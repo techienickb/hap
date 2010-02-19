@@ -1,0 +1,263 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C3649002-D5BA-41D8-A2AA-78AD9E86C7BF}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CHS_Extranet</RootNamespace>
+    <AssemblyName>CHS Extranet</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <FilesToIncludeForPublish>OnlyFilesToRunTheApp</FilesToIncludeForPublish>
+    <DeployIisAppPath>RM/Extranet</DeployIisAppPath>
+    <PackageLocation>obj\Debug\Package\CHS Extranet.zip</PackageLocation>
+    <PackageAsSingleFile>true</PackageAsSingleFile>
+    <ExcludeApp_Data>false</ExcludeApp_Data>
+    <DeployEncryptKey>crickhowell</DeployEncryptKey>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AjaxControlToolkit, Version=3.0.31106.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="DC.SilverlightFileUpload, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\DC.SilverlightFileUpload.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
+    <Reference Include="System.Web.Ajax, Version=3.0.31106.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Silverlight, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\System.Web.Silverlight.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Mobile" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="basestyle.css" />
+    <Content Include="ClientBin\FileUpload.xap" />
+    <Content Include="images\icons\net.png" />
+    <Content Include="images\icons\remotedesktop.png" />
+    <Content Include="images\loading.gif" />
+    <Content Include="move.aspx" />
+    <Content Include="newfolder.aspx" />
+    <Content Include="rename.aspx" />
+    <Content Include="Default.aspx" />
+    <Content Include="delete.aspx" />
+    <Content Include="images\arrow.gif" />
+    <Content Include="images\bar-a-hover.gif" />
+    <Content Include="images\bar.gif" />
+    <Content Include="images\browser-a-hover.gif" />
+    <Content Include="images\icons\access.png" />
+    <Content Include="images\icons\csv.png" />
+    <Content Include="images\icons\pdf.png" />
+    <Content Include="images\icons\ppt.png" />
+    <Content Include="images\icons\pot.png" />
+    <Content Include="images\icons\pps.png" />
+    <Content Include="images\icons\pub.png" />
+    <Content Include="images\icons\doc.png" />
+    <Content Include="images\icons\dot.png" />
+    <Content Include="images\icons\xlt.png" />
+    <Content Include="images\icons\xls.png" />
+    <Content Include="images\icons\htm.png" />
+    <Content Include="images\icons\school.png" />
+    <Content Include="images\icons\msi.png" />
+    <Content Include="images\icons\myvideos.png" />
+    <Content Include="images\icons\mymusic.png" />
+    <Content Include="images\icons\mypictures.png" />
+    <Content Include="images\icons\netdrive.png" />
+    <Content Include="images\icons\file.png" />
+    <Content Include="images\icons\folder.png" />
+    <Content Include="images\icons\jpg.png" />
+    <Content Include="images\icons\gif.png" />
+    <Content Include="images\icons\png.png" />
+    <Content Include="images\icons\rtf.png" />
+    <Content Include="images\icons\txt.png" />
+    <Content Include="images\icons\vid.png" />
+    <Content Include="images\icons\mp3.png" />
+    <Content Include="images\icons\settings.png" />
+    <Content Include="images\icons\bmp.png" />
+    <Content Include="images\icons\exe.png" />
+    <Content Include="images\icons\zip.png" />
+    <Content Include="Login.aspx" />
+    <Content Include="mycomputer.aspx" />
+    <Content Include="mycomputer.css" />
+    <Content Include="Scripts\jquery-1.3.2-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.3.2.js" />
+    <Content Include="Scripts\jquery-1.3.2.min.js" />
+    <Content Include="Scripts\rightclick.js" />
+    <Content Include="upload.aspx" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ActiveDirectoryHelper.cs" />
+    <Compile Include="ActiveDirectoryMembershipProvider.cs" />
+    <Compile Include="ActiveDirectoryRoleProvider.cs" />
+    <Compile Include="ADUtil.cs" />
+    <Compile Include="FileUpload.ashx.cs">
+      <DependentUpon>FileUpload.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="FileUploadProcess.cs" />
+    <Compile Include="move.aspx.cs">
+      <DependentUpon>move.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="move.aspx.designer.cs">
+      <DependentUpon>move.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="newfolder.aspx.cs">
+      <DependentUpon>newfolder.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="newfolder.aspx.designer.cs">
+      <DependentUpon>newfolder.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="p.ashx.cs">
+      <DependentUpon>p.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Pupils.cs" />
+    <Compile Include="rename.aspx.cs">
+      <DependentUpon>rename.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="rename.aspx.designer.cs">
+      <DependentUpon>rename.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="delete.aspx.cs">
+      <DependentUpon>delete.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="delete.aspx.designer.cs">
+      <DependentUpon>delete.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="f.ashx.cs">
+      <DependentUpon>f.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="mycomputer.aspx.cs">
+      <DependentUpon>mycomputer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="mycomputer.aspx.designer.cs">
+      <DependentUpon>mycomputer.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MyComputerItem.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="upload.aspx.cs">
+      <DependentUpon>upload.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="upload.aspx.designer.cs">
+      <DependentUpon>upload.aspx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="chs.master" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CHS\CHS.csproj">
+      <Project>{36468E14-F8AF-4794-AB76-25571A54682F}</Project>
+      <Name>CHS</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="f.ashx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="FileUpload.ashx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="p.ashx" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>5169</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
