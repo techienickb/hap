@@ -62,7 +62,9 @@ namespace CHS_Extranet
             {
                 FileInfo file = new FileInfo(path);
                 context.Response.ContentType = MimeType(file.Extension);
+                if (string.IsNullOrEmpty(context.Request.QueryString["inline"]))
                 context.Response.AppendHeader("Content-Disposition", "attachment; filename=\"" + file.Name + "\"");
+                else context.Response.AppendHeader("Content-Disposition", "inline; filename=\"" + file.Name + "\"");
                 context.Response.AddHeader("Content-Length", file.Length.ToString("F0"));
                 context.Response.Clear();
                 context.Response.TransmitFile(file.FullName);

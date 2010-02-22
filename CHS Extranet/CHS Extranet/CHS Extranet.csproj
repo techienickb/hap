@@ -49,6 +49,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\DC.SilverlightFileUpload.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Office.DocumentFormat.OpenXml, Version=1.0.531.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Microsoft.Office.DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Core" />
@@ -141,6 +145,9 @@
     <Compile Include="ActiveDirectoryMembershipProvider.cs" />
     <Compile Include="ActiveDirectoryRoleProvider.cs" />
     <Compile Include="ADUtil.cs" />
+    <Compile Include="docx.ashx.cs">
+      <DependentUpon>docx.ashx</DependentUpon>
+    </Compile>
     <Compile Include="FileUpload.ashx.cs">
       <DependentUpon>FileUpload.ashx</DependentUpon>
     </Compile>
@@ -210,6 +217,12 @@
     <Compile Include="upload.aspx.designer.cs">
       <DependentUpon>upload.aspx</DependentUpon>
     </Compile>
+    <Compile Include="WordVisualizer\CoreProperties.cs" />
+    <Compile Include="WordVisualizer\DisplayModeEnumeration.cs" />
+    <Compile Include="WordVisualizer\EmuUnit.cs" />
+    <Compile Include="WordVisualizer\Extensions\HttpResponseExtensions.cs" />
+    <Compile Include="WordVisualizer\Extensions\IEnumerableExtensions.cs" />
+    <Compile Include="WordVisualizer\GlobalSuppressions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -231,6 +244,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="p.ashx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="docx.ashx" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
