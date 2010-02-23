@@ -158,6 +158,15 @@ var SimpleContextMenu = {
             SimpleContextMenu._menuElement.getElementsByTagName('a')[0].href = el.href.replace(/\/extranet\/mycomputer.aspx\//gi, "/extranet/delete.aspx/").replace(/\/extranet\/f.ashx\//gi, "/extranet/delete.aspx/f/");
             SimpleContextMenu._menuElement.getElementsByTagName('a')[1].href = el.href.replace(/\/extranet\/mycomputer.aspx\//gi, "/extranet/move.aspx?path=").replace(/\/extranet\/f.ashx\//gi, "/extranet/move.aspx?path=/f/");
             SimpleContextMenu._menuElement.getElementsByTagName('a')[2].href = el.href.replace(/\/extranet\/mycomputer.aspx\//gi, "/extranet/rename.aspx/").replace(/\/extranet\/f.ashx\//gi, "/extranet/rename.aspx/f/");
+            if (el.href.match(/.docx/i)) {
+                SimpleContextMenu._menuElement.getElementsByTagName('a')[3].href = el.href.replace(/\/extranet\/f.ashx/gi, "/extranet/docx.ashx");
+                SimpleContextMenu._menuElement.getElementsByTagName('a')[3].style.display = "block";
+            }
+            else if (el.href.match(/.xls/i)) {
+                SimpleContextMenu._menuElement.getElementsByTagName('a')[3].href = el.href.replace(/\/extranet\/f.ashx/gi, "/extranet/xls.aspx");
+                SimpleContextMenu._menuElement.getElementsByTagName('a')[3].style.display = "block";
+            }
+            else SimpleContextMenu._menuElement.getElementsByTagName('a')[3].style.display = "none";
             SimpleContextMenu._menuElement.style.left = m.x + s.x + 'px';
             SimpleContextMenu._menuElement.style.top = m.y + s.y + 'px';
             SimpleContextMenu._menuElement.style.display = 'block';

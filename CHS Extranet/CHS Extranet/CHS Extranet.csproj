@@ -49,6 +49,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\DC.SilverlightFileUpload.dll</HintPath>
     </Reference>
+    <Reference Include="Excel, Version=2.0.1.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Excel.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.5.452, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Office.DocumentFormat.OpenXml, Version=1.0.531.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Microsoft.Office.DocumentFormat.OpenXml.dll</HintPath>
@@ -139,6 +147,7 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
+    <Content Include="xls.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActiveDirectoryHelper.cs" />
@@ -223,6 +232,13 @@
     <Compile Include="WordVisualizer\Extensions\HttpResponseExtensions.cs" />
     <Compile Include="WordVisualizer\Extensions\IEnumerableExtensions.cs" />
     <Compile Include="WordVisualizer\GlobalSuppressions.cs" />
+    <Compile Include="xls.aspx.cs">
+      <DependentUpon>xls.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="xls.aspx.designer.cs">
+      <DependentUpon>xls.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
