@@ -55,6 +55,8 @@
                     window.open(e.href, 'CHSNew', 'toolbar=0,status=0,statusbar=0,menubar=0,menu=0,address=0,addressbar=0,width=400,height=200', true);
                 else if (e.innerHTML == "Move")
                     window.open(e.href, 'CHSMove', 'toolbar=0,status=0,statusbar=0,menubar=0,menu=0,address=0,addressbar=0,width=500,height=500', true);
+                else if (e.innerHTML == "HTML Preview")
+                    window.open(e.href, 'CHSPreview', 'toolbar=0,status=0,statusbar=0,menubar=0,menu=0,address=0,addressbar=0,width=800,scrollbars=0,height=600', true);
                 else window.open(e.href, 'CHSUpload', 'toolbar=0,status=0,statusbar=0,menubar=0,menu=0,address=0,addressbar=0,width=600,height=400', true);
                 return false;
             }
@@ -64,5 +66,6 @@
 		<a href="#" onclick="return popup(this);">Delete</a>
 		<a href="#" onclick="return popup(this);" runat="server" id="rckmove">Move</a>
 		<a href="#" onclick="return popup(this);">Rename</a>
+        <a href="#" onclick="return popup(this);" style="display: none;">HTML Preview</a>
 	</div>
 </asp:Content>

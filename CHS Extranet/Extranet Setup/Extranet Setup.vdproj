@@ -45,6 +45,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_4A593FD5913B4610A1FFAA271A27410B"
+        "OwnerKey" = "8:_B1F4DB1870CB4719A182101D2AAEDDF1"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_5A4D4AFCE531C3D9A10479F0C24A508D"
         "OwnerKey" = "8:_B1F4DB1870CB4719A182101D2AAEDDF1"
         "MsmSig" = "8:_UNDEFINED"
@@ -77,6 +83,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_5A4D4AFCE531C3D9A10479F0C24A508D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_4A593FD5913B4610A1FFAA271A27410B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -315,6 +327,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4A593FD5913B4610A1FFAA271A27410B"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Microsoft.Office.DocumentFormat.OpenXml, Version=1.0.531.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_4A593FD5913B4610A1FFAA271A27410B"
+                    {
+                    "Name" = "8:Microsoft.Office.DocumentFormat.OpenXml.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Microsoft.Office.DocumentFormat.OpenXml.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_1359032418F1474FA0134C4B00CE8E0F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5A4D4AFCE531C3D9A10479F0C24A508D"
             {
             "AssemblyRegister" = "3:1"
@@ -496,15 +539,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Extranet Setup"
-        "ProductCode" = "8:{18185F38-60C7-4557-BA76-8A33117DA902}"
-        "PackageCode" = "8:{FDF3BF5F-2F87-4EDE-A6ED-3CED674250DB}"
+        "ProductCode" = "8:{4936C3DB-619C-4303-B3CF-D4377604CED7}"
+        "PackageCode" = "8:{956172C2-69D1-4CBD-8C04-01EE14190FA8}"
         "UpgradeCode" = "8:{21D75F33-FC2A-4D3B-A1CF-08A7E3CBD738}"
         "AspNetVersion" = "8:4.0.21006.0"
         "RestartWWWService" = "11:TRUE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.3"
+        "ProductVersion" = "8:1.0.4"
         "Manufacturer" = "8:Crickhowell High School"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
