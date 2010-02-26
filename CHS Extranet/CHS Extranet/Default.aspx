@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Crickhowell High School - IT - Extranet" Language="C#" MasterPageFile="~/chs.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="CHS_Extranet.Default" %>
+﻿<%@ Page Title="Crickhowell High School - IT - Home Access Plus+" Language="C#" MasterPageFile="~/chs.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="CHS_Extranet.Default" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <%@ Register Assembly="System.Web.Ajax" Namespace="System.Web.UI" TagPrefix="asp" %>
 
@@ -56,21 +56,21 @@
                     </ul>
                     <asp:Button runat="server" Text="Update My Details" ID="updatemydetails" onclick="updatemydetails_Click" />
                     <p id="HomeButtons">
-                        <asp:LinkButton runat="server" ID="mycomputer" onclick="mycomputer_Click">
+                        <asp:HyperLink runat="server" ID="mycomputer" NavigateUrl="~/mycomputer.aspx">
                             <img src="images/icons/net.png" alt="" />
                             Browse My Computer
                             <i>Access your school my documents</i>
-                        </asp:LinkButton>
-                        <asp:LinkButton runat="server" ID="rdapp" OnClick="rdapp_Click">
+                        </asp:HyperLink>
+                        <asp:HyperLink runat="server" ID="rdapp" NavigateUrl="/rdweb/">
                             <img src="images/icons/remotedesktop.png" alt="" />
                             Access a School Computer
                             <i>Run school applications at home</i>
-                        </asp:LinkButton>
-                        <asp:LinkButton runat="server" ID="learnres" OnClick="learnres_Click">
+                        </asp:HyperLink>
+                        <asp:HyperLink runat="server" ID="learnres" NavigateUrl="/easylink/rf/">
                             <img src="images/icons/school.png" alt="" />
                             Access Learning Resources
                             <i>Launch RM Learning Resources</i>
-                        </asp:LinkButton>
+                        </asp:HyperLink>
                     </p>
                 </asp:Panel>
                 <asp:Panel runat="server" ID="editmode" Visible="false">

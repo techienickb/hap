@@ -75,7 +75,7 @@ namespace CHS_Extranet
 
                 if (up.IsMemberOf(studentgp) && (p == "T" || p == "H" || p == "W"))
                 {
-                    throw new AuthenticationException("Not Authorized to Access this Resource");
+                    Response.Redirect("/extranet/unauthorised.aspx", true);
                 }
                 else
                 {

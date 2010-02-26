@@ -89,11 +89,12 @@ namespace CHS_Extranet
             if (p == "N") path = up.HomeDirectory + path.Replace('/', '\\');
             else if (p == "W") path = ConfigurationManager.AppSettings["SharedDocsUNC"] + path.Replace('/', '\\');
             else if (p == "T") path = ConfigurationManager.AppSettings["RMStaffUNC"] + path.Replace('/', '\\');
+            else if (p == "R") path = ConfigurationManager.AppSettings["AdminSharedUNC"] + path.Replace('/', '\\');
             else if (p == "H") path = string.Format(ConfigurationManager.AppSettings["AdminServerUNC"], Username) + path.Replace('/', '\\');
 
-            if (up.IsMemberOf(studentgp) && (p == "T" || p == "H"))
+            if (up.IsMemberOf(studentgp) && (p == "T" || p == "H" || p == "R"))
             {
-                throw new AuthenticationException("Not Authorized to Access this Resource");
+                context.Response.Redirect("/extranet/unauthorised.aspx", true);
             }
 
             // Open document
