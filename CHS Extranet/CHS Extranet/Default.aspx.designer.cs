@@ -127,7 +127,7 @@ namespace CHS_Extranet {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton mycomputer;
+        protected global::System.Web.UI.WebControls.HyperLink mycomputer;
         
         /// <summary>
         /// rdapp control.
@@ -136,7 +136,7 @@ namespace CHS_Extranet {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton rdapp;
+        protected global::System.Web.UI.WebControls.HyperLink rdapp;
         
         /// <summary>
         /// learnres control.
@@ -145,7 +145,7 @@ namespace CHS_Extranet {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton learnres;
+        protected global::System.Web.UI.WebControls.HyperLink learnres;
         
         /// <summary>
         /// editmode control.

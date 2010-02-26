@@ -38,6 +38,7 @@ namespace CHS_Extranet
             else throw new Exception("The connection string specified in 'activeDirectoryConnectionString' does not appear to be a valid LDAP connection string.");
             pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, ConfigurationManager.AppSettings["ADUsername"], ConfigurationManager.AppSettings["ADPassword"]);
             up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Username);
+            this.Title = string.Format("{0} - Home Access Plus+ - My Computer", ConfigurationManager.AppSettings["SchoolName"]);
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -180,21 +181,6 @@ namespace CHS_Extranet
             if (up.IsMemberOf(gp)) form.Text = string.Format("<b>Form: </b>{0}", form.Text);
             else form.Text = string.Format("<b>Department: </b>{0}", form.Text);
             email.Text = up.EmailAddress;
-        }
-
-        protected void mycomputer_Click(object sender, EventArgs e)
-        {
-            Response.Redirect("mycomputer.aspx");
-        }
-
-        protected void rdapp_Click(object sender, EventArgs e)
-        {
-            Response.Redirect("/rdweb/");
-        }
-
-        protected void learnres_Click(object sender, EventArgs e)
-        {
-            Response.Redirect("/easylink/rf/");
         }
 
     }

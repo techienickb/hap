@@ -67,8 +67,20 @@ namespace CHS_Extranet
                 case "rar": return "rar.png"; 
                 case "exe": return "exe.png"; 
                 case "msi": return "msi.png"; 
-                default: 
-                    return ExtentionOrName.Contains('.') ? "file.png" : "folder.png"; 
+                default:
+                    if (!ExtentionOrName.StartsWith(".")) return "folder.png";
+                    try
+                    {
+                        foreach (FileInfo file in new DirectoryInfo(HttpContext.Current.Server.MapPath("~/images/icons/")).GetFiles())
+                            if (file.Name.Replace(file.Extension, "").ToLower().Contains(e.ToLower()))
+                                return file.Name;
+                        return "file.png";
+                    }
+                    catch
+                    {
+                        return "file.png";
+                    }
+                    
             }
         }
         public string Name { get; set; }

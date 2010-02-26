@@ -20,6 +20,9 @@ namespace CHS_Extranet
         private UserPrincipal up;
         private GroupPrincipal studentgp, admindrivegp, smt;
 
+        public string FullPath { get; set; }
+        public string Drive { get; set; }
+
 
         protected override void OnInitComplete(EventArgs e)
         {
@@ -38,6 +41,7 @@ namespace CHS_Extranet
                 smt = GroupPrincipal.FindByIdentity(pcontext, ConfigurationManager.AppSettings["SMTGroup"]);
             }
             up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Username);
+            this.Title = string.Format("{0} - Home Access Plus+ - My Computer", ConfigurationManager.AppSettings["SchoolName"]);
         }
 
         public string Username
@@ -59,7 +63,11 @@ namespace CHS_Extranet
                 items.Add(new MyComputerItem("My Documents", Username + " on " + est, "/Extranet/MyComputer.aspx/N\\", "netdrive.png", false));
                 if (ConfigurationManager.AppSettings["EnableAdmin"] == "True") 
                 {
-                    if (up.IsMemberOf(admindrivegp) || up.IsMemberOf(smt)) items.Add(new MyComputerItem("My Admin Documents", Username + " on Admin", "/Extranet/MyComputer.aspx/H\\", "netdrive.png", false));
+                    if (up.IsMemberOf(admindrivegp) || up.IsMemberOf(smt))
+                    {
+                        if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["AdminServerUNC"])) items.Add(new MyComputerItem("My Admin Documents", Username + " on Admin", "/Extranet/MyComputer.aspx/H\\", "netdrive.png", false));
+                        if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["AdminSharedUNC"])) items.Add(new MyComputerItem("Admin Shared", "Admin Shared", "/Extranet/MyComputer.aspx/R\\", "netdrive.png", false));
+                    }
                 }
                 items.Add(new MyComputerItem("RMShared Documents", "Shared Documents on " + ConfigurationManager.AppSettings["EstablishmentName"], "/Extranet/MyComputer.aspx/W\\", "netdrive.png", false));
                 if (!up.IsMemberOf(studentgp)) items.Add(new MyComputerItem("RMStaff", "RMStaff on " + ConfigurationManager.AppSettings["EstablishmentName"], "/Extranet/MyComputer.aspx/T\\", "netdrive.png", false));
@@ -74,6 +82,7 @@ namespace CHS_Extranet
                 if (p == "N") path = up.HomeDirectory + path.Replace('/', '\\');
                 else if (p == "W") path = ConfigurationManager.AppSettings["SharedDocsUNC"] + path.Replace('/', '\\');
                 else if (p == "T") path = ConfigurationManager.AppSettings["RMStaffUNC"] + path.Replace('/', '\\');
+                else if (p == "R") path = ConfigurationManager.AppSettings["AdminSharedUNC"] + path.Replace('/', '\\');
                 else if (p == "H") path = string.Format(ConfigurationManager.AppSettings["AdminServerUNC"], Username) + path.Replace('/', '\\');
 
                 DirectoryInfo dir = new DirectoryInfo(path);
@@ -81,7 +90,7 @@ namespace CHS_Extranet
                     items.Add(new MyComputerItem("My Computer", "Back to My Computer", "/Extranet/MyComputer.aspx", "school.png", false));
                 else items.Add(new MyComputerItem("..", "Up a Directory", "/Extranet/MyComputer.aspx" + Request.PathInfo.Remove(Request.PathInfo.LastIndexOf('/')), "folder.png", false));
 
-                if (up.IsMemberOf(studentgp) && (p == "T" || p == "H"))
+                if (up.IsMemberOf(studentgp) && (p == "T" || p == "H" || p == "R"))
                 {
                     items.Add(new MyComputerItem("Not Authorised", "Back to My Computer", "/Extranet/MyComputer.aspx", "school.png", false));
                 }
@@ -92,38 +101,51 @@ namespace CHS_Extranet
                     if (up.IsMemberOf(studentgp) && p == "W")
                         newfolderlink.Visible = fileuploadlink.Visible = allowedit = false;
 
-                    if (p == "W" || p == "T") rckmove.Style.Add("display", "none");
+                    if (p == "W" || p == "T" || p == "R") rckmove.Style.Add("display", "none");
 
                     newfolderlink.NavigateUrl = "/Extranet/NewFolder.aspx?path=" + Request.PathInfo.Remove(0, 1);
                     fileuploadlink.NavigateUrl = "/Extranet/Upload.aspx?path=" + Request.PathInfo.Remove(0, 1);
-                    foreach (DirectoryInfo subdir in dir.GetDirectories())
+                    try
                     {
-                        if (!subdir.Name.ToLower().Contains("recycle"))
+                        foreach (DirectoryInfo subdir in dir.GetDirectories())
                         {
-                            string dirpath = subdir.FullName;
-                            dirpath = dirpath.Replace(userhome, "N/");
-                            dirpath = dirpath.Replace(ConfigurationManager.AppSettings["SharedDocsUNC"], "W");
-                            dirpath = dirpath.Replace(ConfigurationManager.AppSettings["RMStaffUNC"], "T");
-                            if (ConfigurationManager.AppSettings["EnableAdmin"] == "True")
-                                dirpath = dirpath.Replace(string.Format(ConfigurationManager.AppSettings["AdminServerUNC"], Username), "H");
-                            items.Add(new MyComputerItem(subdir.Name, "Last Modified: " + subdir.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/MyComputer.aspx/" + dirpath, MyComputerItem.ParseForImage(subdir.Name), allowedit));
+                            if (!subdir.Name.ToLower().Contains("recycle"))
+                            {
+                                string dirpath = subdir.FullName;
+                                dirpath = dirpath.Replace(userhome, "N/");
+                                dirpath = dirpath.Replace(ConfigurationManager.AppSettings["SharedDocsUNC"], "W");
+                                dirpath = dirpath.Replace(ConfigurationManager.AppSettings["RMStaffUNC"], "T");
+                                if (ConfigurationManager.AppSettings["EnableAdmin"] == "True")
+                                {
+                                    if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["AdminServerUNC"])) dirpath = dirpath.Replace(string.Format(ConfigurationManager.AppSettings["AdminServerUNC"], Username), "H");
+                                    if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["AdminSharedUNC"])) dirpath = dirpath.Replace(ConfigurationManager.AppSettings["AdminSharedUNC"], "R");
+                                }
+                                items.Add(new MyComputerItem(subdir.Name, "Last Modified: " + subdir.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/MyComputer.aspx/" + dirpath, MyComputerItem.ParseForImage(subdir.Name), allowedit));
+                            }
+                        }
+                        foreach (FileInfo file in dir.GetFiles())
+                        {
+                            if (!file.Name.ToLower().Contains("thumbs"))
+                            {
+                                string dirpath = file.FullName;
+                                dirpath = dirpath.Replace(userhome, "N\\");
+                                dirpath = dirpath.Replace(ConfigurationManager.AppSettings["SharedDocsUNC"], "W");
+                                dirpath = dirpath.Replace(ConfigurationManager.AppSettings["RMStaffUNC"], "T");
+                                if (ConfigurationManager.AppSettings["EnableAdmin"] == "True")
+                                {
+                                    if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["AdminServerUNC"])) dirpath = dirpath.Replace(string.Format(ConfigurationManager.AppSettings["AdminServerUNC"], Username), "H");
+                                    if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["AdminSharedUNC"])) dirpath = dirpath.Replace(ConfigurationManager.AppSettings["AdminSharedUNC"], "R");
+                                }
+                                if (!string.IsNullOrEmpty(file.Extension))
+                                    items.Add(new MyComputerItem(file.Name.Replace(file.Extension, ""), "Last Modified: " + file.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/f.ashx/" + dirpath.Replace("&", "&amp;"), MyComputerItem.ParseForImage(file.Extension.ToLower()), allowedit));
+                                else
+                                    items.Add(new MyComputerItem(file.Name, "Last Modified: " + file.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/f.ashx/" + dirpath.Replace("&", "&amp;"), MyComputerItem.ParseForImage(file.Extension.ToLower()), allowedit));
+                            }
                         }
                     }
-                    foreach (FileInfo file in dir.GetFiles())
+                    catch (UnauthorizedAccessException uae)
                     {
-                        if (!file.Name.ToLower().Contains("thumbs"))
-                        {
-                            string dirpath = file.FullName;
-                            dirpath = dirpath.Replace(userhome, "N\\");
-                            dirpath = dirpath.Replace(ConfigurationManager.AppSettings["SharedDocsUNC"], "W");
-                            dirpath = dirpath.Replace(ConfigurationManager.AppSettings["RMStaffUNC"], "T");
-                            if (ConfigurationManager.AppSettings["EnableAdmin"] == "True")
-                                dirpath = dirpath.Replace(string.Format(ConfigurationManager.AppSettings["AdminServerUNC"], Username), "H");
-                            if (!string.IsNullOrEmpty(file.Extension))
-                                items.Add(new MyComputerItem(file.Name.Replace(file.Extension, ""), "Last Modified: " + file.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/f.ashx/" + dirpath.Replace("&", "&amp;"), MyComputerItem.ParseForImage(file.Extension), allowedit));
-                            else
-                                items.Add(new MyComputerItem(file.Name, "Last Modified: " + file.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/f.ashx/" + dirpath.Replace("&", "&amp;"), MyComputerItem.ParseForImage(file.Extension), allowedit));
-                        }
+                        Response.Redirect("/extranet/unauthorised.aspx?path=" + Server.UrlPathEncode(uae.Message), true);
                     }
                 }
             }

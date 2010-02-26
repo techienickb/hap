@@ -4,14 +4,13 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.IO;
 using System.DirectoryServices.AccountManagement;
 using System.Configuration;
-using System.Security.Authentication;
-using System.IO;
 
 namespace CHS_Extranet
 {
-    public partial class newfolder : System.Web.UI.Page
+    public partial class UploadH : System.Web.UI.Page
     {
         private String _DomainDN;
         private String _ActiveDirectoryConnectionString;
@@ -48,38 +47,58 @@ namespace CHS_Extranet
             up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Username);
         }
 
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!Page.IsPostBack)
+            if (!IsPostBack && !IsCallback && !IsAsync)
             {
+                string userhome = up.HomeDirectory;
+                if (!userhome.EndsWith("\\")) userhome += "\\";
+                string path = Request.QueryString["path"].Remove(0, 1);
                 string p = Request.QueryString["path"].Substring(0, 1);
-
-                if (up.IsMemberOf(studentgp) && (p == "T" || p == "H" || p == "W"))
+                if (p == "N") path = up.HomeDirectory + path.Replace('/', '\\');
+                else if (p == "W") path = ConfigurationManager.AppSettings["SharedDocsUNC"] + path.Replace('/', '\\');
+                else if (p == "T") path = ConfigurationManager.AppSettings["RMStaffUNC"] + path.Replace('/', '\\');
+                else if (p == "R") path = ConfigurationManager.AppSettings["AdminSharedUNC"] + path.Replace('/', '\\');
+                else if (p == "H") path = string.Format(ConfigurationManager.AppSettings["AdminServerUNC"], Username) + path.Replace('/', '\\');
+                if (up.IsMemberOf(studentgp) && (p == "T" || p == "H" || p == "R"))
                 {
-                    throw new AuthenticationException("Not Authorized to Access this Resource");
+                    closeb.Visible = true;
                 }
             }
         }
 
-        protected void yes_Click(object sender, EventArgs e)
+        protected void uploadbtn_Click(object sender, EventArgs e)
         {
             string userhome = up.HomeDirectory;
             if (!userhome.EndsWith("\\")) userhome += "\\";
-            string p = Request.QueryString["path"].Substring(0, 1);
             string path = Request.QueryString["path"].Remove(0, 1);
+            string p = Request.QueryString["path"].Substring(0, 1);
             if (p == "N") path = up.HomeDirectory + path.Replace('/', '\\');
             else if (p == "W") path = ConfigurationManager.AppSettings["SharedDocsUNC"] + path.Replace('/', '\\');
             else if (p == "T") path = ConfigurationManager.AppSettings["RMStaffUNC"] + path.Replace('/', '\\');
             else if (p == "R") path = ConfigurationManager.AppSettings["AdminSharedUNC"] + path.Replace('/', '\\');
             else if (p == "H") path = string.Format(ConfigurationManager.AppSettings["AdminServerUNC"], Username) + path.Replace('/', '\\');
-
             if (up.IsMemberOf(studentgp) && (p == "T" || p == "H" || p == "R"))
             {
-                Response.Redirect("/extranet/unauthorised.aspx", true);
+                closeb.Visible = true;
             }
+            else 
+            {
+                if (FileUpload1.HasFile)
+                    FileUpload1.SaveAs(Path.Combine(path, FileUpload1.FileName));
+                if (FileUpload2.HasFile)
+                    FileUpload2.SaveAs(Path.Combine(path, FileUpload2.FileName));
+                if (FileUpload3.HasFile)
+                    FileUpload3.SaveAs(Path.Combine(path, FileUpload3.FileName));
+                if (FileUpload4.HasFile)
+                    FileUpload4.SaveAs(Path.Combine(path, FileUpload4.FileName));
+                if (FileUpload5.HasFile)
+                    FileUpload5.SaveAs(Path.Combine(path, FileUpload5.FileName));
+            }
+            closeb.Visible = (((Button)sender).ID == "uploadbtnClose");
 
-            Directory.CreateDirectory(Path.Combine(path, foldername.Text));
-            closeandrefresh.Visible = true;
         }
+
     }
 }

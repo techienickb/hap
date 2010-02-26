@@ -14,6 +14,7 @@
         <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
         <asp:Silverlight ID="Xaml1" runat="server" Source="~/ClientBin/FileUpload.xap" 
             MinimumVersion="2.0.31005.0" Width="100%" Height="350px" InitParameters="UploadPage=FileUpload.ashx" />
+        <input type="button" value="HTML Uploader" onclick="location.href='UploadH.aspx?path=<%=Request.QueryString["path"] %>';" />
         <input type="button" value="Done" onclick="done();" />
         <script type="text/javascript">
             function done() {
@@ -22,6 +23,9 @@
                 window.close();
             }
         </script>
+        <asp:Literal runat="server" ID="closeb" Visible="false">
+            <script type="text/javascript">done();</script>
+        </asp:Literal>
     </div>
     </form>
 </body>
