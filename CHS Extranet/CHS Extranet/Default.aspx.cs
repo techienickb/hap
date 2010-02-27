@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using System.DirectoryServices.AccountManagement;
 using System.Configuration;
 using System.DirectoryServices;
+using CHS_Extranet.Configuration;
 
 namespace CHS_Extranet
 {
@@ -16,6 +17,7 @@ namespace CHS_Extranet
         private String _ActiveDirectoryConnectionString;
         private PrincipalContext pcontext;
         private UserPrincipal up;
+        private extranetConfig config;
 
         public string Username
         {
@@ -29,35 +31,36 @@ namespace CHS_Extranet
 
         protected override void OnInitComplete(EventArgs e)
         {
-            ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings["ADConnectionString"];
+            config = ConfigurationManager.GetSection("extranetConfig") as extranetConfig;
+            ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
             if (connObj != null) _ActiveDirectoryConnectionString = connObj.ConnectionString;
             if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))
                 throw new Exception("The connection name 'activeDirectoryConnectionString' was not found in the applications configuration or the connection string is empty.");
             if (_ActiveDirectoryConnectionString.StartsWith("LDAP://"))
                 _DomainDN = _ActiveDirectoryConnectionString.Remove(0, _ActiveDirectoryConnectionString.IndexOf("DC="));
             else throw new Exception("The connection string specified in 'activeDirectoryConnectionString' does not appear to be a valid LDAP connection string.");
-            pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, ConfigurationManager.AppSettings["ADUsername"], ConfigurationManager.AppSettings["ADPassword"]);
+            pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
             up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Username);
-            this.Title = string.Format("{0} - Home Access Plus+ - My Computer", ConfigurationManager.AppSettings["SchoolName"]);
+            this.Title = string.Format("{0} - Home Access Plus+ - My Computer", config.BaseSettings.EstablishmentName);
         }
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, ConfigurationManager.AppSettings["StudentGroup"]);
+            GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, config.ADSettings.StudentsGroupName);
             //rmCom2000-UsrMgr-uPN
-            DirectoryEntry usersDE = new DirectoryEntry(_ActiveDirectoryConnectionString, ConfigurationManager.AppSettings["ADUsername"], ConfigurationManager.AppSettings["ADPassword"]);
+            DirectoryEntry usersDE = new DirectoryEntry(_ActiveDirectoryConnectionString, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
             DirectorySearcher ds = new DirectorySearcher(usersDE);
             ds.Filter = "(sAMAccountName=" + Username + ")";
             ds.PropertiesToLoad.Add("rmCom2000-UsrMgr-uPN");
             ds.PropertiesToLoad.Add("department");
             SearchResult r = ds.FindOne();
-            if (string.IsNullOrEmpty(ConfigurationManager.AppSettings["StudentPhotoHandler"]))
+            if (string.IsNullOrEmpty(config.BaseSettings.StudentPhotoHandler))
                 userimage.Visible = false;
             else
             {
                 try
                 {
-                    userimage.ImageUrl = string.Format("{0}?UPN={1}", ConfigurationManager.AppSettings["StudentPhotoHandler"], r.Properties["rmCom2000-UsrMgr-uPN"][0].ToString());
+                    userimage.ImageUrl = string.Format("{0}?UPN={1}", config.BaseSettings.StudentPhotoHandler, r.Properties["rmCom2000-UsrMgr-uPN"][0].ToString());
                 }
                 catch { userimage.Visible = false; }
             }
@@ -71,7 +74,7 @@ namespace CHS_Extranet
             if (up.IsMemberOf(gp)) form.Text = string.Format("<b>Form: </b>{0}", form.Text);
             else form.Text = string.Format("<b>Department: </b>{0}", form.Text);
             email.Text = up.EmailAddress;
-            string aet = ConfigurationManager.AppSettings["AllowEditingTo"];
+            string aet = config.HomePageLinks["Update My Details"].ShowTo;
             if (aet == "None") updatemydetails.Visible = false;
             else if (aet != "All")
             {
@@ -83,30 +86,33 @@ namespace CHS_Extranet
                 }
                 updatemydetails.Visible = vis;
             }
-            string rdweb = ConfigurationManager.AppSettings["AllowRDWebTo"];
-            if (rdweb == "None")
-                rdapp.Visible = false;
-            else if (rdweb != "All")
-            {
-                bool vis = false;
-                foreach (string s in rdweb.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
+            List<homepagelink> links = new List<homepagelink>();
+            foreach (homepagelink link in config.HomePageLinks)
+                if (link.Name != "Update My Details")
                 {
-                    gp = GroupPrincipal.FindByIdentity(pcontext, s);
-                    if (!vis) vis = up.IsMemberOf(gp);
+                    if (link.ShowTo == "All") links.Add(link);
+                    else if (link.ShowTo != "None")
+                    {
+                        bool vis = false;
+                        foreach (string s in link.ShowTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
+                        {
+                            gp = GroupPrincipal.FindByIdentity(pcontext, s);
+                            if (!vis) vis = up.IsMemberOf(gp);
+                        }
+                        if (vis) links.Add(link);
+                    }
                 }
-                rdapp.Visible = vis;
-            }
-            if (ConfigurationManager.AppSettings["EnableLearningResources"] == "False")
-                learnres.Visible = false;
+            homepagelinks.DataSource = links.ToArray();
+            homepagelinks.DataBind();
         }
 
         protected void updatemydetails_Click(object sender, EventArgs e)
         {
             viewmode.Visible = false;
             editmode.Visible = true;
-            GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, ConfigurationManager.AppSettings["StudentGroup"]);
+            GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, config.ADSettings.StudentsGroupName);
             //rmCom2000-UsrMgr-uPN
-            DirectoryEntry usersDE = new DirectoryEntry(_ActiveDirectoryConnectionString, ConfigurationManager.AppSettings["ADUsername"], ConfigurationManager.AppSettings["ADPassword"]);
+            DirectoryEntry usersDE = new DirectoryEntry(_ActiveDirectoryConnectionString, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
             DirectorySearcher ds = new DirectorySearcher(usersDE);
             ds.Filter = "(sAMAccountName=" + Username + ")";
             ds.PropertiesToLoad.Add("department");
@@ -161,13 +167,13 @@ namespace CHS_Extranet
             ds.PropertiesToLoad.Add("rmCom2000-UsrMgr-uPN");
             ds.PropertiesToLoad.Add("department");
             r = ds.FindOne();
-            if (string.IsNullOrEmpty(ConfigurationManager.AppSettings["StudentPhotoHandler"]))
+            if (string.IsNullOrEmpty(config.BaseSettings.StudentPhotoHandler))
                 userimage.Visible = false;
             else
             {
                 try
                 {
-                    userimage.ImageUrl = string.Format("{0}?UPN={1}", ConfigurationManager.AppSettings["StudentPhotoHandler"], r.Properties["rmCom2000-UsrMgr-uPN"][0].ToString());
+                    userimage.ImageUrl = string.Format("{0}?UPN={1}", config.BaseSettings.StudentPhotoHandler, r.Properties["rmCom2000-UsrMgr-uPN"][0].ToString());
                 }
                 catch { userimage.Visible = false; }
             }

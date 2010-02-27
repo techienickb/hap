@@ -121,31 +121,13 @@ namespace CHS_Extranet {
         protected global::System.Web.UI.WebControls.Button updatemydetails;
         
         /// <summary>
-        /// mycomputer control.
+        /// homepagelinks control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink mycomputer;
-        
-        /// <summary>
-        /// rdapp control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink rdapp;
-        
-        /// <summary>
-        /// learnres control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink learnres;
+        protected global::System.Web.UI.WebControls.Repeater homepagelinks;
         
         /// <summary>
         /// editmode control.
