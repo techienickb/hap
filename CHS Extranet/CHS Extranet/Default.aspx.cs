@@ -41,7 +41,7 @@ namespace CHS_Extranet
             else throw new Exception("The connection string specified in 'activeDirectoryConnectionString' does not appear to be a valid LDAP connection string.");
             pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
             up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Username);
-            this.Title = string.Format("{0} - Home Access Plus+ - My Computer", config.BaseSettings.EstablishmentName);
+            this.Title = string.Format("{0} - Home Access Plus+", config.BaseSettings.EstablishmentName);
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -141,17 +141,17 @@ namespace CHS_Extranet
             up.GivenName = txtfname.Text;
             up.Description = string.Format("{0} {1} in {2}", txtfname.Text, txtlname.Text, txtform.Text);
             up.DisplayName = string.Format("{0} {1}", txtfname.Text, txtlname.Text);
-            GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, ConfigurationManager.AppSettings["StudentGroup"]);
-            if (up.IsMemberOf(gp)) up.EmailAddress = string.Format("{0}{1}{2}@{3}", Username, up.GivenName, up.Surname, ConfigurationManager.AppSettings["StudentEmailFormat"]);
+            GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, config.ADSettings.StudentsGroupName);
+            if (up.IsMemberOf(gp)) up.EmailAddress = string.Format(config.BaseSettings.StudentEmailFormat, Username, up.GivenName, up.Surname);
             up.Save();
 
             // First, get a DE for the user
-            DirectoryEntry usersDE = new DirectoryEntry(_ActiveDirectoryConnectionString, ConfigurationManager.AppSettings["ADUsername"], ConfigurationManager.AppSettings["ADPassword"]);
+            DirectoryEntry usersDE = new DirectoryEntry(_ActiveDirectoryConnectionString, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
             DirectorySearcher ds = new DirectorySearcher(usersDE);
             ds.Filter = "(sAMAccountName=" + Username + ")";
             ds.PropertiesToLoad.Add("cn");
             SearchResult r = ds.FindOne();
-            DirectoryEntry theUserDE = new DirectoryEntry(r.Path, ConfigurationManager.AppSettings["ADUsername"], ConfigurationManager.AppSettings["ADPassword"]);
+            DirectoryEntry theUserDE = new DirectoryEntry(r.Path, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
 
             // Now update the property setting
             if (theUserDE.Properties["Department"].Count == 0)
