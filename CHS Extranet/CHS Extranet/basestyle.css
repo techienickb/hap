@@ -1,6 +1,6 @@
 ﻿html { font-family: Segoe UI; font-size: 14px; }
 #Download { float: right; position: absolute; right: 5px; border-radius: 3px; -moz-border-radius: 3px; top: 0; border: solid 1px #7da2ce; padding: 2px 5px; border-top: 0; background: url(/Extranet/images/bar-a-hover.gif) repeat-x left center; }
-#CoreProperties { width: 100%; }
 #CoreProperties h1 { margin: 0; padding: 0; font-weight: normal; font-size: 18px; }
 #CoreProperties table { width: 100%; border: solid 1px #d9d9d9; border-collapse: collapse; font-size: 12px; }
 #CoreProperties table td { text-align: center; }
+#Document { position: absolute; top: 100px; bottom: 0; left: 0; right: 0; width: 100%; overflow: auto; }

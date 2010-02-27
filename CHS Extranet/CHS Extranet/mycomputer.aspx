@@ -16,7 +16,7 @@
     <div id="maincol" style="position: relative;">
         <h1>My Computer</h1>
         <div id="bar">
-            <a href="/Extranet/">Extranet Home</a>
+            <a href="/Extranet/">Home Access Plus+ Home</a>
             <asp:HyperLink runat="server" ID="newfolderlink" Visible="false" onclick="return popup(this);">New Folder</asp:HyperLink>
             <asp:HyperLink runat="server" ID="fileuploadlink" Visible="false" onclick="return popup(this);">Upload File</asp:HyperLink>
             <a class="right" href="/Extranet/mycomputer.aspx" onclick="return view();"><span>View</span></a>

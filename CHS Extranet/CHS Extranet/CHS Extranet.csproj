@@ -137,6 +137,7 @@
     <Content Include="Scripts\jquery-1.3.2.js" />
     <Content Include="Scripts\jquery-1.3.2.min.js" />
     <Content Include="Scripts\rightclick.js" />
+    <Content Include="test.aspx" />
     <Content Include="unauthorised.aspx" />
     <Content Include="upload.aspx" />
     <Content Include="UploadH.aspx" />
@@ -153,6 +154,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ADUtil.cs" />
+    <Compile Include="Configuration\adSettings.cs" />
+    <Compile Include="Configuration\baseSettings.cs" />
+    <Compile Include="Configuration\extranetConfig.cs" />
+    <Compile Include="Configuration\homepagelink.cs" />
+    <Compile Include="Configuration\homepagelinks.cs" />
+    <Compile Include="Configuration\uncpath.cs" />
+    <Compile Include="Configuration\uncpaths.cs" />
     <Compile Include="docx.ashx.cs">
       <DependentUpon>docx.ashx</DependentUpon>
     </Compile>
@@ -218,6 +226,13 @@
     </Compile>
     <Compile Include="MyComputerItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="test.aspx.cs">
+      <DependentUpon>test.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="test.aspx.designer.cs">
+      <DependentUpon>test.aspx</DependentUpon>
+    </Compile>
     <Compile Include="unauthorised.aspx.cs">
       <DependentUpon>unauthorised.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

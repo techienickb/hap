@@ -44,9 +44,8 @@
             PopupControlID="panelUpdateProgress" />
         <asp:UpdatePanel runat="server" ID="upl" ChildrenAsTriggers="true">
             <ContentTemplate>
-                <h1>The Extranet</h1>
                 <asp:Image runat="server" ID="userimage" ImageAlign="Right" />
-                <h2>Hello, <asp:Literal runat="server" ID="welcomename" /></h2>
+                <h2>Hello, <asp:Literal runat="server" ID="welcomename" />, welcome to Home Access Plus+</h2>
                 <h3>My Details:</h3>
                 <asp:Panel runat="server" ID="viewmode">
                     <ul>
@@ -56,21 +55,15 @@
                     </ul>
                     <asp:Button runat="server" Text="Update My Details" ID="updatemydetails" onclick="updatemydetails_Click" />
                     <p id="HomeButtons">
-                        <asp:HyperLink runat="server" ID="mycomputer" NavigateUrl="~/mycomputer.aspx">
-                            <img src="images/icons/net.png" alt="" />
-                            Browse My Computer
-                            <i>Access your school my documents</i>
-                        </asp:HyperLink>
-                        <asp:HyperLink runat="server" ID="rdapp" NavigateUrl="/rdweb/">
-                            <img src="images/icons/remotedesktop.png" alt="" />
-                            Access a School Computer
-                            <i>Run school applications at home</i>
-                        </asp:HyperLink>
-                        <asp:HyperLink runat="server" ID="learnres" NavigateUrl="/easylink/rf/">
-                            <img src="images/icons/school.png" alt="" />
-                            Access Learning Resources
-                            <i>Launch RM Learning Resources</i>
-                        </asp:HyperLink>
+                        <asp:Repeater ID="homepagelinks" runat="server">
+                            <ItemTemplate>
+                                <asp:HyperLink runat="server" ID="mycomputer" NavigateUrl='<%#Eval("LinkLocation")%>'>
+                                    <img runat="server" src='<%#Eval("Icon")%>' alt="" />
+                                    <%#Eval("Name") %>
+                                    <i><%#Eval("Description") %></i>
+                                </asp:HyperLink>
+                            </ItemTemplate>
+                        </asp:Repeater>
                     </p>
                 </asp:Panel>
                 <asp:Panel runat="server" ID="editmode" Visible="false">
