@@ -8,6 +8,7 @@ using System.DirectoryServices.AccountManagement;
 using System.Configuration;
 using System.Security.Authentication;
 using System.IO;
+using CHS_Extranet.Configuration;
 
 namespace CHS_Extranet
 {
@@ -17,7 +18,54 @@ namespace CHS_Extranet
         private String _ActiveDirectoryConnectionString;
         private PrincipalContext pcontext;
         private UserPrincipal up;
-        private GroupPrincipal studentgp, admindrivegp, smt;
+        private extranetConfig config;
+
+        private bool isAuth(uncpath path)
+        {
+            if (path.EnableReadTo == "All") return true;
+            else if (path.EnableReadTo != "None")
+            {
+                bool vis = false;
+                foreach (string s in path.EnableReadTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, s);
+                    if (!vis) vis = up.IsMemberOf(gp);
+                }
+                return vis;
+            }
+            return false;
+        }
+
+        private bool isWriteAuth(uncpath path)
+        {
+            if (path == null) return true;
+            if (path.EnableWriteTo == "All") return true;
+            else if (path.EnableWriteTo != "None")
+            {
+                bool vis = false;
+                foreach (string s in path.EnableWriteTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, s);
+                    if (!vis) vis = up.IsMemberOf(gp);
+                }
+                return vis;
+            }
+            return false;
+        }
+
+        protected override void OnInitComplete(EventArgs e)
+        {
+            config = ConfigurationManager.GetSection("extranetConfig") as extranetConfig;
+            ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
+            if (connObj != null) _ActiveDirectoryConnectionString = connObj.ConnectionString;
+            if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))
+                throw new Exception("The connection name 'activeDirectoryConnectionString' was not found in the applications configuration or the connection string is empty.");
+            if (_ActiveDirectoryConnectionString.StartsWith("LDAP://"))
+                _DomainDN = _ActiveDirectoryConnectionString.Remove(0, _ActiveDirectoryConnectionString.IndexOf("DC="));
+            else throw new Exception("The connection string specified in 'activeDirectoryConnectionString' does not appear to be a valid LDAP connection string.");
+            pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
+            up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Username);
+        }
 
         public string Username
         {
@@ -27,25 +75,6 @@ namespace CHS_Extranet
                     return User.Identity.Name.Remove(0, User.Identity.Name.IndexOf('\\') + 1);
                 else return User.Identity.Name;
             }
-        }
-
-        protected override void OnInitComplete(EventArgs e)
-        {
-            ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings["ADConnectionString"];
-            if (connObj != null) _ActiveDirectoryConnectionString = connObj.ConnectionString;
-            if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))
-                throw new Exception("The connection name 'activeDirectoryConnectionString' was not found in the applications configuration or the connection string is empty.");
-            if (_ActiveDirectoryConnectionString.StartsWith("LDAP:/"))
-                _DomainDN = _ActiveDirectoryConnectionString.Remove(0, _ActiveDirectoryConnectionString.IndexOf("DC="));
-            else throw new Exception("The connection string specified in 'activeDirectoryConnectionString' does not appear to be a valid LDAP connection string.");
-            pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, ConfigurationManager.AppSettings["ADUsername"], ConfigurationManager.AppSettings["ADPassword"]);
-            studentgp = GroupPrincipal.FindByIdentity(pcontext, ConfigurationManager.AppSettings["StudentGroup"]);
-            if (ConfigurationManager.AppSettings["EnableAdmin"] == "True")
-            {
-                admindrivegp = GroupPrincipal.FindByIdentity(pcontext, ConfigurationManager.AppSettings["AdminStaffGroup"]);
-                smt = GroupPrincipal.FindByIdentity(pcontext, ConfigurationManager.AppSettings["SMTGroup"]);
-            }
-            up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Username);
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -65,30 +94,29 @@ namespace CHS_Extranet
                     path = Request.PathInfo.Remove(0, 2);
                     p = Request.PathInfo.Substring(1, 1);
                 }
-                if (p == "N") path = up.HomeDirectory + path.Replace('/', '\\');
-                else if (p == "W") path = ConfigurationManager.AppSettings["SharedDocsUNC"] + path.Replace('/', '\\');
-                else if (p == "T") path = ConfigurationManager.AppSettings["RMStaffUNC"] + path.Replace('/', '\\');
-                else if (p == "R") path = ConfigurationManager.AppSettings["AdminSharedUNC"] + path.Replace('/', '\\');
-                else if (p == "H") path = string.Format(ConfigurationManager.AppSettings["AdminServerUNC"], Username) + path.Replace('/', '\\');
 
-                if (up.IsMemberOf(studentgp) && (p == "T" || p == "H" || p == "R"))
+                uncpath unc = null;
+                if (p == "N") path = up.HomeDirectory + path.Replace('/', '\\');
+                else
                 {
-                    Response.Redirect("/extranet/unauthorised.aspx", true);
+                    unc = config.UNCPaths[p];
+                    if (unc == null || !isWriteAuth(unc)) Response.Redirect("/Extranet/unauthorised.aspx", true);
+                    else
+                    {
+                        path = string.Format(unc.UNC, Username) + path.Replace('/', '\\');
+                    }
+                }
+                if (Request.PathInfo.Substring(1, 1) == "f")
+                {
+                    FileInfo file = new FileInfo(path);
+                    filename.Text = newname.Text = file.Name;
+                    fullname.Value = file.FullName;
                 }
                 else
                 {
-                    if (Request.PathInfo.Substring(1, 1) == "f")
-                    {
-                        FileInfo file = new FileInfo(path);
-                        filename.Text = newname.Text = file.Name;
-                        fullname.Value = file.FullName;
-                    }
-                    else
-                    {
-                        DirectoryInfo dir = new DirectoryInfo(path);
-                        filename.Text = newname.Text = dir.Name;
-                        fullname.Value = dir.FullName;
-                    }
+                    DirectoryInfo dir = new DirectoryInfo(path);
+                    filename.Text = newname.Text = dir.Name;
+                    fullname.Value = dir.FullName;
                 }
             }
         }
