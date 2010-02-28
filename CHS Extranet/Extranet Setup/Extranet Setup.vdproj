@@ -45,6 +45,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_43EA66E6F413E2DE301641F8EC4D161F"
+        "OwnerKey" = "8:_8B06B925E13AC66F6565FC40BA784502"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_43EA66E6F413E2DE301641F8EC4D161F"
+        "OwnerKey" = "8:_B1F4DB1870CB4719A182101D2AAEDDF1"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_4A593FD5913B4610A1FFAA271A27410B"
         "OwnerKey" = "8:_B1F4DB1870CB4719A182101D2AAEDDF1"
         "MsmSig" = "8:_UNDEFINED"
@@ -59,6 +71,12 @@
         {
         "MsmKey" = "8:_7ABAD73B3BEE4D0DB8B94FF0921C206F"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8B06B925E13AC66F6565FC40BA784502"
+        "OwnerKey" = "8:_B1F4DB1870CB4719A182101D2AAEDDF1"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -89,6 +107,18 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_4A593FD5913B4610A1FFAA271A27410B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_8B06B925E13AC66F6565FC40BA784502"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_43EA66E6F413E2DE301641F8EC4D161F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -327,6 +357,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_43EA66E6F413E2DE301641F8EC4D161F"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:ICSharpCode.SharpZipLib, Version=0.85.5.452, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_43EA66E6F413E2DE301641F8EC4D161F"
+                    {
+                    "Name" = "8:ICSharpCode.SharpZipLib.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:ICSharpCode.SharpZipLib.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_1359032418F1474FA0134C4B00CE8E0F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4A593FD5913B4610A1FFAA271A27410B"
             {
             "AssemblyRegister" = "3:1"
@@ -407,6 +468,37 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8B06B925E13AC66F6565FC40BA784502"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Excel, Version=2.0.1.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_8B06B925E13AC66F6565FC40BA784502"
+                    {
+                    "Name" = "8:Excel.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Excel.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_1359032418F1474FA0134C4B00CE8E0F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_C33080DA0A18370335557C3E6CD1C0CA"
@@ -539,15 +631,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Extranet Setup"
-        "ProductCode" = "8:{4936C3DB-619C-4303-B3CF-D4377604CED7}"
-        "PackageCode" = "8:{956172C2-69D1-4CBD-8C04-01EE14190FA8}"
+        "ProductCode" = "8:{6088A1E6-AC53-4F6C-AC4F-9E215BCDF97B}"
+        "PackageCode" = "8:{76CF9048-3095-4138-862C-D55191E13C7D}"
         "UpgradeCode" = "8:{21D75F33-FC2A-4D3B-A1CF-08A7E3CBD738}"
         "AspNetVersion" = "8:4.0.21006.0"
         "RestartWWWService" = "11:TRUE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.4"
+        "ProductVersion" = "8:3.0.0"
         "Manufacturer" = "8:Crickhowell High School"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
