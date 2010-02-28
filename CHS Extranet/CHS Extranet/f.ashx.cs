@@ -89,7 +89,7 @@ namespace CHS_Extranet
             else
             {
                 unc = config.UNCPaths[p];
-                if (unc == null || !isWriteAuth(unc)) context.Response.Redirect("/Extranet/unauthorised.aspx", true);
+                if (unc == null || !isAuth(unc)) context.Response.Redirect("/Extranet/unauthorised.aspx", true);
                 else
                 {
                     path = string.Format(unc.UNC, Username) + path.Replace('/', '\\');
