@@ -88,6 +88,7 @@
     <Content Include="App_Data\Announcement.xml" />
     <Content Include="basestyle.css" />
     <Content Include="ClientBin\FileUpload.xap" />
+    <Content Include="images\icons\email.png" />
     <Content Include="images\icons\net.png" />
     <Content Include="images\icons\remotedesktop.png" />
     <Content Include="images\loading.gif" />
