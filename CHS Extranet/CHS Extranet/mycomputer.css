@@ -18,6 +18,8 @@
 #browser.Icons a i { display: none; }
 
 #HomeButtons { overflow: hidden; }
+h1.Announcement { background: #fceb80; font-family: Segoe Print, Comic Sans MS; font-size: 12px; color: Red; border: solid 1px #fff; border-radius: 8px; -moz-border-radius: 8px; padding: 4px 10px; }
+h1.Announcement b { font-size: 16px; }
 
 #viewbox { display: none; position: absolute; top: 76px; right: 20px; width: 80px; border: solid 1px #555; background: #eee; padding: 2px; }
 #viewbox.show { display: block; }
@@ -30,4 +32,59 @@
 	margin: 0px;
 	padding: 0px;
     border: solid 1px #555; background: #eee; padding: 2px;
+}
+
+.watermark {
+	background: #FFAAFF;
+}
+
+.popupControl {
+	background-color:#AAD4FF;
+	position:absolute;
+	visibility:hidden;
+	border-style:solid;
+	border-color: Black;
+	border-width: 2px;
+}
+
+.modalBackground {
+	background-color:Gray;
+	filter:alpha(opacity=70);
+	opacity:0.7;
+}
+
+.modalPopup {
+	background-color:#fff;
+	border-width:1px;
+	border-style:solid;
+	border-color: #7da2ce;
+	padding:3px;
+	width:250px;
+	border-radius: 3px;
+	-moz-border-radius: 3px; 
+}
+
+.sampleStyleA {
+	background-color:#FFF;
+}
+
+.sampleStyleB {
+	background-color:#FFF;
+	font-family:monospace;
+	font-size:10pt;
+	font-weight:bold;
+}
+
+.sampleStyleC {
+	background-color:#ddffdd;
+	font-family:sans-serif;
+	font-size:10pt;
+	font-style:italic;
+}
+
+.sampleStyleD {
+	background-color:Blue;
+	color:White;
+	font-family:Arial;
+	font-size:10pt;
 }

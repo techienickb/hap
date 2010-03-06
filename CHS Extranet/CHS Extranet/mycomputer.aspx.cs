@@ -144,7 +144,7 @@ namespace CHS_Extranet
                             string dirpath = subdir.FullName;
                             if (unc == null) dirpath = dirpath.Replace(userhome, "N/");
                             else dirpath = dirpath.Replace(string.Format(unc.UNC, Username), unc.Drive);
-                            items.Add(new MyComputerItem(subdir.Name, "Last Modified: " + subdir.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/MyComputer.aspx/" + dirpath, MyComputerItem.ParseForImage(subdir.Name), allowedit));
+                            items.Add(new MyComputerItem(subdir.Name, "Last Modified: " + subdir.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/MyComputer.aspx/" + dirpath.Replace("&", "&amp;"), MyComputerItem.ParseForImage(subdir.Name), allowedit));
                         }
                     }
                     foreach (FileInfo file in dir.GetFiles())

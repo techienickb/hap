@@ -1,4 +1,6 @@
 ﻿<%@ Page Title="Crickhowell High School - IT - Home Access Plus+" Language="C#" MasterPageFile="~/chs.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="CHS_Extranet.Default" %>
+
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit.HTMLEditor" TagPrefix="asp" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <%@ Register Assembly="System.Web.Ajax" Namespace="System.Web.UI" TagPrefix="asp" %>
 
@@ -39,11 +41,25 @@
                 </ProgressTemplate> 
             </asp:UpdateProgress> 
         </asp:Panel> 
+        <asp:Literal runat="server" ID="Announcement" />
+        <asp:Button runat="server" ID="EditAnnouncement" Text="Edit Annoucement" />
+        <asp:Panel runat="server" ID="AnnouncementEditor" style="display: none;" CssClass="modalPopup" Width="700px">
+<%--            <asp:UpdatePanel runat="server" ChildrenAsTriggers="true">
+                <ContentTemplate>--%>
+                    <asp:Editor ID="Editor1" runat="server" />
+                    <asp:CheckBox ID="ShowAnnouncement" runat="server" Text="Show Announcement" />
+                    <br />
+                    <asp:Button runat="server" Text="Save" ID="saveann" OnClick="saveann_Click" />
+                    <asp:Button ID="ok_btn" runat="server" Text="Close" />
+<%--                </ContentTemplate>
+            </asp:UpdatePanel>--%>
+        </asp:Panel>
+        <asp:ModalPopupExtender ID="ModalPopupExtender1" runat="server" TargetControlID="EditAnnouncement" PopupControlID="AnnouncementEditor" BackgroundCssClass="modalBackground" OkControlID="ok_btn" />
         <asp:modalpopupextender ID="ModalProgress" runat="server" 
             TargetControlID="panelUpdateProgress" BackgroundCssClass="modalMask" 
             PopupControlID="panelUpdateProgress" />
         <asp:UpdatePanel runat="server" ID="upl" ChildrenAsTriggers="true">
-            <ContentTemplate>
+            <ContentTemplate>                
                 <asp:Image runat="server" ID="userimage" ImageAlign="Right" />
                 <h2>Hello, <asp:Literal runat="server" ID="welcomename" />, welcome to Home Access Plus+</h2>
                 <h3>My Details:</h3>
