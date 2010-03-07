@@ -48,15 +48,11 @@
         <asp:Literal runat="server" ID="Announcement" />
         </div>
         <asp:Panel runat="server" ID="AnnouncementEditor" style="display: none;" CssClass="modalPopup" Width="700px">
-<%--            <asp:UpdatePanel runat="server" ChildrenAsTriggers="true">
-                <ContentTemplate>--%>
-                    <asp:Editor ID="Editor1" runat="server" />
-                    <asp:CheckBox ID="ShowAnnouncement" runat="server" Text="Show Announcement" />
-                    <br />
-                    <asp:Button runat="server" Text="Save" ID="saveann" OnClick="saveann_Click" />
-                    <asp:Button ID="ok_btn" runat="server" Text="Close" />
-<%--                </ContentTemplate>
-            </asp:UpdatePanel>--%>
+            <asp:Editor ID="Editor1" runat="server" />
+            <asp:CheckBox ID="ShowAnnouncement" runat="server" Text="Show Announcement" />
+            <br />
+            <asp:Button runat="server" Text="Save" ID="saveann" OnClick="saveann_Click" />
+            <asp:Button ID="ok_btn" runat="server" Text="Close" />
         </asp:Panel>
         <asp:ModalPopupExtender ID="ModalPopupExtender1" runat="server" TargetControlID="EditAnnouncement" PopupControlID="AnnouncementEditor" BackgroundCssClass="modalBackground" OkControlID="ok_btn" />
         <asp:modalpopupextender ID="ModalProgress" runat="server" 

@@ -87,12 +87,20 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\Announcement.xml" />
+    <Content Include="App_Data\Tickets.xml" />
     <Content Include="basestyle.css" />
     <Content Include="ClientBin\FileUpload.xap" />
+    <Content Include="HelpDesk\Default.aspx" />
+    <Content Include="HelpDesk\helpdesksheet.css" />
     <Content Include="images\icons\email.png" />
     <Content Include="images\icons\net.png" />
     <Content Include="images\icons\remotedesktop.png" />
     <Content Include="images\loading.gif" />
+    <Content Include="images\statusicons\fixed.png" />
+    <Content Include="images\statusicons\new.png" />
+    <Content Include="images\statusicons\newadmin.png" />
+    <Content Include="images\statusicons\newticket.png" />
+    <Content Include="images\statusicons\withit.png" />
     <Content Include="move.aspx" />
     <Content Include="newfolder.aspx" />
     <Content Include="rename.aspx" />
@@ -167,6 +175,13 @@
       <DependentUpon>FileUpload.ashx</DependentUpon>
     </Compile>
     <Compile Include="FileUploadProcess.cs" />
+    <Compile Include="HelpDesk\Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HelpDesk\Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
     <Compile Include="move.aspx.cs">
       <DependentUpon>move.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -310,6 +325,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="HelpDesk\Web.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

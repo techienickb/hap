@@ -32,5 +32,18 @@ namespace CHS_Extranet.Configuration
             get { return (string)this["studentemailformat"]; }
             set { this["studentemailformat"] = value; }
         }
+        [ConfigurationProperty("adminemailaddress", DefaultValue = "", IsRequired = false)]
+        public string AdminEmailAddress
+        {
+            get { return (string)this["adminemailaddress"]; }
+            set { this["adminemailaddress"] = value; }
+        }
+
+        [ConfigurationProperty("smtpserver", DefaultValue = "", IsRequired = false)]
+        public string SMTPServer
+        {
+            get { return (string)this["smtpserver"]; }
+            set { this["smtpserver"] = value; }
+        }
     }
 }
