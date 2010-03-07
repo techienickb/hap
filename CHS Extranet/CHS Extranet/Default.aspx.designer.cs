@@ -40,6 +40,15 @@ namespace CHS_Extranet {
         protected global::System.Web.UI.UpdateProgress UpdateProg1;
         
         /// <summary>
+        /// EditAnnouncement control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton EditAnnouncement;
+        
+        /// <summary>
         /// Announcement control.
         /// </summary>
         /// <remarks>
@@ -47,15 +56,6 @@ namespace CHS_Extranet {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal Announcement;
-        
-        /// <summary>
-        /// EditAnnouncement control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button EditAnnouncement;
         
         /// <summary>
         /// AnnouncementEditor control.
