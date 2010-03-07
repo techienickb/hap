@@ -20,6 +20,9 @@
 #HomeButtons { overflow: hidden; }
 h1.Announcement { background: #fceb80; font-family: Segoe Print, Comic Sans MS; font-size: 12px; color: Red; border: solid 1px #fff; border-radius: 8px; -moz-border-radius: 8px; padding: 4px 10px; }
 h1.Announcement b { font-size: 16px; }
+#EditAnn { position: relative; }
+#EditAnn a.EditAnnLink { position: absolute; right: 0; float: right; }
+#EditAnn a.EditAnnLink img { vertical-align: middle; text-decoration: none; height: 48px; }
 
 #viewbox { display: none; position: absolute; top: 76px; right: 20px; width: 80px; border: solid 1px #555; background: #eee; padding: 2px; }
 #viewbox.show { display: block; }

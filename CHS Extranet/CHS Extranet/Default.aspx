@@ -36,13 +36,17 @@
             <asp:UpdateProgress ID="UpdateProg1" DisplayAfter="0" runat="server"> 
                 <ProgressTemplate> 
                     <div style="position: relative; top: 30%; text-align: center; background: #fff;"> 
-                        <img src="/images/loading.gif" alt="" style="vertical-align: text-bottom;" /> Loading...
+                        <img runat="server" src="~/images/loading.gif" alt="" style="vertical-align: text-bottom;" /> Loading...
                     </div> 
                 </ProgressTemplate> 
             </asp:UpdateProgress> 
-        </asp:Panel> 
+        </asp:Panel>
+        <div id="EditAnn">
+        <asp:LinkButton runat="server" CssClass="EditAnnLink" ToolTip="Edit Announcement" ID="EditAnnouncement">
+            <img runat="server" src="~/images/icons/edit.png" alt="Edit Announcement" />
+        </asp:LinkButton>
         <asp:Literal runat="server" ID="Announcement" />
-        <asp:Button runat="server" ID="EditAnnouncement" Text="Edit Annoucement" />
+        </div>
         <asp:Panel runat="server" ID="AnnouncementEditor" style="display: none;" CssClass="modalPopup" Width="700px">
 <%--            <asp:UpdatePanel runat="server" ChildrenAsTriggers="true">
                 <ContentTemplate>--%>
