@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Tickets>
+  <Ticket id="1" subject="brother printer" priority="Normal" status="New">
+    <Note datetime="2010-03-07 11:24:30Z" username="johnw">
+      <![CDATA[Room: A6<br />
+      there is a paper jam which I can' clear, it needs someone with small fingers and expertise.  Please can you help?]]>
+    </Note>
+  </Ticket>
+</Tickets>
