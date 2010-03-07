@@ -132,9 +132,56 @@
                         </asp:PlaceHolder>
                     </asp:PlaceHolder>
                 </div>
-                <div class="ContentOutter2"><b><b></b></b></div>
             </div>
-            </asp:PlaceHolder>            
+            </asp:PlaceHolder>
         </div>
+        <script type="text/javascript">
+            function setButtonState(editor, buttonName, toolbarNumber) {
+                // get collection of buttons in the toolbar
+                var buttons = editor.get_editPanel().get_toolbars()[toolbarNumber].get_buttons();
+                // looking for the 'buttonName' button
+                var x = -1;
+                for (var i = 0; i < buttons.length; i++) {
+                    var button = buttons[i];
+                    if (button.get_buttonName() == buttonName) {
+                        x = i + 1;
+                        // button's node
+                        var element = button.get_element();
+                        element.style.display = "none";
+                    }
+                    else if (i == x) {
+                        var element = button.get_element();
+                        element.style.display = "none";
+                    }
+                }
+            }
+
+            function setButtonState_HTMLtext(editor) {
+                // "HtmlMode" - name of the "HTML text" button 
+                // (class: AjaxControlToolkit.HTMLEditor.ToolbarButton.HtmlMode)
+                setButtonState(editor, "FixedBackColor", 1); // 0 - bottom toolbar, 1 - top toolbar
+                setButtonState(editor, "BackColorSelector", 1); // 0 - bottom toolbar, 1 - top toolbar
+                setButtonState(editor, "BackColorClear", 1); // 0 - bottom toolbar, 1 - top toolbar
+                setButtonState(editor, "FixedForeColor", 1); // 0 - bottom toolbar, 1 - top toolbar
+                setButtonState(editor, "ForeColorSelector", 1); // 0 - bottom toolbar, 1 - top toolbar
+                setButtonState(editor, "ForeColorClear", 1); // 0 - bottom toolbar, 1 - top toolbar
+                setButtonState(editor, "FontName", 1); // 0 - bottom toolbar, 1 - top toolbar
+                setButtonState(editor, "FontSize", 1); // 0 - bottom toolbar, 1 - top toolbar
+            }
+
+            function dosomething() {
+                try {
+                    setButtonState_HTMLtext($find("<%= newadminticketeditor.ClientID %>"));
+                } catch (ex) {  }
+                try {
+                    setButtonState_HTMLtext($find("<%= newticketeditor.ClientID %>"));
+                } catch (ex) { }
+                try {
+                    setButtonState_HTMLtext($find("<%= newnote.ClientID %>"));
+                } catch (ex) {  }
+            }
+            Sys.WebForms.PageRequestManager.getInstance().add_pageLoaded(dosomething);
+
+        </script>
     </div>
 </asp:Content>

@@ -120,10 +120,7 @@ namespace CHS_Extranet.HelpDesk
             {
                 List<Ticket> tickets = new List<Ticket>();
                 foreach (XmlNode node in doc.SelectNodes(xpath))
-                {
-                    Response.Write(node.InnerXml);
                     tickets.Add(Ticket.Parse(node));
-                }
                 ticketsrepeater.DataSource = tickets.ToArray();
                 ticketsrepeater.DataBind();
                 newadminsupportticket.Visible = true;
