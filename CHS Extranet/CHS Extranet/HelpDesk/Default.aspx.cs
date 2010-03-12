@@ -75,6 +75,7 @@ namespace CHS_Extranet.HelpDesk
         public string getDisplayName(object o)
         {
             UserPrincipal u = o as UserPrincipal;
+            if (string.IsNullOrEmpty(u.DisplayName)) return Username;
             return u.DisplayName;
         }
 
