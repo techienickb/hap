@@ -100,7 +100,7 @@ namespace CHS_Extranet
                 FileInfo file = new FileInfo(path);
 
                 item.Text = file.Name;
-                unziptox.Text = string.Format(unziptox.Text, file.Name);
+                unziptox.Text = string.Format(unziptox.Text, file.Name.Replace(file.Extension, ""));
                 fullname.Value = path;
             }
         }
@@ -108,48 +108,10 @@ namespace CHS_Extranet
         protected void ok_Click(object sender, EventArgs e)
         {
             FileInfo file = new FileInfo(fullname.Value);
-            using (ZipInputStream s = new ZipInputStream(file.OpenRead()))
-            {
-
-                ZipEntry theEntry;
-                while ((theEntry = s.GetNextEntry()) != null)
-                {
-                    DirectoryInfo dir;
-                    if (unziphere.Checked) dir = file.Directory;
-                    else dir  = file.Directory.CreateSubdirectory(file.Name.Replace(file.Extension, ""));
-
-                    string directoryName = Path.GetDirectoryName(theEntry.Name);
-                    string fileName = Path.GetFileName(theEntry.Name);
-
-                    // create directory
-                    if (directoryName.Length > 0)
-                    {
-                        if (!Directory.Exists(Path.Combine(dir.FullName, directoryName))) dir.CreateSubdirectory(directoryName);
-                    }
-
-                    if (fileName != String.Empty)
-                    {
-                        using (FileStream streamWriter = File.Create(Path.Combine(dir.FullName, theEntry.Name)))
-                        {
-
-                            int size = 2048;
-                            byte[] data = new byte[2048];
-                            while (true)
-                            {
-                                size = s.Read(data, 0, data.Length);
-                                if (size > 0)
-                                {
-                                    streamWriter.Write(data, 0, size);
-                                }
-                                else
-                                {
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            DirectoryInfo dir = file.Directory;
+            if (unziptox.Checked) dir = dir.CreateSubdirectory(file.Name.Replace(file.Extension, ""));
+            FastZip fastZip = new FastZip();
+            fastZip.ExtractZip(file.FullName, dir.FullName, "");
             closeandrefresh.Visible = true;
         }
     }
