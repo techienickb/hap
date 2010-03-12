@@ -144,8 +144,13 @@ namespace CHS_Extranet.HelpDesk
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(Server.MapPath("~/App_Data/Tickets.xml"));
-            XmlNodeList tickets = doc.SelectNodes("/Tickets/Ticket");
-            int x = int.Parse(tickets[tickets.Count - 1].Attributes["id"].Value) + 1;
+            int x;
+            if (doc.SelectSingleNode("/Tickets").ChildNodes.Count > 0)
+            {
+                XmlNodeList tickets = doc.SelectNodes("/Tickets/Ticket");
+                x = int.Parse(tickets[tickets.Count - 1].Attributes["id"].Value) + 1;
+            }
+            else x = 1;
             _id = x.ToString();
             XmlElement ticket = doc.CreateElement("Ticket");
             ticket.SetAttribute("id", x.ToString());
