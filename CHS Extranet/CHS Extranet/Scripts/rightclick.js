@@ -166,7 +166,11 @@ var SimpleContextMenu = {
                 SimpleContextMenu._menuElement.getElementsByTagName('a')[3].href = el.href.replace(/\/extranet\/f.ashx/gi, "/extranet/xls.aspx");
                 SimpleContextMenu._menuElement.getElementsByTagName('a')[3].style.display = "block";
             }
-            else SimpleContextMenu._menuElement.getElementsByTagName('a')[3].style.display = "none";
+            else if (el.href.match(/.zip/i)) {
+                SimpleContextMenu._menuElement.getElementsByTagName('a')[4].href = el.href.replace(/\/extranet\/f.ashx/gi, "/extranet/unzip.aspx");
+                SimpleContextMenu._menuElement.getElementsByTagName('a')[4].style.display = "block";
+            }
+            else SimpleContextMenu._menuElement.getElementsByTagName('a')[3].style.display = SimpleContextMenu._menuElement.getElementsByTagName('a')[4].style.display = "none";
             SimpleContextMenu._menuElement.style.left = m.x + s.x + 'px';
             SimpleContextMenu._menuElement.style.top = m.y + s.y + 'px';
             SimpleContextMenu._menuElement.style.display = 'block';

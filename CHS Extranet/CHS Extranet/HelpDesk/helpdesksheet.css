@@ -1,14 +1,15 @@
-﻿#maincol { position: relative; height: 500px; }
-#ticketlist { position: absolute; top: 5px; left: 5px; bottom: 5px; width: 300px; overflow: hidden; border: solid 1px #7da2ce; border-radius: 3px; -moz-border-radius: 3px; }
+﻿#maincol { }
+#ticketlist { float: left; width: 300px; overflow: hidden; margin: 5px; border: solid 1px #7da2ce; border-radius: 3px; -moz-border-radius: 3px; }
 #ticketlist h1, #ticket div.panel h1 { display: block; height: 30px; line-height: 30px; margin: 0; padding: 0 4px; background: #7da2ce url(/Extranet/images/bar.gif) repeat-x; color: #1f3976; font-size: 14px; }
-#ticketlist #tickets { display: block; position: absolute; top: 30px; bottom: 0; left: 0; right: 0; width: 300px; overflow: auto; }
+#ticketlist #tickets { display: block; height: 500px; width: 300px; overflow: auto; }
 #ticketlist #tickets a { display: block; margin: 2px; border: solid 1px #fff; border-radius: 3px; -moz-border-radius: 3px; color: #000; padding: 4px; height: 42px; display: block; overflow: hidden; text-decoration: none; }
 #ticketlist #tickets a i { font-style: normal; color: #999; display: block; font-size: 90%; }
 #ticketlist #tickets a:hover { border: solid 1px #7da2ce; background: #f9fbfd url(/Extranet/images/browser-a-hover.gif) repeat-x; text-decoration: none; }
 #ticketlist #tickets a img { float: left; margin: 0 4px 0 0; height: 40px; border: 0; }
+#ticketlist #tickets a img.Priority { position: absolute; margin-left: -25px; height: auto; }
 #ticketlist #tickets a.Selected { border: solid 1px #7da2ce; }
 label { font-weight: bold; padding: 0 5px 0 0; }
 
-#ticket { position: absolute; top: 5px; left: 315px; bottom: 5px; right: 5px; }
-#ticket div.panel { position: absolute; top: 0; left: 0; bottom: 0; right: 0; border: solid 1px #7da2ce; border-radius: 5px; -moz-border-radius: 5px; }
-#ticket div.content { overflow: auto; position: absolute; top: 50px; left: 0; bottom: 0; right: 0; }
+#ticket { margin-left: 305px;  }
+#ticket div.panel { border: solid 1px #7da2ce; margin: 5px; border-radius: 5px; -moz-border-radius: 5px; }
+#ticket div.content { overflow: auto; height: 500px; }

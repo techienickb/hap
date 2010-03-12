@@ -5,14 +5,14 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.DirectoryServices.AccountManagement;
-using System.Configuration;
-using System.Security.Authentication;
-using System.IO;
 using CHS_Extranet.Configuration;
+using System.Configuration;
+using System.IO;
+using ICSharpCode.SharpZipLib.Zip;
 
 namespace CHS_Extranet
 {
-    public partial class move : System.Web.UI.Page
+    public partial class Unzip : System.Web.UI.Page
     {
         private String _DomainDN;
         private String _ActiveDirectoryConnectionString;
@@ -83,18 +83,8 @@ namespace CHS_Extranet
             {
                 string userhome = up.HomeDirectory;
                 if (!userhome.EndsWith("\\")) userhome += "\\";
-                string path, p;
-                if (Request.QueryString["path"].Substring(1, 1) == "f")
-                {
-                    path = Request.QueryString["path"].Remove(0, 4).Replace('^', '&');
-                    p = Request.QueryString["path"].Substring(3, 1);
-                }
-                else
-                {
-                    path = Request.QueryString["path"].Remove(0, 2).Replace('^', '&');
-                    p = Request.QueryString["path"].Substring(1, 1);
-                }
-
+                string p = Request.PathInfo.Substring(1, 1);
+                string path = Request.PathInfo.Remove(0, 2).Replace('^', '&');
                 uncpath unc = null;
                 if (p == "N") path = up.HomeDirectory + path.Replace('/', '\\');
                 else
@@ -106,71 +96,61 @@ namespace CHS_Extranet
                         path = string.Format(unc.UNC, Username) + path.Replace('/', '\\');
                     }
                 }
-                if (Request.QueryString["path"].Substring(1, 1) == "f")
-                {
-                    FileInfo file = new FileInfo(path);
-                    moveitem.Text = file.Name;
-                    fullname.Value = file.FullName;
-                    populatetree(file.Directory, p, p == "H");
-                }
-                else
-                {
-                    DirectoryInfo dir = new DirectoryInfo(path);
-                    moveitem.Text = dir.Name;
-                    fullname.Value = dir.FullName;
-                    populatetree(dir, p, p == "H");
-                }
-            }
-        }
 
-        private void populatetree(DirectoryInfo ignoredir, string p, bool admin)
-        {
-            if (!admin)
-            {
-                TreeNode h = new TreeNode("My Documents", up.HomeDirectory);
-                populatenode(h, ignoredir);
-                TreeView1.Nodes.Add(h);
-            } else {
-                TreeNode h = new TreeNode("My Admin Documents", string.Format(config.UNCPaths["H"].UNC, Username));
-                populatenode(h, ignoredir);
-                TreeView1.Nodes.Add(h);
-            }
-        }
+                FileInfo file = new FileInfo(path);
 
-        private void populatenode(TreeNode node, DirectoryInfo ignoredir)
-        {
-            foreach (DirectoryInfo d in new DirectoryInfo(node.Value).GetDirectories())
-                if (ignoredir != null && d != ignoredir && !d.FullName.ToLower().Contains("recycle")) {
-                    TreeNode child = new TreeNode(d.Name, d.FullName);
-                    populatenode(child, ignoredir);
-                    child.Collapse();
-                    node.ChildNodes.Add(child);
-                }
+                item.Text = file.Name;
+                unziptox.Text = string.Format(unziptox.Text, file.Name);
+                fullname.Value = path;
+            }
         }
 
         protected void ok_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(TreeView1.SelectedValue))
+            FileInfo file = new FileInfo(fullname.Value);
+            using (ZipInputStream s = new ZipInputStream(file.OpenRead()))
             {
-                if (Request.QueryString["path"].Substring(1, 1) == "f")
+
+                ZipEntry theEntry;
+                while ((theEntry = s.GetNextEntry()) != null)
                 {
-                    FileInfo file = new FileInfo(fullname.Value);
-                    file.MoveTo(Path.Combine(TreeView1.SelectedValue, file.Name));
+                    DirectoryInfo dir;
+                    if (unziphere.Checked) dir = file.Directory;
+                    else dir  = file.Directory.CreateSubdirectory(file.Name.Replace(file.Extension, ""));
+
+                    string directoryName = Path.GetDirectoryName(theEntry.Name);
+                    string fileName = Path.GetFileName(theEntry.Name);
+
+                    // create directory
+                    if (directoryName.Length > 0)
+                    {
+                        if (!Directory.Exists(Path.Combine(dir.FullName, directoryName))) dir.CreateSubdirectory(directoryName);
+                    }
+
+                    if (fileName != String.Empty)
+                    {
+                        using (FileStream streamWriter = File.Create(Path.Combine(dir.FullName, theEntry.Name)))
+                        {
+
+                            int size = 2048;
+                            byte[] data = new byte[2048];
+                            while (true)
+                            {
+                                size = s.Read(data, 0, data.Length);
+                                if (size > 0)
+                                {
+                                    streamWriter.Write(data, 0, size);
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
-                else
-                {
-                    DirectoryInfo dir = new DirectoryInfo(fullname.Value);
-                    dir.MoveTo(Path.Combine(TreeView1.SelectedValue, dir.Name));
-                }
-                closeandrefresh.Visible = true;
             }
-
+            closeandrefresh.Visible = true;
         }
-
-        protected void TreeView1_SelectedNodeChanged(object sender, EventArgs e)
-        {
-            ok.Enabled = true;
-        }
-
     }
 }

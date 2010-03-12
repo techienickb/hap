@@ -108,7 +108,7 @@ namespace CHS_Extranet
                 string userhome = up.HomeDirectory;
                 if (!userhome.EndsWith("\\")) userhome += "\\";
                 string p = Request.PathInfo.Substring(1, 1);
-                string path = Request.PathInfo.Remove(0, 2);
+                string path = Request.PathInfo.Remove(0, 2).Replace('^', '&');
                 uncpath unc = null;
                 if (p == "N") path = up.HomeDirectory + path.Replace('/', '\\');
                 else
@@ -144,7 +144,7 @@ namespace CHS_Extranet
                             string dirpath = subdir.FullName;
                             if (unc == null) dirpath = dirpath.Replace(userhome, "N/");
                             else dirpath = dirpath.Replace(string.Format(unc.UNC, Username), unc.Drive);
-                            items.Add(new MyComputerItem(subdir.Name, "Last Modified: " + subdir.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/MyComputer.aspx/" + dirpath.Replace("&", "&amp;"), MyComputerItem.ParseForImage(subdir.Name), allowedit));
+                            items.Add(new MyComputerItem(subdir.Name, "Last Modified: " + subdir.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/MyComputer.aspx/" + dirpath.Replace("&", "^"), MyComputerItem.ParseForImage(subdir), allowedit));
                         }
                     }
                     foreach (FileInfo file in dir.GetFiles())
@@ -155,9 +155,9 @@ namespace CHS_Extranet
                             if (unc == null) dirpath = dirpath.Replace(userhome, "N/");
                             else dirpath = dirpath.Replace(string.Format(unc.UNC, Username), unc.Drive);
                             if (!string.IsNullOrEmpty(file.Extension))
-                                items.Add(new MyComputerItem(file.Name.Replace(file.Extension, ""), "Last Modified: " + file.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/f.ashx/" + dirpath.Replace("&", "&amp;"), MyComputerItem.ParseForImage(file.Extension.ToLower()), allowedit));
+                                items.Add(new MyComputerItem(file.Name.Replace(file.Extension, ""), "Last Modified: " + file.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/f.ashx/" + dirpath.Replace("&", "^"), MyComputerItem.ParseForImage(file), allowedit));
                             else
-                                items.Add(new MyComputerItem(file.Name, "Last Modified: " + file.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/f.ashx/" + dirpath.Replace("&", "&amp;"), MyComputerItem.ParseForImage(file.Extension.ToLower()), allowedit));
+                                items.Add(new MyComputerItem(file.Name, "Last Modified: " + file.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/f.ashx/" + dirpath.Replace("&", "^"), MyComputerItem.ParseForImage(file), allowedit));
                         }
                     }
                 }

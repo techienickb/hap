@@ -34,6 +34,7 @@
                 <ItemTemplate>
                     <a href="<%#string.Format("/Extranet/HelpDesk/Default.aspx?view={0}", Eval("Id")) %>" id="ticket-<%#Eval("Id")%>">
                         <img src="<%#string.Format("/Extranet/Images/StatusIcons/{0}.png", Eval("Status")) %>" alt="<%#Eval("Status")%>" />
+                        <img src="<%#string.Format("/Extranet/Images/StatusIcons/priority_{0}.png", Eval("Priority")) %>" alt="" class="Priority" />
                         <%# Eval("Subject") %>
                         <i>Opened <%# Eval("Date") %> by <%# getDisplayName(Eval("User")) %></i>
                     </a>
@@ -89,7 +90,7 @@
                         <div style="position: relative;">
                         <asp:Editor ID="newticketeditor" runat="server" Width="100%" Height="300px" />
                         </div>
-                        <div style="text-align: center;>
+                        <div style="text-align: center;">
                             <asp:Button ID="newticketbutton" runat="server" Text="File Ticket" OnClick="FileTicket_Click" />
                         </div>
                     </div>
@@ -99,7 +100,7 @@
             <div class="panel">
                 <asp:Repeater runat="server" ID="currentticket">
                     <ItemTemplate>
-                        <h1><span style="float: right;"><%#Eval("Status") %></span><a href="?view=<%#Eval("Id") %>">#<%#Eval("Id") %></a> - <b><%#Eval("Subject") %> - </b></h1>
+                        <h1><span style="float: right;"><%#Eval("Status") %></span><a href="?view=<%#Eval("Id") %>">#<%#Eval("Id") %></a> - <b><%#Eval("Subject") %> - Priority: <%#Eval("Priority")%></b></h1>
                         <div style="border-bottom: solid 1px #7da2ce; padding: 4px;">Filed on <%#Eval("Date")%> by <%#((CHS_Extranet.HelpDesk.Ticket)Container.DataItem).User.DisplayName %></div>
                     </ItemTemplate>
                 </asp:Repeater>
@@ -147,11 +148,15 @@
                         x = i + 1;
                         // button's node
                         var element = button.get_element();
-                        element.style.display = "none";
+                        element.style.position = "absolute";
+                        element.style.top = "-100000px";
+                        element.style.left = "-10000px";
                     }
                     else if (i == x) {
                         var element = button.get_element();
-                        element.style.display = "none";
+                        element.style.position = "absolute";
+                        element.style.top = "-100000px";
+                        element.style.left = "-10000px";
                     }
                 }
             }
