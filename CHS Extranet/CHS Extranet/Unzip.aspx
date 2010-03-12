@@ -18,7 +18,7 @@
     </p>
     <p>
         <asp:HiddenField runat="server" ID="fullname" />
-        <asp:Button runat="server" Enabled="false" ID="ok" Text="Unzip" onclick="ok_Click" />
+        <asp:Button runat="server" ID="ok" Text="Unzip" onclick="ok_Click" />
         <input type="button" value="Cancel" onclick="window.close();" />
     </p>
     <asp:PlaceHolder runat="server" id="closeandrefresh" visible="false">
