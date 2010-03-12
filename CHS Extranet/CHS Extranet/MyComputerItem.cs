@@ -17,16 +17,29 @@ namespace CHS_Extranet
             RightClick = rightclick;
         }
 
-        public static string ParseForImage(string ExtentionOrName)
+        public static string ParseForImage(object ExtentionOrName)
         {
-            string e = ExtentionOrName;
+            string e;
+            if (ExtentionOrName.GetType() == typeof(FileInfo))
+            {
+                e = ((FileInfo)ExtentionOrName).Extension.ToLower();
+                if (string.IsNullOrEmpty(e)) return "file.png";
+            }
+            else
+            {
+                e = ((DirectoryInfo)ExtentionOrName).Name;
+                switch (e) 
+                {
+                    case "My Pictures": return "mypictures.png"; 
+                    case "My Videos": return "myvideos.png"; 
+                    case "My Music": return "mymusic.png"; 
+                    case "My Settings": return "settings.png"; 
+                    default: return "folder.png";
+                }
+            }
             if (e.StartsWith(".")) e = e.Remove(0, 1);
             switch (e)
             {
-                case "My Pictures": return "mypictures.png"; 
-                case "My Videos": return "myvideos.png"; 
-                case "My Music": return "mymusic.png"; 
-                case "My Settings": return "settings.png"; 
                 case "txt": return "txt.png";
                 case "docx": return "doc.png"; 
                 case "doc": return "doc.png";
@@ -68,7 +81,6 @@ namespace CHS_Extranet
                 case "exe": return "exe.png"; 
                 case "msi": return "msi.png"; 
                 default:
-                    if (!ExtentionOrName.StartsWith(".")) return "folder.png";
                     try
                     {
                         foreach (FileInfo file in new DirectoryInfo(HttpContext.Current.Server.MapPath("~/images/icons/")).GetFiles())

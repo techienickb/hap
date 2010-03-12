@@ -82,7 +82,7 @@ namespace CHS_Extranet
             {
                 string userhome = up.HomeDirectory;
                 if (!userhome.EndsWith("\\")) userhome += "\\";
-                string path = Request.QueryString["path"].Remove(0, 1);
+                string path = Request.QueryString["path"].Remove(0, 1).Replace('^', '&');
                 string p = Request.QueryString["path"].Substring(0, 1);
                 uncpath unc = null;
                 if (p == "N") path = up.HomeDirectory + path.Replace('/', '\\');

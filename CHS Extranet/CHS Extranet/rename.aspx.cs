@@ -86,12 +86,12 @@ namespace CHS_Extranet
                 string path, p;
                 if (Request.PathInfo.Substring(1, 1) == "f")
                 {
-                    path = Request.PathInfo.Remove(0, 4);
+                    path = Request.PathInfo.Remove(0, 4).Replace('^', '&');
                     p = Request.PathInfo.Substring(3, 1);
                 }
                 else
                 {
-                    path = Request.PathInfo.Remove(0, 2);
+                    path = Request.PathInfo.Remove(0, 2).Replace('^', '&');
                     p = Request.PathInfo.Substring(1, 1);
                 }
 
