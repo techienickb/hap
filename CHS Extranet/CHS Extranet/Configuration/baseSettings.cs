@@ -45,5 +45,33 @@ namespace CHS_Extranet.Configuration
             get { return (string)this["smtpserver"]; }
             set { this["smtpserver"] = value; }
         }
+
+        [ConfigurationProperty("smtpserverusername", DefaultValue = "", IsRequired = false)]
+        public string SMTPServerUsername
+        {
+            get { return (string)this["smtpserverusername"]; }
+            set { this["smtpserverusername"] = value; }
+        }
+
+        [ConfigurationProperty("smtpserverpassword", DefaultValue = "", IsRequired = false)]
+        public string SMTPServerPassword
+        {
+            get { return (string)this["smtpserverpassword"]; }
+            set { this["smtpserverpassword"] = value; }
+        }
+
+        [ConfigurationProperty("smtpserverssl", DefaultValue = false, IsRequired = false)]
+        public bool SMTPServerSSL
+        {
+            get { return bool.Parse(this["smtpserverssl"].ToString()); }
+            set { this["smtpserverssl"] = value.ToString(); }
+        }
+
+        [ConfigurationProperty("smtpserverport", DefaultValue = 25, IsRequired = false)]
+        public int SMTPServerPort
+        {
+            get { return int.Parse(this["smtpserverport"].ToString()); }
+            set { this["smtpserverport"] = value.ToString(); }
+        }
     }
 }
