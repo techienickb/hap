@@ -90,8 +90,12 @@
     <Content Include="App_Data\Tickets.xml" />
     <Content Include="basestyle.css" />
     <Content Include="ClientBin\FileUpload.xap" />
+    <Content Include="HelpDesk\newusernote.htm" />
+    <Content Include="HelpDesk\newadminnote.htm" />
+    <Content Include="HelpDesk\newadminticket.htm" />
     <Content Include="HelpDesk\Default.aspx" />
     <Content Include="HelpDesk\helpdesksheet.css" />
+    <Content Include="HelpDesk\newuserticket.htm" />
     <Content Include="images\icons\edit.png" />
     <Content Include="images\icons\email.png" />
     <Content Include="images\icons\helpdesk.png" />

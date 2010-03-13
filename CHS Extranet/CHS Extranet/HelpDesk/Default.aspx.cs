@@ -11,6 +11,7 @@ using CHS_Extranet.Configuration;
 using System.Net.Mail;
 using System.DirectoryServices;
 using System.Net;
+using System.IO;
 
 namespace CHS_Extranet.HelpDesk
 {
@@ -183,7 +184,9 @@ namespace CHS_Extranet.HelpDesk
             mes.To.Add(new MailAddress(config.BaseSettings.AdminEmailAddress, "IT Department"));
 
             mes.IsBodyHtml = true;
-            mes.Body = "<html><head><title>Ticket (#" + x + ") has been Created</title><style type=\"text/css\">html { font-family: Calibri; font-sizw: 11px; } blockquote { margin: 10px; border: dotted 1px silver; padding: 5px; font-family: Lucida Console; font-size: 11px; }</style></head><body><h1>Ticket (#" + x + ") has been Created</h1><p>Nick, <br /><br />A New Ticket (#" + x + ") has been Created with: <br /><blockquote>" + newticketsubject.Text + "<br /><br />" + newticketeditor.Content + "<br />In Room: " + newticketroom.Text + "</blockquote><br />This was Created by " + up.DisplayName + "</p><h3>You can update the ticket by visiting <a href=\"https://" + Request.Url.Host + "/extranet/helpdesk/?view=" + x + "\">https://" + Request.Url.Host + "/extranet/helpdesk/?view=" + x + "</a></h3><p>This email was sent an unmonitored account.</body></html>";
+            FileInfo template = new FileInfo(Server.MapPath("~/HelpDesk/newuserticket.htm"));
+            StreamReader fs = template.OpenText();
+            mes.Body = string.Format(fs.ReadToEnd(), x, newticketsubject.Text, newticketeditor.Content, newticketroom.Text, up.DisplayName, Request.Url.Host);
 
             SmtpClient smtp = new SmtpClient(config.BaseSettings.SMTPServer);
             if (!string.IsNullOrEmpty(config.BaseSettings.SMTPServerUsername))
@@ -235,7 +238,10 @@ namespace CHS_Extranet.HelpDesk
             mes.To.Add(new MailAddress(user.EmailAddress, user.DisplayName));
 
             mes.IsBodyHtml = true;
-            mes.Body = "<html><head><title>A Support Ticket (#" + x + ") has been Logged</title><style type=\"text/css\">html { font-family: Calibri; font-sizw: 11px; } blockquote { margin: 10px; border: dotted 1px silver; padding: 5px; font-family: Lucida Console; font-size: 11px; }</style></head><body><h1>A new Support Ticket (#" + x + ") has been Logged</h1><p>Nick, <br /><br />A New Ticket (#" + x + ") has been Logged with: <br /><blockquote>" + newadminticketsubject.Text + "<br /><br />" + newadminticketeditor.Content + "</blockquote><br />This was Created for " + user.DisplayName + "</p><h3>You can update the ticket by visiting <a href=\"https://" + Request.Url.Host + "/extranet/helpdesk/?view=" + x + "\">https://" + Request.Url.Host + "/extranet/helpdesk/?view=" + x + "</a></h3><p>This email was sent an unmonitored account.</p></body></html>";
+
+            FileInfo template = new FileInfo(Server.MapPath("~/HelpDesk/newadminticket.htm"));
+            StreamReader fs = template.OpenText();
+            mes.Body = string.Format(fs.ReadToEnd(), x, newadminticketsubject.Text, newadminticketeditor.Content, user.DisplayName, Request.Url.Host);
             
             SmtpClient smtp = new SmtpClient(config.BaseSettings.SMTPServer);
             if (!string.IsNullOrEmpty(config.BaseSettings.SMTPServerUsername))
@@ -268,7 +274,10 @@ namespace CHS_Extranet.HelpDesk
                 mes.To.Add(new MailAddress(user.EmailAddress, user.DisplayName));
 
                 mes.IsBodyHtml = true;
-                mes.Body = "<html><head><title>Your Ticket (#" + Request.QueryString["view"] + ") has been " + (CheckFixed.Checked ? "Closed" : "Updated") + "</title><style type=\"text/css\">html { font-family: Calibri; font-sizw: 11px; } blockquote { margin: 10px; border: dotted 1px silver; padding: 5px; font-family: Lucida Console; font-size: 11px; }</style></head><body><h1>Your Ticket (#" + Request.QueryString["view"] + ") has been " + (CheckFixed.Checked ? "Closed" : "Updated") + "</h1><p>Hello " + user.DisplayName + ", <br /><br />Your Ticket (#" + Request.QueryString["view"] + ") has been " + (CheckFixed.Checked ? "Closed" : "Updated") + " with: <br /><blockquote>" + newnote.Content + "</blockquote><br />This was updated by " + up.DisplayName + "</p><h3>You can " + (CheckFixed.Checked ? "reopen" : "update") + " your ticket by visiting <a href=\"https://" + Request.Url.Host + "/Extranet/HelpDesk/?view=" + Request.QueryString["view"] + "\">https://" + Request.Url.Host + "/Extranet/HelpDesk/?view=" + Request.QueryString["view"] + "</a></h3><p>This email was sent an unmonitored account.</body></html>";
+
+                FileInfo template = new FileInfo(Server.MapPath("~/HelpDesk/newadminnote.htm"));
+                StreamReader fs = template.OpenText();
+                mes.Body = string.Format(fs.ReadToEnd(), Request.QueryString["view"], (CheckFixed.Checked ? "Closed" : "Updated"), user.DisplayName, newnote.Content, (CheckFixed.Checked ? "reopen" : "update"), Request.Url.Host);
 
                 SmtpClient smtp = new SmtpClient(config.BaseSettings.SMTPServer);
                 if (!string.IsNullOrEmpty(config.BaseSettings.SMTPServerUsername))
@@ -289,7 +298,10 @@ namespace CHS_Extranet.HelpDesk
                 mes.To.Add(new MailAddress(config.BaseSettings.AdminEmailAddress, "IT Department"));
 
                 mes.IsBodyHtml = true;
-                mes.Body = "<html><head><title>Ticket (#" + Request.QueryString["view"] + ") has been Updated</title><style type=\"text/css\">html { font-family: Calibri; font-sizw: 11px; } blockquote { margin: 10px; border: dotted 1px silver; padding: 5px; font-family: Lucida Console; font-size: 11px; }</style></head><body><h1>Ticket (#" + Request.QueryString["view"] + ") has been updated</h1><p>Nick, <br /><br />A Ticket (#" + Request.QueryString["view"] + ") has been updated with: <br /><blockquote>" + newnote.Content + "</blockquote><br />This was updated by " + up.DisplayName + "</p><h3>You can update the ticket by visiting <a href=\"http://" + Request.Url.Host + "/Extranet/HelpDesk/?view=" + Request.QueryString["view"] + "\">http://" + Request.Url.Host + "/Extranet/HelpDesk/?view=" + Request.QueryString["view"] + "</a></h3><p>This email was sent an unmonitored account.</body></html>";
+
+                FileInfo template = new FileInfo(Server.MapPath("~/HelpDesk/newusernote.htm"));
+                StreamReader fs = template.OpenText();
+                mes.Body = string.Format(fs.ReadToEnd(), Request.QueryString["view"], newnote.Content, up.DisplayName, Request.Url.Host);
 
                 SmtpClient smtp = new SmtpClient(config.BaseSettings.SMTPServer);
                 if (!string.IsNullOrEmpty(config.BaseSettings.SMTPServerUsername))
