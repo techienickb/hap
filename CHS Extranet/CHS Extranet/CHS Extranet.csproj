@@ -173,6 +173,8 @@
     <Compile Include="Configuration\homepagelinks.cs" />
     <Compile Include="Configuration\uncpath.cs" />
     <Compile Include="Configuration\uncpaths.cs" />
+    <Compile Include="Configuration\uploadfilter.cs" />
+    <Compile Include="Configuration\uploadfilters.cs" />
     <Compile Include="docx.ashx.cs">
       <DependentUpon>docx.ashx</DependentUpon>
     </Compile>
