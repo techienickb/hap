@@ -32,5 +32,11 @@ namespace CHS_Extranet.Configuration
             get { return (homepagelinks)base["homepagelinks"]; }
         }
 
+        [ConfigurationProperty("uploadfilters", IsDefaultCollection = false)]
+        public uploadfilters UploadFilters
+        {
+            get { return (uploadfilters)base["uploadfilters"]; }
+        }
+
     }
 }

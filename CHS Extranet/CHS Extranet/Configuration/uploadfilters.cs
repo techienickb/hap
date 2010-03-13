@@ -6,8 +6,10 @@ using System.Configuration;
 
 namespace CHS_Extranet.Configuration
 {
-    public class uncpaths : ConfigurationElementCollection
+    public class uploadfilters : ConfigurationElementCollection
     {
+        //Images (*.jpg;*.gif)|*.jpg;*.gif|All Files (*.*)|*.*
+
         public override ConfigurationElementCollectionType CollectionType
         {
             get { return ConfigurationElementCollectionType.AddRemoveClearMap; }
@@ -15,17 +17,17 @@ namespace CHS_Extranet.Configuration
 
         protected override ConfigurationElement CreateNewElement()
         {
-            return new uncpath();
+            return new uploadfilter();
         }
 
         protected override ConfigurationElement CreateNewElement(string elementname)
         {
-            return new uncpath(elementname);
+            return new uploadfilter(elementname);
         }
 
         protected override object GetElementKey(ConfigurationElement element)
         {
-            return ((uncpath)element).Drive;
+            return ((uploadfilter)element).Name;
         }
 
         public new string AddElementName
@@ -51,25 +53,25 @@ namespace CHS_Extranet.Configuration
         }
 
 
-        public uncpath this[int index]
+        public uploadfilter this[int index]
         {
-            get { return (uncpath)BaseGet(index); }
+            get { return (uploadfilter)BaseGet(index); }
             set { if (BaseGet(index) != null) { BaseRemoveAt(index); } BaseAdd(index, value); }
         }
 
-        new public uncpath this[string Drive]
+        new public uploadfilter this[string Name]
         {
-            get { return (uncpath)BaseGet(Drive); }
+            get { return (uploadfilter)BaseGet(Name); }
         }
 
-        public int IndexOf(uncpath path)
+        public int IndexOf(uploadfilter filter)
         {
-            return BaseIndexOf(path);
+            return BaseIndexOf(filter);
         }
 
-        public void Add(uncpath path)
+        public void Add(uploadfilter filter)
         {
-            BaseAdd(path);
+            BaseAdd(filter);
             // Add custom code here.
         }
 
@@ -79,10 +81,10 @@ namespace CHS_Extranet.Configuration
             // Add custom code here.
         }
 
-        public void Remove(uncpath path)
+        public void Remove(uploadfilter filter)
         {
-            if (BaseIndexOf(path) >= 0)
-                BaseRemove(path.Drive);
+            if (BaseIndexOf(filter) >= 0)
+                BaseRemove(filter.Name);
         }
 
         public void RemoveAt(int index)

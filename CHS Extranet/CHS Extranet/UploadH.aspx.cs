@@ -35,6 +35,33 @@ namespace CHS_Extranet
             return false;
         }
 
+
+        private bool isAuth(string extension)
+        {
+            bool vis = false;
+            foreach (uploadfilter filter in config.UploadFilters)
+                if (filter.Filter.Contains(extension)) vis = isAuth(filter);
+            vis = isAuth(config.UploadFilters["All Files"]);
+            return vis;
+        }
+
+        private bool isAuth(uploadfilter filter)
+        {
+            if (filter.EnableFor == "All") return true;
+            else if (filter.EnableFor != "None")
+            {
+                bool vis = false;
+                foreach (string s in filter.EnableFor.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, s);
+                    if (!vis) vis = up.IsMemberOf(gp);
+                }
+                return vis;
+            }
+            return false;
+        }
+
+
         private bool isWriteAuth(uncpath path)
         {
             if (path == null) return true;
@@ -115,16 +142,11 @@ namespace CHS_Extranet
                     path = string.Format(unc.UNC, Username) + path.Replace('/', '\\');
                 }
             }
-            if (FileUpload1.HasFile)
-                FileUpload1.SaveAs(Path.Combine(path, FileUpload1.FileName));
-            if (FileUpload2.HasFile)
-                FileUpload2.SaveAs(Path.Combine(path, FileUpload2.FileName));
-            if (FileUpload3.HasFile)
-                FileUpload3.SaveAs(Path.Combine(path, FileUpload3.FileName));
-            if (FileUpload4.HasFile)
-                FileUpload4.SaveAs(Path.Combine(path, FileUpload4.FileName));
-            if (FileUpload5.HasFile)
-                    FileUpload5.SaveAs(Path.Combine(path, FileUpload5.FileName));
+            if (FileUpload1.HasFile && isAuth(Path.GetExtension(FileUpload1.FileName))) FileUpload1.SaveAs(Path.Combine(path, FileUpload1.FileName));
+            if (FileUpload2.HasFile && isAuth(Path.GetExtension(FileUpload2.FileName))) FileUpload2.SaveAs(Path.Combine(path, FileUpload2.FileName));
+            if (FileUpload3.HasFile && isAuth(Path.GetExtension(FileUpload3.FileName))) FileUpload3.SaveAs(Path.Combine(path, FileUpload3.FileName));
+            if (FileUpload4.HasFile && isAuth(Path.GetExtension(FileUpload4.FileName))) FileUpload4.SaveAs(Path.Combine(path, FileUpload4.FileName));
+            if (FileUpload5.HasFile && isAuth(Path.GetExtension(FileUpload5.FileName))) FileUpload5.SaveAs(Path.Combine(path, FileUpload5.FileName));
             closeb.Visible = (((Button)sender).ID == "uploadbtnClose");
 
         }
