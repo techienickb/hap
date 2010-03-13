@@ -186,7 +186,12 @@ namespace CHS_Extranet.HelpDesk
             mes.IsBodyHtml = true;
             FileInfo template = new FileInfo(Server.MapPath("~/HelpDesk/newuserticket.htm"));
             StreamReader fs = template.OpenText();
-            mes.Body = string.Format(fs.ReadToEnd(), x, newticketsubject.Text, newticketeditor.Content, newticketroom.Text, up.DisplayName, Request.Url.Host);
+            mes.Body = fs.ReadToEnd().Replace("{0}", x.ToString()).Replace("{1}",
+                newticketsubject.Text).Replace("{2}",
+                newticketeditor.Content).Replace("{3}",
+                newticketroom.Text).Replace("{4}",
+                up.DisplayName).Replace("{5}",
+                Request.Url.Host);
 
             SmtpClient smtp = new SmtpClient(config.BaseSettings.SMTPServer);
             if (!string.IsNullOrEmpty(config.BaseSettings.SMTPServerUsername))
@@ -241,7 +246,11 @@ namespace CHS_Extranet.HelpDesk
 
             FileInfo template = new FileInfo(Server.MapPath("~/HelpDesk/newadminticket.htm"));
             StreamReader fs = template.OpenText();
-            mes.Body = string.Format(fs.ReadToEnd(), x, newadminticketsubject.Text, newadminticketeditor.Content, user.DisplayName, Request.Url.Host);
+            mes.Body = fs.ReadToEnd().Replace("{0}", x.ToString()).Replace("{1}", 
+                newadminticketsubject.Text).Replace("{2}", 
+                newadminticketeditor.Content).Replace("{3}", 
+                user.DisplayName).Replace("{4}", 
+                Request.Url.Host);
             
             SmtpClient smtp = new SmtpClient(config.BaseSettings.SMTPServer);
             if (!string.IsNullOrEmpty(config.BaseSettings.SMTPServerUsername))
@@ -277,7 +286,12 @@ namespace CHS_Extranet.HelpDesk
 
                 FileInfo template = new FileInfo(Server.MapPath("~/HelpDesk/newadminnote.htm"));
                 StreamReader fs = template.OpenText();
-                mes.Body = string.Format(fs.ReadToEnd(), Request.QueryString["view"], (CheckFixed.Checked ? "Closed" : "Updated"), user.DisplayName, newnote.Content, (CheckFixed.Checked ? "reopen" : "update"), Request.Url.Host);
+
+                mes.Body = fs.ReadToEnd().Replace("{0}", Request.QueryString["view"]).Replace("{1}",
+                    (CheckFixed.Checked ? "Closed" : "Updated")).Replace("{2}",
+                    newnote.Content).Replace("{3}",
+                    (CheckFixed.Checked ? "reopen" : "update")).Replace("{4}",
+                    Request.Url.Host);
 
                 SmtpClient smtp = new SmtpClient(config.BaseSettings.SMTPServer);
                 if (!string.IsNullOrEmpty(config.BaseSettings.SMTPServerUsername))
@@ -301,7 +315,11 @@ namespace CHS_Extranet.HelpDesk
 
                 FileInfo template = new FileInfo(Server.MapPath("~/HelpDesk/newusernote.htm"));
                 StreamReader fs = template.OpenText();
-                mes.Body = string.Format(fs.ReadToEnd(), Request.QueryString["view"], newnote.Content, up.DisplayName, Request.Url.Host);
+
+                mes.Body = fs.ReadToEnd().Replace("{0}", Request.QueryString["view"]).Replace("{1}",
+                    newnote.Content).Replace("{2}",
+                    up.DisplayName).Replace("{3}",
+                    Request.Url.Host);
 
                 SmtpClient smtp = new SmtpClient(config.BaseSettings.SMTPServer);
                 if (!string.IsNullOrEmpty(config.BaseSettings.SMTPServerUsername))
