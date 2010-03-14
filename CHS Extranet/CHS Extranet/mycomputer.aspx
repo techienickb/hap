@@ -26,6 +26,12 @@
             <a href="#" onclick="return changeview('List');">List</a>
             <a href="#" onclick="return changeview('Tile');">Tiles</a>
         </div>
+        <asp:Repeater runat="server" ID="breadcrumbrepeater">
+            <HeaderTemplate><div id="breadcrumbs"></HeaderTemplate>
+            <ItemTemplate><a href="<%#Eval("Path") %>"><%#Eval("Name") %></a></ItemTemplate>
+            <SeparatorTemplate><span>&nbsp;</span></SeparatorTemplate>
+            <FooterTemplate></div></FooterTemplate>
+        </asp:Repeater>
         <div id="browser">
             <asp:Repeater runat="server" ID="browserrepeater">
                 <ItemTemplate>

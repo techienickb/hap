@@ -6,7 +6,7 @@
 #ticketlist #tickets a i { font-style: normal; color: #999; display: block; font-size: 90%; }
 #ticketlist #tickets a:hover { border: solid 1px #7da2ce; background: #f9fbfd url(/Extranet/images/browser-a-hover.gif) repeat-x; text-decoration: none; }
 #ticketlist #tickets a img { float: left; margin: 0 4px 0 0; height: 40px; border: 0; }
-#ticketlist #tickets a img.Priority { position: absolute; margin-left: -25px; height: auto; }
+#ticketlist #tickets a img.Priority { position: relative; margin-left: -25px; height: auto; }
 #ticketlist #tickets a.Selected { border: solid 1px #7da2ce; }
 label { font-weight: bold; padding: 0 5px 0 0; }
 

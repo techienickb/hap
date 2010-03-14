@@ -84,6 +84,7 @@ namespace CHS_Extranet
             List<MyComputerItem> items = new List<MyComputerItem>();
             if (string.IsNullOrEmpty(Request.PathInfo))
             {
+                breadcrumbrepeater.Visible = false;
                 items.Add(new MyComputerItem("My Documents", string.Format("{0} on {1}", Username, config.BaseSettings.EstablishmentCode), "/Extranet/MyComputer.aspx/N\\", "netdrive.png", false));
                 foreach (uncpath path in config.UNCPaths)
                     if (isAuth(path)) items.Add(new MyComputerItem(path.Name, string.Format("{0} on {1}", path.Name, config.BaseSettings.EstablishmentCode), string.Format("/Extranet/MyComputer.aspx/{0}\\", path.Drive), "netdrive.png", false));
@@ -124,7 +125,34 @@ namespace CHS_Extranet
                 Response.Write("<!--" + path + "-->\n");
                 if (unc != null) Response.Write("<!--" + unc.UNC + "-->");
 
+                List<MyComputerItem> breadcrumbs = new List<MyComputerItem>();
+
+                path = path.TrimEnd(new char[] { '\\' });
                 DirectoryInfo dir = new DirectoryInfo(path);
+                DirectoryInfo subdir1 = dir;
+                string uncroot = up.HomeDirectory;
+                if (unc != null) uncroot = string.Format(unc.UNC, Username);
+                uncroot = uncroot.TrimEnd(new char[] { '\\' });
+                DirectoryInfo rootdir = new DirectoryInfo(uncroot);
+
+                while (subdir1.FullName != rootdir.FullName && subdir1 != null)
+                {
+                    string sdirpath = subdir1.FullName;
+                    if (unc == null) sdirpath = sdirpath.Replace(userhome, "N\\");
+                    else sdirpath = sdirpath.Replace(string.Format(unc.UNC, Username), unc.Drive);
+                    breadcrumbs.Add(new MyComputerItem(subdir1.Name, "", "/Extranet/MyComputer.aspx/" + sdirpath.Replace("&", "^"), "", false));
+                    subdir1 = subdir1.Parent;
+                }
+                if (unc == null)
+                    breadcrumbs.Add(new MyComputerItem("My Documents", "", "/Extranet/MyComputer.aspx/N\\", "", false));
+                else
+                    breadcrumbs.Add(new MyComputerItem(unc.Name, "", "/Extranet/MyComputer.aspx/" + unc.Drive, "", false));
+                breadcrumbs.Add(new MyComputerItem("My Computer", "", "/Extranet/MyComputer.aspx", "", false));
+                breadcrumbs.Reverse();
+                breadcrumbrepeater.Visible = true;
+                breadcrumbrepeater.DataSource = breadcrumbs.ToArray();
+                breadcrumbrepeater.DataBind();
+
                 if (Request.PathInfo.Length <= 3)
                     items.Add(new MyComputerItem("My Computer", "Back to My Computer", "/Extranet/MyComputer.aspx", "school.png", false));
                 else items.Add(new MyComputerItem("..", "Up a Directory", "/Extranet/MyComputer.aspx" + Request.PathInfo.Remove(Request.PathInfo.LastIndexOf('/')), "folder.png", false));
