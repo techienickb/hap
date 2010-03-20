@@ -14,12 +14,17 @@
     <asp:AjaxScriptManager runat="server" />
     <div id="maincol">
         <div id="ticketlist">
-            <h1>Tickets <asp:DropDownList ID="statusselection" AutoPostBack="true" runat="server">
+            <h1>Tickets <asp:DropDownList ID="statusselection" AutoPostBack="true" Width="80px" runat="server">
                 <asp:ListItem Selected="True">Open</asp:ListItem>
                 <asp:ListItem>Closed</asp:ListItem>
                 </asp:DropDownList>
             </h1>
             <div id="tickets">
+                <a href="/extranet/">
+                    <img src="/extranet/images/icons/school.png" alt="" />
+                    Home Access Plus+ Home
+                    <i>Go back to Home Access Plus+ Home</i>
+                </a>
                 <a href="/Extranet/HelpDesk/Default.aspx?view=-1" id="ticket--1">
                     <img src="/Extranet/Images/StatusIcons/newticket.png" alt="" />
                     New Support Ticket

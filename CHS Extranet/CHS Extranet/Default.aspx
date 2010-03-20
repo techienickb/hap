@@ -1,6 +1,5 @@
 ﻿<%@ Page Title="Crickhowell High School - IT - Home Access Plus+" Language="C#" MasterPageFile="~/chs.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="CHS_Extranet.Default" %>
-
-<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit.HTMLEditor" TagPrefix="asp" %>
+<%@ Register TagName="announcement" TagPrefix="hap" Src="~/Announcement.ascx" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <%@ Register Assembly="System.Web.Ajax" Namespace="System.Web.UI" TagPrefix="asp" %>
 
@@ -41,23 +40,10 @@
                 </ProgressTemplate> 
             </asp:UpdateProgress> 
         </asp:Panel>
-        <div id="EditAnn">
-        <asp:LinkButton runat="server" CssClass="EditAnnLink" ToolTip="Edit Announcement" ID="EditAnnouncement">
-            <img runat="server" src="~/images/icons/edit.png" alt="Edit Announcement" />
-        </asp:LinkButton>
-        <asp:Literal runat="server" ID="Announcement" />
-        </div>
-        <asp:Panel runat="server" ID="AnnouncementEditor" style="display: none;" CssClass="modalPopup" Width="700px">
-            <asp:Editor ID="Editor1" runat="server" />
-            <asp:CheckBox ID="ShowAnnouncement" runat="server" Text="Show Announcement" />
-            <br />
-            <asp:Button runat="server" Text="Save" ID="saveann" OnClick="saveann_Click" />
-            <asp:Button ID="ok_btn" runat="server" Text="Close" />
-        </asp:Panel>
-        <asp:ModalPopupExtender ID="ModalPopupExtender1" runat="server" TargetControlID="EditAnnouncement" PopupControlID="AnnouncementEditor" BackgroundCssClass="modalBackground" OkControlID="ok_btn" />
         <asp:modalpopupextender ID="ModalProgress" runat="server" 
             TargetControlID="panelUpdateProgress" BackgroundCssClass="modalMask" 
             PopupControlID="panelUpdateProgress" />
+        <hap:announcement runat="server" />
         <asp:UpdatePanel runat="server" ID="upl" ChildrenAsTriggers="true">
             <ContentTemplate>                
                 <asp:Image runat="server" ID="userimage" ImageAlign="Right" />
