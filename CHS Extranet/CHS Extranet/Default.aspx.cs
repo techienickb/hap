@@ -48,19 +48,6 @@ namespace CHS_Extranet
         protected void Page_Load(object sender, EventArgs e)
         {
             GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, config.ADSettings.StudentsGroupName);
-            GroupPrincipal da = GroupPrincipal.FindByIdentity(pcontext, "Domain Admins");
-            EditAnnouncement.Visible = up.IsMemberOf(da);
-            if (!Page.IsPostBack)
-            {
-                XmlDocument doc = new XmlDocument();
-                doc.Load(Server.MapPath("~/App_Data/Announcement.xml"));
-                XmlNode node = doc.SelectSingleNode("/announcement");
-                ShowAnnouncement.Checked = bool.Parse(node.Attributes[0].Value);
-                Editor1.Content = node.InnerXml.Replace("<![CDATA[ ", "").Replace(" ]]>", "");
-                Editor1.DataBind();
-                if (ShowAnnouncement.Checked)
-                    Announcement.Text = string.Format("<h1 class=\"Announcement\"><b>Announcement</b><br />{0}</h1>", Editor1.Content);
-            }
             //rmCom2000-UsrMgr-uPN
             DirectoryEntry usersDE = new DirectoryEntry(_ActiveDirectoryConnectionString, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
             DirectorySearcher ds = new DirectorySearcher(usersDE);
@@ -78,7 +65,7 @@ namespace CHS_Extranet
                 }
                 catch { userimage.Visible = false; }
             }
-            welcomename.Text = up.GivenName;
+            welcomename.Text = string.IsNullOrEmpty(up.GivenName) ? up.DisplayName : up.GivenName;
             name.Text = userimage.AlternateText = string.Format("{0} {1}", up.GivenName, up.Surname);
             try
             {
@@ -202,19 +189,5 @@ namespace CHS_Extranet
             else form.Text = string.Format("<b>Department: </b>{0}", form.Text);
             email.Text = up.EmailAddress;
         }
-
-        protected void saveann_Click(object sender, EventArgs e)
-        {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(Server.MapPath("~/App_Data/Announcement.xml"));
-            XmlNode node = doc.SelectSingleNode("/announcement");
-            node.Attributes[0].Value = ShowAnnouncement.Checked.ToString();
-            node.InnerXml = string.Format("<![CDATA[ {0} ]]>", Editor1.Content);
-            doc.Save(Server.MapPath("~/App_Data/Announcement.xml"));
-            if (ShowAnnouncement.Checked)
-                Announcement.Text = string.Format("<h1 class=\"Announcement\"><b>Announcement</b><br />{0}</h1>", Editor1.Content);
-            else Announcement.Text = "";
-        }
-
     }
 }

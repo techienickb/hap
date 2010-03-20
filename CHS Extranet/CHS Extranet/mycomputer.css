@@ -15,7 +15,7 @@
 #browser.List a { width: auto; display:block; height: 16px; }
 #browser.List a:hover { background: transparent url(/Extranet/images/browser-a-hover.gif) repeat-x bottom; }
 #browser.List a img { height: 16px; }
-#browser.Icons a i { display: none; }
+#browser.List a i { display: none; }
 
 #breadcrumbs { height: 20px; line-height: 20px; overflow: hidden; border: solid 1px #7da2ce; border-top: 0; padding: 0 2px; }
 #breadcrumbs a { height: 20px; font-size: 12px; line-height: 20px; float: left; padding: 0 5px 0 5px; border-right: solid 1px white; border-left: solid 1px white; color: #000; }

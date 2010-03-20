@@ -86,6 +86,7 @@
     <Reference Include="System.Web.Mobile" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Announcement.ascx" />
     <Content Include="App_Data\Announcement.xml" />
     <Content Include="App_Data\Tickets.xml" />
     <Content Include="basestyle.css" />
@@ -156,6 +157,7 @@
     <Content Include="mycomputer.aspx" />
     <Content Include="mycomputer.css" />
     <Content Include="Scripts\rightclick.js" />
+    <Content Include="Scripts\viewmode.js" />
     <Content Include="unauthorised.aspx" />
     <Content Include="Unzip.aspx" />
     <Content Include="upload.aspx" />
@@ -172,6 +174,13 @@
     <Content Include="xls.aspx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Announcement.ascx.cs">
+      <DependentUpon>Announcement.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Announcement.ascx.designer.cs">
+      <DependentUpon>Announcement.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Configuration\adSettings.cs" />
     <Compile Include="Configuration\baseSettings.cs" />
     <Compile Include="Configuration\extranetConfig.cs" />
