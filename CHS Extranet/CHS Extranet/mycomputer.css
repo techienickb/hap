@@ -1,14 +1,14 @@
 ﻿#bar { height: 24px; background: url(/Extranet/images/bar.gif) repeat-x; padding: 3px 5px 3px 5px; border: solid 1px #7da2ce; border-bottom: 0; }
-#bar a { float: left; height: 21px; line-height: 21px; padding: 1px 15px; color: #1f3976; text-decoration: none; }
+#bar a { float: left; height: 20px; line-height: 21px; padding: 1px 15px; color: #1f3976; text-decoration: none; }
 #bar a.right { float: right; }
 #bar a span { display: block; background: url(/Extranet/images/arrow.gif) no-repeat right 10px; padding: 0 16px 0 0; }
 #bar a:hover { background: url(/Extranet/images/bar-a-hover.gif) repeat-x left center; border-radius: 3px; -moz-border-radius: 3px; text-decoration: none; border: solid 1px #7da2ce; padding: 0 14px; }
-#browser { overflow: auto; height: 500px; border: solid 1px #7da2ce; border-top: 0; }
-#browser a, #HomeButtons a { float: left; margin: 2px; border: solid 1px #fff; border-radius: 3px; -moz-border-radius: 3px; color: #000; padding: 4px; width: 242px; height: 42px; display: block; overflow: hidden; text-decoration: none; }
-#browser a i, #HomeButtons a i { font-style: normal; color: #999; display: block; }
-#browser a:hover, #HomeButtons a:hover { border: solid 1px #7da2ce; background: #f9fbfd url(/Extranet/images/browser-a-hover.gif) repeat-x; text-decoration: none; }
+#browser { background: #fff; overflow: auto; height: 500px; border: solid 1px #7da2ce; border-top: 0; }
+#browser a, #HomeButtons a { float: left; margin: 3px; border: solid 0px #fff; border-radius: 3px; -moz-border-radius: 3px; color: #000; padding: 5px; width: 242px; height: 40px; line-height: 20px; display: block; overflow: hidden; text-decoration: none; }
+#browser a i, #HomeButtons a i { font-style: normal; color: #999; display: block; font-size: small; }
+#browser a:hover, #HomeButtons a:hover { border: solid 1px #7da2ce; margin: 2px; background: #f9fbfd url(/Extranet/images/browser-a-hover.gif) repeat-x; text-decoration: none; }
 #browser a img, #HomeButtons a img { float: left; margin: 0 4px 0 0; height: 40px; border: 0; }
-#browser.Icons a { width: 64px; height: auto; text-align: center; }
+#browser.Icons a { width: 64px; height: auto; text-align: center; line-height: normal; }
 #browser.Icons a i { display: none; }
 #browser.Icons a:hover { background: transparent url(/Extranet/images/browser-a-hover.gif) repeat-x bottom; }
 #browser.Icons a img { float: none; margin: 0 0 4px 0; height: 64px; }
@@ -17,7 +17,7 @@
 #browser.List a img { height: 16px; }
 #browser.List a i { display: none; }
 
-#breadcrumbs { height: 20px; line-height: 20px; overflow: hidden; border: solid 1px #7da2ce; border-top: 0; padding: 0 2px; }
+#breadcrumbs { height: 20px; line-height: 20px; overflow: hidden; background: #fff; border: solid 1px #7da2ce; border-top: 0; padding: 0 2px; }
 #breadcrumbs a { height: 20px; font-size: 12px; line-height: 20px; float: left; padding: 0 5px 0 5px; border-right: solid 1px white; border-left: solid 1px white; color: #000; }
 #breadcrumbs a:hover { background: white url(/extranet/images/breadcrumbover.gif) repeat-x top left; color #000; border-color: #7da2ce; text-decoration: none; }
 #breadcrumbs span { background: white url(/extranet/images/arrow-right.gif) no-repeat center center; padding: 0 5px; float: left; height: 20px; line-height: 20px; }
@@ -29,9 +29,9 @@ h1.Announcement b { font-size: 16px; }
 #EditAnn a.EditAnnLink { position: absolute; right: 0; float: right; }
 #EditAnn a.EditAnnLink img { vertical-align: middle; text-decoration: none; height: 48px; }
 
-#viewbox { display: none; position: absolute; top: 76px; right: 20px; width: 80px; border: solid 1px #555; background: #eee; padding: 2px; }
+#viewbox { display: none; position: absolute; top: 26px; right: 5px; width: 80px; border: solid 1px #555; background: #eee; padding: 2px; }
 #viewbox.show { display: block; }
-#viewbox a, .SimpleContextMenu a { color: #1f3976; display: block; border-radius: 3px; padding: 2px; -moz-border-radius: 3px;  border: solid 1px #eee; }
+#viewbox a, .SimpleContextMenu a { color: #1f3976; display: block; border-radius: 3px; padding: 1px 2px; -moz-border-radius: 3px;  border: solid 1px #eee; text-decoration: none; }
 #viewbox a:hover, .SimpleContextMenu a:hover { color: #1f3976; border: solid 1px #7da2ce; background: transparent url(/Extranet/images/bar-a-hover.gif) repeat-x left center; text-decoration: none; }
 
 .SimpleContextMenu {
