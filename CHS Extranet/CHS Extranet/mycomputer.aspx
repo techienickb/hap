@@ -13,8 +13,9 @@
 </asp:Content>
 
 <asp:Content ContentPlaceHolderID="body" runat="server">
-    <div id="maincol" style="position: relative;">
+    <div id="maincol">
         <h1>My Computer</h1>
+        <div style="position: relative;">
         <div id="bar">
             <a href="/Extranet/">Home Access Plus+ Home</a>
             <asp:HyperLink runat="server" ID="newfolderlink" Visible="false" onclick="return popup(this);">New Folder</asp:HyperLink>
@@ -25,6 +26,7 @@
             <a href="#" onclick="return changeview('Icons');">Icons</a>
             <a href="#" onclick="return changeview('List');">List</a>
             <a href="#" onclick="return changeview('Tile');">Tiles</a>
+        </div>
         </div>
         <asp:Repeater runat="server" ID="breadcrumbrepeater">
             <HeaderTemplate><div id="breadcrumbs"></HeaderTemplate>
