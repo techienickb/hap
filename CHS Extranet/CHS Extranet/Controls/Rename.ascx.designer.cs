@@ -7,99 +7,72 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CHS_Extranet {
+namespace CHS_Extranet.Controls {
     
     
-    public partial class mycomputer {
+    public partial class Rename {
         
         /// <summary>
-        /// newfolderlink control.
+        /// renameclicker control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::CHS_Extranet.Controls.NewFolder newfolderlink;
+        protected global::System.Web.UI.WebControls.Button renameclicker;
         
         /// <summary>
-        /// fileuploadlink control.
+        /// renamebox control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink fileuploadlink;
+        protected global::System.Web.UI.WebControls.Panel renamebox;
         
         /// <summary>
-        /// breadcrumbrepeater control.
+        /// filename control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater breadcrumbrepeater;
+        protected global::System.Web.UI.WebControls.Label filename;
         
         /// <summary>
-        /// browserrepeater control.
+        /// newname control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater browserrepeater;
+        protected global::System.Web.UI.WebControls.TextBox newname;
         
         /// <summary>
-        /// DeleteBox control.
+        /// yesren control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::CHS_Extranet.Controls.Delete DeleteBox;
+        protected global::System.Web.UI.WebControls.Button yesren;
         
         /// <summary>
-        /// RenameBox control.
+        /// cancel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::CHS_Extranet.Controls.Rename RenameBox;
+        protected global::System.Web.UI.WebControls.Button cancel;
         
         /// <summary>
-        /// ZipBox control.
+        /// renameitem control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::CHS_Extranet.Controls.Zip ZipBox;
-        
-        /// <summary>
-        /// UnzipBox control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::CHS_Extranet.Controls.Unzip UnzipBox;
-        
-        /// <summary>
-        /// postbackmove control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder postbackmove;
-        
-        /// <summary>
-        /// rckmove control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor rckmove;
+        protected global::System.Web.UI.WebControls.HiddenField renameitem;
     }
 }

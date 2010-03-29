@@ -33,16 +33,31 @@ function changeview(e) {
     return false;
 }
 function popup(e) {
-    if (e.innerHTML == "Rename")
-        window.open(e.href, 'CHSRename', 'toolbar=0,status=0,statusbar=0,menubar=0,menu=0,address=0,addressbar=0,width=400,height=200', true);
-    else if (e.innerHTML == "Delete")
-        window.open(e.href, 'CHSDelete', 'toolbar=0,status=0,statusbar=0,menubar=0,menu=0,address=0,addressbar=0,width=400,height=200', true);
-    else if (e.innerHTML == "New Folder")
-        window.open(e.href, 'CHSNew', 'toolbar=0,status=0,statusbar=0,menubar=0,menu=0,address=0,addressbar=0,width=400,height=200', true);
+    if (e.innerHTML == "Rename") {
+        renameitem.value = e.href.substring(e.href.lastIndexOf('#') + 1).replace(/%20/gi, " ");
+        if (e.href.match(/#F!/i)) renameitemname.innerHTML = e.href.substring(e.href.lastIndexOf('#') + 3).replace(/%20/gi, " ");
+        else renameitemname.innerHTML = e.href.substring(e.href.lastIndexOf('#') + 1).replace(/%20/gi, " ");
+        renameclick.click();
+    } else if (e.innerHTML == "Delete") {
+        deleteitem.value = e.href.substring(e.href.lastIndexOf('#') + 1).replace(/%20/gi, " ");
+        if (e.href.match(/#F!/i)) deleteitemname.innerHTML = e.href.substring(e.href.lastIndexOf('#') + 3).replace(/%20/gi, " ");
+        else deleteitemname.innerHTML = e.href.substring(e.href.lastIndexOf('#') + 1).replace(/%20/gi, " ");
+        deleteclick.click();
+    }
     else if (e.innerHTML == "Move")
         window.open(e.href, 'CHSMove', 'toolbar=0,status=0,statusbar=0,menubar=0,menu=0,address=0,addressbar=0,width=500,height=500', true);
-    else if (e.innerHTML == "Unzip")
-        window.open(e.href, 'CHSUnzip', 'toolbar=0,status=0,statusbar=0,menubar=0,menu=0,address=0,addressbar=0,width=400,height=300', true);
+    else if (e.innerHTML == "Unzip") {
+        unzipitem.value = e.href.substring(e.href.lastIndexOf('#') + 1).replace(/%20/gi, " ");
+        if (e.href.match(/#F!/i)) unzipitemname.innerHTML = e.href.substring(e.href.lastIndexOf('#') + 3).replace(/%20/gi, " ");
+        else unzipitemname.innerHTML = e.href.substring(e.href.lastIndexOf('#') + 1).replace(/%20/gi, " ");
+        unzipclick.click();
+    }
+    else if (e.innerHTML == "Zip") {
+        zipitem.value = e.href.substring(e.href.lastIndexOf('#') + 1).replace(/%20/gi, " ");
+        if (e.href.match(/#F!/i)) zipitemname.innerHTML = e.href.substring(e.href.lastIndexOf('#') + 3).replace(/%20/gi, " ");
+        else zipitemname.innerHTML = e.href.substring(e.href.lastIndexOf('#') + 1).replace(/%20/gi, " ");
+        zipclick.click();
+    }
     else if (e.innerHTML == "HTML Preview")
         window.open(e.href, 'CHSPreview', 'toolbar=0,status=0,statusbar=0,menubar=0,menu=0,address=0,addressbar=0,width=800,scrollbars=0,height=600', true);
     else window.open(e.href, 'CHSUpload', 'toolbar=0,status=0,statusbar=0,menubar=0,menu=0,address=0,addressbar=0,width=600,height=400', true);

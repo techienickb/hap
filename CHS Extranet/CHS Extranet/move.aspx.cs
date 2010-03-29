@@ -84,15 +84,15 @@ namespace CHS_Extranet
                 string userhome = up.HomeDirectory;
                 if (!userhome.EndsWith("\\")) userhome += "\\";
                 string path, p;
-                if (Request.QueryString["path"].Substring(1, 1) == "f")
+                if (Request.QueryString["path"].Substring(0, 1) == "f")
                 {
-                    path = Request.QueryString["path"].Remove(0, 4).Replace('^', '&');
-                    p = Request.QueryString["path"].Substring(3, 1);
+                    path = Request.QueryString["path"].Remove(0, 3).Replace('^', '&');
+                    p = Request.QueryString["path"].Substring(2, 1);
                 }
                 else
                 {
-                    path = Request.QueryString["path"].Remove(0, 2).Replace('^', '&');
-                    p = Request.QueryString["path"].Substring(1, 1);
+                    path = Request.QueryString["path"].Remove(0, 1).Replace('^', '&');
+                    p = Request.QueryString["path"].Substring(0, 1);
                 }
 
                 uncpath unc = null;

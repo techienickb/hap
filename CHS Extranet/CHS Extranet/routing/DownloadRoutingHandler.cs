@@ -2,26 +2,49 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Routing;
+using System.Web.Security;
+using System.Web.Compilation;
+using System.Net;
 using System.DirectoryServices.AccountManagement;
+using CHS_Extranet.Configuration;
 using System.Configuration;
 using System.IO;
-using System.Security.Authentication;
 using Microsoft.Win32;
-using CHS_Extranet.Configuration;
 
-namespace CHS_Extranet
+namespace CHS_Extranet.routing
 {
-    /// <summary>
-    /// Summary description for f
-    /// </summary>
-    public class f : IHttpHandler
+    public class DownloadRoutingHandler : IRouteHandler
+    {
+        public DownloadRoutingHandler()
+        {
+        }
+
+        public IHttpHandler GetHttpHandler(RequestContext requestContext)
+        {
+            if (!UrlAuthorizationModule.CheckUrlAccessForPrincipal("~/f.ashx", requestContext.HttpContext.User, requestContext.HttpContext.Request.HttpMethod))
+            {
+                requestContext.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                requestContext.HttpContext.Response.End();
+            }
+
+            Downloader downloader = new Downloader();
+            if (requestContext.RouteData.Values.ContainsKey("path")) downloader.RoutingPath = requestContext.RouteData.Values["path"] as string;
+            else downloader.RoutingPath = string.Empty;
+            downloader.RoutingDrive = requestContext.RouteData.Values["drive"] as string;
+            downloader.RoutingDrive = downloader.RoutingDrive.ToUpper();
+
+            return downloader;
+        }
+    }
+
+    public class Downloader : IMyComputerDisplay, IHttpHandler
     {
 
         private String _DomainDN;
         private String _ActiveDirectoryConnectionString;
         private PrincipalContext pcontext;
         private UserPrincipal up;
-        private GroupPrincipal studentgp;
         private extranetConfig config;
 
         private bool isAuth(uncpath path)
@@ -82,23 +105,22 @@ namespace CHS_Extranet
 
             string userhome = up.HomeDirectory;
             if (!userhome.EndsWith("\\")) userhome += "\\";
-            string p = context.Request.PathInfo.Substring(1, 1);
-            string path = context.Request.PathInfo.Remove(0, 2).Replace('^', '&');
+            string path = RoutingPath.Replace('^', '&');
             uncpath unc = null;
-            if (p == "N") path = up.HomeDirectory + path.Replace('/', '\\');
+            if (RoutingDrive == "N") path = up.HomeDirectory + '\\' + path.Replace('/', '\\');
             else
             {
-                unc = config.UNCPaths[p];
+                unc = config.UNCPaths[RoutingDrive];
                 if (unc == null || !isAuth(unc)) context.Response.Redirect("/Extranet/unauthorised.aspx", true);
                 else
                 {
-                    path = string.Format(unc.UNC, Username) + path.Replace('/', '\\');
+                    path = string.Format(unc.UNC, Username) + '\\' + path.Replace('/', '\\');
                 }
             }
             FileInfo file = new FileInfo(path);
             context.Response.ContentType = MimeType(file.Extension);
             if (string.IsNullOrEmpty(context.Request.QueryString["inline"]))
-            context.Response.AppendHeader("Content-Disposition", "attachment; filename=\"" + file.Name + "\"");
+                context.Response.AppendHeader("Content-Disposition", "attachment; filename=\"" + file.Name + "\"");
             else context.Response.AppendHeader("Content-Disposition", "inline; filename=\"" + file.Name + "\"");
             context.Response.AddHeader("Content-Length", file.Length.ToString("F0"));
             context.Response.Clear();
@@ -127,5 +149,8 @@ namespace CHS_Extranet
                 return false;
             }
         }
+
+        public string RoutingPath { get; set; }
+        public string RoutingDrive { get; set; }
     }
 }

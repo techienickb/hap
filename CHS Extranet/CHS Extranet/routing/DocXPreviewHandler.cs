@@ -15,12 +15,12 @@ using System.Xml.Linq;
 using WordVisualizer.Core.Util;
 using CHS_Extranet.Configuration;
 
-namespace CHS_Extranet
+namespace CHS_Extranet.routing
 {
     /// <summary>
     /// Summary description for docx
     /// </summary>
-    public class docx : IHttpHandler
+    public class DocXPreviewHandler : IHttpHandler, IMyComputerDisplay
     {
 
         #region Constants
@@ -119,17 +119,16 @@ namespace CHS_Extranet
 
             string userhome = up.HomeDirectory;
             if (!userhome.EndsWith("\\")) userhome += "\\";
-            string p = context.Request.PathInfo.Substring(1, 1);
-            path = context.Request.PathInfo.Remove(0, 2).Replace('^', '&');
+            path = RoutingPath.Replace('^', '&');
             uncpath unc = null;
-            if (p == "N") path = up.HomeDirectory + path.Replace('/', '\\');
+            if (RoutingDrive == "N") path = Path.Combine(up.HomeDirectory, path.Replace('/', '\\'));
             else
             {
-                unc = config.UNCPaths[p];
+                unc = config.UNCPaths[RoutingDrive];
                 if (unc == null || !isWriteAuth(unc)) context.Response.Redirect("/Extranet/unauthorised.aspx", true);
                 else
                 {
-                    path = string.Format(unc.UNC, Username) + path.Replace('/', '\\');
+                    path = Path.Combine(string.Format(unc.UNC, Username), path.Replace('/', '\\'));
                 }
             }
 
@@ -187,7 +186,7 @@ namespace CHS_Extranet
         private void RenderDownloadLink(System.Web.HttpContext context)
         {
             context.Response.WriteLine("   <div id=\"Download\">");
-            context.Response.WriteLine("     Download document: <a href=\"/f.ashx" + context.Request.PathInfo + "\">" + Path.GetFileName(path) + "</a>");
+            context.Response.WriteLine("     Download document: <a href=\"/extranet/download/" + RoutingDrive + "/" + RoutingPath + "\">" + Path.GetFileName(path) + "</a>");
             context.Response.WriteLine("   </div>");
         }
 
@@ -599,5 +598,9 @@ namespace CHS_Extranet
                 return false;
             }
         }
+
+        public string RoutingPath { get; set; }
+
+        public string RoutingDrive { get; set; }
     }
 }

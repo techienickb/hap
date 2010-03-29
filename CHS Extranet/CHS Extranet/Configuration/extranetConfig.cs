@@ -38,5 +38,11 @@ namespace CHS_Extranet.Configuration
             get { return (uploadfilters)base["uploadfilters"]; }
         }
 
+        [ConfigurationProperty("announcementbox")]
+        public announcementBox AnnouncementBox
+        {
+            get { return (announcementBox)this["announcementbox"]; }
+        }
+
     }
 }

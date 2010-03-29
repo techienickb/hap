@@ -7,19 +7,28 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CHS_Extranet {
+namespace CHS_Extranet.Controls {
     
     
-    public partial class Rename {
+    public partial class Unzip {
         
         /// <summary>
-        /// form1 control.
+        /// unzipclicker control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
+        protected global::System.Web.UI.WebControls.Button unzipclicker;
+        
+        /// <summary>
+        /// unzipbox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel unzipbox;
         
         /// <summary>
         /// filename control.
@@ -31,39 +40,48 @@ namespace CHS_Extranet {
         protected global::System.Web.UI.WebControls.Label filename;
         
         /// <summary>
-        /// newname control.
+        /// unziphere control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox newname;
+        protected global::System.Web.UI.WebControls.RadioButton unziphere;
         
         /// <summary>
-        /// fullname control.
+        /// unziptox control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField fullname;
+        protected global::System.Web.UI.WebControls.RadioButton unziptox;
         
         /// <summary>
-        /// yesren control.
+        /// ok control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button yesren;
+        protected global::System.Web.UI.WebControls.Button ok;
         
         /// <summary>
-        /// closeandrefresh control.
+        /// cancel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder closeandrefresh;
+        protected global::System.Web.UI.WebControls.Button cancel;
+        
+        /// <summary>
+        /// unzipitem control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField unzipitem;
     }
 }

@@ -4,9 +4,9 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="/Extranet/HelpDesk/helpdesksheet.css" rel="stylesheet" type="text/css" />
-    <%if (!string.IsNullOrEmpty(Request.QueryString["view"])) { %>
+    <%if (!string.IsNullOrEmpty(TicketID)) { %>
     <style type="text/css">
-        #ticketlist #tickets a#ticket-<%=Request.QueryString["view"]%> { border: solid 1px #7da2ce; }
+        #ticketlist #tickets a#ticket-<%=TicketID%> { border: solid 1px #7da2ce; }
     </style>
     <%} %>
 </asp:Content>
@@ -25,19 +25,19 @@
                     Home Access Plus+ Home
                     <i>Go back to Home Access Plus+ Home</i>
                 </a>
-                <a href="/Extranet/HelpDesk/Default.aspx?view=-1" id="ticket--1">
+                <a href="/Extranet/HelpDesk/ticket/-1" id="ticket--1">
                     <img src="/Extranet/Images/StatusIcons/newticket.png" alt="" />
                     New Support Ticket
                     <i>Open a New Support Ticket</i>
                 </a>
-                <a href="/Extranet/HelpDesk/Default.aspx?view=-2" runat="server" id="newadminsupportticket">
+                <a href="/Extranet/HelpDesk/ticket/-2" runat="server" id="newadminsupportticket">
                     <img src="/Extranet/Images/StatusIcons/newadmin.png" alt="" />
                     New Admin Support Ticket
                     <i>Open a New Admin Support Ticket</i>
                 </a>
             <asp:Repeater runat="server" ID="ticketsrepeater">
                 <ItemTemplate>
-                    <a href="<%#string.Format("/Extranet/HelpDesk/Default.aspx?view={0}", Eval("Id")) %>" id="ticket-<%#Eval("Id")%>">
+                    <a href="<%#string.Format("/Extranet/HelpDesk/ticket/{0}", Eval("Id")) %>" id="ticket-<%#Eval("Id")%>">
                         <img src="<%#string.Format("/Extranet/Images/StatusIcons/{0}.png", Eval("Status")) %>" alt="<%#Eval("Status")%>" />
                         <img src="<%#string.Format("/Extranet/Images/StatusIcons/priority_{0}.png", Eval("Priority")) %>" alt="" class="Priority" />
                         <%# Eval("Subject") %>
@@ -50,7 +50,7 @@
         <div id="ticket">
             <asp:PlaceHolder runat="server" ID="NewTicketFiled" Visible="false">
                 <h1>Your New ticket has been filed with IT support</h1>
-                <div>You can access your support ticket via <%=string.Format("<a href=\"{0}://{1}{2}?view={3}\">{0}://{1}{2}?view={3}</a>", Request.Url.Scheme, Request.Url.Host + (Request.Url.Port != 80 ? ":" + Request.Url.Port.ToString() : ""), Request.Url.AbsolutePath, _id)%></div>
+                <div>You can access your support ticket via <%=string.Format("<a href=\"{0}://{1}{2}?view={3}\">{0}://{1}{2}/ticket/{3}</a>", Request.Url.Scheme, Request.Url.Host + (Request.Url.Port != 80 ? ":" + Request.Url.Port.ToString() : ""), Request.Url.AbsolutePath, _id)%></div>
             </asp:PlaceHolder>
             <asp:PlaceHolder runat="server" ID="noCurrentTicket">
                 <h1><< Select a Ticket or <a href="?view=-1">File for Support</a></h1>
@@ -105,7 +105,7 @@
             <div class="panel">
                 <asp:Repeater runat="server" ID="currentticket">
                     <ItemTemplate>
-                        <h1><span style="float: right;"><%#Eval("Status") %></span><a href="?view=<%#Eval("Id") %>">#<%#Eval("Id") %></a> - <b><%#Eval("Subject") %> - Priority: <%#Eval("Priority")%></b></h1>
+                        <h1><span style="float: right;"><%#Eval("Status") %></span><a href="/extranet/helpdesk/ticket/<%#Eval("Id") %>">#<%#Eval("Id") %></a> - <b><%#Eval("Subject") %> - Priority: <%#Eval("Priority")%></b></h1>
                         <div style="border-bottom: solid 1px #7da2ce; padding: 4px;">Filed on <%#Eval("Date")%> by <%#((CHS_Extranet.HelpDesk.Ticket)Container.DataItem).User.DisplayName %></div>
                     </ItemTemplate>
                 </asp:Repeater>

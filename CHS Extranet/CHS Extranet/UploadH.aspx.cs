@@ -40,7 +40,7 @@ namespace CHS_Extranet
         {
             bool vis = false;
             foreach (uploadfilter filter in config.UploadFilters)
-                if (filter.Filter.Contains(extension)) vis = isAuth(filter);
+                if (filter.Filter.Replace("*", "").Contains(extension)) vis = isAuth(filter);
             vis = isAuth(config.UploadFilters["All Files"]);
             return vis;
         }

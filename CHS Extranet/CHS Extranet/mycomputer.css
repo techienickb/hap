@@ -1,10 +1,12 @@
-﻿#bar { height: 24px; background: url(/Extranet/images/bar.gif) repeat-x; padding: 3px 5px 3px 5px; border: solid 1px #7da2ce; border-bottom: 0; }
+﻿html { font-family: Calibri, Tahoma; font-size: medium; }
+a img { border: 0; }
+#bar { height: 24px; background: url(/Extranet/images/bar.gif) repeat-x; padding: 3px 5px 3px 5px; border: solid 1px #7da2ce; border-bottom: 0; }
 #bar a { float: left; height: 20px; line-height: 21px; padding: 1px 15px; color: #1f3976; text-decoration: none; }
 #bar a.right { float: right; }
 #bar a span { display: block; background: url(/Extranet/images/arrow.gif) no-repeat right 10px; padding: 0 16px 0 0; }
 #bar a:hover { background: url(/Extranet/images/bar-a-hover.gif) repeat-x left center; border-radius: 3px; -moz-border-radius: 3px; text-decoration: none; border: solid 1px #7da2ce; padding: 0 14px; }
-#browser { background: #fff; overflow: auto; height: 500px; border: solid 1px #7da2ce; border-top: 0; }
-#browser a, #HomeButtons a { float: left; margin: 3px; border: solid 0px #fff; border-radius: 3px; -moz-border-radius: 3px; color: #000; padding: 5px; width: 242px; height: 40px; line-height: 20px; display: block; overflow: hidden; text-decoration: none; }
+#browser { background: #fff; overflow: auto; height: 503px; border: solid 1px #7da2ce; border-top: 0; }
+#browser a, #HomeButtons a { float: left; margin: 3px; border: solid 0px #fff; border-radius: 3px; -moz-border-radius: 3px; color: #000; padding: 5px; width: 280px; height: 40px; line-height: 20px; display: block; overflow: hidden; text-decoration: none; }
 #browser a i, #HomeButtons a i { font-style: normal; color: #999; display: block; font-size: small; }
 #browser a:hover, #HomeButtons a:hover { border: solid 1px #7da2ce; margin: 2px; background: #f9fbfd url(/Extranet/images/browser-a-hover.gif) repeat-x; text-decoration: none; }
 #browser a img, #HomeButtons a img { float: left; margin: 0 4px 0 0; height: 40px; border: 0; }
@@ -61,16 +63,19 @@ h1.Announcement b { font-size: 16px; }
 	opacity:0.7;
 }
 
-.modalPopup {
-	background-color:#fff;
+.modalPopup 
+{
+    background: #fff url(/Extranet/images/bar.gif) repeat-x top left;
 	border-width:1px;
 	border-style:solid;
 	border-color: #7da2ce;
 	padding:3px;
-	width:250px;
+	width: 250px;
 	border-radius: 3px;
 	-moz-border-radius: 3px; 
 }
+.modalPopup h1 { margin: 0; padding: 0; height: 28px; line-height: 26px; font-size: medium; color: #1f3976; font-weight: normal; }
+.modalButtons { text-align: right; border-top: solid 1px #7da2ce; padding: 4px; }
 
 .sampleStyleA {
 	background-color:#FFF;

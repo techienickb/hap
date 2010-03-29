@@ -10,10 +10,11 @@ using System.Security.Authentication;
 using System.IO;
 using Excel;
 using CHS_Extranet.Configuration;
+using CHS_Extranet.routing;
 
 namespace CHS_Extranet
 {
-    public partial class xls : System.Web.UI.Page
+    public partial class xls : Page, IMyComputerDisplay
     {
         private String _DomainDN;
         private String _ActiveDirectoryConnectionString;
@@ -82,17 +83,16 @@ namespace CHS_Extranet
         {
             string userhome = up.HomeDirectory;
             if (!userhome.EndsWith("\\")) userhome += "\\";
-            string p = Request.PathInfo.Substring(1, 1);
-            string path = Request.PathInfo.Remove(0, 2).Replace('^', '&');
+            string path = RoutingPath.Replace('^', '&');
             uncpath unc = null;
-            if (p == "N") path = up.HomeDirectory + path.Replace('/', '\\');
+            if (RoutingDrive == "N") path = Path.Combine(up.HomeDirectory, path.Replace('/', '\\'));
             else
             {
-                unc = config.UNCPaths[p];
+                unc = config.UNCPaths[RoutingDrive];
                 if (unc == null || !isWriteAuth(unc)) Response.Redirect("/Extranet/unauthorised.aspx", true);
                 else
                 {
-                    path = string.Format(unc.UNC, Username) + path.Replace('/', '\\');
+                    path = Path.Combine(string.Format(unc.UNC, Username), path.Replace('/', '\\'));
                 }
             }
 
@@ -106,5 +106,9 @@ namespace CHS_Extranet
             GridView1.DataSource = excelReader.AsDataSet();
             GridView1.DataBind();
         }
+
+        public string RoutingPath { get; set; }
+
+        public string RoutingDrive { get; set; }
     }
 }

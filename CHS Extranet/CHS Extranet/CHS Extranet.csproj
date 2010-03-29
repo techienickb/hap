@@ -68,10 +68,12 @@
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.DirectoryServices.AccountManagement" />
+    <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Ajax, Version=3.0.31106.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Routing" />
     <Reference Include="System.Web.Silverlight, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\System.Web.Silverlight.dll</HintPath>
@@ -86,11 +88,16 @@
     <Reference Include="System.Web.Mobile" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Announcement.ascx" />
+    <Content Include="Controls\Announcement.ascx" />
     <Content Include="App_Data\Announcement.xml" />
     <Content Include="App_Data\Tickets.xml" />
     <Content Include="basestyle.css" />
     <Content Include="ClientBin\FileUpload.xap" />
+    <Content Include="Controls\Delete.ascx" />
+    <Content Include="Controls\Rename.ascx" />
+    <Content Include="Controls\Unzip.ascx" />
+    <Content Include="Controls\Zip.ascx" />
+    <Content Include="Global.asax" />
     <Content Include="HelpDesk\newusernote.htm" />
     <Content Include="HelpDesk\newadminnote.htm" />
     <Content Include="HelpDesk\newadminticket.htm" />
@@ -114,10 +121,8 @@
     <Content Include="images\statusicons\priority_normal.png" />
     <Content Include="images\statusicons\withit.png" />
     <Content Include="move.aspx" />
-    <Content Include="newfolder.aspx" />
-    <Content Include="rename.aspx" />
+    <Content Include="Controls\NewFolder.ascx" />
     <Content Include="Default.aspx" />
-    <Content Include="delete.aspx" />
     <Content Include="images\arrow.gif" />
     <Content Include="images\bar-a-hover.gif" />
     <Content Include="images\bar.gif" />
@@ -159,7 +164,6 @@
     <Content Include="Scripts\rightclick.js" />
     <Content Include="Scripts\viewmode.js" />
     <Content Include="unauthorised.aspx" />
-    <Content Include="Unzip.aspx" />
     <Content Include="upload.aspx" />
     <Content Include="UploadH.aspx" />
     <Content Include="Web.config">
@@ -174,11 +178,12 @@
     <Content Include="xls.aspx" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Announcement.ascx.cs">
+    <Compile Include="Configuration\announcementBox.cs" />
+    <Compile Include="Controls\Announcement.ascx.cs">
       <DependentUpon>Announcement.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Announcement.ascx.designer.cs">
+    <Compile Include="Controls\Announcement.ascx.designer.cs">
       <DependentUpon>Announcement.ascx</DependentUpon>
     </Compile>
     <Compile Include="Configuration\adSettings.cs" />
@@ -190,13 +195,41 @@
     <Compile Include="Configuration\uncpaths.cs" />
     <Compile Include="Configuration\uploadfilter.cs" />
     <Compile Include="Configuration\uploadfilters.cs" />
-    <Compile Include="docx.ashx.cs">
-      <DependentUpon>docx.ashx</DependentUpon>
+    <Compile Include="Controls\Delete.ascx.cs">
+      <DependentUpon>Delete.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Delete.ascx.designer.cs">
+      <DependentUpon>Delete.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Rename.ascx.cs">
+      <DependentUpon>Rename.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Rename.ascx.designer.cs">
+      <DependentUpon>Rename.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Unzip.ascx.cs">
+      <DependentUpon>Unzip.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Unzip.ascx.designer.cs">
+      <DependentUpon>Unzip.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Zip.ascx.cs">
+      <DependentUpon>Zip.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Zip.ascx.designer.cs">
+      <DependentUpon>Zip.ascx</DependentUpon>
     </Compile>
     <Compile Include="FileUpload.ashx.cs">
       <DependentUpon>FileUpload.ashx</DependentUpon>
     </Compile>
     <Compile Include="FileUploadProcess.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
     <Compile Include="HelpDesk\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -211,40 +244,23 @@
     <Compile Include="move.aspx.designer.cs">
       <DependentUpon>move.aspx</DependentUpon>
     </Compile>
-    <Compile Include="newfolder.aspx.cs">
-      <DependentUpon>newfolder.aspx</DependentUpon>
+    <Compile Include="Controls\NewFolder.ascx.cs">
+      <DependentUpon>NewFolder.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="newfolder.aspx.designer.cs">
-      <DependentUpon>newfolder.aspx</DependentUpon>
+    <Compile Include="Controls\NewFolder.ascx.designer.cs">
+      <DependentUpon>NewFolder.ascx</DependentUpon>
     </Compile>
     <Compile Include="p.ashx.cs">
       <DependentUpon>p.ashx</DependentUpon>
     </Compile>
     <Compile Include="Pupils.cs" />
-    <Compile Include="rename.aspx.cs">
-      <DependentUpon>rename.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="rename.aspx.designer.cs">
-      <DependentUpon>rename.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="delete.aspx.cs">
-      <DependentUpon>delete.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="delete.aspx.designer.cs">
-      <DependentUpon>delete.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="f.ashx.cs">
-      <DependentUpon>f.ashx</DependentUpon>
     </Compile>
     <Compile Include="Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>
@@ -262,19 +278,19 @@
     </Compile>
     <Compile Include="MyComputerItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="routing\ITicketDisplay.cs" />
+    <Compile Include="routing\HelpDeskRoutingHandler.cs" />
+    <Compile Include="routing\DocXPreviewHandler.cs" />
+    <Compile Include="routing\PreviewRoutingHandler.cs" />
+    <Compile Include="routing\DownloadRoutingHandler.cs" />
+    <Compile Include="routing\IMyComputerDisplay.cs" />
+    <Compile Include="routing\MyComputerRoutingHandler.cs" />
     <Compile Include="unauthorised.aspx.cs">
       <DependentUpon>unauthorised.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="unauthorised.aspx.designer.cs">
       <DependentUpon>unauthorised.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Unzip.aspx.cs">
-      <DependentUpon>Unzip.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Unzip.aspx.designer.cs">
-      <DependentUpon>Unzip.aspx</DependentUpon>
     </Compile>
     <Compile Include="upload.aspx.cs">
       <DependentUpon>upload.aspx</DependentUpon>
@@ -314,16 +330,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="f.ashx" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="FileUpload.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="p.ashx" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="docx.ashx" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Core">

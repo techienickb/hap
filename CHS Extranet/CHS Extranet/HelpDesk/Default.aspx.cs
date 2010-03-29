@@ -12,10 +12,11 @@ using System.Net.Mail;
 using System.DirectoryServices;
 using System.Net;
 using System.IO;
+using CHS_Extranet.routing;
 
 namespace CHS_Extranet.HelpDesk
 {
-    public partial class Default : System.Web.UI.Page
+    public partial class Default : System.Web.UI.Page, ITicketDisplay
     {
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -36,10 +37,10 @@ namespace CHS_Extranet.HelpDesk
             {
                 canCurrentTicket.Visible = false;
                 noCurrentTicket.Visible = true;
-                if (!string.IsNullOrEmpty(Request.QueryString["view"]))
+                if (!string.IsNullOrEmpty(TicketID))
                 {
-                    if (int.Parse(Request.QueryString["view"]) > 0) loadticket();
-                    else { loadnewticket(); if (Request.QueryString["view"] == "-2") newadminsupportticket.Attributes.Add("class", "Selected"); }
+                    if (int.Parse(TicketID) > 0) loadticket();
+                    else { loadnewticket(); if (TicketID == "-2") newadminsupportticket.Attributes.Add("class", "Selected"); }
                 }
                 GroupPrincipal da = GroupPrincipal.FindByIdentity(pcontext, "Domain Admins");
                 if (up.IsMemberOf(da))
@@ -70,7 +71,7 @@ namespace CHS_Extranet.HelpDesk
 
         public string isSelected(object o)
         {
-            if (o.ToString() == Request.QueryString["view"]) return " class=\"Selected\"";
+            if (o.ToString() == TicketID) return " class=\"Selected\"";
             return "";
         }
 
@@ -85,9 +86,9 @@ namespace CHS_Extranet.HelpDesk
         private void loadnewticket()
         {
             noCurrentTicket.Visible = false;
-            newticket.Visible = (int.Parse(Request.QueryString["view"]) == -1);
+            newticket.Visible = (int.Parse(TicketID) == -1);
             GroupPrincipal da = GroupPrincipal.FindByIdentity(pcontext, "Domain Admins");
-            if (up.IsMemberOf(da)) newadminticket.Visible = (int.Parse(Request.QueryString["view"]) == -2);
+            if (up.IsMemberOf(da)) newadminticket.Visible = (int.Parse(TicketID) == -2);
         }
 
         private void loadticket()
@@ -95,11 +96,11 @@ namespace CHS_Extranet.HelpDesk
             XmlDocument doc = new XmlDocument();
             doc.Load(Server.MapPath("~/App_Data/Tickets.xml"));
             List<Ticket> tickets = new List<Ticket>();
-            tickets.Add(Ticket.Parse(doc.SelectSingleNode("/Tickets/Ticket[@id='" + Request.QueryString["view"] + "']")));
+            tickets.Add(Ticket.Parse(doc.SelectSingleNode("/Tickets/Ticket[@id='" + TicketID + "']")));
             currentticket.DataSource = tickets.ToArray();
             currentticket.DataBind();
             List<Note> notes = new List<Note>();
-            foreach (XmlNode node in doc.SelectNodes("/Tickets/Ticket[@id='" + Request.QueryString["view"] + "']/Note"))
+            foreach (XmlNode node in doc.SelectNodes("/Tickets/Ticket[@id='" + TicketID + "']/Note"))
                 notes.Add(Note.Parse(node));
             ticketnotes.DataSource = notes.ToArray();
             ticketnotes.DataBind();
@@ -268,7 +269,7 @@ namespace CHS_Extranet.HelpDesk
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(Server.MapPath("~/App_Data/Tickets.xml"));
-            XmlNode ticket = doc.SelectSingleNode("/Tickets/Ticket[@id='" + Request.QueryString["view"] + "']");
+            XmlNode ticket = doc.SelectSingleNode("/Tickets/Ticket[@id='" + TicketID + "']");
             GroupPrincipal da = GroupPrincipal.FindByIdentity(pcontext, "Domain Admins");
             if (up.IsMemberOf(da))
             {
@@ -276,7 +277,7 @@ namespace CHS_Extranet.HelpDesk
                 ticket.Attributes["priority"].Value = PriorityList.SelectedValue;
 
                 MailMessage mes = new MailMessage();
-                mes.Subject = "Your Ticket (#" + Request.QueryString["view"] + ") has been " + (CheckFixed.Checked ? "Closed" : "Updated");
+                mes.Subject = "Your Ticket (#" + TicketID + ") has been " + (CheckFixed.Checked ? "Closed" : "Updated");
                 mes.From = mes.ReplyTo = mes.Sender = new MailAddress(up.EmailAddress, "IT Department");
                 UserPrincipal user = UserPrincipal.FindByIdentity(pcontext, ticket.SelectNodes("Note")[0].Attributes["username"].Value);
 
@@ -287,7 +288,7 @@ namespace CHS_Extranet.HelpDesk
                 FileInfo template = new FileInfo(Server.MapPath("~/HelpDesk/newadminnote.htm"));
                 StreamReader fs = template.OpenText();
 
-                mes.Body = fs.ReadToEnd().Replace("{0}", Request.QueryString["view"]).Replace("{1}",
+                mes.Body = fs.ReadToEnd().Replace("{0}", TicketID).Replace("{1}",
                     (CheckFixed.Checked ? "Closed" : "Updated")).Replace("{2}",
                     newnote.Content).Replace("{3}",
                     (CheckFixed.Checked ? "reopen" : "update")).Replace("{4}",
@@ -306,7 +307,7 @@ namespace CHS_Extranet.HelpDesk
 
                 MailMessage mes = new MailMessage();
 
-                mes.Subject = "Ticket (#" + Request.QueryString["view"] + ") has been Updated";
+                mes.Subject = "Ticket (#" + TicketID + ") has been Updated";
                 mes.From = mes.ReplyTo = mes.Sender = new MailAddress(up.EmailAddress, up.DisplayName);
 
                 mes.To.Add(new MailAddress(config.BaseSettings.AdminEmailAddress, "IT Department"));
@@ -316,7 +317,7 @@ namespace CHS_Extranet.HelpDesk
                 FileInfo template = new FileInfo(Server.MapPath("~/HelpDesk/newusernote.htm"));
                 StreamReader fs = template.OpenText();
 
-                mes.Body = fs.ReadToEnd().Replace("{0}", Request.QueryString["view"]).Replace("{1}",
+                mes.Body = fs.ReadToEnd().Replace("{0}", TicketID).Replace("{1}",
                     newnote.Content).Replace("{2}",
                     up.DisplayName).Replace("{3}",
                     Request.Url.Host);
@@ -349,6 +350,8 @@ namespace CHS_Extranet.HelpDesk
             newnote.Content = "";
         }
 
+
+        public string TicketID { get; set; }
     }
 
     public class Note

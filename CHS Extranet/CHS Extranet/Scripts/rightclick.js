@@ -155,22 +155,21 @@ var SimpleContextMenu = {
                 el = el.parentNode;
 
             SimpleContextMenu._menuElement = document.getElementById(menuElementId);
-            SimpleContextMenu._menuElement.getElementsByTagName('a')[0].href = el.href.replace(/\/extranet\/mycomputer.aspx\//gi, "/extranet/delete.aspx/").replace(/\/extranet\/f.ashx\//gi, "/extranet/delete.aspx/f/");
-            SimpleContextMenu._menuElement.getElementsByTagName('a')[1].href = el.href.replace(/\/extranet\/mycomputer.aspx\//gi, "/extranet/move.aspx?path=").replace(/\/extranet\/f.ashx\//gi, "/extranet/move.aspx?path=/f/");
-            SimpleContextMenu._menuElement.getElementsByTagName('a')[2].href = el.href.replace(/\/extranet\/mycomputer.aspx\//gi, "/extranet/rename.aspx/").replace(/\/extranet\/f.ashx\//gi, "/extranet/rename.aspx/f/");
+            var file = false;
+            if (el.href.match(/\/extranet\/download\//i)) file = true;
+            SimpleContextMenu._menuElement.getElementsByTagName('a')[0].href = SimpleContextMenu._menuElement.getElementsByTagName('a')[2].href = SimpleContextMenu._menuElement.getElementsByTagName('a')[4].href = SimpleContextMenu._menuElement.getElementsByTagName('a')[5].href = '#' + (file ? "F!" : "") + el.href.substring(el.href.lastIndexOf('/') + 1);
+            SimpleContextMenu._menuElement.getElementsByTagName('a')[1].href = el.href.replace(/\/extranet\/mycomputer\//gi, "/extranet/move.aspx?path=").replace(/\/extranet\/f.ashx\//gi, "/extranet/move.aspx?path=/f/");
             if (el.href.match(/.docx/i)) {
-                SimpleContextMenu._menuElement.getElementsByTagName('a')[3].href = el.href.replace(/\/extranet\/f.ashx/gi, "/extranet/docx.ashx");
+                SimpleContextMenu._menuElement.getElementsByTagName('a')[3].href = el.href.replace(/\/extranet\/download/gi, "/extranet/preview");
                 SimpleContextMenu._menuElement.getElementsByTagName('a')[3].style.display = "block";
             }
+            else if (!file) SimpleContextMenu._menuElement.getElementsByTagName('a')[4].style.display = "block";
             else if (el.href.match(/.xls/i)) {
-                SimpleContextMenu._menuElement.getElementsByTagName('a')[3].href = el.href.replace(/\/extranet\/f.ashx/gi, "/extranet/xls.aspx");
+                SimpleContextMenu._menuElement.getElementsByTagName('a')[3].href = el.href.replace(/\/extranet\/download/gi, "/extranet/preview");
                 SimpleContextMenu._menuElement.getElementsByTagName('a')[3].style.display = "block";
             }
-            else if (el.href.match(/.zip/i)) {
-                SimpleContextMenu._menuElement.getElementsByTagName('a')[4].href = el.href.replace(/\/extranet\/f.ashx/gi, "/extranet/unzip.aspx");
-                SimpleContextMenu._menuElement.getElementsByTagName('a')[4].style.display = "block";
-            }
-            else SimpleContextMenu._menuElement.getElementsByTagName('a')[3].style.display = SimpleContextMenu._menuElement.getElementsByTagName('a')[4].style.display = "none";
+            else if (el.href.match(/.zip/i)) SimpleContextMenu._menuElement.getElementsByTagName('a')[5].style.display = "block";
+            else SimpleContextMenu._menuElement.getElementsByTagName('a')[3].style.display = SimpleContextMenu._menuElement.getElementsByTagName('a')[4].style.display = SimpleContextMenu._menuElement.getElementsByTagName('a')[5].style.display = "none";
             SimpleContextMenu._menuElement.style.left = m.x + s.x + 'px';
             SimpleContextMenu._menuElement.style.top = m.y + s.y + 'px';
             SimpleContextMenu._menuElement.style.display = 'block';
