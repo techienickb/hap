@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CHS_Extranet {
+namespace CHS_Extranet.Controls {
     
     
     public partial class Announcement {

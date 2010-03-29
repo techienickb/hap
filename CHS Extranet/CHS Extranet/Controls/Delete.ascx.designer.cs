@@ -7,19 +7,28 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CHS_Extranet {
+namespace CHS_Extranet.Controls {
     
     
-    public partial class delete {
+    public partial class Delete {
         
         /// <summary>
-        /// form1 control.
+        /// deleteclicker control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
+        protected global::System.Web.UI.WebControls.Button deleteclicker;
+        
+        /// <summary>
+        /// deletebox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel deletebox;
         
         /// <summary>
         /// filename control.
@@ -31,15 +40,6 @@ namespace CHS_Extranet {
         protected global::System.Web.UI.WebControls.Label filename;
         
         /// <summary>
-        /// fullname control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField fullname;
-        
-        /// <summary>
         /// yesdel control.
         /// </summary>
         /// <remarks>
@@ -49,12 +49,21 @@ namespace CHS_Extranet {
         protected global::System.Web.UI.WebControls.Button yesdel;
         
         /// <summary>
-        /// closeandrefresh control.
+        /// cancel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder closeandrefresh;
+        protected global::System.Web.UI.WebControls.Button cancel;
+        
+        /// <summary>
+        /// deleteitem control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField deleteitem;
     }
 }

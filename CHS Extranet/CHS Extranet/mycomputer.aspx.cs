@@ -10,10 +10,11 @@ using System.IO;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using CHS_Extranet.Configuration;
+using CHS_Extranet.routing;
 
 namespace CHS_Extranet
 {
-    public partial class mycomputer : System.Web.UI.Page
+    public partial class mycomputer : Page, IMyComputerDisplay
     {
         private String _DomainDN;
         private String _ActiveDirectoryConnectionString;
@@ -81,13 +82,20 @@ namespace CHS_Extranet
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            DataBind();
+            postbackmove.Visible = Page.IsPostBack;
+        }
+
+        public override void DataBind()
+        {
+            base.DataBind();
             List<MyComputerItem> items = new List<MyComputerItem>();
-            if (string.IsNullOrEmpty(Request.PathInfo))
+            if (string.IsNullOrEmpty(RoutingDrive))
             {
                 breadcrumbrepeater.Visible = false;
-                items.Add(new MyComputerItem("My Documents", string.Format("{0} on {1}", Username, config.BaseSettings.EstablishmentCode), "/Extranet/MyComputer.aspx/N\\", "netdrive.png", false));
+                items.Add(new MyComputerItem("My Documents", string.Format("{0} on {1}", Username, config.BaseSettings.EstablishmentCode), "/Extranet/MyComputer/N", "netdrive.png", false));
                 foreach (uncpath path in config.UNCPaths)
-                    if (isAuth(path)) items.Add(new MyComputerItem(path.Name, string.Format("{0} on {1}", path.Name, config.BaseSettings.EstablishmentCode), string.Format("/Extranet/MyComputer.aspx/{0}\\", path.Drive), "netdrive.png", false));
+                    if (isAuth(path)) items.Add(new MyComputerItem(path.Name, string.Format("{0} on {1}", path.Name, config.BaseSettings.EstablishmentCode), string.Format("/Extranet/MyComputer/{0}", path.Drive), "netdrive.png", false));
                 if (config.HomePageLinks["Access Learning Resources"] != null)
                 {
                     if (config.HomePageLinks["Access Learning Resources"].ShowTo == "All") items.Add(new MyComputerItem("Learning Resources", string.Format("{0} on {1}", "Learning Resources", config.BaseSettings.EstablishmentCode), config.HomePageLinks["Access Learning Resources"].LinkLocation, config.HomePageLinks["Access Learning Resources"].Icon.Remove(0, config.HomePageLinks["Access Learning Resources"].Icon.LastIndexOf('/') + 1), false));
@@ -101,34 +109,32 @@ namespace CHS_Extranet
                         }
                         if (vis) items.Add(new MyComputerItem("Learning Resources", string.Format("{0} on {1}", "Learning Resources", config.BaseSettings.EstablishmentCode), config.HomePageLinks["Access Learning Resources"].LinkLocation, config.HomePageLinks["Access Learning Resources"].Icon.Remove(0, config.HomePageLinks["Access Learning Resources"].Icon.LastIndexOf('/') + 1), false));
                     }
-                    
+
                 }
             }
             else
             {
                 string userhome = up.HomeDirectory;
                 if (!userhome.EndsWith("\\")) userhome += "\\";
-                string p = Request.PathInfo.Substring(1, 1);
-                string path = Request.PathInfo.Remove(0, 2).Replace('^', '&');
+                string path = "";
                 uncpath unc = null;
-                if (p == "N") path = up.HomeDirectory + path.Replace('/', '\\');
+                if (RoutingDrive == "N") path = up.HomeDirectory + "\\" + RoutingPath.Replace('/', '\\');
                 else
                 {
-                    unc = config.UNCPaths[p];
+                    unc = config.UNCPaths[RoutingDrive];
                     if (unc == null || !isAuth(unc)) Response.Redirect("/Extranet/unauthorised.aspx", true);
                     else
                     {
-                        path = string.Format(unc.UNC, Username) + path.Replace('/', '\\');
+                        path = string.Format(unc.UNC, Username) + "\\" + RoutingPath.Replace('/', '\\');
                     }
                 }
-
-                Response.Write("<!--" + path + "-->\n");
-                if (unc != null) Response.Write("<!--" + unc.UNC + "-->");
 
                 List<MyComputerItem> breadcrumbs = new List<MyComputerItem>();
 
                 path = path.TrimEnd(new char[] { '\\' });
                 DirectoryInfo dir = new DirectoryInfo(path);
+                newfolderlink.Directory = DeleteBox.Dir = RenameBox.Dir = UnzipBox.Dir = ZipBox.Dir = dir;
+                newfolderlink.DataBind();
                 DirectoryInfo subdir1 = dir;
                 string uncroot = up.HomeDirectory;
                 if (unc != null) uncroot = string.Format(unc.UNC, Username);
@@ -138,43 +144,40 @@ namespace CHS_Extranet
                 while (subdir1.FullName != rootdir.FullName && subdir1 != null)
                 {
                     string sdirpath = subdir1.FullName;
-                    if (unc == null) sdirpath = sdirpath.Replace(userhome, "N\\");
+                    if (unc == null) sdirpath = sdirpath.Replace(userhome, "N/");
                     else sdirpath = sdirpath.Replace(string.Format(unc.UNC, Username), unc.Drive);
-                    breadcrumbs.Add(new MyComputerItem(subdir1.Name, "", "/Extranet/MyComputer.aspx/" + sdirpath.Replace("&", "^"), "", false));
+                    breadcrumbs.Add(new MyComputerItem(subdir1.Name, "", "/Extranet/MyComputer/" + sdirpath.Replace("&", "^").Replace('\\', '/'), "", false));
                     subdir1 = subdir1.Parent;
                 }
                 if (unc == null)
-                    breadcrumbs.Add(new MyComputerItem("My Documents", "", "/Extranet/MyComputer.aspx/N\\", "", false));
+                    breadcrumbs.Add(new MyComputerItem("My Documents", "", "/Extranet/MyComputer/N/", "", false));
                 else
-                    breadcrumbs.Add(new MyComputerItem(unc.Name, "", "/Extranet/MyComputer.aspx/" + unc.Drive, "", false));
+                    breadcrumbs.Add(new MyComputerItem(unc.Name, "", "/Extranet/MyComputer/" + unc.Drive, "", false));
                 breadcrumbs.Add(new MyComputerItem("My Computer", "", "/Extranet/MyComputer.aspx", "", false));
                 breadcrumbs.Reverse();
                 breadcrumbrepeater.Visible = true;
                 breadcrumbrepeater.DataSource = breadcrumbs.ToArray();
                 breadcrumbrepeater.DataBind();
 
-                if (Request.PathInfo.Length <= 3)
+                if (string.IsNullOrEmpty(RoutingPath))
                     items.Add(new MyComputerItem("My Computer", "Back to My Computer", "/Extranet/MyComputer.aspx", "school.png", false));
-                else items.Add(new MyComputerItem("..", "Up a Directory", "/Extranet/MyComputer.aspx" + Request.PathInfo.Remove(Request.PathInfo.LastIndexOf('/')), "folder.png", false));
+                else items.Add(new MyComputerItem("..", "Up a Directory", "/Extranet/MyComputer/" + (RoutingDrive + "/" + RoutingPath).Remove((RoutingDrive + "/" + RoutingPath).LastIndexOf('/')), "folder.png", false));
 
-                bool allowedit = isWriteAuth(config.UNCPaths[p]);
+                bool allowedit = isWriteAuth(config.UNCPaths[RoutingDrive]);
                 newfolderlink.Visible = fileuploadlink.Visible = allowedit;
-                if (p != "N" && p != "H") rckmove.Style.Add("display", "none");
-
-                newfolderlink.NavigateUrl = "/Extranet/NewFolder.aspx?path=" + Request.PathInfo.Remove(0, 1);
-                fileuploadlink.NavigateUrl = "/Extranet/Upload.aspx?path=" + Request.PathInfo.Remove(0, 1);
+                if (RoutingDrive != "N" && RoutingDrive != "H") rckmove.Style.Add("display", "none");
+                fileuploadlink.NavigateUrl = "/Extranet/Upload.aspx?path=" + RoutingDrive + "/" + RoutingPath;
                 try
                 {
                     foreach (DirectoryInfo subdir in dir.GetDirectories())
-                    {
                         if (!subdir.Name.ToLower().Contains("recycle"))
                         {
                             string dirpath = subdir.FullName;
                             if (unc == null) dirpath = dirpath.Replace(userhome, "N/");
                             else dirpath = dirpath.Replace(string.Format(unc.UNC, Username), unc.Drive);
-                            items.Add(new MyComputerItem(subdir.Name, "Last Modified: " + subdir.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/MyComputer.aspx/" + dirpath.Replace("&", "^"), MyComputerItem.ParseForImage(subdir), allowedit));
+                            dirpath = dirpath.Replace('\\', '/');
+                            items.Add(new MyComputerItem(subdir.Name, "Last Modified: " + subdir.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/MyComputer/" + dirpath.Replace("&", "^"), MyComputerItem.ParseForImage(subdir), allowedit));
                         }
-                    }
                     foreach (FileInfo file in dir.GetFiles())
                     {
                         if (!file.Name.ToLower().Contains("thumbs"))
@@ -182,10 +185,11 @@ namespace CHS_Extranet
                             string dirpath = file.FullName;
                             if (unc == null) dirpath = dirpath.Replace(userhome, "N/");
                             else dirpath = dirpath.Replace(string.Format(unc.UNC, Username), unc.Drive);
+                            dirpath = dirpath.Replace('\\', '/');
                             if (!string.IsNullOrEmpty(file.Extension))
-                                items.Add(new MyComputerItem(file.Name.Replace(file.Extension, ""), "Last Modified: " + file.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/f.ashx/" + dirpath.Replace("&", "^"), MyComputerItem.ParseForImage(file), allowedit));
+                                items.Add(new MyComputerItem(file.Name.Replace(file.Extension, ""), "Last Modified: " + file.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/Download/" + dirpath.Replace("&", "^"), MyComputerItem.ParseForImage(file), allowedit));
                             else
-                                items.Add(new MyComputerItem(file.Name, "Last Modified: " + file.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/f.ashx/" + dirpath.Replace("&", "^"), MyComputerItem.ParseForImage(file), allowedit));
+                                items.Add(new MyComputerItem(file.Name, "Last Modified: " + file.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/Download/" + dirpath.Replace("&", "^"), MyComputerItem.ParseForImage(file), allowedit));
                         }
                     }
                 }
@@ -197,5 +201,9 @@ namespace CHS_Extranet
             browserrepeater.DataSource = items.ToArray();
             browserrepeater.DataBind();
         }
+
+        public string RoutingPath { get; set; }
+
+        public string RoutingDrive { get; set; }
     }
 }

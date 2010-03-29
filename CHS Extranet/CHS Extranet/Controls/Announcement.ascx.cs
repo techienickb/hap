@@ -9,7 +9,7 @@ using CHS_Extranet.Configuration;
 using System.Configuration;
 using System.Xml;
 
-namespace CHS_Extranet
+namespace CHS_Extranet.Controls
 {
     public partial class Announcement : System.Web.UI.UserControl
     {
@@ -43,8 +43,8 @@ namespace CHS_Extranet
             else throw new Exception("The connection string specified in 'activeDirectoryConnectionString' does not appear to be a valid LDAP connection string.");
             pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
             up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Username);
-            GroupPrincipal da = GroupPrincipal.FindByIdentity(pcontext, "Domain Admins");
-            EditAnnouncement.Visible = up.IsMemberOf(da);
+            EditAnnouncement.Visible = isEdit();
+            AnnouncementText.Visible = isShowTo();
             if (!Page.IsPostBack)
             {
                 XmlDocument doc = new XmlDocument();
@@ -56,6 +56,38 @@ namespace CHS_Extranet
                 if (ShowAnnouncement.Checked)
                     AnnouncementText.Text = string.Format("<h1 class=\"Announcement\"><b>Announcement</b><br />{0}</h1>", Editor1.Content);
             }
+        }
+
+        private bool isShowTo()
+        {
+            if (config.AnnouncementBox.ShowTo == "All") return true;
+            else if (config.AnnouncementBox.ShowTo != "None")
+            {
+                bool vis = false;
+                foreach (string s in config.AnnouncementBox.ShowTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, s);
+                    if (!vis) vis = up.IsMemberOf(gp);
+                }
+                return vis;
+            }
+            return false;
+        }
+
+        private bool isEdit()
+        {
+            if (config.AnnouncementBox.EnableEditTo == "All") return true;
+            else if (config.AnnouncementBox.EnableEditTo != "None")
+            {
+                bool vis = false;
+                foreach (string s in config.AnnouncementBox.EnableEditTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, s);
+                    if (!vis) vis = up.IsMemberOf(gp);
+                }
+                return vis;
+            }
+            return false;
         }
 
         protected void saveann_Click(object sender, EventArgs e)

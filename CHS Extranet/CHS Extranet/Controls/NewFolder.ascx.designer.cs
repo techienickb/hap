@@ -7,19 +7,28 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CHS_Extranet {
+namespace CHS_Extranet.Controls {
     
     
-    public partial class newfolder {
+    public partial class NewFolder {
         
         /// <summary>
-        /// form1 control.
+        /// newfolderlink control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
+        protected global::System.Web.UI.WebControls.LinkButton newfolderlink;
+        
+        /// <summary>
+        /// newfolderbox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel newfolderbox;
         
         /// <summary>
         /// foldername control.
@@ -40,12 +49,21 @@ namespace CHS_Extranet {
         protected global::System.Web.UI.WebControls.Button yes;
         
         /// <summary>
-        /// closeandrefresh control.
+        /// cancel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder closeandrefresh;
+        protected global::System.Web.UI.WebControls.Button cancel;
+        
+        /// <summary>
+        /// newfolderpopup control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender newfolderpopup;
     }
 }
