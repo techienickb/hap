@@ -34,28 +34,28 @@ function changeview(e) {
 }
 function popup(e) {
     if (e.innerHTML == "Rename") {
-        renameitem.value = e.href.substring(e.href.lastIndexOf('#') + 1).replace(/%20/gi, " ");
-        if (e.href.match(/#F!/i)) renameitemname.innerHTML = e.href.substring(e.href.lastIndexOf('#') + 3).replace(/%20/gi, " ");
-        else renameitemname.innerHTML = e.href.substring(e.href.lastIndexOf('#') + 1).replace(/%20/gi, " ");
+        renameitem.value = e.href.substring(e.href.lastIndexOf('#') + 1).replace(/%20/gi, " ").replace(/\^/gi, "&").replace(/%5E/gi, "&");
+        if (e.href.match(/#F!/i)) renameitemname.innerHTML = e.href.substring(e.href.lastIndexOf('#') + 3).replace(/%20/gi, " ").replace(/\^/gi, "&").replace(/%5E/gi, "&");
+        else renameitemname.innerHTML = e.href.substring(e.href.lastIndexOf('#') + 1).replace(/%20/gi, " ").replace(/\^/gi, "&").replace(/%5E/gi, "&");
         renameclick.click();
     } else if (e.innerHTML == "Delete") {
-        deleteitem.value = e.href.substring(e.href.lastIndexOf('#') + 1).replace(/%20/gi, " ");
-        if (e.href.match(/#F!/i)) deleteitemname.innerHTML = e.href.substring(e.href.lastIndexOf('#') + 3).replace(/%20/gi, " ");
-        else deleteitemname.innerHTML = e.href.substring(e.href.lastIndexOf('#') + 1).replace(/%20/gi, " ");
+        deleteitem.value = e.href.substring(e.href.lastIndexOf('#') + 1).replace(/%20/gi, " ").replace(/\^/gi, "&").replace(/%5E/gi, "&");
+        if (e.href.match(/#F!/i)) deleteitemname.innerHTML = e.href.substring(e.href.lastIndexOf('#') + 3).replace(/%20/gi, " ").replace(/\^/gi, "&").replace(/%5E/gi, "&");
+        else deleteitemname.innerHTML = e.href.substring(e.href.lastIndexOf('#') + 1).replace(/%20/gi, " ").replace(/\^/gi, "&").replace(/%5E/gi, "&");
         deleteclick.click();
     }
     else if (e.innerHTML == "Move")
         window.open(e.href, 'CHSMove', 'toolbar=0,status=0,statusbar=0,menubar=0,menu=0,address=0,addressbar=0,width=500,height=500', true);
     else if (e.innerHTML == "Unzip") {
-        unzipitem.value = e.href.substring(e.href.lastIndexOf('#') + 1).replace(/%20/gi, " ");
-        if (e.href.match(/#F!/i)) unzipitemname.innerHTML = e.href.substring(e.href.lastIndexOf('#') + 3).replace(/%20/gi, " ");
-        else unzipitemname.innerHTML = e.href.substring(e.href.lastIndexOf('#') + 1).replace(/%20/gi, " ");
+        unzipitem.value = e.href.substring(e.href.lastIndexOf('#') + 1).replace(/%20/gi, " ").replace(/\^/gi, "&").replace(/%5E/gi, "&");
+        if (e.href.match(/#F!/i)) unzipitemname.innerHTML = e.href.substring(e.href.lastIndexOf('#') + 3).replace(/%20/gi, " ").replace(/\^/gi, "&").replace(/%5E/gi, "&");
+        else unzipitemname.innerHTML = e.href.substring(e.href.lastIndexOf('#') + 1).replace(/%20/gi, " ").replace(/\^/gi, "&").replace(/%5E/gi, "&");
         unzipclick.click();
     }
     else if (e.innerHTML == "Zip") {
-        zipitem.value = e.href.substring(e.href.lastIndexOf('#') + 1).replace(/%20/gi, " ");
-        if (e.href.match(/#F!/i)) zipitemname.innerHTML = e.href.substring(e.href.lastIndexOf('#') + 3).replace(/%20/gi, " ");
-        else zipitemname.innerHTML = e.href.substring(e.href.lastIndexOf('#') + 1).replace(/%20/gi, " ");
+        zipitem.value = e.href.substring(e.href.lastIndexOf('#') + 1).replace(/%20/gi, " ").replace(/\^/gi, "&").replace(/%5E/gi, "&");
+        if (e.href.match(/#F!/i)) zipitemname.innerHTML = e.href.substring(e.href.lastIndexOf('#') + 3).replace(/%20/gi, " ").replace(/\^/gi, "&").replace(/%5E/gi, "&");
+        else zipitemname.innerHTML = e.href.substring(e.href.lastIndexOf('#') + 1).replace(/%20/gi, " ").replace(/\^/gi, "&").replace(/%5E/gi, "&");
         zipclick.click();
     }
     else if (e.innerHTML == "HTML Preview")
