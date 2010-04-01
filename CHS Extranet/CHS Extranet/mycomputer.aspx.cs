@@ -118,20 +118,20 @@ namespace CHS_Extranet
                 if (!userhome.EndsWith("\\")) userhome += "\\";
                 string path = "";
                 uncpath unc = null;
-                if (RoutingDrive == "N") path = up.HomeDirectory + "\\" + RoutingPath.Replace('/', '\\');
+                if (RoutingDrive == "N") path = up.HomeDirectory + "\\" + RoutingPath;
                 else
                 {
                     unc = config.UNCPaths[RoutingDrive];
                     if (unc == null || !isAuth(unc)) Response.Redirect("/Extranet/unauthorised.aspx", true);
                     else
                     {
-                        path = string.Format(unc.UNC, Username) + "\\" + RoutingPath.Replace('/', '\\');
+                        path = string.Format(unc.UNC, Username) + "\\" + RoutingPath;
                     }
                 }
 
                 List<MyComputerItem> breadcrumbs = new List<MyComputerItem>();
 
-                path = path.TrimEnd(new char[] { '\\' });
+                path = path.TrimEnd(new char[] { '\\' }).Replace('^', '&').Replace('/', '\\');
                 DirectoryInfo dir = new DirectoryInfo(path);
                 newfolderlink.Directory = DeleteBox.Dir = RenameBox.Dir = UnzipBox.Dir = ZipBox.Dir = dir;
                 newfolderlink.DataBind();
@@ -146,7 +146,7 @@ namespace CHS_Extranet
                     string sdirpath = subdir1.FullName;
                     if (unc == null) sdirpath = sdirpath.Replace(userhome, "N/");
                     else sdirpath = sdirpath.Replace(string.Format(unc.UNC, Username), unc.Drive);
-                    breadcrumbs.Add(new MyComputerItem(subdir1.Name, "", "/Extranet/MyComputer/" + sdirpath.Replace("&", "^").Replace('\\', '/'), "", false));
+                    breadcrumbs.Add(new MyComputerItem(subdir1.Name, "", "/Extranet/MyComputer/" + sdirpath.Replace('&', '^').Replace('\\', '/'), "", false));
                     subdir1 = subdir1.Parent;
                 }
                 if (unc == null)
@@ -176,7 +176,7 @@ namespace CHS_Extranet
                             if (unc == null) dirpath = dirpath.Replace(userhome, "N/");
                             else dirpath = dirpath.Replace(string.Format(unc.UNC, Username), unc.Drive);
                             dirpath = dirpath.Replace('\\', '/');
-                            items.Add(new MyComputerItem(subdir.Name, "Last Modified: " + subdir.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/MyComputer/" + dirpath.Replace("&", "^"), MyComputerItem.ParseForImage(subdir), allowedit));
+                            items.Add(new MyComputerItem(subdir.Name, "Last Modified: " + subdir.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/MyComputer/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(subdir), allowedit));
                         }
                     foreach (FileInfo file in dir.GetFiles())
                     {
@@ -187,9 +187,9 @@ namespace CHS_Extranet
                             else dirpath = dirpath.Replace(string.Format(unc.UNC, Username), unc.Drive);
                             dirpath = dirpath.Replace('\\', '/');
                             if (!string.IsNullOrEmpty(file.Extension))
-                                items.Add(new MyComputerItem(file.Name.Replace(file.Extension, ""), "Last Modified: " + file.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/Download/" + dirpath.Replace("&", "^"), MyComputerItem.ParseForImage(file), allowedit));
+                                items.Add(new MyComputerItem(file.Name.Replace(file.Extension, ""), "Last Modified: " + file.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/Download/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(file), allowedit));
                             else
-                                items.Add(new MyComputerItem(file.Name, "Last Modified: " + file.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/Download/" + dirpath.Replace("&", "^"), MyComputerItem.ParseForImage(file), allowedit));
+                                items.Add(new MyComputerItem(file.Name, "Last Modified: " + file.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/Download/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(file), allowedit));
                         }
                     }
                 }
