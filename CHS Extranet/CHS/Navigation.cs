@@ -14,17 +14,11 @@ namespace CHS
     [ToolboxData("<{0}:Navigation runat=\"server\" Selected=\"\" />")]
     public class Navigation : WebControl
     {
-
-        private string selected;
         [Bindable(true)]
         [Category("Appearance")]
         [DefaultValue("")]
         [Localizable(true)]
-        public string Selected
-        {
-            get { return this.selected; }
-            set { this.selected = value; }
-        }
+        public string Selected { get; set; }
 
         public override void RenderBeginTag(HtmlTextWriter writer)
         {
@@ -46,7 +40,7 @@ namespace CHS
             {
                 if (line.Contains("<div id=\"navigation\">"))
                     startwrite = true;
-                if (Selected != null && Selected != "" && line.Contains(Selected))
+                if (!string.IsNullOrEmpty(Selected) && line.Contains(Selected))
                     line = line.Replace("<li class=\"", "<li class=\"current_page_item ");
                 if (line.Contains("</div>")) startwrite = false;
                 if (startwrite)
