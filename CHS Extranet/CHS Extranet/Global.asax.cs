@@ -19,6 +19,7 @@ namespace CHS_Extranet
             RouteTable.Routes.Add(new Route("download/{drive}/{*path}", new DownloadRoutingHandler()));
             RouteTable.Routes.Add(new Route("preview/{drive}/{*path}", new PreviewRoutingHandler()));
             RouteTable.Routes.Add(new Route("helpdesk/ticket/{ticket}", new HelpDeskRoutingHandler()));
+            RouteTable.Routes.Add(new Route("bookingsystem/{room}/display", new BookingSystemDislayRoutingHandler()));
         }
 
         protected void Session_Start(object sender, EventArgs e)

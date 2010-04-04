@@ -1,0 +1,49 @@
+﻿#daylist { border: solid 1px #7da2ce; overflow: hidden; border-bottom: 0; }
+#daylist h1, .popupContent h1 { height: 30px; text-align: center; background: url(../images/bar.gif) repeat-x; line-height: 30px; color: #1f3976; font-size: medium; margin: 0; font-weight: normal; padding: 0; overflow: hidden; }
+#daylist h1 a { display: block; margin: 4px; line-height: 22px; height: 22px; }
+#daylist h1 a:hover { background: url(../images/bar-a-hover.gif) repeat-x left center; margin: 3px; border-radius: 3px; -moz-border-radius: 3px; text-decoration: none; border: solid 1px #7da2ce; }
+#daylist span { width: 152px; float: left; text-align: center; }
+#daylist span i { font-style: normal; color: Gray; display: block; font-size: small; }
+#daylist span u { display: block; color: Gray; font-size: x-small; text-decoration: none; }
+#daylist span span { line-height: 20px; height: auto; padding: 8px 0 0 0; }
+#daylist div { overflow: hidden; border-bottom: solid 1px #7da2ce; height: 54px; text-align: center; background: #fff; }
+#daylist div span.room { line-height: 54px; display: block; height: 54px; background: #7da2ce; }
+#daylist div.break, .buttons { height: auto; line-height: normal; background: #7da2ce; }
+#daylist div a { display: block; margin: 1px; height: 50px; line-height: 48px; border: solid 1px #fff; border-radius: 3px; -moz-border-radius: 3px; overflow: hidden; text-decoration: none; color: #333; }
+#daylist div .static { text-align: left; }
+#daylist div img { float: left; margin: 4px; }
+#daylist div a:hover { border: solid 1px #7da2ce; background: #f9fbfd url(../images/browser-a-hover.gif) repeat-x top left; text-decoration: none; }
+#daylist h2 { border-bottom: solid 1px #7da2ce; margin: 0; padding: 122px 0 123px 0; text-align: center; }
+#daylist a.booked { line-height: normal; padding: 6px 0 4px 0; line-height: 20px; height: 40px; position: relative; white-space: nowrap; overflow: hidden; }
+#daylist a.booked label { display: none; position: absolute; cursor: pointer; text-align: right; top: -6px; right: 0; font-size: small; }
+#daylist a.booked:hover { border-color: #be3430; background-image: url(../images/browser-a-booked-hover.gif); }
+#daylist a.booked:hover label { display: block; }
+
+#daylist a.bookedl { line-height: normal; padding: 4px; height: 42px; position: relative; }
+#daylist a.bookedl label { display: none; position: absolute; cursor: pointer; text-align: right; top: -4px; right: 0; font-size: small; }
+#daylist a.bookedl:hover { border-color: #be3430; background-image: url(../images/browser-a-booked-hover.gif); }
+#daylist a.bookedl:hover label { display: block; }
+
+#Cal { display: none; background: #fff; position: absolute; top: 126px; width: 220px; border: solid 1px #7da2ce; border-radius: 0 0 3px 3px ; -moz-border-radius: 0 0 3px 3px; }
+.dayhead { border-bottom: solid 1px #d9d9d9; }
+.calhead td { font-size: 16px;  font-weight: lighter; }
+.Calendar a { font-size: 12px; }
+.Calendar a:hover { text-decoration: none; }
+.Selector { padding: 0; border-right: solid 1px #d9d9d9; }
+.Selector a { cursor: pointer; display: block; height: 28px; line-height: 28px; font-weight: bold; }
+.Day { padding: 0; height: 28px; line-height: 28px; }
+.Day a { cursor: pointer; display: block; height: 28px; line-height: 28px; }
+.Calendar a:Hover { display: block; background: #6d051f; color: #fff!important; }
+.Day { background: Silver url(../images/dashed.gif) repeat; color: #fff; }
+.Autum { background-color: #d27d92; }
+.Spring { background-color: #89d27d; }
+.Summer { background-color: #feb800; }
+.HalfTerm { background-image: url(../images/dashed.gif); background-repeat: repeat; }
+.Term { background-image: none; }
+.Term.SelDay { background-image: none; }
+.modalBackground { background-color:Gray; filter:alpha(opacity=70); opacity:0.7; position: absolute; position: fixed; top: 0; height: 100%; left: 0; width: 100%; z-index: 2500; }
+#modalPopup, #loadingPopup { position: absolute; position: fixed; z-index: 3500; width: 100%; top: 40%; left: 0; width: 100%; }
+.popupContent { background: #fff url(../images/bar.gif) repeat-x top left;	border: solid 1px #7da2ce; padding: 0; width: 500px; margin: 0 auto; border-radius: 3px; -moz-border-radius: 3px; }
+.popupContent div { padding: 4px; }
+.popupContent h1 { background: transparent; }
+.buttons { text-align: right; }
