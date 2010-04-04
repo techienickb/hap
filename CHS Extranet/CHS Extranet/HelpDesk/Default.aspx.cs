@@ -410,6 +410,8 @@ namespace CHS_Extranet.HelpDesk
     {
         public string LoginName;
         public string DisplayName;
+        public string Notes;
+        public string EmailAddress;
 
         #region IComparable Members
 
@@ -454,6 +456,43 @@ namespace CHS_Extranet.HelpDesk
             return users.ToArray();
         }
 
+        static public UserInfo GetUserInfo(string username)
+        {
+            extranetConfig config = ConfigurationManager.GetSection("extranetConfig") as extranetConfig;
+            DirectoryEntry usersDE = new DirectoryEntry(ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
+            DirectorySearcher ds = new DirectorySearcher(usersDE);
+            ds.Filter = "(sAMAccountName=*" + username + ")";
+            ds.PropertiesToLoad.Add("cn");
+            ds.PropertiesToLoad.Add(UserProperty.UserName);
+            ds.PropertiesToLoad.Add(UserProperty.DisplayName);
+            ds.PropertiesToLoad.Add(UserProperty.Notes);
+            ds.PropertiesToLoad.Add(UserProperty.Email);
+            SearchResult r = ds.FindOne();
+
+            UserInfo info = new UserInfo();
+            info.LoginName = r.Properties[UserProperty.UserName][0].ToString();
+            if (r.Properties[UserProperty.DisplayName].Count == 0)
+                info.DisplayName = info.LoginName;
+            else if (r.Properties[UserProperty.DisplayName] != null)
+                info.DisplayName = r.Properties[UserProperty.DisplayName][0].ToString();
+            else
+                info.DisplayName = info.LoginName;
+            if (r.Properties[UserProperty.Notes].Count == 0)
+                info.Notes = info.DisplayName;
+            else if (r.Properties[UserProperty.Notes] != null)
+                info.Notes = r.Properties[UserProperty.Notes][0].ToString();
+            else
+                info.Notes = info.DisplayName;
+            if (r.Properties[UserProperty.Email].Count == 0)
+                info.EmailAddress = "";
+            else if (r.Properties[UserProperty.Email] != null)
+                info.EmailAddress = r.Properties[UserProperty.Email][0].ToString();
+            else
+                info.EmailAddress = "";
+
+            return info;
+        }
+
         // FindUsers - Returns all users matching a pattern
         static public UserInfo[] FindUsers(string ou)
         {
@@ -466,6 +505,7 @@ namespace CHS_Extranet.HelpDesk
             ds.PropertiesToLoad.Add(UserProperty.UserName);
             ds.PropertiesToLoad.Add(UserProperty.DisplayName);
             ds.PropertiesToLoad.Add(UserProperty.Email);
+            ds.PropertiesToLoad.Add(UserProperty.Notes);
 
             SearchResultCollection sr = ds.FindAll();
 
@@ -482,6 +522,18 @@ namespace CHS_Extranet.HelpDesk
                         info.DisplayName = sr[i].Properties[UserProperty.DisplayName][0].ToString();
                     else
                         info.DisplayName = "";
+                    if (sr[i].Properties[UserProperty.Notes].Count == 0)
+                        info.Notes = "";
+                    else if (sr[i].Properties[UserProperty.Notes] != null)
+                        info.Notes = sr[i].Properties[UserProperty.Notes][0].ToString();
+                    else
+                        info.Notes = "";
+                    if (sr[i].Properties[UserProperty.Email].Count == 0)
+                        info.EmailAddress = "";
+                    else if (sr[i].Properties[UserProperty.Email] != null)
+                        info.EmailAddress = sr[i].Properties[UserProperty.Email][0].ToString();
+                    else
+                        info.EmailAddress = "";
                     results.Add(info);
                 }
             }

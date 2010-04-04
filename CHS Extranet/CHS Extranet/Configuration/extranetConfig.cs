@@ -44,5 +44,11 @@ namespace CHS_Extranet.Configuration
             get { return (announcementBox)this["announcementbox"]; }
         }
 
+        [ConfigurationProperty("bookingsystem", IsRequired = false)]
+        public bookingSystem BookingSystem
+        {
+            get { return (bookingSystem)this["bookingsystem"]; }
+        }
+
     }
 }
