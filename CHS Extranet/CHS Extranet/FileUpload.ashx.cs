@@ -69,7 +69,7 @@ namespace CHS_Extranet
         {
             try
             {
-                extranetConfig config = ConfigurationManager.GetSection("extranetConfig") as extranetConfig;
+                extranetConfig config = extranetConfig.Current;
                 ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
                 if (connObj != null) _ActiveDirectoryConnectionString = connObj.ConnectionString;
                 if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))

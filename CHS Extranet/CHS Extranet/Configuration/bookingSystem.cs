@@ -15,6 +15,14 @@ namespace CHS_Extranet.Configuration
             set { this["lessonsperday"] = value.ToString(); }
         }
 
+        [ConfigurationProperty("maxbookingsperweek", DefaultValue = 3, IsRequired = true)]
+        public int MaxBookingsPerWeek
+        {
+            get { return (int)this["maxbookingsperweek"]; }
+            set { this["maxbookingsperweek"] = value.ToString(); }
+        }
+
+
         [ConfigurationProperty("maxdays", DefaultValue = 14, IsRequired = true)]
         public int MaxDays
         {

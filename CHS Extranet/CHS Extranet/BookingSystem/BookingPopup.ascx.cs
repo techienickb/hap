@@ -27,7 +27,7 @@ namespace CHS_Extranet.BookingSystem
             string lessonint = bookingvars.Value.Split(new char[] { '@' }, StringSplitOptions.RemoveEmptyEntries)[1];
             node.SetAttribute("lesson", lessonint);
             string roomstr = bookingvars.Value.Split(new char[] { '@' }, StringSplitOptions.RemoveEmptyEntries)[0];
-            extranetConfig config = ConfigurationManager.GetSection("extranetConfig") as extranetConfig;
+            extranetConfig config = extranetConfig.Current;
             if (config.BookingSystem.Resources[roomstr].ResourceType == ResourceType.Laptops)
             {
                 node.SetAttribute("ltroom", BookLTRoom.Text);
@@ -149,7 +149,7 @@ namespace CHS_Extranet.BookingSystem
             {
                 XmlDocument doc = new XmlDocument();
                 doc.Load(Server.MapPath("~/App_Data/Bookings.xml"));
-                int max = 3;
+                int max = extranetConfig.Current.BookingSystem.MaxBookingsPerWeek;
                 foreach (AdvancedBookingRight right in BookingSystem.BookingRights)
                     if (right.Username == Username)
                         max = right.Numperweek;
@@ -167,7 +167,7 @@ namespace CHS_Extranet.BookingSystem
         {
             get
             {
-                extranetConfig config = ConfigurationManager.GetSection("extranetConfig") as extranetConfig;
+                extranetConfig config = extranetConfig.Current;
                 ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
                 string _DomainDN = connObj.ConnectionString.Remove(0, connObj.ConnectionString.IndexOf("DC="));
                 PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);

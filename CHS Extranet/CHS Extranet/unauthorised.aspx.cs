@@ -13,8 +13,7 @@ namespace CHS_Extranet
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            extranetConfig config = ConfigurationManager.GetSection("extranetConfig") as extranetConfig;
-            this.Title = string.Format("{0} - Home Access Plus+ - Unauthorised", config.BaseSettings.EstablishmentName);
+            this.Title = string.Format("{0} - Home Access Plus+ - Unauthorised", extranetConfig.Current.BaseSettings.EstablishmentName);
         }
     }
 }

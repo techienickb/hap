@@ -15,7 +15,7 @@ namespace CHS_Extranet.BookingSystem
         protected void Page_Load(object sender, EventArgs e)
         {
             bs = new BookingSystem();
-            extranetConfig config = ConfigurationManager.GetSection("extranetConfig") as extranetConfig;
+            extranetConfig config = extranetConfig.Current;
             if (Page.FindControl(Room) != null)
             {
                 Panel room = Page.FindControl(Room) as Panel;
@@ -75,7 +75,7 @@ namespace CHS_Extranet.BookingSystem
         {
             get
             {
-                extranetConfig config = ConfigurationManager.GetSection("extranetConfig") as extranetConfig;
+                extranetConfig config = extranetConfig.Current;
                 int cl = 0;
                 foreach (string s in config.BookingSystem.LessonTimesArray)
                 {

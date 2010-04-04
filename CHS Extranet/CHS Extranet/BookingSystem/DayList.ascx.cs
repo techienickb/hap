@@ -39,7 +39,7 @@ namespace CHS_Extranet.BookingSystem
                 dl.Visible = true; noday.Text = string.Empty;
 
                 List<string> s = new List<string>();
-                extranetConfig config = ConfigurationManager.GetSection("extranetConfig") as extranetConfig;
+                extranetConfig config = extranetConfig.Current;
                 for (int x = 0; x < config.BookingSystem.LessonsPerDay; x++)
                     s.Add((x + 1).ToString());
                 headrepeater.DataSource = s.ToArray();

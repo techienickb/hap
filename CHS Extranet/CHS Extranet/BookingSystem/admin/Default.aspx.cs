@@ -16,7 +16,7 @@ namespace CHS_Extranet.BookingSystem.admin
             SaveButton.Click += new EventHandler(SaveButton_Click);
             staticbookingsgrid.RowDeleting += new GridViewDeleteEventHandler(staticbookingsgrid_RowDeleting);
             ABR.ItemDeleting += new EventHandler<ListViewDeleteEventArgs>(ABR_ItemDeleting);
-            extranetConfig config = ConfigurationManager.GetSection("extranetConfig") as extranetConfig;
+            extranetConfig config = extranetConfig.Current;
             this.Title = string.Format("{0} - Home Access Plus+ - IT Booking System - Admin", config.BaseSettings.EstablishmentName);
         }
 

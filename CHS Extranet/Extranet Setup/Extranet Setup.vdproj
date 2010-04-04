@@ -631,8 +631,8 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Extranet Setup"
-        "ProductCode" = "8:{122C64DC-BDF8-4DFA-BAAC-319ACFD0FBFB}"
-        "PackageCode" = "8:{AF8D71E6-577A-483D-8FAA-DF5CC077CF15}"
+        "ProductCode" = "8:{1A832EAA-814F-4D89-AB73-E393159976D3}"
+        "PackageCode" = "8:{E1386404-4581-4AAB-86B2-9D2868BBBE88}"
         "UpgradeCode" = "8:{21D75F33-FC2A-4D3B-A1CF-08A7E3CBD738}"
         "AspNetVersion" = "8:4.0.21006.0"
         "RestartWWWService" = "11:TRUE"
