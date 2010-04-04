@@ -32,7 +32,7 @@ namespace CHS_Extranet
 
         protected override void OnInitComplete(EventArgs e)
         {
-            config = ConfigurationManager.GetSection("extranetConfig") as extranetConfig;
+            config = extranetConfig.Current;
             ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
             if (connObj != null) _ActiveDirectoryConnectionString = connObj.ConnectionString;
             if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))

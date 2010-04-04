@@ -30,7 +30,7 @@ namespace CHS_Extranet.BookingSystem
 
         protected override void RenderContents(HtmlTextWriter writer)
         {
-            extranetConfig config = ConfigurationManager.GetSection("extranetConfig") as extranetConfig;
+            extranetConfig config = extranetConfig.Current;
             ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
             string _DomainDN = connObj.ConnectionString.Remove(0, connObj.ConnectionString.IndexOf("DC="));
             PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);

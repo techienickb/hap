@@ -20,7 +20,7 @@ namespace CHS_Extranet.HelpDesk
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            config = ConfigurationManager.GetSection("extranetConfig") as extranetConfig;
+            config = extranetConfig.Current;
             ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
             if (connObj != null) _ActiveDirectoryConnectionString = connObj.ConnectionString;
             if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))
@@ -366,7 +366,7 @@ namespace CHS_Extranet.HelpDesk
             if (node.Attributes["date"] != null && node.Attributes["time"] != null)
                 Date = DateTime.Parse(node.Attributes["date"].Value + " " + node.Attributes["time"].Value);
             else Date = DateTime.Parse(node.Attributes["datetime"].Value);
-            extranetConfig config = ConfigurationManager.GetSection("extranetConfig") as extranetConfig;
+            extranetConfig config = extranetConfig.Current;
             string _DomainDN = "";
             if (ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString.StartsWith("LDAP://"))
                 _DomainDN = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString.Remove(0, ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString.IndexOf("DC="));
@@ -396,7 +396,7 @@ namespace CHS_Extranet.HelpDesk
             if (node.SelectNodes("Note")[0].Attributes["date"] != null)
                 Date = DateTime.Parse(node.SelectNodes("Note")[0].Attributes["date"].Value + " " + node.SelectNodes("Note")[0].Attributes["time"].Value);
             Date = DateTime.Parse(node.SelectNodes("Note")[0].Attributes["datetime"].Value);
-            extranetConfig config = ConfigurationManager.GetSection("extranetConfig") as extranetConfig;
+            extranetConfig config = extranetConfig.Current;
             string _DomainDN = "";
             if (ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString.StartsWith("LDAP://"))
                 _DomainDN = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString.Remove(0, ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString.IndexOf("DC="));
@@ -458,7 +458,7 @@ namespace CHS_Extranet.HelpDesk
 
         static public UserInfo GetUserInfo(string username)
         {
-            extranetConfig config = ConfigurationManager.GetSection("extranetConfig") as extranetConfig;
+            extranetConfig config = extranetConfig.Current;
             DirectoryEntry usersDE = new DirectoryEntry(ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
             DirectorySearcher ds = new DirectorySearcher(usersDE);
             ds.Filter = "(sAMAccountName=*" + username + ")";
@@ -498,7 +498,7 @@ namespace CHS_Extranet.HelpDesk
         {
             List<UserInfo> results = new List<UserInfo>();
 
-            extranetConfig config = ConfigurationManager.GetSection("extranetConfig") as extranetConfig;
+            extranetConfig config = extranetConfig.Current;
             DirectoryEntry usersDE = new DirectoryEntry(ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
             DirectorySearcher ds = new DirectorySearcher(usersDE);
             ds.Filter = "(&(objectClass=user)(mail=*)(sAMAccountName=*)(mailNickname=*))";

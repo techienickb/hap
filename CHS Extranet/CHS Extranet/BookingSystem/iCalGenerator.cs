@@ -23,7 +23,7 @@ namespace CHS_Extranet.BookingSystem
 
         public static void Generate(Booking booking, DateTime date)
         {
-            extranetConfig config = ConfigurationManager.GetSection("extranetConfig") as extranetConfig;
+            extranetConfig config = extranetConfig.Current;
             StringBuilder sb = new StringBuilder();
             StringWriter sw = new StringWriter(sb);
 
@@ -90,7 +90,7 @@ namespace CHS_Extranet.BookingSystem
 
         public static void Generate(Booking booking, DateTime date, String username)
         {
-            extranetConfig config = ConfigurationManager.GetSection("extranetConfig") as extranetConfig;
+            extranetConfig config = extranetConfig.Current;
             StringBuilder sb = new StringBuilder();
             StringWriter sw = new StringWriter(sb);
 

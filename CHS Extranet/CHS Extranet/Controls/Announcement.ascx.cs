@@ -33,7 +33,7 @@ namespace CHS_Extranet.Controls
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            config = ConfigurationManager.GetSection("extranetConfig") as extranetConfig;
+            config = extranetConfig.Current;
             ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
             if (connObj != null) _ActiveDirectoryConnectionString = connObj.ConnectionString;
             if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))

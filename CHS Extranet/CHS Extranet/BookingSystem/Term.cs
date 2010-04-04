@@ -84,8 +84,7 @@ namespace CHS_Extranet.BookingSystem
         {
             if ((date >= this.startDate) && (date <= this.endDate))
             {
-                extranetConfig config = ConfigurationManager.GetSection("extranetConfig") as extranetConfig;
-                if (config.BookingSystem.TwoWeekTimetable)
+                if (extranetConfig.Current.BookingSystem.TwoWeekTimetable)
                 {
                     System.Globalization.Calendar cal = CultureInfo.InvariantCulture.Calendar;
                     int x = cal.GetWeekOfYear(date, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
