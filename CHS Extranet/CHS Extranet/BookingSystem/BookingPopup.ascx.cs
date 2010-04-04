@@ -148,7 +148,7 @@ namespace CHS_Extranet.BookingSystem
             if (!isAdmin)
             {
                 XmlDocument doc = new XmlDocument();
-                doc.Load(Server.MapPath("~/App_Code/Bookings.xml"));
+                doc.Load(Server.MapPath("~/App_Data/Bookings.xml"));
                 int max = 3;
                 foreach (AdvancedBookingRight right in BookingSystem.BookingRights)
                     if (right.Username == Username)

@@ -125,6 +125,7 @@
     <Content Include="images\icons\helpdesk.png" />
     <Content Include="images\icons\net.png" />
     <Content Include="images\icons\remotedesktop.png" />
+    <Content Include="images\icons\bookingsystem.png" />
     <Content Include="images\loading.gif" />
     <Content Include="images\logo.png" />
     <Content Include="images\staticb.png" />
