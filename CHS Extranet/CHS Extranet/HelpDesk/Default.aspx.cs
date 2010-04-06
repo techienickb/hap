@@ -30,7 +30,6 @@ namespace CHS_Extranet.HelpDesk
             else throw new Exception("The connection string specified in 'activeDirectoryConnectionString' does not appear to be a valid LDAP connection string.");
             pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
             up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Username);
-            gp = new GroupPrincipal(pcontext, "Domain Admins");
             this.Title = string.Format("{0} - Home Access Plus+ - Help Desk", config.BaseSettings.EstablishmentName);
             loadtickets();
             if (!Page.IsPostBack)
@@ -443,10 +442,10 @@ namespace CHS_Extranet.HelpDesk
         static public UserInfo[] FindUsers()
         {
             System.Collections.Generic.List<UserInfo> users = new System.Collections.Generic.List<UserInfo>();
-            foreach (UserInfo info in FindUsers("Teaching Staff"))
+            foreach (UserInfo info in FindUsers(extranetConfig.Current.BaseSettings.EstablishmentCode + " Teaching Staff"))
                 if  (!users.Contains(info))
                     users.Add(info);
-            foreach (UserInfo info in FindUsers("Non-Teaching Staff"))
+            foreach (UserInfo info in FindUsers(extranetConfig.Current.BaseSettings.EstablishmentCode + " Non-Teaching Staff"))
                 if (!users.Contains(info))
                     users.Add(info);
             foreach (UserInfo info in FindUsers("Domain Admins"))
