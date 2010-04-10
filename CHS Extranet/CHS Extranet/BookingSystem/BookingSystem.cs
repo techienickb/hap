@@ -30,7 +30,7 @@ namespace CHS_Extranet.BookingSystem
             }
         }
 
-        public Booking getBooking(string room, int lesson)
+        public Booking getBooking(string room, string lesson)
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Bookings.xml"));
@@ -58,12 +58,12 @@ namespace CHS_Extranet.BookingSystem
             }
         }
 
-        private bool isStatic(string room, int lesson)
+        private bool isStatic(string room, string lesson)
         {
             return StaticBookings.ContainsKey(new BookingKey(DayNumber, lesson, room));
         }
 
-        public bool islessonFree(string room, int lesson)
+        public bool islessonFree(string room, string lesson)
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Bookings.xml"));

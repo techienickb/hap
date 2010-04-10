@@ -14,6 +14,7 @@ namespace CHS_Extranet.BookingSystem
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            Response.ExpiresAbsolute = DateTime.Now;
             bs = new BookingSystem();
             extranetConfig config = extranetConfig.Current;
             if (Page.FindControl(Room) != null)
@@ -25,8 +26,12 @@ namespace CHS_Extranet.BookingSystem
                     {
                         Repeater r = room.FindControl(s) as Repeater;
                         List<Booking> bookings = new List<Booking>();
-                        for (int i = 0; i < config.BookingSystem.LessonsPerDay; i++)
-                            bookings.Add(bs.getBooking(s, i + 1));
+                        foreach (lesson lesson in config.BookingSystem.Lessons)
+                        {
+                            Booking b = bs.getBooking(s, lesson.OldID.ToString());
+                            if (b.Name == "FREE" || lesson.OldID == -1) b = bs.getBooking(s, lesson.Name);
+                            bookings.Add(b);
+                        }
                         r.DataSource = bookings.ToArray();
                         r.DataBind();
                     }
@@ -37,8 +42,12 @@ namespace CHS_Extranet.BookingSystem
                         {
                             Repeater r = c as Repeater;
                             List<Booking> bookings = new List<Booking>();
-                            for (int i = 0; i < config.BookingSystem.LessonsPerDay; i++)
-                                bookings.Add(bs.getBooking(Room, i + 1));
+                            foreach (lesson lesson in config.BookingSystem.Lessons)
+                            {
+                                Booking b = bs.getBooking(Room, lesson.OldID.ToString());
+                                if (b.Name == "FREE" || lesson.OldID == -1) b = bs.getBooking(Room, lesson.Name);
+                                bookings.Add(b);
+                            }
                             r.DataSource = bookings.ToArray();
                             r.DataBind();
                         }
@@ -54,8 +63,12 @@ namespace CHS_Extranet.BookingSystem
                     {
                         Repeater r = c as Repeater;
                         List<Booking> bookings = new List<Booking>();
-                        for (int i = 0; i < config.BookingSystem.LessonsPerDay; i++)
-                            bookings.Add(bs.getBooking(Room, i + 1));
+                        foreach (lesson lesson in config.BookingSystem.Lessons)
+                        {
+                            Booking b = bs.getBooking(Room, lesson.OldID.ToString());
+                            if (b.Name == "FREE" || lesson.OldID == -1) b = bs.getBooking(Room, lesson.Name);
+                            bookings.Add(b);
+                        }
                         r.DataSource = bookings.ToArray();
                         r.DataBind();
                     }
@@ -71,22 +84,20 @@ namespace CHS_Extranet.BookingSystem
             else return b.User.Notes;
         }
 
-        protected int currentLesson
+        protected string currentLesson
         {
             get
             {
                 extranetConfig config = extranetConfig.Current;
-                int cl = 0;
-                foreach (string s in config.BookingSystem.LessonTimesArray)
+                foreach (lesson lesson in config.BookingSystem.Lessons)
                 {
-                    cl++;
-                    string[] s1 = s.Trim().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-                    string[] s2 = config.BookingSystem.LessonLength.Trim().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                    string[] s1 = lesson.StartTime.Trim().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                    string[] s2 = lesson.EndTime.Trim().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
                     DateTime starttime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, int.Parse(s1[0]), int.Parse(s1[1]), 0);
-                    DateTime endtime = starttime.AddHours(int.Parse(s2[0])).AddMinutes(int.Parse(s2[1]));
-                    if (DateTime.Now >= starttime && DateTime.Now < endtime) return cl;
+                    DateTime endtime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, int.Parse(s2[0]), int.Parse(s2[1]), 0);
+                    if (DateTime.Now >= starttime && DateTime.Now < endtime) return lesson.Name;
                 }
-                return 0;
+                return "N/A";
             }
         }
 

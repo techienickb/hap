@@ -27,13 +27,14 @@ namespace CHS_Extranet.BookingSystem
             StringBuilder sb = new StringBuilder();
             StringWriter sw = new StringWriter(sb);
 
-            DateTime startDate = new DateTime(date.Year, date.Month, date.Day, int.Parse(config.BookingSystem.LessonTimesArray[booking.Lesson - 1].Substring(0, config.BookingSystem.LessonTimesArray[booking.Lesson - 1].IndexOf(':') - 1)), int.Parse(config.BookingSystem.LessonTimesArray[booking.Lesson - 1].Substring(config.BookingSystem.LessonTimesArray[booking.Lesson - 1].IndexOf(':') + 1, 2)), 0);
+            DateTime startDate = new DateTime(date.Year, date.Month, date.Day, int.Parse(config.BookingSystem.Lessons[booking.Lesson].StartTime.Substring(0, config.BookingSystem.Lessons[booking.Lesson].StartTime.IndexOf(':'))), int.Parse(config.BookingSystem.Lessons[booking.Lesson].StartTime.Substring(config.BookingSystem.Lessons[booking.Lesson].StartTime.IndexOf(':') + 1, 2)), 0);
+            DateTime endDate = new DateTime(date.Year, date.Month, date.Day, int.Parse(config.BookingSystem.Lessons[booking.Lesson].EndTime.Substring(0, config.BookingSystem.Lessons[booking.Lesson].EndTime.IndexOf(':'))), int.Parse(config.BookingSystem.Lessons[booking.Lesson].EndTime.Substring(config.BookingSystem.Lessons[booking.Lesson].EndTime.IndexOf(':') + 1, 2)), 0);
             string location = "";
             bookingResource resource = config.BookingSystem.Resources[booking.Room];
             if (resource.ResourceType == ResourceType.ITRoom) location = booking.Room;
             else if (resource.ResourceType == ResourceType.Laptops) location = booking.LTRoom;
             string summary = booking.Name + " in " + location;
-            string description = booking.Name + " in " + location + " during lesson " + booking.Lesson + " on Day " + booking.Day;
+            string description = booking.Name + " in " + location + " during " + booking.Lesson + " on Day " + booking.Day;
             if (resource.ResourceType == ResourceType.Laptops)
             {
                 summary += " with the " + booking.Room + " [" + booking.LTCount.ToString() + "]";
@@ -47,7 +48,7 @@ namespace CHS_Extranet.BookingSystem
             sb.AppendLine("METHOD:PUBLISH");
             sb.AppendLine("BEGIN:VEVENT");
             sb.AppendLine("DTSTART:" + startDate.ToUniversalTime().ToString(DateFormat));
-            sb.AppendLine("DTEND:" + startDate.ToUniversalTime().AddHours(1).ToString(DateFormat));
+            sb.AppendLine("DTEND:" + endDate.ToUniversalTime().ToString(DateFormat));
             sb.AppendLine("ORGANIZER:MAILTO:" + booking.User.EmailAddress);
             sb.AppendLine("LOCATION:" + location);
             sb.AppendLine("UID:" + booking.Username + startDate.ToString(DateFormat));
@@ -94,13 +95,14 @@ namespace CHS_Extranet.BookingSystem
             StringBuilder sb = new StringBuilder();
             StringWriter sw = new StringWriter(sb);
 
-            DateTime startDate = new DateTime(date.Year, date.Month, date.Day, int.Parse(config.BookingSystem.LessonTimesArray[booking.Lesson - 1].Substring(0, config.BookingSystem.LessonTimesArray[booking.Lesson - 1].IndexOf(':') - 1)), int.Parse(config.BookingSystem.LessonTimesArray[booking.Lesson - 1].Substring(config.BookingSystem.LessonTimesArray[booking.Lesson - 1].IndexOf(':') + 1, 2)), 0);
+            DateTime startDate = new DateTime(date.Year, date.Month, date.Day, int.Parse(config.BookingSystem.Lessons[booking.Lesson].StartTime.Substring(0, config.BookingSystem.Lessons[booking.Lesson].StartTime.IndexOf(':'))), int.Parse(config.BookingSystem.Lessons[booking.Lesson].StartTime.Substring(config.BookingSystem.Lessons[booking.Lesson].StartTime.IndexOf(':') + 1, 2)), 0);
+            DateTime endDate = new DateTime(date.Year, date.Month, date.Day, int.Parse(config.BookingSystem.Lessons[booking.Lesson].EndTime.Substring(0, config.BookingSystem.Lessons[booking.Lesson].EndTime.IndexOf(':'))), int.Parse(config.BookingSystem.Lessons[booking.Lesson].EndTime.Substring(config.BookingSystem.Lessons[booking.Lesson].EndTime.IndexOf(':') + 1, 2)), 0);
             string location = "";
             bookingResource resource = config.BookingSystem.Resources[booking.Room];
             if (resource.ResourceType == ResourceType.ITRoom) location = booking.Room;
             else if (resource.ResourceType == ResourceType.Laptops) location = booking.LTRoom;
             string summary = booking.Name + " in " + location;
-            string description = booking.Name + " in " + location + " during lesson " + booking.Lesson + " on Day " + booking.Day;
+            string description = booking.Name + " in " + location + " during " + booking.Lesson + " on Day " + booking.Day;
             if (resource.ResourceType == ResourceType.Laptops)
             {
                 summary += " with the " + booking.Room + " [" + booking.LTCount.ToString() + "]";
@@ -114,7 +116,9 @@ namespace CHS_Extranet.BookingSystem
             sb.AppendLine("METHOD:PUBLISH");
             sb.AppendLine("BEGIN:VEVENT");
             sb.AppendLine("DTSTART:" + startDate.ToUniversalTime().ToString(DateFormat));
-            sb.AppendLine("DTEND:" + startDate.ToUniversalTime().AddHours(1).ToString(DateFormat));
+            sb.AppendLine("DTEND:" + endDate.ToUniversalTime().AddHours(1).ToString(DateFormat));
+            string st = config.BookingSystem.Lessons[booking.Lesson].StartTime;
+            sb.AppendLine("D:" + st.Substring(0, st.IndexOf(":") - 1) + " - " + st.IndexOf(":").ToString());
             sb.AppendLine("ORGANIZER:MAILTO:" + booking.User.EmailAddress);
             sb.AppendLine("LOCATION:" + location);
             sb.AppendLine("UID:" + booking.Username + startDate.ToString(DateFormat));

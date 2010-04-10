@@ -76,15 +76,35 @@ namespace CHS_Extranet.BookingSystem
         protected void remove_Click(object sender, EventArgs e)
         {
             string room = removevars.Value.Split(new char[] { '@' }, StringSplitOptions.RemoveEmptyEntries)[0];
-            int lesson = int.Parse(removevars.Value.Split(new char[] { '@' }, StringSplitOptions.RemoveEmptyEntries)[1]);
+            string lesson = removevars.Value.Split(new char[] { '@' }, StringSplitOptions.RemoveEmptyEntries)[1];
             XmlDocument doc = new XmlDocument();
             doc.Load(Server.MapPath("~/App_Data/Bookings.xml"));
             doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + Calendar1.SelectedDate.ToShortDateString() + "' and @lesson='" + lesson.ToString() + "' and @room='" + room + "']"));
             if (config.BookingSystem.Resources[room].ResourceType == ResourceType.Laptops)
             {
-                doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + Calendar1.SelectedDate.ToShortDateString() + "' and @lesson='" + (lesson + 1).ToString() + "' and @room='" + room.ToString() + "']"));
-                if (doc.SelectSingleNode("/Bookings/Booking[@date='" + Calendar1.SelectedDate.ToShortDateString() + "' and @lesson='" + (lesson - 1).ToString() + "' and @room='" + room.ToString() + "' and @name='UNAVAILABLE']") != null)
-                    doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + Calendar1.SelectedDate.ToShortDateString() + "' and @lesson='" + (lesson - 1).ToString() + "' and @room='" + room.ToString() + "']"));
+                bool oldid = false;
+                if (lesson.Length == 1)
+                {
+                    oldid = true;
+                    foreach (lesson l in config.BookingSystem.Lessons)
+                        if (l.OldID.ToString() == lesson) lesson = l.Name;
+                }
+                int index = config.BookingSystem.Lessons.IndexOf(config.BookingSystem.Lessons[lesson]) + 1;
+                if (index >= config.BookingSystem.Lessons.Count) index--;
+                lesson nextlesson = config.BookingSystem.Lessons[index];
+
+                if (nextlesson.Type != lessontype.Lesson) nextlesson = config.BookingSystem.Lessons[config.BookingSystem.Lessons.IndexOf(nextlesson) + 1];
+                if (doc.SelectSingleNode("/Bookings/Booking[@date='" + Calendar1.SelectedDate.ToShortDateString() + "' and @lesson='" + nextlesson.Name + "' and @room='" + room.ToString() + "']") != null)
+                    doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + Calendar1.SelectedDate.ToShortDateString() + "' and @lesson='" + nextlesson.Name + "' and @room='" + room.ToString() + "']"));
+                else doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + Calendar1.SelectedDate.ToShortDateString() + "' and @lesson='" + nextlesson.OldID.ToString() + "' and @room='" + room.ToString() + "']"));
+
+                index = config.BookingSystem.Lessons.IndexOf(config.BookingSystem.Lessons[lesson]) - 1;
+                if (index < 0) index++;
+                lesson previouslesson = config.BookingSystem.Lessons[index];
+                if (doc.SelectSingleNode("/Bookings/Booking[@date='" + Calendar1.SelectedDate.ToShortDateString() + "' and @lesson='" + previouslesson.Name + "' and @room='" + room.ToString() + "' and @name='UNAVAILABLE']") != null)
+                    doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + Calendar1.SelectedDate.ToShortDateString() + "' and @lesson='" + previouslesson.Name + "' and @room='" + room.ToString() + "' and @name='UNAVAILABLE']"));
+                else if (doc.SelectSingleNode("/Bookings/Booking[@date='" + Calendar1.SelectedDate.ToShortDateString() + "' and @lesson='" + previouslesson.OldID.ToString() + "' and @room='" + room.ToString() + "' and @name='UNAVAILABLE']") != null)
+                        doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + Calendar1.SelectedDate.ToShortDateString() + "' and @lesson='" + previouslesson.OldID.ToString() + "' and @room='" + room.ToString() + "' and @name='UNAVAILABLE']"));
             }
             XmlWriterSettings set = new XmlWriterSettings();
             set.Indent = true;

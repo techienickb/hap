@@ -15,9 +15,9 @@ namespace CHS_Extranet.BookingSystem
             get { return day; }
             set { day = value; }
         }
-        private int lesson;
+        private string lesson;
 
-        public int Lesson
+        public string Lesson
         {
             get { return lesson; }
             set { lesson = value; }
@@ -30,7 +30,7 @@ namespace CHS_Extranet.BookingSystem
             set { room = value; }
         }
 
-        public BookingKey(int Day, int Lesson, string Room)
+        public BookingKey(int Day, string Lesson, string Room)
         {
             this.day = Day;
             this.lesson = Lesson;
@@ -40,11 +40,11 @@ namespace CHS_Extranet.BookingSystem
         public BookingKey(XmlNode node)
         {
             this.day = int.Parse(node.Attributes["day"].Value);
-            this.lesson = int.Parse(node.Attributes["lesson"].Value);
+            this.lesson = node.Attributes["lesson"].Value;
             this.room = node.Attributes["room"].Value;
         }
 
 
-        public static BookingKey parseBooking(int Day, int Lesson, string Room) { return new BookingKey(Day, Lesson, Room); }
+        public static BookingKey parseBooking(int Day, string Lesson, string Room) { return new BookingKey(Day, Lesson, Room); }
     }
 }

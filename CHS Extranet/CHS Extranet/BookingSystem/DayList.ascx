@@ -3,9 +3,7 @@
             <div id="daylist">
                 <h1>
                     <span><a href="javascript:changeDate()"><asp:Literal runat="server" ID="DayName" /></a></span>
-                    <asp:Repeater runat="server" ID="headrepeater">
-                        <ItemTemplate><span>Lesson <%#Container.DataItem.ToString()%></span></ItemTemplate>
-                    </asp:Repeater>
+                    <asp:Repeater runat="server" ID="headrepeater"><ItemTemplate><span><%#Eval("Name")%></span></ItemTemplate></asp:Repeater>
                 </h1>
                 <asp:Repeater runat="server" ID="dl">
                     <ItemTemplate>
