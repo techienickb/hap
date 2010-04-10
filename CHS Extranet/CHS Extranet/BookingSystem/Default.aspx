@@ -52,8 +52,8 @@
             function book(room, roomtype, lesson) {
                 $get('modalBackground').style.display = "block";
                 $get('modalPopup').style.display = "block";
-                $get(lessonID).innerHTML = lesson.toString();
-                $get(bookingvarsID).value = room + "@" + lesson.toString();
+                $get(lessonID).innerHTML = lesson;
+                $get(bookingvarsID).value = room + "@" + lesson;
                 $get(roomID).innerHTML = room;
                 if (roomtype.match(/Laptops/gi)) {
                     $get(inID).innerHTML = "&nbsp;with the&nbsp;";

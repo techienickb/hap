@@ -18,7 +18,7 @@ namespace CHS_Extranet.BookingSystem
         {
             //nt.Parse(node.Attributes["room"].Value), node.Attributes["bookingfor"].Value, node.Attributes["bookingby"].Value, true)
             this.Day = int.Parse(node.Attributes["day"].Value);
-            this.Lesson = int.Parse(node.Attributes["lesson"].Value);
+            this.Lesson = node.Attributes["lesson"].Value;
             this.Room = node.Attributes["room"].Value;
             this.Name = node.Attributes["name"].Value;
             this.Username = node.Attributes["username"].Value;
@@ -33,7 +33,7 @@ namespace CHS_Extranet.BookingSystem
         {
             //nt.Parse(node.Attributes["room"].Value), node.Attributes["bookingfor"].Value, node.Attributes["bookingby"].Value, true)
             this.Day = day;
-            this.Lesson = int.Parse(node.Attributes["lesson"].Value);
+            this.Lesson = node.Attributes["lesson"].Value;
             this.Room = node.Attributes["room"].Value;
             this.Name = node.Attributes["name"].Value;
             this.Username = node.Attributes["username"].Value;
@@ -44,7 +44,7 @@ namespace CHS_Extranet.BookingSystem
             else this.LTHeadPhones = false;
         }
 
-        public Booking(int day, int lesson, string room, string name, string username)
+        public Booking(int day, string lesson, string room, string name, string username)
         {
             //nt.Parse(node.Attributes["room"].Value), node.Attributes["bookingfor"].Value, node.Attributes["bookingby"].Value, true)
             this.Day = day;
@@ -56,7 +56,7 @@ namespace CHS_Extranet.BookingSystem
         }
         public string Room { get; set; }
         public int Day { get; set; }
-        public int Lesson { get; set; }
+        public string Lesson { get; set; }
         public string Name { get; set; }
         public string Username { get; set; }
         public bool LTHeadPhones { get; set; }

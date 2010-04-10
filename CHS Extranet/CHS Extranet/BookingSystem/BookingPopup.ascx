@@ -11,11 +11,11 @@
                         <asp:PlaceHolder id="bookingform" runat="server">
                             <h1>New Booking</h1>
                             <div>
-                                <div style="font-weight: bold;">Booking for Lesson <asp:Label runat="server" ID="lesson" /> on <asp:Label runat="server" ID="date" /> <asp:Label runat="server" ID="inLab" Text="in" /> <asp:Label runat="server" ID="room" /><asp:HiddenField runat="server" ID="bookingvars" /></div>
+                                <div style="font-weight: bold;">Booking for <asp:Label runat="server" ID="lesson" /> on <asp:Label runat="server" ID="date" /> <asp:Label runat="server" ID="inLab" Text="in" /> <asp:Label runat="server" ID="room" /><asp:HiddenField runat="server" ID="bookingvars" /></div>
                                 Year: 
                                 <asp:DropDownList runat="server" ID="BookYear" Width="60px"><asp:ListItem Value="">--</asp:ListItem><asp:ListItem>7</asp:ListItem><asp:ListItem>8</asp:ListItem><asp:ListItem>9</asp:ListItem><asp:ListItem>10</asp:ListItem><asp:ListItem>11</asp:ListItem><asp:ListItem>12</asp:ListItem><asp:ListItem>13</asp:ListItem></asp:DropDownList>
                                 Subject: 
-                                <asp:TextBox ID="BookLesson" Width="100px" runat="server" /><asp:RequiredFieldValidator ID="RequiredFieldValidator1" ControlToValidate="BookLesson" runat="server" ErrorMessage="*" />
+                                <asp:TextBox ID="BookLesson" Width="100px" runat="server" /><asp:RequiredFieldValidator ControlToValidate="BookLesson" runat="server" ErrorMessage="*" />
                                 <asp:Panel runat="server" ID="ltbooking" style="display: none;">
                                     Room: <asp:TextBox ID="BookLTRoom" runat="server" Width="40px" />
                                     Number of Laptops: <asp:RadioButton ID="lt16" Text="16" runat="server" Checked="true" GroupName="lt" /><asp:RadioButton ID="lt32" Text="32" runat="server" GroupName="lt" />

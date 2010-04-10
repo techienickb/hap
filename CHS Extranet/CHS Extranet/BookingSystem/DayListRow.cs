@@ -40,20 +40,21 @@ namespace CHS_Extranet.BookingSystem
             ResourceType RoomType = config.BookingSystem.Resources[Room].ResourceType;
 
             BookingSystem bs = new BookingSystem(Date);
-            for (int i = 0; i < config.BookingSystem.LessonsPerDay; i++)
+            foreach (lesson lesson in config.BookingSystem.Lessons)
             {
-                Booking b = bs.getBooking(Room, i + 1);
+                Booking b = bs.getBooking(Room, lesson.OldID.ToString());
+                if (b.Name == "FREE" || lesson.OldID == -1) b = bs.getBooking(Room, lesson.Name);
                 bool bookie = false;
                 if (up.IsMemberOf(gp) || b.Username == Username) bookie = true;
                 string lessonname = b.Name;
                 if (lessonname.Length > 17) lessonname = lessonname.Remove(17) + "...";
                 if (b.Name == "FREE")
-                    writer.Write("<span><a href=\"javascript:book('{0}', '{1}', {2});\">FREE</a></span>", Room, RoomType, b.Lesson);
+                    writer.Write("<span><a href=\"javascript:book('{0}', '{1}', '{2}');\">FREE</a></span>", Room, RoomType, b.Lesson);
                 else if (b.Static)
                     writer.Write("<span><span class=\"static\"><img src=\"../images/staticb.png\" alt=\"Timetabled Lesson\" />{0}<i>with {1}</i></span></span>", lessonname, b.User.Notes);
                 else if (RoomType == ResourceType.Laptops && bookie)
-                    writer.Write("<span><a href=\"javascript:remove('{0}', {1});\" class=\"bookedl\">{2}<i> with {3}</i><u>{4} laptops [{5}] in {6}</u><label>Remove</label></a></span>", Room, b.Lesson, lessonname, b.User.Notes, b.LTCount, b.LTHeadPhones ? "H" : "NH", b.LTRoom);
-                else if (bookie) writer.Write("<span><a href=\"javascript:remove('{0}', {1});\" class=\"booked\">{2}<i> with {3}</i><label>Remove</label></a></span>", Room, b.Lesson, lessonname, b.User.Notes);
+                    writer.Write("<span><a href=\"javascript:remove('{0}', '{1}');\" class=\"bookedl\">{2}<i> with {3}</i><u>{4} laptops [{5}] in {6}</u><label>Remove</label></a></span>", Room, b.Lesson, lessonname, b.User.Notes, b.LTCount, b.LTHeadPhones ? "H" : "NH", b.LTRoom);
+                else if (bookie) writer.Write("<span><a href=\"javascript:remove('{0}', '{1}');\" class=\"booked\">{2}<i> with {3}</i><label>Remove</label></a></span>", Room, b.Lesson, lessonname, b.User.Notes);
                 else writer.Write("<span><span>{0}<i>with {1}</i></span></span>", lessonname, b.User.Notes);
             }
         }

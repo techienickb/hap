@@ -8,13 +8,6 @@ namespace CHS_Extranet.Configuration
 {
     public class bookingSystem : ConfigurationElement
     {
-        [ConfigurationProperty("lessonsperday", DefaultValue = 5, IsRequired = true)]
-        public int LessonsPerDay
-        {
-            get { return (int)this["lessonsperday"]; }
-            set { this["lessonsperday"] = value.ToString(); }
-        }
-
         [ConfigurationProperty("maxbookingsperweek", DefaultValue = 3, IsRequired = true)]
         public int MaxBookingsPerWeek
         {
@@ -43,25 +36,10 @@ namespace CHS_Extranet.Configuration
             get { return (bookingresources)base["resources"]; }
         }
 
-        [ConfigurationProperty("lessontimes", DefaultValue = "9:00, 10:00, 11:25, 12:25, 14:30", IsRequired = true)]
-        public string LessonTimes
+        [ConfigurationProperty("lessons", IsDefaultCollection = false)]
+        public lessons Lessons
         {
-            get { return (string)this["lessontimes"]; }
-            set { this["lessontimes"] = value; }
-        }
-
-        [ConfigurationProperty("lessonlength", DefaultValue = "1:00", IsRequired = true)]
-        public string LessonLength
-        {
-            get { return (string)this["lessonlength"]; }
-            set { this["lessonlength"] = value; }
-        }
-
-
-        public string[] LessonTimesArray
-        {
-            get { return this.LessonTimes.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries); }
-            set { this.LessonTimes = string.Join(", ", value); }
+            get { return (lessons)base["lessons"]; }
         }
     }
 }

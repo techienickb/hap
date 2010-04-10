@@ -40,9 +40,10 @@ namespace CHS_Extranet.BookingSystem
 
                 List<string> s = new List<string>();
                 extranetConfig config = extranetConfig.Current;
-                for (int x = 0; x < config.BookingSystem.LessonsPerDay; x++)
-                    s.Add((x + 1).ToString());
-                headrepeater.DataSource = s.ToArray();
+                List<lesson> lessons = new List<lesson>();
+                foreach (lesson lesson in config.BookingSystem.Lessons)
+                    lessons.Add(lesson);
+                headrepeater.DataSource = lessons.ToArray();
                 headrepeater.DataBind();
                 List<bookingResource> res = new List<bookingResource>();
                 foreach (bookingResource r in config.BookingSystem.Resources)

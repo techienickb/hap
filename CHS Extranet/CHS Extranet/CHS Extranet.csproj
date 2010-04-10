@@ -243,6 +243,8 @@
     <Compile Include="Configuration\bookingResource.cs" />
     <Compile Include="Configuration\bookingResources.cs" />
     <Compile Include="Configuration\bookingSystem.cs" />
+    <Compile Include="Configuration\lesson.cs" />
+    <Compile Include="Configuration\lessons.cs" />
     <Compile Include="Controls\Announcement.ascx.cs">
       <DependentUpon>Announcement.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -428,10 +430,18 @@
     <Content Include="HelpDesk\Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="BookingSystem\Web.config" />
+    <Content Include="BookingSystem\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="BookingSystem\admin\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="images\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\Web.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

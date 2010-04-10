@@ -44,7 +44,9 @@ namespace CHS_Extranet.BookingSystem
             if (config.BookingSystem.Resources[roomstr].ResourceType == ResourceType.Laptops)
             {
                 BookingSystem bs = new BookingSystem(Date);
-                if ((int.Parse(lessonint) > 1) && bs.islessonFree(roomstr, (int.Parse(lessonint) - 1)))
+                int index = config.BookingSystem.Lessons.IndexOf(config.BookingSystem.Lessons[lessonint]);
+
+                if (index > 0 && bs.islessonFree(roomstr, config.BookingSystem.Lessons[index - 1].Name))
                 {
                     node = doc.CreateElement("Booking");
                     node.SetAttribute("date", Date.ToShortDateString());
@@ -58,7 +60,7 @@ namespace CHS_Extranet.BookingSystem
                     if (BookYear.SelectedValue == "") year = "";
                     doc.SelectSingleNode("/Bookings").AppendChild(node);
                 }
-                if (bs.islessonFree(roomstr, int.Parse(lessonint) + 1))
+                if (bs.islessonFree(roomstr, config.BookingSystem.Lessons[index + 1].Name) && index < config.BookingSystem.Lessons.Count)
                 {
                     node = doc.CreateElement("Booking");
                     node.SetAttribute("date", Date.ToShortDateString());
@@ -83,7 +85,7 @@ namespace CHS_Extranet.BookingSystem
             doc.Save(writer);
             writer.Flush();
             writer.Close();
-            Booking booking = new BookingSystem(Date).getBooking(roomstr, int.Parse(lessonint));
+            Booking booking = new BookingSystem(Date).getBooking(roomstr, lessonint);
             iCalGenerator.Generate(booking, Date);
             if (config.BookingSystem.Resources[roomstr].ResourceType == ResourceType.Laptops) iCalGenerator.Generate(booking, Date, "Nick");
             BookYear.SelectedIndex = 0;

@@ -50,7 +50,7 @@
         <div id="ticket">
             <asp:PlaceHolder runat="server" ID="NewTicketFiled" Visible="false">
                 <h1>Your New ticket has been filed with IT support</h1>
-                <div>You can access your support ticket via <%=string.Format("<a href=\"{0}://{1}{2}?view={3}\">{0}://{1}{2}/ticket/{3}</a>", Request.Url.Scheme, Request.Url.Host + (Request.Url.Port != 80 ? ":" + Request.Url.Port.ToString() : ""), Request.Url.AbsolutePath, _id)%></div>
+                <div>You can access your support ticket via <%=string.Format("<a href=\"/extranet/helpdesk/ticket/{3}\">{0}://{1}{2}/helpdesk/ticket/{3}</a>", Request.Url.Scheme, Request.Url.Host + (Request.Url.Port != 80 && Request.Url.Port != 443 ? ":" + Request.Url.Port.ToString() : ""), Request.ApplicationPath, _id)%></div>
             </asp:PlaceHolder>
             <asp:PlaceHolder runat="server" ID="noCurrentTicket">
                 <h1><< Select a Ticket or <a href="?view=-1">File for Support</a></h1>
