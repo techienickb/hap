@@ -3,13 +3,13 @@
 <%@ Register Src="~/BookingSystem/DayList.ascx" TagName="DayList" TagPrefix="hap" %>
 <%@ Register TagPrefix="hap" TagName="BookingPopup" Src="~/BookingSystem/BookingPopup.ascx" %>
 <%@ Register Namespace="CHS_Extranet.BookingSystem" Assembly="CHS Extranet" TagPrefix="hap" %>
-<asp:Content ContentPlaceHolderID="head" runat="server">
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="bookingsystem.css" rel="stylesheet" type="text/css" />
 </asp:Content>
-<asp:Content runat="server" ContentPlaceHolderID="body">
+<asp:Content ID="Content2" runat="server" ContentPlaceHolderID="body">
             <div style="position: relative;">
-                <asp:ToolkitScriptManager runat="server" />
-                <asp:UpdatePanel runat="server"><ContentTemplate>
+                <asp:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server" />
+                <asp:UpdatePanel ID="UpdatePanel1" runat="server"><ContentTemplate>
                     <div onclick="hideCal();">
                         <asp:HyperLink runat="server" style="float: right;" NavigateUrl="admin/" ID="adminlink" Visible="false">Booking System Admin</asp:HyperLink>
                         <h1>IT Booking System</h1>

@@ -14,12 +14,13 @@ namespace CHS_Extranet.BookingSystem
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
         }
 
         public override void DataBind()
         {
-            
+            extranetConfig config = extranetConfig.Current;
+            daylistrow.Style.Clear();
+            daylistrow.Style.Add("width", (ItemWidth * (config.BookingSystem.Lessons.Count + 1)) + "px");
 
             DayName.Text = Date.DayOfWeek.ToString() + " " + Date.Day;
 
@@ -39,7 +40,6 @@ namespace CHS_Extranet.BookingSystem
                 dl.Visible = true; noday.Text = string.Empty;
 
                 List<string> s = new List<string>();
-                extranetConfig config = extranetConfig.Current;
                 List<lesson> lessons = new List<lesson>();
                 foreach (lesson lesson in config.BookingSystem.Lessons)
                     lessons.Add(lesson);
@@ -52,6 +52,11 @@ namespace CHS_Extranet.BookingSystem
                 dl.DataBind();
             }
         }
+
+        [Bindable(true)]
+        [Category("Data")]
+        [DefaultValue(152)]
+        public int ItemWidth { get; set; }
 
         [Bindable(true)]
         [Category("Data")]

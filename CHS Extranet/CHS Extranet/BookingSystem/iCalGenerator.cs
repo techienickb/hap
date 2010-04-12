@@ -116,9 +116,7 @@ namespace CHS_Extranet.BookingSystem
             sb.AppendLine("METHOD:PUBLISH");
             sb.AppendLine("BEGIN:VEVENT");
             sb.AppendLine("DTSTART:" + startDate.ToUniversalTime().ToString(DateFormat));
-            sb.AppendLine("DTEND:" + endDate.ToUniversalTime().AddHours(1).ToString(DateFormat));
-            string st = config.BookingSystem.Lessons[booking.Lesson].StartTime;
-            sb.AppendLine("D:" + st.Substring(0, st.IndexOf(":") - 1) + " - " + st.IndexOf(":").ToString());
+            sb.AppendLine("DTEND:" + endDate.ToUniversalTime().ToString(DateFormat));
             sb.AppendLine("ORGANIZER:MAILTO:" + booking.User.EmailAddress);
             sb.AppendLine("LOCATION:" + location);
             sb.AppendLine("UID:" + booking.Username + startDate.ToString(DateFormat));
