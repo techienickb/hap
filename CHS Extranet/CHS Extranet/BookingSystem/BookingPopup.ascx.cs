@@ -16,6 +16,21 @@ namespace CHS_Extranet.BookingSystem
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!IsPostBack)
+            {
+                if (isAdmin)
+                {
+                    userlist.Items.Clear();
+                    foreach (UserInfo user in ADUtil.FindUsers())
+                        if (string.IsNullOrEmpty(user.Notes))
+                            userlist.Items.Add(new ListItem(user.LoginName, user.LoginName.ToLower()));
+                        else
+                            userlist.Items.Add(new ListItem(string.Format("{0} - ({1})", user.LoginName, user.Notes), user.LoginName.ToLower()));
+                    userlist.SelectedValue = Username.ToLower();
+                    bookingadmin1.Visible = true;
+                }
+                else bookingadmin1.Visible = false;
+            }
         }
 
         protected void book_Click(object sender, EventArgs e)
@@ -45,12 +60,11 @@ namespace CHS_Extranet.BookingSystem
             {
                 BookingSystem bs = new BookingSystem(Date);
                 int index = config.BookingSystem.Lessons.IndexOf(config.BookingSystem.Lessons[lessonint]);
-
                 if (index > 0 && bs.islessonFree(roomstr, config.BookingSystem.Lessons[index - 1].Name))
                 {
                     node = doc.CreateElement("Booking");
                     node.SetAttribute("date", Date.ToShortDateString());
-                    node.SetAttribute("lesson", (int.Parse(lessonint) - 1).ToString());
+                    node.SetAttribute("lesson", config.BookingSystem.Lessons[index - 1].Name);
                     node.SetAttribute("room", roomstr);
                     node.SetAttribute("ltroom", "--");
                     node.SetAttribute("ltcount", lt16.Checked ? "16" : "32");
@@ -64,7 +78,7 @@ namespace CHS_Extranet.BookingSystem
                 {
                     node = doc.CreateElement("Booking");
                     node.SetAttribute("date", Date.ToShortDateString());
-                    node.SetAttribute("lesson", (int.Parse(lessonint) + 1).ToString());
+                    node.SetAttribute("lesson", config.BookingSystem.Lessons[index + 1].Name);
                     node.SetAttribute("room", roomstr);
                     node.SetAttribute("ltroom", "--");
                     node.SetAttribute("ltcount", lt16.Checked ? "16" : "32");
@@ -134,18 +148,6 @@ namespace CHS_Extranet.BookingSystem
         public override void DataBind()
         {
             base.DataBind();
-            if (isAdmin)
-            {
-                userlist.Items.Clear();
-                foreach (UserInfo user in ADUtil.FindUsers())
-                    if (string.IsNullOrEmpty(user.Notes))
-                        userlist.Items.Add(new ListItem(user.LoginName, user.LoginName.ToLower()));
-                    else
-                        userlist.Items.Add(new ListItem(string.Format("{0} - ({1})", user.LoginName, user.Notes), user.LoginName.ToLower()));
-                userlist.SelectedValue = Username.ToLower();
-                bookingadmin1.Visible = true;
-            }
-            else bookingadmin1.Visible = false;
             date.Text = Date.ToLongDateString();
             if (!isAdmin)
             {

@@ -1,4 +1,4 @@
-﻿#daylist { border: solid 1px #7da2ce; overflow: hidden; border-bottom: 0; }
+﻿#daylist { border: solid 1px #7da2ce; overflow: auto; border-bottom: 0; }
 #daylist h1, .popupContent h1 { height: 30px; text-align: center; background: url(../images/bar.gif) repeat-x; line-height: 30px; color: #1f3976; font-size: medium; margin: 0; font-weight: normal; padding: 0; overflow: hidden; }
 #daylist h1 a { display: block; margin: 4px; line-height: 22px; height: 22px; }
 #daylist h1 a:hover { background: url(../images/bar-a-hover.gif) repeat-x left center; margin: 3px; border-radius: 3px; -moz-border-radius: 3px; text-decoration: none; border: solid 1px #7da2ce; }
@@ -6,13 +6,13 @@
 #daylist span i { font-style: normal; color: Gray; display: block; font-size: small; }
 #daylist span u { display: block; color: Gray; font-size: x-small; text-decoration: none; }
 #daylist span span { line-height: 20px; height: auto; padding: 8px 0 0 0; }
-#daylist div { overflow: hidden; border-bottom: solid 1px #7da2ce; height: 54px; text-align: center; background: #fff; }
-#daylist div span.room { line-height: 54px; display: block; height: 54px; background: #7da2ce; }
-#daylist div.break, .buttons { height: auto; line-height: normal; background: #7da2ce; }
-#daylist div a { display: block; margin: 1px; height: 50px; line-height: 48px; border: solid 1px #fff; border-radius: 3px; -moz-border-radius: 3px; overflow: hidden; text-decoration: none; color: #333; }
-#daylist div .static { text-align: left; }
-#daylist div img { float: left; margin: 4px; }
-#daylist div a:hover { border: solid 1px #7da2ce; background: #f9fbfd url(../images/browser-a-hover.gif) repeat-x top left; text-decoration: none; }
+#daylist div div { overflow: hidden; border-bottom: solid 1px #7da2ce; height: 54px; text-align: center; background: #fff; }
+#daylist div div span.room { line-height: 54px; display: block; height: 54px; background: #7da2ce; }
+#daylist div div.break, .buttons { height: auto; line-height: normal; background: #7da2ce; }
+#daylist div div a { display: block; margin: 1px; height: 50px; line-height: 48px; border: solid 1px #fff; border-radius: 3px; -moz-border-radius: 3px; overflow: hidden; text-decoration: none; color: #333; }
+#daylist div div .static { text-align: left; }
+#daylist div div img { float: left; margin: 4px; }
+#daylist div div a:hover { border: solid 1px #7da2ce; background: #f9fbfd url(../images/browser-a-hover.gif) repeat-x top left; text-decoration: none; }
 #daylist h2 { border-bottom: solid 1px #7da2ce; margin: 0; padding: 122px 0 123px 0; text-align: center; }
 #daylist a.booked { line-height: normal; padding: 6px 0 4px 0; line-height: 20px; height: 40px; position: relative; white-space: nowrap; overflow: hidden; }
 #daylist a.booked label { display: none; position: absolute; cursor: pointer; text-align: right; top: -6px; right: 0; font-size: small; }

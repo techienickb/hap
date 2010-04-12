@@ -13,6 +13,15 @@ namespace CHS_Extranet.BookingSystem {
     public partial class DayList {
         
         /// <summary>
+        /// daylistrow control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl daylistrow;
+        
+        /// <summary>
         /// DayName control.
         /// </summary>
         /// <remarks>
