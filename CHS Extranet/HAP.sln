@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Web", "CHS Extranet\HAP.Web.csproj", "{C3649002-D5BA-41D8-A2AA-78AD9E86C7BF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Web", "HAP.Web\HAP.Web.csproj", "{C3649002-D5BA-41D8-A2AA-78AD9E86C7BF}"
 	ProjectSection(ProjectDependencies) = postProject
 		{9DCDBB22-ECEB-4220-A0FE-E786189F0B08} = {9DCDBB22-ECEB-4220-A0FE-E786189F0B08}
 	EndProjectSection
