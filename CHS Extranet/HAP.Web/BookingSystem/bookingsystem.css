@@ -24,7 +24,7 @@
 #daylist a.bookedl:hover { border-color: #be3430; background-image: url(../images/browser-a-booked-hover.gif); }
 #daylist a.bookedl:hover label { display: block; }
 
-#Cal { display: none; background: #fff; position: absolute; top: 126px; width: 220px; border: solid 1px #7da2ce; border-radius: 0 0 3px 3px ; -moz-border-radius: 0 0 3px 3px; }
+#Cal { display: none; background: #fff; position: absolute; width: 220px; border: solid 1px #7da2ce; border-radius: 0 0 3px 3px ; -moz-border-radius: 0 0 3px 3px; }
 .dayhead { border-bottom: solid 1px #d9d9d9; }
 .calhead td { font-size: 16px;  font-weight: lighter; }
 .Calendar a { font-size: 12px; }

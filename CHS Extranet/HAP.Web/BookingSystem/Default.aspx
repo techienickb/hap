@@ -7,7 +7,7 @@
     <link href="bookingsystem.css" rel="stylesheet" type="text/css" />
 </asp:Content>
 <asp:Content ID="Content2" runat="server" ContentPlaceHolderID="body">
-            <div style="position: relative;">
+            <div>
                 <asp:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server" />
                 <asp:UpdatePanel ID="UpdatePanel1" runat="server"><ContentTemplate>
                     <div onclick="hideCal();">
@@ -75,6 +75,7 @@
             function changeDate() {
                 if ($get('Cal').style.display == "") {
                     $get('Cal').style.display = "block";
+                    $get('Cal').style.top = (getPosition($get('daylist')) + 30) + "px";
                     showcal = true;
                 }
             }
@@ -102,6 +103,14 @@
             function beginRequestHandler(sender, args) {
                 $get('modalBackground').style.display = "block";
                 $get('loadingPopup').style.display = "block";
+            }
+            function getPosition(obj) {
+                var topValue = 0;
+                while (obj) {
+                    topValue += obj.offsetTop;
+                    obj = obj.offsetParent;
+                }
+                return topValue;
             }
             Sys.Application.add_load(resetCal);
             Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(beginRequestHandler);

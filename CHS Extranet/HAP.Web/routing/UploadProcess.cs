@@ -6,6 +6,31 @@ using System.IO;
 
 namespace HAP.Web.routing
 {
+    public delegate void FileUploadCompletedEvent(object sender, FileUploadCompletedEventArgs args);
+    public class FileUploadCompletedEventArgs
+    {
+        private string fileName;
+        public string FileName
+        {
+            get { return fileName; }
+            set { fileName = value; }
+        }
+        private string filePath;
+        public string FilePath
+        {
+            get { return filePath; }
+            set { filePath = value; }
+        }
+
+        public FileUploadCompletedEventArgs() { }
+
+        public FileUploadCompletedEventArgs(string fileName, string filePath)
+        {
+            FileName = fileName;
+            FilePath = filePath;
+        }
+    }
+
     public class UploadProcess
     {
         public event FileUploadCompletedEvent FileUploadCompleted;

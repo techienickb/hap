@@ -47,10 +47,6 @@
     <Reference Include="AjaxControlToolkit, Version=3.0.31106.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="DC.SilverlightFileUpload, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\DC.SilverlightFileUpload.dll</HintPath>
-    </Reference>
     <Reference Include="Excel, Version=2.0.1.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Excel.dll</HintPath>
@@ -108,7 +104,6 @@
     <Content Include="App_Data\Announcement.xml" />
     <Content Include="App_Data\Tickets.xml" />
     <Content Include="basestyle.css" />
-    <Content Include="ClientBin\FileUpload.xap" />
     <Content Include="Controls\Delete.ascx" />
     <Content Include="Controls\Rename.ascx" />
     <Content Include="Controls\Unzip.ascx" />
@@ -189,7 +184,6 @@
     <Content Include="Scripts\rightclick.js" />
     <Content Include="Scripts\viewmode.js" />
     <Content Include="unauthorised.aspx" />
-    <Content Include="upload.aspx" />
     <Content Include="UploadH.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -303,10 +297,6 @@
     <Compile Include="Controls\Zip.ascx.designer.cs">
       <DependentUpon>Zip.ascx</DependentUpon>
     </Compile>
-    <Compile Include="FileUpload.ashx.cs">
-      <DependentUpon>FileUpload.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="FileUploadProcess.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -371,13 +361,6 @@
     <Compile Include="unauthorised.aspx.designer.cs">
       <DependentUpon>unauthorised.aspx</DependentUpon>
     </Compile>
-    <Compile Include="upload.aspx.cs">
-      <DependentUpon>upload.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="upload.aspx.designer.cs">
-      <DependentUpon>upload.aspx</DependentUpon>
-    </Compile>
     <Compile Include="UploadH.aspx.cs">
       <DependentUpon>UploadH.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -407,9 +390,6 @@
       <Project>{36468E14-F8AF-4794-AB76-25571A54682F}</Project>
       <Name>CHS</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="FileUpload.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="p.ashx" />
