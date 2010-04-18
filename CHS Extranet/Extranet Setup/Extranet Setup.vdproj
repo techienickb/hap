@@ -22,13 +22,13 @@
         "Entry"
         {
         "MsmKey" = "8:_30CF1512C009D39EB028F64D0C831C94"
-        "OwnerKey" = "8:_B1F4DB1870CB4719A182101D2AAEDDF1"
+        "OwnerKey" = "8:_7A48FE539A284335988B0EA3EB2BD5E5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_3613E61B4F5ACCC0DDA0C8D75D19EF69"
-        "OwnerKey" = "8:_B1F4DB1870CB4719A182101D2AAEDDF1"
+        "OwnerKey" = "8:_7A48FE539A284335988B0EA3EB2BD5E5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -40,7 +40,7 @@
         "Entry"
         {
         "MsmKey" = "8:_3E3FA921BA54766D07906F45F23F7B46"
-        "OwnerKey" = "8:_B1F4DB1870CB4719A182101D2AAEDDF1"
+        "OwnerKey" = "8:_7A48FE539A284335988B0EA3EB2BD5E5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -52,19 +52,25 @@
         "Entry"
         {
         "MsmKey" = "8:_43EA66E6F413E2DE301641F8EC4D161F"
-        "OwnerKey" = "8:_B1F4DB1870CB4719A182101D2AAEDDF1"
+        "OwnerKey" = "8:_7A48FE539A284335988B0EA3EB2BD5E5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_4A593FD5913B4610A1FFAA271A27410B"
-        "OwnerKey" = "8:_B1F4DB1870CB4719A182101D2AAEDDF1"
+        "OwnerKey" = "8:_7A48FE539A284335988B0EA3EB2BD5E5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_5A4D4AFCE531C3D9A10479F0C24A508D"
-        "OwnerKey" = "8:_B1F4DB1870CB4719A182101D2AAEDDF1"
+        "MsmKey" = "8:_5D3EB54419B46FA61860A1CBE3F2F43F"
+        "OwnerKey" = "8:_7A48FE539A284335988B0EA3EB2BD5E5"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7A48FE539A284335988B0EA3EB2BD5E5"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -76,31 +82,25 @@
         "Entry"
         {
         "MsmKey" = "8:_8B06B925E13AC66F6565FC40BA784502"
-        "OwnerKey" = "8:_B1F4DB1870CB4719A182101D2AAEDDF1"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_B1F4DB1870CB4719A182101D2AAEDDF1"
-        "OwnerKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_7A48FE539A284335988B0EA3EB2BD5E5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_C33080DA0A18370335557C3E6CD1C0CA"
-        "OwnerKey" = "8:_B1F4DB1870CB4719A182101D2AAEDDF1"
+        "OwnerKey" = "8:_7A48FE539A284335988B0EA3EB2BD5E5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_B1F4DB1870CB4719A182101D2AAEDDF1"
+        "OwnerKey" = "8:_7A48FE539A284335988B0EA3EB2BD5E5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_5A4D4AFCE531C3D9A10479F0C24A508D"
+        "OwnerKey" = "8:_5D3EB54419B46FA61860A1CBE3F2F43F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -172,10 +172,10 @@
             "ComponentsUrl" = "8:"
                 "Items"
                 {
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0"
                     {
-                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
-                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    "Name" = "8:Microsoft .NET Framework 4 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0"
                     }
                     "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
                     {
@@ -209,10 +209,10 @@
             "ComponentsUrl" = "8:"
                 "Items"
                 {
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0"
                     {
-                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
-                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    "Name" = "8:Microsoft .NET Framework 4 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0"
                     }
                     "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
                     {
@@ -227,20 +227,6 @@
     {
         "CustomAction"
         {
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_3120FCE387A44E4B92E54CF141CCF4AB"
-            {
-            "Name" = "8:Primary output from CHS Extranet (Active)"
-            "Condition" = "8:"
-            "Object" = "8:_B1F4DB1870CB4719A182101D2AAEDDF1"
-            "FileType" = "3:1"
-            "InstallAction" = "3:1"
-            "Arguments" = "8:"
-            "EntryPoint" = "8:"
-            "Sequence" = "3:1"
-            "Identifier" = "8:_DE6B34BB_4399_4535_A302_A3A6751EB83C"
-            "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:"
-            }
         }
         "DefaultFeature"
         {
@@ -256,7 +242,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:.NETFramework,Version=v3.5"
+                "FrameworkVersion" = "8:.NETFramework,Version=v4.0"
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=131000"
                 }
@@ -419,14 +405,14 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5A4D4AFCE531C3D9A10479F0C24A508D"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5D3EB54419B46FA61860A1CBE3F2F43F"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:CHS, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_5A4D4AFCE531C3D9A10479F0C24A508D"
+                    "_5D3EB54419B46FA61860A1CBE3F2F43F"
                     {
                     "Name" = "8:CHS.dll"
                     "Attributes" = "3:512"
@@ -580,24 +566,6 @@
                         {
                         }
                     }
-                    "{4C6F2762-250E-4E7D-82DC-65B304135C98}:_C93F612CF691479AA9277D97C01C37E3"
-                    {
-                    "AllowScriptSourceAccess" = "11:FALSE"
-                    "AllowReadAccess" = "11:FALSE"
-                    "AllowWriteAccess" = "11:FALSE"
-                    "AllowDirectoryBrowse" = "11:FALSE"
-                    "LogVisits" = "11:TRUE"
-                    "Index" = "11:TRUE"
-                    "ExecutePermissions" = "3:2"
-                    "Name" = "8:bin"
-                    "AlwaysCreate" = "11:TRUE"
-                    "Condition" = "8:"
-                    "Transitive" = "11:FALSE"
-                    "Property" = "8:_536E39C39862423399B5710B8A4CA6BC"
-                        "Folders"
-                        {
-                        }
-                    }
                 }
             }
         }
@@ -631,15 +599,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Extranet Setup"
-        "ProductCode" = "8:{1F2403E0-DBFA-4711-8874-CAAEBB2DC5AE}"
-        "PackageCode" = "8:{472E4987-5E40-4017-A29E-EA1A48F5ACC1}"
+        "ProductCode" = "8:{BA91FC1D-E737-4A8E-BD33-C82DD1AA97B7}"
+        "PackageCode" = "8:{125C6B59-C76A-447E-BDD1-CA1125914B46}"
         "UpgradeCode" = "8:{21D75F33-FC2A-4D3B-A1CF-08A7E3CBD738}"
-        "AspNetVersion" = "8:4.0.21006.0"
+        "AspNetVersion" = "8:1"
         "RestartWWWService" = "11:TRUE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:3.2.9"
+        "ProductVersion" = "8:4.0.0"
         "Manufacturer" = "8:Crickhowell High School"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -1110,9 +1078,9 @@
                 {
                 }
             }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_B1F4DB1870CB4719A182101D2AAEDDF1"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_7A48FE539A284335988B0EA3EB2BD5E5"
             {
-            "SourcePath" = "8:..\\CHS Extranet\\obj\\Debug\\CHS Extranet.dll"
+            "SourcePath" = "8:..\\CHS Extranet\\obj\\Debug\\HAP.Web.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_52BD45AE44A64DDE997A11F04F93D98B"

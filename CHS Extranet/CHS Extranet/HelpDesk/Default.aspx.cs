@@ -7,20 +7,20 @@ using System.Web.UI.WebControls;
 using System.Configuration;
 using System.Xml;
 using System.DirectoryServices.AccountManagement;
-using CHS_Extranet.Configuration;
+using HAP.Web.Configuration;
 using System.Net.Mail;
 using System.DirectoryServices;
 using System.Net;
 using System.IO;
-using CHS_Extranet.routing;
+using HAP.Web.routing;
 
-namespace CHS_Extranet.HelpDesk
+namespace HAP.Web.HelpDesk
 {
     public partial class Default : System.Web.UI.Page, ITicketDisplay
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            config = extranetConfig.Current;
+            config = hapConfig.Current;
             ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
             if (connObj != null) _ActiveDirectoryConnectionString = connObj.ConnectionString;
             if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))
@@ -41,8 +41,7 @@ namespace CHS_Extranet.HelpDesk
                     if (int.Parse(TicketID) > 0) loadticket();
                     else { loadnewticket(); if (TicketID == "-2") newadminsupportticket.Attributes.Add("class", "Selected"); }
                 }
-                GroupPrincipal da = GroupPrincipal.FindByIdentity(pcontext, "Domain Admins");
-                if (up.IsMemberOf(da))
+                if (User.IsInRole("Domain Admins"))
                 {
                     userlist.Items.Clear();
                     foreach (UserInfo user in ADUtil.FindUsers())
@@ -55,8 +54,7 @@ namespace CHS_Extranet.HelpDesk
         private String _ActiveDirectoryConnectionString;
         private PrincipalContext pcontext;
         private UserPrincipal up;
-        private extranetConfig config;
-        private GroupPrincipal gp;
+        private hapConfig config;
 
         public string Username
         {
@@ -86,8 +84,7 @@ namespace CHS_Extranet.HelpDesk
         {
             noCurrentTicket.Visible = false;
             newticket.Visible = (int.Parse(TicketID) == -1);
-            GroupPrincipal da = GroupPrincipal.FindByIdentity(pcontext, "Domain Admins");
-            if (up.IsMemberOf(da)) newadminticket.Visible = (int.Parse(TicketID) == -2);
+            if (User.IsInRole("Domain Admins")) newadminticket.Visible = (int.Parse(TicketID) == -2);
         }
 
         private void loadticket()
@@ -105,8 +102,7 @@ namespace CHS_Extranet.HelpDesk
             ticketnotes.DataBind();
             canCurrentTicket.Visible = true;
             AddNote.Visible = true;
-            GroupPrincipal da = GroupPrincipal.FindByIdentity(pcontext, "Domain Admins");
-            AdminNote.Visible = CheckFixed.Visible = PriorityList.Visible = up.IsMemberOf(da);
+            AdminNote.Visible = CheckFixed.Visible = PriorityList.Visible = User.IsInRole("Domain Admins");
             CheckFixed.Checked = (tickets[0].Status == "Fixed");
             PriorityList.SelectedValue = tickets[0].Priority;
             noCurrentTicket.Visible = false;
@@ -118,8 +114,7 @@ namespace CHS_Extranet.HelpDesk
             doc.Load(Server.MapPath("~/App_Data/Tickets.xml"));
             openticketcount.Text = doc.SelectNodes("/Tickets/Ticket[@status!='Fixed']").Count.ToString();
             string xpath = string.Format("/Tickets/Ticket[@status{0}]", statusselection.SelectedValue == "Open" ? "!='Fixed'" : "='Fixed'");
-            GroupPrincipal da = GroupPrincipal.FindByIdentity(pcontext, "Domain Admins");
-            if (up.IsMemberOf(da))
+            if (User.IsInRole("Domain Admins"))
             {
                 List<Ticket> tickets = new List<Ticket>();
                 foreach (XmlNode node in doc.SelectNodes(xpath))
@@ -179,7 +174,8 @@ namespace CHS_Extranet.HelpDesk
 
             mes.Subject = "A Ticket (#" + x + ") has been Created";
             mes.From = new MailAddress(up.EmailAddress, up.DisplayName);
-            mes.Sender = mes.ReplyTo = mes.From;
+            mes.Sender = mes.From;
+            mes.ReplyTo = mes.Sender;
 
             mes.To.Add(new MailAddress(config.BaseSettings.AdminEmailAddress, "IT Department"));
 
@@ -238,7 +234,8 @@ namespace CHS_Extranet.HelpDesk
             mes.Subject = "A Support Ticket (#" + x + ") has been Logged";
             UserPrincipal user = UserPrincipal.FindByIdentity(pcontext, userlist.SelectedValue);
 
-            mes.From = mes.ReplyTo = mes.Sender = new MailAddress(up.EmailAddress, "IT Department");
+            mes.From = mes.Sender = new MailAddress(up.EmailAddress, "IT Department");
+            mes.ReplyTo = mes.From;
 
             mes.To.Add(new MailAddress(user.EmailAddress, user.DisplayName));
 
@@ -269,15 +266,15 @@ namespace CHS_Extranet.HelpDesk
             XmlDocument doc = new XmlDocument();
             doc.Load(Server.MapPath("~/App_Data/Tickets.xml"));
             XmlNode ticket = doc.SelectSingleNode("/Tickets/Ticket[@id='" + TicketID + "']");
-            GroupPrincipal da = GroupPrincipal.FindByIdentity(pcontext, "Domain Admins");
-            if (up.IsMemberOf(da))
+            if (User.IsInRole("Domain Admins"))
             {
                 ticket.Attributes["status"].Value = (CheckFixed.Checked ? "Fixed" : "WithIT");
                 ticket.Attributes["priority"].Value = PriorityList.SelectedValue;
 
                 MailMessage mes = new MailMessage();
                 mes.Subject = "Your Ticket (#" + TicketID + ") has been " + (CheckFixed.Checked ? "Closed" : "Updated");
-                mes.From = mes.ReplyTo = mes.Sender = new MailAddress(up.EmailAddress, "IT Department");
+                mes.From = mes.Sender = new MailAddress(up.EmailAddress, "IT Department");
+                mes.ReplyTo = mes.From;
                 UserPrincipal user = UserPrincipal.FindByIdentity(pcontext, ticket.SelectNodes("Note")[0].Attributes["username"].Value);
 
                 mes.To.Add(new MailAddress(user.EmailAddress, user.DisplayName));
@@ -307,8 +304,8 @@ namespace CHS_Extranet.HelpDesk
                 MailMessage mes = new MailMessage();
 
                 mes.Subject = "Ticket (#" + TicketID + ") has been Updated";
-                mes.From = mes.ReplyTo = mes.Sender = new MailAddress(up.EmailAddress, up.DisplayName);
-
+                mes.From = mes.Sender = new MailAddress(up.EmailAddress, up.DisplayName);
+                mes.ReplyTo = mes.From;
                 mes.To.Add(new MailAddress(config.BaseSettings.AdminEmailAddress, "IT Department"));
 
                 mes.IsBodyHtml = true;
@@ -365,7 +362,7 @@ namespace CHS_Extranet.HelpDesk
             if (node.Attributes["date"] != null && node.Attributes["time"] != null)
                 Date = DateTime.Parse(node.Attributes["date"].Value + " " + node.Attributes["time"].Value);
             else Date = DateTime.Parse(node.Attributes["datetime"].Value);
-            extranetConfig config = extranetConfig.Current;
+            hapConfig config = hapConfig.Current;
             string _DomainDN = "";
             if (ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString.StartsWith("LDAP://"))
                 _DomainDN = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString.Remove(0, ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString.IndexOf("DC="));
@@ -395,7 +392,7 @@ namespace CHS_Extranet.HelpDesk
             if (node.SelectNodes("Note")[0].Attributes["date"] != null)
                 Date = DateTime.Parse(node.SelectNodes("Note")[0].Attributes["date"].Value + " " + node.SelectNodes("Note")[0].Attributes["time"].Value);
             Date = DateTime.Parse(node.SelectNodes("Note")[0].Attributes["datetime"].Value);
-            extranetConfig config = extranetConfig.Current;
+            hapConfig config = hapConfig.Current;
             string _DomainDN = "";
             if (ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString.StartsWith("LDAP://"))
                 _DomainDN = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString.Remove(0, ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString.IndexOf("DC="));
@@ -442,10 +439,10 @@ namespace CHS_Extranet.HelpDesk
         static public UserInfo[] FindUsers()
         {
             System.Collections.Generic.List<UserInfo> users = new System.Collections.Generic.List<UserInfo>();
-            foreach (UserInfo info in FindUsers(extranetConfig.Current.BaseSettings.EstablishmentCode + " Teaching Staff"))
+            foreach (UserInfo info in FindUsers(hapConfig.Current.BaseSettings.EstablishmentCode + " Teaching Staff"))
                 if  (!users.Contains(info))
                     users.Add(info);
-            foreach (UserInfo info in FindUsers(extranetConfig.Current.BaseSettings.EstablishmentCode + " Non-Teaching Staff"))
+            foreach (UserInfo info in FindUsers(hapConfig.Current.BaseSettings.EstablishmentCode + " Non-Teaching Staff"))
                 if (!users.Contains(info))
                     users.Add(info);
             foreach (UserInfo info in FindUsers("Domain Admins"))
@@ -457,7 +454,7 @@ namespace CHS_Extranet.HelpDesk
 
         static public UserInfo GetUserInfo(string username)
         {
-            extranetConfig config = extranetConfig.Current;
+            hapConfig config = hapConfig.Current;
             DirectoryEntry usersDE = new DirectoryEntry(ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
             DirectorySearcher ds = new DirectorySearcher(usersDE);
             ds.Filter = "(sAMAccountName=*" + username + ")";
@@ -497,7 +494,7 @@ namespace CHS_Extranet.HelpDesk
         {
             List<UserInfo> results = new List<UserInfo>();
 
-            extranetConfig config = extranetConfig.Current;
+            hapConfig config = hapConfig.Current;
             DirectoryEntry usersDE = new DirectoryEntry(ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
             DirectorySearcher ds = new DirectorySearcher(usersDE);
             ds.Filter = "(&(objectClass=user)(mail=*)(sAMAccountName=*)(mailNickname=*))";

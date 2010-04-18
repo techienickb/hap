@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CHS_Extranet.Controls {
+namespace HAP.Web.Controls {
     
     
     public partial class NewFolder {

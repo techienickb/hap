@@ -8,9 +8,9 @@ using System.DirectoryServices.AccountManagement;
 using System.Configuration;
 using System.Security.Authentication;
 using System.IO;
-using CHS_Extranet.Configuration;
+using HAP.Web.Configuration;
 
-namespace CHS_Extranet
+namespace HAP.Web
 {
     public partial class move : System.Web.UI.Page
     {
@@ -18,7 +18,7 @@ namespace CHS_Extranet
         private String _ActiveDirectoryConnectionString;
         private PrincipalContext pcontext;
         private UserPrincipal up;
-        private extranetConfig config;
+        private hapConfig config;
 
         private bool isAuth(uncpath path)
         {
@@ -27,10 +27,7 @@ namespace CHS_Extranet
             {
                 bool vis = false;
                 foreach (string s in path.EnableReadTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, s);
-                    if (!vis) vis = up.IsMemberOf(gp);
-                }
+                    if (!vis) vis = User.IsInRole(s);
                 return vis;
             }
             return false;
@@ -44,10 +41,7 @@ namespace CHS_Extranet
             {
                 bool vis = false;
                 foreach (string s in path.EnableWriteTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, s);
-                    if (!vis) vis = up.IsMemberOf(gp);
-                }
+                    if (!vis) vis = User.IsInRole(s);
                 return vis;
             }
             return false;
@@ -55,7 +49,7 @@ namespace CHS_Extranet
 
         protected override void OnInitComplete(EventArgs e)
         {
-            config = extranetConfig.Current;
+            config = hapConfig.Current;
             ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
             if (connObj != null) _ActiveDirectoryConnectionString = connObj.ConnectionString;
             if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))
@@ -106,7 +100,7 @@ namespace CHS_Extranet
                         path = string.Format(unc.UNC, Username) + path.Replace('/', '\\');
                     }
                 }
-                if (Request.QueryString["path"].Substring(1, 1) == "f")
+                if (Request.QueryString["path"].Substring(0, 1) == "f")
                 {
                     FileInfo file = new FileInfo(path);
                     moveitem.Text = file.Name;
@@ -152,7 +146,7 @@ namespace CHS_Extranet
         {
             if (!string.IsNullOrEmpty(TreeView1.SelectedValue))
             {
-                if (Request.QueryString["path"].Substring(1, 1) == "f")
+                if (Request.QueryString["path"].Substring(0, 1) == "f")
                 {
                     FileInfo file = new FileInfo(fullname.Value);
                     file.MoveTo(Path.Combine(TreeView1.SelectedValue, file.Name));

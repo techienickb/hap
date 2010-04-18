@@ -158,7 +158,7 @@ var SimpleContextMenu = {
             var file = false;
             if (el.href.match(/\/extranet\/download\//i)) file = true;
             SimpleContextMenu._menuElement.getElementsByTagName('a')[0].href = SimpleContextMenu._menuElement.getElementsByTagName('a')[2].href = SimpleContextMenu._menuElement.getElementsByTagName('a')[4].href = SimpleContextMenu._menuElement.getElementsByTagName('a')[5].href = '#' + (file ? "F!" : "") + el.href.substring(el.href.lastIndexOf('/') + 1);
-            SimpleContextMenu._menuElement.getElementsByTagName('a')[1].href = el.href.replace(/\/extranet\/mycomputer\//gi, "/extranet/move.aspx?path=").replace(/\/extranet\/f.ashx\//gi, "/extranet/move.aspx?path=/f/");
+            SimpleContextMenu._menuElement.getElementsByTagName('a')[1].href = el.href.replace(/\/extranet\/mycomputer\//gi, "/extranet/move.aspx?path=").replace(/\/extranet\/download\//gi, "/extranet/move.aspx?path=f/");
             if (el.href.match(/.docx/i)) {
                 SimpleContextMenu._menuElement.getElementsByTagName('a')[3].href = el.href.replace(/\/extranet\/download/gi, "/extranet/preview");
                 SimpleContextMenu._menuElement.getElementsByTagName('a')[3].style.display = "block";

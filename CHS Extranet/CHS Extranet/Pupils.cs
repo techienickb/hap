@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Xml;
 using CHS.Base64;
 
-namespace CHS_Extranet
+namespace HAP.Web
 {
     public class Pupils
     {

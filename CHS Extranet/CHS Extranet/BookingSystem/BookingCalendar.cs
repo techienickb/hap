@@ -5,12 +5,12 @@ using System.Web;
 using System.Web.UI.WebControls;
 using System.Web.UI;
 using System.Configuration;
-using CHS_Extranet.Configuration;
+using HAP.Web.Configuration;
 using System.Text;
 using System.DirectoryServices.AccountManagement;
 using System.IO;
 
-namespace CHS_Extranet.BookingSystem
+namespace HAP.Web.BookingSystem
 {
     public class BookingCalendar : Calendar, INamingContainer
     {
@@ -18,13 +18,8 @@ namespace CHS_Extranet.BookingSystem
         {
             // since this control will be used for displaying
             // events, set these properties as a default
-            extranetConfig config = extranetConfig.Current;
-            ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
-            string _DomainDN = connObj.ConnectionString.Remove(0, connObj.ConnectionString.IndexOf("DC="));
-            PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
-            UserPrincipal up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Username);
-            GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, "Domain Admins");
-            _isAdmin = up.IsMemberOf(gp);
+            hapConfig config = hapConfig.Current;
+            _isAdmin = HttpContext.Current.User.IsInRole("Domain Admins");
 
             this.SelectionMode = CalendarSelectionMode.Day;
             this.maxday = config.BookingSystem.MaxDays;
@@ -90,7 +85,6 @@ namespace CHS_Extranet.BookingSystem
             html.WriteLine("<!--{0}-->", this.maxday);
         }
 
-        private string _dayField;
         private int maxday;
 
         protected override void OnDayRender(TableCell cell, CalendarDay day)

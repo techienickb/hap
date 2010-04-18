@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CHS_Extranet.BookingSystem {
+namespace HAP.Web.BookingSystem {
     
     
     public partial class Display {

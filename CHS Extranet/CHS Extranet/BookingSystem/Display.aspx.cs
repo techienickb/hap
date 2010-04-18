@@ -4,11 +4,11 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using CHS_Extranet.Configuration;
+using HAP.Web.Configuration;
 using System.Configuration;
-using CHS_Extranet.routing;
+using HAP.Web.routing;
 
-namespace CHS_Extranet.BookingSystem
+namespace HAP.Web.BookingSystem
 {
     public partial class Display : System.Web.UI.Page, IBookingSystemDisplay
     {
@@ -16,7 +16,7 @@ namespace CHS_Extranet.BookingSystem
         {
             Response.ExpiresAbsolute = DateTime.Now;
             bs = new BookingSystem();
-            extranetConfig config = extranetConfig.Current;
+            hapConfig config = hapConfig.Current;
             if (Page.FindControl(Room) != null)
             {
                 Panel room = Page.FindControl(Room) as Panel;
@@ -88,7 +88,7 @@ namespace CHS_Extranet.BookingSystem
         {
             get
             {
-                extranetConfig config = extranetConfig.Current;
+                hapConfig config = hapConfig.Current;
                 foreach (lesson lesson in config.BookingSystem.Lessons)
                 {
                     string[] s1 = lesson.StartTime.Trim().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);

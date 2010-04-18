@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CHS_Extranet.BookingSystem {
+namespace HAP.Web.BookingSystem {
     
     
     public partial class Default {
@@ -55,7 +55,7 @@ namespace CHS_Extranet.BookingSystem {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::CHS_Extranet.BookingSystem.DayList daylist;
+        protected global::HAP.Web.BookingSystem.DayList daylist;
         
         /// <summary>
         /// bookingpopup control.
@@ -64,7 +64,7 @@ namespace CHS_Extranet.BookingSystem {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::CHS_Extranet.BookingSystem.BookingPopup bookingpopup;
+        protected global::HAP.Web.BookingSystem.BookingPopup bookingpopup;
         
         /// <summary>
         /// remove control.
@@ -91,6 +91,6 @@ namespace CHS_Extranet.BookingSystem {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::CHS_Extranet.BookingSystem.BookingCalendar Calendar1;
+        protected global::HAP.Web.BookingSystem.BookingCalendar Calendar1;
     }
 }

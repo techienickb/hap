@@ -7,10 +7,10 @@ using System.Web.UI.WebControls;
 using System.DirectoryServices.AccountManagement;
 using System.Configuration;
 using System.DirectoryServices;
-using CHS_Extranet.Configuration;
+using HAP.Web.Configuration;
 using System.Xml;
 
-namespace CHS_Extranet
+namespace HAP.Web
 {
     public partial class Default : System.Web.UI.Page
     {
@@ -18,7 +18,7 @@ namespace CHS_Extranet
         private String _ActiveDirectoryConnectionString;
         private PrincipalContext pcontext;
         private UserPrincipal up;
-        private extranetConfig config;
+        private hapConfig config;
 
         public string Username
         {
@@ -32,9 +32,8 @@ namespace CHS_Extranet
 
         protected override void OnInitComplete(EventArgs e)
         {
-            config = extranetConfig.Current;
-            ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
-            if (connObj != null) _ActiveDirectoryConnectionString = connObj.ConnectionString;
+            config = hapConfig.Current;
+            _ActiveDirectoryConnectionString = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString;
             if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))
                 throw new Exception("The connection name 'activeDirectoryConnectionString' was not found in the applications configuration or the connection string is empty.");
             if (_ActiveDirectoryConnectionString.StartsWith("LDAP://"))
@@ -47,7 +46,6 @@ namespace CHS_Extranet
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, config.ADSettings.StudentsGroupName);
             //rmCom2000-UsrMgr-uPN
             DirectoryEntry usersDE = new DirectoryEntry(_ActiveDirectoryConnectionString, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
             DirectorySearcher ds = new DirectorySearcher(usersDE);
@@ -72,7 +70,7 @@ namespace CHS_Extranet
                 form.Text = r.Properties["department"][0].ToString();
             }
             catch { form.Text = "n/a"; }
-            if (up.IsMemberOf(gp)) form.Text = string.Format("<b>Form: </b>{0}", form.Text);
+            if (User.IsInRole(config.ADSettings.StudentsGroupName)) form.Text = string.Format("<b>Form: </b>{0}", form.Text);
             else form.Text = string.Format("<b>Department: </b>{0}", form.Text);
             email.Text = up.EmailAddress;
             string aet = config.HomePageLinks["Update My Details"].ShowTo;
@@ -81,10 +79,7 @@ namespace CHS_Extranet
             {
                 bool vis = false;
                 foreach (string s in aet.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    gp = GroupPrincipal.FindByIdentity(pcontext, s);
-                    if (!vis) vis = up.IsMemberOf(gp);
-                }
+                    if (!vis) vis = User.IsInRole(s);
                 updatemydetails.Visible = vis;
             }
             List<homepagelink> links = new List<homepagelink>();
@@ -96,54 +91,34 @@ namespace CHS_Extranet
                     {
                         bool vis = false;
                         foreach (string s in link.ShowTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                        {
-                            gp = GroupPrincipal.FindByIdentity(pcontext, s);
-                            if (!vis) vis = up.IsMemberOf(gp);
-                        }
+                            if (!vis) vis = User.IsInRole(s);
                         if (vis) links.Add(link);
                     }
                 }
+
+            if (!Page.IsPostBack)
+            {
+                txtfname.Text = up.GivenName;
+                txtlname.Text = up.Surname;
+                try
+                {
+                    txtform.Text = r.Properties["department"][0].ToString();
+                }
+                catch { txtform.Text = ""; }
+                if (User.IsInRole(config.ADSettings.StudentsGroupName)) formlabel.Text = "<b>Form: </b>";
+                else formlabel.Text = "<b>Department: </b>";
+            }
             homepagelinks.DataSource = links.ToArray();
             homepagelinks.DataBind();
         }
 
-        protected void updatemydetails_Click(object sender, EventArgs e)
-        {
-            viewmode.Visible = false;
-            editmode.Visible = true;
-            GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, config.ADSettings.StudentsGroupName);
-            //rmCom2000-UsrMgr-uPN
-            DirectoryEntry usersDE = new DirectoryEntry(_ActiveDirectoryConnectionString, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
-            DirectorySearcher ds = new DirectorySearcher(usersDE);
-            ds.Filter = "(sAMAccountName=" + Username + ")";
-            ds.PropertiesToLoad.Add("department");
-            SearchResult r = ds.FindOne();
-            txtfname.Text = up.GivenName;
-            txtlname.Text = up.Surname;
-            try
-            {
-                txtform.Text = r.Properties["department"][0].ToString();
-            }
-            catch { txtform.Text = ""; }
-            if (up.IsMemberOf(gp)) formlabel.Text = "<b>Form: </b>";
-            else
-            {
-                formlabel.Text = "<b>Department: </b>";
-                txtform.Columns = 14;
-            }
-            email.Text = up.EmailAddress;
-        }
-
         protected void editmydetails_Click(object sender, EventArgs e)
         {
-            viewmode.Visible = true;
-            editmode.Visible = false;
             up.Surname = txtlname.Text;
             up.GivenName = txtfname.Text;
             up.Description = string.Format("{0} {1} in {2}", txtfname.Text, txtlname.Text, txtform.Text);
             up.DisplayName = string.Format("{0} {1}", txtfname.Text, txtlname.Text);
-            GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, config.ADSettings.StudentsGroupName);
-            if (up.IsMemberOf(gp)) up.EmailAddress = string.Format(config.BaseSettings.StudentEmailFormat, Username, up.GivenName, up.Surname);
+            if (User.IsInRole(config.ADSettings.StudentsGroupName)) up.EmailAddress = string.Format(config.BaseSettings.StudentEmailFormat, Username, up.GivenName, up.Surname);
             up.Save();
 
             // First, get a DE for the user
@@ -185,7 +160,7 @@ namespace CHS_Extranet
                 form.Text = r.Properties["department"][0].ToString();
             }
             catch { form.Text = "n/a"; }
-            if (up.IsMemberOf(gp)) form.Text = string.Format("<b>Form: </b>{0}", form.Text);
+            if (User.IsInRole(config.ADSettings.StudentsGroupName)) form.Text = string.Format("<b>Form: </b>{0}", form.Text);
             else form.Text = string.Format("<b>Department: </b>{0}", form.Text);
             email.Text = up.EmailAddress;
         }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Configuration;
 
-namespace CHS_Extranet.Configuration
+namespace HAP.Web.Configuration
 {
     public class bookingResource : ConfigurationElement
     {
@@ -29,7 +29,21 @@ namespace CHS_Extranet.Configuration
             get { return (ResourceType)this["type"]; }
             set { this["type"] = value; }
         }
+
+        [ConfigurationProperty("emailadmin", DefaultValue = false)]
+        public bool EmailAdmin
+        {
+            get { return (bool)this["emailadmin"]; }
+            set { this["emailadmin"] = value; }
+        }
+
+        [ConfigurationProperty("enablecharging", DefaultValue = false)]
+        public bool EnableCharging
+        {
+            get { return (bool)this["enablecharging"]; }
+            set { this["enablecharging"] = value; }
+        }
     }
 
-    public enum ResourceType { ITRoom, Laptops, Other }
+    public enum ResourceType { ITRoom, Laptops, Equipment, Other }
 }

@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/chs.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="CHS_Extranet.HelpDesk.Default" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/chs.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="HAP.Web.HelpDesk.Default" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit.HTMLEditor" TagPrefix="asp" %>
 <%@ Register Assembly="System.Web.Ajax" Namespace="System.Web.UI" TagPrefix="asp" %>
 
@@ -106,14 +106,14 @@
                 <asp:Repeater runat="server" ID="currentticket">
                     <ItemTemplate>
                         <h1><span style="float: right;"><%#Eval("Status") %></span><a href="/extranet/helpdesk/ticket/<%#Eval("Id") %>">#<%#Eval("Id") %></a> - <b><%#Eval("Subject") %> - Priority: <%#Eval("Priority")%></b></h1>
-                        <div style="border-bottom: solid 1px #7da2ce; padding: 4px;">Filed on <%#Eval("Date")%> by <%#((CHS_Extranet.HelpDesk.Ticket)Container.DataItem).User.DisplayName %></div>
+                        <div style="border-bottom: solid 1px #7da2ce; padding: 4px;">Filed on <%#Eval("Date")%> by <%#((HAP.Web.HelpDesk.Ticket)Container.DataItem).User.DisplayName %></div>
                     </ItemTemplate>
                 </asp:Repeater>
                 <div class="Content">
                     <div style="padding: 4px 6px;">
                     <asp:Repeater runat="server" ID="ticketnotes">
                         <ItemTemplate>
-                            <h3><%#Eval("Date")%> by <%#((CHS_Extranet.HelpDesk.Note)Container.DataItem).User.DisplayName %>:</h3>
+                            <h3><%#Eval("Date")%> by <%#((HAP.Web.HelpDesk.Note)Container.DataItem).User.DisplayName %>:</h3>
                             <blockquote><%#Eval("NoteText")%></blockquote>
                         </ItemTemplate>
                         <SeparatorTemplate><hr /></SeparatorTemplate>

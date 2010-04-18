@@ -5,11 +5,11 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.DirectoryServices.AccountManagement;
-using CHS_Extranet.Configuration;
+using HAP.Web.Configuration;
 using System.Configuration;
 using System.Xml;
 
-namespace CHS_Extranet.Controls
+namespace HAP.Web.Controls
 {
     public partial class Announcement : System.Web.UI.UserControl
     {
@@ -18,7 +18,7 @@ namespace CHS_Extranet.Controls
         private String _ActiveDirectoryConnectionString;
         private PrincipalContext pcontext;
         private UserPrincipal up;
-        private extranetConfig config;
+        private hapConfig config;
 
         public string Username
         {
@@ -33,7 +33,7 @@ namespace CHS_Extranet.Controls
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            config = extranetConfig.Current;
+            config = hapConfig.Current;
             ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
             if (connObj != null) _ActiveDirectoryConnectionString = connObj.ConnectionString;
             if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))
@@ -65,10 +65,7 @@ namespace CHS_Extranet.Controls
             {
                 bool vis = false;
                 foreach (string s in config.AnnouncementBox.ShowTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, s);
-                    if (!vis) vis = up.IsMemberOf(gp);
-                }
+                    if (!vis) vis = Page.User.IsInRole(s);
                 return vis;
             }
             return false;
@@ -81,10 +78,7 @@ namespace CHS_Extranet.Controls
             {
                 bool vis = false;
                 foreach (string s in config.AnnouncementBox.EnableEditTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, s);
-                    if (!vis) vis = up.IsMemberOf(gp);
-                }
+                    if (!vis) vis = Page.User.IsInRole(s);
                 return vis;
             }
             return false;

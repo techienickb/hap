@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Crickhowell High School - IT - Extranet - My Computer" Language="C#" MasterPageFile="~/chs.master" AutoEventWireup="true" CodeBehind="mycomputer.aspx.cs" Inherits="CHS_Extranet.mycomputer" %>
+﻿<%@ Page Title="Crickhowell High School - IT - Extranet - My Computer" Language="C#" MasterPageFile="~/chs.master" AutoEventWireup="true" CodeBehind="mycomputer.aspx.cs" Inherits="HAP.Web.mycomputer" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <%@ Register Assembly="System.Web.Ajax" Namespace="System.Web.UI" TagPrefix="asp" %>
 <%@ Register Src="~/Controls/NewFolder.ascx" TagName="NewFolder" TagPrefix="hap" %>
@@ -6,15 +6,22 @@
 <%@ Register Src="~/Controls/Rename.ascx" TagName="Rename" TagPrefix="hap" %>
 <%@ Register Src="~/Controls/Unzip.ascx" TagName="Unzip" TagPrefix="hap" %>
 <%@ Register Src="~/Controls/Zip.ascx" TagName="Zip" TagPrefix="hap" %>
+<%@ Register Src="~/Controls/Upload.ascx" TagName="Upload" TagPrefix="hap" %>
 
 <asp:Content runat="server" ContentPlaceHolderID="head">
     <link href="/Extranet/mycomputer.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="/Extranet/Scripts/rightclick.js"></script>
-    	<script type="text/javascript">
-    	    SimpleContextMenu.setup({ 'preventDefault': true, 'preventForms': false });
-    	    SimpleContextMenu.attach('container', 'CM1');
+    <script type="text/javascript">
+    	SimpleContextMenu.setup({ 'preventDefault': true, 'preventForms': false });
+    	SimpleContextMenu.attach('container', 'CM1');
+    	function onSilverlightError(sender, args) {
+    	    alert(args.ErrorMessage);
+    	}
+    	var slCtl = null;
+    	function onSilverlightLoaded(sender, args) {
+    	    slCtl = sender.getHost();
+    	}
 	</script>
-
 </asp:Content>
 
 <asp:Content ContentPlaceHolderID="body" runat="server">
@@ -25,7 +32,7 @@
         <div id="bar">
             <a href="/Extranet/">Home Access Plus+ Home</a>
             <hap:NewFolder runat="server" ID="newfolderlink" Visible="false" />
-            <asp:HyperLink runat="server" ID="fileuploadlink" Visible="false" onclick="return popup(this);">Upload File</asp:HyperLink>
+            <hap:Upload runat="server" id="newfileuploadlink" Visible="false" />
             <a class="right" href="/Extranet/mycomputer.aspx" onclick="return view();"><span>View</span></a>
         </div>
         <div id="viewbox">
@@ -57,7 +64,19 @@
         <hap:Rename runat="server" id="RenameBox" />
         <hap:Zip runat="server" id="ZipBox" />
         <hap:Unzip runat="server" id="UnzipBox" />
-        <asp:PlaceHolder runat="server" ID="postbackmove" Visible="false"><script type="text/javascript">window.location.href = window.location.href + "#bar";</script></asp:PlaceHolder>
+        <asp:PlaceHolder runat="server" ID="postbackmove" Visible="false">
+            <script type="text/javascript">
+                function getPosition(obj) {
+                    var topValue = 0;
+                    while (obj) {
+                        topValue += obj.offsetTop;
+                        obj = obj.offsetParent;
+                    }
+                    return topValue;
+                }
+                self.scrollTo(0, getPosition($get('bar')));
+            </script>
+        </asp:PlaceHolder>
     </div>
 	<div id="CM1" class="SimpleContextMenu">
 		<a href="#" onclick="return popup(this);">Delete</a>

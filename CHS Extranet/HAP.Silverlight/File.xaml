@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="HAP.Silverlight.File"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="50" d:DesignWidth="260" xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk">
+    
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <ProgressBar Name="progress" Height="50" VerticalAlignment="Top" />
+        <Image HorizontalAlignment="Left" Margin="5,5,0,5" Name="image" Stretch="Fill" Width="40" />
+        <sdk:Label Margin="51,8,12,25" Name="filename" FontSize="12" Content="FileName" />
+        <sdk:Label Margin="51,0,12,8" Name="status" Content="filesize - status" Foreground="#FF444444" Height="15" VerticalAlignment="Bottom" />
+        <Button Content="X" Height="23" HorizontalAlignment="Right" Name="removebutton" VerticalAlignment="Top" Width="20" Margin="0,3,8,0" Click="removebutton_Click" />
+    </Grid>
+</UserControl>

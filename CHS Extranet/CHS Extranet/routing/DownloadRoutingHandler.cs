@@ -7,12 +7,12 @@ using System.Web.Security;
 using System.Web.Compilation;
 using System.Net;
 using System.DirectoryServices.AccountManagement;
-using CHS_Extranet.Configuration;
+using HAP.Web.Configuration;
 using System.Configuration;
 using System.IO;
 using Microsoft.Win32;
 
-namespace CHS_Extranet.routing
+namespace HAP.Web.routing
 {
     public class DownloadRoutingHandler : IRouteHandler
     {
@@ -45,7 +45,7 @@ namespace CHS_Extranet.routing
         private String _ActiveDirectoryConnectionString;
         private PrincipalContext pcontext;
         private UserPrincipal up;
-        private extranetConfig config;
+        private hapConfig config;
 
         private bool isAuth(uncpath path)
         {
@@ -54,10 +54,7 @@ namespace CHS_Extranet.routing
             {
                 bool vis = false;
                 foreach (string s in path.EnableReadTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, s);
-                    if (!vis) vis = up.IsMemberOf(gp);
-                }
+                    if (!vis) vis = HttpContext.Current.User.IsInRole(s);
                 return vis;
             }
             return false;
@@ -71,10 +68,7 @@ namespace CHS_Extranet.routing
             {
                 bool vis = false;
                 foreach (string s in path.EnableWriteTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, s);
-                    if (!vis) vis = up.IsMemberOf(gp);
-                }
+                    if (!vis) vis = HttpContext.Current.User.IsInRole(s);
                 return vis;
             }
             return false;
@@ -92,7 +86,7 @@ namespace CHS_Extranet.routing
 
         public void ProcessRequest(HttpContext context)
         {
-            config = extranetConfig.Current;
+            config = hapConfig.Current;
             ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
             if (connObj != null) _ActiveDirectoryConnectionString = connObj.ConnectionString;
             if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))

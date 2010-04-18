@@ -8,7 +8,7 @@ using System.IO;
 using System.Drawing.Imaging;
 using CHS.Base64;
 
-namespace CHS_Extranet
+namespace HAP.Web
 {
     /// <summary>
     /// Summary description for p

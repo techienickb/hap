@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CHS_Extranet.HelpDesk {
+namespace HAP.Web.HelpDesk {
     
     
     public partial class Default {

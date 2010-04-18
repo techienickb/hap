@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Text;
 using System.IO;
-using CHS_Extranet.Configuration;
+using HAP.Web.Configuration;
 using System.Configuration;
 using System.Net.Mail;
 using System.Globalization;
@@ -12,7 +12,7 @@ using System.Net.Mime;
 using System.Net;
 using System.DirectoryServices.AccountManagement;
 
-namespace CHS_Extranet.BookingSystem
+namespace HAP.Web.BookingSystem
 {
     public class iCalGenerator
     {
@@ -23,7 +23,7 @@ namespace CHS_Extranet.BookingSystem
 
         public static void Generate(Booking booking, DateTime date)
         {
-            extranetConfig config = extranetConfig.Current;
+            hapConfig config = hapConfig.Current;
             StringBuilder sb = new StringBuilder();
             StringWriter sw = new StringWriter(sb);
 
@@ -69,9 +69,7 @@ namespace CHS_Extranet.BookingSystem
             MailMessage mes = new MailMessage();
             IFormatProvider culture = new CultureInfo("en-gb");
             mes.Subject = summary;
-            mes.From = new MailAddress("administrator@crickhowell-hs.powys.sch.uk", "ICT Department");
-            mes.ReplyTo = new MailAddress("administrator@crickhowell-hs.powys.sch.uk", "ICT Department");
-            mes.Sender = new MailAddress("administrator@crickhowell-hs.powys.sch.uk", "ICT Department");
+            mes.From = mes.ReplyTo = mes.Sender = new MailAddress(config.BaseSettings.AdminEmailAddress, "ICT Department");
             mes.To.Add(new MailAddress(booking.User.EmailAddress, booking.User.DisplayName));
 
             mes.Body = description;
@@ -91,7 +89,7 @@ namespace CHS_Extranet.BookingSystem
 
         public static void Generate(Booking booking, DateTime date, String username)
         {
-            extranetConfig config = extranetConfig.Current;
+            hapConfig config = hapConfig.Current;
             StringBuilder sb = new StringBuilder();
             StringWriter sw = new StringWriter(sb);
 
@@ -137,9 +135,7 @@ namespace CHS_Extranet.BookingSystem
             MailMessage mes = new MailMessage();
             IFormatProvider culture = new CultureInfo("en-gb");
             mes.Subject = summary;
-            mes.From = new MailAddress(config.BaseSettings.AdminEmailAddress, "ICT Department");
-            mes.ReplyTo = new MailAddress(config.BaseSettings.AdminEmailAddress, "ICT Department");
-            mes.Sender = new MailAddress(config.BaseSettings.AdminEmailAddress, "ICT Department");
+            mes.From = mes.ReplyTo = mes.Sender = new MailAddress(config.BaseSettings.AdminEmailAddress, "ICT Department");
 
             ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
             string _DomainDN = connObj.ConnectionString.Remove(0, connObj.ConnectionString.IndexOf("DC="));

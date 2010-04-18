@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace CHS_Extranet.BookingSystem
+namespace HAP.Web.BookingSystem
 {
     public struct AdvancedBookingRight
     {

@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CHS_Extranet {
+namespace HAP.Web {
     
     
     public partial class mycomputer {
@@ -19,16 +19,16 @@ namespace CHS_Extranet {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::CHS_Extranet.Controls.NewFolder newfolderlink;
+        protected global::HAP.Web.Controls.NewFolder newfolderlink;
         
         /// <summary>
-        /// fileuploadlink control.
+        /// newfileuploadlink control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink fileuploadlink;
+        protected global::HAP.Web.Controls.Upload newfileuploadlink;
         
         /// <summary>
         /// breadcrumbrepeater control.
@@ -55,7 +55,7 @@ namespace CHS_Extranet {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::CHS_Extranet.Controls.Delete DeleteBox;
+        protected global::HAP.Web.Controls.Delete DeleteBox;
         
         /// <summary>
         /// RenameBox control.
@@ -64,7 +64,7 @@ namespace CHS_Extranet {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::CHS_Extranet.Controls.Rename RenameBox;
+        protected global::HAP.Web.Controls.Rename RenameBox;
         
         /// <summary>
         /// ZipBox control.
@@ -73,7 +73,7 @@ namespace CHS_Extranet {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::CHS_Extranet.Controls.Zip ZipBox;
+        protected global::HAP.Web.Controls.Zip ZipBox;
         
         /// <summary>
         /// UnzipBox control.
@@ -82,7 +82,7 @@ namespace CHS_Extranet {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::CHS_Extranet.Controls.Unzip UnzipBox;
+        protected global::HAP.Web.Controls.Unzip UnzipBox;
         
         /// <summary>
         /// postbackmove control.

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Configuration;
 
-namespace CHS_Extranet.Configuration
+namespace HAP.Web.Configuration
 {
     public class uncpath : ConfigurationElement
     {

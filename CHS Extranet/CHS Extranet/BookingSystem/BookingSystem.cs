@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Xml;
-using CHS_Extranet.Configuration;
+using HAP.Web.Configuration;
 using System.Configuration;
 
-namespace CHS_Extranet.BookingSystem
+namespace HAP.Web.BookingSystem
 {
     public class BookingSystem
     {
@@ -204,7 +204,7 @@ namespace CHS_Extranet.BookingSystem
             //doc.Save(HttpContext.Current.Server.MapPath("~/StaticBookings.xml"));
         }
 
-        public void deleteStaticBooking1(int lesson, int room, int day)
+        public void deleteStaticBooking1(string lesson, string room, int day)
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/StaticBookings.xml"));

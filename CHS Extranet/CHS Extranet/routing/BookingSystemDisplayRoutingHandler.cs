@@ -8,7 +8,7 @@ using System.Web.UI;
 using System.Web.Security;
 using System.Net;
 
-namespace CHS_Extranet.routing
+namespace HAP.Web.routing
 {
     public class BookingSystemDislayRoutingHandler : IRouteHandler
     {

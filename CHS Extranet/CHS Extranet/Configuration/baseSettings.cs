@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Configuration;
 
-namespace CHS_Extranet.Configuration
+namespace HAP.Web.Configuration
 {
     public class baseSettings : ConfigurationElement
     {
@@ -37,6 +37,13 @@ namespace CHS_Extranet.Configuration
         {
             get { return (string)this["adminemailaddress"]; }
             set { this["adminemailaddress"] = value; }
+        }
+
+        [ConfigurationProperty("adminemailuser", DefaultValue = "admin", IsRequired = false)]
+        public string AdminEmailUser
+        {
+            get { return (string)this["adminemailuser"]; }
+            set { this["adminemailuser"] = value; }
         }
 
         [ConfigurationProperty("smtpserver", DefaultValue = "", IsRequired = false)]

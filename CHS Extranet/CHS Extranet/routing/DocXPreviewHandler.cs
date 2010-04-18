@@ -13,9 +13,9 @@ using System.Xml;
 using System.Text;
 using System.Xml.Linq;
 using WordVisualizer.Core.Util;
-using CHS_Extranet.Configuration;
+using HAP.Web.Configuration;
 
-namespace CHS_Extranet.routing
+namespace HAP.Web.routing
 {
     /// <summary>
     /// Summary description for docx
@@ -51,9 +51,8 @@ namespace CHS_Extranet.routing
         private String _ActiveDirectoryConnectionString;
         private PrincipalContext pcontext;
         private UserPrincipal up;
-        private GroupPrincipal studentgp;
         private string path;
-        private extranetConfig config;
+        private hapConfig config;
 
         private bool isAuth(uncpath path)
         {
@@ -62,10 +61,7 @@ namespace CHS_Extranet.routing
             {
                 bool vis = false;
                 foreach (string s in path.EnableReadTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, s);
-                    if (!vis) vis = up.IsMemberOf(gp);
-                }
+                    if (!vis) vis = HttpContext.Current.User.IsInRole(s);
                 return vis;
             }
             return false;
@@ -79,10 +75,7 @@ namespace CHS_Extranet.routing
             {
                 bool vis = false;
                 foreach (string s in path.EnableWriteTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, s);
-                    if (!vis) vis = up.IsMemberOf(gp);
-                }
+                    if (!vis) vis = HttpContext.Current.User.IsInRole(s);
                 return vis;
             }
             return false;
@@ -106,7 +99,7 @@ namespace CHS_Extranet.routing
         /// <param name="context">Current http context</param>
         public void ProcessRequest(System.Web.HttpContext context)
         {
-            config = extranetConfig.Current;
+            config = hapConfig.Current;
             ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
             if (connObj != null) _ActiveDirectoryConnectionString = connObj.ConnectionString;
             if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))
