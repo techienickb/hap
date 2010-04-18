@@ -4,12 +4,12 @@ using System.Web.Services;
 using System.Web.Services.Protocols;
 using System.ComponentModel;
 using System.DirectoryServices.AccountManagement;
-using CHS_Extranet.Configuration;
+using HAP.Web.Configuration;
 using System.Configuration;
 using System.Xml;
-using CHS_Extranet.HelpDesk;
+using HAP.Web.HelpDesk;
 
-namespace CHS_Extranet.BookingSystem
+namespace HAP.Web.BookingSystem
 {
     public class Booking
     {
@@ -27,6 +27,7 @@ namespace CHS_Extranet.BookingSystem
             if (node.Attributes["ltroom"] != null) this.LTRoom = node.Attributes["ltroom"].Value;
             if (node.Attributes["ltheadphones"] != null) this.LTHeadPhones = bool.Parse(node.Attributes["ltheadphones"].Value);
             else this.LTHeadPhones = false;
+            if (node.Attributes["equiproom"] != null) this.EquipRoom = node.Attributes["equiproom"].Value;
         }
 
         public Booking(XmlNode node, int day)
@@ -42,6 +43,7 @@ namespace CHS_Extranet.BookingSystem
             if (node.Attributes["ltroom"] != null) this.LTRoom = node.Attributes["ltroom"].Value;
             if (node.Attributes["ltheadphones"] != null) this.LTHeadPhones = bool.Parse(node.Attributes["ltheadphones"].Value);
             else this.LTHeadPhones = false;
+            if (node.Attributes["equiproom"] != null) this.EquipRoom = node.Attributes["equiproom"].Value;
         }
 
         public Booking(int day, string lesson, string room, string name, string username)
@@ -61,6 +63,7 @@ namespace CHS_Extranet.BookingSystem
         public string Username { get; set; }
         public bool LTHeadPhones { get; set; }
         public string LTRoom { get; set; }
+        public string EquipRoom { get; set; }
         public int LTCount { get; set; }
         public bool Static { get; set; }
 

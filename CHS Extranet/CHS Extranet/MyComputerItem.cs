@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.IO;
 
-namespace CHS_Extranet
+namespace HAP.Web
 {
     public class MyComputerItem
     {

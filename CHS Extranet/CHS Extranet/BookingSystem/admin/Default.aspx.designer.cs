@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CHS_Extranet.BookingSystem.admin {
+namespace HAP.Web.BookingSystem.admin {
     
     
     public partial class Default {
@@ -110,6 +110,24 @@ namespace CHS_Extranet.BookingSystem.admin {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DetailsView DetailsView1;
+        
+        /// <summary>
+        /// resourcesds control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ObjectDataSource resourcesds;
+        
+        /// <summary>
+        /// lessonsds control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ObjectDataSource lessonsds;
         
         /// <summary>
         /// UpdatePanelAnimationExtender1 control.

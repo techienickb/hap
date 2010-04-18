@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Web;
 using System.IO;
 
-namespace CHS_Extranet
+namespace HAP.Web
 {
 
     /// <summary>

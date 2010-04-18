@@ -1,8 +1,8 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/chs.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="CHS_Extranet.BookingSystem.Default" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/chs.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="HAP.Web.BookingSystem.Default" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <%@ Register Src="~/BookingSystem/DayList.ascx" TagName="DayList" TagPrefix="hap" %>
 <%@ Register TagPrefix="hap" TagName="BookingPopup" Src="~/BookingSystem/BookingPopup.ascx" %>
-<%@ Register Namespace="CHS_Extranet.BookingSystem" Assembly="CHS Extranet" TagPrefix="hap" %>
+<%@ Register Namespace="HAP.Web.BookingSystem" Assembly="HAP.Web" TagPrefix="hap" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="bookingsystem.css" rel="stylesheet" type="text/css" />
 </asp:Content>
@@ -14,7 +14,7 @@
                         <asp:HyperLink runat="server" style="float: right;" NavigateUrl="admin/" ID="adminlink" Visible="false">Booking System Admin</asp:HyperLink>
                         <h1>IT Booking System</h1>
                         <p>Click on a Free period to book a room, or click on a booking to remove it.  Click on <%=Calendar1.SelectedDate.DayOfWeek.ToString() %> to change the day. Week: <asp:Label runat="server" ID="weeknum" /></p>
-                        <hap:DayList runat="server" id="daylist" />
+                        <hap:DayList runat="server" id="daylist" ItemWidth="152" />
                         <hap:BookingPopup runat="server" ID="bookingpopup" />
                         <asp:Button ID="remove" style="display: none;" OnClick="remove_Click" CausesValidation="false" runat="server" Text="Remove" />
                         <asp:HiddenField ID="removevars" runat="server" />
@@ -22,7 +22,7 @@
                     <div id="Cal">
                         <hap:BookingCalendar ID="Calendar1" runat="server" FirstDayOfWeek="Monday" CssClass="Calendar"
                             NextPrevFormat="ShortMonth" BackColor="Transparent" OnVisibleMonthChanged="Calendar1_VisibleMonthChanged"
-                            BorderColor="#d9d9d9" BorderWidth="0" CellPadding="4" DayNameFormat="Short" 
+                            BorderColor="#d9d9d9" BorderWidth="0" CellPadding="4" DayNameFormat="Short"
                             Font-Size="9pt" Width="100%" onselectionchanged="Calendar1_SelectionChanged">
                             <SelectedDayStyle BackColor="#6d051f" CssClass="Day SelDay" Font-Bold="True" ForeColor="White" />
                             <DayStyle CssClass="Day" />
@@ -49,18 +49,20 @@
             var bookingvarsID = "";
             var ltbookingID = "";
             var inID = "";
+            var equipID = "";
             function book(room, roomtype, lesson) {
                 $get('modalBackground').style.display = "block";
                 $get('modalPopup').style.display = "block";
                 $get(lessonID).innerHTML = lesson;
                 $get(bookingvarsID).value = room + "@" + lesson;
                 $get(roomID).innerHTML = room;
-                if (roomtype.match(/Laptops/gi)) {
+                if (roomtype.match(/Laptops/gi) || roomtype.match(/Equipment/gi)) {
                     $get(inID).innerHTML = "&nbsp;with the&nbsp;";
-                    $get(ltbookingID).style.display = "";
+                    if (roomtype.match(/Laptops/gi)) $get(ltbookingID).style.display = "";
+                    else $get(equipID).style.display = "";
                 } else {
                     $get(inID).innerHTML = "&nbsp;in&nbsp;";
-                    $get(ltbookingID).style.display = "none";
+                    $get(ltbookingID).style.display = $get(equipID).style.display = "none";
                 }
             }
             function remove(room, lesson) {
@@ -90,7 +92,19 @@
                 $get('modalBackground').style.display = "block";
                 $get('loadingPopup').style.display = "block";
             }
+            function endRequestHandler(sender, args) {
+                var error = args.get_error();
+                if (error != undefined) {
+                    alert(error.message);
+                    args.set_errorHandled(true);
+                }
+            }
+            function beginRequestHandler(sender, args) {
+                $get('modalBackground').style.display = "block";
+                $get('loadingPopup').style.display = "block";
+            }
             Sys.Application.add_load(resetCal);
             Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(beginRequestHandler);
+            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandler);
         </script>
 </asp:Content>

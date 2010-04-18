@@ -1,9 +1,11 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/chs.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="CHS_Extranet.BookingSystem.admin.Default" %>
-<%@ Import Namespace="CHS_Extranet.BookingSystem" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/chs.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="HAP.Web.BookingSystem.admin.Default" %>
+<%@ Import Namespace="HAP.Web.BookingSystem" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="body" runat="server">
    <h1>IT Booking System</h1>
    <asp:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server" />
+    <asp:HyperLink runat="server" NavigateUrl="~/">Back to Home Access Plus</asp:HyperLink> | 
+    <asp:HyperLink runat="server" NavigateUrl="~/bookingsystem/">Back to the Booking System</asp:HyperLink>
     <asp:TabContainer ID="TabContainer1" runat="server" Width="98%">
         <asp:TabPanel ID="TabPanel1" runat="server">
             <HeaderTemplate>Term Dates</HeaderTemplate>
@@ -70,7 +72,7 @@
                     </ItemTemplate>
                     <FooterTemplate></table></FooterTemplate>
                 </asp:Repeater>
-                <asp:ObjectDataSource ID="termdatesDataSource" runat="server" SelectMethod="ToArray" TypeName="CHS_Extranet.BookingSystem.Terms">
+                <asp:ObjectDataSource ID="termdatesDataSource" runat="server" SelectMethod="ToArray" TypeName="HAP.Web.BookingSystem.Terms">
                 </asp:ObjectDataSource>
                 <p class="PanelSaveButton" style="text-align:right;">
                     <asp:Button id="SaveButton" runat="server" Text="Save" />
@@ -93,21 +95,30 @@
                                     <asp:CommandField ButtonType="Button" ShowDeleteButton="True" ShowEditButton="True" />
                                 </Columns>
                             </asp:GridView>
-                            <asp:ObjectDataSource ID="StaticBookingsDS" runat="server" DataObjectTypeName="CHS_Extranet.BookingSystem.Booking" DeleteMethod="deleteStaticBooking" InsertMethod="addStaticBooking" SelectMethod="getStaticBookingsArray" TypeName="CHS_Extranet.BookingSystem.BookingSystem" UpdateMethod="updateStaticBooking" />
+                            <asp:ObjectDataSource ID="StaticBookingsDS" runat="server" DataObjectTypeName="HAP.Web.BookingSystem.Booking" DeleteMethod="deleteStaticBooking" InsertMethod="addStaticBooking" SelectMethod="getStaticBookingsArray" TypeName="HAP.Web.BookingSystem.BookingSystem" UpdateMethod="updateStaticBooking" />
                             <asp:DetailsView ID="DetailsView1" runat="server" AutoGenerateRows="False" DataSourceID="StaticBookingsDS" DefaultMode="Insert" EnableModelValidation="True">
                                 <Fields>
                                     <asp:BoundField DataField="Day" HeaderText="Day" SortExpression="Day" ControlStyle-Width="20px" />
-                                    <asp:BoundField DataField="Lesson" HeaderText="Lesson" ControlStyle-Width="20px" SortExpression="Lesson" />
+                                    <asp:TemplateField HeaderText="Lesson" SortExpression="Lesson">
+                                        <InsertItemTemplate>
+                                            <asp:DropDownList ID="LessonDDL" runat="server" SelectedValue='<%# Bind("Lesson") %>' DataSourceID="lessonsds" DataTextField="Name" DataValueField="Name" />
+                                        </InsertItemTemplate>
+                                        <ItemTemplate><asp:Label runat="server" ID="room" Text='<%# Bind("Lesson") %>'></asp:Label></ItemTemplate>
+                                    </asp:TemplateField>
                                     <asp:TemplateField HeaderText="Room" SortExpression="Room">
-                                        <InsertItemTemplate><asp:TextBox runat="server" ID="room" Text='<%# Bind("Room") %>' /></InsertItemTemplate>
+                                        <InsertItemTemplate>
+                                            <asp:DropDownList ID="ResourceDDL" runat="server" SelectedValue='<%# Bind("Room") %>' DataSourceID="resourcesds"  DataTextField="Name" DataValueField="Name">
+                                            </asp:DropDownList>
+                                        </InsertItemTemplate>
                                         <ItemTemplate><asp:Label runat="server" ID="room" Text='<%# Bind("Room") %>'></asp:Label></ItemTemplate>
-                                        <ControlStyle Width="20px" />
                                     </asp:TemplateField>
                                     <asp:BoundField DataField="Name" HeaderText="Lesson Name" SortExpression="Name" />
                                     <asp:BoundField DataField="Username" HeaderText="Username" SortExpression="Username" />
                                     <asp:CommandField ButtonType="Button" ShowCancelButton="False" ShowInsertButton="True" />
                                 </Fields>
                             </asp:DetailsView>
+                            <asp:ObjectDataSource ID="resourcesds" runat="server" SelectMethod="getResources" TypeName="HAP.Web.BookingSystem.admin.Default" />
+                            <asp:ObjectDataSource ID="lessonsds" runat="server" SelectMethod="getLessons" TypeName="HAP.Web.BookingSystem.admin.Default" />
                         </ContentTemplate>
                     </asp:UpdatePanel>
                     <asp:UpdatePanelAnimationExtender ID="UpdatePanelAnimationExtender1" runat="server" TargetControlID="UpdatePanel1">
@@ -249,8 +260,8 @@
                             </LayoutTemplate>
                         </asp:ListView>
                         <asp:ObjectDataSource ID="ABRDS" runat="server" 
-                            DataObjectTypeName="CHS_Extranet.BookingSystem.AdvancedBookingRight" InsertMethod="addBookingRights" 
-                            SelectMethod="getBookingRights" TypeName="CHS_Extranet.BookingSystem.BookingSystem" 
+                            DataObjectTypeName="HAP.Web.BookingSystem.AdvancedBookingRight" InsertMethod="addBookingRights" 
+                            SelectMethod="getBookingRights" TypeName="HAP.Web.BookingSystem.BookingSystem" 
                             UpdateMethod="updateBookingRights" DeleteMethod="deleteBookingRights" />
                     </ContentTemplate>
                 </asp:UpdatePanel>

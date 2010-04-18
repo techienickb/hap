@@ -5,12 +5,12 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Configuration;
-using CHS_Extranet.Configuration;
+using HAP.Web.Configuration;
 using System.DirectoryServices.AccountManagement;
 using System.Xml;
-using CHS_Extranet.HelpDesk;
+using HAP.Web.HelpDesk;
 
-namespace CHS_Extranet.BookingSystem
+namespace HAP.Web.BookingSystem
 {
     public partial class BookingPopup : System.Web.UI.UserControl
     {
@@ -42,21 +42,23 @@ namespace CHS_Extranet.BookingSystem
             string lessonint = bookingvars.Value.Split(new char[] { '@' }, StringSplitOptions.RemoveEmptyEntries)[1];
             node.SetAttribute("lesson", lessonint);
             string roomstr = bookingvars.Value.Split(new char[] { '@' }, StringSplitOptions.RemoveEmptyEntries)[0];
-            extranetConfig config = extranetConfig.Current;
+            hapConfig config = hapConfig.Current;
             if (config.BookingSystem.Resources[roomstr].ResourceType == ResourceType.Laptops)
             {
                 node.SetAttribute("ltroom", BookLTRoom.Text);
                 node.SetAttribute("ltcount", lt16.Checked ? "16" : "32");
                 node.SetAttribute("ltheadphones", headphones.Checked.ToString());
             }
+            else if (config.BookingSystem.Resources[roomstr].ResourceType == ResourceType.Equipment)
+                node.SetAttribute("equiproom", equiproom.Text);
             node.SetAttribute("room", roomstr);
             node.SetAttribute("username", (isAdmin) ? userlist.SelectedValue : Username);
             string year = "Year " + BookYear.SelectedItem.Text + " ";
             if (BookYear.SelectedValue == "") year = "";
             node.SetAttribute("name", year + BookLesson.Text);
             doc.SelectSingleNode("/Bookings").AppendChild(node);
-            #region Laptop Trolley Additional Booking
-            if (config.BookingSystem.Resources[roomstr].ResourceType == ResourceType.Laptops)
+            #region Charging
+            if (config.BookingSystem.Resources[roomstr].EnableCharging)
             {
                 BookingSystem bs = new BookingSystem(Date);
                 int index = config.BookingSystem.Lessons.IndexOf(config.BookingSystem.Lessons[lessonint]);
@@ -74,19 +76,22 @@ namespace CHS_Extranet.BookingSystem
                     if (BookYear.SelectedValue == "") year = "";
                     doc.SelectSingleNode("/Bookings").AppendChild(node);
                 }
-                if (bs.islessonFree(roomstr, config.BookingSystem.Lessons[index + 1].Name) && index < config.BookingSystem.Lessons.Count)
+                if (index < config.BookingSystem.Lessons.Count - 1)
                 {
-                    node = doc.CreateElement("Booking");
-                    node.SetAttribute("date", Date.ToShortDateString());
-                    node.SetAttribute("lesson", config.BookingSystem.Lessons[index + 1].Name);
-                    node.SetAttribute("room", roomstr);
-                    node.SetAttribute("ltroom", "--");
-                    node.SetAttribute("ltcount", lt16.Checked ? "16" : "32");
-                    node.SetAttribute("ltheadphones", headphones.Checked.ToString());
-                    node.SetAttribute("username", "systemadmin");
-                    node.SetAttribute("name", "CHARGING");
-                    if (BookYear.SelectedValue == "") year = "";
-                    doc.SelectSingleNode("/Bookings").AppendChild(node);
+                    if (bs.islessonFree(roomstr, config.BookingSystem.Lessons[index + 1].Name))
+                    {
+                        node = doc.CreateElement("Booking");
+                        node.SetAttribute("date", Date.ToShortDateString());
+                        node.SetAttribute("lesson", config.BookingSystem.Lessons[index + 1].Name);
+                        node.SetAttribute("room", roomstr);
+                        node.SetAttribute("ltroom", "--");
+                        node.SetAttribute("ltcount", lt16.Checked ? "16" : "32");
+                        node.SetAttribute("ltheadphones", headphones.Checked.ToString());
+                        node.SetAttribute("username", "systemadmin");
+                        node.SetAttribute("name", "CHARGING");
+                        if (BookYear.SelectedValue == "") year = "";
+                        doc.SelectSingleNode("/Bookings").AppendChild(node);
+                    }
                 }
             }
             #endregion
@@ -101,7 +106,7 @@ namespace CHS_Extranet.BookingSystem
             writer.Close();
             Booking booking = new BookingSystem(Date).getBooking(roomstr, lessonint);
             iCalGenerator.Generate(booking, Date);
-            if (config.BookingSystem.Resources[roomstr].ResourceType == ResourceType.Laptops) iCalGenerator.Generate(booking, Date, "Nick");
+            if (config.BookingSystem.Resources[roomstr].EmailAdmin) iCalGenerator.Generate(booking, Date, config.BaseSettings.AdminEmailUser);
             BookYear.SelectedIndex = 0;
             BookLesson.Text = BookLTRoom.Text = "";
             Page.DataBind();
@@ -153,7 +158,7 @@ namespace CHS_Extranet.BookingSystem
             {
                 XmlDocument doc = new XmlDocument();
                 doc.Load(Server.MapPath("~/App_Data/Bookings.xml"));
-                int max = extranetConfig.Current.BookingSystem.MaxBookingsPerWeek;
+                int max = hapConfig.Current.BookingSystem.MaxBookingsPerWeek;
                 foreach (AdvancedBookingRight right in BookingSystem.BookingRights)
                     if (right.Username == Username)
                         max = right.Numperweek;
@@ -171,13 +176,7 @@ namespace CHS_Extranet.BookingSystem
         {
             get
             {
-                extranetConfig config = extranetConfig.Current;
-                ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
-                string _DomainDN = connObj.ConnectionString.Remove(0, connObj.ConnectionString.IndexOf("DC="));
-                PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
-                UserPrincipal up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Username);
-                GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, "Domain Admins");
-                return up.IsMemberOf(gp);
+                return HttpContext.Current.User.IsInRole("Domain Admins");
             }
         }
 
@@ -185,9 +184,9 @@ namespace CHS_Extranet.BookingSystem
         {
             get
             {
-                if (Page.User.Identity.Name.Contains('\\'))
-                    return Page.User.Identity.Name.Remove(0, Page.User.Identity.Name.IndexOf('\\') + 1);
-                else return Page.User.Identity.Name;
+                if (HttpContext.Current.User.Identity.Name.Contains('\\'))
+                    return HttpContext.Current.User.Identity.Name.Remove(0, HttpContext.Current.User.Identity.Name.IndexOf('\\') + 1);
+                else return HttpContext.Current.User.Identity.Name;
             }
         }
 

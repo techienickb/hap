@@ -5,11 +5,11 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Configuration;
-using CHS_Extranet.Configuration;
+using HAP.Web.Configuration;
 using System.IO;
 using System.DirectoryServices.AccountManagement;
 
-namespace CHS_Extranet.Controls
+namespace HAP.Web.Controls
 {
     public partial class NewFolder : System.Web.UI.UserControl
     {

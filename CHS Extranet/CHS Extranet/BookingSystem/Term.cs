@@ -4,10 +4,10 @@ using System.Linq;
 using System.Web;
 using System.Xml;
 using System.Globalization;
-using CHS_Extranet.Configuration;
+using HAP.Web.Configuration;
 using System.Configuration;
 
-namespace CHS_Extranet.BookingSystem
+namespace HAP.Web.BookingSystem
 {
     public struct HalfTerm
     {
@@ -84,7 +84,7 @@ namespace CHS_Extranet.BookingSystem
         {
             if ((date >= this.startDate) && (date <= this.endDate))
             {
-                if (extranetConfig.Current.BookingSystem.TwoWeekTimetable)
+                if (hapConfig.Current.BookingSystem.TwoWeekTimetable)
                 {
                     System.Globalization.Calendar cal = CultureInfo.InvariantCulture.Calendar;
                     int x = cal.GetWeekOfYear(date, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);

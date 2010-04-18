@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CHS_Extranet.BookingSystem {
+namespace HAP.Web.BookingSystem {
     
     
     public partial class BookingPopup {
@@ -101,6 +101,24 @@ namespace CHS_Extranet.BookingSystem {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox BookLesson;
+        
+        /// <summary>
+        /// equptbooking control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel equptbooking;
+        
+        /// <summary>
+        /// equiproom control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox equiproom;
         
         /// <summary>
         /// ltbooking control.

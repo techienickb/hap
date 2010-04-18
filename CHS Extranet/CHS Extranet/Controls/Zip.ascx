@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Zip.ascx.cs" Inherits="CHS_Extranet.Controls.Zip" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Zip.ascx.cs" Inherits="HAP.Web.Controls.Zip" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <%@ Register Assembly="System.Web.Ajax" Namespace="System.Web.UI" TagPrefix="asp" %>
     <asp:Button runat="server" Text="Zip" style="display: none;" id="zipclicker" />
@@ -6,7 +6,7 @@
         <h1>Are you sure you want to ZIP up this Folder?</h1>
         <p><asp:Label runat="server" ID="filename" /></p>
         <div class="modalButtons">
-            <asp:Button runat="server" ID="ok" UseSubmitBehavior="true" Text="Ok" onclick="ok_Click" />
+            <asp:Button runat="server" ID="ok" Text="Ok" onclick="ok_Click" />
             <asp:Button runat="server" ID="cancel" Text="Cancel" />
         </div>
     </asp:Panel>

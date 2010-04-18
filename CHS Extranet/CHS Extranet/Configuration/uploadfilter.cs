@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Configuration;
 
-namespace CHS_Extranet.Configuration
+namespace HAP.Web.Configuration
 {
     public class uploadfilter : ConfigurationElement
     {
@@ -36,7 +36,7 @@ namespace CHS_Extranet.Configuration
         }
         public override string ToString()
         {
-            return string.Format("{0} ({1})|{1}", this.Name, this.Filter);
+            return string.Format("{0} ({2})|{1}", this.Name, this.Filter, this.Filter.Replace(";", "\\ "));
         }
     }
 }

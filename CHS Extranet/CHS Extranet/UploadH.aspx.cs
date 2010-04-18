@@ -7,9 +7,9 @@ using System.Web.UI.WebControls;
 using System.IO;
 using System.DirectoryServices.AccountManagement;
 using System.Configuration;
-using CHS_Extranet.Configuration;
+using HAP.Web.Configuration;
 
-namespace CHS_Extranet
+namespace HAP.Web
 {
     public partial class UploadH : System.Web.UI.Page
     {
@@ -17,7 +17,7 @@ namespace CHS_Extranet
         private String _ActiveDirectoryConnectionString;
         private PrincipalContext pcontext;
         private UserPrincipal up;
-        private extranetConfig config;
+        private hapConfig config;
 
         private bool isAuth(uncpath path)
         {
@@ -26,10 +26,7 @@ namespace CHS_Extranet
             {
                 bool vis = false;
                 foreach (string s in path.EnableReadTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, s);
-                    if (!vis) vis = up.IsMemberOf(gp);
-                }
+                    if (!vis) vis = User.IsInRole(s);
                 return vis;
             }
             return false;
@@ -52,10 +49,7 @@ namespace CHS_Extranet
             {
                 bool vis = false;
                 foreach (string s in filter.EnableFor.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, s);
-                    if (!vis) vis = up.IsMemberOf(gp);
-                }
+                    if (!vis) vis = User.IsInRole(s);
                 return vis;
             }
             return false;
@@ -70,10 +64,7 @@ namespace CHS_Extranet
             {
                 bool vis = false;
                 foreach (string s in path.EnableWriteTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, s);
-                    if (!vis) vis = up.IsMemberOf(gp);
-                }
+                    if (!vis) vis = User.IsInRole(s);
                 return vis;
             }
             return false;
@@ -81,7 +72,7 @@ namespace CHS_Extranet
 
         protected override void OnInitComplete(EventArgs e)
         {
-            config = extranetConfig.Current;
+            config = hapConfig.Current;
             ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
             if (connObj != null) _ActiveDirectoryConnectionString = connObj.ConnectionString;
             if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))

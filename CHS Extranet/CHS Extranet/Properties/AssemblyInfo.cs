@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("CHS_Extranet")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Home Access Plus+")]
+[assembly: AssemblyDescription("Home Access Plus+")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Crickhowell High School")]
-[assembly: AssemblyProduct("CHS_Extranet")]
+[assembly: AssemblyProduct("HAP")]
 [assembly: AssemblyCopyright("Copyright © Crickhowell High School 2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("3.0.0.0")]
-[assembly: AssemblyFileVersion("3.0.0.0")]
+[assembly: AssemblyVersion("4.0.0.0")]
+[assembly: AssemblyFileVersion("4.0.0.0")]

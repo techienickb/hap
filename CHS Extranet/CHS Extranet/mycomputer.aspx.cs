@@ -9,10 +9,10 @@ using System.Configuration;
 using System.IO;
 using System.Security.AccessControl;
 using System.Security.Principal;
-using CHS_Extranet.Configuration;
-using CHS_Extranet.routing;
+using HAP.Web.Configuration;
+using HAP.Web.routing;
 
-namespace CHS_Extranet
+namespace HAP.Web
 {
     public partial class mycomputer : Page, IMyComputerDisplay
     {
@@ -20,7 +20,7 @@ namespace CHS_Extranet
         private String _ActiveDirectoryConnectionString;
         private PrincipalContext pcontext;
         private UserPrincipal up;
-        private extranetConfig config;
+        private hapConfig config;
 
         private bool isAuth(uncpath path)
         {
@@ -29,10 +29,7 @@ namespace CHS_Extranet
             {
                 bool vis = false;
                 foreach (string s in path.EnableReadTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, s);
-                    if (!vis) vis = up.IsMemberOf(gp);
-                }
+                    if (!vis) vis = User.IsInRole(s);
                 return vis;
             }
             return false;
@@ -46,10 +43,7 @@ namespace CHS_Extranet
             {
                 bool vis = false;
                 foreach (string s in path.EnableWriteTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, s);
-                    if (!vis) vis = up.IsMemberOf(gp);
-                }
+                    if (!vis) vis = User.IsInRole(s);
                 return vis;
             }
             return false;
@@ -57,7 +51,7 @@ namespace CHS_Extranet
 
         protected override void OnInitComplete(EventArgs e)
         {
-            config = extranetConfig.Current;
+            config = hapConfig.Current;
             ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
             if (connObj != null) _ActiveDirectoryConnectionString = connObj.ConnectionString;
             if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))
@@ -103,10 +97,7 @@ namespace CHS_Extranet
                     {
                         bool vis = false;
                         foreach (string s in config.HomePageLinks["Access Learning Resources"].ShowTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                        {
-                            GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, s);
-                            if (!vis) vis = up.IsMemberOf(gp);
-                        }
+                            if (!vis) vis = User.IsInRole(s);
                         if (vis) items.Add(new MyComputerItem("Learning Resources", string.Format("{0} on {1}", "Learning Resources", config.BaseSettings.EstablishmentCode), config.HomePageLinks["Access Learning Resources"].LinkLocation, config.HomePageLinks["Access Learning Resources"].Icon.Remove(0, config.HomePageLinks["Access Learning Resources"].Icon.LastIndexOf('/') + 1), false));
                     }
 
@@ -164,9 +155,8 @@ namespace CHS_Extranet
                 else items.Add(new MyComputerItem("..", "Up a Directory", "/Extranet/MyComputer/" + (RoutingDrive + "/" + RoutingPath).Remove((RoutingDrive + "/" + RoutingPath).LastIndexOf('/')), "folder.png", false));
 
                 bool allowedit = isWriteAuth(config.UNCPaths[RoutingDrive]);
-                newfolderlink.Visible = fileuploadlink.Visible = allowedit;
+                newfolderlink.Visible = newfileuploadlink.Visible = allowedit;
                 if (RoutingDrive != "N" && RoutingDrive != "H") rckmove.Style.Add("display", "none");
-                fileuploadlink.NavigateUrl = "/Extranet/Upload.aspx?path=" + RoutingDrive + "/" + RoutingPath;
                 try
                 {
                     foreach (DirectoryInfo subdir in dir.GetDirectories())

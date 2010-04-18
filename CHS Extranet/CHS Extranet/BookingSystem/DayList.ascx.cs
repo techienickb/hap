@@ -4,21 +4,26 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using CHS_Extranet.Configuration;
+using HAP.Web.Configuration;
 using System.Configuration;
 using System.ComponentModel;
 
-namespace CHS_Extranet.BookingSystem
+namespace HAP.Web.BookingSystem
 {
     public partial class DayList : System.Web.UI.UserControl
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!IsPostBack)
+            {
+                foreach (lesson lesson in hapConfig.Current.BookingSystem.Lessons)
+                    lessonsel.Items.Add(lesson.Name);
+            }
         }
 
         public override void DataBind()
         {
-            extranetConfig config = extranetConfig.Current;
+            hapConfig config = hapConfig.Current;
             daylistrow.Style.Clear();
             daylistrow.Style.Add("width", (ItemWidth * (config.BookingSystem.Lessons.Count + 1)) + "px");
 
@@ -42,12 +47,14 @@ namespace CHS_Extranet.BookingSystem
                 List<string> s = new List<string>();
                 List<lesson> lessons = new List<lesson>();
                 foreach (lesson lesson in config.BookingSystem.Lessons)
-                    lessons.Add(lesson);
+                    if (lessonsel.SelectedValue == "All" || lesson.Name == lessonsel.SelectedValue) lessons.Add(lesson);
                 headrepeater.DataSource = lessons.ToArray();
                 headrepeater.DataBind();
                 List<bookingResource> res = new List<bookingResource>();
                 foreach (bookingResource r in config.BookingSystem.Resources)
-                    res.Add(r);
+                    if (resourcetype.SelectedValue == "All") res.Add(r);
+                    else if (r.ResourceType == (ResourceType)Enum.Parse(typeof(ResourceType), resourcetype.SelectedValue, true))
+                        res.Add(r);
                 dl.DataSource = res.ToArray();
                 dl.DataBind();
             }
@@ -61,5 +68,15 @@ namespace CHS_Extranet.BookingSystem
         [Bindable(true)]
         [Category("Data")]
         public DateTime Date { get; set; }
+
+        protected void resourcetype_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Page.DataBind();
+        }
+
+        protected void lessonsel_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Page.DataBind();
+        }
     }
 }

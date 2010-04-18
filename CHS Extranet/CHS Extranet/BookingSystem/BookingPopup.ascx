@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="BookingPopup.ascx.cs" Inherits="CHS_Extranet.BookingSystem.BookingPopup" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="BookingPopup.ascx.cs" Inherits="HAP.Web.BookingSystem.BookingPopup" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <%@ Register Assembly="System.Web.Ajax" Namespace="System.Web.UI" TagPrefix="asp" %>
                 <div id="modalBackground" class="modalBackground" style="display: none;"></div>
@@ -16,6 +16,9 @@
                                 <asp:DropDownList runat="server" ID="BookYear" Width="60px"><asp:ListItem Value="">--</asp:ListItem><asp:ListItem>7</asp:ListItem><asp:ListItem>8</asp:ListItem><asp:ListItem>9</asp:ListItem><asp:ListItem>10</asp:ListItem><asp:ListItem>11</asp:ListItem><asp:ListItem>12</asp:ListItem><asp:ListItem>13</asp:ListItem></asp:DropDownList>
                                 Subject: 
                                 <asp:TextBox ID="BookLesson" Width="100px" runat="server" /><asp:RequiredFieldValidator ControlToValidate="BookLesson" runat="server" ErrorMessage="*" />
+                                <asp:Panel runat="server" ID="equptbooking" style="display: none;">
+                                    Room: <asp:TextBox ID="equiproom" runat="server" Width="40px" />
+                                </asp:Panel>
                                 <asp:Panel runat="server" ID="ltbooking" style="display: none;">
                                     Room: <asp:TextBox ID="BookLTRoom" runat="server" Width="40px" />
                                     Number of Laptops: <asp:RadioButton ID="lt16" Text="16" runat="server" Checked="true" GroupName="lt" /><asp:RadioButton ID="lt32" Text="32" runat="server" GroupName="lt" />
@@ -38,6 +41,7 @@
                         roomID = "<%=room.ClientID %>";
                         bookingvarsID = "<%=bookingvars.ClientID %>";
                         ltbookingID = "<%=ltbooking.ClientID %>";
+                        equipID = "<%=equiproom.ClientID %>";
                         inID = "<%=inLab.ClientID %>";
                     }
                     setIDs();

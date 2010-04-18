@@ -6,9 +6,9 @@ using DC.SilverlightFileUpload;
 using System.IO;
 using System.Configuration;
 using System.DirectoryServices.AccountManagement;
-using CHS_Extranet.Configuration;
+using HAP.Web.Configuration;
 
-namespace CHS_Extranet
+namespace HAP.Web
 {
     /// <summary>
     /// Summary description for FileUpload
@@ -19,7 +19,6 @@ namespace CHS_Extranet
         private String _ActiveDirectoryConnectionString;
         private PrincipalContext pcontext;
         private UserPrincipal up;
-        private GroupPrincipal studentgp, admindrivegp, smt;
 
         public string Username
         {
@@ -38,10 +37,7 @@ namespace CHS_Extranet
             {
                 bool vis = false;
                 foreach (string s in path.EnableReadTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, s);
-                    if (!vis) vis = up.IsMemberOf(gp);
-                }
+                    if (!vis) vis = HttpContext.Current.User.IsInRole(s);
                 return vis;
             }
             return false;
@@ -55,10 +51,7 @@ namespace CHS_Extranet
             {
                 bool vis = false;
                 foreach (string s in path.EnableWriteTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, s);
-                    if (!vis) vis = up.IsMemberOf(gp);
-                }
+                    if (!vis) vis = HttpContext.Current.User.IsInRole(s);
                 return vis;
             }
             return false;
@@ -69,7 +62,7 @@ namespace CHS_Extranet
         {
             try
             {
-                extranetConfig config = extranetConfig.Current;
+                hapConfig config = hapConfig.Current;
                 ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
                 if (connObj != null) _ActiveDirectoryConnectionString = connObj.ConnectionString;
                 if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))

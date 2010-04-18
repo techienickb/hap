@@ -6,7 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.IO;
 
-namespace CHS_Extranet.Controls
+namespace HAP.Web.Controls
 {
     public partial class Rename : System.Web.UI.UserControl
     {

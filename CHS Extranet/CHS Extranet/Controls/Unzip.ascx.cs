@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 using System.IO;
 using ICSharpCode.SharpZipLib.Zip;
 
-namespace CHS_Extranet.Controls
+namespace HAP.Web.Controls
 {
     public partial class Unzip : System.Web.UI.UserControl
     {

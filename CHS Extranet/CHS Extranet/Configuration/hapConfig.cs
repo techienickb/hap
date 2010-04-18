@@ -4,9 +4,9 @@ using System.Linq;
 using System.Web;
 using System.Configuration;
 
-namespace CHS_Extranet.Configuration
+namespace HAP.Web.Configuration
 {
-    public class extranetConfig : ConfigurationSection
+    public class hapConfig : ConfigurationSection
     {
         [ConfigurationProperty("adsettings")]
         public adSettings ADSettings
@@ -50,7 +50,7 @@ namespace CHS_Extranet.Configuration
             get { return (bookingSystem)this["bookingsystem"]; }
         }
 
-        public static extranetConfig Current { get { return ConfigurationManager.GetSection("extranetConfig") as extranetConfig; } }
+        public static hapConfig Current { get { return ConfigurationManager.GetSection("hapConfig") as hapConfig; } }
 
     }
 }

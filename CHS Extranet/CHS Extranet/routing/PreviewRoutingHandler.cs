@@ -8,7 +8,7 @@ using System.Web.Compilation;
 using System.Net;
 using System.Web.UI;
 
-namespace CHS_Extranet.routing
+namespace HAP.Web.routing
 {
     public class PreviewRoutingHandler : IRouteHandler
     {

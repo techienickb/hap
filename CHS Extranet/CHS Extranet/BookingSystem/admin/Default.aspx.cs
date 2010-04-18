@@ -4,10 +4,10 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using CHS_Extranet.Configuration;
+using HAP.Web.Configuration;
 using System.Configuration;
 
-namespace CHS_Extranet.BookingSystem.admin
+namespace HAP.Web.BookingSystem.admin
 {
     public partial class Default : System.Web.UI.Page
     {
@@ -16,8 +16,23 @@ namespace CHS_Extranet.BookingSystem.admin
             SaveButton.Click += new EventHandler(SaveButton_Click);
             staticbookingsgrid.RowDeleting += new GridViewDeleteEventHandler(staticbookingsgrid_RowDeleting);
             ABR.ItemDeleting += new EventHandler<ListViewDeleteEventArgs>(ABR_ItemDeleting);
-            extranetConfig config = extranetConfig.Current;
+            hapConfig config = hapConfig.Current;
             this.Title = string.Format("{0} - Home Access Plus+ - IT Booking System - Admin", config.BaseSettings.EstablishmentName);
+        }
+
+        public bookingResource[] getResources()
+        {
+            List<bookingResource> resources = new List<bookingResource>();
+            foreach (bookingResource br in hapConfig.Current.BookingSystem.Resources)
+                resources.Add(br);
+            return resources.ToArray();
+        }
+        public lesson[] getLessons()
+        {
+            List<lesson> Lessons = new List<lesson>();
+            foreach (lesson les in hapConfig.Current.BookingSystem.Lessons)
+                Lessons.Add(les);
+            return Lessons.ToArray();
         }
 
         void ABR_ItemDeleting(object sender, ListViewDeleteEventArgs e)
@@ -70,7 +85,7 @@ namespace CHS_Extranet.BookingSystem.admin
 
         void staticbookingsgrid_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
-            new BookingSystem().deleteStaticBooking1(int.Parse(e.Values[1].ToString()), int.Parse(e.Values[2].ToString()), int.Parse(e.Values[0].ToString()));
+            new BookingSystem().deleteStaticBooking1(e.Values[1].ToString(), e.Values[2].ToString(), int.Parse(e.Values[0].ToString()));
         }
     }
 }

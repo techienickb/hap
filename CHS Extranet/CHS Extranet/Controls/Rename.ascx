@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Rename.ascx.cs" Inherits="CHS_Extranet.Controls.Rename" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Rename.ascx.cs" Inherits="HAP.Web.Controls.Rename" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <%@ Register Assembly="System.Web.Ajax" Namespace="System.Web.UI" TagPrefix="asp" %>
     <asp:Button runat="server" Text="Rename" style="display: none;" id="renameclicker" />
@@ -12,7 +12,7 @@
             <asp:RequiredFieldValidator ValidationGroup="Rename" runat="server" ErrorMessage="*" ControlToValidate="newname" />
         </p>
         <div class="modalButtons">
-            <asp:Button runat="server" ID="yesren" UseSubmitBehavior="true" Text="Rename" ValidationGroup="Rename" onclick="yesren_Click" />
+            <asp:Button runat="server" ID="yesren" Text="Rename" ValidationGroup="Rename" onclick="yesren_Click" />
             <asp:Button runat="server" ID="cancel" Text="Cancel" />
         </div>
     </asp:Panel>
