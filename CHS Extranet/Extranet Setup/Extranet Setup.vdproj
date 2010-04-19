@@ -28,12 +28,6 @@
         "Entry"
         {
         "MsmKey" = "8:_330C83414E6662C3CFCAC68184E88644"
-        "OwnerKey" = "8:_E3CAB0AB967CBA79C7D60BD3D9CE8D37"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_330C83414E6662C3CFCAC68184E88644"
         "OwnerKey" = "8:_7A48FE539A284335988B0EA3EB2BD5E5"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -87,14 +81,14 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_E3CAB0AB967CBA79C7D60BD3D9CE8D37"
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_7A48FE539A284335988B0EA3EB2BD5E5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_7A48FE539A284335988B0EA3EB2BD5E5"
+        "OwnerKey" = "8:_330C83414E6662C3CFCAC68184E88644"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -113,18 +107,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_D7B977C1F11DEAA7221EFD6B1AC5B7FC"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_E3CAB0AB967CBA79C7D60BD3D9CE8D37"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_330C83414E6662C3CFCAC68184E88644"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -350,6 +332,11 @@
             "AssemblyAsmDisplayName" = "8:CHS, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
+                    "_5D3EB54419B46FA61860A1CBE3F2F43F"
+                    {
+                    "Name" = "8:CHS.dll"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:CHS.dll"
             "TargetName" = "8:"
@@ -482,37 +469,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E3CAB0AB967CBA79C7D60BD3D9CE8D37"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DC.SilverlightFileUpload, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_E3CAB0AB967CBA79C7D60BD3D9CE8D37"
-                    {
-                    "Name" = "8:DC.SilverlightFileUpload.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:DC.SilverlightFileUpload.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_1359032418F1474FA0134C4B00CE8E0F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
         }
         "FileType"
         {
@@ -595,7 +551,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Extranet Setup"
         "ProductCode" = "8:{BA91FC1D-E737-4A8E-BD33-C82DD1AA97B7}"
-        "PackageCode" = "8:{C85485E7-60AD-4254-B6E1-F29476A5AF33}"
+        "PackageCode" = "8:{F6598115-7710-425B-A12F-CD4758153C06}"
         "UpgradeCode" = "8:{21D75F33-FC2A-4D3B-A1CF-08A7E3CBD738}"
         "AspNetVersion" = "8:1"
         "RestartWWWService" = "11:TRUE"

@@ -56,7 +56,7 @@ namespace HAP.Silverlight
 
                 foreach (FileInfo file in files)
                 {
-                    if (filters.Contains("*.*") || filters.Contains("*." + file.Extension.ToLower()))
+                    if (filters.Contains("*.*") || filters.ToLower().Contains(file.Extension.Trim(new char[] { '.' }).ToLower()))
                     {
                         File f = new File();
                         f.BaseUri = BaseUri;
@@ -70,7 +70,7 @@ namespace HAP.Silverlight
                         f.Check();
                         if (uploadbutton.Content.ToString() == "Upload") uploadbutton.IsEnabled = clearbutton.IsEnabled = true;
                     }
-                    else MessageBox.Show("File Type Not Allowed", "This file is not allowed to be uploaded", MessageBoxButton.OK);
+                    else MessageBox.Show("File Type Not Allowed (" + file.Extension.ToLower() + ")", "This file is not allowed to be uploaded", MessageBoxButton.OK);
                 }
             }
             catch { MessageBox.Show("The item you have dragged here is not supported");  }
