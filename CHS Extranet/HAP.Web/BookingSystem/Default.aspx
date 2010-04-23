@@ -87,6 +87,7 @@
             function resetCal(sender, args) {
                 if (showcal) $get('Cal').style.display = "block";
                 $get('loadingPopup').style.display = "none";
+                $get('Cal').style.top = (getPosition($get('daylist')) + 30) + "px";
                 setIDs();
             }
             function beginRequestHandler(sender, args) {
