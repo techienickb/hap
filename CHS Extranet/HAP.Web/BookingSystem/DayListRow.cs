@@ -60,7 +60,7 @@ namespace HAP.Web.BookingSystem
                     else if (RoomType == ResourceType.Equipment && bookie)
                         writer.Write("<span><a href=\"javascript:remove('{0}', '{1}');\" class=\"bookedl\">{2}<i> with {3} in {4}</i><label>Remove</label></a></span>", Room, b.Lesson, lessonname, b.User.Notes, b.EquipRoom);
                     else if (RoomType == ResourceType.Laptops)
-                        writer.Write("<span><span>{0}<i> with {1}</i><u>{2} laptops [{3}] in {4}</u><label>Remove</label></a></span>", lessonname, b.User.Notes, b.LTCount, b.LTHeadPhones ? "H" : "NH", b.LTRoom);
+                        writer.Write("<span><span>{0}<i> with {1}</i><u>{2} laptops [{3}] in {4}</u></a></span></span>", lessonname, b.User.Notes, b.LTCount, b.LTHeadPhones ? "H" : "NH", b.LTRoom);
                     else if (RoomType == ResourceType.Equipment)
                         writer.Write("<span><span>{0}<i> with {1} in {2}</i></span></span>", lessonname, b.User.Notes, b.EquipRoom);
                     else if (bookie) writer.Write("<span><a href=\"javascript:remove('{0}', '{1}');\" class=\"booked\">{2}<i> with {3}</i><label>Remove</label></a></span>", Room, b.Lesson, lessonname, b.User.Notes);

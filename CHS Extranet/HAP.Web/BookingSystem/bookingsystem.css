@@ -19,7 +19,7 @@
 #daylist a.booked:hover { border-color: #be3430; background-image: url(../images/browser-a-booked-hover.gif); }
 #daylist a.booked:hover label { display: block; }
 
-#daylist a.bookedl { line-height: normal; padding: 4px; height: 42px; position: relative; }
+#daylist a.bookedl, #daylist div.Laptops span span { line-height: normal; padding: 4px; height: 42px; position: relative; }
 #daylist a.bookedl label { display: none; position: absolute; cursor: pointer; text-align: right; top: -4px; right: 0; font-size: small; }
 #daylist a.bookedl:hover { border-color: #be3430; background-image: url(../images/browser-a-booked-hover.gif); }
 #daylist a.bookedl:hover label { display: block; }

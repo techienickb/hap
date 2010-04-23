@@ -13,6 +13,8 @@ using System.DirectoryServices;
 using System.Net;
 using System.IO;
 using HAP.Web.routing;
+using System.Collections;
+using System.Collections.Specialized;
 
 namespace HAP.Web.HelpDesk
 {
@@ -39,13 +41,16 @@ namespace HAP.Web.HelpDesk
                 if (!string.IsNullOrEmpty(TicketID))
                 {
                     if (int.Parse(TicketID) > 0) loadticket();
-                    else { loadnewticket(); if (TicketID == "-2") newadminsupportticket.Attributes.Add("class", "Selected"); }
-                }
-                if (User.IsInRole("Domain Admins"))
-                {
-                    userlist.Items.Clear();
-                    foreach (UserInfo user in ADUtil.FindUsers())
-                        userlist.Items.Add(new ListItem(string.Format("{0} - ({1})", user.LoginName, user.DisplayName), user.LoginName));
+                    else
+                    {
+                        loadnewticket(); if (TicketID == "-2")
+                        {
+                            newadminsupportticket.Attributes.Add("class", "Selected");
+                            userlist.Items.Clear();
+                            foreach (UserInfo user in ADUtil.FindUsers())
+                                userlist.Items.Add(new ListItem(string.Format("{0} - ({1})", user.LoginName, user.DisplayName), user.LoginName));
+                        }
+                    }
                 }
             }
         }
@@ -439,17 +444,74 @@ namespace HAP.Web.HelpDesk
         static public UserInfo[] FindUsers()
         {
             System.Collections.Generic.List<UserInfo> users = new System.Collections.Generic.List<UserInfo>();
-            foreach (UserInfo info in FindUsers(hapConfig.Current.BaseSettings.EstablishmentCode + " Teaching Staff"))
-                if  (!users.Contains(info))
-                    users.Add(info);
-            foreach (UserInfo info in FindUsers(hapConfig.Current.BaseSettings.EstablishmentCode + " Non-Teaching Staff"))
+            foreach (UserInfo info in FindUsers("Teaching Staff"))
                 if (!users.Contains(info))
                     users.Add(info);
-            foreach (UserInfo info in FindUsers("Domain Admins"))
+            foreach (UserInfo info in FindUsers("Non-Teaching Staff"))
+                if (!users.Contains(info))
+                    users.Add(info);
+            foreach (UserInfo info in FindUsers("System Administrators"))
                 if (!users.Contains(info))
                     users.Add(info);
             users.Sort();
             return users.ToArray();
+        }
+
+        static public UserInfo[] FindUsers(string ou)
+        {
+            List<UserInfo> results = new List<UserInfo>();
+
+            hapConfig config = hapConfig.Current;
+            string cs = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString;
+            cs = string.Format("{0}OU={1},OU={2},OU=Establishments,{3}", cs.Substring(0, cs.LastIndexOf('/') + 1), ou, config.BaseSettings.EstablishmentCode, cs.Remove(0, cs.LastIndexOf('/') + 1));
+            DirectoryEntry usersDE = new DirectoryEntry(cs, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
+            //throw new Exception(usersDE1.Path);
+            //DirectoryEntry usersDE = new DirectoryEntry(ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
+            DirectorySearcher ds = new DirectorySearcher(usersDE);
+            ds.Filter = "(&(objectClass=user)(mail=*)(sAMAccountName=*))";
+            ds.PropertiesToLoad.Add(UserProperty.UserName);
+            ds.PropertiesToLoad.Add(UserProperty.DisplayName);
+            ds.PropertiesToLoad.Add(UserProperty.Email);
+            ds.PropertiesToLoad.Add(UserProperty.Notes);
+
+            try
+            {
+                SearchResultCollection sr = ds.FindAll();
+
+                for (int i = 0; i < sr.Count; i++)
+                {
+                    int z = 0;
+
+                    if (!int.TryParse(sr[i].Properties[UserProperty.UserName][0].ToString().ToCharArray()[0].ToString(), out z))
+                    {
+                        UserInfo info = new UserInfo();
+                        info.LoginName = sr[i].Properties[UserProperty.UserName][0].ToString();
+                        if (sr[i].Properties[UserProperty.DisplayName].Count == 0)
+                            info.DisplayName = "";
+                        else if (sr[i].Properties[UserProperty.DisplayName] != null)
+                            info.DisplayName = sr[i].Properties[UserProperty.DisplayName][0].ToString();
+                        else
+                            info.DisplayName = "";
+                        if (sr[i].Properties[UserProperty.Notes].Count == 0)
+                            info.Notes = "";
+                        else if (sr[i].Properties[UserProperty.Notes] != null)
+                            info.Notes = sr[i].Properties[UserProperty.Notes][0].ToString();
+                        else
+                            info.Notes = "";
+                        if (sr[i].Properties[UserProperty.Email].Count == 0)
+                            info.EmailAddress = "";
+                        else if (sr[i].Properties[UserProperty.Email] != null)
+                            info.EmailAddress = sr[i].Properties[UserProperty.Email][0].ToString();
+                        else
+                            info.EmailAddress = "";
+                        results.Add(info);
+                    }
+
+                }
+            }
+            catch (Exception e) { throw new Exception(usersDE.Path, e); }
+            results.Sort();
+            return results.ToArray();
         }
 
         static public UserInfo GetUserInfo(string username)
@@ -487,54 +549,6 @@ namespace HAP.Web.HelpDesk
                 info.EmailAddress = "";
 
             return info;
-        }
-
-        // FindUsers - Returns all users matching a pattern
-        static public UserInfo[] FindUsers(string ou)
-        {
-            List<UserInfo> results = new List<UserInfo>();
-
-            hapConfig config = hapConfig.Current;
-            DirectoryEntry usersDE = new DirectoryEntry(ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
-            DirectorySearcher ds = new DirectorySearcher(usersDE);
-            ds.Filter = "(&(objectClass=user)(mail=*)(sAMAccountName=*)(mailNickname=*))";
-            ds.PropertiesToLoad.Add(UserProperty.UserName);
-            ds.PropertiesToLoad.Add(UserProperty.DisplayName);
-            ds.PropertiesToLoad.Add(UserProperty.Email);
-            ds.PropertiesToLoad.Add(UserProperty.Notes);
-
-            SearchResultCollection sr = ds.FindAll();
-
-            for (int i = 0; i < sr.Count; i++)
-            {
-                int z = 0;
-                if (!int.TryParse(sr[i].Properties[UserProperty.UserName][0].ToString().ToCharArray()[0].ToString(), out z))
-                {
-                    UserInfo info = new UserInfo();
-                    info.LoginName = sr[i].Properties[UserProperty.UserName][0].ToString();
-                    if (sr[i].Properties[UserProperty.DisplayName].Count == 0)
-                        info.DisplayName = "";
-                    else if (sr[i].Properties[UserProperty.DisplayName] != null)
-                        info.DisplayName = sr[i].Properties[UserProperty.DisplayName][0].ToString();
-                    else
-                        info.DisplayName = "";
-                    if (sr[i].Properties[UserProperty.Notes].Count == 0)
-                        info.Notes = "";
-                    else if (sr[i].Properties[UserProperty.Notes] != null)
-                        info.Notes = sr[i].Properties[UserProperty.Notes][0].ToString();
-                    else
-                        info.Notes = "";
-                    if (sr[i].Properties[UserProperty.Email].Count == 0)
-                        info.EmailAddress = "";
-                    else if (sr[i].Properties[UserProperty.Email] != null)
-                        info.EmailAddress = sr[i].Properties[UserProperty.Email][0].ToString();
-                    else
-                        info.EmailAddress = "";
-                    results.Add(info);
-                }
-            }
-            results.Sort();
-            return (results.ToArray());
         }
     }
 
