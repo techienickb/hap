@@ -75,20 +75,24 @@ namespace HAP.Config
                     el.SetAttribute("linklocation", row.Cells[3].Value.ToString());
                     el.SetAttribute("icon", row.Cells[4].Value.ToString());
                     hpl.AppendChild(el);
-                    if (row.Cells[0].Value.ToString() == "Help Desk")
+                    try
                     {
-                        XmlDocument doc1 = new XmlDocument();
-                        doc1.Load(Path.Combine(Directory.GetParent(Path.GetDirectoryName(Application.ExecutablePath)).FullName, "HelpDesk", "web.config"));
-                        doc1.SelectSingleNode("/configuration/system.web/authorization/allow").Attributes["roles"].Value = row.Cells[2].Value.ToString();
-                        doc1.Save(Path.Combine(Directory.GetParent(Path.GetDirectoryName(Application.ExecutablePath)).FullName, "HelpDesk", "web.config"));                        
+                        if (row.Cells[0].Value.ToString() == "Help Desk")
+                        {
+                            XmlDocument doc1 = new XmlDocument();
+                            doc1.Load(Path.Combine(Directory.GetParent(Path.GetDirectoryName(Application.ExecutablePath)).FullName, "HelpDesk", "web.config"));
+                            doc1.SelectSingleNode("/configuration/system.web/authorization/allow").Attributes["roles"].Value = row.Cells[2].Value.ToString();
+                            doc1.Save(Path.Combine(Directory.GetParent(Path.GetDirectoryName(Application.ExecutablePath)).FullName, "HelpDesk", "web.config"));
+                        }
+                        else if (row.Cells[0].Value.ToString() == "Booking System")
+                        {
+                            XmlDocument doc1 = new XmlDocument();
+                            doc1.Load(Path.Combine(Directory.GetParent(Path.GetDirectoryName(Application.ExecutablePath)).FullName, "BookingSystem", "web.config"));
+                            doc1.SelectSingleNode("/configuration/location/system.web/authorization/allow").Attributes["roles"].Value = row.Cells[2].Value.ToString();
+                            doc1.Save(Path.Combine(Directory.GetParent(Path.GetDirectoryName(Application.ExecutablePath)).FullName, "BookingSystem", "web.config"));
+                        }
                     }
-                    else if (row.Cells[0].Value.ToString() == "Booking System")
-                    {
-                        XmlDocument doc1 = new XmlDocument();
-                        doc1.Load(Path.Combine(Directory.GetParent(Path.GetDirectoryName(Application.ExecutablePath)).FullName, "BookingSystem", "web.config"));
-                        doc1.SelectSingleNode("/configuration/location/system.web/authorization/allow").Attributes["roles"].Value = row.Cells[2].Value.ToString();
-                        doc1.Save(Path.Combine(Directory.GetParent(Path.GetDirectoryName(Application.ExecutablePath)).FullName, "BookingSystem", "web.config"));
-                    }
+                    catch { }
                 }
             }
             #endregion
@@ -234,7 +238,7 @@ namespace HAP.Config
             XmlNode adsettings = hapConfig.SelectSingleNode("adsettings");
             XmlNode constring = doc.SelectSingleNode("/configuration/connectionStrings/add[@name='ADConnectionString']");
 
-            ad_dc.Text = constring.Attributes["connectionString"].Value.Substring(7, constring.Attributes["connectionString"].Value.LastIndexOf('/'));
+            ad_dc.Text = constring.Attributes["connectionString"].Value.Substring(7, constring.Attributes["connectionString"].Value.LastIndexOf('/') - 7);
             ad_domainname.Text = constring.Attributes["connectionString"].Value.Remove(0, constring.Attributes["connectionString"].Value.LastIndexOf('/') + 1).Replace("DC=", "").Replace(",", ".");
             ad_Username.Text = adsettings.Attributes["adusername"].Value;
             ad_Password.Text = adsettings.Attributes["adpassword"].Value;
