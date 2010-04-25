@@ -156,9 +156,9 @@ namespace HAP.Config
                 }
             }
 
-            XmlNode lessons = bs.SelectSingleNode("lessons");
-            lessons.RemoveAll();
-            foreach (DataGridViewRow row in Resources.Rows)
+            XmlNode les = bs.SelectSingleNode("lessons");
+            les.RemoveAll();
+            foreach (DataGridViewRow row in lessons.Rows)
             {
                 if (!row.IsNewRow)
                 {
@@ -168,7 +168,7 @@ namespace HAP.Config
                         el.SetAttribute("type", row.Cells[1].Value.ToString());
                     el.SetAttribute("starttime", row.Cells[2].Value.ToString());
                     el.SetAttribute("endtime", row.Cells[3].Value.ToString());
-                    lessons.AppendChild(el);
+                    les.AppendChild(el);
                 }
             }
             #endregion
