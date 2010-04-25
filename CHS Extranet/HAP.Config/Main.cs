@@ -234,8 +234,8 @@ namespace HAP.Config
             XmlNode adsettings = hapConfig.SelectSingleNode("adsettings");
             XmlNode constring = doc.SelectSingleNode("/configuration/connectionStrings/add[@name='ADConnectionString']");
 
-            ad_dc.Text = constring.Attributes["connectionString"].Value.Substring(7, constring.Attributes["connectionString"].Value.IndexOf('/'));
-            ad_domainname.Text = constring.Attributes["connectionString"].Value.Remove(0, constring.Attributes["connectionString"].Value.LastIndexOf('/')).Replace("DC=", "").Replace(",", ".");
+            ad_dc.Text = constring.Attributes["connectionString"].Value.Substring(7, constring.Attributes["connectionString"].Value.LastIndexOf('/'));
+            ad_domainname.Text = constring.Attributes["connectionString"].Value.Remove(0, constring.Attributes["connectionString"].Value.LastIndexOf('/') + 1).Replace("DC=", "").Replace(",", ".");
             ad_Username.Text = adsettings.Attributes["adusername"].Value;
             ad_Password.Text = adsettings.Attributes["adpassword"].Value;
             ad_Student.Text = adsettings.Attributes["studentsgroupname"].Value;
