@@ -71,8 +71,8 @@ namespace HAP.Web.BookingSystem.admin
                             case "halftermend":
                                 ht.EndDate = DateTime.Parse(((TextBox)c).Text);
                                 break;
-
                         }
+                    term.HalfTerm = ht;
                     t[x] = term;
                 }
 

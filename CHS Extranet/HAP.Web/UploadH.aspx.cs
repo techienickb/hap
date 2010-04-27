@@ -36,9 +36,9 @@ namespace HAP.Web
         private bool isAuth(string extension)
         {
             bool vis = false;
-            foreach (uploadfilter filter in config.UploadFilters)
+            foreach (uploadfilter filter in config.MyComputer.UploadFilters)
                 if (filter.Filter.Replace("*", "").Contains(extension)) vis = isAuth(filter);
-            vis = isAuth(config.UploadFilters["All Files"]);
+            vis = isAuth(config.MyComputer.UploadFilters["All Files"]);
             return vis;
         }
 
@@ -106,7 +106,7 @@ namespace HAP.Web
                 if (p == "N") path = up.HomeDirectory + path.Replace('/', '\\');
                 else
                 {
-                    unc = config.UNCPaths[p];
+                    unc = config.MyComputer.UNCPaths[p];
                     if (unc == null || !isWriteAuth(unc)) Response.Redirect("/Extranet/unauthorised.aspx", true);
                     else
                     {
@@ -126,7 +126,7 @@ namespace HAP.Web
             if (p == "N") path = up.HomeDirectory + path.Replace('/', '\\');
             else
             {
-                unc = config.UNCPaths[p];
+                unc = config.MyComputer.UNCPaths[p];
                 if (unc == null || !isWriteAuth(unc)) Response.Redirect("/Extranet/unauthorised.aspx", true);
                 else
                 {

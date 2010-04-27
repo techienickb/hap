@@ -30,7 +30,7 @@ namespace HAP.Web.Controls
         {
             config = hapConfig.Current;
             List<string> filters = new List<string>();
-            foreach (uploadfilter f in config.UploadFilters)
+            foreach (uploadfilter f in config.MyComputer.UploadFilters)
                 if (isAuth(f)) filters.Add(f.ToString());
             string fs = string.Join("|", filters.ToArray());
             InitParams.Attributes.Add("value", string.Format("Path={0}/{1},Filters={2}", ((IMyComputerDisplay)Page).RoutingDrive, ((IMyComputerDisplay)Page).RoutingPath, fs));

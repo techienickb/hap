@@ -58,6 +58,15 @@ namespace HAP.Web.BookingSystem {
         protected global::HAP.Web.BookingSystem.DayList daylist;
         
         /// <summary>
+        /// overview control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::HAP.Web.BookingSystem.OverviewCalendar overview;
+        
+        /// <summary>
         /// bookingpopup control.
         /// </summary>
         /// <remarks>

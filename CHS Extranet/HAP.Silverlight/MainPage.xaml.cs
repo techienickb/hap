@@ -104,6 +104,7 @@ namespace HAP.Silverlight
 
                 if (dlg.ShowDialog().Value)
                 {
+                    if (stackPanel1.Children.Count == 1 && stackPanel1.Children[0].GetType() == typeof(TextBlock)) stackPanel1.Children.Clear();
                     foreach (FileInfo file in dlg.Files)
                     {
                         File f = new File();

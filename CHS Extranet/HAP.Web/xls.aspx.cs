@@ -82,7 +82,7 @@ namespace HAP.Web
             if (RoutingDrive == "N") path = Path.Combine(up.HomeDirectory, path.Replace('/', '\\'));
             else
             {
-                unc = config.UNCPaths[RoutingDrive];
+                unc = config.MyComputer.UNCPaths[RoutingDrive];
                 if (unc == null || !isWriteAuth(unc)) Response.Redirect("/Extranet/unauthorised.aspx", true);
                 else
                 {

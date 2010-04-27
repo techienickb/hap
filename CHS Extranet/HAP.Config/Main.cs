@@ -97,8 +97,10 @@ namespace HAP.Config
             }
             #endregion
 
-            #region UNCPaths
-            XmlNode uncp = hapConfig.SelectSingleNode("uncpaths");
+            #region MyComputer
+            XmlNode mycomp = hapConfig.SelectSingleNode("mycomputer");
+            mycomp.Attributes["hideextensions"].Value = mycomputer_exext.Text;
+            XmlNode uncp = mycomp.SelectSingleNode("uncpaths");
             uncp.RemoveAll();
             foreach (DataGridViewRow row in uncpaths.Rows)
             {
@@ -113,10 +115,7 @@ namespace HAP.Config
                     uncp.AppendChild(el);
                 }
             }
-            #endregion
-
-            #region Upload Filters
-            XmlNode filters = hapConfig.SelectSingleNode("uploadfilters");
+            XmlNode filters = mycomp.SelectSingleNode("uploadfilters");
             filters.RemoveAll();
             foreach (DataGridViewRow row in uncpaths.Rows)
             {
@@ -254,14 +253,14 @@ namespace HAP.Config
                     homepagelinks.Rows.Add(node.Attributes["name"].Value, node.Attributes["description"].Value, node.Attributes["showto"].Value, node.Attributes["linklocation"].Value, node.Attributes["icon"].Value);
             #endregion
 
-            #region UNC Paths
-            XmlNode uncp = hapConfig.SelectSingleNode("uncpaths");
+            #region MyComputer
+            XmlNode mycomp = hapConfig.SelectSingleNode("mycomputer");
+            mycomputer_exext.Text = mycomp.Attributes["hideextensions"].Value;
+            XmlNode uncp = mycomp.SelectSingleNode("uncpaths");
             foreach (XmlNode node in uncp.SelectNodes("add"))
                 uncpaths.Rows.Add(node.Attributes["drive"].Value, node.Attributes["name"].Value, node.Attributes["unc"].Value, node.Attributes["enablereadto"].Value, node.Attributes["enablewriteto"].Value);
-            #endregion
 
-            #region Upload Filters
-            XmlNode uf = hapConfig.SelectSingleNode("uploadfilters");
+            XmlNode uf = mycomp.SelectSingleNode("uploadfilters");
             foreach (XmlNode node in uf.SelectNodes("add"))
                 uploadfilters.Rows.Add(node.Attributes["name"].Value, node.Attributes["filter"].Value, node.Attributes["enablefor"].Value);
             #endregion

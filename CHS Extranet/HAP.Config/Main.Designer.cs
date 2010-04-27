@@ -78,16 +78,6 @@
             this.hpl_updatedetails = new System.Windows.Forms.TextBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.uncpaths = new System.Windows.Forms.DataGridView();
-            this.Drive = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.PathName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.UNC = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.UNCEnableReadTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.UNCEnableWriteTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.uploadfilters = new System.Windows.Forms.DataGridView();
-            this.FilterName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Filter = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FilterEnableFor = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.label17 = new System.Windows.Forms.Label();
             this.announcementBox_EditTo = new System.Windows.Forms.TextBox();
@@ -116,6 +106,21 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.btnClose = new System.Windows.Forms.Button();
             this.btnsave = new System.Windows.Forms.Button();
+            this.tabControl3 = new System.Windows.Forms.TabControl();
+            this.tabPage10 = new System.Windows.Forms.TabPage();
+            this.tabPage11 = new System.Windows.Forms.TabPage();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.uploadfilters = new System.Windows.Forms.DataGridView();
+            this.FilterName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Filter = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FilterEnableFor = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Drive = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.PathName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.UNC = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.UNCEnableReadTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.UNCEnableWriteTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.mycomputer_exext = new System.Windows.Forms.TextBox();
+            this.label21 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -124,8 +129,6 @@
             this.panel1.SuspendLayout();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.uncpaths)).BeginInit();
-            this.tabPage5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.uploadfilters)).BeginInit();
             this.tabPage6.SuspendLayout();
             this.tabPage7.SuspendLayout();
             this.tabControl2.SuspendLayout();
@@ -137,6 +140,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.bs_max)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bs_maxdays)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
+            this.tabControl3.SuspendLayout();
+            this.tabPage10.SuspendLayout();
+            this.tabPage11.SuspendLayout();
+            this.panel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.uploadfilters)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -145,14 +153,13 @@
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
-            this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Controls.Add(this.tabPage6);
             this.tabControl1.Controls.Add(this.tabPage7);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(5, 5);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(682, 397);
+            this.tabControl1.Size = new System.Drawing.Size(632, 397);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -184,7 +191,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 24);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(674, 369);
+            this.tabPage1.Size = new System.Drawing.Size(624, 369);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Base Settings";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -505,7 +512,7 @@
             this.tabPage3.Controls.Add(this.panel1);
             this.tabPage3.Location = new System.Drawing.Point(4, 24);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(674, 369);
+            this.tabPage3.Size = new System.Drawing.Size(624, 369);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Home Page Links";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -524,7 +531,7 @@
             this.homepagelinks.Location = new System.Drawing.Point(0, 43);
             this.homepagelinks.Name = "homepagelinks";
             this.homepagelinks.RowTemplate.Height = 24;
-            this.homepagelinks.Size = new System.Drawing.Size(674, 326);
+            this.homepagelinks.Size = new System.Drawing.Size(624, 326);
             this.homepagelinks.TabIndex = 0;
             // 
             // HPLName
@@ -559,7 +566,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(674, 43);
+            this.panel1.Size = new System.Drawing.Size(624, 43);
             this.panel1.TabIndex = 1;
             // 
             // label20
@@ -580,12 +587,13 @@
             // 
             // tabPage4
             // 
-            this.tabPage4.Controls.Add(this.uncpaths);
+            this.tabPage4.Controls.Add(this.tabControl3);
+            this.tabPage4.Controls.Add(this.panel3);
             this.tabPage4.Location = new System.Drawing.Point(4, 24);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(674, 369);
+            this.tabPage4.Size = new System.Drawing.Size(624, 369);
             this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "UNC Paths";
+            this.tabPage4.Text = "My Computer";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
             // uncpaths
@@ -598,106 +606,10 @@
             this.UNCEnableReadTo,
             this.UNCEnableWriteTo});
             this.uncpaths.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uncpaths.Location = new System.Drawing.Point(0, 0);
+            this.uncpaths.Location = new System.Drawing.Point(3, 3);
             this.uncpaths.Name = "uncpaths";
-            this.uncpaths.Size = new System.Drawing.Size(674, 369);
+            this.uncpaths.Size = new System.Drawing.Size(610, 283);
             this.uncpaths.TabIndex = 0;
-            // 
-            // Drive
-            // 
-            this.Drive.HeaderText = "Drive";
-            this.Drive.Items.AddRange(new object[] {
-            "A",
-            "B",
-            "C",
-            "D",
-            "E",
-            "F",
-            "G",
-            "H",
-            "I",
-            "J",
-            "K",
-            "L",
-            "M",
-            "O",
-            "P",
-            "Q",
-            "R",
-            "S",
-            "T",
-            "U",
-            "V",
-            "W",
-            "X",
-            "Y",
-            "Z"});
-            this.Drive.Name = "Drive";
-            this.Drive.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Drive.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.Drive.Width = 45;
-            // 
-            // PathName
-            // 
-            this.PathName.HeaderText = "Name";
-            this.PathName.Name = "PathName";
-            // 
-            // UNC
-            // 
-            this.UNC.HeaderText = "UNC";
-            this.UNC.Name = "UNC";
-            this.UNC.Width = 120;
-            // 
-            // UNCEnableReadTo
-            // 
-            this.UNCEnableReadTo.HeaderText = "Enable Read To";
-            this.UNCEnableReadTo.Name = "UNCEnableReadTo";
-            this.UNCEnableReadTo.Width = 170;
-            // 
-            // UNCEnableWriteTo
-            // 
-            this.UNCEnableWriteTo.HeaderText = "Enable Write To";
-            this.UNCEnableWriteTo.Name = "UNCEnableWriteTo";
-            this.UNCEnableWriteTo.Width = 170;
-            // 
-            // tabPage5
-            // 
-            this.tabPage5.Controls.Add(this.uploadfilters);
-            this.tabPage5.Location = new System.Drawing.Point(4, 24);
-            this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(674, 369);
-            this.tabPage5.TabIndex = 4;
-            this.tabPage5.Text = "Upload Filters";
-            this.tabPage5.UseVisualStyleBackColor = true;
-            // 
-            // uploadfilters
-            // 
-            this.uploadfilters.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.uploadfilters.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.uploadfilters.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.FilterName,
-            this.Filter,
-            this.FilterEnableFor});
-            this.uploadfilters.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uploadfilters.Location = new System.Drawing.Point(0, 0);
-            this.uploadfilters.Name = "uploadfilters";
-            this.uploadfilters.Size = new System.Drawing.Size(674, 369);
-            this.uploadfilters.TabIndex = 0;
-            // 
-            // FilterName
-            // 
-            this.FilterName.HeaderText = "Name";
-            this.FilterName.Name = "FilterName";
-            // 
-            // Filter
-            // 
-            this.Filter.HeaderText = "Filter";
-            this.Filter.Name = "Filter";
-            // 
-            // FilterEnableFor
-            // 
-            this.FilterEnableFor.HeaderText = "Enable For";
-            this.FilterEnableFor.Name = "FilterEnableFor";
             // 
             // tabPage6
             // 
@@ -939,13 +851,13 @@
             this.flowLayoutPanel1.Location = new System.Drawing.Point(5, 402);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(682, 34);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(632, 34);
             this.flowLayoutPanel1.TabIndex = 1;
             // 
             // btnClose
             // 
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnClose.Location = new System.Drawing.Point(604, 8);
+            this.btnClose.Location = new System.Drawing.Point(554, 8);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 0;
@@ -956,7 +868,7 @@
             // btnsave
             // 
             this.btnsave.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnsave.Location = new System.Drawing.Point(523, 8);
+            this.btnsave.Location = new System.Drawing.Point(473, 8);
             this.btnsave.Name = "btnsave";
             this.btnsave.Size = new System.Drawing.Size(75, 23);
             this.btnsave.TabIndex = 1;
@@ -964,13 +876,158 @@
             this.btnsave.UseVisualStyleBackColor = true;
             this.btnsave.Click += new System.EventHandler(this.btnsave_Click);
             // 
+            // tabControl3
+            // 
+            this.tabControl3.Controls.Add(this.tabPage10);
+            this.tabControl3.Controls.Add(this.tabPage11);
+            this.tabControl3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl3.Location = new System.Drawing.Point(0, 52);
+            this.tabControl3.Name = "tabControl3";
+            this.tabControl3.SelectedIndex = 0;
+            this.tabControl3.Size = new System.Drawing.Size(624, 317);
+            this.tabControl3.TabIndex = 1;
+            // 
+            // tabPage10
+            // 
+            this.tabPage10.Controls.Add(this.uncpaths);
+            this.tabPage10.Location = new System.Drawing.Point(4, 24);
+            this.tabPage10.Name = "tabPage10";
+            this.tabPage10.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage10.Size = new System.Drawing.Size(616, 289);
+            this.tabPage10.TabIndex = 0;
+            this.tabPage10.Text = "UNC Paths";
+            this.tabPage10.UseVisualStyleBackColor = true;
+            // 
+            // tabPage11
+            // 
+            this.tabPage11.Controls.Add(this.uploadfilters);
+            this.tabPage11.Location = new System.Drawing.Point(4, 24);
+            this.tabPage11.Name = "tabPage11";
+            this.tabPage11.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage11.Size = new System.Drawing.Size(616, 304);
+            this.tabPage11.TabIndex = 1;
+            this.tabPage11.Text = "Upload Filters";
+            this.tabPage11.UseVisualStyleBackColor = true;
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.label21);
+            this.panel3.Controls.Add(this.mycomputer_exext);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel3.Location = new System.Drawing.Point(0, 0);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(624, 52);
+            this.panel3.TabIndex = 2;
+            // 
+            // uploadfilters
+            // 
+            this.uploadfilters.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.uploadfilters.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.uploadfilters.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.FilterName,
+            this.Filter,
+            this.FilterEnableFor});
+            this.uploadfilters.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.uploadfilters.Location = new System.Drawing.Point(3, 3);
+            this.uploadfilters.Name = "uploadfilters";
+            this.uploadfilters.Size = new System.Drawing.Size(610, 298);
+            this.uploadfilters.TabIndex = 1;
+            // 
+            // FilterName
+            // 
+            this.FilterName.HeaderText = "Name";
+            this.FilterName.Name = "FilterName";
+            // 
+            // Filter
+            // 
+            this.Filter.HeaderText = "Filter";
+            this.Filter.Name = "Filter";
+            // 
+            // FilterEnableFor
+            // 
+            this.FilterEnableFor.HeaderText = "Enable For";
+            this.FilterEnableFor.Name = "FilterEnableFor";
+            // 
+            // Drive
+            // 
+            this.Drive.HeaderText = "Drive";
+            this.Drive.Items.AddRange(new object[] {
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "J",
+            "K",
+            "L",
+            "M",
+            "O",
+            "P",
+            "Q",
+            "R",
+            "S",
+            "T",
+            "U",
+            "V",
+            "W",
+            "X",
+            "Y",
+            "Z"});
+            this.Drive.Name = "Drive";
+            this.Drive.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Drive.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.Drive.Width = 45;
+            // 
+            // PathName
+            // 
+            this.PathName.HeaderText = "Name";
+            this.PathName.Name = "PathName";
+            // 
+            // UNC
+            // 
+            this.UNC.HeaderText = "UNC";
+            this.UNC.Name = "UNC";
+            this.UNC.Width = 120;
+            // 
+            // UNCEnableReadTo
+            // 
+            this.UNCEnableReadTo.HeaderText = "Enable Read To";
+            this.UNCEnableReadTo.Name = "UNCEnableReadTo";
+            this.UNCEnableReadTo.Width = 140;
+            // 
+            // UNCEnableWriteTo
+            // 
+            this.UNCEnableWriteTo.HeaderText = "Enable Write To";
+            this.UNCEnableWriteTo.Name = "UNCEnableWriteTo";
+            this.UNCEnableWriteTo.Width = 140;
+            // 
+            // mycomputer_exext
+            // 
+            this.mycomputer_exext.Location = new System.Drawing.Point(197, 16);
+            this.mycomputer_exext.Name = "mycomputer_exext";
+            this.mycomputer_exext.Size = new System.Drawing.Size(207, 21);
+            this.mycomputer_exext.TabIndex = 0;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(74, 19);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(117, 15);
+            this.label21.TabIndex = 1;
+            this.label21.Text = "Exclude Extensions:";
+            // 
             // Main
             // 
             this.AcceptButton = this.btnsave;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(692, 441);
+            this.ClientSize = new System.Drawing.Size(642, 441);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -990,8 +1047,6 @@
             this.panel1.PerformLayout();
             this.tabPage4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.uncpaths)).EndInit();
-            this.tabPage5.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.uploadfilters)).EndInit();
             this.tabPage6.ResumeLayout(false);
             this.tabPage6.PerformLayout();
             this.tabPage7.ResumeLayout(false);
@@ -1005,6 +1060,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.bs_max)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bs_maxdays)).EndInit();
             this.flowLayoutPanel1.ResumeLayout(false);
+            this.tabControl3.ResumeLayout(false);
+            this.tabPage10.ResumeLayout(false);
+            this.tabPage11.ResumeLayout(false);
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.uploadfilters)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1019,7 +1080,6 @@
         private System.Windows.Forms.Button btnsave;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TabPage tabPage4;
-        private System.Windows.Forms.TabPage tabPage5;
         private System.Windows.Forms.TabPage tabPage6;
         private System.Windows.Forms.TabPage tabPage7;
         private System.Windows.Forms.TabControl tabControl2;
@@ -1061,10 +1121,6 @@
         private System.Windows.Forms.CheckBox base_StudentPhotoEnable;
         private System.Windows.Forms.DataGridView homepagelinks;
         private System.Windows.Forms.DataGridView uncpaths;
-        private System.Windows.Forms.DataGridView uploadfilters;
-        private System.Windows.Forms.DataGridViewTextBoxColumn FilterName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Filter;
-        private System.Windows.Forms.DataGridViewTextBoxColumn FilterEnableFor;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.TextBox announcementBox_EditTo;
         private System.Windows.Forms.Label label16;
@@ -1074,11 +1130,6 @@
         private System.Windows.Forms.NumericUpDown bs_maxdays;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.NumericUpDown bs_max;
-        private System.Windows.Forms.DataGridViewComboBoxColumn Drive;
-        private System.Windows.Forms.DataGridViewTextBoxColumn PathName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn UNC;
-        private System.Windows.Forms.DataGridViewTextBoxColumn UNCEnableReadTo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn UNCEnableWriteTo;
         private System.Windows.Forms.DataGridView Resources;
         private System.Windows.Forms.DataGridViewTextBoxColumn ResName;
         private System.Windows.Forms.DataGridViewComboBoxColumn type;
@@ -1098,5 +1149,20 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ShowTo;
         private System.Windows.Forms.DataGridViewTextBoxColumn LinkLocation;
         private System.Windows.Forms.DataGridViewTextBoxColumn HPLIcon;
+        private System.Windows.Forms.TabControl tabControl3;
+        private System.Windows.Forms.TabPage tabPage10;
+        private System.Windows.Forms.TabPage tabPage11;
+        private System.Windows.Forms.DataGridView uploadfilters;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FilterName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Filter;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FilterEnableFor;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Drive;
+        private System.Windows.Forms.DataGridViewTextBoxColumn PathName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn UNC;
+        private System.Windows.Forms.DataGridViewTextBoxColumn UNCEnableReadTo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn UNCEnableWriteTo;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.TextBox mycomputer_exext;
     }
 }
