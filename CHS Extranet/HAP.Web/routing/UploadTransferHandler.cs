@@ -50,7 +50,7 @@ namespace HAP.Web.routing
                     if (RoutingDrive == "N") path = up.HomeDirectory + '\\' + path.Replace('/', '\\');
                     else
                     {
-                        unc = config.UNCPaths[RoutingDrive];
+                        unc = config.MyComputer.UNCPaths[RoutingDrive];
                         path = string.Format(unc.UNC, Username) + '\\' + path.Replace('/', '\\');
                     }
                     UploadProcess fileUpload = new UploadProcess();

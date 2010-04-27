@@ -1,7 +1,6 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="DayList.ascx.cs" Inherits="HAP.Web.BookingSystem.DayList" %>
 <%@ Register Namespace="HAP.Web.BookingSystem" Assembly="HAP.Web" TagPrefix="hap" %>
             <div>
-                <h3>Filters</h3>
                 <b>Resource Type: </b>
                 <asp:DropDownList ID="resourcetype" AutoPostBack="true" runat="server" onselectedindexchanged="resourcetype_SelectedIndexChanged">
                     <asp:ListItem Selected="True">All</asp:ListItem>

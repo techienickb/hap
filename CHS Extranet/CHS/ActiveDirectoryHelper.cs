@@ -159,27 +159,32 @@ namespace CHS
 		}
 
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="root"></param>
-		/// <param name="username"></param>
-		/// <returns></returns>
-		public static string[] GetRolesForUser(DirectoryEntry root, string username)
-		{
-			var user = getUser(root, username);
-			var roles = new List<string>();
-			IdentityReferenceCollection groupCollection = ExpandTokenGroups(user).Translate(typeof(NTAccount));
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="root"></param>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        public static string[] GetRolesForUser(DirectoryEntry root, string username)
+        {
+            var user = getUser(root, username);
+            var roles = new List<string>();
+            IdentityReferenceCollection groupCollection = ExpandTokenGroups(user).Translate(typeof(NTAccount), false);
 
-			if (groupCollection != null)
-				foreach (NTAccount group in groupCollection)
-				{
-					String roleName = group.ToString().Substring(group.ToString().IndexOf(@"\") + 1);
-					if (roleName != String.Empty)
-						roles.Add(roleName);
-				}
-			return roles.ToArray();
-		}
+            if (groupCollection != null)
+                foreach (object g in groupCollection)
+                {
+                    try
+                    {
+                        NTAccount group = g as NTAccount;
+                        String roleName = group.ToString().Substring(group.ToString().IndexOf(@"\") + 1);
+                        if (roleName != String.Empty)
+                            roles.Add(roleName);
+                    }
+                    catch { }
+                }
+            return roles.ToArray();
+        }
 
 		/// <summary>
 		/// 

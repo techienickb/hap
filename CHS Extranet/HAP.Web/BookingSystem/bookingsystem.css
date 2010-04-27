@@ -8,7 +8,7 @@
 #daylist span span { line-height: 20px; height: auto; padding: 8px 0 0 0; }
 #daylist div div { overflow: hidden; border-bottom: solid 1px #7da2ce; height: 54px; text-align: center; background: #fff; }
 #daylist div div span.room { line-height: 54px; display: block; height: 54px; background: #7da2ce; }
-#daylist div div.break, .buttons { height: auto; line-height: normal; background: #7da2ce; }
+#daylist div div.break { height: auto; line-height: normal; background: #7da2ce; }
 #daylist div div a { display: block; margin: 1px; height: 50px; line-height: 48px; border: solid 1px #fff; border-radius: 3px; -moz-border-radius: 3px; overflow: hidden; text-decoration: none; color: #333; }
 #daylist div div .static { text-align: left; }
 #daylist div div img { float: left; margin: 4px; }
@@ -34,6 +34,9 @@
 .Day { padding: 0; height: 28px; line-height: 28px; }
 .Day a { cursor: pointer; display: block; height: 28px; line-height: 28px; }
 .Calendar a:Hover { display: block; background: #6d051f; color: #fff!important; }
+.OverviewCal .Day { border-top: solid 1px #7da2ce; overflow: hidden; color: #000; }
+.OverviewCal .Day a { height: 100%; }
+.OverviewCal .Day a:hover { background: #6d051f; color: #fff!important; }
 .Day { background: Silver url(../images/dashed.gif) repeat; color: #fff; }
 .Autum { background-color: #d27d92; }
 .Spring { background-color: #89d27d; }
@@ -42,8 +45,12 @@
 .Term { background-image: none; }
 .Term.SelDay { background-image: none; }
 .modalBackground { background-color:Gray; filter:alpha(opacity=70); opacity:0.7; position: absolute; position: fixed; top: 0; height: 100%; left: 0; width: 100%; z-index: 2500; }
-#modalPopup, #loadingPopup { position: absolute; position: fixed; z-index: 3500; width: 100%; top: 40%; left: 0; width: 100%; }
-.popupContent { background: #fff url(../images/bar.gif) repeat-x top left;	border: solid 1px #7da2ce; padding: 0; width: 500px; margin: 0 auto; border-radius: 3px; -moz-border-radius: 3px; }
-.popupContent div { padding: 4px; }
-.popupContent h1 { background: transparent; }
-.buttons { text-align: right; }
+#modalPopup, #loadingPopup, #OverviewBox { position: absolute; position: fixed; z-index: 3500; width: 100%; top: 40%; left: 0; width: 100%; }
+.popupContent { background: #fff url(../images/bar.gif) repeat-x top left; padding: 4px; border: solid 1px #7da2ce; width: 500px; margin: 0 auto; border-radius: 3px; -moz-border-radius: 3px; }
+.popupContent div {  }
+.popupContent h1 { background: transparent; margin: 0; padding: 0; height: 28px; line-height: 26px; font-size: medium; color: #1f3976; font-weight: normal; }
+.buttons, .modalButtons { text-align: right; border-top: solid 1px #7da2ce; padding: 4px; margin: 4px 0 0 0; }
+.QuickView { overflow: hidden; float: left; padding: 3px; }
+.QuickView div { height: 6px; overflow: hidden; padding: 0; }
+.QuickView span { float: left; height: 5px; width: 5px; margin: 0px 1px 1px 0; background: #7da2ce; }
+.QuickView span.free { background: #fff; }

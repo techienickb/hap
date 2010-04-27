@@ -19,8 +19,8 @@ namespace HAP.Web.Controls
         protected void yesdel_Click(object sender, EventArgs e)
         {
             bool isFile = deleteitem.Value.StartsWith("F!");
-            if (isFile) File.Delete(Path.Combine(Dir.FullName, deleteitem.Value.Remove(0, 2)));
-            else Directory.Delete(Path.Combine(Dir.FullName, deleteitem.Value), true);
+            if (isFile && File.Exists(Path.Combine(Dir.FullName, deleteitem.Value.Remove(0, 2)))) File.Delete(Path.Combine(Dir.FullName, deleteitem.Value.Remove(0, 2)));
+            else if (Directory.Exists((Path.Combine(Dir.FullName, deleteitem.Value)))) Directory.Delete(Path.Combine(Dir.FullName, deleteitem.Value), true);
             Page.DataBind();
         }
     }

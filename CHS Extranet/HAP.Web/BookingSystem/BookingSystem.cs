@@ -58,7 +58,7 @@ namespace HAP.Web.BookingSystem
             }
         }
 
-        private bool isStatic(string room, string lesson)
+        public bool isStatic(string room, string lesson)
         {
             return StaticBookings.ContainsKey(new BookingKey(DayNumber, lesson, room));
         }

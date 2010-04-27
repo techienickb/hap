@@ -93,7 +93,7 @@ namespace HAP.Web
                 if (p == "N") path = up.HomeDirectory + path.Replace('/', '\\');
                 else
                 {
-                    unc = config.UNCPaths[p];
+                    unc = config.MyComputer.UNCPaths[p];
                     if (unc == null || !isWriteAuth(unc)) Response.Redirect("/Extranet/unauthorised.aspx", true);
                     else
                     {
@@ -125,7 +125,7 @@ namespace HAP.Web
                 populatenode(h, ignoredir);
                 TreeView1.Nodes.Add(h);
             } else {
-                TreeNode h = new TreeNode("My Admin Documents", string.Format(config.UNCPaths["H"].UNC, Username));
+                TreeNode h = new TreeNode("My Admin Documents", string.Format(config.MyComputer.UNCPaths["H"].UNC, Username));
                 populatenode(h, ignoredir);
                 TreeView1.Nodes.Add(h);
             }

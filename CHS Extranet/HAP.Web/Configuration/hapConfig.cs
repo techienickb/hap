@@ -20,28 +20,22 @@ namespace HAP.Web.Configuration
             get { return (baseSettings)this["basesettings"]; }
         }
 
-        [ConfigurationProperty("uncpaths", IsDefaultCollection = false)]
-        public uncpaths UNCPaths
-        {
-            get { return (uncpaths)base["uncpaths"]; }
-        }
-
         [ConfigurationProperty("homepagelinks", IsDefaultCollection = false)]
         public homepagelinks HomePageLinks
         {
             get { return (homepagelinks)base["homepagelinks"]; }
         }
 
-        [ConfigurationProperty("uploadfilters", IsDefaultCollection = false)]
-        public uploadfilters UploadFilters
-        {
-            get { return (uploadfilters)base["uploadfilters"]; }
-        }
-
         [ConfigurationProperty("announcementbox")]
         public announcementBox AnnouncementBox
         {
             get { return (announcementBox)this["announcementbox"]; }
+        }
+
+        [ConfigurationProperty("mycomputer", IsRequired = false)]
+        public mycomputer MyComputer
+        {
+            get { return (mycomputer)this["mycomputer"]; }
         }
 
         [ConfigurationProperty("bookingsystem", IsRequired = false)]

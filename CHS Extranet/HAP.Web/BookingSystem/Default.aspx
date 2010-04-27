@@ -2,6 +2,7 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <%@ Register Src="~/BookingSystem/DayList.ascx" TagName="DayList" TagPrefix="hap" %>
 <%@ Register TagPrefix="hap" TagName="BookingPopup" Src="~/BookingSystem/BookingPopup.ascx" %>
+<%@ Register TagPrefix="hap" TagName="Overview" Src="~/BookingSystem/OverviewCalendar.ascx" %>
 <%@ Register Namespace="HAP.Web.BookingSystem" Assembly="HAP.Web" TagPrefix="hap" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="bookingsystem.css" rel="stylesheet" type="text/css" />
@@ -11,10 +12,13 @@
                 <asp:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server" />
                 <asp:UpdatePanel ID="UpdatePanel1" runat="server"><ContentTemplate>
                     <div onclick="hideCal();">
-                        <asp:HyperLink runat="server" style="float: right;" NavigateUrl="admin/" ID="adminlink" Visible="false">Booking System Admin</asp:HyperLink>
+                        <asp:HyperLink runat="server" style="float: right; padding: 0 5px;" NavigateUrl="admin/" ID="adminlink" Visible="false">Booking System Admin</asp:HyperLink>
+                        <a href="javascript:showOverview()" style="float: right;">Overview</a>
+                        <a href="/extranet/" style="float: right; padding: 0 5px;">Home Access Plus+ Home</a>
                         <h1>IT Booking System</h1>
                         <p>Click on a Free period to book a room, or click on a booking to remove it.  Click on <%=Calendar1.SelectedDate.DayOfWeek.ToString() %> to change the day. Week: <asp:Label runat="server" ID="weeknum" /></p>
                         <hap:DayList runat="server" id="daylist" ItemWidth="152" />
+                        <hap:Overview runat="server" id="overview" />
                         <hap:BookingPopup runat="server" ID="bookingpopup" />
                         <asp:Button ID="remove" style="display: none;" OnClick="remove_Click" CausesValidation="false" runat="server" Text="Remove" />
                         <asp:HiddenField ID="removevars" runat="server" />
@@ -83,6 +87,14 @@
                 if (!showcal) return;
                 showcal = false;
                 $get('Cal').style.display = "";
+            }
+            function showOverview() {
+                $get('modalBackground').style.display = "block";
+                $get('OverviewBox').style.display = "block";
+            }
+            function hideOverview() {
+                $get('modalBackground').style.display = "none";
+                $get('OverviewBox').style.display = "none";
             }
             function resetCal(sender, args) {
                 if (showcal) $get('Cal').style.display = "block";

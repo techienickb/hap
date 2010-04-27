@@ -88,7 +88,7 @@ namespace HAP.Web
             {
                 breadcrumbrepeater.Visible = false;
                 items.Add(new MyComputerItem("My Documents", string.Format("{0} on {1}", Username, config.BaseSettings.EstablishmentCode), "/Extranet/MyComputer/N", "netdrive.png", false));
-                foreach (uncpath path in config.UNCPaths)
+                foreach (uncpath path in config.MyComputer.UNCPaths)
                     if (isAuth(path)) items.Add(new MyComputerItem(path.Name, string.Format("{0} on {1}", path.Name, config.BaseSettings.EstablishmentCode), string.Format("/Extranet/MyComputer/{0}", path.Drive), "netdrive.png", false));
                 if (config.HomePageLinks["Access Learning Resources"] != null)
                 {
@@ -112,7 +112,7 @@ namespace HAP.Web
                 if (RoutingDrive == "N") path = up.HomeDirectory + "\\" + RoutingPath;
                 else
                 {
-                    unc = config.UNCPaths[RoutingDrive];
+                    unc = config.MyComputer.UNCPaths[RoutingDrive];
                     if (unc == null || !isAuth(unc)) Response.Redirect("/Extranet/unauthorised.aspx", true);
                     else
                     {
@@ -154,7 +154,7 @@ namespace HAP.Web
                     items.Add(new MyComputerItem("My Computer", "Back to My Computer", "/Extranet/MyComputer.aspx", "school.png", false));
                 else items.Add(new MyComputerItem("..", "Up a Directory", "/Extranet/MyComputer/" + (RoutingDrive + "/" + RoutingPath).Remove((RoutingDrive + "/" + RoutingPath).LastIndexOf('/')), "folder.png", false));
 
-                bool allowedit = isWriteAuth(config.UNCPaths[RoutingDrive]);
+                bool allowedit = isWriteAuth(config.MyComputer.UNCPaths[RoutingDrive]);
                 newfolderlink.Visible = newfileuploadlink.Visible = allowedit;
                 if (RoutingDrive != "N" && RoutingDrive != "H") rckmove.Style.Add("display", "none");
                 try
@@ -168,9 +168,10 @@ namespace HAP.Web
                             dirpath = dirpath.Replace('\\', '/');
                             items.Add(new MyComputerItem(subdir.Name, "Last Modified: " + subdir.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/MyComputer/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(subdir), allowedit));
                         }
+                    
                     foreach (FileInfo file in dir.GetFiles())
                     {
-                        if (!file.Name.ToLower().Contains("thumbs"))
+                        if (!file.Name.ToLower().Contains("thumbs") && checkext(file.Extension))
                         {
                             string dirpath = file.FullName;
                             if (unc == null) dirpath = dirpath.Replace(userhome, "N/");
@@ -190,6 +191,14 @@ namespace HAP.Web
             }
             browserrepeater.DataSource = items.ToArray();
             browserrepeater.DataBind();
+        }
+
+        public bool checkext(string extension)
+        {
+            string[] exc = config.MyComputer.HideExtensions.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string s in exc)
+                if (s.ToLower() == extension.ToLower()) return false;
+            return true;
         }
 
         public string RoutingPath { get; set; }

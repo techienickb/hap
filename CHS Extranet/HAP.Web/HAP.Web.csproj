@@ -99,6 +99,8 @@
     <Content Include="BookingSystem\Default.aspx" />
     <Content Include="BookingSystem\Display.aspx" />
     <Content Include="BookingSystem\loading.gif" />
+    <Content Include="BookingSystem\OverviewCalendar.ascx" />
+    <Content Include="BookingSystem\temp.htm" />
     <Content Include="ClientBin\HAP.Silverlight.xap" />
     <Content Include="Controls\Announcement.ascx" />
     <Content Include="App_Data\Announcement.xml" />
@@ -121,6 +123,7 @@
     <Content Include="images\browser-a-booked-hover.gif" />
     <Content Include="images\dashed.gif" />
     <Content Include="images\headbg.png" />
+    <Content Include="images\icons\rdp.png" />
     <Content Include="images\icons\edit.png" />
     <Content Include="images\icons\email.png" />
     <Content Include="images\icons\helpdesk.png" />
@@ -128,6 +131,8 @@
     <Content Include="images\icons\remotedesktop.png" />
     <Content Include="images\icons\bookingsystem.png" />
     <Content Include="images\icons\rm.png" />
+    <Content Include="images\icons\xml.png" />
+    <Content Include="images\icons\xps.png" />
     <Content Include="images\loading.gif" />
     <Content Include="images\logo.png" />
     <Content Include="images\Silverlight-Prompt.png" />
@@ -216,6 +221,7 @@
       <DependentUpon>BookingPopup.ascx</DependentUpon>
     </Compile>
     <Compile Include="BookingSystem\BookingSystem.cs" />
+    <Compile Include="BookingSystem\BigBookingCalendar.cs" />
     <Compile Include="BookingSystem\DayList.ascx.cs">
       <DependentUpon>DayList.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -239,11 +245,19 @@
       <DependentUpon>Display.aspx</DependentUpon>
     </Compile>
     <Compile Include="BookingSystem\iCalGenerator.cs" />
+    <Compile Include="BookingSystem\OverviewCalendar.ascx.cs">
+      <DependentUpon>OverviewCalendar.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BookingSystem\OverviewCalendar.ascx.designer.cs">
+      <DependentUpon>OverviewCalendar.ascx</DependentUpon>
+    </Compile>
     <Compile Include="BookingSystem\Term.cs" />
     <Compile Include="Configuration\announcementBox.cs" />
     <Compile Include="Configuration\bookingResource.cs" />
     <Compile Include="Configuration\bookingResources.cs" />
     <Compile Include="Configuration\bookingSystem.cs" />
+    <Compile Include="Configuration\mycomputer.cs" />
     <Compile Include="Configuration\lesson.cs" />
     <Compile Include="Configuration\lessons.cs" />
     <Compile Include="Controls\Announcement.ascx.cs">
@@ -389,6 +403,10 @@
     <ProjectReference Include="..\CHS\CHS.csproj">
       <Project>{36468E14-F8AF-4794-AB76-25571A54682F}</Project>
       <Name>CHS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HAP.Config\HAP.Config.csproj">
+      <Project>{8E445E7B-246A-446A-B3B2-ED4F51C21768}</Project>
+      <Name>HAP.Config</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
