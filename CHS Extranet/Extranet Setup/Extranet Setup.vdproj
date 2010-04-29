@@ -485,7 +485,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:HAP Config, Version=1.1.0.0, Culture=neutral, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:HAP Config, Version=1.1.1.0, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_DD281FC6433021EAF59EDCD6CC8802D1"
@@ -593,15 +593,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Extranet Setup"
-        "ProductCode" = "8:{23AFE1B7-1267-4ED0-B69F-ABC7E3B10502}"
-        "PackageCode" = "8:{FA839257-1732-418D-9353-3222F157770E}"
+        "ProductCode" = "8:{3247EAB8-694B-41C4-A7E2-66813443EB3B}"
+        "PackageCode" = "8:{142EB852-5F4A-467E-9613-6EA22C064803}"
         "UpgradeCode" = "8:{21D75F33-FC2A-4D3B-A1CF-08A7E3CBD738}"
         "AspNetVersion" = "8:1"
         "RestartWWWService" = "11:TRUE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:4.1.0"
+        "ProductVersion" = "8:4.1.1"
         "Manufacturer" = "8:Crickhowell High School"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

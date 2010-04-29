@@ -153,8 +153,13 @@ namespace HAP.Config
                     el.SetAttribute("type", row.Cells[1].Value.ToString());
                     if (bool.Parse(row.Cells[2].Value.ToString()))
                         el.SetAttribute("emailadmin", row.Cells[2].Value.ToString());
+                    else if (el.HasAttribute("emailadmin")) el.RemoveAttribute("emailadmin");
                     if (bool.Parse(row.Cells[3].Value.ToString()))
                         el.SetAttribute("enablecharging", row.Cells[3].Value.ToString());
+                    else if (el.HasAttribute("enablecharging")) el.RemoveAttribute("enablecharging");
+                    if (!bool.Parse(row.Cells[4].Value.ToString()))
+                        el.SetAttribute("enable", row.Cells[3].Value.ToString());
+                    else if (el.HasAttribute("enable")) el.RemoveAttribute("enable");
                     res.AppendChild(el);
                 }
             }
@@ -169,6 +174,7 @@ namespace HAP.Config
                     el.SetAttribute("name", row.Cells[0].Value.ToString());
                     if (row.Cells[1].Value.ToString() != "Lesson")
                         el.SetAttribute("type", row.Cells[1].Value.ToString());
+                    else if (el.HasAttribute("type")) el.RemoveAttribute("type");
                     el.SetAttribute("starttime", row.Cells[2].Value.ToString());
                     el.SetAttribute("endtime", row.Cells[3].Value.ToString());
                     les.AppendChild(el);
@@ -277,7 +283,7 @@ namespace HAP.Config
             bs_maxdays.Value = int.Parse(bs.Attributes["maxdays"].Value);
             bs_twoweek.Checked = bool.Parse(bs.Attributes["twoweektimetable"].Value);
             foreach (XmlNode node in bs.SelectNodes("resources/add"))
-                Resources.Rows.Add(node.Attributes["name"].Value, node.Attributes["type"].Value, node.Attributes["emailadmin"] != null ? bool.Parse(node.Attributes["emailadmin"].Value) : false, node.Attributes["enablecharging"] != null ? bool.Parse(node.Attributes["enablecharging"].Value) : false);
+                Resources.Rows.Add(node.Attributes["name"].Value, node.Attributes["type"].Value, node.Attributes["emailadmin"] != null ? bool.Parse(node.Attributes["emailadmin"].Value) : false, node.Attributes["enablecharging"] != null ? bool.Parse(node.Attributes["enablecharging"].Value) : false, node.Attributes["enable"] != null ? bool.Parse(node.Attributes["enable"].Value) : true);
             foreach (XmlNode node in bs.SelectNodes("lessons/add"))
                 lessons.Rows.Add(node.Attributes["name"].Value, node.Attributes["type"] == null ? "Lesson" : node.Attributes["type"].Value, node.Attributes["starttime"].Value, node.Attributes["endtime"].Value);
             #endregion
