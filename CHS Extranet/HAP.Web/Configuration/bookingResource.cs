@@ -43,6 +43,13 @@ namespace HAP.Web.Configuration
             get { return (bool)this["enablecharging"]; }
             set { this["enablecharging"] = value; }
         }
+
+        [ConfigurationProperty("enable", DefaultValue = true, IsRequired = false)]
+        public bool Enable
+        {
+            get { return (bool)this["enable"]; }
+            set { this["enable"] = value; }
+        }
     }
 
     public enum ResourceType { ITRoom, Laptops, Equipment, Other }
