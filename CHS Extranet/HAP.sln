@@ -8,11 +8,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Web", "HAP.Web\HAP.Web.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CHS", "CHS\CHS.csproj", "{36468E14-F8AF-4794-AB76-25571A54682F}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Extranet Setup", "Extranet Setup\Extranet Setup.vdproj", "{298DDB59-7B13-4885-A4B2-AF0929A72D2A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Silverlight", "HAP.Silverlight\HAP.Silverlight.csproj", "{9DCDBB22-ECEB-4220-A0FE-E786189F0B08}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Config", "HAP.Config\HAP.Config.csproj", "{8E445E7B-246A-446A-B3B2-ED4F51C21768}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HAP.Setup", "HAP.Setup\HAP.Setup.vdproj", "{2E147F33-6B10-45FE-88DD-06D842F684AD}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -23,18 +23,18 @@ Global
 		SccProjectUniqueName1 = CHS\\CHS.csproj
 		SccProjectName1 = CHS
 		SccLocalPath1 = CHS
-		SccProjectUniqueName2 = Extranet\u0020Setup\\Extranet\u0020Setup.vdproj
-		SccProjectName2 = Extranet\u0020Setup
-		SccLocalPath2 = Extranet\u0020Setup
-		SccProjectUniqueName3 = HAP.Silverlight\\HAP.Silverlight.csproj
-		SccProjectName3 = HAP.Silverlight
-		SccLocalPath3 = HAP.Silverlight
-		SccProjectUniqueName4 = HAP.Web\\HAP.Web.csproj
-		SccProjectName4 = HAP.Web
-		SccLocalPath4 = HAP.Web
-		SccProjectUniqueName5 = HAP.Config\\HAP.Config.csproj
-		SccProjectName5 = HAP.Config
-		SccLocalPath5 = HAP.Config
+		SccProjectUniqueName2 = HAP.Silverlight\\HAP.Silverlight.csproj
+		SccProjectName2 = HAP.Silverlight
+		SccLocalPath2 = HAP.Silverlight
+		SccProjectUniqueName3 = HAP.Web\\HAP.Web.csproj
+		SccProjectName3 = HAP.Web
+		SccLocalPath3 = HAP.Web
+		SccProjectUniqueName4 = HAP.Config\\HAP.Config.csproj
+		SccProjectName4 = HAP.Config
+		SccLocalPath4 = HAP.Config
+		SccProjectUniqueName5 = HAP.Setup\\HAP.Setup.vdproj
+		SccProjectName5 = HAP.Setup
+		SccLocalPath5 = HAP.Setup
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,16 +65,6 @@ Global
 		{36468E14-F8AF-4794-AB76-25571A54682F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{36468E14-F8AF-4794-AB76-25571A54682F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{36468E14-F8AF-4794-AB76-25571A54682F}.Release|x86.ActiveCfg = Release|Any CPU
-		{298DDB59-7B13-4885-A4B2-AF0929A72D2A}.Debug|Any CPU.ActiveCfg = Release
-		{298DDB59-7B13-4885-A4B2-AF0929A72D2A}.Debug|Mixed Platforms.ActiveCfg = Debug
-		{298DDB59-7B13-4885-A4B2-AF0929A72D2A}.Debug|Mixed Platforms.Build.0 = Debug
-		{298DDB59-7B13-4885-A4B2-AF0929A72D2A}.Debug|x86.ActiveCfg = Debug
-		{298DDB59-7B13-4885-A4B2-AF0929A72D2A}.Debug|x86.Build.0 = Debug
-		{298DDB59-7B13-4885-A4B2-AF0929A72D2A}.Release|Any CPU.ActiveCfg = Release
-		{298DDB59-7B13-4885-A4B2-AF0929A72D2A}.Release|Mixed Platforms.ActiveCfg = Release
-		{298DDB59-7B13-4885-A4B2-AF0929A72D2A}.Release|Mixed Platforms.Build.0 = Release
-		{298DDB59-7B13-4885-A4B2-AF0929A72D2A}.Release|x86.ActiveCfg = Release
-		{298DDB59-7B13-4885-A4B2-AF0929A72D2A}.Release|x86.Build.0 = Release
 		{9DCDBB22-ECEB-4220-A0FE-E786189F0B08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9DCDBB22-ECEB-4220-A0FE-E786189F0B08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DCDBB22-ECEB-4220-A0FE-E786189F0B08}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -95,6 +85,12 @@ Global
 		{8E445E7B-246A-446A-B3B2-ED4F51C21768}.Release|Mixed Platforms.Build.0 = Release|x86
 		{8E445E7B-246A-446A-B3B2-ED4F51C21768}.Release|x86.ActiveCfg = Release|x86
 		{8E445E7B-246A-446A-B3B2-ED4F51C21768}.Release|x86.Build.0 = Release|x86
+		{2E147F33-6B10-45FE-88DD-06D842F684AD}.Debug|Any CPU.ActiveCfg = Debug
+		{2E147F33-6B10-45FE-88DD-06D842F684AD}.Debug|Mixed Platforms.ActiveCfg = Debug
+		{2E147F33-6B10-45FE-88DD-06D842F684AD}.Debug|x86.ActiveCfg = Debug
+		{2E147F33-6B10-45FE-88DD-06D842F684AD}.Release|Any CPU.ActiveCfg = Release
+		{2E147F33-6B10-45FE-88DD-06D842F684AD}.Release|Mixed Platforms.ActiveCfg = Release
+		{2E147F33-6B10-45FE-88DD-06D842F684AD}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

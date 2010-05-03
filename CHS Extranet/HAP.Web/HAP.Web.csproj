@@ -100,7 +100,6 @@
     <Content Include="BookingSystem\Display.aspx" />
     <Content Include="BookingSystem\loading.gif" />
     <Content Include="BookingSystem\OverviewCalendar.ascx" />
-    <Content Include="BookingSystem\temp.htm" />
     <Content Include="ClientBin\HAP.Silverlight.xap" />
     <Content Include="Controls\Announcement.ascx" />
     <Content Include="App_Data\Announcement.xml" />
@@ -121,6 +120,7 @@
     <Content Include="images\arrow-right.gif" />
     <Content Include="images\breadcrumbover.gif" />
     <Content Include="images\browser-a-booked-hover.gif" />
+    <Content Include="images\browser-a-override-hover.gif" />
     <Content Include="images\dashed.gif" />
     <Content Include="images\headbg.png" />
     <Content Include="images\icons\rdp.png" />

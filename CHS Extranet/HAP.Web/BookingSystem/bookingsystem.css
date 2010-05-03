@@ -5,7 +5,7 @@
 #daylist span { width: 152px; float: left; text-align: center; }
 #daylist span i { font-style: normal; color: Gray; display: block; font-size: small; }
 #daylist span u { display: block; color: Gray; font-size: x-small; text-decoration: none; }
-#daylist span span { line-height: 20px; height: auto; padding: 8px 0 0 0; }
+#daylist span span, #daylist span a.static { line-height: 20px; height: auto; padding: 8px 0 0 0; }
 #daylist div div { overflow: hidden; border-bottom: solid 1px #7da2ce; height: 54px; text-align: center; background: #fff; }
 #daylist div div span.room { line-height: 54px; display: block; height: 54px; background: #7da2ce; }
 #daylist div div.break { height: auto; line-height: normal; background: #7da2ce; }
@@ -14,11 +14,11 @@
 #daylist div div img { float: left; margin: 4px; }
 #daylist div div a:hover { border: solid 1px #7da2ce; background: #f9fbfd url(../images/browser-a-hover.gif) repeat-x top left; text-decoration: none; }
 #daylist h2 { border-bottom: solid 1px #7da2ce; margin: 0; padding: 122px 0 123px 0; text-align: center; }
-#daylist a.booked { line-height: normal; padding: 6px 0 4px 0; line-height: 20px; height: 40px; position: relative; white-space: nowrap; overflow: hidden; }
-#daylist a.booked label { display: none; position: absolute; cursor: pointer; text-align: right; top: -6px; right: 0; font-size: small; }
+#daylist a.booked, #daylist span a.static { line-height: normal; padding: 6px 0 4px 0; line-height: 20px; height: 40px; position: relative; white-space: nowrap; overflow: hidden; } 
+#daylist a label { display: none; position: absolute; cursor: pointer; text-align: right; top: -6px; right: 0; font-size: small; }
 #daylist a.booked:hover { border-color: #be3430; background-image: url(../images/browser-a-booked-hover.gif); }
-#daylist a.booked:hover label { display: block; }
-
+#daylist a:hover label { display: block; }
+#daylist span a.static:hover { border-color: #ffd800; background-image: url(../images/browser-a-override-hover.gif); }
 #daylist a.bookedl, #daylist div.Laptops span span { line-height: normal; padding: 4px; height: 42px; position: relative; }
 #daylist a.bookedl label { display: none; position: absolute; cursor: pointer; text-align: right; top: -4px; right: 0; font-size: small; }
 #daylist a.bookedl:hover { border-color: #be3430; background-image: url(../images/browser-a-booked-hover.gif); }
@@ -46,11 +46,12 @@
 .Term.SelDay { background-image: none; }
 .modalBackground { background-color:Gray; filter:alpha(opacity=70); opacity:0.7; position: absolute; position: fixed; top: 0; height: 100%; left: 0; width: 100%; z-index: 2500; }
 #modalPopup, #loadingPopup, #OverviewBox { position: absolute; position: fixed; z-index: 3500; width: 100%; top: 40%; left: 0; width: 100%; }
+#OverviewBox { top: 20%; }
 .popupContent { background: #fff url(../images/bar.gif) repeat-x top left; padding: 4px; border: solid 1px #7da2ce; width: 500px; margin: 0 auto; border-radius: 3px; -moz-border-radius: 3px; }
 .popupContent div {  }
 .popupContent h1 { background: transparent; margin: 0; padding: 0; height: 28px; line-height: 26px; font-size: medium; color: #1f3976; font-weight: normal; }
 .buttons, .modalButtons { text-align: right; border-top: solid 1px #7da2ce; padding: 4px; margin: 4px 0 0 0; }
 .QuickView { overflow: hidden; float: left; padding: 3px; }
-.QuickView div { height: 6px; overflow: hidden; padding: 0; }
-.QuickView span { float: left; height: 5px; width: 5px; margin: 0px 1px 1px 0; background: #7da2ce; }
+.QuickView div { height: 10px; overflow: hidden; padding: 0; }
+.QuickView span { float: left; height: 9px; width: 9px; margin: 0px 1px 1px 0; background: #7da2ce; }
 .QuickView span.free { background: #fff; }

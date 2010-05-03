@@ -41,7 +41,7 @@
                         <img src="<%#string.Format("/Extranet/Images/StatusIcons/{0}.png", Eval("Status")) %>" alt="<%#Eval("Status")%>" />
                         <img src="<%#string.Format("/Extranet/Images/StatusIcons/priority_{0}.png", Eval("Priority")) %>" alt="" class="Priority" />
                         <%# Eval("Subject") %>
-                        <i>Opened <%# Eval("Date") %> by <%# getDisplayName(Eval("User")) %></i>
+                        <i><%# ((DateTime)Eval("Date")).ToString("dd/MM/yy hh:mm")%> by <%# getDisplayName(Eval("User")) %></i>
                     </a>
                 </ItemTemplate>
             </asp:Repeater>

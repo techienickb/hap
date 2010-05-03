@@ -27,7 +27,7 @@ namespace HAP.Config
         private void btnsave_Click(object sender, EventArgs e)
         {
             XmlDocument doc = new XmlDocument();
-            doc.Load(Path.Combine(Directory.GetParent(Path.GetDirectoryName(Application.ExecutablePath)).FullName, "web.config"));
+            doc.Load(path);
 
             XmlNode hapConfig = doc.SelectSingleNode("/configuration/hapConfig");
             #region Base Settings
@@ -182,7 +182,7 @@ namespace HAP.Config
             }
             #endregion
 
-            doc.Save(Path.Combine(Directory.GetParent(Path.GetDirectoryName(Application.ExecutablePath)).FullName, "web.config"));
+            doc.Save(path);
             MessageBox.Show("Saved", "Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -215,10 +215,25 @@ namespace HAP.Config
             }
         }
 
+        private string path;
+
         private void Main_Load(object sender, EventArgs e)
         {
+            path = Path.Combine(Directory.GetParent(Path.GetDirectoryName(Application.ExecutablePath)).FullName, "web.config");
+            if (!File.Exists(path)) 
+            {
+                if (folderBrowser.ShowDialog(this) == System.Windows.Forms.DialogResult.OK)
+                    path = Path.Combine(folderBrowser.SelectedPath, "web.config");
+                if (!File.Exists(path))
+                {
+                    MessageBox.Show(this, "I'm unable to load the Home Access Plus+ Web.Config file, please run me again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Close();
+                    return;
+                }
+            }
+
             XmlDocument doc = new XmlDocument();
-            doc.Load(Path.Combine(Directory.GetParent(Path.GetDirectoryName(Application.ExecutablePath)).FullName, "web.config"));
+            doc.Load(path);
 
             XmlNode hapConfig = doc.SelectSingleNode("/configuration/hapConfig");
             #region Base Settings

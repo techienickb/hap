@@ -102,6 +102,11 @@
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage8 = new System.Windows.Forms.TabPage();
             this.Resources = new System.Windows.Forms.DataGridView();
+            this.ResName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.type = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.EmailAdmin = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Charging = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.ResEnable = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.tabPage9 = new System.Windows.Forms.TabPage();
             this.lessons = new System.Windows.Forms.DataGridView();
             this.LessonName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -117,11 +122,7 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.btnClose = new System.Windows.Forms.Button();
             this.btnsave = new System.Windows.Forms.Button();
-            this.ResName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.type = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.EmailAdmin = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.Charging = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.ResEnable = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -849,8 +850,38 @@
             this.Resources.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Resources.Location = new System.Drawing.Point(3, 3);
             this.Resources.Name = "Resources";
-            this.Resources.Size = new System.Drawing.Size(600, 231);
+            this.Resources.Size = new System.Drawing.Size(600, 233);
             this.Resources.TabIndex = 0;
+            // 
+            // ResName
+            // 
+            this.ResName.HeaderText = "Name";
+            this.ResName.Name = "ResName";
+            // 
+            // type
+            // 
+            this.type.HeaderText = "Type";
+            this.type.Items.AddRange(new object[] {
+            "ITRoom",
+            "Laptops",
+            "Equipment",
+            "Other"});
+            this.type.Name = "type";
+            // 
+            // EmailAdmin
+            // 
+            this.EmailAdmin.HeaderText = "Email Admin";
+            this.EmailAdmin.Name = "EmailAdmin";
+            // 
+            // Charging
+            // 
+            this.Charging.HeaderText = "Charging";
+            this.Charging.Name = "Charging";
+            // 
+            // ResEnable
+            // 
+            this.ResEnable.HeaderText = "Enable";
+            this.ResEnable.Name = "ResEnable";
             // 
             // tabPage9
             // 
@@ -858,7 +889,7 @@
             this.tabPage9.Location = new System.Drawing.Point(4, 24);
             this.tabPage9.Name = "tabPage9";
             this.tabPage9.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage9.Size = new System.Drawing.Size(656, 237);
+            this.tabPage9.Size = new System.Drawing.Size(606, 237);
             this.tabPage9.TabIndex = 1;
             this.tabPage9.Text = "Lessons";
             this.tabPage9.UseVisualStyleBackColor = true;
@@ -875,7 +906,7 @@
             this.lessons.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lessons.Location = new System.Drawing.Point(3, 3);
             this.lessons.Name = "lessons";
-            this.lessons.Size = new System.Drawing.Size(650, 233);
+            this.lessons.Size = new System.Drawing.Size(600, 233);
             this.lessons.TabIndex = 0;
             // 
             // LessonName
@@ -930,7 +961,7 @@
             this.bs_twoweek.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.bs_twoweek.Location = new System.Drawing.Point(65, 70);
             this.bs_twoweek.Name = "bs_twoweek";
-            this.bs_twoweek.Size = new System.Drawing.Size(147, 19);
+            this.bs_twoweek.Size = new System.Drawing.Size(134, 17);
             this.bs_twoweek.TabIndex = 5;
             this.bs_twoweek.Text = "Two Week Timetable: ";
             this.bs_twoweek.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -998,35 +1029,11 @@
             this.btnsave.UseVisualStyleBackColor = true;
             this.btnsave.Click += new System.EventHandler(this.btnsave_Click);
             // 
-            // ResName
+            // folderBrowser
             // 
-            this.ResName.HeaderText = "Name";
-            this.ResName.Name = "ResName";
-            // 
-            // type
-            // 
-            this.type.HeaderText = "Type";
-            this.type.Items.AddRange(new object[] {
-            "ITRoom",
-            "Laptops",
-            "Equipment",
-            "Other"});
-            this.type.Name = "type";
-            // 
-            // EmailAdmin
-            // 
-            this.EmailAdmin.HeaderText = "Email Admin";
-            this.EmailAdmin.Name = "EmailAdmin";
-            // 
-            // Charging
-            // 
-            this.Charging.HeaderText = "Charging";
-            this.Charging.Name = "Charging";
-            // 
-            // ResEnable
-            // 
-            this.ResEnable.HeaderText = "Enable";
-            this.ResEnable.Name = "ResEnable";
+            this.folderBrowser.Description = "Please select HAP\'s installation directory";
+            this.folderBrowser.RootFolder = System.Environment.SpecialFolder.MyComputer;
+            this.folderBrowser.ShowNewFolderButton = false;
             // 
             // Main
             // 
@@ -1172,5 +1179,6 @@
         private System.Windows.Forms.DataGridViewCheckBoxColumn EmailAdmin;
         private System.Windows.Forms.DataGridViewCheckBoxColumn Charging;
         private System.Windows.Forms.DataGridViewCheckBoxColumn ResEnable;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowser;
     }
 }

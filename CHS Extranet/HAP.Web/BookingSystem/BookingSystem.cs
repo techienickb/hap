@@ -34,12 +34,12 @@ namespace HAP.Web.BookingSystem
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Bookings.xml"));
-            if (isStatic(room, lesson)) return StaticBookings[BookingKey.parseBooking(DayNumber, lesson, room)];
-            else if (!islessonFree(room, lesson))
+            if (!islessonFree(room, lesson))
             {
                 XmlNode node = doc.SelectSingleNode("/Bookings/Booking[@date='" + Date.ToShortDateString() + "' and @lesson='" + lesson + "' and @room='" + room + "']");
                 return new Booking(node, DayNumber);
             }
+            else if (isStatic(room, lesson)) return StaticBookings[BookingKey.parseBooking(DayNumber, lesson, room)];
             return new Booking(DayNumber, lesson, room, "FREE", "Not Booked");
         }
 
