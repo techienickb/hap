@@ -53,18 +53,25 @@ namespace HAP.Web.BookingSystem
                     if (lessonname.Length > 17) lessonname = lessonname.Remove(17) + "...";
                     if (b.Name == "FREE")
                         writer.Write("<span><a href=\"javascript:book('{0}', '{1}', '{2}');\">FREE</a></span>", Room, RoomType, b.Lesson);
+                    else if (!b.Static)
+                    {
+                        if (RoomType == ResourceType.Laptops && bookie)
+                            writer.Write("<span><a href=\"javascript:remove('{0}', '{1}');\" class=\"bookedl\">{2}<i> with {3}</i><u>{4} laptops [{5}] in {6}</u><label>Remove</label></a></span>", Room, b.Lesson, lessonname, b.User.Notes, b.LTCount, b.LTHeadPhones ? "H" : "NH", b.LTRoom);
+                        else if (RoomType == ResourceType.Equipment && bookie)
+                            writer.Write("<span><a href=\"javascript:remove('{0}', '{1}');\" class=\"bookedl\">{2}<i> with {3} in {4}</i><label>Remove</label></a></span>", Room, b.Lesson, lessonname, b.User.Notes, b.EquipRoom);
+                        else if (RoomType == ResourceType.Laptops)
+                            writer.Write("<span><span>{0}<i> with {1}</i><u>{2} laptops [{3}] in {4}</u></a></span></span>", lessonname, b.User.Notes, b.LTCount, b.LTHeadPhones ? "H" : "NH", b.LTRoom);
+                        else if (RoomType == ResourceType.Equipment && !b.Static)
+                            writer.Write("<span><span>{0}<i> with {1} in {2}</i></span></span>", lessonname, b.User.Notes, b.EquipRoom);
+                        else if (bookie && !b.Static) writer.Write("<span><a href=\"javascript:remove('{0}', '{1}');\" class=\"booked\">{2}<i> with {3}</i><label>Remove</label></a></span>", Room, b.Lesson, lessonname, b.User.Notes);
+                        else writer.Write("<span><span>{0}<i>with {1}</i></span></span>", lessonname, b.User.Notes);
+                    }
                     else if (b.Static)
-                        writer.Write("<span><span class=\"static\"><img src=\"../images/staticb.png\" alt=\"Timetabled Lesson\" />{0}<i>with {1}</i></span></span>", lessonname, b.User.Notes);
-                    else if (RoomType == ResourceType.Laptops && bookie)
-                        writer.Write("<span><a href=\"javascript:remove('{0}', '{1}');\" class=\"bookedl\">{2}<i> with {3}</i><u>{4} laptops [{5}] in {6}</u><label>Remove</label></a></span>", Room, b.Lesson, lessonname, b.User.Notes, b.LTCount, b.LTHeadPhones ? "H" : "NH", b.LTRoom);
-                    else if (RoomType == ResourceType.Equipment && bookie)
-                        writer.Write("<span><a href=\"javascript:remove('{0}', '{1}');\" class=\"bookedl\">{2}<i> with {3} in {4}</i><label>Remove</label></a></span>", Room, b.Lesson, lessonname, b.User.Notes, b.EquipRoom);
-                    else if (RoomType == ResourceType.Laptops)
-                        writer.Write("<span><span>{0}<i> with {1}</i><u>{2} laptops [{3}] in {4}</u></a></span></span>", lessonname, b.User.Notes, b.LTCount, b.LTHeadPhones ? "H" : "NH", b.LTRoom);
-                    else if (RoomType == ResourceType.Equipment)
-                        writer.Write("<span><span>{0}<i> with {1} in {2}</i></span></span>", lessonname, b.User.Notes, b.EquipRoom);
-                    else if (bookie) writer.Write("<span><a href=\"javascript:remove('{0}', '{1}');\" class=\"booked\">{2}<i> with {3}</i><label>Remove</label></a></span>", Room, b.Lesson, lessonname, b.User.Notes);
-                    else writer.Write("<span><span>{0}<i>with {1}</i></span></span>", lessonname, b.User.Notes);
+                    {
+                        if (Page.User.IsInRole("Domain Admins"))
+                            writer.Write("<span><a href=\"javascript:book('{0}', '{1}', '{2}');\" class=\"static\"><img src=\"../images/staticb.png\" alt=\"Timetabled Lesson\" />{3}<i>with {4}</i><label>Override</label></a></span>", Room, RoomType, b.Lesson, lessonname, b.User.Notes);
+                        else writer.Write("<span><span class=\"static\"><img src=\"../images/staticb.png\" alt=\"Timetabled Lesson\" />{0}<i>with {1}</i></span></span>", lessonname, b.User.Notes);
+                    }
                 }
         }
 

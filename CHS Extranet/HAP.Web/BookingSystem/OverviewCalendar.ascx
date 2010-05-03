@@ -4,7 +4,7 @@
 <%@ Register Assembly="System.Web.Ajax" Namespace="System.Web.UI" TagPrefix="asp" %>
     
     <div ID="OverviewBox" style="display: none;">
-        <div class="popupContent" style="width: 400px;">
+        <div class="popupContent" style="width: 600px;">
             <h1>Month Overview</h1>
             <div>
                 <hap:BigBookingCalendar ID="OverviewCal" CssClass="OverviewCal" runat="server" FirstDayOfWeek="Monday" NextPrevFormat="ShortMonth" BackColor="Transparent" BorderColor="#d9d9d9" BorderWidth="0" CellPadding="4" DayNameFormat="Short" Font-Size="10pt" Width="100%" SelectionMode="None">
