@@ -87,17 +87,22 @@ namespace HAP.Web.BookingSystem
                 if (hapConfig.Current.BookingSystem.TwoWeekTimetable)
                 {
                     System.Globalization.Calendar cal = CultureInfo.InvariantCulture.Calendar;
+                    int swn = this.startWeekNum;
                     int x = cal.GetWeekOfYear(date, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
                     if ((date >= this.startDate) && (date < this.halfTerm.StartDate))
                     {
                         int y = cal.GetWeekOfYear(this.startDate, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
 
-                        return (((x - y) % 2) == 0) ? this.startWeekNum : this.startWeekNum + 1;
+                        int a = (((x - y) % 2) == 0) ? this.startWeekNum : this.startWeekNum + 1;
+                        if (a == 3) a = 1;
+                        return a;
                     }
                     else if ((date > this.halfTerm.EndDate) && (date <= this.EndDate))
                     {
-                        int y = cal.GetWeekOfYear(this.halfTerm.EndDate, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
-                        return (((x - y) % 2) == 0) ? this.startWeekNum + 1 : this.startWeekNum;
+                        int y = cal.GetWeekOfYear(this.halfTerm.EndDate.AddDays(3), CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+                        int a = (((x - y) % 2) == 0) ? this.startWeekNum + 1 : this.startWeekNum;
+                        if (a == 3) a = 1;
+                        return a;
                     }
                     else return 0;
                 }

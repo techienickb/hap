@@ -157,30 +157,40 @@ namespace HAP.Web
                 bool allowedit = isWriteAuth(config.MyComputer.UNCPaths[RoutingDrive]);
                 newfolderlink.Visible = newfileuploadlink.Visible = allowedit;
                 if (RoutingDrive != "N" && RoutingDrive != "H") rckmove.Style.Add("display", "none");
-                try
-                {
+                try {
                     foreach (DirectoryInfo subdir in dir.GetDirectories())
-                        if (!subdir.Name.ToLower().Contains("recycle"))
+                        try
                         {
-                            string dirpath = subdir.FullName;
-                            if (unc == null) dirpath = dirpath.Replace(userhome, "N/");
-                            else dirpath = dirpath.Replace(string.Format(unc.UNC, Username), unc.Drive);
-                            dirpath = dirpath.Replace('\\', '/');
-                            items.Add(new MyComputerItem(subdir.Name, "Last Modified: " + subdir.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/MyComputer/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(subdir), allowedit));
+                            if (!subdir.Name.ToLower().Contains("recycle"))
+                            {
+                                string dirpath = subdir.FullName;
+                                if (unc == null) dirpath = dirpath.Replace(userhome, "N/");
+                                else dirpath = dirpath.Replace(string.Format(unc.UNC, Username), unc.Drive);
+                                dirpath = dirpath.Replace('\\', '/');
+                                items.Add(new MyComputerItem(subdir.Name, "Last Modified: " + subdir.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/MyComputer/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(subdir), allowedit));
+                            }
                         }
-                    
+                        catch { }
+
                     foreach (FileInfo file in dir.GetFiles())
                     {
-                        if (!file.Name.ToLower().Contains("thumbs") && checkext(file.Extension))
+                        try
                         {
-                            string dirpath = file.FullName;
-                            if (unc == null) dirpath = dirpath.Replace(userhome, "N/");
-                            else dirpath = dirpath.Replace(string.Format(unc.UNC, Username), unc.Drive);
-                            dirpath = dirpath.Replace('\\', '/');
-                            if (!string.IsNullOrEmpty(file.Extension))
-                                items.Add(new MyComputerItem(file.Name.Replace(file.Extension, ""), "Last Modified: " + file.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/Download/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(file), allowedit));
-                            else
-                                items.Add(new MyComputerItem(file.Name, "Last Modified: " + file.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/Download/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(file), allowedit));
+                            if (!file.Name.ToLower().Contains("thumbs") && checkext(file.Extension))
+                            {
+                                string dirpath = file.FullName;
+                                if (unc == null) dirpath = dirpath.Replace(userhome, "N/");
+                                else dirpath = dirpath.Replace(string.Format(unc.UNC, Username), unc.Drive);
+                                dirpath = dirpath.Replace('\\', '/');
+                                if (!string.IsNullOrEmpty(file.Extension))
+                                    items.Add(new MyComputerItem(file.Name.Replace(file.Extension, ""), "Last Modified: " + file.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/Download/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(file), allowedit));
+                                else
+                                    items.Add(new MyComputerItem(file.Name, "Last Modified: " + file.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/Download/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(file), allowedit));
+                            }
+                        }
+                        catch
+                        {
+                            //Response.Redirect("/extranet/unauthorised.aspx?path=" + Server.UrlPathEncode(uae.Message), true);
                         }
                     }
                 }
