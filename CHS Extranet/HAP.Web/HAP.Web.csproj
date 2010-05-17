@@ -18,7 +18,7 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
-    <SilverlightApplicationList>{9DCDBB22-ECEB-4220-A0FE-E786189F0B08}|..\HAP.Silverlight\HAP.Silverlight.csproj|ClientBin|False</SilverlightApplicationList>
+    <SilverlightApplicationList>{9DCDBB22-ECEB-4220-A0FE-E786189F0B08}|..\HAP.Silverlight\HAP.Silverlight.csproj|ClientBin|False,{E1C14EF8-AD23-48F5-9EFF-9A2F4A07CCC9}|..\HAP.Silverlight.Browser\HAP.Silverlight.Browser.csproj|ClientBin|False</SilverlightApplicationList>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -100,6 +100,7 @@
     <Content Include="BookingSystem\Display.aspx" />
     <Content Include="BookingSystem\loading.gif" />
     <Content Include="BookingSystem\OverviewCalendar.ascx" />
+    <Content Include="ClientBin\HAP.Silverlight.Browser.xap" />
     <Content Include="ClientBin\HAP.Silverlight.xap" />
     <Content Include="Controls\Announcement.ascx" />
     <Content Include="App_Data\Announcement.xml" />
