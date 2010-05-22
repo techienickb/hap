@@ -39,6 +39,7 @@
                     <my:BarButton x:Name="newfolder" Text="New Folder" Click="newfolder_Click" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Column="1">
+                    <my:HelpButton x:Name="helpButton1" Click="helpButton1_Click" />
                     <my:ViewButton x:Name="barContextButton1" Text="View" Click="barContextButton1_Click" />
                 </StackPanel>
             </Grid>
@@ -81,11 +82,7 @@
                     <RowDefinition Height="3" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="100" />
-                </Grid.ColumnDefinitions>
-                <Rectangle Grid.ColumnSpan="2">
+                <Rectangle>
                     <Rectangle.Fill>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Color="#FFCCD9EA" Offset="0.1" />
@@ -99,9 +96,6 @@
                             <my:UploadItem x:Name="uploadItem1" />
                         </StackPanel>
                     </ScrollViewer>
-                </whistlerBlue:WhistlerBlueTheme>
-                <whistlerBlue:WhistlerBlueTheme Grid.Column="2" Grid.Row="1" Margin="0, 14, 10, 14">
-                    <Button Content="Start Upload" />
                 </whistlerBlue:WhistlerBlueTheme>
             </Grid>
         </Grid>

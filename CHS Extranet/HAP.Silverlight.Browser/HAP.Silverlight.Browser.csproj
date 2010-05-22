@@ -88,6 +88,15 @@
     <Compile Include="BrowserItem.xaml.cs">
       <DependentUpon>BrowserItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FileExists.xaml.cs">
+      <DependentUpon>FileExists.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="HelpButton.xaml.cs">
+      <DependentUpon>HelpButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Help.xaml.cs">
+      <DependentUpon>Help.xaml</DependentUpon>
+    </Compile>
     <Compile Include="OrganiseButton.xaml.cs">
       <DependentUpon>OrganiseButton.xaml</DependentUpon>
     </Compile>
@@ -112,6 +121,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="BrowserItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FileExists.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="HelpButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Help.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -149,6 +170,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="move.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="help.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="movearrow.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
