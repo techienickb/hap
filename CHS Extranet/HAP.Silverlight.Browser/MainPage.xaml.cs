@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.IO;
+using System.Windows.Controls.Theming;
 
 namespace HAP.Silverlight.Browser
 {
@@ -406,6 +407,12 @@ namespace HAP.Silverlight.Browser
                 }
             }
             catch { MessageBox.Show("The item you have dragged here is not supported"); }
+        }
+
+        private void helpButton1_Click(object sender, RoutedEventArgs e)
+        {
+            Help help = new Help();
+            help.Show();
         }
     }
 

@@ -3,11 +3,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" Background="Transparent"
+    mc:Ignorable="d" Background="Transparent" xmlns:toolkit="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
     d:DesignHeight="30" d:DesignWidth="100" Margin="0,0,2,0">
 
     <Grid x:Name="LayoutRoot" Background="Transparent">
-        <ProgressBar Name="Progress" Minimum="0" Maximum="100" />
+        <ProgressBar Name="Progress" Minimum="0" Maximum="100" Value="10" />
         <StackPanel Orientation="Horizontal">
             <Image HorizontalAlignment="Left" Margin="4" Name="image1" Stretch="Uniform" Source="/HAP.Silverlight.Browser;component/file.png" />
             <Grid VerticalAlignment="Center" Margin="0, 0, 10, 0">
@@ -19,5 +19,10 @@
                 <TextBlock x:Name="FileSize" Margin="0, 0, 0, 5" Grid.Row="2" VerticalAlignment="Top" Text="4kb" Foreground="Gray" />
             </Grid>
         </StackPanel>
+        <toolkit:ContextMenuService.ContextMenu>
+            <toolkit:ContextMenu>
+                <toolkit:MenuItem Header="Remove" />
+            </toolkit:ContextMenu>
+        </toolkit:ContextMenuService.ContextMenu>
     </Grid>
 </UserControl>
