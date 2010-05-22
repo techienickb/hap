@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="HAP.Silverlight.Browser.UploadItem"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" Background="Transparent"
+    d:DesignHeight="30" d:DesignWidth="100" Margin="0,0,2,0">
+
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <ProgressBar Name="Progress" Minimum="0" Maximum="100" />
+        <StackPanel Orientation="Horizontal">
+            <Image HorizontalAlignment="Left" Margin="4" Name="image1" Stretch="Uniform" Source="/HAP.Silverlight.Browser;component/file.png" />
+            <Grid VerticalAlignment="Center" Margin="0, 0, 10, 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="26" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBlock Text="File" Margin="0, 7, 0, 0" x:Name="Name" FontSize="12" />
+                <TextBlock x:Name="FileSize" Margin="0, 0, 0, 5" Grid.Row="2" VerticalAlignment="Top" Text="4kb" Foreground="Gray" />
+            </Grid>
+        </StackPanel>
+    </Grid>
+</UserControl>

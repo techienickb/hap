@@ -117,7 +117,7 @@ namespace HAP.Config
             }
             XmlNode filters = mycomp.SelectSingleNode("uploadfilters");
             filters.RemoveAll();
-            foreach (DataGridViewRow row in uncpaths.Rows)
+            foreach (DataGridViewRow row in uploadfilters.Rows)
             {
                 if (!row.IsNewRow)
                 {
