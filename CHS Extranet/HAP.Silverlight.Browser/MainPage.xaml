@@ -1,0 +1,123 @@
+﻿<UserControl x:Class="HAP.Silverlight.Browser.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls"
+    xmlns:whistlerBlue="clr-namespace:System.Windows.Controls.Theming;assembly=System.Windows.Controls.Theming.WhistlerBlue" 
+    xmlns:toolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit" AllowDrop="True"
+    xmlns:controlsToolkit="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Toolkit"
+    mc:Ignorable="d" xmlns:my="clr-namespace:HAP.Silverlight.Browser" d:DesignHeight="400" d:DesignWidth="800" MouseMove="UserControl_MouseMove" MouseLeave="UserControl_MouseLeave" MouseLeftButtonUp="UserControl_MouseLeftButtonUp" DragEnter="UserControl_DragEnter" DragOver="UserControl_DragOver" DragLeave="UserControl_DragLeave" Drop="UserControl_Drop">
+    <Grid x:Name="LayoutRoot" Background="White">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="31" MaxHeight="31" MinHeight="31" />
+                <RowDefinition />
+                <RowDefinition Height="60" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" x:Name="ToolBarGrid" AllowDrop="False">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="100" />
+                </Grid.ColumnDefinitions>
+                <Grid.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFFAFCFD" Offset="0" />
+                        <GradientStop Color="#FFF9FCFF" Offset="0.1" />
+                        <GradientStop Color="#FFE7F1FB" Offset="0.499" />
+                        <GradientStop Color="#FFDCE6F4" Offset="0.501" />
+                        <GradientStop Color="#FFDCE7F5" Offset="0.95" />
+                        <GradientStop Color="#FFA0AFC3" Offset="0.96" />
+                        <GradientStop Color="#FFA0AFC3" Offset="1" />
+                    </LinearGradientBrush>
+                </Grid.Background>
+                <StackPanel Orientation="Horizontal">
+                    <my:OrganiseButton x:Name="organiseButton1" SelectAllClick="organiseButton1_SelectAllClick" />
+                    <my:BarButton x:Name="newfolder" Text="New Folder" Click="newfolder_Click" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Column="1">
+                    <my:ViewButton x:Name="barContextButton1" Text="View" Click="barContextButton1_Click" />
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Row="1" x:Name="MainGrid">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200" MinWidth="0" MaxWidth="400"/>
+                    <ColumnDefinition Width="2" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <whistlerBlue:WhistlerBlueTheme AllowDrop="False">
+                    <controls:TreeView Name="treeView1" BorderBrush="Transparent">
+                        <controls:TreeViewItem Header="My Documents" IsSelected="True" Expanded="TreeViewItem_Expanded">
+                            <controls:TreeViewItem Header="Loading..." />
+                        </controls:TreeViewItem>
+                        <controls:TreeViewItem Header="Shared Documents" Expanded="TreeViewItem_Expanded">
+                            <controls:TreeViewItem Header="Loading..." />
+                        </controls:TreeViewItem>
+                    </controls:TreeView>
+                </whistlerBlue:WhistlerBlueTheme>
+                <controls:GridSplitter Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1" Background="#FFE7F1FB" />
+                <Grid Grid.Column="2">
+                    <toolkit:ContextMenuService.ContextMenu>
+                        <toolkit:ContextMenu x:Name="context">
+                            <toolkit:MenuItem Header="New Folder" x:Name="RightClickFolder" Click="newfolder_Click" />
+                            <toolkit:MenuItem Header="Rename" x:Name="RightClickRename" Click="RightClickRename_Click" />
+                            <toolkit:MenuItem Header="Delete" x:Name="RightClickDelete" Click="RightClickDelete_Click" />
+                            <toolkit:MenuItem Visibility="Collapsed" x:Name="RightClickZIP" Header="Send to Compressed (ZIP) File" />
+                            <toolkit:MenuItem Visibility="Collapsed" x:Name="RightClickUNZIP" Header="Extract (ZIP) File" />
+                        </toolkit:ContextMenu>
+                    </toolkit:ContextMenuService.ContextMenu>
+                    <whistlerBlue:WhistlerBlueTheme>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" x:Name="scroller" BorderBrush="Transparent">
+                            <toolkit:WrapPanel x:Name="contentPan" Background="White" AllowDrop="True" MouseLeftButtonUp="contentPan_MouseLeftButtonUp" MouseRightButtonDown="contentPan_MouseRightButtonDown" DragEnter="contentPan_DragEnter" DragOver="contentPan_DragOver" DragLeave="contentPan_DragLeave" Drop="contentPan_Drop" />
+                        </ScrollViewer>
+                    </whistlerBlue:WhistlerBlueTheme>
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="2" AllowDrop="False" Background="#FFF1F5FB">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="100" />
+                </Grid.ColumnDefinitions>
+                <Rectangle Grid.ColumnSpan="2">
+                    <Rectangle.Fill>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FFCCD9EA" Offset="0.1" />
+                            <GradientStop Color="#FFF0F4FA" Offset="1" />
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+                <whistlerBlue:WhistlerBlueTheme Grid.Row="2" Background="Transparent">
+                    <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto" BorderBrush="Transparent" Padding="4">
+                        <StackPanel Orientation="Horizontal" x:Name="UploadQueue">
+                            <my:UploadItem x:Name="uploadItem1" />
+                        </StackPanel>
+                    </ScrollViewer>
+                </whistlerBlue:WhistlerBlueTheme>
+                <whistlerBlue:WhistlerBlueTheme Grid.Column="2" Grid.Row="1" Margin="0, 14, 10, 14">
+                    <Button Content="Start Upload" />
+                </whistlerBlue:WhistlerBlueTheme>
+            </Grid>
+        </Grid>
+        <Border x:Name="movetooltip" Visibility="Collapsed" VerticalAlignment="Top" HorizontalAlignment="Left" BorderBrush="#FF757575" CornerRadius="4" BorderThickness="1">
+            <Border.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFFEFEFE" Offset="0" />
+                    <GradientStop Color="#FFE3E2EE" Offset="1" />
+                </LinearGradientBrush>
+            </Border.Background>
+            <StackPanel Orientation="Horizontal">
+                <Image Name="moveic" Stretch="None" VerticalAlignment="Center" HorizontalAlignment="Left" Source="/HAP.Silverlight.Browser;component/move.png" Width="16" Height="16" Margin="6,2,0,2" />
+                <TextBlock HorizontalAlignment="Left" Margin="2" Name="movetext" Text="Move" VerticalAlignment="Center" Foreground="#FF3E08C9" />
+                <TextBlock HorizontalAlignment="Left" Margin="0,0,8,0" Name="movefoldertext" Text="" VerticalAlignment="Center" Foreground="#FF1F0065" />
+            </StackPanel>
+        </Border>
+        <Image Name="nomove" Stretch="None" Visibility="Collapsed" VerticalAlignment="Top" HorizontalAlignment="Left" Source="/HAP.Silverlight.Browser;component/nomove.png" Width="16" Height="16" />
+    </Grid>
+</UserControl>

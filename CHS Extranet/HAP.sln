@@ -14,9 +14,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Config", "HAP.Config\HA
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HAP.Setup", "HAP.Setup\HAP.Setup.vdproj", "{2E147F33-6B10-45FE-88DD-06D842F684AD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Silverlight.Browser", "HAP.Silverlight.Browser\HAP.Silverlight.Browser.csproj", "{E1C14EF8-AD23-48F5-9EFF-9A2F4A07CCC9}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
+		SccNumberOfProjects = 7
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs08.codeplex.com/
 		SccLocalPath0 = .
@@ -35,6 +37,9 @@ Global
 		SccProjectUniqueName5 = HAP.Setup\\HAP.Setup.vdproj
 		SccProjectName5 = HAP.Setup
 		SccLocalPath5 = HAP.Setup
+		SccProjectUniqueName6 = HAP.Silverlight.Browser\\HAP.Silverlight.Browser.csproj
+		SccProjectName6 = HAP.Silverlight.Browser
+		SccLocalPath6 = HAP.Silverlight.Browser
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +96,16 @@ Global
 		{2E147F33-6B10-45FE-88DD-06D842F684AD}.Release|Any CPU.ActiveCfg = Release
 		{2E147F33-6B10-45FE-88DD-06D842F684AD}.Release|Mixed Platforms.ActiveCfg = Release
 		{2E147F33-6B10-45FE-88DD-06D842F684AD}.Release|x86.ActiveCfg = Release
+		{E1C14EF8-AD23-48F5-9EFF-9A2F4A07CCC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1C14EF8-AD23-48F5-9EFF-9A2F4A07CCC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1C14EF8-AD23-48F5-9EFF-9A2F4A07CCC9}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E1C14EF8-AD23-48F5-9EFF-9A2F4A07CCC9}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E1C14EF8-AD23-48F5-9EFF-9A2F4A07CCC9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E1C14EF8-AD23-48F5-9EFF-9A2F4A07CCC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1C14EF8-AD23-48F5-9EFF-9A2F4A07CCC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1C14EF8-AD23-48F5-9EFF-9A2F4A07CCC9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E1C14EF8-AD23-48F5-9EFF-9A2F4A07CCC9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E1C14EF8-AD23-48F5-9EFF-9A2F4A07CCC9}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
