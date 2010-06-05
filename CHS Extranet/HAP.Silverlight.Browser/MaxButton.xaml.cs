@@ -10,38 +10,33 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Media.Imaging;
-using System.Windows.Resources;
+using System.Windows.Browser;
 
 namespace HAP.Silverlight.Browser
 {
-    public partial class OrganiseButton : UserControl
+    public partial class MaxButton : UserControl
     {
-        public OrganiseButton()
+        public MaxButton()
         {
             InitializeComponent();
+            if (Max)
+            {
+                image1.Visibility = System.Windows.Visibility.Collapsed;
+                image2.Visibility = System.Windows.Visibility.Visible;
+            }
+            else
+            {
+                image1.Visibility = System.Windows.Visibility.Visible;
+                image2.Visibility = System.Windows.Visibility.Collapsed;
+            }
         }
 
-        public string Text
+        private void UserControl_MouseEnter(object sender, MouseEventArgs e)
         {
-            get { return textBlock1.Text; }
-            set { textBlock1.Text = value; }
+
         }
 
-        public bool IsRename
-        {
-            get { return cRename.IsEnabled; }
-            set { cRename.IsEnabled = value; }
-        }
-
-        public bool IsDelete
-        {
-            get { return cDelete.IsEnabled; }
-            set { cDelete.IsEnabled = value; }
-        }
-
-        public event RoutedEventHandler Delete;
-        public event RoutedEventHandler Rename;
-        public event RoutedEventHandler SelectAllClick;
+        public event RoutedEventHandler Click;
 
         private void Border_MouseEnter(object sender, MouseEventArgs e)
         {
@@ -61,31 +56,37 @@ namespace HAP.Silverlight.Browser
             BBorder1.Background = Resources["DownBg"] as LinearGradientBrush;
         }
 
+        public bool Max 
+        {
+            get
+            {
+                try
+                {
+                    if (HtmlPage.Document.Body.GetAttribute("class") == "max") return true;
+                }
+                catch { }
+                return false;
+            }
+        }
+
         private void BBorder1_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             BBorder1.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 187, 202, 219));
             BBorder.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 239, 244, 249));
             BBorder1.Background = new SolidColorBrush(Colors.Transparent);
-            context.IsOpen = true;
-            context.VerticalOffset = 25 - e.GetPosition(BBorder).Y;
-            context.HorizontalOffset = 0 - e.GetPosition(BBorder).Y;
-        }
-
-        private void SelectAll_Click(object sender, RoutedEventArgs e)
-        {
-            if (SelectAllClick != null) SelectAllClick(sender, e);
-        }
-
-        private void cDelete_Click(object sender, RoutedEventArgs e)
-        {
-            if (Delete != null) Delete(sender, e);
-            cDelete.IsEnabled = cRename.IsEnabled = false;
-        }
-
-        private void cRename_Click(object sender, RoutedEventArgs e)
-        {
-            if (Rename != null) Rename(sender, e);
-            cDelete.IsEnabled = cRename.IsEnabled = false;
+            if (Max)
+            {
+                image2.Visibility = System.Windows.Visibility.Collapsed;
+                image1.Visibility = System.Windows.Visibility.Visible;
+                HtmlPage.Document.Body.RemoveAttribute("class");
+            }
+            else
+            {
+                image2.Visibility = System.Windows.Visibility.Visible;
+                image1.Visibility = System.Windows.Visibility.Collapsed;
+                HtmlPage.Document.Body.SetAttribute("class", "max");
+            }
+            if (Click != null) Click(this, new RoutedEventArgs());
         }
     }
 }

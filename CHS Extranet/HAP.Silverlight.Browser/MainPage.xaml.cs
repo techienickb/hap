@@ -11,6 +11,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.IO;
 using System.Windows.Controls.Theming;
+using System.Windows.Browser;
 
 namespace HAP.Silverlight.Browser
 {
@@ -19,29 +20,249 @@ namespace HAP.Silverlight.Browser
         public MainPage()
         {
             InitializeComponent();
+            loaded = false;
             activeItems = new List<BrowserItem>();
-            BrowserItem item = new BrowserItem(new BItem("Folder 1", "/HAP.Silverlight.Browser;component/folder.png", "", "Folder", BType.Folder, "/N/Folder"));
-            item.Activate += new EventHandler(item_Activate);
-            item.MouseEnter += new MouseEventHandler(item_MouseEnter);
-            item.MouseLeftButtonDown += new MouseButtonEventHandler(item_MouseLeftButtonDown);
-            item.ItemDrop += new DragEventHandler(item_Drop);
-            item.DragEnter += new DragEventHandler(item_DragEnter);
-            item.DragLeave += new DragEventHandler(item_DragLeave);
-            item.MouseLeave += new MouseEventHandler(item_MouseLeave);
-            item.ReSort += new EventHandler(item_ReSort);
+            Filter = new List<string>();
+            ViewMode = Browser.ViewMode.Tile;
+            CurrentItem = new BItem("My Computer", "", "", "", BType.Drive, "", false);
+            newfolder.Visibility = System.Windows.Visibility.Collapsed;
+            WebClient driveclient = new WebClient();
+            driveclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(driveclient_DownloadStringCompleted);
+            driveclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + "/extranet/api/mycomputer/listdrives"), false);
+        }
+
+        private bool loaded;
+        public List<string> Filter { get; set; }
+        private BItem CurrentItem { get; set; }
+        private List<BItem> Drives { get; set; }
+        public ViewMode ViewMode { get; set; }
+
+        delegate void ClearItemsDelegate();
+        delegate void AddItemDelegate(BrowserItem item, bool Resort);
+        public void AddItem(BrowserItem item, bool Resort)
+        {
             contentPan.Children.Add(item);
-            item = new BrowserItem(new BItem("File 1", "/HAP.Silverlight.Browser;component/file.png", "0 bytes", "File", BType.File, "/N/File"));
-            item.MouseEnter += new MouseEventHandler(item_MouseEnter);
-            item.MouseLeftButtonDown += new MouseButtonEventHandler(item_MouseLeftButtonDown);
-            item.MouseLeave += new MouseEventHandler(item_MouseLeave);
-            item.Activate += new EventHandler(item_Activate);
-            item.ReSort += new EventHandler(item_ReSort);
-            contentPan.Children.Add(item);
+            if (Resort) item_ReSort(this, true);
+        }
+        public void ClearItems()
+        {
+            contentPan.Children.Clear();
+            activeItems.Clear();
+        }
+
+        private void driveclient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
+        {
+            Dispatcher.BeginInvoke(new DownloadStringCompletedEventHandler(driveclient_DownloadStringCompleted2), sender, e);
+        }
+        private void driveclient_DownloadStringCompleted2(object sender, DownloadStringCompletedEventArgs e)
+        {
+            if (loaded) ClearItems();
+            foreach (string s in e.Result.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                if (s.StartsWith("FILTER"))
+                {
+                    if (!Filter.Contains(s.Remove(0, 6)))
+                        Filter.Add(s.Remove(0, 6));
+                }
+                else
+                {
+                    string[] ss = s.Split(new char[] { ',' });
+                    BItem bitem = new BItem(ss[0], ss[1], "", "Drive", BType.Drive, ss[2], bool.Parse(ss[3]));
+                    BrowserItem item = new BrowserItem(bitem);
+                    if (!loaded)
+                    {
+                        HAPTreeNode titem = new HAPTreeNode();
+                        titem.Cursor = Cursors.Hand;
+                        titem.Header = bitem.Name;
+                        titem.BItem = bitem;
+                        titem.Expanded += new RoutedEventHandler(HAPTreeNode_Expanded);
+                        titem.Selected += new RoutedEventHandler(HAPTreeNode_Selected);
+                        HAPTreeNode ttitem = new HAPTreeNode();
+                        ttitem.Header = "Loading...";
+                        titem.Items.Add(ttitem);
+                        treeView1.Items.Add(titem);
+                    }
+                    item.MouseEnter += new MouseEventHandler(item_MouseEnter);
+                    item.MouseLeftButtonDown += new MouseButtonEventHandler(item_MouseLeftButtonDown);
+                    item.MouseLeave += new MouseEventHandler(item_MouseLeave);
+                    item.Activate += new EventHandler(item_Activate);
+                    item.ReSort += new ResortHandler(item_ReSort);
+                    item.DirectoryChange += new ChangeDirectoryHandler(item_DirectoryChange);
+                    contentPan.Children.Add(item);
+                    item.Mode = ViewMode;
+                }
+            }
+            if (!loaded)
+            {
+                string p = HtmlPage.Document.DocumentUri.AbsoluteUri;
+                if (p.Contains('#'))
+                {
+                    p = p.Remove(0, p.IndexOf('#') + 1);
+                    if (p.Length == 0) loaded = true;
+                    else
+                    {
+                        string s = "/extranet/api/mycomputer/list/" + p.Split(new char[] { '/' })[0];
+                        if (p.Split(new char[] { '/' }).Length > 1) GetTreeNode(s, treeView1.Items).IsExpanded = true;
+                        else
+                        {
+                            loaded = true;
+                            treeView1.SelectItem(GetTreeNode(s, treeView1.Items));
+                        }
+                    }
+                }
+                else loaded = true;
+            }
+        }
+
+        private bool reload = false;
+        private HAPTreeNode tempnode;
+
+        private void HAPTreeNode_Selected(object sender, RoutedEventArgs e)
+        {
+            reload = true;
+            CurrentItem = ((HAPTreeNode)treeView1.SelectedItem).BItem;
+            ((HAPTreeNode)treeView1.SelectedItem).IsExpanded = true;
+            WebClient listclient = new WebClient();
+            listclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(listclient_DownloadStringCompleted);
+            listclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + CurrentItem.Path));
+            HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + HtmlPage.Document.DocumentUri.LocalPath + "#" + CurrentItem.Path.ToLower().Remove(0, 30)));
+        }
+
+        private void HAPTreeNode_Expanded(object sender, RoutedEventArgs e)
+        {
+            if (!reload)
+            {
+                tempnode = sender as HAPTreeNode;
+                WebClient listclient = new WebClient();
+                listclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(treereloadclient_DownloadStringCompleted);
+                listclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + tempnode.BItem.Path));
+            }
+        }
+
+        private HAPTreeNode GetTreeNode(string path, ItemCollection items)
+        {
+            HAPTreeNode item = new HAPTreeNode();
+            item.Header = "E";
+            foreach (HAPTreeNode i in items)
+                if (i.Header.ToString() == "Loading...") break;
+                else if (i.BItem.Path.ToLower() == path.ToLower())
+                {
+                    item = i;
+                    break;
+                }
+                else if (i.HasItems)
+                {
+                    item = GetTreeNode(path, i.Items);
+                    if (item.Header.ToString() != "E") break;
+                }
+            return item;
+        }
+
+        private void item_DirectoryChange(object sender, BItem e)
+        {
+            CurrentItem = e;
+            HAPTreeNode i = GetTreeNode(e.Path, treeView1.Items);
+            if (i.Header.ToString() != "E") treeView1.SelectItem(i);
+            else MessageBox.Show("Error: " + e.Path);
+        }
+
+        private void computer_DirectoryChange(object sender, BItem e)
+        {
+            CurrentItem = new BItem("My Computer", "", "", "", BType.Drive, "", false);
+            if (treeView1.SelectedItem != null) ((HAPTreeNode)treeView1.SelectedItem).IsSelected = false;
+            WebClient listclient = new WebClient();
+            listclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(driveclient_DownloadStringCompleted);
+            listclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + e.Path));
+            HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + HtmlPage.Document.DocumentUri.LocalPath + "#"));
+        }
+
+        private void listclient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
+        {
+            Dispatcher.BeginInvoke(new DownloadStringCompletedEventHandler(listclient_DownloadStringCompleted2), sender, e);
+        }
+        private void listclient_DownloadStringCompleted2(object sender, DownloadStringCompletedEventArgs e)
+        {
+            ClearItems();
+            tempnode = ((HAPTreeNode)treeView1.SelectedItem);
+            tempnode.Items.Clear();
+            if (e.Result.StartsWith("ERROR")) MessageBox.Show("An Error Occured");
+            else foreach (string s in e.Result.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                string[] ss = s.Split(new char[] { ',' });
+                BrowserItem item = new BrowserItem(new BItem(ss[0], ss[1], ss[2], ss[3], (ss[3] == "File Folder" ? BType.Folder : (ss[3] == "Drive" ? BType.Drive : BType.File)), ss[4], bool.Parse(ss[5])));
+                item.Activate += new EventHandler(item_Activate);
+                item.MouseEnter += new MouseEventHandler(item_MouseEnter);
+                if (CurrentItem.CanWrite)
+                {
+                    item.ItemDrop += new DragEventHandler(item_Drop);
+                    item.DragEnter += new DragEventHandler(item_DragEnter);
+                    item.DragLeave += new DragEventHandler(item_DragLeave);
+                    item.MouseLeftButtonDown += new MouseButtonEventHandler(item_MouseLeftButtonDown);
+                }
+                item.MouseLeave += new MouseEventHandler(item_MouseLeave);
+                item.ReSort += new ResortHandler(item_ReSort);
+                if (item.Data.BType == BType.Drive) item.DirectoryChange += new ChangeDirectoryHandler(computer_DirectoryChange);
+                else item.DirectoryChange += new ChangeDirectoryHandler(item_DirectoryChange);
+                if (item.Data.BType == BType.Folder && item.Data.Name != "..") UpdateTree(item.Data);
+                contentPan.Children.Add(item);
+                item.Mode = ViewMode;
+            }
+            reload = false;
+        }
+
+        private void treereloadclient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
+        {
+            Dispatcher.BeginInvoke(new DownloadStringCompletedEventHandler(treereloadclient_DownloadStringCompleted2), sender, e);
+        }
+        private void treereloadclient_DownloadStringCompleted2(object sender, DownloadStringCompletedEventArgs e)
+        {
+            tempnode.Items.Clear();
+            if (e.Result.StartsWith("ERROR")) MessageBox.Show("An Error Occured");
+            else foreach (string s in e.Result.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    string[] ss = s.Split(new char[] { ',' });
+                    BrowserItem item = new BrowserItem(new BItem(ss[0], ss[1], ss[2], ss[3], (ss[3] == "File Folder" ? BType.Folder : (ss[3] == "Drive" ? BType.Drive : BType.File)), ss[4], bool.Parse(ss[5])));
+                    if (item.Data.BType == BType.Folder && item.Data.Name != "..") UpdateTree(item.Data);
+                }
+            if (!loaded)
+            {
+                string p = HtmlPage.Document.DocumentUri.AbsoluteUri;
+                p = p.Replace("%20", " ").Remove(0, p.IndexOf('#') + 1);
+                p = p.Remove(0, tempnode.BItem.Path.Remove(0, 30).Length + 1);
+                if (p.Split(new char[] { '/' }).Length > 1)
+                    GetTreeNode(tempnode.BItem.Path + "/" + p.Split(new char[] { '/' })[0], tempnode.Items).IsExpanded = true;
+                else
+                {
+                    loaded = true;
+                    Dispatcher.BeginInvoke(new SelectHandler(SelectUpdatedNode), tempnode.BItem.Path + "/" + p.Split(new char[] { '/' })[0]);
+                } 
+            }
+            reload = false;
+        }
+
+        private void SelectUpdatedNode(string path)
+        {
+            treeView1.SelectItem(GetTreeNode(path, treeView1.Items));//.IsSelected = true;
+        }
+
+        private void UpdateTree(BItem bitem)
+        {
+            HAPTreeNode titem = new HAPTreeNode();
+            titem.Cursor = Cursors.Hand;
+            titem.Header = bitem.Name;
+            titem.BItem = bitem;
+            titem.Expanded += new RoutedEventHandler(HAPTreeNode_Expanded);
+            titem.Selected += new RoutedEventHandler(HAPTreeNode_Selected);
+            HAPTreeNode ttitem = new HAPTreeNode();
+            ttitem.Header = "Loading...";
+            titem.Items.Add(ttitem);
+            tempnode.Items.Add(titem);
         }
 
         private void barContextButton1_Click(object sender, EventArgs e)
         {
-            if (barContextButton1.Mode == ViewMode.List)
+            ViewMode = barContextButton1.Mode;
+            if (ViewMode == ViewMode.List)
             {
                 contentPan.Orientation = Orientation.Vertical;
                 scroller.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
@@ -54,7 +275,7 @@ namespace HAP.Silverlight.Browser
                 scroller.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
             }
             foreach (BrowserItem item in contentPan.Children)
-                item.Mode = barContextButton1.Mode;
+                item.Mode = ViewMode;
         }
 
         private List<BrowserItem> activeItems;
@@ -96,7 +317,7 @@ namespace HAP.Silverlight.Browser
                 }
                 else
                 {
-                    item_ReSort(this, new EventArgs());
+                    item_ReSort(this, false);
                     ((BrowserItem)sender).Active = true;
                     if (((BrowserItem)sender).Active) activeItems.Add((BrowserItem)sender);
                 }
@@ -107,7 +328,7 @@ namespace HAP.Silverlight.Browser
         private bool selectall = false;
         private void organiseButton1_SelectAllClick(object sender, RoutedEventArgs e)
         {
-            item_ReSort(this, new EventArgs());
+            item_ReSort(this, false);
             foreach (BrowserItem item in contentPan.Children)
             {
                 item.Active = true;
@@ -122,27 +343,31 @@ namespace HAP.Silverlight.Browser
             drag = false;
             if (!rightclick)
             {
-                item_ReSort(this, new EventArgs());
+                if (activeItems.Count(I => I.IsRename == true) > 0) item_ReSort(this, true);
+                else item_ReSort(this, false);
             } else rightclick = false;
         }
 
         private void contentPan_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (activeItems.Count == 1)
+            if (activeItems.Count == 1 && activeItems[0].Data.Name != ".." && activeItems[0].Data.Name != "My Computer")
             {
-                BrowserItem item = activeItems[0];
-                RightClickRename.Visibility = RightClickDelete.Visibility = System.Windows.Visibility.Visible;
+                organiseButton1.IsDelete = organiseButton1.IsRename = RightClickRename.IsEnabled = RightClickDelete.IsEnabled = CurrentItem.CanWrite;
                 RightClickZIP.Visibility = RightClickFolder.Visibility = RightClickUNZIP.Visibility = System.Windows.Visibility.Collapsed;
             }
-            else if (activeItems.Count > 1)
+            else if (activeItems.Count > 1 && activeItems.Where(I => I.Data.Name == "My Computer" || I.Data.Name == "..").Count() == 0)
             {
-                RightClickRename.Visibility = RightClickUNZIP.Visibility = RightClickFolder.Visibility = System.Windows.Visibility.Collapsed;
-                RightClickZIP.Visibility = RightClickDelete.Visibility = System.Windows.Visibility.Visible;
+                organiseButton1.IsDelete = RightClickDelete.IsEnabled = CurrentItem.CanWrite;
+                organiseButton1.IsRename = RightClickRename.IsEnabled = false;
+                RightClickUNZIP.Visibility = System.Windows.Visibility.Collapsed;
+                RightClickFolder.Visibility = RightClickZIP.Visibility = CurrentItem.CanWrite ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
             }
             else
             {
-                RightClickRename.Visibility = RightClickDelete.Visibility = RightClickUNZIP.Visibility = RightClickZIP.Visibility = System.Windows.Visibility.Collapsed;
-                RightClickFolder.Visibility = System.Windows.Visibility.Visible;
+                organiseButton1.IsDelete = organiseButton1.IsRename = false;
+                RightClickRename.IsEnabled = RightClickDelete.IsEnabled = false;
+                RightClickUNZIP.Visibility = RightClickZIP.Visibility = System.Windows.Visibility.Collapsed;
+                RightClickFolder.Visibility = CurrentItem.CanWrite ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
             }
         }
 
@@ -155,24 +380,25 @@ namespace HAP.Silverlight.Browser
         private void newfolder_Click(object sender, RoutedEventArgs e)
         {
             if (sender == RightClickFolder) rightclick = true;
-            item_ReSort(this, new EventArgs());
+            item_ReSort(this, true);
             int count = 0;
             foreach (BrowserItem i in contentPan.Children.Where(I => ((BrowserItem)I).Data.BType == BType.Folder))
                 if (i.Data.Name.StartsWith("New Folder")) count++;
-            BrowserItem item = new BrowserItem(new BItem("New Folder" + (count == 0 ? "" : " " + count), "/HAP.Silverlight.Browser;component/folder.png", "", "Folder", BType.Folder, "/N/New Folder" + (count == 0 ? "" : (count + 1).ToString())));
-            item.ReSort += new EventHandler(item_ReSort);
+            BrowserItem item = new BrowserItem(new BItem("New Folder" + (count == 0 ? "" : " " + count), "/extranet/images/icons/folder.png", "", "Folder", BType.Folder, CurrentItem.Path + "/New Folder" + (count == 0 ? "" : " " + (count + 1)), true));
+            item.ReSort += new ResortHandler(item_ReSort);
             item.Activate += new EventHandler(item_Activate);
             item.MouseEnter += new MouseEventHandler(item_MouseEnter);
             item.MouseLeftButtonDown += new MouseButtonEventHandler(item_MouseLeftButtonDown);
             item.MouseLeave += new MouseEventHandler(item_MouseLeave);
             contentPan.Children.Add(item);
-            item.Mode = barContextButton1.Mode;
+            scroller.ScrollToBottom();
+            item.Mode = ViewMode;
             item.Active = true;
             item.IsRename = true;
             activeItems.Add(item);
         }
 
-        private void item_ReSort(object sender, EventArgs e)
+        private void item_ReSort(object sender, bool resort)
         {
             foreach (BrowserItem item in activeItems)
                 if (item.IsRename)
@@ -180,21 +406,31 @@ namespace HAP.Silverlight.Browser
                     else return;
                 else item.Active = false;
             activeItems.Clear();
-            List<BrowserItem> folders = new List<BrowserItem>();
-            foreach (BrowserItem item in contentPan.Children.Where(I => ((BrowserItem)I).Data.BType == BType.Folder))
-                folders.Add(item);
-            folders.Sort();
-            List<BrowserItem> files = new List<BrowserItem>();
-            foreach (BrowserItem item in contentPan.Children.Where(I => ((BrowserItem)I).Data.BType == BType.File))
-                files.Add(item);
-            files.Sort();
-            contentPan.Children.Clear();
-            foreach (BrowserItem item in folders) contentPan.Children.Add(item);
-            foreach (BrowserItem item in files) contentPan.Children.Add(item);
+            if (resort)
+            {
+                List<BrowserItem> drives = new List<BrowserItem>();
+                foreach (BrowserItem item in contentPan.Children.Where(I => ((BrowserItem)I).Data.BType == BType.Drive))
+                    drives.Add(item);
+                drives.Sort();
+                List<BrowserItem> folders = new List<BrowserItem>();
+                foreach (BrowserItem item in contentPan.Children.Where(I => ((BrowserItem)I).Data.BType == BType.Folder))
+                    folders.Add(item);
+                folders.Sort();
+                List<BrowserItem> files = new List<BrowserItem>();
+                foreach (BrowserItem item in contentPan.Children.Where(I => ((BrowserItem)I).Data.BType == BType.File))
+                    files.Add(item);
+                files.Sort();
+                contentPan.Children.Clear();
+                foreach (BrowserItem item in drives) contentPan.Children.Add(item);
+                foreach (BrowserItem item in folders) contentPan.Children.Add(item);
+                foreach (BrowserItem item in files) contentPan.Children.Add(item);
+                if (sender is BrowserItem) scroller.ScrollIntoView((BrowserItem)sender);
+            }
         }
 
         private void RightClickDelete_Click(object sender, RoutedEventArgs e)
         {
+            MessageBox.Show("ERG");
             rightclick = true;
             foreach (BrowserItem i in activeItems)
             {
@@ -288,11 +524,6 @@ namespace HAP.Silverlight.Browser
             mousemode = MouseMode.Normal;
         }
 
-        private void TreeViewItem_Expanded(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Refresh Treeview");
-        }
-
         private void contentPan_DragEnter(object sender, DragEventArgs e)
         {
             mousemode = MouseMode.Upload;
@@ -304,6 +535,7 @@ namespace HAP.Silverlight.Browser
 
         private void UserControl_DragEnter(object sender, DragEventArgs e)
         {
+            //MessageBox.Show(string.Join("\n", e.Data.GetFormats(false)));
             movetext.Text = "Upload to";
             movefoldertext.Text = "This Folder";
             movetooltip.Margin = new Thickness(e.GetPosition(this).X + 10, e.GetPosition(this).Y + 10, 0, 0);
@@ -414,8 +646,34 @@ namespace HAP.Silverlight.Browser
             Help help = new Help();
             help.Show();
         }
+
+        private void organiseButton1_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (activeItems.Count == 1 && activeItems[0].Data.Name != ".." && activeItems[0].Data.Name != "My Computer")
+            {
+                organiseButton1.IsDelete = organiseButton1.IsRename = RightClickRename.IsEnabled = RightClickDelete.IsEnabled = CurrentItem.CanWrite;
+                RightClickZIP.Visibility = RightClickFolder.Visibility = RightClickUNZIP.Visibility = System.Windows.Visibility.Collapsed;
+            }
+            else if (activeItems.Count > 1 && activeItems.Where(I => I.Data.Name == "My Computer" || I.Data.Name == "..").Count() == 0)
+            {
+                organiseButton1.IsDelete = RightClickDelete.IsEnabled = CurrentItem.CanWrite;
+                organiseButton1.IsRename = RightClickRename.IsEnabled = false;
+                RightClickUNZIP.Visibility = System.Windows.Visibility.Collapsed;
+                RightClickFolder.Visibility = RightClickZIP.Visibility = CurrentItem.CanWrite ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+            }
+            else
+            {
+                organiseButton1.IsDelete = organiseButton1.IsRename = false;
+                RightClickRename.IsEnabled = RightClickDelete.IsEnabled = false;
+                RightClickUNZIP.Visibility = RightClickZIP.Visibility = System.Windows.Visibility.Collapsed;
+                RightClickFolder.Visibility = CurrentItem.CanWrite ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+            }
+        }
     }
 
     public enum ViewMode { List, SmallIcon, Icon, LargeIcon, Tile }
     public enum MouseMode { NoGo, Move, Normal, Upload }
 }
+
+public delegate void ResortHandler(object sender, bool resort);
+public delegate void SelectHandler(string path);

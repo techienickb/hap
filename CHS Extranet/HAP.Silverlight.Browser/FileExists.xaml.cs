@@ -55,6 +55,12 @@ namespace HAP.Silverlight.Browser
             if (FileExistComplete != null) FileExistComplete(this, ReplaceResult.Rename);
             this.DialogResult = true;
         }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (FileExistComplete != null) FileExistComplete(this, ReplaceResult.Cancel);
+            this.DialogResult = false;
+        }
     }
 
     public enum ReplaceResult { Replace, Cancel, Rename }

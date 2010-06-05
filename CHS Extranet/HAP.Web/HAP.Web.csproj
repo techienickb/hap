@@ -187,6 +187,7 @@
     <Content Include="images\icons\zip.png" />
     <Content Include="mycomputer.aspx" />
     <Content Include="mycomputer.css" />
+    <Content Include="MyComputerSL.aspx" />
     <Content Include="Scripts\rightclick.js" />
     <Content Include="Scripts\viewmode.js" />
     <Content Include="unauthorised.aspx" />
@@ -203,6 +204,9 @@
     <Content Include="xls.aspx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\List.cs" />
+    <Compile Include="API\ListDrives.cs" />
+    <Compile Include="API\RegisterAPI.cs" />
     <Compile Include="BookingSystem\admin\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -335,6 +339,13 @@
     </Compile>
     <Compile Include="Controls\NewFolder.ascx.designer.cs">
       <DependentUpon>NewFolder.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="MyComputerSL.aspx.cs">
+      <DependentUpon>MyComputerSL.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MyComputerSL.aspx.designer.cs">
+      <DependentUpon>MyComputerSL.aspx</DependentUpon>
     </Compile>
     <Compile Include="p.ashx.cs">
       <DependentUpon>p.ashx</DependentUpon>

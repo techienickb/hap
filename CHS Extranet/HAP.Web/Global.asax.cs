@@ -14,6 +14,7 @@ namespace HAP.Web
 
         protected void Application_Start(object sender, EventArgs e)
         {
+            API.APIRoutes.Register(RouteTable.Routes);
             RouteTable.Routes.Add(new Route("mycomputer/{drive}", new MyComputerRoutingHandler(true)));
             RouteTable.Routes.Add(new Route("mycomputer/{drive}/{*path}", new MyComputerRoutingHandler(false)));
             RouteTable.Routes.Add(new Route("download/{drive}/{*path}", new DownloadRoutingHandler()));

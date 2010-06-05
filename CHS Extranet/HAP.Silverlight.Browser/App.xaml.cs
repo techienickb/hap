@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+using System.Windows.Controls.Theming;
 
 namespace HAP.Silverlight.Browser
 {
@@ -20,7 +21,6 @@ namespace HAP.Silverlight.Browser
             this.Startup += this.Application_Startup;
             this.Exit += this.Application_Exit;
             this.UnhandledException += this.Application_UnhandledException;
-
             InitializeComponent();
         }
 
