@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Media.Imaging;
+using System.Windows.Browser;
 
 namespace HAP.Silverlight.Browser
 {
@@ -35,7 +36,8 @@ namespace HAP.Silverlight.Browser
                 name1.Text = name2.Text = name3.Text = name4.Text = name5.Text = textBox1.Text = textBox2.Text = textBox3.Text = textBox4.Text = textBox5.Text = _data.Name;
                 size.Text = _data.Size;
                 type.Text = _data.Type;
-                image1.Source = image2.Source = image3.Source = image4.Source = image5.Source = new BitmapImage(new Uri(_data.Icon, UriKind.Relative));
+
+                image1.Source = image2.Source = image3.Source = image4.Source = image5.Source = new BitmapImage(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + _data.Icon));
                 this.AllowDrop = (_data.BType == BType.Folder);
             }
         }
@@ -114,7 +116,7 @@ namespace HAP.Silverlight.Browser
         }
 
         public event EventHandler Activate;
-        public event EventHandler ReSort;
+        public event ResortHandler ReSort;
         public event ChangeDirectoryHandler DirectoryChange;
 
         private bool _active;
@@ -144,12 +146,8 @@ namespace HAP.Silverlight.Browser
             if (Activate != null) Activate(this, new EventArgs());
             if ((DateTime.Now.Ticks - LastTicks) < 2310000)
             {
-                if (_data.BType == BType.Folder)
-                {
-                    MessageBox.Show("Navigation to folder");
-                    if (DirectoryChange != null) DirectoryChange(this, this._data);
-                }
-                else MessageBox.Show("Downloading file");
+                if (_data.BType == BType.File) HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + this._data.Path));
+                else if (DirectoryChange != null) DirectoryChange(this, this._data);
             }
             LastTicks = DateTime.Now.Ticks;
         }
@@ -178,7 +176,7 @@ namespace HAP.Silverlight.Browser
             if (textBox1.Text == "") { MessageBox.Show("I Can't Rename this to Nothing", "Error", MessageBoxButton.OK); return -1; }
             _data.Name = name1.Text = name2.Text = name3.Text = name4.Text = name5.Text = textBox2.Text = textBox3.Text = textBox4.Text = textBox5.Text = textBox1.Text;
             this.IsRename = false;
-            if (ReSort != null && resort) ReSort(this, new EventArgs());
+            if (ReSort != null && resort) ReSort(this, true);
             return 0;
             //so some saving stuff;
         }
@@ -255,8 +253,9 @@ namespace HAP.Silverlight.Browser
         public string Type { get; set; }
         public BType BType { get; set; }
         public string Path { get; set; }
+        public bool CanWrite { get; set; }
 
-        public BItem(string name, string icon, string size, string type, BType btype, string path)
+        public BItem(string name, string icon, string size, string type, BType btype, string path, bool canwrite)
         {
             Name = name;
             Icon = icon;
@@ -264,6 +263,7 @@ namespace HAP.Silverlight.Browser
             Size = size;
             BType = btype;
             Path = path;
+            CanWrite = canwrite;
         }
 
         public int CompareTo(object obj)

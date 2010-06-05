@@ -1,9 +1,9 @@
-﻿<UserControl xmlns:my="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"  x:Class="HAP.Silverlight.Browser.OrganiseButton"
+﻿<UserControl x:Class="HAP.Silverlight.Browser.MaxButton"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" Foreground="#FF1F3976" IsTabStop="True" Margin="3,3,0,4">
+    mc:Ignorable="d" Foreground="#FF1F3976" IsTabStop="True" Margin="0,3,0,4">
     <UserControl.Resources>
         <LinearGradientBrush x:Key="BarBg" EndPoint="0.5,1" StartPoint="0.5,0">
             <GradientStop Color="#FFFDFEFF" Offset="0" />
@@ -20,19 +20,11 @@
         </LinearGradientBrush>
     </UserControl.Resources>
     <Border x:Name="BBorder1" CornerRadius="3" BorderThickness="1" MouseEnter="Border_MouseEnter" Background="Transparent" BorderBrush="Transparent" MouseLeave="BBorder_MouseLeave" MouseLeftButtonDown="BBorder1_MouseLeftButtonDown" MouseLeftButtonUp="BBorder1_MouseLeftButtonUp">
-        <Border x:Name="BBorder" CornerRadius="2" BorderThickness="1" BorderBrush="Transparent" Background="Transparent">
-            <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
-                <TextBlock Name="textBlock1" Text="Organize" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10, 2, 4, 2" />
-                <Image Name="image" Stretch="None" Source="/HAP.Silverlight.Browser;component/arrow.png" Width="8" Height="6" Margin="0, 0, 6, 0" />
-            </StackPanel>
+        <Border x:Name="BBorder" CornerRadius="2" BorderThickness="1" BorderBrush="Transparent" Background="Transparent" Padding="2,0">
+            <Grid>
+                <Image x:Name="image1" Source="/HAP.Silverlight.Browser;component/maximize.png" Stretch="None" Height="16" Width="16" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                <Image x:Name="image2" Source="/HAP.Silverlight.Browser;component/minimize.png" Visibility="Collapsed" Stretch="None" Height="16" Width="16" VerticalAlignment="Center" HorizontalAlignment="Center" />
+            </Grid>
         </Border>
-        <my:ContextMenuService.ContextMenu>
-            <my:ContextMenu x:Name="context">
-                <my:MenuItem Header="Select All" x:Name="SelectAll" Click="SelectAll_Click" />
-                <my:Separator />
-                <my:MenuItem Header="Delete" x:Name="cDelete" IsEnabled="False" Click="cDelete_Click" />
-                <my:MenuItem Header="Rename" x:Name="cRename" IsEnabled="False" Click="cRename_Click" />
-            </my:ContextMenu>
-        </my:ContextMenuService.ContextMenu>
     </Border>
 </UserControl>

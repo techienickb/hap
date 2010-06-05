@@ -21,7 +21,7 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
-                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="110" />
                 </Grid.ColumnDefinitions>
                 <Grid.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -35,11 +35,12 @@
                     </LinearGradientBrush>
                 </Grid.Background>
                 <StackPanel Orientation="Horizontal">
-                    <my:OrganiseButton x:Name="organiseButton1" SelectAllClick="organiseButton1_SelectAllClick" />
+                    <my:OrganiseButton x:Name="organiseButton1" SelectAllClick="organiseButton1_SelectAllClick" MouseLeftButtonDown="organiseButton1_MouseLeftButtonDown" />
                     <my:BarButton x:Name="newfolder" Text="New Folder" Click="newfolder_Click" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Column="1">
                     <my:HelpButton x:Name="helpButton1" Click="helpButton1_Click" />
+                    <my:MaxButton x:Name="maxButton1" />
                     <my:ViewButton x:Name="barContextButton1" Text="View" Click="barContextButton1_Click" />
                 </StackPanel>
             </Grid>
@@ -51,31 +52,25 @@
                 </Grid.ColumnDefinitions>
                 <whistlerBlue:WhistlerBlueTheme AllowDrop="False">
                     <controls:TreeView Name="treeView1" BorderBrush="Transparent">
-                        <controls:TreeViewItem Header="My Documents" IsSelected="True" Expanded="TreeViewItem_Expanded">
-                            <controls:TreeViewItem Header="Loading..." />
-                        </controls:TreeViewItem>
-                        <controls:TreeViewItem Header="Shared Documents" Expanded="TreeViewItem_Expanded">
-                            <controls:TreeViewItem Header="Loading..." />
-                        </controls:TreeViewItem>
                     </controls:TreeView>
                 </whistlerBlue:WhistlerBlueTheme>
                 <controls:GridSplitter Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1" Background="#FFE7F1FB" />
-                <Grid Grid.Column="2">
-                    <toolkit:ContextMenuService.ContextMenu>
-                        <toolkit:ContextMenu x:Name="context">
-                            <toolkit:MenuItem Header="New Folder" x:Name="RightClickFolder" Click="newfolder_Click" />
-                            <toolkit:MenuItem Header="Rename" x:Name="RightClickRename" Click="RightClickRename_Click" />
-                            <toolkit:MenuItem Header="Delete" x:Name="RightClickDelete" Click="RightClickDelete_Click" />
-                            <toolkit:MenuItem Visibility="Collapsed" x:Name="RightClickZIP" Header="Send to Compressed (ZIP) File" />
-                            <toolkit:MenuItem Visibility="Collapsed" x:Name="RightClickUNZIP" Header="Extract (ZIP) File" />
-                        </toolkit:ContextMenu>
-                    </toolkit:ContextMenuService.ContextMenu>
-                    <whistlerBlue:WhistlerBlueTheme>
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" x:Name="scroller" BorderBrush="Transparent">
+                <whistlerBlue:WhistlerBlueTheme Grid.Column="2">
+                    <Grid>
+                        <toolkit:ContextMenuService.ContextMenu>
+                            <toolkit:ContextMenu x:Name="context">
+                                <toolkit:MenuItem Header="New Folder" x:Name="RightClickFolder" Click="newfolder_Click" />
+                                <toolkit:MenuItem Header="Rename" x:Name="RightClickRename" Click="RightClickRename_Click" />
+                                <toolkit:MenuItem Header="Delete" x:Name="RightClickDelete" Click="RightClickDelete_Click" />
+                                <toolkit:MenuItem Visibility="Collapsed" x:Name="RightClickZIP" Header="Send to Compressed (ZIP) File" />
+                                <toolkit:MenuItem Visibility="Collapsed" x:Name="RightClickUNZIP" Header="Extract (ZIP) File" />
+                            </toolkit:ContextMenu>
+                        </toolkit:ContextMenuService.ContextMenu>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" x:Name="scroller" BorderBrush="Transparent" BorderThickness="0">
                             <toolkit:WrapPanel x:Name="contentPan" Background="White" AllowDrop="True" MouseLeftButtonUp="contentPan_MouseLeftButtonUp" MouseRightButtonDown="contentPan_MouseRightButtonDown" DragEnter="contentPan_DragEnter" DragOver="contentPan_DragOver" DragLeave="contentPan_DragLeave" Drop="contentPan_Drop" />
                         </ScrollViewer>
-                    </whistlerBlue:WhistlerBlueTheme>
-                </Grid>
+                    </Grid>
+                </whistlerBlue:WhistlerBlueTheme>
             </Grid>
             <Grid Grid.Row="2" AllowDrop="False" Background="#FFF1F5FB">
                 <Grid.RowDefinitions>
@@ -93,7 +88,6 @@
                 <whistlerBlue:WhistlerBlueTheme Grid.Row="2" Background="Transparent">
                     <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto" BorderBrush="Transparent" Padding="4">
                         <StackPanel Orientation="Horizontal" x:Name="UploadQueue">
-                            <my:UploadItem x:Name="uploadItem1" />
                         </StackPanel>
                     </ScrollViewer>
                 </whistlerBlue:WhistlerBlueTheme>

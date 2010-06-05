@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Browser;
+using System.Reflection;
 
 namespace HAP.Silverlight.Browser
 {
@@ -18,6 +19,10 @@ namespace HAP.Silverlight.Browser
         public Help()
         {
             InitializeComponent();
+            Assembly asm = Assembly.GetExecutingAssembly();
+            string[] parts = asm.FullName.Split(',');
+            string version = parts[1].Remove(0, parts[1].IndexOf('=') + 1);
+            browserversion.Text = "Browser Version: " + version;
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)

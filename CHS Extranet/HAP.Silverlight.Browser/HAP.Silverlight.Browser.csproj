@@ -88,6 +88,10 @@
     <Compile Include="BrowserItem.xaml.cs">
       <DependentUpon>BrowserItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="HAPTreeNode.cs" />
+    <Compile Include="MaxButton.xaml.cs">
+      <DependentUpon>MaxButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="FileExists.xaml.cs">
       <DependentUpon>FileExists.xaml</DependentUpon>
     </Compile>
@@ -123,6 +127,10 @@
     <Page Include="BrowserItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MaxButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="FileExists.xaml">
       <SubType>Designer</SubType>
@@ -160,12 +168,6 @@
     <Resource Include="arrow.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="file.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="folder.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="nomove.png" />
   </ItemGroup>
   <ItemGroup>
@@ -176,6 +178,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="movearrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="maximize.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="minimize.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
