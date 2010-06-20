@@ -5,7 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls"
     xmlns:whistlerBlue="clr-namespace:System.Windows.Controls.Theming;assembly=System.Windows.Controls.Theming.WhistlerBlue" 
-    xmlns:toolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit" AllowDrop="True"
+    xmlns:toolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit" AllowDrop="False"
     xmlns:controlsToolkit="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Toolkit"
     mc:Ignorable="d" xmlns:my="clr-namespace:HAP.Silverlight.Browser" d:DesignHeight="400" d:DesignWidth="800" MouseMove="UserControl_MouseMove" MouseLeave="UserControl_MouseLeave" MouseLeftButtonUp="UserControl_MouseLeftButtonUp" DragEnter="UserControl_DragEnter" DragOver="UserControl_DragOver" DragLeave="UserControl_DragLeave" Drop="UserControl_Drop">
     <Grid x:Name="LayoutRoot" Background="White">
@@ -35,6 +35,7 @@
                     </LinearGradientBrush>
                 </Grid.Background>
                 <StackPanel Orientation="Horizontal">
+                    <my:BarButton x:Name="home" Margin="4,3,0,4" Text="Home Access Plus+ Home" Click="home_Click" />
                     <my:OrganiseButton x:Name="organiseButton1" SelectAllClick="organiseButton1_SelectAllClick" MouseLeftButtonDown="organiseButton1_MouseLeftButtonDown" />
                     <my:BarButton x:Name="newfolder" Text="New Folder" Click="newfolder_Click" />
                 </StackPanel>
@@ -67,7 +68,7 @@
                             </toolkit:ContextMenu>
                         </toolkit:ContextMenuService.ContextMenu>
                         <ScrollViewer VerticalScrollBarVisibility="Auto" x:Name="scroller" BorderBrush="Transparent" BorderThickness="0">
-                            <toolkit:WrapPanel x:Name="contentPan" Background="White" AllowDrop="True" MouseLeftButtonUp="contentPan_MouseLeftButtonUp" MouseRightButtonDown="contentPan_MouseRightButtonDown" DragEnter="contentPan_DragEnter" DragOver="contentPan_DragOver" DragLeave="contentPan_DragLeave" Drop="contentPan_Drop" />
+                            <toolkit:WrapPanel x:Name="contentPan" Background="White" AllowDrop="False" MouseLeftButtonUp="contentPan_MouseLeftButtonUp" MouseRightButtonDown="contentPan_MouseRightButtonDown" DragEnter="contentPan_DragEnter" DragOver="contentPan_DragOver" DragLeave="contentPan_DragLeave" Drop="contentPan_Drop" KeyUp="contentPan_KeyUp" />
                         </ScrollViewer>
                     </Grid>
                 </whistlerBlue:WhistlerBlueTheme>

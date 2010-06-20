@@ -25,6 +25,11 @@ namespace HAP.Silverlight.Browser
             browserversion.Text = "Browser Version: " + version;
         }
 
+        public string HAPV
+        {
+            set { hapv.Text = value.Remove(0, 5).Replace(',', ' ').Replace(":", ": "); }
+        }
+
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = false;

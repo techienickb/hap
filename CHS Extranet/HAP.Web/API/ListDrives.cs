@@ -12,6 +12,8 @@ using HAP.Web.Configuration;
 using System.Configuration;
 using System.DirectoryServices.AccountManagement;
 using System.Xml;
+using System.Runtime.InteropServices;
+using System.Reflection;
 
 namespace HAP.Web.API
 {
@@ -35,15 +37,57 @@ namespace HAP.Web.API
             context.Response.Clear();
             context.Response.Headers.Add("HAP:API", "ListDrives");
             context.Response.ContentType = "text/plain";
-            string format = "{0},{1},{2},{3}\n";
-            context.Response.Write(string.Format(format, "My Documents", "/extranet/images/icons/netdrive.png", "/Extranet/API/MyComputer/List/N", true));
+            string format = "{0},{1},{2},{3}{4}\n";
+            string spacen = "";
+            long freeBytesForUser, totalBytes, freeBytes;
+            ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
+            string _ActiveDirectoryConnectionString = "";
+            string _DomainDN = "";
+            if (connObj != null) _ActiveDirectoryConnectionString = connObj.ConnectionString;
+            if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))
+                throw new Exception("The connection name 'activeDirectoryConnectionString' was not found in the applications configuration or the connection string is empty.");
+            if (_ActiveDirectoryConnectionString.StartsWith("LDAP://"))
+                _DomainDN = _ActiveDirectoryConnectionString.Remove(0, _ActiveDirectoryConnectionString.IndexOf("DC="));
+            else throw new Exception("The connection string specified in 'activeDirectoryConnectionString' does not appear to be a valid LDAP connection string.");
+            PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
+            UserPrincipal up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Username);
+
+            string userhome = up.HomeDirectory;
+            if (context.User.IsInRole("Domain Admins"))
+            {
+                if (Win32.GetDiskFreeSpaceEx(userhome, out freeBytesForUser, out totalBytes, out freeBytes))
+                {
+                    spacen = "," + Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
+                }
+                else { spacen = ""; }
+            }
+            else spacen = "";
+            context.Response.Write(string.Format(format, "My Documents", "/extranet/images/icons/netdrive.png", "/Extranet/api/mycomputer/list/N", true, spacen));
             foreach (uncpath path in config.MyComputer.UNCPaths)
-                if (isAuth(path)) context.Response.Write(string.Format(format, path.Name, "/extranet/images/icons/netdrive.png", string.Format("/Extranet/API/MyComputer/list/{0}", path.Drive), isWriteAuth(path)));
+            {
+                string space = "";
+                if (isWriteAuth(path))
+                {
+                    if (Win32.GetDiskFreeSpaceEx(string.Format(path.UNC, Username), out freeBytesForUser, out totalBytes, out freeBytes))
+                        space = "," + Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
+                    else space = "";
+                }
+                if (isAuth(path)) context.Response.Write(string.Format(format, path.Name, "/extranet/images/icons/netdrive.png", string.Format("/Extranet/api/mycomputer/list/{0}", path.Drive), isWriteAuth(path), space));
+            }
 
             foreach (uploadfilter filter in config.MyComputer.UploadFilters)
                 if (isAuth(filter)) context.Response.Write("FILTER" + filter.ToString() + "\n");
 
+            context.Response.Write("INFOName:" + Assembly.GetExecutingAssembly().GetName().Name + ",Version:" + Assembly.GetExecutingAssembly().GetName().Version.ToString());
+
             context.Response.ContentType = "text/plain";
+        }
+
+        internal static class Win32
+        {
+            [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+            internal static extern bool GetDiskFreeSpaceEx(string drive, out long freeBytesForUser, out long totalBytes, out long freeBytes);
+
         }
 
         private bool isAuth(uploadfilter filter)

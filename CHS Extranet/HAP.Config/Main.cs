@@ -134,6 +134,8 @@ namespace HAP.Config
             XmlNode ab = hapConfig.SelectSingleNode("announcementbox");
             ab.Attributes["enableeditto"].Value = announcementBox_EditTo.Text;
             ab.Attributes["showto"].Value = announcementBox_ShowTo.Text;
+            ab.Attributes["proxyaddress"].Value = proxyaddress.Text;
+            ab.Attributes["proxyport"].Value = proxyport.Value.ToString();
             #endregion
 
             #region Booking System
@@ -290,6 +292,8 @@ namespace HAP.Config
             XmlNode ab = hapConfig.SelectSingleNode("announcementbox");
             announcementBox_EditTo.Text = ab.Attributes["enableeditto"].Value;
             announcementBox_ShowTo.Text = ab.Attributes["showto"].Value;
+            proxyaddress.Text = ab.Attributes["proxyaddress"].Value;
+            proxyport.Value = int.Parse(ab.Attributes["proxyport"].Value);
             #endregion
 
             #region Booking System

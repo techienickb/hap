@@ -23,5 +23,8 @@
         <Border x:Name="BBorder" CornerRadius="2" BorderThickness="1" BorderBrush="Transparent" Background="Transparent" Padding="2,0">
             <Image Source="/HAP.Silverlight.Browser;component/help.png" Stretch="None" Height="16" Width="16" VerticalAlignment="Center" HorizontalAlignment="Center" />
         </Border>
+        <ToolTipService.ToolTip>
+            <ToolTip Content="About Home Access Plus" />
+        </ToolTipService.ToolTip>
     </Border>
 </UserControl>

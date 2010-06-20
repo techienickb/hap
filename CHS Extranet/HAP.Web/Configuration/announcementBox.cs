@@ -21,5 +21,19 @@ namespace HAP.Web.Configuration
             get { return (string)this["enableeditto"]; }
             set { this["enableeditto"] = value; }
         }
+
+        [ConfigurationProperty("proxyaddress", DefaultValue = "", IsRequired = false)]
+        public string ProxyAddress
+        {
+            get { return (string)this["proxyaddress"]; }
+            set { this["proxyaddress"] = value; }
+        }
+
+        [ConfigurationProperty("proxyport", DefaultValue = 80, IsRequired = false)]
+        public int ProxyPort
+        {
+            get { return (int)this["proxyport"]; }
+            set { this["proxyport"] = value; }
+        }
     }
 }

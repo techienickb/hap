@@ -31,24 +31,30 @@ namespace HAP.Silverlight.Browser
             driveclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + "/extranet/api/mycomputer/listdrives"), false);
         }
 
+        #region Variables
+
         private bool loaded;
         public List<string> Filter { get; set; }
+        public string Info { get; set; }
         private BItem CurrentItem { get; set; }
         private List<BItem> Drives { get; set; }
         public ViewMode ViewMode { get; set; }
+        private bool reload = false;
+        private HAPTreeNode tempnode;
+        private bool candrag = false;
+        private bool drag = false;
+        private MouseMode mousemode = MouseMode.Normal;
+
+        private bool selectall = false;
+        private bool rightclick = false;
+        private List<BrowserItem> activeItems;
 
         delegate void ClearItemsDelegate();
         delegate void AddItemDelegate(BrowserItem item, bool Resort);
-        public void AddItem(BrowserItem item, bool Resort)
-        {
-            contentPan.Children.Add(item);
-            if (Resort) item_ReSort(this, true);
-        }
-        public void ClearItems()
-        {
-            contentPan.Children.Clear();
-            activeItems.Clear();
-        }
+
+        #endregion
+
+        #region drive/list events
 
         private void driveclient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
         {
@@ -56,6 +62,8 @@ namespace HAP.Silverlight.Browser
         }
         private void driveclient_DownloadStringCompleted2(object sender, DownloadStringCompletedEventArgs e)
         {
+            this.AllowDrop = contentPan.AllowDrop = RightClickFolder.IsEnabled = CurrentItem.CanWrite;
+            newfolder.Visibility = CurrentItem.CanWrite ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
             if (loaded) ClearItems();
             foreach (string s in e.Result.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
             {
@@ -64,11 +72,15 @@ namespace HAP.Silverlight.Browser
                     if (!Filter.Contains(s.Remove(0, 6)))
                         Filter.Add(s.Remove(0, 6));
                 }
+                else if (s.StartsWith("INFO")) Info = s.Remove(0, 4);
                 else
                 {
                     string[] ss = s.Split(new char[] { ',' });
                     BItem bitem = new BItem(ss[0], ss[1], "", "Drive", BType.Drive, ss[2], bool.Parse(ss[3]));
-                    BrowserItem item = new BrowserItem(bitem);
+                    BrowserItem item;
+                    if (ss.Length > 4)
+                        item = new BrowserItem(bitem, double.Parse(ss[4]));
+                    else item = new BrowserItem(bitem);
                     if (!loaded)
                     {
                         HAPTreeNode titem = new HAPTreeNode();
@@ -82,6 +94,7 @@ namespace HAP.Silverlight.Browser
                         titem.Items.Add(ttitem);
                         treeView1.Items.Add(titem);
                     }
+                    item.KeyUp += new KeyEventHandler(item_KeyUp);
                     item.MouseEnter += new MouseEventHandler(item_MouseEnter);
                     item.MouseLeftButtonDown += new MouseButtonEventHandler(item_MouseLeftButtonDown);
                     item.MouseLeave += new MouseEventHandler(item_MouseLeave);
@@ -114,8 +127,46 @@ namespace HAP.Silverlight.Browser
             }
         }
 
-        private bool reload = false;
-        private HAPTreeNode tempnode;
+        private void listclient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
+        {
+            Dispatcher.BeginInvoke(new DownloadStringCompletedEventHandler(listclient_DownloadStringCompleted2), sender, e);
+        }
+        private void listclient_DownloadStringCompleted2(object sender, DownloadStringCompletedEventArgs e)
+        {
+            ClearItems();
+            this.AllowDrop = contentPan.AllowDrop = RightClickFolder.IsEnabled = CurrentItem.CanWrite;
+            newfolder.Visibility = CurrentItem.CanWrite ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+            tempnode = ((HAPTreeNode)treeView1.SelectedItem);
+            tempnode.Items.Clear();
+            if (e.Result.StartsWith("ERROR")) MessageBox.Show("An Error Occured");
+            else foreach (string s in e.Result.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                string[] ss = s.Split(new char[] { ',' });
+                BrowserItem item = new BrowserItem(new BItem(ss[0], ss[1], ss[2], ss[3], (ss[3] == "File Folder" ? BType.Folder : (ss[3] == "Drive" ? BType.Drive : BType.File)), ss[4], bool.Parse(ss[5])));
+                item.Activate += new EventHandler(item_Activate);
+                item.MouseEnter += new MouseEventHandler(item_MouseEnter);
+                if (CurrentItem.CanWrite)
+                {
+                    item.ItemDrop += new DragEventHandler(item_Drop);
+                    item.DragEnter += new DragEventHandler(item_DragEnter);
+                    item.DragLeave += new DragEventHandler(item_DragLeave);
+                    item.MouseLeftButtonDown += new MouseButtonEventHandler(item_MouseLeftButtonDown);
+                    item.KeyUp += new KeyEventHandler(item_KeyUp);
+                }
+                item.MouseLeave += new MouseEventHandler(item_MouseLeave);
+                item.ReSort += new ResortHandler(item_ReSort);
+                if (item.Data.BType == BType.Drive) item.DirectoryChange += new ChangeDirectoryHandler(computer_DirectoryChange);
+                else item.DirectoryChange += new ChangeDirectoryHandler(item_DirectoryChange);
+                if (item.Data.BType == BType.Folder && item.Data.Name != "..") UpdateTree(item.Data);
+                contentPan.Children.Add(item);
+                item.Mode = ViewMode;
+            }
+            reload = false;
+        }
+
+        #endregion
+
+        #region Tree Events
 
         private void HAPTreeNode_Selected(object sender, RoutedEventArgs e)
         {
@@ -158,58 +209,6 @@ namespace HAP.Silverlight.Browser
             return item;
         }
 
-        private void item_DirectoryChange(object sender, BItem e)
-        {
-            CurrentItem = e;
-            HAPTreeNode i = GetTreeNode(e.Path, treeView1.Items);
-            if (i.Header.ToString() != "E") treeView1.SelectItem(i);
-            else MessageBox.Show("Error: " + e.Path);
-        }
-
-        private void computer_DirectoryChange(object sender, BItem e)
-        {
-            CurrentItem = new BItem("My Computer", "", "", "", BType.Drive, "", false);
-            if (treeView1.SelectedItem != null) ((HAPTreeNode)treeView1.SelectedItem).IsSelected = false;
-            WebClient listclient = new WebClient();
-            listclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(driveclient_DownloadStringCompleted);
-            listclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + e.Path));
-            HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + HtmlPage.Document.DocumentUri.LocalPath + "#"));
-        }
-
-        private void listclient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
-        {
-            Dispatcher.BeginInvoke(new DownloadStringCompletedEventHandler(listclient_DownloadStringCompleted2), sender, e);
-        }
-        private void listclient_DownloadStringCompleted2(object sender, DownloadStringCompletedEventArgs e)
-        {
-            ClearItems();
-            tempnode = ((HAPTreeNode)treeView1.SelectedItem);
-            tempnode.Items.Clear();
-            if (e.Result.StartsWith("ERROR")) MessageBox.Show("An Error Occured");
-            else foreach (string s in e.Result.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                string[] ss = s.Split(new char[] { ',' });
-                BrowserItem item = new BrowserItem(new BItem(ss[0], ss[1], ss[2], ss[3], (ss[3] == "File Folder" ? BType.Folder : (ss[3] == "Drive" ? BType.Drive : BType.File)), ss[4], bool.Parse(ss[5])));
-                item.Activate += new EventHandler(item_Activate);
-                item.MouseEnter += new MouseEventHandler(item_MouseEnter);
-                if (CurrentItem.CanWrite)
-                {
-                    item.ItemDrop += new DragEventHandler(item_Drop);
-                    item.DragEnter += new DragEventHandler(item_DragEnter);
-                    item.DragLeave += new DragEventHandler(item_DragLeave);
-                    item.MouseLeftButtonDown += new MouseButtonEventHandler(item_MouseLeftButtonDown);
-                }
-                item.MouseLeave += new MouseEventHandler(item_MouseLeave);
-                item.ReSort += new ResortHandler(item_ReSort);
-                if (item.Data.BType == BType.Drive) item.DirectoryChange += new ChangeDirectoryHandler(computer_DirectoryChange);
-                else item.DirectoryChange += new ChangeDirectoryHandler(item_DirectoryChange);
-                if (item.Data.BType == BType.Folder && item.Data.Name != "..") UpdateTree(item.Data);
-                contentPan.Children.Add(item);
-                item.Mode = ViewMode;
-            }
-            reload = false;
-        }
-
         private void treereloadclient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
         {
             Dispatcher.BeginInvoke(new DownloadStringCompletedEventHandler(treereloadclient_DownloadStringCompleted2), sender, e);
@@ -235,7 +234,7 @@ namespace HAP.Silverlight.Browser
                 {
                     loaded = true;
                     Dispatcher.BeginInvoke(new SelectHandler(SelectUpdatedNode), tempnode.BItem.Path + "/" + p.Split(new char[] { '/' })[0]);
-                } 
+                }
             }
             reload = false;
         }
@@ -259,6 +258,9 @@ namespace HAP.Silverlight.Browser
             tempnode.Items.Add(titem);
         }
 
+        #endregion
+
+        #region Bar/Context Events
         private void barContextButton1_Click(object sender, EventArgs e)
         {
             ViewMode = barContextButton1.Mode;
@@ -278,11 +280,136 @@ namespace HAP.Silverlight.Browser
                 item.Mode = ViewMode;
         }
 
-        private List<BrowserItem> activeItems;
+        private void organiseButton1_SelectAllClick(object sender, RoutedEventArgs e)
+        {
+            item_ReSort(this, false);
+            foreach (BrowserItem item in contentPan.Children)
+            {
+                item.Active = true;
+                activeItems.Add(item);
+            }
+            selectall = true;
+        }
+
+        private void home_Click(object sender, RoutedEventArgs e)
+        {
+            HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + "/extranet/"));
+        }
+
+        private void helpButton1_Click(object sender, RoutedEventArgs e)
+        {
+            Help help = new Help();
+            help.HAPV = Info;
+            help.Show();
+        }
+
+        private void organiseButton1_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (activeItems.Count == 1 && activeItems[0].Data.Name != ".." && activeItems[0].Data.Name != "My Computer")
+            {
+                organiseButton1.IsDelete = organiseButton1.IsRename = RightClickRename.IsEnabled = RightClickDelete.IsEnabled = CurrentItem.CanWrite;
+                RightClickZIP.Visibility = RightClickFolder.Visibility = RightClickUNZIP.Visibility = System.Windows.Visibility.Collapsed;
+            }
+            else if (activeItems.Count > 1 && activeItems.Where(I => I.Data.Name == "My Computer" || I.Data.Name == "..").Count() == 0)
+            {
+                organiseButton1.IsDelete = RightClickDelete.IsEnabled = CurrentItem.CanWrite;
+                organiseButton1.IsRename = RightClickRename.IsEnabled = false;
+                RightClickUNZIP.Visibility = System.Windows.Visibility.Collapsed;
+                RightClickFolder.Visibility = RightClickZIP.Visibility = CurrentItem.CanWrite ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+            }
+            else
+            {
+                organiseButton1.IsDelete = organiseButton1.IsRename = false;
+                RightClickRename.IsEnabled = RightClickDelete.IsEnabled = false;
+                RightClickUNZIP.Visibility = RightClickZIP.Visibility = System.Windows.Visibility.Collapsed;
+                RightClickFolder.Visibility = CurrentItem.CanWrite ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+            }
+        }
+
+        #endregion
+
+        #region new folder
+
+        private void newfolder_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender == RightClickFolder) rightclick = true;
+            item_ReSort(this, true);
+            int count = 0;
+            foreach (BrowserItem i in contentPan.Children.Where(I => ((BrowserItem)I).Data.BType == BType.Folder))
+                if (i.Data.Name.StartsWith("New Folder")) count++;
+            BrowserItem item = new BrowserItem(new BItem("New Folder" + (count == 0 ? "" : " " + count), "/extranet/images/icons/folder.png", "", "Folder", BType.Folder, CurrentItem.Path + "/New Folder" + (count == 0 ? "" : " " + (count + 1)), true));
+            item.Activate += new EventHandler(item_Activate);
+            item.MouseEnter += new MouseEventHandler(item_MouseEnter);
+            if (CurrentItem.CanWrite)
+            {
+                item.ItemDrop += new DragEventHandler(item_Drop);
+                item.DragEnter += new DragEventHandler(item_DragEnter);
+                item.DragLeave += new DragEventHandler(item_DragLeave);
+                item.MouseLeftButtonDown += new MouseButtonEventHandler(item_MouseLeftButtonDown);
+                item.KeyUp += new KeyEventHandler(item_KeyUp);
+            }
+            item.MouseLeave += new MouseEventHandler(item_MouseLeave);
+            item.ReSort += new ResortHandler(item_ReSort);
+            item.DirectoryChange += new ChangeDirectoryHandler(item_DirectoryChange);
+            if (item.Data.BType == BType.Folder && item.Data.Name != "..") UpdateTree(item.Data);
+            contentPan.Children.Add(item);
+            scroller.ScrollIntoView(item);
+            item.Mode = ViewMode;
+            item.Active = true;
+            item.IsRename = true;
+            foreach (BrowserItem i in activeItems)
+                if (i.IsRename)
+                    if (i.Save(false) == 0) i.Active = false;
+                    else return;
+                else i.Active = false;
+            activeItems.Clear();
+            activeItems.Add(item);
+            WebClient newfolderclient = new WebClient();
+            newfolderclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(newfolderclient_DownloadStringCompleted);
+            newfolderclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + item.Data.Path.Replace("/api/mycomputer/list/", "/api/mycomputer/new/")), false);
+        }
+        private void newfolderclient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
+        {
+            Dispatcher.BeginInvoke(new DownloadStringCompletedEventHandler(newfolderclient_DownloadStringCompleted2), sender, e);
+        }
+
+        private void newfolderclient_DownloadStringCompleted2(object sender, DownloadStringCompletedEventArgs e)
+        {
+            if (e.Result.StartsWith("ERROR"))
+            {
+                contentPan.Children.Remove(activeItems[0]);
+                activeItems.Clear();
+                MessageBox.Show(e.Result);
+            }
+        }
+
+        #endregion
+
+        #region ItemEvents
+
+        public void AddItem(BrowserItem item, bool Resort)
+        {
+            contentPan.Children.Add(item);
+            if (Resort) item_ReSort(this, true);
+        }
+        public void ClearItems()
+        {
+            contentPan.Children.Clear();
+            activeItems.Clear();
+        }
 
         private void item_Activate(object sender, EventArgs e)
         {
-            candrag = drag = false;  mousemode = MouseMode.Normal;
+            if (drag && mousemode == MouseMode.Move)
+            {
+                foreach (BrowserItem item in activeItems)
+                {
+                    item.Active = false;
+                    item.Move(true, ((BrowserItem)sender).Data.Name);
+                }
+                activeItems.Clear();
+            }
+            candrag = drag = false; mousemode = MouseMode.Normal;
             if (!selectall && !rightclick)
             {
                 if (Keyboard.Modifiers == ModifierKeys.Control)
@@ -325,77 +452,52 @@ namespace HAP.Silverlight.Browser
             else { selectall = false; rightclick = false; }
         }
 
-        private bool selectall = false;
-        private void organiseButton1_SelectAllClick(object sender, RoutedEventArgs e)
+        private void item_DirectoryChange(object sender, BItem e)
         {
-            item_ReSort(this, false);
-            foreach (BrowserItem item in contentPan.Children)
-            {
-                item.Active = true;
-                activeItems.Add(item);
-            }
-            selectall = true;
+            CurrentItem = e;
+            HAPTreeNode i = GetTreeNode(e.Path, treeView1.Items);
+            if (i.Header.ToString() != "E") treeView1.SelectItem(i);
+            else MessageBox.Show("Error: " + e.Path);
         }
 
-        private bool rightclick = false;
-        private void contentPan_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void computer_DirectoryChange(object sender, BItem e)
         {
-            drag = false;
-            if (!rightclick)
-            {
-                if (activeItems.Count(I => I.IsRename == true) > 0) item_ReSort(this, true);
-                else item_ReSort(this, false);
-            } else rightclick = false;
+            CurrentItem = new BItem("My Computer", "", "", "", BType.Drive, "", false);
+            if (treeView1.SelectedItem != null) ((HAPTreeNode)treeView1.SelectedItem).IsSelected = false;
+            WebClient listclient = new WebClient();
+            listclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(driveclient_DownloadStringCompleted);
+            listclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + e.Path));
+            HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + HtmlPage.Document.DocumentUri.LocalPath + "#"));
         }
 
-        private void contentPan_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        private void item_KeyUp(object sender, KeyEventArgs e)
         {
-            if (activeItems.Count == 1 && activeItems[0].Data.Name != ".." && activeItems[0].Data.Name != "My Computer")
+            BrowserItem item = ((BrowserItem)sender);
+            if (item.Active && !item.IsRename)
             {
-                organiseButton1.IsDelete = organiseButton1.IsRename = RightClickRename.IsEnabled = RightClickDelete.IsEnabled = CurrentItem.CanWrite;
-                RightClickZIP.Visibility = RightClickFolder.Visibility = RightClickUNZIP.Visibility = System.Windows.Visibility.Collapsed;
+                if (e.Key == Key.Delete)
+                {
+                    if (MessageBox.Show("Are you sure you want to delete?", "Delete?", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                    {
+                        item.Active = false;
+                        item.Delete();
+                    }
+                    e.Handled = true;
+                }
+                else if (e.Key == Key.Enter && item.Data.BType != BType.File)
+                {
+                    CurrentItem = item.Data;
+                    HAPTreeNode i = GetTreeNode(item.Data.Path, treeView1.Items);
+                    if (i.Header.ToString() != "E") treeView1.SelectItem(i);
+                    else MessageBox.Show("Error: " + item.Data.Path);
+                    e.Handled = true;
+                }
+                else if (e.Key == Key.Enter && item.Data.BType == BType.File)
+                {
+                    HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + item.Data.Path));
+                    e.Handled = true;
+                }
             }
-            else if (activeItems.Count > 1 && activeItems.Where(I => I.Data.Name == "My Computer" || I.Data.Name == "..").Count() == 0)
-            {
-                organiseButton1.IsDelete = RightClickDelete.IsEnabled = CurrentItem.CanWrite;
-                organiseButton1.IsRename = RightClickRename.IsEnabled = false;
-                RightClickUNZIP.Visibility = System.Windows.Visibility.Collapsed;
-                RightClickFolder.Visibility = RightClickZIP.Visibility = CurrentItem.CanWrite ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
-            }
-            else
-            {
-                organiseButton1.IsDelete = organiseButton1.IsRename = false;
-                RightClickRename.IsEnabled = RightClickDelete.IsEnabled = false;
-                RightClickUNZIP.Visibility = RightClickZIP.Visibility = System.Windows.Visibility.Collapsed;
-                RightClickFolder.Visibility = CurrentItem.CanWrite ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
-            }
-        }
-
-        private void RightClickRename_Click(object sender, RoutedEventArgs e)
-        {
-            activeItems[0].IsRename = true;
-            rightclick = true;
-        }
-
-        private void newfolder_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender == RightClickFolder) rightclick = true;
-            item_ReSort(this, true);
-            int count = 0;
-            foreach (BrowserItem i in contentPan.Children.Where(I => ((BrowserItem)I).Data.BType == BType.Folder))
-                if (i.Data.Name.StartsWith("New Folder")) count++;
-            BrowserItem item = new BrowserItem(new BItem("New Folder" + (count == 0 ? "" : " " + count), "/extranet/images/icons/folder.png", "", "Folder", BType.Folder, CurrentItem.Path + "/New Folder" + (count == 0 ? "" : " " + (count + 1)), true));
-            item.ReSort += new ResortHandler(item_ReSort);
-            item.Activate += new EventHandler(item_Activate);
-            item.MouseEnter += new MouseEventHandler(item_MouseEnter);
-            item.MouseLeftButtonDown += new MouseButtonEventHandler(item_MouseLeftButtonDown);
-            item.MouseLeave += new MouseEventHandler(item_MouseLeave);
-            contentPan.Children.Add(item);
-            scroller.ScrollToBottom();
-            item.Mode = ViewMode;
-            item.Active = true;
-            item.IsRename = true;
-            activeItems.Add(item);
         }
 
         private void item_ReSort(object sender, bool resort)
@@ -428,9 +530,125 @@ namespace HAP.Silverlight.Browser
             }
         }
 
+        private void item_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            candrag = true;
+        }
+
+        private void item_Drop(object sender, DragEventArgs e)
+        {
+            ((BrowserItem)sender).Leave();
+            //Upload to a specific folder
+            if (e.Data == null) return;
+
+            try
+            {
+
+                FileInfo[] files = e.Data.GetData(DataFormats.FileDrop) as FileInfo[];
+
+                if (files == null) return;
+
+                foreach (FileInfo file in files)
+                {
+                    if (HasFilter(file.Extension)) { UploadItem ui = new UploadItem(file, ((BrowserItem)sender).Data, ref UploadQueue, new RoutedEventHandler(ui_Uploaded)); }
+                    else MessageBox.Show("File Type Not Allowed (" + file.Extension.ToLower() + ")", "This file is not allowed to be uploaded", MessageBoxButton.OK);
+                }
+            }
+            catch { MessageBox.Show("The item you have dragged here is not supported"); }
+        }
+
+        private void item_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (candrag)
+            {
+                if (!activeItems.Contains((BrowserItem)sender))
+                {
+                    foreach (BrowserItem item in activeItems)
+                        if (item.IsRename)
+                            if (item.Save(false) == 0) item.Active = false;
+                            else return;
+                        else item.Active = false;
+                    activeItems.Clear();
+                    ((BrowserItem)sender).Active = true;
+                    activeItems.Add((BrowserItem)sender);
+                }
+                drag = true;
+                mousemode = MouseMode.Normal;
+                candrag = false;
+            }
+            mousemode = MouseMode.NoGo;
+        }
+
+        private void item_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (drag)
+            {
+                if (((BrowserItem)sender).Data.BType == BType.Folder)
+                {
+                    if (activeItems.Contains((BrowserItem)sender)) mousemode = MouseMode.NoGo;
+                    else
+                    {
+                        movetext.Text = "Move to";
+                        movefoldertext.Text = ((BrowserItem)sender).Data.Name;
+                        mousemode = MouseMode.Move;
+                    }
+                }
+                else mousemode = MouseMode.NoGo;
+            }
+        }
+
+        private void item_DragLeave(object sender, DragEventArgs e)
+        {
+            if (CurrentItem.Name != "My Computer" && CurrentItem.CanWrite)
+            {
+                movefoldertext.Text = "This Folder";
+            }
+            ((BrowserItem)sender).Leave();
+        }
+
+        private void item_DragEnter(object sender, DragEventArgs e)
+        {
+            if (CurrentItem.Name != "My Computer" && CurrentItem.CanWrite)
+            {
+                mousemode = MouseMode.Upload;
+                nomove.Visibility = System.Windows.Visibility.Visible;
+                movetooltip.Visibility = System.Windows.Visibility.Collapsed;
+                movetext.Text = "Upload to";
+                movefoldertext.Text = ((BrowserItem)sender).Data.Name;
+                ((BrowserItem)sender).Hover();
+                e.Handled = true;
+            }
+        }
+
+        #endregion
+
+        #region Right Click Events
+
+        private void contentPan_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (activeItems.Count == 1 && activeItems[0].Data.Name != ".." && activeItems[0].Data.Name != "My Computer")
+            {
+                organiseButton1.IsDelete = organiseButton1.IsRename = RightClickRename.IsEnabled = RightClickDelete.IsEnabled = CurrentItem.CanWrite;
+                RightClickZIP.Visibility = RightClickFolder.Visibility = RightClickUNZIP.Visibility = System.Windows.Visibility.Collapsed;
+            }
+            else if (activeItems.Count > 1 && activeItems.Where(I => I.Data.Name == "My Computer" || I.Data.Name == "..").Count() == 0)
+            {
+                organiseButton1.IsDelete = RightClickDelete.IsEnabled = CurrentItem.CanWrite;
+                organiseButton1.IsRename = RightClickRename.IsEnabled = false;
+                RightClickUNZIP.Visibility = System.Windows.Visibility.Collapsed;
+                RightClickFolder.Visibility = RightClickZIP.Visibility = CurrentItem.CanWrite ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+            }
+            else
+            {
+                organiseButton1.IsDelete = organiseButton1.IsRename = false;
+                RightClickRename.IsEnabled = RightClickDelete.IsEnabled = false;
+                RightClickUNZIP.Visibility = RightClickZIP.Visibility = System.Windows.Visibility.Collapsed;
+                RightClickFolder.Visibility = CurrentItem.CanWrite ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+            }
+        }
+
         private void RightClickDelete_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("ERG");
             rightclick = true;
             foreach (BrowserItem i in activeItems)
             {
@@ -438,19 +656,19 @@ namespace HAP.Silverlight.Browser
                     if (i.Save(false) == 0) i.Active = false;
                     else return;
                 else i.Delete();
-                contentPan.Children.Remove(i);
             }
             activeItems.Clear();
         }
 
-        private bool candrag = false;
-        private bool drag = false;
-        private MouseMode mousemode = MouseMode.Normal;
-
-        private void item_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void RightClickRename_Click(object sender, RoutedEventArgs e)
         {
-            candrag = true;
+            activeItems[0].IsRename = true;
+            rightclick = true;
         }
+
+        #endregion
+
+        #region Drag Events
 
         private void UserControl_MouseMove(object sender, MouseEventArgs e)
         {
@@ -479,49 +697,21 @@ namespace HAP.Silverlight.Browser
             movetooltip.Visibility = nomove.Visibility = System.Windows.Visibility.Collapsed;
         }
 
-        private void item_MouseLeave(object sender, MouseEventArgs e)
-        {
-            if (candrag) {
-                if (!activeItems.Contains((BrowserItem)sender))
-                {
-                    foreach (BrowserItem item in activeItems)
-                        if (item.IsRename)
-                            if (item.Save(false) == 0) item.Active = false;
-                            else return;
-                        else item.Active = false;
-                    activeItems.Clear();
-                    ((BrowserItem)sender).Active = true;
-                    activeItems.Add((BrowserItem)sender);
-                }
-                drag = true;
-                mousemode = MouseMode.Normal; 
-                candrag = false;
-            }
-            mousemode = MouseMode.NoGo;
-        }
-
-        private void item_MouseEnter(object sender, MouseEventArgs e)
-        {
-            if (drag)
-            {
-                if (((BrowserItem)sender).Data.BType == BType.Folder)
-                {
-                    if (activeItems.Contains((BrowserItem)sender)) mousemode = MouseMode.NoGo;
-                    else
-                    {
-                        movetext.Text = "Move to";
-                        movefoldertext.Text = ((BrowserItem)sender).Data.Name;
-                        mousemode = MouseMode.Move;
-                    }
-                }
-                else mousemode = MouseMode.NoGo;
-            }
-        }
-
         private void UserControl_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             drag = false;
             mousemode = MouseMode.Normal;
+        }
+
+        private void contentPan_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            drag = false;
+            if (!rightclick)
+            {
+                if (activeItems.Count(I => I.IsRename == true) > 0) item_ReSort(this, true);
+                else item_ReSort(this, false);
+            }
+            else rightclick = false;
         }
 
         private void contentPan_DragEnter(object sender, DragEventArgs e)
@@ -536,19 +726,35 @@ namespace HAP.Silverlight.Browser
         private void UserControl_DragEnter(object sender, DragEventArgs e)
         {
             //MessageBox.Show(string.Join("\n", e.Data.GetFormats(false)));
-            movetext.Text = "Upload to";
-            movefoldertext.Text = "This Folder";
             movetooltip.Margin = new Thickness(e.GetPosition(this).X + 10, e.GetPosition(this).Y + 10, 0, 0);
-            movetooltip.Visibility = System.Windows.Visibility.Visible;
-            nomove.Visibility = System.Windows.Visibility.Collapsed;
+            if (CurrentItem.Name != "My Computer" && CurrentItem.CanWrite)
+            {
+                movetext.Text = "Upload to";
+                movefoldertext.Text = "This Folder";
+                movetooltip.Visibility = System.Windows.Visibility.Visible;
+                nomove.Visibility = System.Windows.Visibility.Collapsed;
+            }
+            else
+            {
+                movetooltip.Visibility = System.Windows.Visibility.Collapsed;
+                nomove.Visibility = System.Windows.Visibility.Visible;
+            }
             e.Handled = true;
         }
 
         private void contentPan_DragOver(object sender, DragEventArgs e)
         {
             movetooltip.Margin = new Thickness(e.GetPosition(this).X + 10, e.GetPosition(this).Y + 10, 0, 0);
-            movetooltip.Visibility = System.Windows.Visibility.Visible;
-            nomove.Visibility = System.Windows.Visibility.Collapsed;
+            if (CurrentItem.Name != "My Computer" && CurrentItem.CanWrite)
+            {
+                movetooltip.Visibility = System.Windows.Visibility.Visible;
+                nomove.Visibility = System.Windows.Visibility.Collapsed;
+            }
+            else
+            {
+                movetooltip.Visibility = System.Windows.Visibility.Collapsed;
+                nomove.Visibility = System.Windows.Visibility.Visible;
+            }
             e.Handled = true;
         }
 
@@ -556,23 +762,6 @@ namespace HAP.Silverlight.Browser
         {
             nomove.Visibility = System.Windows.Visibility.Visible;
             movetooltip.Visibility = System.Windows.Visibility.Collapsed;
-        }
-
-        private void item_DragLeave(object sender, DragEventArgs e)
-        {
-            movefoldertext.Text = "This Folder";
-            ((BrowserItem)sender).Leave();
-        }
-
-        private void item_DragEnter(object sender, DragEventArgs e)
-        {
-            mousemode = MouseMode.Upload;
-            nomove.Visibility = System.Windows.Visibility.Visible;
-            movetooltip.Visibility = System.Windows.Visibility.Collapsed;
-            movetext.Text = "Upload to";
-            movefoldertext.Text = ((BrowserItem)sender).Data.Name;
-            ((BrowserItem)sender).Hover();
-            e.Handled = true;
         }
 
         private void UserControl_DragOver(object sender, DragEventArgs e)
@@ -603,77 +792,52 @@ namespace HAP.Silverlight.Browser
 
                 foreach (FileInfo file in files)
                 {
-                    //if (filters.Contains("*.*") || filters.ToLower().Contains(file.Extension.Trim(new char[] { '.' }).ToLower()))
-                    //{
-                    UploadItem ui = new UploadItem(file);
-                    UploadQueue.Children.Add(ui);
-                    //}
-                    //else MessageBox.Show("File Type Not Allowed (" + file.Extension.ToLower() + ")", "This file is not allowed to be uploaded", MessageBoxButton.OK);
+                    if (HasFilter(file.Extension)) { UploadItem ui = new UploadItem(file, CurrentItem, ref UploadQueue, new RoutedEventHandler(ui_Uploaded)); }
+                    else MessageBox.Show("File Type Not Allowed (" + file.Extension.ToLower() + ")", "This file is not allowed to be uploaded", MessageBoxButton.OK);
                 }
             }
             catch { MessageBox.Show("The item you have dragged here is not supported"); }
             
         }
 
-        private void item_Drop(object sender, DragEventArgs e)
+        public void ui_Uploaded(object sender, RoutedEventArgs e)
         {
-            ((BrowserItem)sender).Leave();
-            //Upload to a specific folder
-            if (e.Data == null) return;
-
-            try
+            UploadItem item = sender as UploadItem;
+            if (CurrentItem == item.ParentData)
             {
-
-                FileInfo[] files = e.Data.GetData(DataFormats.FileDrop) as FileInfo[];
-
-                if (files == null) return;
-
-                foreach (FileInfo file in files)
-                {
-                    //if (filters.Contains("*.*") || filters.ToLower().Contains(file.Extension.Trim(new char[] { '.' }).ToLower()))
-                    //{
-                    UploadItem ui = new UploadItem(file);
-                    UploadQueue.Children.Add(ui);
-                    //}
-                    //else MessageBox.Show("File Type Not Allowed (" + file.Extension.ToLower() + ")", "This file is not allowed to be uploaded", MessageBoxButton.OK);
-                }
+                reload = true;
+                WebClient listclient = new WebClient();
+                listclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(listclient_DownloadStringCompleted);
+                listclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + CurrentItem.Path));
+                HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + HtmlPage.Document.DocumentUri.LocalPath + "#" + CurrentItem.Path.ToLower().Remove(0, 30)));
             }
-            catch { MessageBox.Show("The item you have dragged here is not supported"); }
+            UploadQueue.Children.Remove(item);
+            if (UploadQueue.Children.Count > 0)
+            {
+                UploadItem i = UploadQueue.Children[0] as UploadItem;
+                if (i.State == UploadItemState.Ready) i.Upload();
+            }
         }
 
-        private void helpButton1_Click(object sender, RoutedEventArgs e)
+        #endregion
+
+
+        private void contentPan_KeyUp(object sender, KeyEventArgs e)
         {
-            Help help = new Help();
-            help.Show();
+            if (e.Key == Key.Delete) RightClickDelete_Click(RightClickDelete, new RoutedEventArgs());
         }
 
-        private void organiseButton1_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private bool HasFilter(string extension)
         {
-            if (activeItems.Count == 1 && activeItems[0].Data.Name != ".." && activeItems[0].Data.Name != "My Computer")
-            {
-                organiseButton1.IsDelete = organiseButton1.IsRename = RightClickRename.IsEnabled = RightClickDelete.IsEnabled = CurrentItem.CanWrite;
-                RightClickZIP.Visibility = RightClickFolder.Visibility = RightClickUNZIP.Visibility = System.Windows.Visibility.Collapsed;
-            }
-            else if (activeItems.Count > 1 && activeItems.Where(I => I.Data.Name == "My Computer" || I.Data.Name == "..").Count() == 0)
-            {
-                organiseButton1.IsDelete = RightClickDelete.IsEnabled = CurrentItem.CanWrite;
-                organiseButton1.IsRename = RightClickRename.IsEnabled = false;
-                RightClickUNZIP.Visibility = System.Windows.Visibility.Collapsed;
-                RightClickFolder.Visibility = RightClickZIP.Visibility = CurrentItem.CanWrite ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
-            }
-            else
-            {
-                organiseButton1.IsDelete = organiseButton1.IsRename = false;
-                RightClickRename.IsEnabled = RightClickDelete.IsEnabled = false;
-                RightClickUNZIP.Visibility = RightClickZIP.Visibility = System.Windows.Visibility.Collapsed;
-                RightClickFolder.Visibility = CurrentItem.CanWrite ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
-            }
+            foreach (string s in Filter)
+                if (s.Contains("*.*")) return true;
+                else if (s.ToLower().Contains(extension.ToLower())) return true;
+            return false;
         }
     }
 
     public enum ViewMode { List, SmallIcon, Icon, LargeIcon, Tile }
     public enum MouseMode { NoGo, Move, Normal, Upload }
+    public delegate void ResortHandler(object sender, bool resort);
+    public delegate void SelectHandler(string path);
 }
-
-public delegate void ResortHandler(object sender, bool resort);
-public delegate void SelectHandler(string path);
