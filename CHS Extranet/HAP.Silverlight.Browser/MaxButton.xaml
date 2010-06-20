@@ -26,5 +26,8 @@
                 <Image x:Name="image2" Source="/HAP.Silverlight.Browser;component/minimize.png" Visibility="Collapsed" Stretch="None" Height="16" Width="16" VerticalAlignment="Center" HorizontalAlignment="Center" />
             </Grid>
         </Border>
+        <ToolTipService.ToolTip>
+            <ToolTip Content="Maximize/Minimize"/>
+        </ToolTipService.ToolTip>
     </Border>
 </UserControl>

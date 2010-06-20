@@ -9,7 +9,7 @@
     <Grid x:Name="LayoutRoot" Background="Transparent">
         <ProgressBar Name="Progress" Minimum="0" Maximum="100" Value="10" />
         <StackPanel Orientation="Horizontal">
-            <Image HorizontalAlignment="Left" Margin="4" Name="image1" Stretch="Uniform" Source="/HAP.Silverlight.Browser;component/file.png" />
+            <Image HorizontalAlignment="Left" Margin="4" Name="image1" Stretch="Uniform" />
             <Grid VerticalAlignment="Center" Margin="0, 0, 10, 0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="26" />
@@ -21,7 +21,7 @@
         </StackPanel>
         <toolkit:ContextMenuService.ContextMenu>
             <toolkit:ContextMenu>
-                <toolkit:MenuItem Header="Remove" />
+                <toolkit:MenuItem x:Name="remove" Header="Remove" Click="remove_Click" />
             </toolkit:ContextMenu>
         </toolkit:ContextMenuService.ContextMenu>
     </Grid>

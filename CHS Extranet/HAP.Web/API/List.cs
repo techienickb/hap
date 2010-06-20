@@ -81,8 +81,8 @@ namespace HAP.Web.API
             bool allowedit = isWriteAuth(unc);
 
             if (string.IsNullOrEmpty(RoutingPath))
-                context.Response.Write(string.Format(format, "My Computer", "school.png", "Back to My Computer", "Drive", "/Extranet/api/MyComputer/listdrives", false));
-            else context.Response.Write(string.Format(format, "..", "folder.png", "Up a Folder", "File Folder", "/Extranet/api/MyComputer/list/" + (RoutingDrive + "/" + RoutingPath).Replace("//", "/").Remove((RoutingDrive + "/" + RoutingPath).LastIndexOf('/') - 1), allowedit));
+                context.Response.Write(string.Format(format, "My Computer", "school.png", "Back to My Computer", "Drive", "/Extranet/api/mycomputer/listdrives", false));
+            else context.Response.Write(string.Format(format, "..", "folder.png", "Up a Folder", "File Folder", "/Extranet/api/mycomputer/list/" + (RoutingDrive + "/" + RoutingPath).Replace("//", "/").Remove((RoutingDrive + "/" + RoutingPath).LastIndexOf('/') - 1), allowedit));
 
             try
             {
@@ -94,8 +94,8 @@ namespace HAP.Web.API
                             string dirpath = subdir.FullName;
                             if (unc == null) dirpath = dirpath.Replace(userhome, "N");
                             else dirpath = dirpath.Replace(string.Format(unc.UNC, Username), unc.Drive);
-                            dirpath = dirpath.Replace('\\', '/').Replace("//", "/"); ;
-                            context.Response.Write(string.Format(format, subdir.Name, MyComputerItem.ParseForImage(subdir), "", "File Folder", "/Extranet/api/MyComputer/list/" + dirpath.Replace('&', '^'), allowedit));
+                            dirpath = dirpath.Replace('\\', '/').Replace("//", "/");
+                            context.Response.Write(string.Format(format, subdir.Name, MyComputerItem.ParseForImage(subdir), "", "File Folder", "/Extranet/api/mycomputer/list/" + dirpath.Replace('&', '^'), allowedit));
                         }
                     }
                     catch { }
@@ -141,7 +141,7 @@ namespace HAP.Web.API
 
         }
 
-        public string parseLength(object size)
+        public static string parseLength(object size)
         {
             decimal d = decimal.Parse(size.ToString() + ".00");
             string[] s = { "bytes", "KB", "MB", "GB", "TB", "PB" };

@@ -123,6 +123,10 @@
             this.btnClose = new System.Windows.Forms.Button();
             this.btnsave = new System.Windows.Forms.Button();
             this.folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
+            this.label22 = new System.Windows.Forms.Label();
+            this.proxyaddress = new System.Windows.Forms.TextBox();
+            this.proxyport = new System.Windows.Forms.NumericUpDown();
+            this.label23 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -147,6 +151,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.bs_max)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bs_maxdays)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.proxyport)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -632,7 +637,7 @@
             this.uncpaths.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uncpaths.Location = new System.Drawing.Point(3, 3);
             this.uncpaths.Name = "uncpaths";
-            this.uncpaths.Size = new System.Drawing.Size(610, 285);
+            this.uncpaths.Size = new System.Drawing.Size(610, 283);
             this.uncpaths.TabIndex = 0;
             // 
             // Drive
@@ -760,6 +765,10 @@
             // 
             // tabPage6
             // 
+            this.tabPage6.Controls.Add(this.label23);
+            this.tabPage6.Controls.Add(this.proxyport);
+            this.tabPage6.Controls.Add(this.proxyaddress);
+            this.tabPage6.Controls.Add(this.label22);
             this.tabPage6.Controls.Add(this.label17);
             this.tabPage6.Controls.Add(this.announcementBox_EditTo);
             this.tabPage6.Controls.Add(this.label16);
@@ -1035,6 +1044,43 @@
             this.folderBrowser.RootFolder = System.Environment.SpecialFolder.MyComputer;
             this.folderBrowser.ShowNewFolderButton = false;
             // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(70, 74);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(121, 15);
+            this.label22.TabIndex = 4;
+            this.label22.Text = "HTTP Proxy Address:";
+            // 
+            // proxyaddress
+            // 
+            this.proxyaddress.Location = new System.Drawing.Point(197, 71);
+            this.proxyaddress.Name = "proxyaddress";
+            this.proxyaddress.Size = new System.Drawing.Size(207, 21);
+            this.proxyaddress.TabIndex = 4;
+            // 
+            // proxyport
+            // 
+            this.proxyport.Location = new System.Drawing.Point(197, 98);
+            this.proxyport.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.proxyport.Name = "proxyport";
+            this.proxyport.Size = new System.Drawing.Size(120, 21);
+            this.proxyport.TabIndex = 6;
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(92, 100);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(99, 15);
+            this.label23.TabIndex = 7;
+            this.label23.Text = "HTTP Proxy Port:";
+            // 
             // Main
             // 
             this.AcceptButton = this.btnsave;
@@ -1080,6 +1126,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.bs_max)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bs_maxdays)).EndInit();
             this.flowLayoutPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.proxyport)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1180,5 +1227,9 @@
         private System.Windows.Forms.DataGridViewCheckBoxColumn Charging;
         private System.Windows.Forms.DataGridViewCheckBoxColumn ResEnable;
         private System.Windows.Forms.FolderBrowserDialog folderBrowser;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.NumericUpDown proxyport;
+        private System.Windows.Forms.TextBox proxyaddress;
+        private System.Windows.Forms.Label label22;
     }
 }

@@ -20,9 +20,11 @@
         <Border x:Name="Tile" BorderThickness="1" BorderBrush="Transparent" CornerRadius="3">
             <Grid Width="250">
                 <Image Height="48" x:Name="image1" HorizontalAlignment="Left" Margin="5,5,5,5" Stretch="Fill" VerticalAlignment="Top" Width="48" />
-                <TextBlock Text="File 1" x:Name="name1" Margin="60,5,0,0" Padding="0,0,5,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="12" Width="180" />
+                <TextBlock Text="File 1" x:Name="name1" Margin="60,5,0,0" Padding="0,0,5,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="12" Width="180" TextTrimming="WordEllipsis" />
                 <TextBlock Text="Text Document" x:Name="type" Margin="60,22,0,0" Padding="0,0,5,0" Foreground="Gray" />
                 <TextBlock Text="124 bytes" x:Name="size" Margin="60,36,0,0" Padding="0,0,5,0" Foreground="Gray" />
+                <ProgressBar Height="14" HorizontalAlignment="Left" Margin="60,38,0,0" Name="frespace" Visibility="Collapsed" VerticalAlignment="Top" Width="138" SmallChange="0.01" />
+                <TextBlock Text="" x:Name="freespace" Margin="200,37,0,0" Padding="0,0,0,0" Foreground="Gray" Visibility="Collapsed" HorizontalAlignment="Left" Width="44" Height="16" VerticalAlignment="Top" />
                 <TextBox Height="23" HorizontalAlignment="Left" Margin="60,3,0,0" Name="textBox1" Visibility="Collapsed" VerticalAlignment="Top" Width="180" KeyDown="textBox1_KeyDown" AcceptsReturn="True" />
             </Grid>
         </Border>
@@ -36,21 +38,21 @@
         <Border x:Name="Icon" Visibility="Collapsed" BorderThickness="1" BorderBrush="Transparent" CornerRadius="3">
             <Grid>
                 <Image Height="64" x:Name="image3" HorizontalAlignment="Left" Margin="5,5,5,5" Stretch="Fill" VerticalAlignment="Top" Width="64" />
-                <TextBlock Text="File 1" x:Name="name3" Margin="2,70,2,2" Width="70" HorizontalAlignment="Left" TextAlignment="Center" VerticalAlignment="Top" FontSize="12" />
+                <TextBlock Text="File 1" x:Name="name3" Margin="2,70,2,2" Width="70" HorizontalAlignment="Left" TextAlignment="Center" VerticalAlignment="Top" FontSize="12" TextWrapping="Wrap" />
                 <TextBox Height="23" HorizontalAlignment="Left" Margin="2,70,2,2" Name="textBox3" Visibility="Collapsed" VerticalAlignment="Top" Width="70" KeyDown="textBox3_KeyDown" AcceptsReturn="True" />
             </Grid>
         </Border>
         <Border x:Name="MediumIcon" Visibility="Collapsed" BorderThickness="1" BorderBrush="Transparent" CornerRadius="3">
             <Grid>
                 <Image Height="48" x:Name="image4" HorizontalAlignment="Left" Margin="13,5,5,5" Stretch="Fill" VerticalAlignment="Top" Width="48" />
-                <TextBlock Text="File 1" x:Name="name4" Margin="2,56,2,2" Width="70" HorizontalAlignment="Left" TextAlignment="Center" VerticalAlignment="Top" FontSize="12" />
+                <TextBlock Text="File 1" x:Name="name4" Margin="2,56,2,2" Width="70" HorizontalAlignment="Left" TextAlignment="Center" VerticalAlignment="Top" FontSize="12" TextWrapping="Wrap" />
                 <TextBox Height="23" HorizontalAlignment="Left" Margin="2,56, 2,2" Visibility="Collapsed" Name="textBox4" VerticalAlignment="Top" Width="70" KeyDown="textBox4_KeyDown" AcceptsReturn="True" />
             </Grid>
         </Border>
         <Border x:Name="SmallIcon" Visibility="Collapsed" BorderThickness="1" BorderBrush="Transparent" CornerRadius="3">
             <Grid>
                 <Image Height="32" x:Name="image5" HorizontalAlignment="Left" Margin="13,5,5,5" Stretch="Fill" VerticalAlignment="Top" Width="32" />
-                <TextBlock Text="File 1" x:Name="name5" Margin="50,10,2,2" Padding="0,0,5,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="12" />
+                <TextBlock Text="File 1" x:Name="name5" Margin="50,10,2,2" Padding="0,0,5,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="12" TextWrapping="Wrap" />
                 <TextBox Height="23" HorizontalAlignment="Left" Margin="50,8,2,2" Name="textBox5" Visibility="Collapsed" VerticalAlignment="Top" KeyDown="textBox5_KeyDown" AcceptsReturn="True" />
             </Grid>
         </Border>

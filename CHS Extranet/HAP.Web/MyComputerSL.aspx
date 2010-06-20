@@ -36,10 +36,8 @@
             alert(errMsg);
             throw new Error(errMsg);
         }
-        function changeHash(args) {
-            if (args == null) {
-                
-            }
+        function OnSourceDownloadProgressChanged(sender, args) {
+            sender.findName("ProgressText").Text = "Loading... " + Math.round((args.progress * 1000)) / 10 + "%";
         }
     </script>
     <style type="text/css">
@@ -52,10 +50,11 @@
     <div id="silverlightControlHost">
         <object data="data:application/x-silverlight-2," type="application/x-silverlight-2" width="100%" height="100%">
 		  <param name="source" value="/extranet/clientbin/HAP.Silverlight.Browser.xap"/>
+          <param name="splashscreensource" value="MyComputerSLSplash.xaml"/>
+          <param name="onSourceDownloadProgressChanged" value="OnSourceDownloadProgressChanged" />
 		  <param name="onError" value="onSilverlightError" />
 		  <param name="background" value="white" />
 		  <param name="minRuntimeVersion" value="4.0.50401.0" />
-          <param name="windowless" value="true" />
 		  <param name="autoUpgrade" value="true" />
 		  <a href="http://www.microsoft.com/getsilverlight/" target="_blank" style="text-decoration: none;"><img src="/extranet/images/Silverlight-Prompt.png" alt="Get Microsoft Silverlight" /></a>
 	    </object>

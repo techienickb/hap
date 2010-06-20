@@ -1,5 +1,6 @@
 ﻿<%@ Page Title="Crickhowell High School - IT - Home Access Plus+" Language="C#" MasterPageFile="~/chs.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="HAP.Web.Default" %>
 <%@ Register TagName="announcement" TagPrefix="hap" Src="~/Controls/Announcement.ascx" %>
+<%@ Register TagName="version" TagPrefix="hap" Src="~/Controls/UpdateChecker.ascx" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <%@ Register Assembly="System.Web.Ajax" Namespace="System.Web.UI" TagPrefix="asp" %>
 
@@ -11,6 +12,8 @@
     <div id="maincol">
         <asp:AjaxScriptManager runat="server" />
         <hap:announcement runat="server" />
+        <hap:version runat="server" />
+        <a href="http://chsextranet.codeplex.com" target="_blank" style="text-align: center; display: block;"><img src="/extranet/images/haplogo.png" alt="Home Access Plus+ Logo" /></a>
         <asp:Image runat="server" ID="userimage" ImageAlign="Right" />
         <h2>Hello, <asp:Literal runat="server" ID="welcomename" />, welcome to Home Access Plus+</h2>
         <h3>My Details:</h3>
