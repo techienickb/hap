@@ -27,7 +27,7 @@
                     There is already a file with the same name in this location.
                 </TextBlock>
                 <TextBlock>Click the file you want to keep</TextBlock>
-                <Border BorderThickness="1" BorderBrush="Transparent" CornerRadius="4" x:Name="CReplace" MouseEnter="CReplace_MouseEnter" MouseLeave="CReplace_MouseLeave" MouseLeftButtonDown="CReplace_MouseLeftButtonDown" MouseLeftButtonUp="CReplace_MouseLeftButtonUp">
+                <Border BorderThickness="1" BorderBrush="Transparent" CornerRadius="4" x:Name="CReplace" MouseEnter="CReplace_MouseEnter" MouseLeave="CReplace_MouseLeave" MouseLeftButtonDown="CReplace_MouseLeftButtonDown" MouseLeftButtonUp="CReplace_MouseLeftButtonUp" Margin="0, 0, 0, 2">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -42,7 +42,7 @@
                             <RowDefinition />
                             <RowDefinition />
                         </Grid.RowDefinitions>
-                        <Image Grid.RowSpan="6" VerticalAlignment="Top" Stretch="None" HorizontalAlignment="Left" Grid.Column="0" Source="/HAP.Silverlight.Browser;component/movearrow.png" />
+                        <Image Grid.RowSpan="6" VerticalAlignment="Top" Stretch="None" HorizontalAlignment="Left" Grid.Column="0" Source="/HAP.Silverlight.Browser;component/movearrow.png" Margin="2" />
                         <TextBlock Foreground="#FF0033BC" FontSize="14" Grid.ColumnSpan="2" Grid.Column="1">Copy and Replace</TextBlock>
                         <TextBlock Foreground="#FF0033BC" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2">Replace the file in the destination folder with the file you are copying:</TextBlock>
                         <Image Grid.Column="1" Grid.Row="2" Grid.RowSpan="4" Source="/HAP.Silverlight.Browser;component/file.png" Name="image1" />
@@ -52,7 +52,7 @@
                         <TextBlock Grid.Row="5" Grid.Column="2" Text="Date modified: x x x x x" Name="date1" />
                     </Grid>
                 </Border>
-                <Border BorderThickness="1" BorderBrush="Transparent" CornerRadius="4" x:Name="CDont" MouseEnter="CReplace_MouseEnter" MouseLeave="CReplace_MouseLeave" MouseLeftButtonDown="CReplace_MouseLeftButtonDown" MouseLeftButtonUp="CDont_MouseLeftButtonUp">
+                <Border BorderThickness="1" BorderBrush="Transparent" CornerRadius="4" x:Name="CDont" MouseEnter="CReplace_MouseEnter" MouseLeave="CReplace_MouseLeave" MouseLeftButtonDown="CReplace_MouseLeftButtonDown" MouseLeftButtonUp="CDont_MouseLeftButtonUp" Margin="0, 0, 0, 2">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -67,7 +67,7 @@
                             <RowDefinition />
                             <RowDefinition />
                         </Grid.RowDefinitions>
-                        <Image Grid.RowSpan="6" VerticalAlignment="Top" Stretch="None" HorizontalAlignment="Left" Grid.Column="0" Source="/HAP.Silverlight.Browser;component/movearrow.png" />
+                        <Image Grid.RowSpan="6" VerticalAlignment="Top" Stretch="None" HorizontalAlignment="Left" Grid.Column="0" Source="/HAP.Silverlight.Browser;component/movearrow.png" Margin="2" />
                         <TextBlock Foreground="#FF0033BC" FontSize="14" Grid.ColumnSpan="2" Grid.Column="1">Don't copy</TextBlock>
                         <TextBlock Foreground="#FF0033BC" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2">No files will be changed. Leave this file in the destination folder:</TextBlock>
                         <Image Grid.Column="1" Grid.Row="2" Grid.RowSpan="4" Source="/HAP.Silverlight.Browser;component/file.png" Name="image2" />
@@ -87,7 +87,7 @@
                             <RowDefinition />
                             <RowDefinition />
                         </Grid.RowDefinitions>
-                        <Image Grid.RowSpan="1" VerticalAlignment="Top" Stretch="None" HorizontalAlignment="Left" Grid.Column="0" Source="/HAP.Silverlight.Browser;component/movearrow.png" />
+                        <Image Grid.RowSpan="1" VerticalAlignment="Top" Stretch="None" HorizontalAlignment="Left" Grid.Column="0" Source="/HAP.Silverlight.Browser;component/movearrow.png" Margin="2" />
                         <TextBlock Foreground="#FF0033BC" FontSize="14" Grid.Column="1">Copy, but keep both files</TextBlock>
                         <TextBlock Foreground="#FF0033BC" Grid.Row="1" Grid.Column="1" Name="name3">The file you are copying will be renamed "File 1 (2)"</TextBlock>
                     </Grid>

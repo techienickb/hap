@@ -3,6 +3,7 @@
 <%@ Register Src="~/BookingSystem/DayList.ascx" TagName="DayList" TagPrefix="hap" %>
 <%@ Register TagPrefix="hap" TagName="BookingPopup" Src="~/BookingSystem/BookingPopup.ascx" %>
 <%@ Register TagPrefix="hap" TagName="Overview" Src="~/BookingSystem/OverviewCalendar.ascx" %>
+<%@ Register TagPrefix="hap" TagName="SIMS" Src="~/BookingSystem/SIMS.ascx" %>
 <%@ Register Namespace="HAP.Web.BookingSystem" Assembly="HAP.Web" TagPrefix="hap" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="bookingsystem.css" rel="stylesheet" type="text/css" />
@@ -12,7 +13,8 @@
                 <asp:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server" />
                 <asp:UpdatePanel ID="UpdatePanel1" runat="server"><ContentTemplate>
                     <div onclick="hideCal();">
-                        <asp:HyperLink runat="server" style="float: right; padding: 0 5px;" NavigateUrl="admin/" ID="adminlink" Visible="false">Booking System Admin</asp:HyperLink>
+                        <asp:HyperLink runat="server" style="float: right;" NavigateUrl="admin/" ID="adminlink" Visible="false">Booking System Admin</asp:HyperLink>
+                        <hap:SIMS runat="server" />
                         <a href="javascript:showOverview()" style="float: right;">Overview</a>
                         <a href="/extranet/" style="float: right; padding: 0 5px;">Home Access Plus+ Home</a>
                         <h1>IT Booking System</h1>

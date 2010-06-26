@@ -155,7 +155,11 @@ namespace HAP.Silverlight.Browser
                     Tile.BorderBrush = Icon.BorderBrush = List.BorderBrush = SmallIcon.BorderBrush = MediumIcon.BorderBrush = Resources["ABB"] as SolidColorBrush;
                     Tile.Background = Icon.Background = List.Background = SmallIcon.Background = MediumIcon.Background = Resources["ActiveBG"] as LinearGradientBrush;
                 }
-                else Tile.BorderBrush = Icon.BorderBrush = List.BorderBrush = Tile.Background = Icon.Background = List.Background = SmallIcon.BorderBrush = MediumIcon.BorderBrush = SmallIcon.Background = MediumIcon.Background = new SolidColorBrush(Colors.Transparent);
+                else
+                {
+                    Tile.BorderBrush = Icon.BorderBrush = List.BorderBrush = Tile.Background = Icon.Background = List.Background = SmallIcon.BorderBrush = MediumIcon.BorderBrush = SmallIcon.Background = MediumIcon.Background = new SolidColorBrush(Colors.Transparent);
+                    if (IsRename) IsRename = false;
+                }
             }
         }
 
@@ -231,7 +235,7 @@ namespace HAP.Silverlight.Browser
             {
                 this.IsRename = false;
                 _data.Path = _data.Path.Replace(state.oldname, _data.Name);
-                if (ReSort != null && (bool)e.UserState) ReSort(this, true);
+                if (ReSort != null && state.Resort) ReSort(this, true);
             }
             else if (e.Result.StartsWith("EXISTS"))
             {
@@ -324,13 +328,14 @@ namespace HAP.Silverlight.Browser
             if (e.Result == "DONE")
             {
                 ((WrapPanel)Parent).Children.Remove(this);
-                if (ReSort != null && (bool)e.UserState) ReSort(this, true);
+                if (ReSort != null && state.Resort) ReSort(this, true);
             }
-            else if (e.Result.StartsWith("EXISTS"))
+            else if (e.Result.Contains("EXISTS"))
             {
                 string[] res = e.Result.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
                 FileExists fe = new FileExists(res[1], res[2], res[3], res[4], res[5], res[6], res[7], image1.Source);
                 fe.FileExistComplete += new FileExistHandler(fe_FileExistComplete3);
+                fe.Show();
             }
             else MessageBox.Show(e.Result);
         }
@@ -360,7 +365,7 @@ namespace HAP.Silverlight.Browser
                 //_data.Name = name1.Text = name2.Text = name3.Text = name4.Text = name5.Text = textBox2.Text = textBox3.Text = textBox4.Text = textBox5.Text = textBox1.Text = newname;
 
                 WebClient saveclient = new WebClient();
-                saveclient.UploadStringCompleted += new UploadStringCompletedEventHandler(saveclient_UploadStringCompleted);
+                saveclient.UploadStringCompleted += new UploadStringCompletedEventHandler(saveclient_UploadStringCompleted3);
                 saveclient.UploadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + _data.Path.Replace("/api/mycomputer/list/", "/api/mycomputer/save/").Replace("/Download/", "/api/mycomputer/save/")), "POST", _d, new BUserState(state.Resort, _d, _data.Name));
             }
         }

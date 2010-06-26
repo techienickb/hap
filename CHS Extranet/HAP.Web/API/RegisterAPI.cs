@@ -17,6 +17,8 @@ namespace HAP.Web.API
             RouteTable.Routes.Add(new Route("api/mycomputer/new/{*path}", new NewFolderHandler()));
             RouteTable.Routes.Add(new Route("api/mycomputer/save/{*path}", new SaveHandler()));
             RouteTable.Routes.Add(new Route("api/mycomputer/upload/{*path}", new UploadHandler()));
+            RouteTable.Routes.Add(new Route("api/mycomputer/zip/{*path}", new ZipHandler()));
+            RouteTable.Routes.Add(new Route("api/mycomputer/unzip/{*path}", new UnZipHandler()));
         }
     }
 }

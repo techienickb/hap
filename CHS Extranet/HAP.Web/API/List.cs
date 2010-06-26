@@ -44,32 +44,8 @@ namespace HAP.Web.API
         {
             Context = context;
             config = hapConfig.Current;
-            ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
-            if (connObj != null) _ActiveDirectoryConnectionString = connObj.ConnectionString;
-            if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))
-                throw new Exception("The connection name 'activeDirectoryConnectionString' was not found in the applications configuration or the connection string is empty.");
-            if (_ActiveDirectoryConnectionString.StartsWith("LDAP://"))
-                _DomainDN = _ActiveDirectoryConnectionString.Remove(0, _ActiveDirectoryConnectionString.IndexOf("DC="));
-            else throw new Exception("The connection string specified in 'activeDirectoryConnectionString' does not appear to be a valid LDAP connection string.");
-            pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
-            up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Username);
-
-            string userhome = up.HomeDirectory;
-            if (userhome.EndsWith("\\")) userhome = userhome.Remove(userhome.LastIndexOf('\\'));
-            string path = "";
-            uncpath unc = null;
-            if (RoutingDrive == "N") path = up.HomeDirectory + RoutingPath;
-            else
-            {
-                unc = config.MyComputer.UNCPaths[RoutingDrive];
-                if (unc == null || !isAuth(unc)) { context.Response.Write("ERROR: Unauthorised"); context.Response.End(); return; }
-                else
-                {
-                    path = string.Format(unc.UNC, Username) + RoutingPath;
-                }
-            }
-
-            path = path.TrimEnd(new char[] { '\\' }).Replace('^', '&').Replace('/', '\\');
+            uncpath unc; string userhome;
+            string path = Converter.DriveToUNC(RoutingPath, RoutingDrive, out unc, out userhome);
             DirectoryInfo dir = new DirectoryInfo(path);
             //name,icon,size,type,path,canwrite
             string format = "{0},/extranet/images/icons/{1},{2},{3},{4},{5}\n";
@@ -91,10 +67,7 @@ namespace HAP.Web.API
                     {
                         if (!subdir.Name.ToLower().Contains("recycle") && subdir.Attributes != FileAttributes.Hidden && subdir.Attributes != FileAttributes.System && !subdir.Name.ToLower().Contains("system volume info"))
                         {
-                            string dirpath = subdir.FullName;
-                            if (unc == null) dirpath = dirpath.Replace(userhome, "N");
-                            else dirpath = dirpath.Replace(string.Format(unc.UNC, Username), unc.Drive);
-                            dirpath = dirpath.Replace('\\', '/').Replace("//", "/");
+                            string dirpath = Converter.UNCtoDrive2(subdir.FullName, unc, userhome);
                             context.Response.Write(string.Format(format, subdir.Name, MyComputerItem.ParseForImage(subdir), "", "File Folder", "/Extranet/api/mycomputer/list/" + dirpath.Replace('&', '^'), allowedit));
                         }
                     }
@@ -117,10 +90,7 @@ namespace HAP.Web.API
                             }
                             catch { filetype = "File"; }
 
-                            string dirpath = file.FullName;
-                            if (unc == null) dirpath = dirpath.Replace(userhome, "N");
-                            else dirpath = dirpath.Replace(string.Format(unc.UNC, Username), unc.Drive);
-                            dirpath = dirpath.Replace('\\', '/').Replace("//", "/");
+                            string dirpath = Converter.UNCtoDrive2(file.FullName, unc, userhome);
                             if (!string.IsNullOrEmpty(file.Extension))
                                 context.Response.Write(string.Format(format, filename, MyComputerItem.ParseForImage(file), parseLength(file.Length), filetype, "/Extranet/Download/" + dirpath.Replace('&', '^'), allowedit));
                             else
@@ -137,6 +107,11 @@ namespace HAP.Web.API
             {
                 context.Response.Clear();
                 context.Response.Write("ERROR: UNAUTHORISED");
+            }
+            catch (Exception e)
+            {
+                context.Response.Clear();
+                context.Response.Write("ERROR: " + e.ToString() + "\n" + e.Message);
             }
 
         }
@@ -191,10 +166,6 @@ namespace HAP.Web.API
             return false;
         }
 
-        private String _DomainDN;
-        private String _ActiveDirectoryConnectionString;
-        private PrincipalContext pcontext;
-        private UserPrincipal up;
         private hapConfig config;
         private HttpContext Context;
 
