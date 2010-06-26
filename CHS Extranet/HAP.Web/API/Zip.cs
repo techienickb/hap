@@ -13,25 +13,26 @@ using System.Configuration;
 using System.DirectoryServices.AccountManagement;
 using System.Xml;
 using System.IO;
+using ICSharpCode.SharpZipLib.Zip;
 
 namespace HAP.Web.API
 {
-    public class DeleteHandler : IRouteHandler
+    public class ZipHandler : IRouteHandler
     {
         public IHttpHandler GetHttpHandler(RequestContext requestContext)
         {
             string path = requestContext.RouteData.Values["path"] as string;
             string drive = path.Substring(0, 1);
             path = path.Remove(0, 1);
-            return new Delete(path, drive);
+            return new Zip(path, drive);
         }
     }
 
-    public class Delete : IHttpHandler
+    public class Zip : IHttpHandler
     {
         public bool IsReusable { get { return true; } }
 
-        public Delete(string path, string drive)
+        public Zip(string path, string drive)
         {
             RoutingPath = path;
             RoutingDrive = drive;
@@ -42,18 +43,29 @@ namespace HAP.Web.API
         public void ProcessRequest(HttpContext context)
         {
             context.Response.Clear();
-            context.Response.Headers.Add("HAP:API", "Delete");
+            context.Response.Headers.Add("HAP:API", "ZIP");
             context.Response.ContentType = "text/plain";
+
             try
             {
-
                 string path = Converter.DriveToUNC(RoutingPath, RoutingDrive);
-
-                path = path.TrimEnd(new char[] { '\\' }).Replace('^', '&').Replace('/', '\\');
-
-                try { File.Delete(path); }
-                catch { Directory.Delete(path, true); }
-
+                StreamReader sr = new StreamReader(context.Request.InputStream);
+                string c = sr.ReadToEnd();
+                ZipFile zf;
+                if (File.Exists(path))
+                    zf = new ZipFile(path);
+                else zf = ZipFile.Create(path);
+                zf.BeginUpdate();
+                foreach (string s in c.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    string p = Converter.DriveToUNC(s);
+                    if (File.Exists(p))
+                        zf.Add(p);
+                    else if (Directory.Exists(p))
+                        zf.AddDirectory(p);
+                }
+                zf.CommitUpdate();
+                zf.Close();
                 context.Response.Write("DONE");
             }
             catch (Exception e)
@@ -61,5 +73,7 @@ namespace HAP.Web.API
                 context.Response.Write("ERROR: " + e.ToString() + "\\n" + e.Message);
             }
         }
+
+
     }
 }

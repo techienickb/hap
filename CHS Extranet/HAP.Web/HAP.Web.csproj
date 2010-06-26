@@ -110,6 +110,7 @@
     <Content Include="BookingSystem\Display.aspx" />
     <Content Include="BookingSystem\loading.gif" />
     <Content Include="BookingSystem\OverviewCalendar.ascx" />
+    <Content Include="BookingSystem\SIMS.ascx" />
     <Content Include="ClientBin\HAP.Silverlight.Browser.xap" />
     <Content Include="ClientBin\HAP.Silverlight.xap" />
     <Content Include="Controls\Announcement.ascx" />
@@ -216,6 +217,9 @@
     <Content Include="xls.aspx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\Converter.cs" />
+    <Compile Include="API\UnZip.cs" />
+    <Compile Include="API\Zip.cs" />
     <Compile Include="API\NewFolder.cs" />
     <Compile Include="API\Delete.cs" />
     <Compile Include="API\List.cs" />
@@ -273,6 +277,13 @@
     </Compile>
     <Compile Include="BookingSystem\OverviewCalendar.ascx.designer.cs">
       <DependentUpon>OverviewCalendar.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="BookingSystem\SIMS.ascx.cs">
+      <DependentUpon>SIMS.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BookingSystem\SIMS.ascx.designer.cs">
+      <DependentUpon>SIMS.ascx</DependentUpon>
     </Compile>
     <Compile Include="BookingSystem\Term.cs" />
     <Compile Include="Configuration\announcementBox.cs" />
@@ -493,6 +504,7 @@
     <None Include="MyComputerSLSplash.xaml">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Thanks.rtf" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

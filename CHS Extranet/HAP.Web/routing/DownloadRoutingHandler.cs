@@ -113,13 +113,15 @@ namespace HAP.Web.routing
             }
             FileInfo file = new FileInfo(path);
             context.Response.ContentType = MimeType(file.Extension);
+            context.Response.Buffer = true;
             if (string.IsNullOrEmpty(context.Request.QueryString["inline"]))
-                context.Response.AppendHeader("Content-Disposition", "attachment; filename=\"" + file.Name + "\"");
-            else context.Response.AppendHeader("Content-Disposition", "inline; filename=\"" + file.Name + "\"");
-            context.Response.AddHeader("Content-Length", file.Length.ToString("F0"));
+                context.Response.AppendHeader("Content-Disposition", "attachment; filename=\"" + file.Name + "\" size=" + file.Length + "; creation-date=" + file.CreationTimeUtc.ToString("R") + "; modification-date=" + file.LastWriteTimeUtc.ToString("R") + "; read-date=" + file.LastAccessTimeUtc.ToString("R"));
+            else context.Response.AppendHeader("Content-Disposition", "inline; filename=\"" + file.Name + "\"; size=" + file.Length + "; creation-date=" + file.CreationTimeUtc.ToString("R") + "; modification-date=" + file.LastWriteTimeUtc.ToString("R") + ";  read-date=" + file.LastAccessTimeUtc.ToString("R"));
+            context.Response.AddHeader("Content-Length", file.Length.ToString());
             context.Response.Clear();
             context.Response.TransmitFile(file.FullName);
             context.Response.Flush();
+            context.Response.Close();
             context.Response.End();
         }
 

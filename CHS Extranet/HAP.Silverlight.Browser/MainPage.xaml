@@ -35,9 +35,9 @@
                     </LinearGradientBrush>
                 </Grid.Background>
                 <StackPanel Orientation="Horizontal">
-                    <my:BarButton x:Name="home" Margin="4,3,0,4" Text="Home Access Plus+ Home" Click="home_Click" />
+                    <my:BarButton x:Name="home" Margin="4,3,0,4" Text="Home Access Plus+ Home" Click="home_Click" ToolTip="Go back to Home Access Plus+'s Home Page" />
                     <my:OrganiseButton x:Name="organiseButton1" SelectAllClick="organiseButton1_SelectAllClick" MouseLeftButtonDown="organiseButton1_MouseLeftButtonDown" />
-                    <my:BarButton x:Name="newfolder" Text="New Folder" Click="newfolder_Click" />
+                    <my:BarButton x:Name="newfolder" Text="New Folder" Click="newfolder_Click" ToolTip="Create a New Folder in the Current Folder" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Column="1">
                     <my:HelpButton x:Name="helpButton1" Click="helpButton1_Click" />
@@ -63,8 +63,8 @@
                                 <toolkit:MenuItem Header="New Folder" x:Name="RightClickFolder" Click="newfolder_Click" />
                                 <toolkit:MenuItem Header="Rename" x:Name="RightClickRename" Click="RightClickRename_Click" />
                                 <toolkit:MenuItem Header="Delete" x:Name="RightClickDelete" Click="RightClickDelete_Click" />
-                                <toolkit:MenuItem Visibility="Collapsed" x:Name="RightClickZIP" Header="Send to Compressed (ZIP) File" />
-                                <toolkit:MenuItem Visibility="Collapsed" x:Name="RightClickUNZIP" Header="Extract (ZIP) File" />
+                                <toolkit:MenuItem Visibility="Collapsed" x:Name="RightClickZIP" Header="Send to Compressed (ZIP) File" Click="RightClickZIP_Click" />
+                                <toolkit:MenuItem Visibility="Collapsed" x:Name="RightClickUNZIP" Header="Extract (ZIP) File" Click="RightClickUNZIP_Click" />
                             </toolkit:ContextMenu>
                         </toolkit:ContextMenuService.ContextMenu>
                         <ScrollViewer VerticalScrollBarVisibility="Auto" x:Name="scroller" BorderBrush="Transparent" BorderThickness="0">

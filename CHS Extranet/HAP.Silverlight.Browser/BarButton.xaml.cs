@@ -24,6 +24,8 @@ namespace HAP.Silverlight.Browser
 
         }
 
+        public object ToolTip { get { return tooltip.Content; } set { tooltip.Content = value; } }
+
         public string Text
         {
             get { return textBlock1.Text; }

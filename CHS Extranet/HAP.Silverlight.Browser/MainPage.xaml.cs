@@ -44,6 +44,7 @@ namespace HAP.Silverlight.Browser
         private bool candrag = false;
         private bool drag = false;
         private MouseMode mousemode = MouseMode.Normal;
+        private BItem uploadItem { get; set; }
 
         private bool selectall = false;
         private bool rightclick = false;
@@ -62,7 +63,16 @@ namespace HAP.Silverlight.Browser
         }
         private void driveclient_DownloadStringCompleted2(object sender, DownloadStringCompletedEventArgs e)
         {
-            this.AllowDrop = contentPan.AllowDrop = RightClickFolder.IsEnabled = CurrentItem.CanWrite;
+            try
+            {
+                this.AllowDrop = CurrentItem.CanWrite;
+            }
+            catch { }
+            try
+            {
+                this.AllowDrop = contentPan.AllowDrop = RightClickFolder.IsEnabled = CurrentItem.CanWrite;
+            }
+            catch (Exception ex) { MessageBox.Show(ex.ToString()); }
             newfolder.Visibility = CurrentItem.CanWrite ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
             if (loaded) ClearItems();
             foreach (string s in e.Result.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
@@ -134,7 +144,16 @@ namespace HAP.Silverlight.Browser
         private void listclient_DownloadStringCompleted2(object sender, DownloadStringCompletedEventArgs e)
         {
             ClearItems();
-            this.AllowDrop = contentPan.AllowDrop = RightClickFolder.IsEnabled = CurrentItem.CanWrite;
+            try
+            {
+                this.AllowDrop = CurrentItem.CanWrite;
+            }
+            catch { }
+            try
+            {
+                this.AllowDrop = contentPan.AllowDrop = RightClickFolder.IsEnabled = CurrentItem.CanWrite;
+            }
+            catch (Exception ex) { MessageBox.Show(ex.ToString()); }
             newfolder.Visibility = CurrentItem.CanWrite ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
             tempnode = ((HAPTreeNode)treeView1.SelectedItem);
             tempnode.Items.Clear();
@@ -147,7 +166,6 @@ namespace HAP.Silverlight.Browser
                 item.MouseEnter += new MouseEventHandler(item_MouseEnter);
                 if (CurrentItem.CanWrite)
                 {
-                    item.ItemDrop += new DragEventHandler(item_Drop);
                     item.DragEnter += new DragEventHandler(item_DragEnter);
                     item.DragLeave += new DragEventHandler(item_DragLeave);
                     item.MouseLeftButtonDown += new MouseButtonEventHandler(item_MouseLeftButtonDown);
@@ -342,7 +360,6 @@ namespace HAP.Silverlight.Browser
             item.MouseEnter += new MouseEventHandler(item_MouseEnter);
             if (CurrentItem.CanWrite)
             {
-                item.ItemDrop += new DragEventHandler(item_Drop);
                 item.DragEnter += new DragEventHandler(item_DragEnter);
                 item.DragLeave += new DragEventHandler(item_DragLeave);
                 item.MouseLeftButtonDown += new MouseButtonEventHandler(item_MouseLeftButtonDown);
@@ -400,18 +417,18 @@ namespace HAP.Silverlight.Browser
 
         private void item_Activate(object sender, EventArgs e)
         {
-            if (drag && mousemode == MouseMode.Move)
-            {
-                foreach (BrowserItem item in activeItems)
-                {
-                    item.Active = false;
-                    item.Move(true, ((BrowserItem)sender).Data.Name);
-                }
-                activeItems.Clear();
-            }
-            candrag = drag = false; mousemode = MouseMode.Normal;
             if (!selectall && !rightclick)
             {
+                if (drag && mousemode == MouseMode.Move)
+                {
+                    foreach (BrowserItem item in activeItems)
+                    {
+                        item.Active = false;
+                        item.Move(true, ((BrowserItem)sender).Data.Name);
+                    }
+                    activeItems.Clear();
+                }
+                candrag = drag = false; mousemode = MouseMode.Normal;
                 if (Keyboard.Modifiers == ModifierKeys.Control)
                 {
                     if (activeItems.Contains((BrowserItem)sender))
@@ -535,28 +552,6 @@ namespace HAP.Silverlight.Browser
             candrag = true;
         }
 
-        private void item_Drop(object sender, DragEventArgs e)
-        {
-            ((BrowserItem)sender).Leave();
-            //Upload to a specific folder
-            if (e.Data == null) return;
-
-            try
-            {
-
-                FileInfo[] files = e.Data.GetData(DataFormats.FileDrop) as FileInfo[];
-
-                if (files == null) return;
-
-                foreach (FileInfo file in files)
-                {
-                    if (HasFilter(file.Extension)) { UploadItem ui = new UploadItem(file, ((BrowserItem)sender).Data, ref UploadQueue, new RoutedEventHandler(ui_Uploaded)); }
-                    else MessageBox.Show("File Type Not Allowed (" + file.Extension.ToLower() + ")", "This file is not allowed to be uploaded", MessageBoxButton.OK);
-                }
-            }
-            catch { MessageBox.Show("The item you have dragged here is not supported"); }
-        }
-
         private void item_MouseLeave(object sender, MouseEventArgs e)
         {
             if (candrag)
@@ -599,6 +594,7 @@ namespace HAP.Silverlight.Browser
 
         private void item_DragLeave(object sender, DragEventArgs e)
         {
+            uploadItem = CurrentItem;
             if (CurrentItem.Name != "My Computer" && CurrentItem.CanWrite)
             {
                 movefoldertext.Text = "This Folder";
@@ -616,6 +612,7 @@ namespace HAP.Silverlight.Browser
                 movetext.Text = "Upload to";
                 movefoldertext.Text = ((BrowserItem)sender).Data.Name;
                 ((BrowserItem)sender).Hover();
+                uploadItem = ((BrowserItem)sender).Data;
                 e.Handled = true;
             }
         }
@@ -629,7 +626,10 @@ namespace HAP.Silverlight.Browser
             if (activeItems.Count == 1 && activeItems[0].Data.Name != ".." && activeItems[0].Data.Name != "My Computer")
             {
                 organiseButton1.IsDelete = organiseButton1.IsRename = RightClickRename.IsEnabled = RightClickDelete.IsEnabled = CurrentItem.CanWrite;
-                RightClickZIP.Visibility = RightClickFolder.Visibility = RightClickUNZIP.Visibility = System.Windows.Visibility.Collapsed;
+                if (activeItems[0].Data.Type == "Compressed (zipped) Folder")
+                    RightClickUNZIP.Visibility = System.Windows.Visibility.Visible;
+                else RightClickUNZIP.Visibility = System.Windows.Visibility.Collapsed;
+                RightClickZIP.Visibility = RightClickFolder.Visibility = System.Windows.Visibility.Collapsed;
             }
             else if (activeItems.Count > 1 && activeItems.Where(I => I.Data.Name == "My Computer" || I.Data.Name == "..").Count() == 0)
             {
@@ -645,6 +645,39 @@ namespace HAP.Silverlight.Browser
                 RightClickUNZIP.Visibility = RightClickZIP.Visibility = System.Windows.Visibility.Collapsed;
                 RightClickFolder.Visibility = CurrentItem.CanWrite ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
             }
+        }
+
+        private void RightClickZIP_Click(object sender, RoutedEventArgs e)
+        {
+            rightclick = true;
+            List<BItem> bitems = new List<BItem>();
+            foreach (BrowserItem i in activeItems)
+                bitems.Add(i.Data);
+            ZipQuestion zq = new ZipQuestion(bitems.ToArray(), CurrentItem);
+            zq.ZipQuestionComplete += new RoutedEventHandler(zipcompletedhandler);
+            zq.Show();
+        }
+
+        private void RightClickUNZIP_Click(object sender, RoutedEventArgs e)
+        {
+            rightclick = true;
+            UnZip uz = new UnZip(activeItems[0].Data, CurrentItem, new RoutedEventHandler(zipcompletedhandler));
+            uz.Completed += new RoutedEventHandler(zipcompletedhandler);
+            uz.Show();
+        }
+
+        private void zipcompletedhandler(object sender, RoutedEventArgs e)
+        {
+            Dispatcher.BeginInvoke(new RoutedEventHandler(zipcompletedhandler2), sender, e);
+        }
+
+        private void zipcompletedhandler2(object sender, RoutedEventArgs e)
+        {
+
+            WebClient listclient = new WebClient();
+            listclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(listclient_DownloadStringCompleted);
+            listclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + CurrentItem.Path));
+            HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + HtmlPage.Document.DocumentUri.LocalPath + "#" + CurrentItem.Path.ToLower().Remove(0, 30)));
         }
 
         private void RightClickDelete_Click(object sender, RoutedEventArgs e)
@@ -721,6 +754,7 @@ namespace HAP.Silverlight.Browser
             movetooltip.Visibility = System.Windows.Visibility.Collapsed;
             movetext.Text = "Upload to";
             movefoldertext.Text = "This Folder";
+            uploadItem = CurrentItem;
         }
 
         private void UserControl_DragEnter(object sender, DragEventArgs e)
@@ -733,11 +767,13 @@ namespace HAP.Silverlight.Browser
                 movefoldertext.Text = "This Folder";
                 movetooltip.Visibility = System.Windows.Visibility.Visible;
                 nomove.Visibility = System.Windows.Visibility.Collapsed;
+                uploadItem = CurrentItem;
             }
             else
             {
                 movetooltip.Visibility = System.Windows.Visibility.Collapsed;
                 nomove.Visibility = System.Windows.Visibility.Visible;
+                uploadItem = null;
             }
             e.Handled = true;
         }
@@ -762,6 +798,7 @@ namespace HAP.Silverlight.Browser
         {
             nomove.Visibility = System.Windows.Visibility.Visible;
             movetooltip.Visibility = System.Windows.Visibility.Collapsed;
+            uploadItem = null;
         }
 
         private void UserControl_DragOver(object sender, DragEventArgs e)
@@ -782,6 +819,7 @@ namespace HAP.Silverlight.Browser
         private void contentPan_Drop(object sender, DragEventArgs e)
         {
             if (e.Data == null) return;
+            if (uploadItem == null) return;
 
             try
             {
@@ -792,12 +830,13 @@ namespace HAP.Silverlight.Browser
 
                 foreach (FileInfo file in files)
                 {
-                    if (HasFilter(file.Extension)) { UploadItem ui = new UploadItem(file, CurrentItem, ref UploadQueue, new RoutedEventHandler(ui_Uploaded)); }
+                    if (HasFilter(file.Extension)) { UploadItem ui = new UploadItem(file, uploadItem, ref UploadQueue, new RoutedEventHandler(ui_Uploaded)); }
                     else MessageBox.Show("File Type Not Allowed (" + file.Extension.ToLower() + ")", "This file is not allowed to be uploaded", MessageBoxButton.OK);
                 }
             }
             catch { MessageBox.Show("The item you have dragged here is not supported"); }
-            
+            nomove.Visibility = movetooltip.Visibility = System.Windows.Visibility.Collapsed;
+            drag = false;            
         }
 
         public void ui_Uploaded(object sender, RoutedEventArgs e)

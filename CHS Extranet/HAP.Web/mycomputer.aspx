@@ -31,6 +31,7 @@
         <div style="position: relative;">
         <div id="bar">
             <a href="/Extranet/">Home Access Plus+ Home</a>
+            <a href="/Extranet/MyComputerSL.aspx">Try the Silverlight Version (Beta)</a>
             <hap:NewFolder runat="server" ID="newfolderlink" Visible="false" />
             <hap:Upload runat="server" id="newfileuploadlink" Visible="false" />
             <a class="right" href="/Extranet/mycomputer.aspx" onclick="return view();"><span>View</span></a>

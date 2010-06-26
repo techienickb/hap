@@ -23,5 +23,8 @@
         <Border x:Name="BBorder" CornerRadius="2" BorderThickness="1" BorderBrush="Transparent" Background="Transparent">
             <TextBlock Name="textBlock1" Text="TextBlock" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10, 2" />
         </Border>
+        <ToolTipService.ToolTip>
+            <ToolTip x:Name="tooltip"/>
+        </ToolTipService.ToolTip>
     </Border>
 </UserControl>
