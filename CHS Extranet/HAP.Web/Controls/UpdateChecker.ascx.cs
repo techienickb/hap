@@ -30,20 +30,13 @@ namespace HAP.Web.Controls
                 Regex reg = new Regex("Release: v([\\d\\.])+");
                 string versioninfo = reg.Match(title.InnerText).Value.Replace("Release: ", "").TrimStart(new char[] { 'v' });
 
-                int[] version = { 0, 0, 0, 0 };
-                int x = 0;
-                foreach (string s in versioninfo.Split(new char[] { '.' }))
-                {
-                    version[x] = int.Parse(s);
-                    x++;
-                }
-
-                Version NeededUpdate = new Version(version[0], version[1], version[2]);
+                Version NeededUpdate = Version.Parse(versioninfo);
 
                 this.Visible = false;
 
                 if (NeededUpdate.Major > Assembly.GetExecutingAssembly().GetName().Version.Major) this.Visible = true;
                 if (NeededUpdate.Minor > Assembly.GetExecutingAssembly().GetName().Version.Minor) this.Visible = true;
+                if (NeededUpdate.Build > Assembly.GetExecutingAssembly().GetName().Version.Build) this.Visible = true;
                 if (NeededUpdate.Revision > Assembly.GetExecutingAssembly().GetName().Version.Revision) this.Visible = true;
 
                 currentv.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
