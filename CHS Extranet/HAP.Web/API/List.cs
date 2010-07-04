@@ -52,7 +52,6 @@ namespace HAP.Web.API
 
             context.Response.Clear();
             context.Response.ExpiresAbsolute = DateTime.Now;
-            context.Response.Headers.Add("HAP:API", "List");
             context.Response.ContentType = "text/plain";
 
             bool allowedit = isWriteAuth(unc);
