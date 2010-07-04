@@ -30,8 +30,16 @@
             <my:ContextMenu x:Name="context">
                 <my:MenuItem Header="Select All" x:Name="SelectAll" Click="SelectAll_Click" />
                 <my:Separator />
-                <my:MenuItem Header="Delete" x:Name="cDelete" IsEnabled="False" Click="cDelete_Click" />
-                <my:MenuItem Header="Rename" x:Name="cRename" IsEnabled="False" Click="cRename_Click" />
+                <my:MenuItem Header="Delete" x:Name="cDelete" IsEnabled="False" Click="cDelete_Click">
+                    <my:MenuItem.Icon>
+                        <Image Height="16" Width="16" Source="/HAP.Silverlight.Browser;component/delete.png" />
+                    </my:MenuItem.Icon>
+                </my:MenuItem>
+                <my:MenuItem Header="Rename" x:Name="cRename" IsEnabled="False" Click="cRename_Click">
+                    <my:MenuItem.Icon>
+                        <Image Height="16" Width="16" Source="/HAP.Silverlight.Browser;component/Rename.png" />
+                    </my:MenuItem.Icon>
+                </my:MenuItem>
             </my:ContextMenu>
         </my:ContextMenuService.ContextMenu>
     </Border>

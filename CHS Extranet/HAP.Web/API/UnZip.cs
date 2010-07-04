@@ -43,6 +43,7 @@ namespace HAP.Web.API
         public void ProcessRequest(HttpContext context)
         {
             context.Response.Clear();
+            context.Response.ExpiresAbsolute = DateTime.Now;
             context.Response.Headers.Add("HAP:API", "UNZIP");
             context.Response.ContentType = "text/plain";
 

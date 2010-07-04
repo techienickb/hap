@@ -38,6 +38,7 @@ namespace HAP.Web.API
         {
             string path = Converter.DriveToUNC(RoutingPath, RoutingDrive);
             context.Response.Clear();
+            context.Response.ExpiresAbsolute = DateTime.Now;
             context.Response.ContentType = "text/plain";
             try
             {

@@ -38,6 +38,7 @@ namespace HAP.Web.API
         {
             FileInfo file = new FileInfo(Converter.DriveToUNC(RoutingPath, RoutingDrive));
             context.Response.Clear();
+            context.Response.ExpiresAbsolute = DateTime.Now;
             context.Response.ContentType = "text/plain";
             context.Response.Write(file.Exists ? "EXISTS" : "OK");
             context.Response.Write("\n");

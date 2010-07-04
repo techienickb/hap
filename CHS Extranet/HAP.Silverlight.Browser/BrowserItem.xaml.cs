@@ -217,6 +217,7 @@ namespace HAP.Silverlight.Browser
             saveclient.UploadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + _data.Path.Replace("/api/mycomputer/list/", "/api/mycomputer/save/").Replace("/Download/", "/api/mycomputer/save/")), "POST", _d, new BUserState(resort, _d, _data.Name));
 
             _data.Name = name1.Text = name2.Text = name3.Text = name4.Text = name5.Text = textBox2.Text = textBox3.Text = textBox4.Text = textBox5.Text = textBox1.Text = newname;
+            if (_data.Icon.Contains("NewFolder")) { _data.Icon.Replace("NewFolder", "folder"); Data = _data; }
             return 0;
             //so some saving stuff;
         }

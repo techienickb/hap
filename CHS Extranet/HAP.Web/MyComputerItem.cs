@@ -51,6 +51,8 @@ namespace HAP.Web
                 case "xlt": return "xlt.png";
                 case "xltx": return "xlt.png";
                 case "csv": return "csv.png";
+                case "cs": return "cs.png";
+                case "config": return "config.png";
                 case "ppt": return "ppt.png";
                 case "pptx": return "ppt.png";
                 case "pps": return "pps.png";
@@ -75,7 +77,9 @@ namespace HAP.Web
                 case "jpg": return "jpg.png"; 
                 case "jpeg": return "jpg.png"; 
                 case "gif": return "gif.png"; 
-                case "bmp": return "bmp.png"; 
+                case "bmp": return "bmp.png";
+                case "xml": return "xml.png";
+                case "xaml": return "xaml.png";
                 case "zip": return "zip.png"; 
                 case "rar": return "rar.png"; 
                 case "exe": return "exe.png"; 

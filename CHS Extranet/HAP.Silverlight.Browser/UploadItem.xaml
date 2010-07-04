@@ -20,7 +20,7 @@
             </Grid>
         </StackPanel>
         <toolkit:ContextMenuService.ContextMenu>
-            <toolkit:ContextMenu>
+            <toolkit:ContextMenu x:Name="context">
                 <toolkit:MenuItem x:Name="remove" Header="Remove" Click="remove_Click" />
             </toolkit:ContextMenu>
         </toolkit:ContextMenuService.ContextMenu>

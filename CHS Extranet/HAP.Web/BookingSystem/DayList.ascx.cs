@@ -52,9 +52,12 @@ namespace HAP.Web.BookingSystem
                 headrepeater.DataBind();
                 List<bookingResource> res = new List<bookingResource>();
                 foreach (bookingResource r in config.BookingSystem.Resources)
-                    if (resourcetype.SelectedValue == "All" && r.Enable) res.Add(r);
-                    else if (r.ResourceType == (ResourceType)Enum.Parse(typeof(ResourceType), resourcetype.SelectedValue, true) && r.Enable)
-                        res.Add(r);
+                    if (r.Enable)
+                    {
+                        if (resourcetype.SelectedValue == "All") res.Add(r);
+                        else if (r.ResourceType == (ResourceType)Enum.Parse(typeof(ResourceType), resourcetype.SelectedValue, true))
+                            res.Add(r);
+                    }
                 dl.DataSource = res.ToArray();
                 dl.DataBind();
             }

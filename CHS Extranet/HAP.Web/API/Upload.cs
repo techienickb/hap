@@ -40,6 +40,7 @@ namespace HAP.Web.API
 
         public void ProcessRequest(HttpContext context)
         {
+            context.Response.ExpiresAbsolute = DateTime.Now;
             try
             {
                 if (context.Request.HttpMethod == "POST")
