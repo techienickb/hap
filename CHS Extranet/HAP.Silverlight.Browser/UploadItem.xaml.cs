@@ -116,7 +116,7 @@ namespace HAP.Silverlight.Browser
             long temp = File.Length - BytesUploaded;
 
             if (string.IsNullOrEmpty(baseurl)) baseurl = HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + ParentData.Path.Replace("/api/mycomputer/list/", "/api/mycomputer/upload/");
-
+            context.IsEnabled = false;
             UriBuilder ub = new UriBuilder(baseurl);
             bool complete = temp <= 20480;
             ub.Query = string.Format("{3}filename={0}&StartByte={1}&Complete={2}", File.Name, BytesUploaded, complete, string.IsNullOrEmpty(ub.Query) ? "" : ub.Query.Remove(0, 1) + "&");

@@ -115,12 +115,13 @@ namespace HAP.Web.BookingSystem
                     cell.CssClass += " " + s;
                     LiteralControl lc = new LiteralControl("<div class=\"QuickView\">");
                     foreach (bookingResource resource in config.BookingSystem.Resources)
-                    {
-                        lc.Text += "<div>";
-                        foreach (lesson lesson in config.BookingSystem.Lessons)
-                            lc.Text += string.Format("<span class=\"{0}\" title=\"{1} {2}: {0}\"></span>", (!bs.isStatic(resource.Name, lesson.Name) && bs.islessonFree(resource.Name, lesson.Name)) ? "free" : "booked", lesson.Name, resource.Name);
-                        lc.Text += "</div>";
-                    }
+                        if (resource.Enable)
+                        {
+                            lc.Text += "<div>";
+                            foreach (lesson lesson in config.BookingSystem.Lessons)
+                                lc.Text += string.Format("<span class=\"{0}\" title=\"{1} {2}: {0}\"></span>", (!bs.isStatic(resource.Name, lesson.Name) && bs.islessonFree(resource.Name, lesson.Name)) ? "free" : "booked", lesson.Name, resource.Name);
+                            lc.Text += "</div>";
+                        }
                     lc.Text += "</div>";
                     cell.Controls.AddAt(0, lc);
                 }

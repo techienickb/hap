@@ -26,6 +26,17 @@ namespace HAP.Silverlight.Browser
             ViewMode = Browser.ViewMode.Tile;
             CurrentItem = new BItem("My Computer", "", "", "", BType.Drive, "", false);
             newfolder.Visibility = System.Windows.Visibility.Collapsed;
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (HtmlPage.BrowserInformation.ProductName == "Firefox" && new Version(HtmlPage.BrowserInformation.ProductVersion) > new Version(3, 6, 3))
+                    MessageBox.Show("Please note, that this version of firefox is causing issues with Home Access Plus+.\nTo fix the problem, either downgrade to 3.6.3 or:\n  1. Type 'about:config' into FF's address bar\n  2. Accept the warning (if applicable)\n  3. Search for the entry 'dom.ipc.plugins.enabled.npctrl.dll'\n  4. Change its value from 'true' to 'false' (double-click)\n  5. Restart the browser\nThis has been reported to Mozilla");
+            }
+            catch { }
+
             WebClient driveclient = new WebClient();
             driveclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(driveclient_DownloadStringCompleted);
             driveclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + "/extranet/api/mycomputer/listdrives"), false);
@@ -63,16 +74,7 @@ namespace HAP.Silverlight.Browser
         }
         private void driveclient_DownloadStringCompleted2(object sender, DownloadStringCompletedEventArgs e)
         {
-            try
-            {
-                this.AllowDrop = CurrentItem.CanWrite;
-            }
-            catch { }
-            try
-            {
-                this.AllowDrop = contentPan.AllowDrop = RightClickFolder.IsEnabled = CurrentItem.CanWrite;
-            }
-            catch (Exception ex) { MessageBox.Show(ex.ToString()); }
+            this.AllowDrop = contentPan.AllowDrop = RightClickFolder.IsEnabled = CurrentItem.CanWrite;
             newfolder.Visibility = CurrentItem.CanWrite ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
             if (loaded) ClearItems();
             foreach (string s in e.Result.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
@@ -144,16 +146,7 @@ namespace HAP.Silverlight.Browser
         private void listclient_DownloadStringCompleted2(object sender, DownloadStringCompletedEventArgs e)
         {
             ClearItems();
-            try
-            {
-                this.AllowDrop = CurrentItem.CanWrite;
-            }
-            catch { }
-            try
-            {
-                this.AllowDrop = contentPan.AllowDrop = RightClickFolder.IsEnabled = CurrentItem.CanWrite;
-            }
-            catch (Exception ex) { MessageBox.Show(ex.ToString()); }
+            this.AllowDrop = contentPan.AllowDrop = RightClickFolder.IsEnabled = CurrentItem.CanWrite;
             newfolder.Visibility = CurrentItem.CanWrite ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
             tempnode = ((HAPTreeNode)treeView1.SelectedItem);
             tempnode.Items.Clear();
@@ -355,7 +348,7 @@ namespace HAP.Silverlight.Browser
             int count = 0;
             foreach (BrowserItem i in contentPan.Children.Where(I => ((BrowserItem)I).Data.BType == BType.Folder))
                 if (i.Data.Name.StartsWith("New Folder")) count++;
-            BrowserItem item = new BrowserItem(new BItem("New Folder" + (count == 0 ? "" : " " + count), "/extranet/images/icons/folder.png", "", "Folder", BType.Folder, CurrentItem.Path + "/New Folder" + (count == 0 ? "" : " " + (count + 1)), true));
+            BrowserItem item = new BrowserItem(new BItem("New Folder" + (count == 0 ? "" : " " + count), "/extranet/images/icons/Newfolder.png", "", "Folder", BType.Folder, CurrentItem.Path + "/New Folder" + (count == 0 ? "" : " " + (count + 1)), true));
             item.Activate += new EventHandler(item_Activate);
             item.MouseEnter += new MouseEventHandler(item_MouseEnter);
             if (CurrentItem.CanWrite)
@@ -549,6 +542,8 @@ namespace HAP.Silverlight.Browser
 
         private void item_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            foreach (BrowserItem item in activeItems) if (item.Data.Name == "My Computer") { candrag = false; return; }
+            if (((BrowserItem)sender).Data.Name == "My Computer") { candrag = false; return; }
             candrag = true;
         }
 

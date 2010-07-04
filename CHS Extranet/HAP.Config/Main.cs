@@ -155,13 +155,10 @@ namespace HAP.Config
                     el.SetAttribute("type", row.Cells[1].Value.ToString());
                     if (bool.Parse(row.Cells[2].Value.ToString()))
                         el.SetAttribute("emailadmin", row.Cells[2].Value.ToString());
-                    else if (el.HasAttribute("emailadmin")) el.RemoveAttribute("emailadmin");
                     if (bool.Parse(row.Cells[3].Value.ToString()))
                         el.SetAttribute("enablecharging", row.Cells[3].Value.ToString());
-                    else if (el.HasAttribute("enablecharging")) el.RemoveAttribute("enablecharging");
                     if (!bool.Parse(row.Cells[4].Value.ToString()))
-                        el.SetAttribute("enable", row.Cells[3].Value.ToString());
-                    else if (el.HasAttribute("enable")) el.RemoveAttribute("enable");
+                        el.SetAttribute("enable", row.Cells[4].Value.ToString());
                     res.AppendChild(el);
                 }
             }

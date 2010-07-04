@@ -51,6 +51,7 @@ namespace HAP.Web.API
             string format = "{0},/extranet/images/icons/{1},{2},{3},{4},{5}\n";
 
             context.Response.Clear();
+            context.Response.ExpiresAbsolute = DateTime.Now;
             context.Response.Headers.Add("HAP:API", "List");
             context.Response.ContentType = "text/plain";
 

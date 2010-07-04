@@ -94,6 +94,10 @@
             this.label21 = new System.Windows.Forms.Label();
             this.mycomputer_exext = new System.Windows.Forms.TextBox();
             this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.label23 = new System.Windows.Forms.Label();
+            this.proxyport = new System.Windows.Forms.NumericUpDown();
+            this.proxyaddress = new System.Windows.Forms.TextBox();
+            this.label22 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.announcementBox_EditTo = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
@@ -123,10 +127,6 @@
             this.btnClose = new System.Windows.Forms.Button();
             this.btnsave = new System.Windows.Forms.Button();
             this.folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
-            this.label22 = new System.Windows.Forms.Label();
-            this.proxyaddress = new System.Windows.Forms.TextBox();
-            this.proxyport = new System.Windows.Forms.NumericUpDown();
-            this.label23 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -141,6 +141,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.uploadfilters)).BeginInit();
             this.panel3.SuspendLayout();
             this.tabPage6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.proxyport)).BeginInit();
             this.tabPage7.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage8.SuspendLayout();
@@ -151,7 +152,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.bs_max)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bs_maxdays)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.proxyport)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -637,7 +637,7 @@
             this.uncpaths.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uncpaths.Location = new System.Drawing.Point(3, 3);
             this.uncpaths.Name = "uncpaths";
-            this.uncpaths.Size = new System.Drawing.Size(610, 283);
+            this.uncpaths.Size = new System.Drawing.Size(610, 285);
             this.uncpaths.TabIndex = 0;
             // 
             // Drive
@@ -779,6 +779,43 @@
             this.tabPage6.TabIndex = 5;
             this.tabPage6.Text = "Announcement Box";
             this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(92, 100);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(99, 15);
+            this.label23.TabIndex = 7;
+            this.label23.Text = "HTTP Proxy Port:";
+            // 
+            // proxyport
+            // 
+            this.proxyport.Location = new System.Drawing.Point(197, 98);
+            this.proxyport.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.proxyport.Name = "proxyport";
+            this.proxyport.Size = new System.Drawing.Size(120, 21);
+            this.proxyport.TabIndex = 6;
+            // 
+            // proxyaddress
+            // 
+            this.proxyaddress.Location = new System.Drawing.Point(197, 71);
+            this.proxyaddress.Name = "proxyaddress";
+            this.proxyaddress.Size = new System.Drawing.Size(207, 21);
+            this.proxyaddress.TabIndex = 4;
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(70, 74);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(121, 15);
+            this.label22.TabIndex = 4;
+            this.label22.Text = "HTTP Proxy Address:";
             // 
             // label17
             // 
@@ -1044,43 +1081,6 @@
             this.folderBrowser.RootFolder = System.Environment.SpecialFolder.MyComputer;
             this.folderBrowser.ShowNewFolderButton = false;
             // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(70, 74);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(121, 15);
-            this.label22.TabIndex = 4;
-            this.label22.Text = "HTTP Proxy Address:";
-            // 
-            // proxyaddress
-            // 
-            this.proxyaddress.Location = new System.Drawing.Point(197, 71);
-            this.proxyaddress.Name = "proxyaddress";
-            this.proxyaddress.Size = new System.Drawing.Size(207, 21);
-            this.proxyaddress.TabIndex = 4;
-            // 
-            // proxyport
-            // 
-            this.proxyport.Location = new System.Drawing.Point(197, 98);
-            this.proxyport.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.proxyport.Name = "proxyport";
-            this.proxyport.Size = new System.Drawing.Size(120, 21);
-            this.proxyport.TabIndex = 6;
-            // 
-            // label23
-            // 
-            this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(92, 100);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(99, 15);
-            this.label23.TabIndex = 7;
-            this.label23.Text = "HTTP Proxy Port:";
-            // 
             // Main
             // 
             this.AcceptButton = this.btnsave;
@@ -1115,6 +1115,7 @@
             this.panel3.PerformLayout();
             this.tabPage6.ResumeLayout(false);
             this.tabPage6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.proxyport)).EndInit();
             this.tabPage7.ResumeLayout(false);
             this.tabControl2.ResumeLayout(false);
             this.tabPage8.ResumeLayout(false);
@@ -1126,7 +1127,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.bs_max)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bs_maxdays)).EndInit();
             this.flowLayoutPanel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.proxyport)).EndInit();
             this.ResumeLayout(false);
 
         }

@@ -35,6 +35,7 @@ namespace HAP.Web.API
             config = hapConfig.Current;
 
             context.Response.Clear();
+            context.Response.ExpiresAbsolute = DateTime.Now;
             context.Response.Headers.Add("HAP:API", "ListDrives");
             context.Response.ContentType = "text/plain";
             string format = "{0},{1},{2},{3}{4}\n";
