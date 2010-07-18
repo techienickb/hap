@@ -56,16 +56,22 @@
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.label15 = new System.Windows.Forms.Label();
-            this.ad_Student = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.ad_Password = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.ad_Username = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.ad_domainname = new System.Windows.Forms.TextBox();
+            this.ouloc = new System.Windows.Forms.Button();
+            this.adous = new System.Windows.Forms.DataGridView();
+            this.ouName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.oupath = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.OUIgnore = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.panel4 = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
             this.ad_dc = new System.Windows.Forms.TextBox();
+            this.ad_Student = new System.Windows.Forms.TextBox();
+            this.ad_domainname = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.ad_Password = new System.Windows.Forms.TextBox();
+            this.ad_Username = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.homepagelinks = new System.Windows.Forms.DataGridView();
             this.HPLName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -130,6 +136,8 @@
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.adous)).BeginInit();
+            this.panel4.SuspendLayout();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.homepagelinks)).BeginInit();
             this.panel1.SuspendLayout();
@@ -412,16 +420,9 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.label15);
-            this.tabPage2.Controls.Add(this.ad_Student);
-            this.tabPage2.Controls.Add(this.label14);
-            this.tabPage2.Controls.Add(this.ad_Password);
-            this.tabPage2.Controls.Add(this.label13);
-            this.tabPage2.Controls.Add(this.ad_Username);
-            this.tabPage2.Controls.Add(this.label12);
-            this.tabPage2.Controls.Add(this.ad_domainname);
-            this.tabPage2.Controls.Add(this.label8);
-            this.tabPage2.Controls.Add(this.ad_dc);
+            this.tabPage2.Controls.Add(this.ouloc);
+            this.tabPage2.Controls.Add(this.adous);
+            this.tabPage2.Controls.Add(this.panel4);
             this.tabPage2.Location = new System.Drawing.Point(4, 24);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -430,71 +431,73 @@
             this.tabPage2.Text = "Active Directory";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // label15
+            // ouloc
             // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(65, 130);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(126, 15);
-            this.label15.TabIndex = 9;
-            this.label15.Text = "Student Group Name:";
+            this.ouloc.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ouloc.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ouloc.Location = new System.Drawing.Point(402, 185);
+            this.ouloc.Name = "ouloc";
+            this.ouloc.Size = new System.Drawing.Size(24, 20);
+            this.ouloc.TabIndex = 10;
+            this.ouloc.Text = "...";
+            this.ouloc.UseVisualStyleBackColor = true;
+            this.ouloc.Visible = false;
+            this.ouloc.Click += new System.EventHandler(this.ouloc_Click);
+            this.ouloc.Enter += new System.EventHandler(this.ouloc_Enter);
+            this.ouloc.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ouloc_MouseDown);
             // 
-            // ad_Student
+            // adous
             // 
-            this.ad_Student.Location = new System.Drawing.Point(197, 127);
-            this.ad_Student.Name = "ad_Student";
-            this.ad_Student.Size = new System.Drawing.Size(116, 21);
-            this.ad_Student.TabIndex = 8;
+            this.adous.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.adous.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.adous.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ouName,
+            this.oupath,
+            this.OUIgnore});
+            this.adous.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.adous.Location = new System.Drawing.Point(3, 160);
+            this.adous.MultiSelect = false;
+            this.adous.Name = "adous";
+            this.adous.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.adous.Size = new System.Drawing.Size(618, 206);
+            this.adous.TabIndex = 11;
+            this.adous.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.adous_CellEnter);
+            this.adous.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.adous_CellLeave);
             // 
-            // label14
+            // ouName
             // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(89, 103);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(102, 15);
-            this.label14.TabIndex = 7;
-            this.label14.Text = "Admin Password:";
+            this.ouName.HeaderText = "Name";
+            this.ouName.Name = "ouName";
             // 
-            // ad_Password
+            // oupath
             // 
-            this.ad_Password.Location = new System.Drawing.Point(197, 100);
-            this.ad_Password.Name = "ad_Password";
-            this.ad_Password.Size = new System.Drawing.Size(207, 21);
-            this.ad_Password.TabIndex = 6;
-            this.ad_Password.UseSystemPasswordChar = true;
+            this.oupath.HeaderText = "OU Path";
+            this.oupath.Name = "oupath";
             // 
-            // label13
+            // OUIgnore
             // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(85, 75);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(106, 15);
-            this.label13.TabIndex = 5;
-            this.label13.Text = "Admin Username:";
+            this.OUIgnore.HeaderText = "Ignore from Staff Areas";
+            this.OUIgnore.Name = "OUIgnore";
+            this.OUIgnore.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.OUIgnore.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
-            // ad_Username
+            // panel4
             // 
-            this.ad_Username.Location = new System.Drawing.Point(197, 72);
-            this.ad_Username.Name = "ad_Username";
-            this.ad_Username.Size = new System.Drawing.Size(207, 21);
-            this.ad_Username.TabIndex = 4;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(100, 47);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(91, 15);
-            this.label12.TabIndex = 3;
-            this.label12.Text = "Domain Name:";
-            // 
-            // ad_domainname
-            // 
-            this.ad_domainname.Location = new System.Drawing.Point(197, 44);
-            this.ad_domainname.Name = "ad_domainname";
-            this.ad_domainname.Size = new System.Drawing.Size(207, 21);
-            this.ad_domainname.TabIndex = 2;
-            this.ad_domainname.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ad_domainname_KeyUp);
+            this.panel4.Controls.Add(this.label8);
+            this.panel4.Controls.Add(this.label15);
+            this.panel4.Controls.Add(this.ad_dc);
+            this.panel4.Controls.Add(this.ad_Student);
+            this.panel4.Controls.Add(this.ad_domainname);
+            this.panel4.Controls.Add(this.label14);
+            this.panel4.Controls.Add(this.label12);
+            this.panel4.Controls.Add(this.ad_Password);
+            this.panel4.Controls.Add(this.ad_Username);
+            this.panel4.Controls.Add(this.label13);
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel4.Location = new System.Drawing.Point(3, 3);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(618, 157);
+            this.panel4.TabIndex = 10;
             // 
             // label8
             // 
@@ -505,6 +508,15 @@
             this.label8.TabIndex = 1;
             this.label8.Text = "Domain Controller FQDN:";
             // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(65, 130);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(126, 15);
+            this.label15.TabIndex = 9;
+            this.label15.Text = "Student Group Name:";
+            // 
             // ad_dc
             // 
             this.ad_dc.Location = new System.Drawing.Point(197, 16);
@@ -512,6 +524,63 @@
             this.ad_dc.Size = new System.Drawing.Size(207, 21);
             this.ad_dc.TabIndex = 0;
             this.ad_dc.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ad_dc_KeyUp);
+            // 
+            // ad_Student
+            // 
+            this.ad_Student.Location = new System.Drawing.Point(197, 127);
+            this.ad_Student.Name = "ad_Student";
+            this.ad_Student.Size = new System.Drawing.Size(116, 21);
+            this.ad_Student.TabIndex = 8;
+            // 
+            // ad_domainname
+            // 
+            this.ad_domainname.Location = new System.Drawing.Point(197, 44);
+            this.ad_domainname.Name = "ad_domainname";
+            this.ad_domainname.Size = new System.Drawing.Size(207, 21);
+            this.ad_domainname.TabIndex = 2;
+            this.ad_domainname.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ad_domainname_KeyUp);
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(89, 103);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(102, 15);
+            this.label14.TabIndex = 7;
+            this.label14.Text = "Admin Password:";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(100, 47);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(91, 15);
+            this.label12.TabIndex = 3;
+            this.label12.Text = "Domain Name:";
+            // 
+            // ad_Password
+            // 
+            this.ad_Password.Location = new System.Drawing.Point(197, 100);
+            this.ad_Password.Name = "ad_Password";
+            this.ad_Password.Size = new System.Drawing.Size(207, 21);
+            this.ad_Password.TabIndex = 6;
+            this.ad_Password.UseSystemPasswordChar = true;
+            // 
+            // ad_Username
+            // 
+            this.ad_Username.Location = new System.Drawing.Point(197, 72);
+            this.ad_Username.Name = "ad_Username";
+            this.ad_Username.Size = new System.Drawing.Size(207, 21);
+            this.ad_Username.TabIndex = 4;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(85, 75);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(106, 15);
+            this.label13.TabIndex = 5;
+            this.label13.Text = "Admin Username:";
             // 
             // tabPage3
             // 
@@ -637,7 +706,7 @@
             this.uncpaths.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uncpaths.Location = new System.Drawing.Point(3, 3);
             this.uncpaths.Name = "uncpaths";
-            this.uncpaths.Size = new System.Drawing.Size(610, 285);
+            this.uncpaths.Size = new System.Drawing.Size(610, 283);
             this.uncpaths.TabIndex = 0;
             // 
             // Drive
@@ -896,7 +965,7 @@
             this.Resources.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Resources.Location = new System.Drawing.Point(3, 3);
             this.Resources.Name = "Resources";
-            this.Resources.Size = new System.Drawing.Size(600, 233);
+            this.Resources.Size = new System.Drawing.Size(600, 231);
             this.Resources.TabIndex = 0;
             // 
             // ResName
@@ -1007,7 +1076,7 @@
             this.bs_twoweek.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.bs_twoweek.Location = new System.Drawing.Point(65, 70);
             this.bs_twoweek.Name = "bs_twoweek";
-            this.bs_twoweek.Size = new System.Drawing.Size(134, 17);
+            this.bs_twoweek.Size = new System.Drawing.Size(147, 19);
             this.bs_twoweek.TabIndex = 5;
             this.bs_twoweek.Text = "Two Week Timetable: ";
             this.bs_twoweek.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1100,7 +1169,9 @@
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.adous)).EndInit();
+            this.panel4.ResumeLayout(false);
+            this.panel4.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.homepagelinks)).EndInit();
             this.panel1.ResumeLayout(false);
@@ -1231,5 +1302,11 @@
         private System.Windows.Forms.NumericUpDown proxyport;
         private System.Windows.Forms.TextBox proxyaddress;
         private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.DataGridView adous;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.Button ouloc;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ouName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn oupath;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn OUIgnore;
     }
 }
