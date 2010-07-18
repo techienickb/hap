@@ -55,6 +55,20 @@ namespace HAP.Config
             adsettings.Attributes["adusername"].Value = doc.SelectSingleNode("/configuration/system.web/membership/providers/add").Attributes["connectionUsername"].Value = doc.SelectSingleNode("/configuration/system.web/roleManager/providers/add").Attributes["connectionUsername"].Value = ad_Username.Text;
             adsettings.Attributes["adpassword"].Value = doc.SelectSingleNode("/configuration/system.web/membership/providers/add").Attributes["connectionPassword"].Value = doc.SelectSingleNode("/configuration/system.web/roleManager/providers/add").Attributes["connectionPassword"].Value = ad_Password.Text;
             adsettings.Attributes["studentsgroupname"].Value = ad_Student.Text;
+            XmlNode ouobs = adsettings.SelectSingleNode("ouobjects");
+            ouobs.RemoveAll();
+            foreach (DataGridViewRow row in homepagelinks.Rows)
+            {
+                if (!row.IsNewRow)
+                {
+                    XmlElement el = doc.CreateElement("add");
+                    el.SetAttribute("name", row.Cells[0].Value.ToString());
+                    el.SetAttribute("path", row.Cells[1].Value.ToString());
+                    if (Convert.ToBoolean(row.Cells[1].Value))
+                        el.SetAttribute("ignore", row.Cells[2].Value.ToString());
+                    ouobs.AppendChild(el);
+                }
+            }
             #endregion
 
             #region Home Page Links
@@ -262,6 +276,11 @@ namespace HAP.Config
             ad_Username.Text = adsettings.Attributes["adusername"].Value;
             ad_Password.Text = adsettings.Attributes["adpassword"].Value;
             ad_Student.Text = adsettings.Attributes["studentsgroupname"].Value;
+
+            XmlNode ouobs = adsettings.SelectSingleNode("ouobjects");
+            foreach (XmlNode node in ouobs.SelectNodes("add"))
+                adous.Rows.Add(node.Attributes["name"].Value, node.Attributes["description"].Value, node.Attributes["showto"].Value, node.Attributes["linklocation"].Value, node.Attributes["icon"].Value);
+
             #endregion
 
             #region Home Page Links
@@ -305,6 +324,37 @@ namespace HAP.Config
             #endregion
 
         }
+
+        private void adous_CellEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 1)
+            {
+                //ouloc.Top = adous.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, true).Top + adous.Top;
+                //ouloc.Left = adous.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, true).Left + adous.Left + adous.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, true).Width - ouloc.Width;
+                //ouloc.Show();
+            }
+        }
+
+        private void adous_CellLeave(object sender, DataGridViewCellEventArgs e)
+        {
+            //ouloc.Hide();
+        }
+
+        private void ouloc_Enter(object sender, EventArgs e)
+        {
+            //ouloc.Show();
+        }
+
+        private void ouloc_MouseDown(object sender, MouseEventArgs e)
+        {
+            //ouloc.Show();
+        }
+
+        private void ouloc_Click(object sender, EventArgs e)
+        {
+            //string s = adous.SelectedCells[0].Value as string;
+        }
+
 
     }
 }
