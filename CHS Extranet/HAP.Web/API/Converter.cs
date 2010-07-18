@@ -5,6 +5,7 @@ using System.Web;
 using System.Configuration;
 using HAP.Web.Configuration;
 using System.DirectoryServices.AccountManagement;
+using Microsoft.Win32;
 
 namespace HAP.Web.API
 {
@@ -103,6 +104,19 @@ namespace HAP.Web.API
                     return Context.User.Identity.Name.Remove(0, Context.User.Identity.Name.IndexOf('\\') + 1);
                 else return Context.User.Identity.Name;
             }
+        }
+
+        public static string MimeType(string Extension)
+        {
+            string mime = "application/octetstream";
+            if (string.IsNullOrEmpty(Extension))
+                return mime;
+            string ext = Extension.ToLower();
+            RegistryKey rk = Registry.ClassesRoot.OpenSubKey(ext);
+            if (rk != null && rk.GetValue("Content Type") != null)
+                mime = rk.GetValue("Content Type").ToString();
+            return mime;
+
         }
     }
 }

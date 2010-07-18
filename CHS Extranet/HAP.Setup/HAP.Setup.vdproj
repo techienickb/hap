@@ -39,19 +39,31 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_335237AE6EA384892C43FDA3F7CBF7FE"
+        "OwnerKey" = "8:_A19328A2BD294192ADF67AF2746F89EA"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_35DC64D75E6A0C257B8BC48B5DFABDDF"
         "OwnerKey" = "8:_5C36A32E20404938AEDF2E91BD0E8C99"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_49BB8FF4E408AB1B6EF526D16BCFE587"
+        "MsmKey" = "8:_47644465258A926E1A3F3BF872921725"
         "OwnerKey" = "8:_5C36A32E20404938AEDF2E91BD0E8C99"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_4A66A1986B1AF40BA2F61E1AABE9EAC7"
+        "MsmKey" = "8:_47644465258A926E1A3F3BF872921725"
+        "OwnerKey" = "8:_B3E5D99CF7FC05CFEE7FBFCB261FEDF3"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_49BB8FF4E408AB1B6EF526D16BCFE587"
         "OwnerKey" = "8:_5C36A32E20404938AEDF2E91BD0E8C99"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -75,6 +87,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_A19328A2BD294192ADF67AF2746F89EA"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B3E5D99CF7FC05CFEE7FBFCB261FEDF3"
+        "OwnerKey" = "8:_5C36A32E20404938AEDF2E91BD0E8C99"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_B63CA479540E095AEADCD3A0FF4C5782"
         "OwnerKey" = "8:_49BB8FF4E408AB1B6EF526D16BCFE587"
         "MsmSig" = "8:_UNDEFINED"
@@ -87,7 +111,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_DC80A81961C79F59422E1B40DF713EFD"
+        "MsmKey" = "8:_EA41FE5100BE80122A95A7CA47FF9548"
         "OwnerKey" = "8:_5C36A32E20404938AEDF2E91BD0E8C99"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -95,6 +119,18 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_5C36A32E20404938AEDF2E91BD0E8C99"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_A19328A2BD294192ADF67AF2746F89EA"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_335237AE6EA384892C43FDA3F7CBF7FE"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -136,13 +172,19 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_4A66A1986B1AF40BA2F61E1AABE9EAC7"
+        "OwnerKey" = "8:_B3E5D99CF7FC05CFEE7FBFCB261FEDF3"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_DC80A81961C79F59422E1B40DF713EFD"
+        "OwnerKey" = "8:_47644465258A926E1A3F3BF872921725"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_EA41FE5100BE80122A95A7CA47FF9548"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -227,6 +269,20 @@
     {
         "CustomAction"
         {
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_8C7BB5806D544AF792AAC32E70121485"
+            {
+            "Name" = "8:Primary output from HAP.Config (Active)"
+            "Condition" = "8:"
+            "Object" = "8:_A19328A2BD294192ADF67AF2746F89EA"
+            "FileType" = "3:2"
+            "InstallAction" = "3:1"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_998089A4_3DB7_47BB_825C_BA78DE9E7A53"
+            "InstallerClass" = "11:FALSE"
+            "CustomActionData" = "8:"
+            }
         }
         "DefaultFeature"
         {
@@ -332,6 +388,37 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_335237AE6EA384892C43FDA3F7CBF7FE"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:AeroWizard, Version=1.0.3851.27394, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_335237AE6EA384892C43FDA3F7CBF7FE"
+                    {
+                    "Name" = "8:AeroWizard.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:AeroWizard.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_B465FF8C3911469DA681F17009509E60"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_35DC64D75E6A0C257B8BC48B5DFABDDF"
             {
             "AssemblyRegister" = "3:1"
@@ -363,20 +450,20 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_49BB8FF4E408AB1B6EF526D16BCFE587"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_47644465258A926E1A3F3BF872921725"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:AjaxControlToolkit, Version=3.0.31106.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:AeroWizard, Version=1.0.3851.27394, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_49BB8FF4E408AB1B6EF526D16BCFE587"
+                    "_47644465258A926E1A3F3BF872921725"
                     {
-                    "Name" = "8:AjaxControlToolkit.dll"
+                    "Name" = "8:AeroWizard.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:AjaxControlToolkit.dll"
+            "SourcePath" = "8:AeroWizard.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_B465FF8C3911469DA681F17009509E60"
@@ -394,20 +481,20 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4A66A1986B1AF40BA2F61E1AABE9EAC7"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_49BB8FF4E408AB1B6EF526D16BCFE587"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:HAP Config, Version=1.3.0.0, Culture=neutral, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:AjaxControlToolkit, Version=3.0.31106.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_4A66A1986B1AF40BA2F61E1AABE9EAC7"
+                    "_49BB8FF4E408AB1B6EF526D16BCFE587"
                     {
-                    "Name" = "8:HAP Config.exe"
+                    "Name" = "8:AjaxControlToolkit.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:HAP Config.exe"
+            "SourcePath" = "8:AjaxControlToolkit.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_B465FF8C3911469DA681F17009509E60"
@@ -476,6 +563,37 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B3E5D99CF7FC05CFEE7FBFCB261FEDF3"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:HAP Config, Version=1.3.0.0, Culture=neutral, processorArchitecture=x86"
+                "ScatterAssemblies"
+                {
+                    "_B3E5D99CF7FC05CFEE7FBFCB261FEDF3"
+                    {
+                    "Name" = "8:HAP Config.exe"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:HAP Config.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_B465FF8C3911469DA681F17009509E60"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B63CA479540E095AEADCD3A0FF4C5782"
             {
             "AssemblyRegister" = "3:1"
@@ -507,14 +625,14 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_DC80A81961C79F59422E1B40DF713EFD"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_EA41FE5100BE80122A95A7CA47FF9548"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:CHS, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_DC80A81961C79F59422E1B40DF713EFD"
+                    "_EA41FE5100BE80122A95A7CA47FF9548"
                     {
                     "Name" = "8:CHS.dll"
                     "Attributes" = "3:512"
@@ -627,15 +745,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HAP.Setup"
-        "ProductCode" = "8:{0020DD86-0159-480C-864C-654CDF9FC607}"
-        "PackageCode" = "8:{CD7A7D69-DB1D-49AE-8926-752A267F9871}"
+        "ProductCode" = "8:{E59E0A25-C7DB-4B57-B910-E61EF30275F6}"
+        "PackageCode" = "8:{5619F522-9F82-45E2-8B62-588977CF4834}"
         "UpgradeCode" = "8:{21D75F33-FC2A-4D3B-A1CF-08A7E3CBD738}"
         "AspNetVersion" = "8:1"
         "RestartWWWService" = "11:TRUE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:4.6.2"
+        "ProductVersion" = "8:4.7.0"
         "Manufacturer" = "8:nb development"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://communities.rm.com"
@@ -1155,7 +1273,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_5C36A32E20404938AEDF2E91BD0E8C99"
             {
-            "SourcePath" = "8:..\\HAP.Web\\obj\\Debug\\HAP.Web.dll"
+            "SourcePath" = "8:..\\HAP.Web\\obj\\Release\\HAP.Web.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_37E4786E3F3B4C7F9E04D4F5B0002087"
@@ -1176,6 +1294,34 @@
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:Built"
             "OutputProjectGuid" = "8:{C3649002-D5BA-41D8-A2AA-78AD9E86C7BF}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_A19328A2BD294192ADF67AF2746F89EA"
+            {
+            "SourcePath" = "8:..\\HAP.Config\\obj\\x86\\Release\\HAP Config.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_B465FF8C3911469DA681F17009509E60"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{8E445E7B-246A-446A-B3B2-ED4F51C21768}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {

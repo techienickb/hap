@@ -7,17 +7,7 @@
         <div class="popupContent" style="width: 600px;">
             <h1>Month Overview</h1>
             <div>
-                <hap:BigBookingCalendar ID="OverviewCal" CssClass="OverviewCal" runat="server" FirstDayOfWeek="Monday" NextPrevFormat="ShortMonth" BackColor="Transparent" BorderColor="#d9d9d9" BorderWidth="0" CellPadding="4" DayNameFormat="Short" Font-Size="10pt" Width="100%" SelectionMode="None">
-                    <SelectedDayStyle BackColor="#6d051f" CssClass="Day SelDay" Font-Bold="True" ForeColor="White" />
-                    <DayStyle CssClass="Day" />
-                    <SelectorStyle CssClass="Selector" />
-                    <WeekendDayStyle BackColor="#FFFFCC" />
-                    <TodayDayStyle BackColor="#CCCCCC" ForeColor="Black" />
-                    <OtherMonthDayStyle ForeColor="Black" />
-                    <NextPrevStyle VerticalAlign="Middle" ForeColor="Black" CssClass="PreNextMonth" />
-                    <DayHeaderStyle BackColor="White" ForeColor="#646464" CssClass="dayhead" Font-Bold="True" Font-Size="10pt" />
-                    <TitleStyle CssClass="calhead" BackColor="Transparent" />
-                </hap:BigBookingCalendar>
+                <iframe src="OverviewCalendar.aspx" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" width="100%" height="400px"></iframe>
             </div>
             <div class="modalButtons">
                 <input type="button" value="Close" onclick="hideOverview();" />
