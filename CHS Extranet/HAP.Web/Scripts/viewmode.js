@@ -1,7 +1,7 @@
 ﻿function setCookie(c_name, value, expiredays) {
     var exdate = new Date();
     exdate.setDate(exdate.getDate() + expiredays);
-    document.cookie = c_name + "=" + escape(value) + ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString());
+    document.cookie = c_name + "=" + escape(value) + ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString() + ";path=/");
 }
 function getCookie(c_name) {
     if (document.cookie.length > 0) {
@@ -63,5 +63,23 @@ function popup(e) {
     else window.open(e.href, 'CHSUpload', 'toolbar=0,status=0,statusbar=0,menubar=0,menu=0,address=0,addressbar=0,width=600,height=400', true);
     return false;
 }
+
+function changeversion(e) {
+    setCookie('mycompv', e, 30);
+    if (e == "sl") window.location.href = "/extranet/mycomputersl.aspx";
+    else document.getElementById('versionquest').style.display = 'none';
+    return false;
+}
+
+var hasSilverlight = Boolean(window.Silverlight);
+var hasSilverlight4 = hasSilverlight && Silverlight.isInstalled('4.0');
+if (!hasSilverlight4) document.getElementById("versionquest").style.display = "none";
+else {
+    var version = getCookie('mycompv');
+    if (version != null && version != "") {
+        changeversion(version);
+    }
+}
+
 
 getViewMode();

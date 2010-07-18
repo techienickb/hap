@@ -8,23 +8,22 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using System.IO;
-using System.Security.Cryptography;
 
 namespace HAP.Config
 {
-    public partial class Main : Form
+    public partial class FirstRun : Form
     {
-        public Main()
+        public FirstRun()
         {
             InitializeComponent();
         }
 
-        private void btnClose_Click(object sender, EventArgs e)
+        private void wiz_Cancelled(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
-        private void btnsave_Click(object sender, EventArgs e)
+        private void wiz_Finished(object sender, EventArgs e)
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(path);
@@ -196,17 +195,13 @@ namespace HAP.Config
             #endregion
 
             doc.Save(path);
-            MessageBox.Show("Saved", "Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if (MessageBox.Show("Saved\nDo you want to close?", "Saved", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == System.Windows.Forms.DialogResult.Yes)
+                Close();
         }
 
         private void base_SMTPAuth_CheckedChanged(object sender, EventArgs e)
         {
             base_SMTPUsername.Enabled = base_SMTPPassword.Enabled = base_SMTPAuth.Checked;
-        }
-
-        private void ad_domainname_KeyUp(object sender, KeyEventArgs e)
-        {
-            ad_Username.Text = string.Format("{0}\\Administrator", ad_domainname.Text.Split(new char[] { '.' })[0]);
         }
 
         private void base_Code_KeyUp(object sender, KeyEventArgs e)
@@ -221,19 +216,15 @@ namespace HAP.Config
 
         private void ad_dc_KeyUp(object sender, KeyEventArgs e)
         {
-            if (ad_dc.Text.Contains('.'))
-            {
-                ad_domainname.Text = ad_dc.Text.Remove(0, ad_dc.Text.IndexOf('.') + 1);
-                ad_Username.Text = string.Format("{0}\\Administrator", ad_domainname.Text.Split(new char[] { '.' })[0]);
-            }
+
         }
 
         private string path;
 
-        private void Main_Load(object sender, EventArgs e)
+        private void FirstRun_Load(object sender, EventArgs e)
         {
             path = Path.Combine(Directory.GetParent(Path.GetDirectoryName(Application.ExecutablePath)).FullName, "web.config");
-            if (!File.Exists(path)) 
+            if (!File.Exists(path))
             {
                 if (folderBrowser.ShowDialog(this) == System.Windows.Forms.DialogResult.OK)
                     path = Path.Combine(folderBrowser.SelectedPath, "web.config");
@@ -279,7 +270,7 @@ namespace HAP.Config
 
             XmlNode ouobs = adsettings.SelectSingleNode("ouobjects");
             foreach (XmlNode node in ouobs.SelectNodes("add"))
-                adous.Rows.Add(node.Attributes["name"].Value, node.Attributes["description"].Value, node.Attributes["showto"].Value, node.Attributes["linklocation"].Value, node.Attributes["icon"].Value);
+                adous.Rows.Add(node.Attributes["name"].Value, node.Attributes["path"].Value, node.Attributes["ignore"] == null ? false: true);
 
             #endregion
 
@@ -322,39 +313,6 @@ namespace HAP.Config
             foreach (XmlNode node in bs.SelectNodes("lessons/add"))
                 lessons.Rows.Add(node.Attributes["name"].Value, node.Attributes["type"] == null ? "Lesson" : node.Attributes["type"].Value, node.Attributes["starttime"].Value, node.Attributes["endtime"].Value);
             #endregion
-
         }
-
-        private void adous_CellEnter(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.ColumnIndex == 1)
-            {
-                //ouloc.Top = adous.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, true).Top + adous.Top;
-                //ouloc.Left = adous.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, true).Left + adous.Left + adous.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, true).Width - ouloc.Width;
-                //ouloc.Show();
-            }
-        }
-
-        private void adous_CellLeave(object sender, DataGridViewCellEventArgs e)
-        {
-            //ouloc.Hide();
-        }
-
-        private void ouloc_Enter(object sender, EventArgs e)
-        {
-            //ouloc.Show();
-        }
-
-        private void ouloc_MouseDown(object sender, MouseEventArgs e)
-        {
-            //ouloc.Show();
-        }
-
-        private void ouloc_Click(object sender, EventArgs e)
-        {
-            //string s = adous.SelectedCells[0].Value as string;
-        }
-
-
     }
 }

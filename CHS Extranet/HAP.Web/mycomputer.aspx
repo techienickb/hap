@@ -28,19 +28,40 @@
     <asp:AjaxScriptManager runat="server" />
     <div id="maincol">
         <h1>My Computer</h1>
+        <script type="text/javascript" src="/Extranet/Scripts/Silverlight.js"></script>
+        <div id="versionquest">
+            <div class="modalBackground" style="width: 100%; height: 100%; position: absolute; position: fixed; z-index: 2000; top: 0; left: 0; right: 0; bottom: 0;">
+            </div>
+            <div style="width: 100%; height: 100%; position: absolute; position: fixed; z-index: 2001; top: 0; left: 0; right: 0; bottom: 0;">
+                <table cellpadding="0" cellspacing="0" border="0" style="width: 100%; height: 100%;">
+                    <tr valign="middle" align="center">
+                        <td valign="middle" align="center">
+                            <div class="modalPopup" style="width: 300px; text-align: left;">
+                                <h1>My Computer Version:</h1>
+                                Please select a version to use:
+                                <div id="HomeButtons">
+                                    <a href="/Extranet/MyComputerSL.aspx" onclick="return changeversion('sl');">Extended Version<i>Contains drag and drop features</i></a>
+                                    <a href="/extranet/mycomputer.aspx" onclick="return changeversion('html');">Basic Version<i>Basic HTML icons</i></a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
         <div style="position: relative;">
-        <div id="bar">
-            <a href="/Extranet/">Home Access Plus+ Home</a>
-            <a href="/Extranet/MyComputerSL.aspx">Try the Silverlight Version (Beta)</a>
-            <hap:NewFolder runat="server" ID="newfolderlink" Visible="false" />
-            <hap:Upload runat="server" id="newfileuploadlink" Visible="false" />
-            <a class="right" href="/Extranet/mycomputer.aspx" onclick="return view();"><span>View</span></a>
-        </div>
-        <div id="viewbox">
-            <a href="#" onclick="return changeview('Icons');">Icons</a>
-            <a href="#" onclick="return changeview('List');">List</a>
-            <a href="#" onclick="return changeview('Tile');">Tiles</a>
-        </div>
+            <div id="bar">
+                <a href="/Extranet/">Home Access Plus+ Home</a>
+                <a href="/Extranet/MyComputerSL.aspx">Try the Silverlight Version (Beta)</a>
+                <hap:NewFolder runat="server" ID="newfolderlink" Visible="false" />
+                <hap:Upload runat="server" id="newfileuploadlink" Visible="false" />
+                <a class="right" href="/Extranet/mycomputer.aspx" onclick="return view();"><span>View</span></a>
+            </div>
+            <div id="viewbox">
+                <a href="#" onclick="return changeview('Icons');">Icons</a>
+                <a href="#" onclick="return changeview('List');">List</a>
+                <a href="#" onclick="return changeview('Tile');">Tiles</a>
+            </div>
         </div>
         <asp:Repeater runat="server" ID="breadcrumbrepeater">
             <HeaderTemplate><div id="breadcrumbs"></HeaderTemplate>
@@ -79,7 +100,7 @@
             </script>
         </asp:PlaceHolder>
     </div>
-	<div id="CM1" class="SimpleContextMenu">
+    <div id="CM1" class="SimpleContextMenu">
 		<a href="#" onclick="return popup(this);">Delete</a>
 		<a href="#" onclick="return popup(this);" runat="server" id="rckmove">Move</a>
 		<a href="#" onclick="return popup(this);">Rename</a>

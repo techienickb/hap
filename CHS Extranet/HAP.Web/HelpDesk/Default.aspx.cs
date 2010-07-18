@@ -441,29 +441,26 @@ namespace HAP.Web.HelpDesk
 
     public class ADUtil
     {
-        static public UserInfo[] FindUsers()
+        public static UserInfo[] FindUsers()
         {
+            config = hapConfig.Current;
             System.Collections.Generic.List<UserInfo> users = new System.Collections.Generic.List<UserInfo>();
-            foreach (UserInfo info in FindUsers("Teaching Staff"))
-                if (!users.Contains(info))
-                    users.Add(info);
-            foreach (UserInfo info in FindUsers("Non-Teaching Staff"))
-                if (!users.Contains(info))
-                    users.Add(info);
-            foreach (UserInfo info in FindUsers("System Administrators"))
-                if (!users.Contains(info))
-                    users.Add(info);
+            foreach (ouobject ob in hapConfig.Current.ADSettings.OUObjects)
+                if (!ob.Ignore)
+                    foreach (UserInfo info in FindUsers(ob, ""))
+                        if (!users.Contains(info))
+                            users.Add(info);
             users.Sort();
             return users.ToArray();
         }
+        
+        static hapConfig config;
 
-        static public UserInfo[] FindUsers(string ou)
+        public static UserInfo[] FindUsers(ouobject ou, string subou)
         {
             List<UserInfo> results = new List<UserInfo>();
 
-            hapConfig config = hapConfig.Current;
-            string cs = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString;
-            cs = string.Format("{0}OU={1},OU={2},OU=Establishments,{3}", cs.Substring(0, cs.LastIndexOf('/') + 1), ou, config.BaseSettings.EstablishmentCode, cs.Remove(0, cs.LastIndexOf('/') + 1));
+            string cs = string.Format(ou.Path, subou, config.BaseSettings.EstablishmentCode);
             DirectoryEntry usersDE = new DirectoryEntry(cs, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
             //throw new Exception(usersDE1.Path);
             //DirectoryEntry usersDE = new DirectoryEntry(ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
@@ -514,41 +511,52 @@ namespace HAP.Web.HelpDesk
             return results.ToArray();
         }
 
-        static public UserInfo GetUserInfo(string username)
+        public static UserInfo GetUserInfo(string username)
         {
-            hapConfig config = hapConfig.Current;
-            DirectoryEntry usersDE = new DirectoryEntry(ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
-            DirectorySearcher ds = new DirectorySearcher(usersDE);
-            ds.Filter = "(sAMAccountName=*" + username + ")";
-            ds.PropertiesToLoad.Add("cn");
-            ds.PropertiesToLoad.Add(UserProperty.UserName);
-            ds.PropertiesToLoad.Add(UserProperty.DisplayName);
-            ds.PropertiesToLoad.Add(UserProperty.Notes);
-            ds.PropertiesToLoad.Add(UserProperty.Email);
-            SearchResult r = ds.FindOne();
+            try
+            {
+                DirectoryEntry usersDE = new DirectoryEntry(ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
+                DirectorySearcher ds = new DirectorySearcher(usersDE);
+                ds.Filter = "(sAMAccountName=*" + username + ")";
+                ds.PropertiesToLoad.Add("cn");
+                ds.PropertiesToLoad.Add(UserProperty.UserName);
+                ds.PropertiesToLoad.Add(UserProperty.DisplayName);
+                ds.PropertiesToLoad.Add(UserProperty.Notes);
+                ds.PropertiesToLoad.Add(UserProperty.Email);
+                SearchResult r = ds.FindOne();
 
-            UserInfo info = new UserInfo();
-            info.LoginName = r.Properties[UserProperty.UserName][0].ToString();
-            if (r.Properties[UserProperty.DisplayName].Count == 0)
-                info.DisplayName = info.LoginName;
-            else if (r.Properties[UserProperty.DisplayName] != null)
-                info.DisplayName = r.Properties[UserProperty.DisplayName][0].ToString();
-            else
-                info.DisplayName = info.LoginName;
-            if (r.Properties[UserProperty.Notes].Count == 0)
-                info.Notes = info.DisplayName;
-            else if (r.Properties[UserProperty.Notes] != null)
-                info.Notes = r.Properties[UserProperty.Notes][0].ToString();
-            else
-                info.Notes = info.DisplayName;
-            if (r.Properties[UserProperty.Email].Count == 0)
-                info.EmailAddress = "";
-            else if (r.Properties[UserProperty.Email] != null)
-                info.EmailAddress = r.Properties[UserProperty.Email][0].ToString();
-            else
-                info.EmailAddress = "";
+                UserInfo info = new UserInfo();
+                info.LoginName = r.Properties[UserProperty.UserName][0].ToString();
+                if (r.Properties[UserProperty.DisplayName].Count == 0)
+                    info.DisplayName = info.LoginName;
+                else if (r.Properties[UserProperty.DisplayName] != null)
+                    info.DisplayName = r.Properties[UserProperty.DisplayName][0].ToString();
+                else
+                    info.DisplayName = info.LoginName;
+                if (r.Properties[UserProperty.Notes].Count == 0)
+                    info.Notes = info.DisplayName;
+                else if (r.Properties[UserProperty.Notes] != null)
+                    info.Notes = r.Properties[UserProperty.Notes][0].ToString();
+                else
+                    info.Notes = info.DisplayName;
+                if (r.Properties[UserProperty.Email].Count == 0)
+                    info.EmailAddress = "";
+                else if (r.Properties[UserProperty.Email] != null)
+                    info.EmailAddress = r.Properties[UserProperty.Email][0].ToString();
+                else
+                    info.EmailAddress = "";
 
-            return info;
+                return info;
+            }
+            catch
+            {
+                UserInfo io = new UserInfo();
+                io.DisplayName = "Unknown Username";
+                io.Notes = "Unknown Username";
+                io.LoginName = "N/A";
+                io.EmailAddress = hapConfig.Current.BaseSettings.AdminEmailAddress;
+                return io;
+            }
         }
     }
 

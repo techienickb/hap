@@ -1,6 +1,6 @@
 ﻿namespace HAP.Config
 {
-    partial class Main
+    partial class FirstRun
     {
         /// <summary>
         /// Required designer variable.
@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FirstRun));
+            this.wiz = new AeroWizard.WizardControl();
+            this.wizardPage1 = new AeroWizard.WizardPage();
             this.base_StudentPhotoEnable = new System.Windows.Forms.CheckBox();
             this.base_StudentPhoto = new System.Windows.Forms.TextBox();
             this.base_SMTPPassword = new System.Windows.Forms.TextBox();
@@ -55,8 +55,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.ouloc = new System.Windows.Forms.Button();
+            this.wizardPage2 = new AeroWizard.WizardPage();
             this.adous = new System.Windows.Forms.DataGridView();
             this.ouName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.oupath = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -72,7 +71,7 @@
             this.ad_Password = new System.Windows.Forms.TextBox();
             this.ad_Username = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.wizardPage3 = new AeroWizard.WizardPage();
             this.homepagelinks = new System.Windows.Forms.DataGridView();
             this.HPLName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -82,7 +81,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.label20 = new System.Windows.Forms.Label();
             this.hpl_updatedetails = new System.Windows.Forms.TextBox();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.wizardPage4 = new AeroWizard.WizardPage();
             this.tabControl3 = new System.Windows.Forms.TabControl();
             this.tabPage10 = new System.Windows.Forms.TabPage();
             this.uncpaths = new System.Windows.Forms.DataGridView();
@@ -99,7 +98,7 @@
             this.panel3 = new System.Windows.Forms.Panel();
             this.label21 = new System.Windows.Forms.Label();
             this.mycomputer_exext = new System.Windows.Forms.TextBox();
-            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.wizardPage5 = new AeroWizard.WizardPage();
             this.label23 = new System.Windows.Forms.Label();
             this.proxyport = new System.Windows.Forms.NumericUpDown();
             this.proxyaddress = new System.Windows.Forms.TextBox();
@@ -108,7 +107,7 @@
             this.announcementBox_EditTo = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
             this.announcementBox_ShowTo = new System.Windows.Forms.TextBox();
-            this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.wizardPage6 = new AeroWizard.WizardPage();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage8 = new System.Windows.Forms.TabPage();
             this.Resources = new System.Windows.Forms.DataGridView();
@@ -129,28 +128,25 @@
             this.bs_max = new System.Windows.Forms.NumericUpDown();
             this.label19 = new System.Windows.Forms.Label();
             this.bs_maxdays = new System.Windows.Forms.NumericUpDown();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.btnClose = new System.Windows.Forms.Button();
-            this.btnsave = new System.Windows.Forms.Button();
             this.folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
-            this.tabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.wiz)).BeginInit();
+            this.wizardPage1.SuspendLayout();
+            this.wizardPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.adous)).BeginInit();
             this.panel4.SuspendLayout();
-            this.tabPage3.SuspendLayout();
+            this.wizardPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.homepagelinks)).BeginInit();
             this.panel1.SuspendLayout();
-            this.tabPage4.SuspendLayout();
+            this.wizardPage4.SuspendLayout();
             this.tabControl3.SuspendLayout();
             this.tabPage10.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.uncpaths)).BeginInit();
             this.tabPage11.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.uploadfilters)).BeginInit();
             this.panel3.SuspendLayout();
-            this.tabPage6.SuspendLayout();
+            this.wizardPage5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.proxyport)).BeginInit();
-            this.tabPage7.SuspendLayout();
+            this.wizardPage6.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Resources)).BeginInit();
@@ -159,100 +155,99 @@
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bs_max)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bs_maxdays)).BeginInit();
-            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // tabControl1
+            // wiz
             // 
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Controls.Add(this.tabPage3);
-            this.tabControl1.Controls.Add(this.tabPage4);
-            this.tabControl1.Controls.Add(this.tabPage6);
-            this.tabControl1.Controls.Add(this.tabPage7);
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(5, 5);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(632, 397);
-            this.tabControl1.TabIndex = 0;
+            this.wiz.Location = new System.Drawing.Point(0, 0);
+            this.wiz.Name = "wiz";
+            this.wiz.Pages.Add(this.wizardPage1);
+            this.wiz.Pages.Add(this.wizardPage2);
+            this.wiz.Pages.Add(this.wizardPage3);
+            this.wiz.Pages.Add(this.wizardPage4);
+            this.wiz.Pages.Add(this.wizardPage5);
+            this.wiz.Pages.Add(this.wizardPage6);
+            this.wiz.Size = new System.Drawing.Size(784, 502);
+            this.wiz.TabIndex = 0;
+            this.wiz.Title = "";
+            this.wiz.TitleIcon = ((System.Drawing.Icon)(resources.GetObject("wiz.TitleIcon")));
+            this.wiz.Cancelled += new System.EventHandler(this.wiz_Cancelled);
+            this.wiz.Finished += new System.EventHandler(this.wiz_Finished);
             // 
-            // tabPage1
+            // wizardPage1
             // 
-            this.tabPage1.Controls.Add(this.base_StudentPhotoEnable);
-            this.tabPage1.Controls.Add(this.base_StudentPhoto);
-            this.tabPage1.Controls.Add(this.base_SMTPPassword);
-            this.tabPage1.Controls.Add(this.base_SMTPUsername);
-            this.tabPage1.Controls.Add(this.base_SMTPAuth);
-            this.tabPage1.Controls.Add(this.base_SMTPSSL);
-            this.tabPage1.Controls.Add(this.base_SMTPPort);
-            this.tabPage1.Controls.Add(this.base_SMTPAddress);
-            this.tabPage1.Controls.Add(this.base_StudentEmailFormat);
-            this.tabPage1.Controls.Add(this.base_AdminUsername);
-            this.tabPage1.Controls.Add(this.base_AdminEmail);
-            this.tabPage1.Controls.Add(this.base_Code);
-            this.tabPage1.Controls.Add(this.base_Name);
-            this.tabPage1.Controls.Add(this.label11);
-            this.tabPage1.Controls.Add(this.label10);
-            this.tabPage1.Controls.Add(this.label9);
-            this.tabPage1.Controls.Add(this.label7);
-            this.tabPage1.Controls.Add(this.label6);
-            this.tabPage1.Controls.Add(this.label5);
-            this.tabPage1.Controls.Add(this.label4);
-            this.tabPage1.Controls.Add(this.label3);
-            this.tabPage1.Controls.Add(this.label2);
-            this.tabPage1.Controls.Add(this.label1);
-            this.tabPage1.Controls.Add(this.groupBox1);
-            this.tabPage1.Location = new System.Drawing.Point(4, 24);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(624, 369);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Base Settings";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.wizardPage1.Controls.Add(this.base_StudentPhotoEnable);
+            this.wizardPage1.Controls.Add(this.base_StudentPhoto);
+            this.wizardPage1.Controls.Add(this.base_SMTPPassword);
+            this.wizardPage1.Controls.Add(this.base_SMTPUsername);
+            this.wizardPage1.Controls.Add(this.base_SMTPAuth);
+            this.wizardPage1.Controls.Add(this.base_SMTPSSL);
+            this.wizardPage1.Controls.Add(this.base_SMTPPort);
+            this.wizardPage1.Controls.Add(this.base_SMTPAddress);
+            this.wizardPage1.Controls.Add(this.base_StudentEmailFormat);
+            this.wizardPage1.Controls.Add(this.base_AdminUsername);
+            this.wizardPage1.Controls.Add(this.base_AdminEmail);
+            this.wizardPage1.Controls.Add(this.base_Code);
+            this.wizardPage1.Controls.Add(this.base_Name);
+            this.wizardPage1.Controls.Add(this.label11);
+            this.wizardPage1.Controls.Add(this.label10);
+            this.wizardPage1.Controls.Add(this.label9);
+            this.wizardPage1.Controls.Add(this.label7);
+            this.wizardPage1.Controls.Add(this.label6);
+            this.wizardPage1.Controls.Add(this.label5);
+            this.wizardPage1.Controls.Add(this.label4);
+            this.wizardPage1.Controls.Add(this.label3);
+            this.wizardPage1.Controls.Add(this.label2);
+            this.wizardPage1.Controls.Add(this.label1);
+            this.wizardPage1.Controls.Add(this.groupBox1);
+            this.wizardPage1.Name = "wizardPage1";
+            this.wizardPage1.NextPage = this.wizardPage2;
+            this.wizardPage1.Size = new System.Drawing.Size(737, 352);
+            this.wizardPage1.TabIndex = 0;
+            this.wizardPage1.Text = "Base Settings";
             // 
             // base_StudentPhotoEnable
             // 
             this.base_StudentPhotoEnable.AutoSize = true;
-            this.base_StudentPhotoEnable.Location = new System.Drawing.Point(41, 290);
+            this.base_StudentPhotoEnable.Location = new System.Drawing.Point(154, 297);
             this.base_StudentPhotoEnable.Name = "base_StudentPhotoEnable";
             this.base_StudentPhotoEnable.Size = new System.Drawing.Size(15, 14);
-            this.base_StudentPhotoEnable.TabIndex = 24;
+            this.base_StudentPhotoEnable.TabIndex = 48;
             this.base_StudentPhotoEnable.UseVisualStyleBackColor = true;
             this.base_StudentPhotoEnable.CheckedChanged += new System.EventHandler(this.base_StudentPhotoEnable_CheckedChanged);
             // 
             // base_StudentPhoto
             // 
             this.base_StudentPhoto.Enabled = false;
-            this.base_StudentPhoto.Location = new System.Drawing.Point(197, 285);
+            this.base_StudentPhoto.Location = new System.Drawing.Point(310, 292);
             this.base_StudentPhoto.Name = "base_StudentPhoto";
-            this.base_StudentPhoto.Size = new System.Drawing.Size(207, 21);
-            this.base_StudentPhoto.TabIndex = 23;
+            this.base_StudentPhoto.Size = new System.Drawing.Size(207, 23);
+            this.base_StudentPhoto.TabIndex = 47;
             // 
             // base_SMTPPassword
             // 
             this.base_SMTPPassword.Enabled = false;
-            this.base_SMTPPassword.Location = new System.Drawing.Point(197, 257);
+            this.base_SMTPPassword.Location = new System.Drawing.Point(310, 264);
             this.base_SMTPPassword.Name = "base_SMTPPassword";
-            this.base_SMTPPassword.Size = new System.Drawing.Size(100, 21);
-            this.base_SMTPPassword.TabIndex = 22;
+            this.base_SMTPPassword.Size = new System.Drawing.Size(100, 23);
+            this.base_SMTPPassword.TabIndex = 46;
             this.base_SMTPPassword.UseSystemPasswordChar = true;
             // 
             // base_SMTPUsername
             // 
             this.base_SMTPUsername.Enabled = false;
-            this.base_SMTPUsername.Location = new System.Drawing.Point(197, 229);
+            this.base_SMTPUsername.Location = new System.Drawing.Point(310, 236);
             this.base_SMTPUsername.Name = "base_SMTPUsername";
-            this.base_SMTPUsername.Size = new System.Drawing.Size(100, 21);
-            this.base_SMTPUsername.TabIndex = 21;
+            this.base_SMTPUsername.Size = new System.Drawing.Size(100, 23);
+            this.base_SMTPUsername.TabIndex = 45;
             // 
             // base_SMTPAuth
             // 
             this.base_SMTPAuth.AutoSize = true;
-            this.base_SMTPAuth.Location = new System.Drawing.Point(67, 248);
+            this.base_SMTPAuth.Location = new System.Drawing.Point(180, 255);
             this.base_SMTPAuth.Name = "base_SMTPAuth";
             this.base_SMTPAuth.Size = new System.Drawing.Size(15, 14);
-            this.base_SMTPAuth.TabIndex = 20;
+            this.base_SMTPAuth.TabIndex = 44;
             this.base_SMTPAuth.UseVisualStyleBackColor = true;
             this.base_SMTPAuth.CheckedChanged += new System.EventHandler(this.base_SMTPAuth_CheckedChanged);
             // 
@@ -260,191 +255,172 @@
             // 
             this.base_SMTPSSL.AutoSize = true;
             this.base_SMTPSSL.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.base_SMTPSSL.Location = new System.Drawing.Point(124, 209);
+            this.base_SMTPSSL.Location = new System.Drawing.Point(237, 216);
             this.base_SMTPSSL.Name = "base_SMTPSSL";
-            this.base_SMTPSSL.Size = new System.Drawing.Size(89, 19);
-            this.base_SMTPSSL.TabIndex = 18;
+            this.base_SMTPSSL.Size = new System.Drawing.Size(81, 19);
+            this.base_SMTPSSL.TabIndex = 42;
             this.base_SMTPSSL.Text = "SMTP SSL:";
             this.base_SMTPSSL.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.base_SMTPSSL.UseVisualStyleBackColor = true;
             // 
             // base_SMTPPort
             // 
-            this.base_SMTPPort.Location = new System.Drawing.Point(197, 182);
+            this.base_SMTPPort.Location = new System.Drawing.Point(310, 189);
             this.base_SMTPPort.Name = "base_SMTPPort";
-            this.base_SMTPPort.Size = new System.Drawing.Size(36, 21);
-            this.base_SMTPPort.TabIndex = 17;
+            this.base_SMTPPort.Size = new System.Drawing.Size(36, 23);
+            this.base_SMTPPort.TabIndex = 41;
             this.base_SMTPPort.Text = "25";
             // 
             // base_SMTPAddress
             // 
-            this.base_SMTPAddress.Location = new System.Drawing.Point(197, 154);
+            this.base_SMTPAddress.Location = new System.Drawing.Point(310, 161);
             this.base_SMTPAddress.Name = "base_SMTPAddress";
-            this.base_SMTPAddress.Size = new System.Drawing.Size(207, 21);
-            this.base_SMTPAddress.TabIndex = 16;
+            this.base_SMTPAddress.Size = new System.Drawing.Size(207, 23);
+            this.base_SMTPAddress.TabIndex = 40;
             // 
             // base_StudentEmailFormat
             // 
-            this.base_StudentEmailFormat.Location = new System.Drawing.Point(197, 127);
+            this.base_StudentEmailFormat.Location = new System.Drawing.Point(310, 134);
             this.base_StudentEmailFormat.Name = "base_StudentEmailFormat";
-            this.base_StudentEmailFormat.Size = new System.Drawing.Size(268, 21);
-            this.base_StudentEmailFormat.TabIndex = 15;
+            this.base_StudentEmailFormat.Size = new System.Drawing.Size(268, 23);
+            this.base_StudentEmailFormat.TabIndex = 39;
             // 
             // base_AdminUsername
             // 
-            this.base_AdminUsername.Location = new System.Drawing.Point(197, 99);
+            this.base_AdminUsername.Location = new System.Drawing.Point(310, 106);
             this.base_AdminUsername.Name = "base_AdminUsername";
-            this.base_AdminUsername.Size = new System.Drawing.Size(100, 21);
-            this.base_AdminUsername.TabIndex = 14;
+            this.base_AdminUsername.Size = new System.Drawing.Size(100, 23);
+            this.base_AdminUsername.TabIndex = 38;
             // 
             // base_AdminEmail
             // 
-            this.base_AdminEmail.Location = new System.Drawing.Point(197, 71);
+            this.base_AdminEmail.Location = new System.Drawing.Point(310, 78);
             this.base_AdminEmail.Name = "base_AdminEmail";
-            this.base_AdminEmail.Size = new System.Drawing.Size(268, 21);
-            this.base_AdminEmail.TabIndex = 13;
+            this.base_AdminEmail.Size = new System.Drawing.Size(268, 23);
+            this.base_AdminEmail.TabIndex = 37;
             // 
             // base_Code
             // 
-            this.base_Code.Location = new System.Drawing.Point(197, 44);
+            this.base_Code.Location = new System.Drawing.Point(310, 51);
             this.base_Code.MaxLength = 3;
             this.base_Code.Name = "base_Code";
-            this.base_Code.Size = new System.Drawing.Size(36, 21);
-            this.base_Code.TabIndex = 12;
-            this.base_Code.KeyUp += new System.Windows.Forms.KeyEventHandler(this.base_Code_KeyUp);
+            this.base_Code.Size = new System.Drawing.Size(36, 23);
+            this.base_Code.TabIndex = 36;
             // 
             // base_Name
             // 
-            this.base_Name.Location = new System.Drawing.Point(197, 16);
+            this.base_Name.Location = new System.Drawing.Point(310, 23);
             this.base_Name.Name = "base_Name";
-            this.base_Name.Size = new System.Drawing.Size(207, 21);
-            this.base_Name.TabIndex = 11;
+            this.base_Name.Size = new System.Drawing.Size(207, 23);
+            this.base_Name.TabIndex = 35;
             // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(57, 288);
+            this.label11.Location = new System.Drawing.Point(170, 295);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(134, 15);
-            this.label11.TabIndex = 10;
+            this.label11.Size = new System.Drawing.Size(131, 15);
+            this.label11.TabIndex = 34;
             this.label11.Text = "Student Photo Handler:";
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(94, 260);
+            this.label10.Location = new System.Drawing.Point(207, 267);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(101, 15);
-            this.label10.TabIndex = 9;
+            this.label10.Size = new System.Drawing.Size(94, 15);
+            this.label10.TabIndex = 33;
             this.label10.Text = "SMTP Password:";
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(90, 232);
+            this.label9.Location = new System.Drawing.Point(203, 239);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(105, 15);
-            this.label9.TabIndex = 8;
+            this.label9.Size = new System.Drawing.Size(97, 15);
+            this.label9.TabIndex = 32;
             this.label9.Text = "SMTP Username:";
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(122, 185);
+            this.label7.Location = new System.Drawing.Point(235, 192);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(69, 15);
-            this.label7.TabIndex = 6;
+            this.label7.Size = new System.Drawing.Size(66, 15);
+            this.label7.TabIndex = 31;
             this.label7.Text = "SMTP Port:";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(62, 157);
+            this.label6.Location = new System.Drawing.Point(175, 164);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(129, 15);
-            this.label6.TabIndex = 5;
+            this.label6.Size = new System.Drawing.Size(121, 15);
+            this.label6.TabIndex = 30;
             this.label6.Text = "SMTP Server Address:";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(62, 130);
+            this.label5.Location = new System.Drawing.Point(175, 137);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(129, 15);
-            this.label5.TabIndex = 4;
+            this.label5.Size = new System.Drawing.Size(124, 15);
+            this.label5.TabIndex = 29;
             this.label5.Text = "Student Email Format:";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(50, 102);
+            this.label4.Location = new System.Drawing.Point(163, 109);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(141, 15);
-            this.label4.TabIndex = 3;
+            this.label4.Size = new System.Drawing.Size(134, 15);
+            this.label4.TabIndex = 28;
             this.label4.Text = "Admin Email Username:";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(64, 74);
+            this.label3.Location = new System.Drawing.Point(177, 81);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(127, 15);
-            this.label3.TabIndex = 2;
+            this.label3.Size = new System.Drawing.Size(123, 15);
+            this.label3.TabIndex = 27;
             this.label3.Text = "Admin Email Address:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(71, 47);
+            this.label2.Location = new System.Drawing.Point(184, 54);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(120, 15);
-            this.label2.TabIndex = 1;
+            this.label2.Size = new System.Drawing.Size(115, 15);
+            this.label2.TabIndex = 26;
             this.label2.Text = "Establishment Code:";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(66, 19);
+            this.label1.Location = new System.Drawing.Point(179, 26);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(125, 15);
-            this.label1.TabIndex = 0;
+            this.label1.Size = new System.Drawing.Size(119, 15);
+            this.label1.TabIndex = 25;
             this.label1.Text = "Establishment Name:";
             // 
             // groupBox1
             // 
-            this.groupBox1.Location = new System.Drawing.Point(74, 234);
+            this.groupBox1.Location = new System.Drawing.Point(187, 241);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(91, 35);
-            this.groupBox1.TabIndex = 19;
+            this.groupBox1.TabIndex = 43;
             this.groupBox1.TabStop = false;
             // 
-            // tabPage2
+            // wizardPage2
             // 
-            this.tabPage2.Controls.Add(this.ouloc);
-            this.tabPage2.Controls.Add(this.adous);
-            this.tabPage2.Controls.Add(this.panel4);
-            this.tabPage2.Location = new System.Drawing.Point(4, 24);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(624, 369);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Active Directory";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // ouloc
-            // 
-            this.ouloc.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.ouloc.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ouloc.Location = new System.Drawing.Point(402, 185);
-            this.ouloc.Name = "ouloc";
-            this.ouloc.Size = new System.Drawing.Size(24, 20);
-            this.ouloc.TabIndex = 10;
-            this.ouloc.Text = "...";
-            this.ouloc.UseVisualStyleBackColor = true;
-            this.ouloc.Visible = false;
-            this.ouloc.Click += new System.EventHandler(this.ouloc_Click);
-            this.ouloc.Enter += new System.EventHandler(this.ouloc_Enter);
-            this.ouloc.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ouloc_MouseDown);
+            this.wizardPage2.Controls.Add(this.adous);
+            this.wizardPage2.Controls.Add(this.panel4);
+            this.wizardPage2.Name = "wizardPage2";
+            this.wizardPage2.NextPage = this.wizardPage3;
+            this.wizardPage2.Size = new System.Drawing.Size(737, 352);
+            this.wizardPage2.TabIndex = 1;
+            this.wizardPage2.Text = "Active Directory Settings";
             // 
             // adous
             // 
@@ -455,14 +431,11 @@
             this.oupath,
             this.OUIgnore});
             this.adous.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.adous.Location = new System.Drawing.Point(3, 160);
+            this.adous.Location = new System.Drawing.Point(0, 157);
             this.adous.MultiSelect = false;
             this.adous.Name = "adous";
-            this.adous.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.adous.Size = new System.Drawing.Size(618, 206);
-            this.adous.TabIndex = 11;
-            this.adous.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.adous_CellEnter);
-            this.adous.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.adous_CellLeave);
+            this.adous.Size = new System.Drawing.Size(737, 195);
+            this.adous.TabIndex = 13;
             // 
             // ouName
             // 
@@ -494,17 +467,17 @@
             this.panel4.Controls.Add(this.ad_Username);
             this.panel4.Controls.Add(this.label13);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel4.Location = new System.Drawing.Point(3, 3);
+            this.panel4.Location = new System.Drawing.Point(0, 0);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(618, 157);
-            this.panel4.TabIndex = 10;
+            this.panel4.Size = new System.Drawing.Size(737, 157);
+            this.panel4.TabIndex = 12;
             // 
             // label8
             // 
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(44, 19);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(147, 15);
+            this.label8.Size = new System.Drawing.Size(143, 15);
             this.label8.TabIndex = 1;
             this.label8.Text = "Domain Controller FQDN:";
             // 
@@ -513,7 +486,7 @@
             this.label15.AutoSize = true;
             this.label15.Location = new System.Drawing.Point(65, 130);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(126, 15);
+            this.label15.Size = new System.Drawing.Size(122, 15);
             this.label15.TabIndex = 9;
             this.label15.Text = "Student Group Name:";
             // 
@@ -521,31 +494,29 @@
             // 
             this.ad_dc.Location = new System.Drawing.Point(197, 16);
             this.ad_dc.Name = "ad_dc";
-            this.ad_dc.Size = new System.Drawing.Size(207, 21);
+            this.ad_dc.Size = new System.Drawing.Size(207, 23);
             this.ad_dc.TabIndex = 0;
-            this.ad_dc.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ad_dc_KeyUp);
             // 
             // ad_Student
             // 
             this.ad_Student.Location = new System.Drawing.Point(197, 127);
             this.ad_Student.Name = "ad_Student";
-            this.ad_Student.Size = new System.Drawing.Size(116, 21);
+            this.ad_Student.Size = new System.Drawing.Size(116, 23);
             this.ad_Student.TabIndex = 8;
             // 
             // ad_domainname
             // 
             this.ad_domainname.Location = new System.Drawing.Point(197, 44);
             this.ad_domainname.Name = "ad_domainname";
-            this.ad_domainname.Size = new System.Drawing.Size(207, 21);
+            this.ad_domainname.Size = new System.Drawing.Size(207, 23);
             this.ad_domainname.TabIndex = 2;
-            this.ad_domainname.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ad_domainname_KeyUp);
             // 
             // label14
             // 
             this.label14.AutoSize = true;
             this.label14.Location = new System.Drawing.Point(89, 103);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(102, 15);
+            this.label14.Size = new System.Drawing.Size(99, 15);
             this.label14.TabIndex = 7;
             this.label14.Text = "Admin Password:";
             // 
@@ -554,7 +525,7 @@
             this.label12.AutoSize = true;
             this.label12.Location = new System.Drawing.Point(100, 47);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(91, 15);
+            this.label12.Size = new System.Drawing.Size(87, 15);
             this.label12.TabIndex = 3;
             this.label12.Text = "Domain Name:";
             // 
@@ -562,7 +533,7 @@
             // 
             this.ad_Password.Location = new System.Drawing.Point(197, 100);
             this.ad_Password.Name = "ad_Password";
-            this.ad_Password.Size = new System.Drawing.Size(207, 21);
+            this.ad_Password.Size = new System.Drawing.Size(207, 23);
             this.ad_Password.TabIndex = 6;
             this.ad_Password.UseSystemPasswordChar = true;
             // 
@@ -570,7 +541,7 @@
             // 
             this.ad_Username.Location = new System.Drawing.Point(197, 72);
             this.ad_Username.Name = "ad_Username";
-            this.ad_Username.Size = new System.Drawing.Size(207, 21);
+            this.ad_Username.Size = new System.Drawing.Size(207, 23);
             this.ad_Username.TabIndex = 4;
             // 
             // label13
@@ -578,20 +549,19 @@
             this.label13.AutoSize = true;
             this.label13.Location = new System.Drawing.Point(85, 75);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(106, 15);
+            this.label13.Size = new System.Drawing.Size(102, 15);
             this.label13.TabIndex = 5;
             this.label13.Text = "Admin Username:";
             // 
-            // tabPage3
+            // wizardPage3
             // 
-            this.tabPage3.Controls.Add(this.homepagelinks);
-            this.tabPage3.Controls.Add(this.panel1);
-            this.tabPage3.Location = new System.Drawing.Point(4, 24);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(624, 369);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Home Page Links";
-            this.tabPage3.UseVisualStyleBackColor = true;
+            this.wizardPage3.Controls.Add(this.homepagelinks);
+            this.wizardPage3.Controls.Add(this.panel1);
+            this.wizardPage3.Name = "wizardPage3";
+            this.wizardPage3.NextPage = this.wizardPage4;
+            this.wizardPage3.Size = new System.Drawing.Size(737, 352);
+            this.wizardPage3.TabIndex = 2;
+            this.wizardPage3.Text = "Home Page Links";
             // 
             // homepagelinks
             // 
@@ -607,8 +577,8 @@
             this.homepagelinks.Location = new System.Drawing.Point(0, 43);
             this.homepagelinks.Name = "homepagelinks";
             this.homepagelinks.RowTemplate.Height = 24;
-            this.homepagelinks.Size = new System.Drawing.Size(624, 326);
-            this.homepagelinks.TabIndex = 0;
+            this.homepagelinks.Size = new System.Drawing.Size(737, 309);
+            this.homepagelinks.TabIndex = 2;
             // 
             // HPLName
             // 
@@ -642,15 +612,15 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(624, 43);
-            this.panel1.TabIndex = 1;
+            this.panel1.Size = new System.Drawing.Size(737, 43);
+            this.panel1.TabIndex = 3;
             // 
             // label20
             // 
             this.label20.AutoSize = true;
             this.label20.Location = new System.Drawing.Point(30, 19);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(161, 15);
+            this.label20.Size = new System.Drawing.Size(155, 15);
             this.label20.TabIndex = 1;
             this.label20.Text = "Show Update My Details To:";
             // 
@@ -658,19 +628,18 @@
             // 
             this.hpl_updatedetails.Location = new System.Drawing.Point(197, 16);
             this.hpl_updatedetails.Name = "hpl_updatedetails";
-            this.hpl_updatedetails.Size = new System.Drawing.Size(207, 21);
+            this.hpl_updatedetails.Size = new System.Drawing.Size(207, 23);
             this.hpl_updatedetails.TabIndex = 0;
             // 
-            // tabPage4
+            // wizardPage4
             // 
-            this.tabPage4.Controls.Add(this.tabControl3);
-            this.tabPage4.Controls.Add(this.panel3);
-            this.tabPage4.Location = new System.Drawing.Point(4, 24);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(624, 369);
-            this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "My Computer";
-            this.tabPage4.UseVisualStyleBackColor = true;
+            this.wizardPage4.Controls.Add(this.tabControl3);
+            this.wizardPage4.Controls.Add(this.panel3);
+            this.wizardPage4.Name = "wizardPage4";
+            this.wizardPage4.NextPage = this.wizardPage5;
+            this.wizardPage4.Size = new System.Drawing.Size(737, 352);
+            this.wizardPage4.TabIndex = 3;
+            this.wizardPage4.Text = "My Computer";
             // 
             // tabControl3
             // 
@@ -680,8 +649,8 @@
             this.tabControl3.Location = new System.Drawing.Point(0, 52);
             this.tabControl3.Name = "tabControl3";
             this.tabControl3.SelectedIndex = 0;
-            this.tabControl3.Size = new System.Drawing.Size(624, 317);
-            this.tabControl3.TabIndex = 1;
+            this.tabControl3.Size = new System.Drawing.Size(737, 300);
+            this.tabControl3.TabIndex = 3;
             // 
             // tabPage10
             // 
@@ -689,7 +658,7 @@
             this.tabPage10.Location = new System.Drawing.Point(4, 24);
             this.tabPage10.Name = "tabPage10";
             this.tabPage10.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage10.Size = new System.Drawing.Size(616, 289);
+            this.tabPage10.Size = new System.Drawing.Size(729, 272);
             this.tabPage10.TabIndex = 0;
             this.tabPage10.Text = "UNC Paths";
             this.tabPage10.UseVisualStyleBackColor = true;
@@ -706,7 +675,7 @@
             this.uncpaths.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uncpaths.Location = new System.Drawing.Point(3, 3);
             this.uncpaths.Name = "uncpaths";
-            this.uncpaths.Size = new System.Drawing.Size(610, 283);
+            this.uncpaths.Size = new System.Drawing.Size(723, 266);
             this.uncpaths.TabIndex = 0;
             // 
             // Drive
@@ -772,7 +741,7 @@
             this.tabPage11.Location = new System.Drawing.Point(4, 24);
             this.tabPage11.Name = "tabPage11";
             this.tabPage11.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage11.Size = new System.Drawing.Size(616, 289);
+            this.tabPage11.Size = new System.Drawing.Size(724, 259);
             this.tabPage11.TabIndex = 1;
             this.tabPage11.Text = "Upload Filters";
             this.tabPage11.UseVisualStyleBackColor = true;
@@ -788,7 +757,7 @@
             this.uploadfilters.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uploadfilters.Location = new System.Drawing.Point(3, 3);
             this.uploadfilters.Name = "uploadfilters";
-            this.uploadfilters.Size = new System.Drawing.Size(610, 285);
+            this.uploadfilters.Size = new System.Drawing.Size(718, 253);
             this.uploadfilters.TabIndex = 1;
             // 
             // FilterName
@@ -813,15 +782,15 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(624, 52);
-            this.panel3.TabIndex = 2;
+            this.panel3.Size = new System.Drawing.Size(737, 52);
+            this.panel3.TabIndex = 4;
             // 
             // label21
             // 
             this.label21.AutoSize = true;
             this.label21.Location = new System.Drawing.Point(74, 19);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(117, 15);
+            this.label21.Size = new System.Drawing.Size(108, 15);
             this.label21.TabIndex = 1;
             this.label21.Text = "Exclude Extensions:";
             // 
@@ -829,117 +798,115 @@
             // 
             this.mycomputer_exext.Location = new System.Drawing.Point(197, 16);
             this.mycomputer_exext.Name = "mycomputer_exext";
-            this.mycomputer_exext.Size = new System.Drawing.Size(207, 21);
+            this.mycomputer_exext.Size = new System.Drawing.Size(207, 23);
             this.mycomputer_exext.TabIndex = 0;
             // 
-            // tabPage6
+            // wizardPage5
             // 
-            this.tabPage6.Controls.Add(this.label23);
-            this.tabPage6.Controls.Add(this.proxyport);
-            this.tabPage6.Controls.Add(this.proxyaddress);
-            this.tabPage6.Controls.Add(this.label22);
-            this.tabPage6.Controls.Add(this.label17);
-            this.tabPage6.Controls.Add(this.announcementBox_EditTo);
-            this.tabPage6.Controls.Add(this.label16);
-            this.tabPage6.Controls.Add(this.announcementBox_ShowTo);
-            this.tabPage6.Location = new System.Drawing.Point(4, 24);
-            this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Size = new System.Drawing.Size(624, 369);
-            this.tabPage6.TabIndex = 5;
-            this.tabPage6.Text = "Announcement Box";
-            this.tabPage6.UseVisualStyleBackColor = true;
+            this.wizardPage5.Controls.Add(this.label23);
+            this.wizardPage5.Controls.Add(this.proxyport);
+            this.wizardPage5.Controls.Add(this.proxyaddress);
+            this.wizardPage5.Controls.Add(this.label22);
+            this.wizardPage5.Controls.Add(this.label17);
+            this.wizardPage5.Controls.Add(this.announcementBox_EditTo);
+            this.wizardPage5.Controls.Add(this.label16);
+            this.wizardPage5.Controls.Add(this.announcementBox_ShowTo);
+            this.wizardPage5.Name = "wizardPage5";
+            this.wizardPage5.NextPage = this.wizardPage6;
+            this.wizardPage5.Size = new System.Drawing.Size(737, 352);
+            this.wizardPage5.TabIndex = 4;
+            this.wizardPage5.Text = "Announcement Box";
             // 
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(92, 100);
+            this.label23.Location = new System.Drawing.Point(221, 201);
             this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(99, 15);
-            this.label23.TabIndex = 7;
+            this.label23.Size = new System.Drawing.Size(97, 15);
+            this.label23.TabIndex = 15;
             this.label23.Text = "HTTP Proxy Port:";
             // 
             // proxyport
             // 
-            this.proxyport.Location = new System.Drawing.Point(197, 98);
+            this.proxyport.Location = new System.Drawing.Point(326, 199);
             this.proxyport.Maximum = new decimal(new int[] {
             9999,
             0,
             0,
             0});
             this.proxyport.Name = "proxyport";
-            this.proxyport.Size = new System.Drawing.Size(120, 21);
-            this.proxyport.TabIndex = 6;
+            this.proxyport.Size = new System.Drawing.Size(120, 23);
+            this.proxyport.TabIndex = 14;
             // 
             // proxyaddress
             // 
-            this.proxyaddress.Location = new System.Drawing.Point(197, 71);
+            this.proxyaddress.Location = new System.Drawing.Point(326, 172);
             this.proxyaddress.Name = "proxyaddress";
-            this.proxyaddress.Size = new System.Drawing.Size(207, 21);
-            this.proxyaddress.TabIndex = 4;
+            this.proxyaddress.Size = new System.Drawing.Size(207, 23);
+            this.proxyaddress.TabIndex = 12;
             // 
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(70, 74);
+            this.label22.Location = new System.Drawing.Point(199, 175);
             this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(121, 15);
-            this.label22.TabIndex = 4;
+            this.label22.Size = new System.Drawing.Size(117, 15);
+            this.label22.TabIndex = 13;
             this.label22.Text = "HTTP Proxy Address:";
             // 
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(101, 47);
+            this.label17.Location = new System.Drawing.Point(230, 148);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(90, 15);
-            this.label17.TabIndex = 3;
+            this.label17.Size = new System.Drawing.Size(85, 15);
+            this.label17.TabIndex = 11;
             this.label17.Text = "Enable Edit To:";
             // 
             // announcementBox_EditTo
             // 
-            this.announcementBox_EditTo.Location = new System.Drawing.Point(197, 44);
+            this.announcementBox_EditTo.Location = new System.Drawing.Point(326, 145);
             this.announcementBox_EditTo.Name = "announcementBox_EditTo";
-            this.announcementBox_EditTo.Size = new System.Drawing.Size(207, 21);
-            this.announcementBox_EditTo.TabIndex = 2;
+            this.announcementBox_EditTo.Size = new System.Drawing.Size(207, 23);
+            this.announcementBox_EditTo.TabIndex = 10;
             // 
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(133, 19);
+            this.label16.Location = new System.Drawing.Point(262, 120);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(58, 15);
-            this.label16.TabIndex = 1;
+            this.label16.Size = new System.Drawing.Size(56, 15);
+            this.label16.TabIndex = 9;
             this.label16.Text = "Show To:";
             // 
             // announcementBox_ShowTo
             // 
-            this.announcementBox_ShowTo.Location = new System.Drawing.Point(197, 16);
+            this.announcementBox_ShowTo.Location = new System.Drawing.Point(326, 117);
             this.announcementBox_ShowTo.Name = "announcementBox_ShowTo";
-            this.announcementBox_ShowTo.Size = new System.Drawing.Size(207, 21);
-            this.announcementBox_ShowTo.TabIndex = 0;
+            this.announcementBox_ShowTo.Size = new System.Drawing.Size(207, 23);
+            this.announcementBox_ShowTo.TabIndex = 8;
             // 
-            // tabPage7
+            // wizardPage6
             // 
-            this.tabPage7.Controls.Add(this.tabControl2);
-            this.tabPage7.Controls.Add(this.panel2);
-            this.tabPage7.Location = new System.Drawing.Point(4, 24);
-            this.tabPage7.Name = "tabPage7";
-            this.tabPage7.Padding = new System.Windows.Forms.Padding(5);
-            this.tabPage7.Size = new System.Drawing.Size(624, 369);
-            this.tabPage7.TabIndex = 6;
-            this.tabPage7.Text = "Booking System";
-            this.tabPage7.UseVisualStyleBackColor = true;
+            this.wizardPage6.AllowNext = false;
+            this.wizardPage6.Controls.Add(this.tabControl2);
+            this.wizardPage6.Controls.Add(this.panel2);
+            this.wizardPage6.IsFinishPage = true;
+            this.wizardPage6.Name = "wizardPage6";
+            this.wizardPage6.Size = new System.Drawing.Size(737, 352);
+            this.wizardPage6.TabIndex = 5;
+            this.wizardPage6.Text = "Booking System";
             // 
             // tabControl2
             // 
             this.tabControl2.Controls.Add(this.tabPage8);
             this.tabControl2.Controls.Add(this.tabPage9);
             this.tabControl2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl2.Location = new System.Drawing.Point(5, 99);
+            this.tabControl2.Location = new System.Drawing.Point(0, 94);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(614, 265);
-            this.tabControl2.TabIndex = 0;
+            this.tabControl2.Size = new System.Drawing.Size(737, 258);
+            this.tabControl2.TabIndex = 7;
             // 
             // tabPage8
             // 
@@ -947,7 +914,7 @@
             this.tabPage8.Location = new System.Drawing.Point(4, 24);
             this.tabPage8.Name = "tabPage8";
             this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage8.Size = new System.Drawing.Size(606, 237);
+            this.tabPage8.Size = new System.Drawing.Size(729, 230);
             this.tabPage8.TabIndex = 0;
             this.tabPage8.Text = "Resources";
             this.tabPage8.UseVisualStyleBackColor = true;
@@ -965,7 +932,7 @@
             this.Resources.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Resources.Location = new System.Drawing.Point(3, 3);
             this.Resources.Name = "Resources";
-            this.Resources.Size = new System.Drawing.Size(600, 231);
+            this.Resources.Size = new System.Drawing.Size(723, 224);
             this.Resources.TabIndex = 0;
             // 
             // ResName
@@ -1004,7 +971,7 @@
             this.tabPage9.Location = new System.Drawing.Point(4, 24);
             this.tabPage9.Name = "tabPage9";
             this.tabPage9.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage9.Size = new System.Drawing.Size(606, 237);
+            this.tabPage9.Size = new System.Drawing.Size(724, 217);
             this.tabPage9.TabIndex = 1;
             this.tabPage9.Text = "Lessons";
             this.tabPage9.UseVisualStyleBackColor = true;
@@ -1021,7 +988,7 @@
             this.lessons.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lessons.Location = new System.Drawing.Point(3, 3);
             this.lessons.Name = "lessons";
-            this.lessons.Size = new System.Drawing.Size(600, 233);
+            this.lessons.Size = new System.Drawing.Size(718, 211);
             this.lessons.TabIndex = 0;
             // 
             // LessonName
@@ -1056,17 +1023,17 @@
             this.panel2.Controls.Add(this.label19);
             this.panel2.Controls.Add(this.bs_maxdays);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(5, 5);
+            this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(614, 94);
-            this.panel2.TabIndex = 6;
+            this.panel2.Size = new System.Drawing.Size(737, 94);
+            this.panel2.TabIndex = 8;
             // 
             // label18
             // 
             this.label18.AutoSize = true;
             this.label18.Location = new System.Drawing.Point(47, 18);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(144, 15);
+            this.label18.Size = new System.Drawing.Size(136, 15);
             this.label18.TabIndex = 2;
             this.label18.Text = "Max Bookings Per Week:";
             // 
@@ -1076,7 +1043,7 @@
             this.bs_twoweek.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.bs_twoweek.Location = new System.Drawing.Point(65, 70);
             this.bs_twoweek.Name = "bs_twoweek";
-            this.bs_twoweek.Size = new System.Drawing.Size(147, 19);
+            this.bs_twoweek.Size = new System.Drawing.Size(143, 19);
             this.bs_twoweek.TabIndex = 5;
             this.bs_twoweek.Text = "Two Week Timetable: ";
             this.bs_twoweek.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1091,7 +1058,7 @@
             0,
             0});
             this.bs_max.Name = "bs_max";
-            this.bs_max.Size = new System.Drawing.Size(50, 21);
+            this.bs_max.Size = new System.Drawing.Size(50, 23);
             this.bs_max.TabIndex = 1;
             // 
             // label19
@@ -1099,7 +1066,7 @@
             this.label19.AutoSize = true;
             this.label19.Location = new System.Drawing.Point(65, 45);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(126, 15);
+            this.label19.Size = new System.Drawing.Size(122, 15);
             this.label19.TabIndex = 4;
             this.label19.Text = "Max Days in Advance:";
             // 
@@ -1107,42 +1074,8 @@
             // 
             this.bs_maxdays.Location = new System.Drawing.Point(197, 43);
             this.bs_maxdays.Name = "bs_maxdays";
-            this.bs_maxdays.Size = new System.Drawing.Size(50, 21);
+            this.bs_maxdays.Size = new System.Drawing.Size(50, 23);
             this.bs_maxdays.TabIndex = 3;
-            // 
-            // flowLayoutPanel1
-            // 
-            this.flowLayoutPanel1.Controls.Add(this.btnClose);
-            this.flowLayoutPanel1.Controls.Add(this.btnsave);
-            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(5, 402);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(632, 34);
-            this.flowLayoutPanel1.TabIndex = 1;
-            // 
-            // btnClose
-            // 
-            this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnClose.Location = new System.Drawing.Point(554, 8);
-            this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(75, 23);
-            this.btnClose.TabIndex = 0;
-            this.btnClose.Text = "&Close";
-            this.btnClose.UseVisualStyleBackColor = true;
-            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
-            // 
-            // btnsave
-            // 
-            this.btnsave.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnsave.Location = new System.Drawing.Point(473, 8);
-            this.btnsave.Name = "btnsave";
-            this.btnsave.Size = new System.Drawing.Size(75, 23);
-            this.btnsave.TabIndex = 1;
-            this.btnsave.Text = "&Save";
-            this.btnsave.UseVisualStyleBackColor = true;
-            this.btnsave.Click += new System.EventHandler(this.btnsave_Click);
             // 
             // folderBrowser
             // 
@@ -1150,33 +1083,31 @@
             this.folderBrowser.RootFolder = System.Environment.SpecialFolder.MyComputer;
             this.folderBrowser.ShowNewFolderButton = false;
             // 
-            // Main
+            // FirstRun
             // 
-            this.AcceptButton = this.btnsave;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(642, 441);
-            this.Controls.Add(this.tabControl1);
-            this.Controls.Add(this.flowLayoutPanel1);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ClientSize = new System.Drawing.Size(784, 502);
+            this.Controls.Add(this.wiz);
+            this.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Main";
-            this.Padding = new System.Windows.Forms.Padding(5);
-            this.Text = "Home Access Plus+ - Config Tool";
-            this.Load += new System.EventHandler(this.Main_Load);
-            this.tabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
-            this.tabPage2.ResumeLayout(false);
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.MinimumSize = new System.Drawing.Size(645, 460);
+            this.Name = "FirstRun";
+            this.Text = "Home Access Plus+ Config Tool";
+            this.Load += new System.EventHandler(this.FirstRun_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.wiz)).EndInit();
+            this.wizardPage1.ResumeLayout(false);
+            this.wizardPage1.PerformLayout();
+            this.wizardPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.adous)).EndInit();
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
-            this.tabPage3.ResumeLayout(false);
+            this.wizardPage3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.homepagelinks)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            this.tabPage4.ResumeLayout(false);
+            this.wizardPage4.ResumeLayout(false);
             this.tabControl3.ResumeLayout(false);
             this.tabPage10.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.uncpaths)).EndInit();
@@ -1184,10 +1115,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.uploadfilters)).EndInit();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
-            this.tabPage6.ResumeLayout(false);
-            this.tabPage6.PerformLayout();
+            this.wizardPage5.ResumeLayout(false);
+            this.wizardPage5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.proxyport)).EndInit();
-            this.tabPage7.ResumeLayout(false);
+            this.wizardPage6.ResumeLayout(false);
             this.tabControl2.ResumeLayout(false);
             this.tabPage8.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Resources)).EndInit();
@@ -1197,35 +1128,26 @@
             this.panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bs_max)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bs_maxdays)).EndInit();
-            this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
-        private System.Windows.Forms.Button btnClose;
-        private System.Windows.Forms.Button btnsave;
-        private System.Windows.Forms.TabPage tabPage3;
-        private System.Windows.Forms.TabPage tabPage4;
-        private System.Windows.Forms.TabPage tabPage6;
-        private System.Windows.Forms.TabPage tabPage7;
-        private System.Windows.Forms.TabControl tabControl2;
-        private System.Windows.Forms.TabPage tabPage8;
-        private System.Windows.Forms.TabPage tabPage9;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label7;
+        private AeroWizard.WizardControl wizardControl1;
+        private AeroWizard.WizardPage basesets;
+        private AeroWizard.WizardControl wiz;
+        private AeroWizard.WizardPage wizardPage1;
+        private AeroWizard.WizardPage wizardPage2;
+        private AeroWizard.WizardPage wizardPage3;
+        private AeroWizard.WizardPage wizardPage4;
+        private AeroWizard.WizardPage wizardPage5;
+        private AeroWizard.WizardPage wizardPage6;
+        private System.Windows.Forms.CheckBox base_StudentPhotoEnable;
+        private System.Windows.Forms.TextBox base_StudentPhoto;
+        private System.Windows.Forms.TextBox base_SMTPPassword;
+        private System.Windows.Forms.TextBox base_SMTPUsername;
+        private System.Windows.Forms.CheckBox base_SMTPAuth;
         private System.Windows.Forms.CheckBox base_SMTPSSL;
         private System.Windows.Forms.TextBox base_SMTPPort;
         private System.Windows.Forms.TextBox base_SMTPAddress;
@@ -1235,78 +1157,84 @@
         private System.Windows.Forms.TextBox base_Code;
         private System.Windows.Forms.TextBox base_Name;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.TextBox base_SMTPPassword;
-        private System.Windows.Forms.TextBox base_SMTPUsername;
-        private System.Windows.Forms.CheckBox base_SMTPAuth;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.TextBox base_StudentPhoto;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.TextBox ad_Username;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.TextBox ad_domainname;
+        private System.Windows.Forms.DataGridView adous;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ouName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn oupath;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn OUIgnore;
+        private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.TextBox ad_dc;
-        private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.TextBox ad_Password;
         private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.TextBox ad_dc;
         private System.Windows.Forms.TextBox ad_Student;
-        private System.Windows.Forms.CheckBox base_StudentPhotoEnable;
+        private System.Windows.Forms.TextBox ad_domainname;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox ad_Password;
+        private System.Windows.Forms.TextBox ad_Username;
+        private System.Windows.Forms.Label label13;
         private System.Windows.Forms.DataGridView homepagelinks;
-        private System.Windows.Forms.DataGridView uncpaths;
-        private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.TextBox announcementBox_EditTo;
-        private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.TextBox announcementBox_ShowTo;
-        private System.Windows.Forms.CheckBox bs_twoweek;
-        private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.NumericUpDown bs_maxdays;
-        private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.NumericUpDown bs_max;
-        private System.Windows.Forms.DataGridView Resources;
-        private System.Windows.Forms.DataGridView lessons;
-        private System.Windows.Forms.DataGridViewTextBoxColumn LessonName;
-        private System.Windows.Forms.DataGridViewComboBoxColumn LessonType;
-        private System.Windows.Forms.DataGridViewTextBoxColumn StartTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn EndTime;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label label20;
-        private System.Windows.Forms.TextBox hpl_updatedetails;
-        private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.DataGridViewTextBoxColumn HPLName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Description;
         private System.Windows.Forms.DataGridViewTextBoxColumn ShowTo;
         private System.Windows.Forms.DataGridViewTextBoxColumn LinkLocation;
         private System.Windows.Forms.DataGridViewTextBoxColumn HPLIcon;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.TextBox hpl_updatedetails;
         private System.Windows.Forms.TabControl tabControl3;
         private System.Windows.Forms.TabPage tabPage10;
+        private System.Windows.Forms.DataGridView uncpaths;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Drive;
+        private System.Windows.Forms.DataGridViewTextBoxColumn PathName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn UNC;
+        private System.Windows.Forms.DataGridViewTextBoxColumn UNCEnableReadTo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn UNCEnableWriteTo;
         private System.Windows.Forms.TabPage tabPage11;
         private System.Windows.Forms.DataGridView uploadfilters;
         private System.Windows.Forms.DataGridViewTextBoxColumn FilterName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Filter;
         private System.Windows.Forms.DataGridViewTextBoxColumn FilterEnableFor;
         private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.DataGridViewComboBoxColumn Drive;
-        private System.Windows.Forms.DataGridViewTextBoxColumn PathName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn UNC;
-        private System.Windows.Forms.DataGridViewTextBoxColumn UNCEnableReadTo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn UNCEnableWriteTo;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.TextBox mycomputer_exext;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.NumericUpDown proxyport;
+        private System.Windows.Forms.TextBox proxyaddress;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.TextBox announcementBox_EditTo;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.TextBox announcementBox_ShowTo;
+        private System.Windows.Forms.TabControl tabControl2;
+        private System.Windows.Forms.TabPage tabPage8;
+        private System.Windows.Forms.DataGridView Resources;
         private System.Windows.Forms.DataGridViewTextBoxColumn ResName;
         private System.Windows.Forms.DataGridViewComboBoxColumn type;
         private System.Windows.Forms.DataGridViewCheckBoxColumn EmailAdmin;
         private System.Windows.Forms.DataGridViewCheckBoxColumn Charging;
         private System.Windows.Forms.DataGridViewCheckBoxColumn ResEnable;
+        private System.Windows.Forms.TabPage tabPage9;
+        private System.Windows.Forms.DataGridView lessons;
+        private System.Windows.Forms.DataGridViewTextBoxColumn LessonName;
+        private System.Windows.Forms.DataGridViewComboBoxColumn LessonType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn StartTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn EndTime;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.CheckBox bs_twoweek;
+        private System.Windows.Forms.NumericUpDown bs_max;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.NumericUpDown bs_maxdays;
         private System.Windows.Forms.FolderBrowserDialog folderBrowser;
-        private System.Windows.Forms.Label label23;
-        private System.Windows.Forms.NumericUpDown proxyport;
-        private System.Windows.Forms.TextBox proxyaddress;
-        private System.Windows.Forms.Label label22;
-        private System.Windows.Forms.DataGridView adous;
-        private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.Button ouloc;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ouName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn oupath;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn OUIgnore;
     }
 }

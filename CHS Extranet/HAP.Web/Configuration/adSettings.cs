@@ -32,5 +32,11 @@ namespace HAP.Web.Configuration
             get { return (string)this["studentsgroupname"]; }
             set { this["studentsgroupname"] = value; }
         }
+
+        [ConfigurationProperty("ouobjects", IsDefaultCollection = false)]
+        public ouobjects OUObjects
+        {
+            get { return (ouobjects)base["ouobjects"]; }
+        }
     }
 }

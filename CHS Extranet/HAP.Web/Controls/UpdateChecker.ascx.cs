@@ -31,13 +31,9 @@ namespace HAP.Web.Controls
                 string versioninfo = reg.Match(title.InnerText).Value.Replace("Release: ", "").TrimStart(new char[] { 'v' });
 
                 Version NeededUpdate = Version.Parse(versioninfo);
+                int comp = Assembly.GetExecutingAssembly().GetName().Version.CompareTo(NeededUpdate);
+                this.Visible = (comp == -1);
 
-                this.Visible = false;
-
-                if (NeededUpdate.Major > Assembly.GetExecutingAssembly().GetName().Version.Major) this.Visible = true;
-                if (NeededUpdate.Minor > Assembly.GetExecutingAssembly().GetName().Version.Minor) this.Visible = true;
-                if (NeededUpdate.Build > Assembly.GetExecutingAssembly().GetName().Version.Build) this.Visible = true;
-                if (NeededUpdate.Revision > Assembly.GetExecutingAssembly().GetName().Version.Revision) this.Visible = true;
 
                 currentv.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
                 latestv.Text = NeededUpdate.ToString();

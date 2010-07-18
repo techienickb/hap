@@ -49,8 +49,6 @@ namespace HAP.Web.API
 
                 string path = Converter.DriveToUNC(RoutingPath, RoutingDrive);
 
-                path = path.TrimEnd(new char[] { '\\' }).Replace('^', '&').Replace('/', '\\');
-
                 try { File.Delete(path); }
                 catch { Directory.Delete(path, true); }
 
@@ -58,7 +56,7 @@ namespace HAP.Web.API
             }
             catch (Exception e)
             {
-                context.Response.Write("ERROR: " + e.ToString() + "\\n" + e.Message);
+                context.Response.Write("ERROR: " + e.ToString() + "\n" + e.Message);
             }
         }
     }

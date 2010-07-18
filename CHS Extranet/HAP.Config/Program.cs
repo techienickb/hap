@@ -15,7 +15,7 @@ namespace HAP.Config
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Main());
+            Application.Run(new FirstRun());
         }
     }
 }

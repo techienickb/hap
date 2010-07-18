@@ -23,7 +23,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -36,7 +36,7 @@
     <DeployEncryptKey>crickhowell</DeployEncryptKey>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -98,6 +98,7 @@
     <Content Include="BookingSystem\Display.aspx" />
     <Content Include="BookingSystem\loading.gif" />
     <Content Include="BookingSystem\OverviewCalendar.ascx" />
+    <Content Include="BookingSystem\OverviewCalendar.aspx" />
     <Content Include="BookingSystem\SIMS.ascx" />
     <Content Include="ClientBin\HAP.Silverlight.Browser.xap" />
     <Content Include="ClientBin\HAP.Silverlight.xap" />
@@ -197,6 +198,7 @@
     <Content Include="MyComputerSL.aspx" />
     <Content Include="Scripts\rightclick.js" />
     <Content Include="Scripts\viewmode.js" />
+    <Content Include="Scripts\Silverlight.js" />
     <Content Include="unauthorised.aspx" />
     <Content Include="UploadH.aspx" />
     <Content Include="Web.config">
@@ -212,6 +214,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\Converter.cs" />
+    <Compile Include="API\Thumbs.cs" />
+    <Compile Include="API\Inf.cs" />
     <Compile Include="API\UnZip.cs" />
     <Compile Include="API\Zip.cs" />
     <Compile Include="API\NewFolder.cs" />
@@ -275,6 +279,13 @@
     <Compile Include="BookingSystem\OverviewCalendar.ascx.designer.cs">
       <DependentUpon>OverviewCalendar.ascx</DependentUpon>
     </Compile>
+    <Compile Include="BookingSystem\OverviewCalendar.aspx.cs">
+      <DependentUpon>OverviewCalendar.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BookingSystem\OverviewCalendar.aspx.designer.cs">
+      <DependentUpon>OverviewCalendar.aspx</DependentUpon>
+    </Compile>
     <Compile Include="BookingSystem\SIMS.ascx.cs">
       <DependentUpon>SIMS.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -287,6 +298,8 @@
     <Compile Include="Configuration\bookingResource.cs" />
     <Compile Include="Configuration\bookingResources.cs" />
     <Compile Include="Configuration\bookingSystem.cs" />
+    <Compile Include="Configuration\ouobjects.cs" />
+    <Compile Include="Configuration\ouobject.cs" />
     <Compile Include="Configuration\mycomputer.cs" />
     <Compile Include="Configuration\lesson.cs" />
     <Compile Include="Configuration\lessons.cs" />
