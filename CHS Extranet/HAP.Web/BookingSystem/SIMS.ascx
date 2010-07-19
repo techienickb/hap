@@ -8,7 +8,7 @@
             <asp:FileUpload ID="importfile" runat="server" Width="100%" />
             <div class="modalButtons">
                 <asp:Button runat="server" Text="Import" CausesValidation="false" ID="import" onclick="import_Click" />
-                <asp:Button ID="ok_btn" runat="server" CausesValidation="false" Text="Close" />
+                <asp:Button ID="ok_btn" runat="server" Text="Close" />
             </div>
         </asp:Panel>
         <asp:Literal ID="results" runat="server"></asp:Literal>

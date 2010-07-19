@@ -47,12 +47,8 @@ namespace HAP.Web.routing
                     if (!userhome.EndsWith("\\")) userhome += "\\";
                     string path = RoutingPath.Replace('^', '&');
                     uncpath unc = null;
-                    if (RoutingDrive == "N") path = up.HomeDirectory + '\\' + path.Replace('/', '\\');
-                    else
-                    {
-                        unc = config.MyComputer.UNCPaths[RoutingDrive];
-                        path = string.Format(unc.UNC, Username) + '\\' + path.Replace('/', '\\');
-                    }
+                    unc = config.MyComputer.UNCPaths[RoutingDrive];
+                    path = string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username) + '\\' + path.Replace('/', '\\');
                     UploadProcess fileUpload = new UploadProcess();
                     fileUpload.FileUploadCompleted += new FileUploadCompletedEvent(fileUpload_FileUploadCompleted);
                     fileUpload.ProcessRequest(context, path);

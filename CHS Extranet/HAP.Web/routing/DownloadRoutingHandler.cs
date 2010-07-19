@@ -101,16 +101,9 @@ namespace HAP.Web.routing
             if (!userhome.EndsWith("\\")) userhome += "\\";
             string path = RoutingPath.Replace('^', '&');
             uncpath unc = null;
-            if (RoutingDrive == "N") path = up.HomeDirectory + '\\' + path.Replace('/', '\\');
-            else
-            {
-                unc = config.MyComputer.UNCPaths[RoutingDrive];
-                if (unc == null || !isAuth(unc)) context.Response.Redirect("/Extranet/unauthorised.aspx", true);
-                else
-                {
-                    path = string.Format(unc.UNC, Username) + '\\' + path.Replace('/', '\\');
-                }
-            }
+            unc = config.MyComputer.UNCPaths[RoutingDrive];
+            if (unc == null || !isAuth(unc)) context.Response.Redirect("/Extranet/unauthorised.aspx", true);
+            else path = string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username) + '\\' + path.Replace('/', '\\');
             FileInfo file = new FileInfo(path);
             context.Response.ContentType = MimeType(file.Extension);
             context.Response.Buffer = true;

@@ -45,17 +45,9 @@ namespace HAP.Web.API
             userhome = up.HomeDirectory;
             if (userhome.EndsWith("\\")) userhome = userhome.Remove(userhome.LastIndexOf('\\'));
             string path = "";
-            unc = null;
-            if (RoutingDrive == "N") path = up.HomeDirectory + RoutingPath;
-            else
-            {
-                unc = config.MyComputer.UNCPaths[RoutingDrive];
-                if (unc == null || !isWriteAuth(unc)) throw new Exception("ERROR: Unauthorised");
-                else
-                {
-                    path = string.Format(unc.UNC, Username) + RoutingPath;
-                }
-            }
+            unc = config.MyComputer.UNCPaths[RoutingDrive];
+            if (unc == null || !isWriteAuth(unc)) throw new Exception("ERROR: Unauthorised");
+            else path = string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username) + RoutingPath;
 
             path = path.TrimEnd(new char[] { '\\' }).Replace('^', '&').Replace('/', '\\');
             return path;
@@ -68,16 +60,14 @@ namespace HAP.Web.API
 
         public static string UNCtoDrive(string dirpath, uncpath unc, string userhome)
         {
-            if (unc == null) dirpath = dirpath.Replace(userhome, "N:");
-            else dirpath = dirpath.Replace(string.Format(unc.UNC, Username), unc.Drive + ":");
+            dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", userhome), Username), unc.Drive + ":");
             dirpath = dirpath.Replace("\\\\", "\\");
             return dirpath;
         }
 
         public static string UNCtoDrive2(string dirpath, uncpath unc, string userhome)
         {
-            if (unc == null) dirpath = dirpath.Replace(userhome, "N");
-            else dirpath = dirpath.Replace(string.Format(unc.UNC, Username), unc.Drive);
+            dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", userhome), Username), unc.Drive);
             dirpath = dirpath.Replace('\\', '/').Replace("//", "/");
             return dirpath;
         }

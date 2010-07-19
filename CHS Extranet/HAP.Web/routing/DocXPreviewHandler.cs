@@ -114,16 +114,9 @@ namespace HAP.Web.routing
             if (!userhome.EndsWith("\\")) userhome += "\\";
             path = RoutingPath.Replace('^', '&');
             uncpath unc = null;
-            if (RoutingDrive == "N") path = Path.Combine(up.HomeDirectory, path.Replace('/', '\\'));
-            else
-            {
-                unc = config.MyComputer.UNCPaths[RoutingDrive];
-                if (unc == null || !isWriteAuth(unc)) context.Response.Redirect("/Extranet/unauthorised.aspx", true);
-                else
-                {
-                    path = Path.Combine(string.Format(unc.UNC, Username), path.Replace('/', '\\'));
-                }
-            }
+            unc = config.MyComputer.UNCPaths[RoutingDrive];
+            if (unc == null || !isWriteAuth(unc)) context.Response.Redirect("/Extranet/unauthorised.aspx", true);
+            else path = Path.Combine(string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username), path.Replace('/', '\\'));
 
             // Open document
             using (WordprocessingDocument document = WordprocessingDocument.Open(path, false))

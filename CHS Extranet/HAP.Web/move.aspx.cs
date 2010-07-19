@@ -90,45 +90,31 @@ namespace HAP.Web
                 }
 
                 uncpath unc = null;
-                if (p == "N") path = up.HomeDirectory + path.Replace('/', '\\');
-                else
-                {
-                    unc = config.MyComputer.UNCPaths[p];
-                    if (unc == null || !isWriteAuth(unc)) Response.Redirect("/Extranet/unauthorised.aspx", true);
-                    else
-                    {
-                        path = string.Format(unc.UNC, Username) + path.Replace('/', '\\');
-                    }
-                }
+                unc = config.MyComputer.UNCPaths[p];
+                if (unc == null || !isWriteAuth(unc)) Response.Redirect("/Extranet/unauthorised.aspx", true);
+                else path = string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username) + path.Replace('/', '\\');
                 if (Request.QueryString["path"].Substring(0, 1) == "f")
                 {
                     FileInfo file = new FileInfo(path);
                     moveitem.Text = file.Name;
                     fullname.Value = file.FullName;
-                    populatetree(file.Directory, p, p == "H");
+                    populatetree(file.Directory, p);
                 }
                 else
                 {
                     DirectoryInfo dir = new DirectoryInfo(path);
                     moveitem.Text = dir.Name;
                     fullname.Value = dir.FullName;
-                    populatetree(dir, p, p == "H");
+                    populatetree(dir, p);
                 }
             }
         }
 
-        private void populatetree(DirectoryInfo ignoredir, string p, bool admin)
+        private void populatetree(DirectoryInfo ignoredir, string p)
         {
-            if (!admin)
-            {
-                TreeNode h = new TreeNode("My Documents", up.HomeDirectory);
-                populatenode(h, ignoredir);
-                TreeView1.Nodes.Add(h);
-            } else {
-                TreeNode h = new TreeNode("My Admin Documents", string.Format(config.MyComputer.UNCPaths["H"].UNC, Username));
-                populatenode(h, ignoredir);
-                TreeView1.Nodes.Add(h);
-            }
+            TreeNode h = new TreeNode(hapConfig.Current.MyComputer.UNCPaths[p].Name, string.Format(config.MyComputer.UNCPaths[p].UNC.Replace("%homepath%", up.HomeDirectory), Username));
+            populatenode(h, ignoredir);
+            TreeView1.Nodes.Add(h);
         }
 
         private void populatenode(TreeNode node, DirectoryInfo ignoredir)
