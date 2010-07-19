@@ -746,7 +746,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HAP.Setup"
         "ProductCode" = "8:{E59E0A25-C7DB-4B57-B910-E61EF30275F6}"
-        "PackageCode" = "8:{5619F522-9F82-45E2-8B62-588977CF4834}"
+        "PackageCode" = "8:{03B2A8CD-6933-47DF-9631-CD9B1A41B10D}"
         "UpgradeCode" = "8:{21D75F33-FC2A-4D3B-A1CF-08A7E3CBD738}"
         "AspNetVersion" = "8:1"
         "RestartWWWService" = "11:TRUE"

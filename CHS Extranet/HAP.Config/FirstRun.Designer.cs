@@ -741,7 +741,7 @@
             this.tabPage11.Location = new System.Drawing.Point(4, 24);
             this.tabPage11.Name = "tabPage11";
             this.tabPage11.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage11.Size = new System.Drawing.Size(724, 259);
+            this.tabPage11.Size = new System.Drawing.Size(729, 272);
             this.tabPage11.TabIndex = 1;
             this.tabPage11.Text = "Upload Filters";
             this.tabPage11.UseVisualStyleBackColor = true;
@@ -757,7 +757,7 @@
             this.uploadfilters.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uploadfilters.Location = new System.Drawing.Point(3, 3);
             this.uploadfilters.Name = "uploadfilters";
-            this.uploadfilters.Size = new System.Drawing.Size(718, 253);
+            this.uploadfilters.Size = new System.Drawing.Size(723, 266);
             this.uploadfilters.TabIndex = 1;
             // 
             // FilterName
@@ -888,7 +888,6 @@
             // 
             // wizardPage6
             // 
-            this.wizardPage6.AllowNext = false;
             this.wizardPage6.Controls.Add(this.tabControl2);
             this.wizardPage6.Controls.Add(this.panel2);
             this.wizardPage6.IsFinishPage = true;
@@ -971,7 +970,7 @@
             this.tabPage9.Location = new System.Drawing.Point(4, 24);
             this.tabPage9.Name = "tabPage9";
             this.tabPage9.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage9.Size = new System.Drawing.Size(724, 217);
+            this.tabPage9.Size = new System.Drawing.Size(729, 230);
             this.tabPage9.TabIndex = 1;
             this.tabPage9.Text = "Lessons";
             this.tabPage9.UseVisualStyleBackColor = true;
@@ -988,7 +987,7 @@
             this.lessons.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lessons.Location = new System.Drawing.Point(3, 3);
             this.lessons.Name = "lessons";
-            this.lessons.Size = new System.Drawing.Size(718, 211);
+            this.lessons.Size = new System.Drawing.Size(723, 224);
             this.lessons.TabIndex = 0;
             // 
             // LessonName
