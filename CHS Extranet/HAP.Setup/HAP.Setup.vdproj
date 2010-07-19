@@ -51,19 +51,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_47644465258A926E1A3F3BF872921725"
+        "MsmKey" = "8:_49BB8FF4E408AB1B6EF526D16BCFE587"
         "OwnerKey" = "8:_5C36A32E20404938AEDF2E91BD0E8C99"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_47644465258A926E1A3F3BF872921725"
-        "OwnerKey" = "8:_B3E5D99CF7FC05CFEE7FBFCB261FEDF3"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_49BB8FF4E408AB1B6EF526D16BCFE587"
+        "MsmKey" = "8:_4A66A1986B1AF40BA2F61E1AABE9EAC7"
         "OwnerKey" = "8:_5C36A32E20404938AEDF2E91BD0E8C99"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -93,12 +87,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_B3E5D99CF7FC05CFEE7FBFCB261FEDF3"
-        "OwnerKey" = "8:_5C36A32E20404938AEDF2E91BD0E8C99"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_B63CA479540E095AEADCD3A0FF4C5782"
         "OwnerKey" = "8:_49BB8FF4E408AB1B6EF526D16BCFE587"
         "MsmSig" = "8:_UNDEFINED"
@@ -111,7 +99,19 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_EA41FE5100BE80122A95A7CA47FF9548"
+        "MsmKey" = "8:_C54B0AD9F3313F6AEC50F0648535E47E"
+        "OwnerKey" = "8:_5C36A32E20404938AEDF2E91BD0E8C99"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C54B0AD9F3313F6AEC50F0648535E47E"
+        "OwnerKey" = "8:_4A66A1986B1AF40BA2F61E1AABE9EAC7"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_DC80A81961C79F59422E1B40DF713EFD"
         "OwnerKey" = "8:_5C36A32E20404938AEDF2E91BD0E8C99"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -172,19 +172,19 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_B3E5D99CF7FC05CFEE7FBFCB261FEDF3"
+        "OwnerKey" = "8:_4A66A1986B1AF40BA2F61E1AABE9EAC7"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_47644465258A926E1A3F3BF872921725"
+        "OwnerKey" = "8:_C54B0AD9F3313F6AEC50F0648535E47E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_EA41FE5100BE80122A95A7CA47FF9548"
+        "OwnerKey" = "8:_DC80A81961C79F59422E1B40DF713EFD"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -450,20 +450,20 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_47644465258A926E1A3F3BF872921725"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_49BB8FF4E408AB1B6EF526D16BCFE587"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:AeroWizard, Version=1.0.3851.27394, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:AjaxControlToolkit, Version=3.0.31106.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_47644465258A926E1A3F3BF872921725"
+                    "_49BB8FF4E408AB1B6EF526D16BCFE587"
                     {
-                    "Name" = "8:AeroWizard.dll"
+                    "Name" = "8:AjaxControlToolkit.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:AeroWizard.dll"
+            "SourcePath" = "8:AjaxControlToolkit.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_B465FF8C3911469DA681F17009509E60"
@@ -481,20 +481,20 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_49BB8FF4E408AB1B6EF526D16BCFE587"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4A66A1986B1AF40BA2F61E1AABE9EAC7"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:AjaxControlToolkit, Version=3.0.31106.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:HAP Config, Version=1.4.0.0, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
-                    "_49BB8FF4E408AB1B6EF526D16BCFE587"
+                    "_4A66A1986B1AF40BA2F61E1AABE9EAC7"
                     {
-                    "Name" = "8:AjaxControlToolkit.dll"
+                    "Name" = "8:HAP Config.exe"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:AjaxControlToolkit.dll"
+            "SourcePath" = "8:HAP Config.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_B465FF8C3911469DA681F17009509E60"
@@ -563,37 +563,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B3E5D99CF7FC05CFEE7FBFCB261FEDF3"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:HAP Config, Version=1.3.0.0, Culture=neutral, processorArchitecture=x86"
-                "ScatterAssemblies"
-                {
-                    "_B3E5D99CF7FC05CFEE7FBFCB261FEDF3"
-                    {
-                    "Name" = "8:HAP Config.exe"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:HAP Config.exe"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_B465FF8C3911469DA681F17009509E60"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B63CA479540E095AEADCD3A0FF4C5782"
             {
             "AssemblyRegister" = "3:1"
@@ -625,14 +594,45 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_EA41FE5100BE80122A95A7CA47FF9548"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_C54B0AD9F3313F6AEC50F0648535E47E"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:AeroWizard, Version=1.0.3851.27394, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_C54B0AD9F3313F6AEC50F0648535E47E"
+                    {
+                    "Name" = "8:AeroWizard.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:AeroWizard.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_B465FF8C3911469DA681F17009509E60"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_DC80A81961C79F59422E1B40DF713EFD"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:CHS, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_EA41FE5100BE80122A95A7CA47FF9548"
+                    "_DC80A81961C79F59422E1B40DF713EFD"
                     {
                     "Name" = "8:CHS.dll"
                     "Attributes" = "3:512"
@@ -745,15 +745,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HAP.Setup"
-        "ProductCode" = "8:{E59E0A25-C7DB-4B57-B910-E61EF30275F6}"
-        "PackageCode" = "8:{03B2A8CD-6933-47DF-9631-CD9B1A41B10D}"
+        "ProductCode" = "8:{B7FA70C7-6841-4FA6-B93E-6B467477656E}"
+        "PackageCode" = "8:{6C02DCAD-4E45-4095-9CAB-77476C8402DC}"
         "UpgradeCode" = "8:{21D75F33-FC2A-4D3B-A1CF-08A7E3CBD738}"
         "AspNetVersion" = "8:1"
         "RestartWWWService" = "11:TRUE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:4.7.0"
+        "ProductVersion" = "8:4.7.1"
         "Manufacturer" = "8:nb development"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://communities.rm.com"

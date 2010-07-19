@@ -87,7 +87,6 @@ namespace HAP.Web
             if (string.IsNullOrEmpty(RoutingDrive))
             {
                 breadcrumbrepeater.Visible = false;
-                items.Add(new MyComputerItem("My Documents", string.Format("{0} on {1}", Username, config.BaseSettings.EstablishmentCode), "/Extranet/MyComputer/N", "netdrive.png", false));
                 foreach (uncpath path in config.MyComputer.UNCPaths)
                     if (isAuth(path)) items.Add(new MyComputerItem(path.Name, string.Format("{0} on {1}", path.Name, config.BaseSettings.EstablishmentCode), string.Format("/Extranet/MyComputer/{0}", path.Drive), "netdrive.png", false));
                 if (config.HomePageLinks["Access Learning Resources"] != null)
@@ -109,16 +108,14 @@ namespace HAP.Web
                 if (!userhome.EndsWith("\\")) userhome += "\\";
                 string path = "";
                 uncpath unc = null;
-                if (RoutingDrive == "N") path = up.HomeDirectory + "\\" + RoutingPath;
-                else
-                {
+                //if (RoutingDrive == "N") path = up.HomeDirectory + "\\" + RoutingPath;
+                //else
+                //{
                     unc = config.MyComputer.UNCPaths[RoutingDrive];
                     if (unc == null || !isAuth(unc)) Response.Redirect("/Extranet/unauthorised.aspx", true);
-                    else
-                    {
-                        path = string.Format(unc.UNC, Username) + "\\" + RoutingPath;
-                    }
-                }
+                    else if (unc.UNC.Contains("%homepath%")) path = unc.UNC.Replace("%homepath%", up.HomeDirectory) + "\\" + RoutingPath;
+                    else path = string.Format(unc.UNC, Username) + "\\" + RoutingPath;
+                //}
 
                 List<MyComputerItem> breadcrumbs = new List<MyComputerItem>();
 
@@ -127,23 +124,21 @@ namespace HAP.Web
                 newfolderlink.Directory = DeleteBox.Dir = RenameBox.Dir = UnzipBox.Dir = ZipBox.Dir = dir;
                 newfolderlink.DataBind();
                 DirectoryInfo subdir1 = dir;
-                string uncroot = up.HomeDirectory;
-                if (unc != null) uncroot = string.Format(unc.UNC, Username);
+                string uncroot = string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username);
                 uncroot = uncroot.TrimEnd(new char[] { '\\' });
                 DirectoryInfo rootdir = new DirectoryInfo(uncroot);
-
                 while (subdir1.FullName != rootdir.FullName && subdir1 != null)
                 {
                     string sdirpath = subdir1.FullName;
-                    if (unc == null) sdirpath = sdirpath.Replace(userhome, "N/");
-                    else sdirpath = sdirpath.Replace(string.Format(unc.UNC, Username), unc.Drive);
+                    sdirpath = sdirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username), unc.Drive);
                     breadcrumbs.Add(new MyComputerItem(subdir1.Name, "", "/Extranet/MyComputer/" + sdirpath.Replace('&', '^').Replace('\\', '/'), "", false));
-                    subdir1 = subdir1.Parent;
+                    try
+                    {
+                        subdir1 = subdir1.Parent;
+                    }
+                    catch { subdir1 = null; }
                 }
-                if (unc == null)
-                    breadcrumbs.Add(new MyComputerItem("My Documents", "", "/Extranet/MyComputer/N/", "", false));
-                else
-                    breadcrumbs.Add(new MyComputerItem(unc.Name, "", "/Extranet/MyComputer/" + unc.Drive, "", false));
+                breadcrumbs.Add(new MyComputerItem(unc.Name, "", "/Extranet/MyComputer/" + unc.Drive, "", false));
                 breadcrumbs.Add(new MyComputerItem("My Computer", "", "/Extranet/MyComputer.aspx", "", false));
                 breadcrumbs.Reverse();
                 breadcrumbrepeater.Visible = true;
@@ -156,7 +151,7 @@ namespace HAP.Web
 
                 bool allowedit = isWriteAuth(config.MyComputer.UNCPaths[RoutingDrive]);
                 newfolderlink.Visible = newfileuploadlink.Visible = allowedit;
-                if (RoutingDrive != "N" && RoutingDrive != "H") rckmove.Style.Add("display", "none");
+                if (!unc.EnableMove) rckmove.Style.Add("display", "none");
                 try {
                     foreach (DirectoryInfo subdir in dir.GetDirectories())
                         try
@@ -164,8 +159,7 @@ namespace HAP.Web
                             if (!subdir.Name.ToLower().Contains("recycle"))
                             {
                                 string dirpath = subdir.FullName;
-                                if (unc == null) dirpath = dirpath.Replace(userhome, "N/");
-                                else dirpath = dirpath.Replace(string.Format(unc.UNC, Username), unc.Drive);
+                                dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username), unc.Drive);
                                 dirpath = dirpath.Replace('\\', '/');
                                 items.Add(new MyComputerItem(subdir.Name, "Last Modified: " + subdir.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/MyComputer/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(subdir), allowedit));
                             }
@@ -179,8 +173,7 @@ namespace HAP.Web
                             if (!file.Name.ToLower().Contains("thumbs") && checkext(file.Extension))
                             {
                                 string dirpath = file.FullName;
-                                if (unc == null) dirpath = dirpath.Replace(userhome, "N/");
-                                else dirpath = dirpath.Replace(string.Format(unc.UNC, Username), unc.Drive);
+                                dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username), unc.Drive);
                                 dirpath = dirpath.Replace('\\', '/');
                                 if (!string.IsNullOrEmpty(file.Extension))
                                     items.Add(new MyComputerItem(file.Name.Replace(file.Extension, ""), "Last Modified: " + file.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/Download/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(file), allowedit));

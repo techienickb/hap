@@ -53,22 +53,14 @@ namespace HAP.Web.API
             UserPrincipal up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Username);
 
             string userhome = up.HomeDirectory;
-            if (context.User.IsInRole("Domain Admins"))
-            {
-                if (Win32.GetDiskFreeSpaceEx(userhome, out freeBytesForUser, out totalBytes, out freeBytes))
-                {
-                    spacen = "," + Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
-                }
-                else { spacen = ""; }
-            }
-            else spacen = "";
-            context.Response.Write(string.Format(format, "My Documents", "/extranet/images/icons/netdrive.png", "/Extranet/api/mycomputer/list/N", true, spacen));
             foreach (uncpath path in config.MyComputer.UNCPaths)
             {
                 string space = "";
-                if (isWriteAuth(path))
+                bool showspace = false;
+                if (context.User.IsInRole("Domain Admins") || !path.UNC.Contains("%homepath%")) showspace = isWriteAuth(path);
+                if (showspace)
                 {
-                    if (Win32.GetDiskFreeSpaceEx(string.Format(path.UNC, Username), out freeBytesForUser, out totalBytes, out freeBytes))
+                    if (Win32.GetDiskFreeSpaceEx(string.Format(path.UNC.Replace("%homepath%", userhome), Username), out freeBytesForUser, out totalBytes, out freeBytes))
                         space = "," + Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
                     else space = "";
                 }

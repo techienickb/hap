@@ -56,14 +56,14 @@ namespace HAP.Config
             adsettings.Attributes["studentsgroupname"].Value = ad_Student.Text;
             XmlNode ouobs = adsettings.SelectSingleNode("ouobjects");
             ouobs.RemoveAll();
-            foreach (DataGridViewRow row in homepagelinks.Rows)
+            foreach (DataGridViewRow row in adous.Rows)
             {
                 if (!row.IsNewRow)
                 {
                     XmlElement el = doc.CreateElement("add");
                     el.SetAttribute("name", row.Cells[0].Value.ToString());
                     el.SetAttribute("path", row.Cells[1].Value.ToString());
-                    if (Convert.ToBoolean(row.Cells[1].Value))
+                    if (Convert.ToBoolean(row.Cells[2].Value))
                         el.SetAttribute("ignore", row.Cells[2].Value.ToString());
                     ouobs.AppendChild(el);
                 }
@@ -125,6 +125,8 @@ namespace HAP.Config
                     el.SetAttribute("unc", row.Cells[2].Value.ToString());
                     el.SetAttribute("enablereadto", row.Cells[3].Value.ToString());
                     el.SetAttribute("enablewriteto", row.Cells[4].Value.ToString());
+                    if (Convert.ToBoolean(row.Cells[5].Value))
+                        el.SetAttribute("enablemove", row.Cells[5].Value.ToString());
                     uncp.AppendChild(el);
                 }
             }
@@ -288,7 +290,7 @@ namespace HAP.Config
             mycomputer_exext.Text = mycomp.Attributes["hideextensions"].Value;
             XmlNode uncp = mycomp.SelectSingleNode("uncpaths");
             foreach (XmlNode node in uncp.SelectNodes("add"))
-                uncpaths.Rows.Add(node.Attributes["drive"].Value, node.Attributes["name"].Value, node.Attributes["unc"].Value, node.Attributes["enablereadto"].Value, node.Attributes["enablewriteto"].Value);
+                uncpaths.Rows.Add(node.Attributes["drive"].Value, node.Attributes["name"].Value, node.Attributes["unc"].Value, node.Attributes["enablereadto"].Value, node.Attributes["enablewriteto"].Value, (node.Attributes["enablemove"] == null ? false : true));
 
             XmlNode uf = mycomp.SelectSingleNode("uploadfilters");
             foreach (XmlNode node in uf.SelectNodes("add"))

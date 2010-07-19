@@ -46,5 +46,11 @@ namespace HAP.Web.Configuration
             get { return (string)this["unc"]; }
             set { this["unc"] = value; }
         }
+        [ConfigurationProperty("enablemove", DefaultValue = false, IsRequired = false)]
+        public bool EnableMove
+        {
+            get { return (bool)this["enablemove"]; }
+            set { this["enablemove"] = value; }
+        }
     }
 }
