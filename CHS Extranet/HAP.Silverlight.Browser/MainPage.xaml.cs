@@ -87,7 +87,7 @@ namespace HAP.Silverlight.Browser
                 else if (s.StartsWith("INFO")) Info = s.Remove(0, 4);
                 else
                 {
-                    string[] ss = s.Split(new char[] { ',' });
+                    string[] ss = s.Split(new char[] { '|' });
                     BItem bitem = new BItem(ss[0], ss[1], "", "Drive", BType.Drive, ss[2], bool.Parse(ss[3]));
                     BrowserItem item;
                     if (ss.Length > 4)
@@ -153,7 +153,7 @@ namespace HAP.Silverlight.Browser
             if (e.Result.StartsWith("ERROR")) MessageBox.Show("An Error Occured");
             else foreach (string s in e.Result.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
             {
-                string[] ss = s.Split(new char[] { ',' });
+                string[] ss = s.Split(new char[] { '|' });
                 BrowserItem item = new BrowserItem(new BItem(ss[0], ss[1], ss[2], ss[3], (ss[3] == "File Folder" ? BType.Folder : (ss[3] == "Drive" ? BType.Drive : BType.File)), ss[4], bool.Parse(ss[5])));
                 item.Activate += new EventHandler(item_Activate);
                 item.MouseEnter += new MouseEventHandler(item_MouseEnter);
@@ -230,7 +230,7 @@ namespace HAP.Silverlight.Browser
             if (e.Result.StartsWith("ERROR")) MessageBox.Show("An Error Occured");
             else foreach (string s in e.Result.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    string[] ss = s.Split(new char[] { ',' });
+                    string[] ss = s.Split(new char[] { '|' });
                     BrowserItem item = new BrowserItem(new BItem(ss[0], ss[1], ss[2], ss[3], (ss[3] == "File Folder" ? BType.Folder : (ss[3] == "Drive" ? BType.Drive : BType.File)), ss[4], bool.Parse(ss[5])));
                     if (item.Data.BType == BType.Folder && item.Data.Name != "..") UpdateTree(item.Data);
                 }

@@ -47,8 +47,8 @@ namespace HAP.Web.API
             uncpath unc; string userhome;
             string path = Converter.DriveToUNC(RoutingPath, RoutingDrive, out unc, out userhome);
             DirectoryInfo dir = new DirectoryInfo(path);
-            //name,icon,size,type,path,canwrite
-            string format = "{0},{1},{2},{3},{4},{5}\n";
+            //name|icon|size|type|path|canwrite
+            string format = "{0}|{1}|{2}|{3}|{4}|{5}\n";
 
             context.Response.Clear();
             context.Response.ExpiresAbsolute = DateTime.Now;
