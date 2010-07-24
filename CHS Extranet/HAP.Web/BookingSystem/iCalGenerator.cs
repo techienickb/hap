@@ -69,7 +69,8 @@ namespace HAP.Web.BookingSystem
             MailMessage mes = new MailMessage();
             IFormatProvider culture = new CultureInfo("en-gb");
             mes.Subject = summary;
-            mes.From = mes.ReplyTo = mes.Sender = new MailAddress(config.BaseSettings.AdminEmailAddress, "ICT Department");
+            mes.From = mes.Sender = new MailAddress(config.BaseSettings.AdminEmailAddress, "ICT Department");
+            mes.ReplyToList.Add(mes.From);
             mes.To.Add(new MailAddress(booking.User.EmailAddress, booking.User.DisplayName));
 
             mes.Body = description;
@@ -135,7 +136,8 @@ namespace HAP.Web.BookingSystem
             MailMessage mes = new MailMessage();
             IFormatProvider culture = new CultureInfo("en-gb");
             mes.Subject = summary;
-            mes.From = mes.ReplyTo = mes.Sender = new MailAddress(config.BaseSettings.AdminEmailAddress, "ICT Department");
+            mes.From = mes.Sender = new MailAddress(config.BaseSettings.AdminEmailAddress, "ICT Department");
+            mes.ReplyToList.Add(mes.From);
 
             ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
             string _DomainDN = connObj.ConnectionString.Remove(0, connObj.ConnectionString.IndexOf("DC="));

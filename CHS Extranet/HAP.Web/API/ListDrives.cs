@@ -38,7 +38,6 @@ namespace HAP.Web.API
             context.Response.ExpiresAbsolute = DateTime.Now;
             context.Response.ContentType = "text/plain";
             string format = "{0},{1},{2},{3}{4}\n";
-            string spacen = "";
             long freeBytesForUser, totalBytes, freeBytes;
             ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
             string _ActiveDirectoryConnectionString = "";
