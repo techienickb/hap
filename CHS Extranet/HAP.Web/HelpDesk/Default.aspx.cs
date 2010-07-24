@@ -180,7 +180,7 @@ namespace HAP.Web.HelpDesk
             mes.Subject = "A Ticket (#" + x + ") has been Created";
             mes.From = new MailAddress(up.EmailAddress, up.DisplayName);
             mes.Sender = mes.From;
-            mes.ReplyTo = mes.Sender;
+            mes.ReplyToList.Add(mes.From);
 
             mes.To.Add(new MailAddress(config.BaseSettings.AdminEmailAddress, "IT Department"));
 
@@ -240,7 +240,7 @@ namespace HAP.Web.HelpDesk
             UserPrincipal user = UserPrincipal.FindByIdentity(pcontext, userlist.SelectedValue);
 
             mes.From = mes.Sender = new MailAddress(up.EmailAddress, "IT Department");
-            mes.ReplyTo = mes.From;
+            mes.ReplyToList.Add(mes.From);
 
             mes.To.Add(new MailAddress(user.EmailAddress, user.DisplayName));
 
@@ -279,7 +279,7 @@ namespace HAP.Web.HelpDesk
                 MailMessage mes = new MailMessage();
                 mes.Subject = "Your Ticket (#" + TicketID + ") has been " + (CheckFixed.Checked ? "Closed" : "Updated");
                 mes.From = mes.Sender = new MailAddress(up.EmailAddress, "IT Department");
-                mes.ReplyTo = mes.From;
+                mes.ReplyToList.Add(mes.From);
                 UserPrincipal user = UserPrincipal.FindByIdentity(pcontext, ticket.SelectNodes("Note")[0].Attributes["username"].Value);
 
                 mes.To.Add(new MailAddress(user.EmailAddress, user.DisplayName));
@@ -310,7 +310,7 @@ namespace HAP.Web.HelpDesk
 
                 mes.Subject = "Ticket (#" + TicketID + ") has been Updated";
                 mes.From = mes.Sender = new MailAddress(up.EmailAddress, up.DisplayName);
-                mes.ReplyTo = mes.From;
+                mes.ReplyToList.Add(mes.From);
                 mes.To.Add(new MailAddress(config.BaseSettings.AdminEmailAddress, "IT Department"));
 
                 mes.IsBodyHtml = true;

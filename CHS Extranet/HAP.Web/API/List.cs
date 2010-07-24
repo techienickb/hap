@@ -103,7 +103,7 @@ namespace HAP.Web.API
                     }
                 }
             }
-            catch (UnauthorizedAccessException uae)
+            catch (UnauthorizedAccessException)
             {
                 context.Response.Clear();
                 context.Response.Write("ERROR: UNAUTHORISED");

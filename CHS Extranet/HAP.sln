@@ -17,11 +17,19 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HAP.Setup", "HAP.Setup\HAP.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Silverlight.Browser", "HAP.Silverlight.Browser\HAP.Silverlight.Browser.csproj", "{E1C14EF8-AD23-48F5-9EFF-9A2F4A07CCC9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{A881389B-1A30-4196-A10B-ACA9C7A96292}"
+	ProjectSection(SolutionItems) = preProject
+		Binaries\AeroWizard.dll = Binaries\AeroWizard.dll
+		Binaries\AeroWizard.xml = Binaries\AeroWizard.xml
+		Binaries\Microsoft.WindowsAPICodePack.dll = Binaries\Microsoft.WindowsAPICodePack.dll
+		Binaries\Microsoft.WindowsAPICodePack.Shell.dll = Binaries\Microsoft.WindowsAPICodePack.Shell.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 7
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://tfs08.codeplex.com/
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs08
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = CHS\\CHS.csproj
 		SccProjectName1 = CHS

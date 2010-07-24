@@ -15,7 +15,7 @@
                     <RowDefinition Height="26" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <TextBlock Text="File" Margin="0, 7, 0, 0" x:Name="Name" FontSize="12" />
+                <TextBlock Text="File" Margin="0, 7, 0, 0" x:Name="name" FontSize="12" />
                 <TextBlock x:Name="FileSize" Margin="0, 0, 0, 5" Grid.Row="2" VerticalAlignment="Top" Text="4kb" Foreground="Gray" />
             </Grid>
         </StackPanel>

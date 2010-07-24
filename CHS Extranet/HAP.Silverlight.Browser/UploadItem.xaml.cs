@@ -31,11 +31,12 @@ namespace HAP.Silverlight.Browser
             State = UploadItemState.Checking;
             Check();
             this.Uploaded += Uploaded;
+            BaseUri = HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + ParentData.Path.Replace("/api/mycomputer/list/", "/api/mycomputer/upload/");
         }
 
         public UploadItem(string name) : this()
         {
-            Name.Text = name;
+            this.name.Text = name;
             State = UploadItemState.Debug;
             Progress.Value = 30;
         }
@@ -49,6 +50,7 @@ namespace HAP.Silverlight.Browser
         public double Value { get { return Progress.Value; } }
         public double Value1 { get; set; }
         private FileInfo _file;
+        public string BaseUri { get; set; }
 
         public FileInfo File {
 
@@ -56,7 +58,7 @@ namespace HAP.Silverlight.Browser
             set
             {
                 _file = value;
-                Name.Text = _file.Name.Replace(File.Extension, "");
+                name.Text = _file.Name.Replace(File.Extension, "");
                 FileSize.Text = parseLength(_file.Length);
             }
         }
@@ -94,7 +96,7 @@ namespace HAP.Silverlight.Browser
             State = UploadItemState.Ready;
             queue.Children.Add(this);
             image1.Source = new BitmapImage(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + s[1]));
-            if (queue.Children.IndexOf(this) == 0) Upload();
+            if (queue.Children.IndexOf(this) == 0) Dispatcher.BeginInvoke(() => { Upload(); }); //Upload();
         }
 
         private void remove_Click(object sender, RoutedEventArgs e)
@@ -109,15 +111,12 @@ namespace HAP.Silverlight.Browser
             if (State == UploadItemState.Done) Dispatcher.BeginInvoke(new RoutedEventHandler(Uploaded), this, new RoutedEventArgs());
         }
 
-        public string baseurl = "";
-
         public void Upload()
         {
             long temp = File.Length - BytesUploaded;
 
-            if (string.IsNullOrEmpty(baseurl)) baseurl = HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + ParentData.Path.Replace("/api/mycomputer/list/", "/api/mycomputer/upload/");
             context.IsEnabled = false;
-            UriBuilder ub = new UriBuilder(baseurl);
+            UriBuilder ub = new UriBuilder(BaseUri);
             bool complete = temp <= 20480;
             ub.Query = string.Format("{3}filename={0}&StartByte={1}&Complete={2}", File.Name, BytesUploaded, complete, string.IsNullOrEmpty(ub.Query) ? "" : ub.Query.Remove(0, 1) + "&");
             HttpWebRequest webrequest = (HttpWebRequest)WebRequest.Create(ub.Uri);
@@ -160,7 +159,7 @@ namespace HAP.Silverlight.Browser
             string responsestring = reader.ReadToEnd();
             reader.Close();
 
-            if (BytesUploaded < File.Length) Upload();
+            if (BytesUploaded < File.Length) Dispatcher.BeginInvoke(() => { Upload(); });
             else State = UploadItemState.Done; 
             Dispatcher.BeginInvoke(new UpdateUIDelegate(UpdateUI), "");
         }

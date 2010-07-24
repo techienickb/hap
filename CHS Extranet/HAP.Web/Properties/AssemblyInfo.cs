@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Home Access Plus+")]
 [assembly: AssemblyDescription("Home Access Plus+")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Crickhowell High School")]
+[assembly: AssemblyCompany("nb development")]
 [assembly: AssemblyProduct("HAP")]
-[assembly: AssemblyCopyright("Copyright © Crickhowell High School 2010")]
+[assembly: AssemblyCopyright("Copyright © nb development 2009-2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("4.7.1")]
-[assembly: AssemblyFileVersion("4.7.1")]
+[assembly: AssemblyVersion("4.7.2")]
+[assembly: AssemblyFileVersion("4.7.2")]
