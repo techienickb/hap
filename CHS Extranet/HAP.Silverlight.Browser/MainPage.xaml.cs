@@ -700,17 +700,30 @@ namespace HAP.Silverlight.Browser
 
         private void UserControl_MouseMove(object sender, MouseEventArgs e)
         {
-            if (drag && mousemode == MouseMode.NoGo)
+            if (drag && (mousemode == MouseMode.NoGo || mousemode == MouseMode.Move))
             {
-                nomove.Margin = new Thickness(e.GetPosition(this).X + 10, e.GetPosition(this).Y + 10, 0, 0);
-                nomove.Visibility = System.Windows.Visibility.Visible;
-                movetooltip.Visibility = System.Windows.Visibility.Collapsed;
-            }
-            else if (drag && mousemode == MouseMode.Move)
-            {
-                movetooltip.Margin = new Thickness(e.GetPosition(this).X + 10, e.GetPosition(this).Y + 10, 0, 0);
-                movetooltip.Visibility = System.Windows.Visibility.Visible;
-                nomove.Visibility = System.Windows.Visibility.Collapsed;
+                if (mousemode == MouseMode.NoGo)
+                {
+                    nomove.Margin = new Thickness(e.GetPosition(this).X + 10, e.GetPosition(this).Y + 10, 0, 0);
+                    nomove.Visibility = System.Windows.Visibility.Visible;
+                    movetooltip.Visibility = System.Windows.Visibility.Collapsed;
+                }
+                else if (mousemode == MouseMode.Move)
+                {
+                    movetooltip.Margin = new Thickness(e.GetPosition(this).X + 10, e.GetPosition(this).Y + 10, 0, 0);
+                    movetooltip.Visibility = System.Windows.Visibility.Visible;
+                    nomove.Visibility = System.Windows.Visibility.Collapsed;
+                }
+                if (ViewMode == Browser.ViewMode.List)
+                {
+                    if (e.GetPosition(scroller).X < 10) scroller.ScrollToHorizontalOffset(scroller.HorizontalOffset - (10 - e.GetPosition(scroller).X));
+                    else if (e.GetPosition(scroller).X > (scroller.ActualWidth - 10)) scroller.ScrollToHorizontalOffset(scroller.HorizontalOffset + (10 - (scroller.ActualHeight - e.GetPosition(scroller).X)));
+                }
+                else
+                {
+                    if (e.GetPosition(scroller).Y < 10) scroller.ScrollToVerticalOffset(scroller.VerticalOffset - (10 - e.GetPosition(scroller).Y));
+                    else if (e.GetPosition(scroller).Y > (scroller.ActualHeight - 20)) scroller.ScrollToVerticalOffset(scroller.VerticalOffset + (10 - (scroller.ActualHeight - e.GetPosition(scroller).Y)));
+                }
             }
             else
             {
@@ -729,6 +742,7 @@ namespace HAP.Silverlight.Browser
         {
             drag = false;
             mousemode = MouseMode.Normal;
+            movetooltip.Visibility = nomove.Visibility = System.Windows.Visibility.Collapsed;
         }
 
         private void contentPan_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
