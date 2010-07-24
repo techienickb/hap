@@ -37,7 +37,7 @@ namespace HAP.Web.API
             context.Response.Clear();
             context.Response.ExpiresAbsolute = DateTime.Now;
             context.Response.ContentType = "text/plain";
-            string format = "{0},{1},{2},{3}{4}\n";
+            string format = "{0}|{1}|{2}|{3}{4}\n";
             long freeBytesForUser, totalBytes, freeBytes;
             ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
             string _ActiveDirectoryConnectionString = "";
@@ -60,7 +60,7 @@ namespace HAP.Web.API
                 if (showspace)
                 {
                     if (Win32.GetDiskFreeSpaceEx(string.Format(path.UNC.Replace("%homepath%", userhome), Username), out freeBytesForUser, out totalBytes, out freeBytes))
-                        space = "," + Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
+                        space = "|" + Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
                     else space = "";
                 }
                 if (isAuth(path)) context.Response.Write(string.Format(format, path.Name, "/extranet/images/icons/netdrive.png", string.Format("/Extranet/api/mycomputer/list/{0}", path.Drive), isWriteAuth(path), space));
@@ -69,7 +69,7 @@ namespace HAP.Web.API
             foreach (uploadfilter filter in config.MyComputer.UploadFilters)
                 if (isAuth(filter)) context.Response.Write("FILTER" + filter.ToString() + "\n");
 
-            context.Response.Write("INFOName:" + Assembly.GetExecutingAssembly().GetName().Name + ",Version:" + Assembly.GetExecutingAssembly().GetName().Version.ToString());
+            context.Response.Write("INFOName:" + Assembly.GetExecutingAssembly().GetName().Name + "|Version:" + Assembly.GetExecutingAssembly().GetName().Version.ToString());
 
             context.Response.ContentType = "text/plain";
         }
