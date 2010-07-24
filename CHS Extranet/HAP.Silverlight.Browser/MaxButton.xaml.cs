@@ -19,7 +19,12 @@ namespace HAP.Silverlight.Browser
         public MaxButton()
         {
             InitializeComponent();
-            if (Max)
+            App.Current.Host.Content.FullScreenChanged += new EventHandler(Content_FullScreenChanged);
+        }
+
+        void Content_FullScreenChanged(object sender, EventArgs e)
+        {
+            if (Application.Current.Host.Content.IsFullScreen)
             {
                 image1.Visibility = System.Windows.Visibility.Collapsed;
                 image2.Visibility = System.Windows.Visibility.Visible;
@@ -29,11 +34,6 @@ namespace HAP.Silverlight.Browser
                 image1.Visibility = System.Windows.Visibility.Visible;
                 image2.Visibility = System.Windows.Visibility.Collapsed;
             }
-        }
-
-        private void UserControl_MouseEnter(object sender, MouseEventArgs e)
-        {
-
         }
 
         public event RoutedEventHandler Click;
@@ -56,36 +56,12 @@ namespace HAP.Silverlight.Browser
             BBorder1.Background = Resources["DownBg"] as LinearGradientBrush;
         }
 
-        public bool Max 
-        {
-            get
-            {
-                try
-                {
-                    if (HtmlPage.Document.Body.GetAttribute("class") == "max") return true;
-                }
-                catch { }
-                return false;
-            }
-        }
-
         private void BBorder1_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             BBorder1.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 187, 202, 219));
             BBorder.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 239, 244, 249));
             BBorder1.Background = new SolidColorBrush(Colors.Transparent);
-            if (Max)
-            {
-                image2.Visibility = System.Windows.Visibility.Collapsed;
-                image1.Visibility = System.Windows.Visibility.Visible;
-                HtmlPage.Document.Body.RemoveAttribute("class");
-            }
-            else
-            {
-                image2.Visibility = System.Windows.Visibility.Visible;
-                image1.Visibility = System.Windows.Visibility.Collapsed;
-                HtmlPage.Document.Body.SetAttribute("class", "max");
-            }
+            Application.Current.Host.Content.IsFullScreen = !Application.Current.Host.Content.IsFullScreen;
             if (Click != null) Click(this, new RoutedEventArgs());
         }
     }
