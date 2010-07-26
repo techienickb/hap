@@ -56,9 +56,7 @@ namespace HAP.Web.API
 
             bool allowedit = isWriteAuth(unc);
 
-            if (string.IsNullOrEmpty(RoutingPath))
-                context.Response.Write(string.Format(format, "My Computer", "/extranet/images/icons/school.png", "Back to My Computer", "Drive", "/Extranet/api/mycomputer/listdrives", false));
-            else context.Response.Write(string.Format(format, "..", "/extranet/images/icons/folder.png", "Up a Folder", "File Folder", "/Extranet/api/mycomputer/list/" + (RoutingDrive + "/" + RoutingPath).Replace("//", "/").Remove((RoutingDrive + "/" + RoutingPath).LastIndexOf('/') - 1), allowedit));
+            if (!string.IsNullOrEmpty(RoutingPath)) context.Response.Write(string.Format(format, "..", "/extranet/images/icons/folder.png", "Up a Folder", "File Folder", "/Extranet/api/mycomputer/list/" + (RoutingDrive + "/" + RoutingPath).Replace("//", "/").Remove((RoutingDrive + "/" + RoutingPath).LastIndexOf('/') - 1), allowedit));
 
             try
             {
