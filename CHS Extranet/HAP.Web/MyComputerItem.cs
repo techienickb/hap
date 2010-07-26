@@ -33,7 +33,8 @@ namespace HAP.Web
                     case "My Pictures": return "mypictures.png"; 
                     case "My Videos": return "myvideos.png"; 
                     case "My Music": return "mymusic.png"; 
-                    case "My Settings": return "settings.png"; 
+                    case "My Settings": return "settings.png";
+                    case "My Favorites": return "myfavs.png"; 
                     default: return "folder.png";
                 }
             }

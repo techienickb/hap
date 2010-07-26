@@ -145,9 +145,9 @@ namespace HAP.Web
                 breadcrumbrepeater.DataSource = breadcrumbs.ToArray();
                 breadcrumbrepeater.DataBind();
 
-                if (string.IsNullOrEmpty(RoutingPath))
-                    items.Add(new MyComputerItem("My Computer", "Back to My Computer", "/Extranet/MyComputer.aspx", "school.png", false));
-                else items.Add(new MyComputerItem("..", "Up a Directory", "/Extranet/MyComputer/" + (RoutingDrive + "/" + RoutingPath).Remove((RoutingDrive + "/" + RoutingPath).LastIndexOf('/')), "folder.png", false));
+                if (!string.IsNullOrEmpty(RoutingPath)) items.Add(new MyComputerItem("..", "Up a Directory", "/Extranet/MyComputer/" + (RoutingDrive + "/" + RoutingPath).Remove((RoutingDrive + "/" + RoutingPath).LastIndexOf('/')), "folder.png", false));
+                //    items.Add(new MyComputerItem("My Computer", "Back to My Computer", "/Extranet/MyComputer.aspx", "school.png", false));
+                //else 
 
                 bool allowedit = isWriteAuth(config.MyComputer.UNCPaths[RoutingDrive]);
                 newfolderlink.Visible = newfileuploadlink.Visible = allowedit;
