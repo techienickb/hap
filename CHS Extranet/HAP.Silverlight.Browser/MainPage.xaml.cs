@@ -12,6 +12,7 @@ using System.Windows.Shapes;
 using System.IO;
 using System.Windows.Controls.Theming;
 using System.Windows.Browser;
+using System.Windows.Media.Imaging;
 
 namespace HAP.Silverlight.Browser
 {
@@ -24,12 +25,31 @@ namespace HAP.Silverlight.Browser
             activeItems = new List<BrowserItem>();
             Filter = new List<string>();
             ViewMode = Browser.ViewMode.Tile;
-            CurrentItem = new BItem("My Computer", "", "", "", BType.Drive, "", false);
+            CurrentItem = new BItem("My School Computer", "", "", "", BType.Drive, "/Extranet/api/mycomputer/listdrives", false);
             newfolder.Visibility = System.Windows.Visibility.Collapsed;
+            HAPTreeNode root = new HAPTreeNode();
+            root.BItem = CurrentItem;
+            StackPanel sp = new StackPanel();
+            sp.Orientation = Orientation.Horizontal;
+            sp.VerticalAlignment = System.Windows.VerticalAlignment.Center;
+            sp.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+            sp.Cursor = Cursors.Hand;
+            Image img = new Image();
+            img.Margin = new Thickness(0, 0, 4, 0);
+            img.Source = new BitmapImage(new Uri("/HAP.Silverlight.Browser;component/mycomp.png", UriKind.Relative));
+            sp.Children.Add(img);
+            TextBlock tb = new TextBlock();
+            tb.Text = CurrentItem.Name;
+            sp.Children.Add(tb);
+            root.Header = sp;
+            treeView1.Items.Add(root);
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            ((HAPTreeNode)treeView1.Items[0]).IsExpanded = true;
+            ((HAPTreeNode)treeView1.Items[0]).IsSelected = true;
+            ((HAPTreeNode)treeView1.Items[0]).Selected += new RoutedEventHandler(root_Selected);
             try
             {
                 if (HtmlPage.BrowserInformation.ProductName == "Firefox" && new Version(HtmlPage.BrowserInformation.ProductVersion) > new Version(3, 6, 3))
@@ -96,15 +116,26 @@ namespace HAP.Silverlight.Browser
                     if (!loaded)
                     {
                         HAPTreeNode titem = new HAPTreeNode();
-                        titem.Cursor = Cursors.Hand;
-                        titem.Header = bitem.Name;
+                        StackPanel sp = new StackPanel();
+                        sp.Orientation = Orientation.Horizontal;
+                        sp.VerticalAlignment = System.Windows.VerticalAlignment.Center;
+                        sp.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+                        sp.Cursor = Cursors.Hand;
+                        Image img = new Image();
+                        img.Margin = new Thickness(0, 0, 4, 0);
+                        img.Source = new BitmapImage(new Uri("/HAP.Silverlight.Browser;component/netdrive.png", UriKind.Relative));
+                        sp.Children.Add(img);
+                        TextBlock tb = new TextBlock();
+                        tb.Text = bitem.Name;
+                        sp.Children.Add(tb);
+                        titem.Header = sp;
                         titem.BItem = bitem;
                         titem.Expanded += new RoutedEventHandler(HAPTreeNode_Expanded);
                         titem.Selected += new RoutedEventHandler(HAPTreeNode_Selected);
                         HAPTreeNode ttitem = new HAPTreeNode();
                         ttitem.Header = "Loading...";
                         titem.Items.Add(ttitem);
-                        treeView1.Items.Add(titem);
+                        ((HAPTreeNode)treeView1.Items[0]).Items.Add(titem);
                     }
                     item.KeyUp += new KeyEventHandler(item_KeyUp);
                     item.MouseEnter += new MouseEventHandler(item_MouseEnter);
@@ -166,8 +197,9 @@ namespace HAP.Silverlight.Browser
                 }
                 item.MouseLeave += new MouseEventHandler(item_MouseLeave);
                 item.ReSort += new ResortHandler(item_ReSort);
-                if (item.Data.BType == BType.Drive) item.DirectoryChange += new ChangeDirectoryHandler(computer_DirectoryChange);
-                else item.DirectoryChange += new ChangeDirectoryHandler(item_DirectoryChange);
+                //if (item.Data.BType == BType.Drive) item.DirectoryChange += new ChangeDirectoryHandler(computer_DirectoryChange);
+                //else 
+                item.DirectoryChange += new ChangeDirectoryHandler(item_DirectoryChange);
                 if (item.Data.BType == BType.Folder && item.Data.Name != "..") UpdateTree(item.Data);
                 contentPan.Children.Add(item);
                 item.Mode = ViewMode;
@@ -179,11 +211,26 @@ namespace HAP.Silverlight.Browser
 
         #region Tree Events
 
+        private void root_Selected(object sender, RoutedEventArgs e)
+        {
+            CurrentItem = ((HAPTreeNode)sender).BItem;
+            WebClient listclient = new WebClient();
+            listclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(driveclient_DownloadStringCompleted);
+            listclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + CurrentItem.Path));
+            HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + HtmlPage.Document.DocumentUri.LocalPath + "#"));
+        }
+
         private void HAPTreeNode_Selected(object sender, RoutedEventArgs e)
         {
             reload = true;
             CurrentItem = ((HAPTreeNode)treeView1.SelectedItem).BItem;
             ((HAPTreeNode)treeView1.SelectedItem).IsExpanded = true;
+            if (CurrentItem.BType == BType.Folder)
+            {
+                StackPanel sp = ((HAPTreeNode)treeView1.SelectedItem).Header as StackPanel;
+                Image img = sp.Children[0] as Image;
+                img.Source = new BitmapImage(new Uri("/HAP.Silverlight.Browser;component/folderopen.png", UriKind.Relative));
+            }
             WebClient listclient = new WebClient();
             listclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(listclient_DownloadStringCompleted);
             listclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + CurrentItem.Path));
@@ -195,9 +242,26 @@ namespace HAP.Silverlight.Browser
             if (!reload)
             {
                 tempnode = sender as HAPTreeNode;
+                if (tempnode.BItem.BType == BType.Folder)
+                {
+                    StackPanel sp = tempnode.Header as StackPanel;
+                    Image img = sp.Children[0] as Image;
+                    img.Source = new BitmapImage(new Uri("/HAP.Silverlight.Browser;component/folderopen.png", UriKind.Relative));
+                }
                 WebClient listclient = new WebClient();
                 listclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(treereloadclient_DownloadStringCompleted);
                 listclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + tempnode.BItem.Path));
+            }
+        }
+
+        private void HAPTreeNode_Collapsed(object sender, RoutedEventArgs e)
+        {
+            HAPTreeNode node = sender as HAPTreeNode;
+            if (node.BItem.BType == BType.Folder)
+            {
+                StackPanel sp = node.Header as StackPanel;
+                Image img = sp.Children[0] as Image;
+                img.Source = new BitmapImage(new Uri("/HAP.Silverlight.Browser;component/folderclosed.png", UriKind.Relative));
             }
         }
 
@@ -258,10 +322,22 @@ namespace HAP.Silverlight.Browser
         private void UpdateTree(BItem bitem)
         {
             HAPTreeNode titem = new HAPTreeNode();
-            titem.Cursor = Cursors.Hand;
-            titem.Header = bitem.Name;
+            StackPanel sp = new StackPanel();
+            sp.Orientation = Orientation.Horizontal;
+            sp.VerticalAlignment = System.Windows.VerticalAlignment.Center;
+            sp.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+            sp.Cursor = Cursors.Hand;
+            Image img = new Image();
+            img.Margin = new Thickness(0, 0, 4, 0);
+            img.Source = new BitmapImage(new Uri("/HAP.Silverlight.Browser;component/folderclosed.png", UriKind.Relative));
+            sp.Children.Add(img);
+            TextBlock tb = new TextBlock();
+            tb.Text = bitem.Name;
+            sp.Children.Add(tb);
+            titem.Header = sp;
             titem.BItem = bitem;
             titem.Expanded += new RoutedEventHandler(HAPTreeNode_Expanded);
+            titem.Collapsed += new RoutedEventHandler(HAPTreeNode_Collapsed);
             titem.Selected += new RoutedEventHandler(HAPTreeNode_Selected);
             HAPTreeNode ttitem = new HAPTreeNode();
             ttitem.Header = "Loading...";
@@ -468,16 +544,6 @@ namespace HAP.Silverlight.Browser
             HAPTreeNode i = GetTreeNode(e.Path, treeView1.Items);
             if (i.Header.ToString() != "E") treeView1.SelectItem(i);
             else MessageBox.Show("Error: " + e.Path);
-        }
-
-        private void computer_DirectoryChange(object sender, BItem e)
-        {
-            CurrentItem = new BItem("My Computer", "", "", "", BType.Drive, "", false);
-            if (treeView1.SelectedItem != null) ((HAPTreeNode)treeView1.SelectedItem).IsSelected = false;
-            WebClient listclient = new WebClient();
-            listclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(driveclient_DownloadStringCompleted);
-            listclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + e.Path));
-            HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + HtmlPage.Document.DocumentUri.LocalPath + "#"));
         }
 
         private void item_KeyUp(object sender, KeyEventArgs e)
