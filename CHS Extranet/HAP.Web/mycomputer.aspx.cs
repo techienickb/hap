@@ -61,7 +61,7 @@ namespace HAP.Web
             else throw new Exception("The connection string specified in 'activeDirectoryConnectionString' does not appear to be a valid LDAP connection string.");
             pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
             up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Username);
-            this.Title = string.Format("{0} - Home Access Plus+ - My Computer", config.BaseSettings.EstablishmentName);
+            this.Title = string.Format("{0} - Home Access Plus+ - My School Computer", config.BaseSettings.EstablishmentName);
         }
 
         public string Username
@@ -139,7 +139,7 @@ namespace HAP.Web
                     catch { subdir1 = null; }
                 }
                 breadcrumbs.Add(new MyComputerItem(unc.Name, "", "/Extranet/MyComputer/" + unc.Drive, "", false));
-                breadcrumbs.Add(new MyComputerItem("My Computer", "", "/Extranet/MyComputer.aspx", "", false));
+                breadcrumbs.Add(new MyComputerItem("My School Computer", "", "/Extranet/MyComputer.aspx", "", false));
                 breadcrumbs.Reverse();
                 breadcrumbrepeater.Visible = true;
                 breadcrumbrepeater.DataSource = breadcrumbs.ToArray();
