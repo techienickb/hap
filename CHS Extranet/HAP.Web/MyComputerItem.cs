@@ -27,14 +27,16 @@ namespace HAP.Web
             }
             else
             {
-                e = ((DirectoryInfo)ExtentionOrName).Name;
+                e = ((DirectoryInfo)ExtentionOrName).Name.ToLower();
+                e = e.Replace("my ", "");
                 switch (e) 
                 {
-                    case "My Pictures": return "mypictures.png"; 
-                    case "My Videos": return "myvideos.png"; 
-                    case "My Music": return "mymusic.png"; 
-                    case "My Settings": return "settings.png";
-                    case "My Favorites": return "myfavs.png"; 
+                    case "pictures": return "mypictures.png"; 
+                    case "video": case "videos": return "myvideos.png"; 
+                    case "music": return "mymusic.png"; 
+                    case "settings": return "settings.png";
+                    case "favorites": return "myfavs.png";
+                    case "downloads": return "mydownloads.png"; 
                     default: return "folder.png";
                 }
             }

@@ -130,6 +130,7 @@
     <Content Include="images\headbg.png" />
     <Content Include="images\icons\config.png" />
     <Content Include="images\icons\cs.png" />
+    <Content Include="images\icons\mydownloads.png" />
     <Content Include="images\icons\myfavs.png" />
     <Content Include="images\icons\NewFolder.png" />
     <Content Include="images\icons\rdp.png" />
