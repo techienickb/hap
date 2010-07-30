@@ -1176,8 +1176,6 @@
 
         #endregion
 
-        private AeroWizard.WizardControl wizardControl1;
-        private AeroWizard.WizardPage basesets;
         private AeroWizard.WizardControl wiz;
         private AeroWizard.WizardPage wizardPage1;
         private AeroWizard.WizardPage wizardPage2;
