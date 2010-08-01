@@ -68,7 +68,7 @@ namespace HAP.Web.API
             }
 
             foreach (uploadfilter filter in config.MyComputer.UploadFilters)
-                if (isAuth(filter)) context.Response.Write("FILTER" + filter.ToString() + "\n");
+                if (isAuth(filter)) context.Response.Write("FILTER" + filter.ToString().Replace('\\', ',') + "\n");
 
             context.Response.Write("INFOName:" + Assembly.GetExecutingAssembly().GetName().Name + "|Version:" + Assembly.GetExecutingAssembly().GetName().Version.ToString());
 

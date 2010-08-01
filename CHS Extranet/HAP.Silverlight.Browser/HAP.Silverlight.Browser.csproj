@@ -92,6 +92,9 @@
       <DependentUpon>BrowserItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="BStackPanel.cs" />
+    <Compile Include="FirefoxMessage.xaml.cs">
+      <DependentUpon>FirefoxMessage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="HAPTreeNode.cs" />
     <Compile Include="IBitem.cs" />
     <Compile Include="MaxButton.xaml.cs">
@@ -136,6 +139,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="BrowserItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FirefoxMessage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -231,6 +238,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="key.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="upload.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
