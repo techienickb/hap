@@ -16,11 +16,11 @@
             <StackPanel Margin="5">
                 <StackPanel Margin="5">
                     <TextBlock Padding="4, 1">Browser Code: HAP.Silverlight.Browser</TextBlock>
-                    <TextBlock Padding="4, 1" x:Name="browserversion">Browser Version: 1.0 ALPHA 0.2</TextBlock>
+                    <TextBlock Padding="4, 1" x:Name="browserversion">Browser Version: 1.3</TextBlock>
                     <TextBlock Padding="4, 1">Browser Mode: Silverlight</TextBlock>
                     <Rectangle Height="1" Fill="Black"></Rectangle>
                     <TextBlock Padding="4, 1" x:Name="hapv">HAP Version: 4.5</TextBlock>
-                    <TextBlock Padding="4, 1">API Version: 1.0 ALPHA</TextBlock>
+                    <TextBlock Padding="4, 1">API Version: 1.1</TextBlock>
                 </StackPanel>
                 <ScrollViewer Height="114" Padding="4">
                     <StackPanel>
