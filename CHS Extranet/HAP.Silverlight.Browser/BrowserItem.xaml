@@ -20,6 +20,11 @@
         <Border x:Name="Tile" BorderThickness="1" BorderBrush="Transparent" CornerRadius="3">
             <Grid Width="250">
                 <Image Height="48" x:Name="image1" HorizontalAlignment="Left" Margin="5,5,5,5" Stretch="Fill" VerticalAlignment="Top" Width="48" />
+                <Image Height="16" x:Name="key1" HorizontalAlignment="Left" Margin="35,35,0,0" Stretch="None" VerticalAlignment="Top" Width="16" Source="/HAP.Silverlight.Browser;component/key.png">
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="This file/folder has restrictive permissions" x:Name="tooltip1" />
+                    </ToolTipService.ToolTip>
+                </Image>
                 <TextBlock Text="File 1" x:Name="name1" Margin="60,5,5,0" Padding="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Top" FontSize="12" TextTrimming="WordEllipsis" />
                 <TextBlock Text="Text Document" x:Name="type" Margin="60,22,5,5" Padding="0,0,0,0" Foreground="Gray" TextTrimming="WordEllipsis" />
                 <TextBlock Text="124 bytes" x:Name="size" Margin="60,36,0,0" Padding="0,0,5,0" Foreground="Gray" />
@@ -31,6 +36,11 @@
         <Border x:Name="List" Visibility="Collapsed" BorderThickness="1" BorderBrush="Transparent"  CornerRadius="3">
             <Grid>
                 <Image Height="16" x:Name="image2" HorizontalAlignment="Left" Margin="2,2,2,2" Stretch="Fill" VerticalAlignment="Top" Width="16" />
+                <Image Height="10" x:Name="key2" HorizontalAlignment="Left" Margin="10,8,0,0" Stretch="Fill" VerticalAlignment="Top" Width="10" Source="/HAP.Silverlight.Browser;component/key.png">
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="This file/folder has restrictive permissions" x:Name="tooltip2" />
+                    </ToolTipService.ToolTip>
+                </Image>
                 <TextBlock Text="File 1" x:Name="name2" Margin="22,2,0,0" Padding="0,0,5,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="12" />
                 <TextBox Height="21" HorizontalAlignment="Left" Margin="20,0,0,0" Name="textBox2" VerticalAlignment="Top" Visibility="Collapsed" KeyDown="textBox2_KeyDown" AcceptsReturn="True" />
             </Grid>
@@ -38,6 +48,11 @@
         <Border x:Name="Icon" Visibility="Collapsed" BorderThickness="1" BorderBrush="Transparent" CornerRadius="3">
             <Grid>
                 <Image Height="64" x:Name="image3" HorizontalAlignment="Left" Margin="5,5,5,5" Stretch="Fill" VerticalAlignment="Top" Width="64" />
+                <Image Height="16" x:Name="key3" HorizontalAlignment="Left" Margin="55,55,0,0" Stretch="None" VerticalAlignment="Top" Width="16" Source="/HAP.Silverlight.Browser;component/key.png">
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="This file/folder has restrictive permissions" x:Name="tooltip3" />
+                    </ToolTipService.ToolTip>
+                </Image>
                 <TextBlock Text="File 1" x:Name="name3" Margin="2,70,2,2" Width="70" HorizontalAlignment="Left" TextAlignment="Center" VerticalAlignment="Top" FontSize="12" TextWrapping="Wrap" />
                 <TextBox Height="23" HorizontalAlignment="Left" Margin="2,70,2,2" Name="textBox3" Visibility="Collapsed" VerticalAlignment="Top" Width="70" KeyDown="textBox3_KeyDown" AcceptsReturn="True" />
             </Grid>
@@ -45,6 +60,11 @@
         <Border x:Name="MediumIcon" Visibility="Collapsed" BorderThickness="1" BorderBrush="Transparent" CornerRadius="3">
             <Grid>
                 <Image Height="48" x:Name="image4" HorizontalAlignment="Left" Margin="13,5,5,5" Stretch="Fill" VerticalAlignment="Top" Width="48" />
+                <Image Height="16" x:Name="key4" HorizontalAlignment="Left" Margin="48,38,0,0" Stretch="None" VerticalAlignment="Top" Width="16" Source="/HAP.Silverlight.Browser;component/key.png">
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="This file/folder has restrictive permissions" x:Name="tooltip4" />
+                    </ToolTipService.ToolTip>
+                </Image>
                 <TextBlock Text="File 1" x:Name="name4" Margin="2,56,2,2" Width="70" HorizontalAlignment="Left" TextAlignment="Center" VerticalAlignment="Top" FontSize="12" TextWrapping="Wrap" />
                 <TextBox Height="23" HorizontalAlignment="Left" Margin="2,56, 2,2" Visibility="Collapsed" Name="textBox4" VerticalAlignment="Top" Width="70" KeyDown="textBox4_KeyDown" AcceptsReturn="True" />
             </Grid>
@@ -52,6 +72,11 @@
         <Border x:Name="SmallIcon" Visibility="Collapsed" BorderThickness="1" BorderBrush="Transparent" CornerRadius="3">
             <Grid>
                 <Image Height="32" x:Name="image5" HorizontalAlignment="Left" Margin="13,5,5,5" Stretch="Fill" VerticalAlignment="Top" Width="32" />
+                <Image Height="16" x:Name="key5" HorizontalAlignment="Left" Margin="32,24,0,0" Stretch="None" VerticalAlignment="Top" Width="16" Source="/HAP.Silverlight.Browser;component/key.png">
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="This file/folder has restrictive permissions" x:Name="tooltip5" />
+                    </ToolTipService.ToolTip>
+                </Image>
                 <TextBlock Text="File 1" x:Name="name5" Margin="50,10,2,2" Padding="0,0,5,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="12" TextWrapping="Wrap" />
                 <TextBox Height="23" HorizontalAlignment="Left" Margin="50,8,2,2" Name="textBox5" Visibility="Collapsed" VerticalAlignment="Top" KeyDown="textBox5_KeyDown" AcceptsReturn="True" />
             </Grid>

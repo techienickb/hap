@@ -15,7 +15,7 @@ using System.Text.RegularExpressions;
 
 namespace HAP.Silverlight.Browser
 {
-    public partial class BrowserItem : UserControl, IComparable
+    public partial class BrowserItem : UserControl, IComparable, IBitem
     {
         public BrowserItem()
         {
@@ -47,7 +47,9 @@ namespace HAP.Silverlight.Browser
                 type.Text = _data.Type;
 
                 image1.Source = image2.Source = image3.Source = image4.Source = image5.Source = new BitmapImage(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + _data.Icon));
-                this.AllowDrop = (_data.BType == BType.Folder);
+                this.AllowDrop = (_data.BType == BType.Folder) && _data.AccessControl == AccessControlActions.Change;
+                key1.Visibility = key2.Visibility = key3.Visibility = key4.Visibility = key5.Visibility = (_data.AccessControl == AccessControlActions.Change ? Visibility.Collapsed : System.Windows.Visibility.Visible);
+                tooltip1.Content = tooltip2.Content = tooltip3.Content = tooltip4.Content = tooltip5.Content = (_data.AccessControl == AccessControlActions.None ? "This file/folder may not be accessible" : "This file/folder has restrictive permissions");
             }
         }
 
@@ -310,7 +312,7 @@ namespace HAP.Silverlight.Browser
         public int Move(bool resort, string folder)
         {
             string _d = "";
-            _d = "SAVETO:" + folder + "\\" + _data.Name;
+            _d = "SAVETO:" + folder.Replace("/Extranet/api/mycomputer/list/", "").Replace('/', '\\') + "\\" + _data.Name;
 
             WebClient saveclient = new WebClient();
             saveclient.UploadStringCompleted += new UploadStringCompletedEventHandler(saveclient_UploadStringCompleted3);
@@ -469,9 +471,9 @@ namespace HAP.Silverlight.Browser
         public string Type { get; set; }
         public BType BType { get; set; }
         public string Path { get; set; }
-        public bool CanWrite { get; set; }
+        public AccessControlActions AccessControl { get; set; }
 
-        public BItem(string name, string icon, string size, string type, BType btype, string path, bool canwrite)
+        public BItem(string name, string icon, string size, string type, BType btype, string path, AccessControlActions access)
         {
             Name = name;
             Icon = icon;
@@ -479,7 +481,18 @@ namespace HAP.Silverlight.Browser
             Size = size;
             BType = btype;
             Path = path;
-            CanWrite = canwrite;
+            AccessControl = access;
+        }
+
+        public BItem(string name, string icon, string size, string type, BType btype, string path, string access)
+        {
+            Name = name;
+            Icon = icon;
+            Type = type;
+            Size = size;
+            BType = btype;
+            Path = path;
+            AccessControl = (AccessControlActions)Enum.Parse(typeof(AccessControlActions), access, true);
         }
 
         public int CompareTo(object obj)
@@ -503,4 +516,6 @@ namespace HAP.Silverlight.Browser
         public string Data { get; set; }
         public string oldname { get; set; }
     }
+
+    public enum AccessControlActions { Change, View, None }
 }

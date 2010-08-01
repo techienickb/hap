@@ -91,7 +91,9 @@
     <Compile Include="BrowserItem.xaml.cs">
       <DependentUpon>BrowserItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BStackPanel.cs" />
     <Compile Include="HAPTreeNode.cs" />
+    <Compile Include="IBitem.cs" />
     <Compile Include="MaxButton.xaml.cs">
       <DependentUpon>MaxButton.xaml</DependentUpon>
     </Compile>
@@ -226,6 +228,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="mycomp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="key.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -14,6 +14,7 @@ using System.DirectoryServices.AccountManagement;
 using System.Xml;
 using System.Runtime.InteropServices;
 using System.Reflection;
+using System.Security.AccessControl;
 
 namespace HAP.Web.API
 {
@@ -63,7 +64,7 @@ namespace HAP.Web.API
                         space = "|" + Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
                     else space = "";
                 }
-                if (isAuth(path)) context.Response.Write(string.Format(format, path.Name, "/extranet/images/icons/netdrive.png", string.Format("/Extranet/api/mycomputer/list/{0}", path.Drive), isWriteAuth(path), space));
+                if (isAuth(path)) context.Response.Write(string.Format(format, path.Name, "/extranet/images/icons/netdrive.png", string.Format("/Extranet/api/mycomputer/list/{0}", path.Drive), isWriteAuth(path) ? AccessControlActions.Change : AccessControlActions.View, space));
             }
 
             foreach (uploadfilter filter in config.MyComputer.UploadFilters)

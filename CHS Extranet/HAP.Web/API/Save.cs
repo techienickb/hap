@@ -50,7 +50,7 @@ namespace HAP.Web.API
                 string path = Converter.DriveToUNC(RoutingPath, RoutingDrive, out unc, out userhome);
                 StreamReader sr = new StreamReader(context.Request.InputStream);
                 string c = sr.ReadToEnd();
-                bool folder = c.Contains("..");
+                bool folder = c.Contains("\\");
 
                 if (File.Exists(path))
                 {
@@ -62,7 +62,7 @@ namespace HAP.Web.API
                     {
                         c = c.Remove(0, 7);
                         string p2 = path.Replace(name, c);
-                        if (folder) p2 = p2.Replace(file.Directory.Name + "\\", "");
+                        if (folder) p2 = Converter.DriveToUNC(c);
                         FileInfo f2 = new FileInfo(p2);
                         if (f2.Exists)
                         {
@@ -84,7 +84,8 @@ namespace HAP.Web.API
                         if (folder) p2 = p2.Replace(file.Directory.Name + "\\", "");
                         File.Delete(p2);
                     }
-                    file.MoveTo(file.FullName.Replace(name, c));
+                    if (folder) file.MoveTo(Converter.DriveToUNC(c) + (extension ? "" : file.Extension));
+                    else file.MoveTo(file.FullName.Replace(name, c) + (extension ? "" : file.Extension));
                 }
                 else
                 {
@@ -94,7 +95,7 @@ namespace HAP.Web.API
                     {
                         c = c.Remove(0, 7);
                         string p2 = path.Replace(file.Name, c);
-                        if (folder) p2 = p2.Replace("..\\", "").Replace(file.Parent.Name + "\\", "");
+                        if (folder) p2 = Converter.DriveToUNC(p2);
                         DirectoryInfo f2 = new DirectoryInfo(p2);
                         if (f2.Exists)
                         {
@@ -116,7 +117,8 @@ namespace HAP.Web.API
                         if (folder) p2 = p2.Replace(file.Parent.Name + "\\", "");
                         Directory.Delete(p2);
                     }
-                    file.MoveTo(file.FullName.Replace(file.Name, c));
+                    if (folder) file.MoveTo(Converter.DriveToUNC(c));
+                    else file.MoveTo(file.FullName.Replace(file.Name, c));
                 }
 
                 context.Response.Write("DONE");

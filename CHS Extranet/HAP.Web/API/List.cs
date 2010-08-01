@@ -14,6 +14,7 @@ using System.DirectoryServices.AccountManagement;
 using System.Xml;
 using System.IO;
 using Microsoft.Win32;
+using System.Security.AccessControl;
 
 namespace HAP.Web.API
 {
@@ -53,10 +54,9 @@ namespace HAP.Web.API
             context.Response.Clear();
             context.Response.ExpiresAbsolute = DateTime.Now;
             context.Response.ContentType = "text/plain";
+            AccessControlActions allowactions = isWriteAuth(unc) ? AccessControlActions.Change : AccessControlActions.View;
 
-            bool allowedit = isWriteAuth(unc);
-
-            if (!string.IsNullOrEmpty(RoutingPath)) context.Response.Write(string.Format(format, "..", "/extranet/images/icons/folder.png", "Up a Folder", "File Folder", "/Extranet/api/mycomputer/list/" + (RoutingDrive + "/" + RoutingPath).Replace("//", "/").Remove((RoutingDrive + "/" + RoutingPath).LastIndexOf('/') - 1), allowedit));
+            //if (!string.IsNullOrEmpty(RoutingPath)) context.Response.Write(string.Format(format, "..", "/extranet/images/icons/folder.png", "Up a Folder", "File Folder", "/Extranet/api/mycomputer/list/" + (RoutingDrive + "/" + RoutingPath).Replace("//", "/").Remove((RoutingDrive + "/" + RoutingPath).LastIndexOf('/') - 1), allowedit));
 
             try
             {
@@ -65,8 +65,17 @@ namespace HAP.Web.API
                     {
                         if (!subdir.Name.ToLower().Contains("recycle") && subdir.Attributes != FileAttributes.Hidden && subdir.Attributes != FileAttributes.System && !subdir.Name.ToLower().Contains("system volume info"))
                         {
+                            AccessControlActions actions = allowactions;
+                            if (actions == AccessControlActions.Change)
+                            {
+                                try { File.Create(Path.Combine(subdir.FullName, "temp.ini")).Close(); File.Delete(Path.Combine(subdir.FullName, "temp.ini")); }
+                                catch { actions = AccessControlActions.View; }
+                            }
+                            try { subdir.GetDirectories(); }
+                            catch { actions = AccessControlActions.None; }
+
                             string dirpath = Converter.UNCtoDrive2(subdir.FullName, unc, userhome);
-                            context.Response.Write(string.Format(format, subdir.Name, "/extranet/images/icons/" + MyComputerItem.ParseForImage(subdir), "", "File Folder", "/Extranet/api/mycomputer/list/" + dirpath.Replace('&', '^'), allowedit));
+                            context.Response.Write(string.Format(format, subdir.Name, "/extranet/images/icons/" + MyComputerItem.ParseForImage(subdir), "", "File Folder", "/Extranet/api/mycomputer/list/" + dirpath.Replace('&', '^'), actions));
                         }
                     }
                     catch { }
@@ -92,7 +101,7 @@ namespace HAP.Web.API
                             string thumb = "/extranet/images/icons/" + MyComputerItem.ParseForImage(file);
                             if (file.Extension.ToLower().Equals(".png") || file.Extension.ToLower().Equals(".jpg") || file.Extension.ToLower().Equals(".jpeg") || file.Extension.ToLower().Equals(".gif") || file.Extension.ToLower().Equals(".bmp") || file.Extension.ToLower().Equals(".wmf"))
                                 thumb = "/Extranet/api/mycomputer/thumb/" + dirpath.Replace('&', '^');
-                            context.Response.Write(string.Format(format, filename, thumb, parseLength(file.Length), filetype, "/Extranet/Download/" + dirpath.Replace('&', '^'), allowedit));
+                            context.Response.Write(string.Format(format, filename, thumb, parseLength(file.Length), filetype, "/Extranet/Download/" + dirpath.Replace('&', '^'), allowactions));
                         }
                     }
                     catch

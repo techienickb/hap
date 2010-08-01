@@ -11,12 +11,8 @@ using System.Windows.Shapes;
 
 namespace HAP.Silverlight.Browser
 {
-    public class HAPTreeNode : TreeViewItem, IBitem
+    public interface IBitem
     {
-        public HAPTreeNode() : base()
-        {
-            Padding = new Thickness(0);
-        }
-        public BItem Data { get; set; }
+        BItem Data { get; set; }
     }
 }
