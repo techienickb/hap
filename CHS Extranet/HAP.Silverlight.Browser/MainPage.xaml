@@ -65,6 +65,12 @@
                                         <Image Height="16" Width="16" Source="/HAP.Silverlight.Browser;component/New_Folder_Command.png" />
                                     </toolkit:MenuItem.Icon>
                                 </toolkit:MenuItem>
+                                <toolkit:MenuItem Visibility="Collapsed" x:Name="RightClickUpload" Header="Upload Files Here" Click="RightClickUpload_Click">
+                                    <toolkit:MenuItem.Icon>
+                                        <Image Height="16" Width="16" Source="/HAP.Silverlight.Browser;component/upload.png" />
+                                    </toolkit:MenuItem.Icon>
+                                </toolkit:MenuItem>
+                                <toolkit:Separator />
                                 <toolkit:MenuItem Header="Rename" x:Name="RightClickRename" Click="RightClickRename_Click">
                                     <toolkit:MenuItem.Icon>
                                         <Image Height="16" Width="16" Source="/HAP.Silverlight.Browser;component/Rename.png" />

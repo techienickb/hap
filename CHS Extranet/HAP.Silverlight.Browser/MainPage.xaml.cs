@@ -52,8 +52,16 @@ namespace HAP.Silverlight.Browser
             ((HAPTreeNode)treeView1.Items[0]).Selected += new RoutedEventHandler(root_Selected);
             try
             {
+                this.AllowDrop = true;
+            }
+            catch 
+            {
                 if (HtmlPage.BrowserInformation.ProductName == "Firefox" && new Version(HtmlPage.BrowserInformation.ProductVersion) > new Version(3, 6, 3))
-                    MessageBox.Show("Please note, that this version of firefox is causing issues with Home Access Plus+.\nTo fix the problem, either downgrade to 3.6.3 or:\n  1. Type 'about:config' into FF's address bar\n  2. Accept the warning (if applicable)\n  3. Search for the entry 'dom.ipc.plugins.enabled.npctrl.dll'\n  4. Change its value from 'true' to 'false' (double-click)\n  5. Restart the browser\nThis has been reported to Mozilla");
+                    new FirefoxMessage().Show();
+            }
+            try
+            {
+                this.AllowDrop = false;
             }
             catch { }
 
@@ -742,28 +750,47 @@ namespace HAP.Silverlight.Browser
 
         private void contentPan_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (activeItems.Count == 1 && activeItems[0].Data.Name != ".." && activeItems[0].Data.Name != "My Computer")
+            if (activeItems.Count == 1)
             {
                 organiseButton1.IsDelete = organiseButton1.IsRename = RightClickRename.IsEnabled = RightClickDelete.IsEnabled = CurrentItem.AccessControl == AccessControlActions.Change;
+                if (activeItems[0].Data.BType == BType.Folder)
+                {
+                    RightClickUpload.Visibility = System.Windows.Visibility.Visible;
+                    RightClickUpload.Header = "Upload to " + activeItems[0].Data.Name;
+                }
+                else RightClickUpload.Visibility = System.Windows.Visibility.Collapsed;
                 if (activeItems[0].Data.Type == "Compressed (zipped) Folder")
                     RightClickUNZIP.Visibility = System.Windows.Visibility.Visible;
                 else RightClickUNZIP.Visibility = System.Windows.Visibility.Collapsed;
                 RightClickZIP.Visibility = RightClickFolder.Visibility = System.Windows.Visibility.Collapsed;
             }
-            else if (activeItems.Count > 1 && activeItems.Where(I => I.Data.Name == "My Computer" || I.Data.Name == "..").Count() == 0)
+            else if (activeItems.Count > 1)
             {
                 organiseButton1.IsDelete = RightClickDelete.IsEnabled = CurrentItem.AccessControl == AccessControlActions.Change;
                 organiseButton1.IsRename = RightClickRename.IsEnabled = false;
-                RightClickUNZIP.Visibility = System.Windows.Visibility.Collapsed;
+                RightClickUpload.Visibility = RightClickUNZIP.Visibility = System.Windows.Visibility.Collapsed;
                 RightClickFolder.Visibility = RightClickZIP.Visibility = CurrentItem.AccessControl == AccessControlActions.Change ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
             }
             else
             {
+                RightClickUpload.Header = "Upload to " + CurrentItem.Name;
                 organiseButton1.IsDelete = organiseButton1.IsRename = false;
                 RightClickRename.IsEnabled = RightClickDelete.IsEnabled = false;
                 RightClickUNZIP.Visibility = RightClickZIP.Visibility = System.Windows.Visibility.Collapsed;
-                RightClickFolder.Visibility = CurrentItem.AccessControl == AccessControlActions.Change ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+                RightClickFolder.Visibility = RightClickUpload.Visibility = CurrentItem.AccessControl == AccessControlActions.Change ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
             }
+        }
+
+
+        private void RightClickUpload_Click(object sender, RoutedEventArgs e)
+        {
+            rightclick = true;
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.Filter = string.Join("|", Filter.ToArray());
+            dlg.Multiselect = true;
+            if (dlg.ShowDialog().Value)
+                foreach (FileInfo file in dlg.Files)
+                    new UploadItem(file, activeItems.Count == 1 ? activeItems[0].Data : CurrentItem, ref UploadQueue, new RoutedEventHandler(ui_Uploaded));
         }
 
         private void RightClickZIP_Click(object sender, RoutedEventArgs e)
