@@ -26,6 +26,12 @@ namespace HAP.Web.Configuration
             get { return (homepagelinks)base["homepagelinks"]; }
         }
 
+        [ConfigurationProperty("tracker")]
+        public tracker Tracker
+        {
+            get { return (tracker)this["tracker"]; }
+        }
+
         [ConfigurationProperty("announcementbox")]
         public announcementBox AnnouncementBox
         {

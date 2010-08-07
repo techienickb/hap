@@ -23,20 +23,24 @@ namespace HAP.Web.Controls
                 if (!string.IsNullOrEmpty(hapConfig.Current.AnnouncementBox.ProxyAddress))
                     client.Proxy = new WebProxy(hapConfig.Current.AnnouncementBox.ProxyAddress, hapConfig.Current.AnnouncementBox.ProxyPort);
                 XmlDocument xmldoc = new XmlDocument();
-                xmldoc.LoadXml(client.DownloadString("http://chsextranet.codeplex.com/Project/ProjectRss.aspx?ProjectRSSFeed=codeplex://release/chsextranet"));
+                try
+                {
+                    xmldoc.LoadXml(client.DownloadString("http://chsextranet.codeplex.com/Project/ProjectRss.aspx?ProjectRSSFeed=codeplex://release/chsextranet"));
 
-                XmlNode latest = xmldoc.SelectNodes("/rss/channel/item")[0];
-                XmlNode title = latest.SelectSingleNode("title");
-                Regex reg = new Regex("Release: v([\\d\\.])+");
-                string versioninfo = reg.Match(title.InnerText).Value.Replace("Release: ", "").TrimStart(new char[] { 'v' });
+                    XmlNode latest = xmldoc.SelectNodes("/rss/channel/item")[0];
+                    XmlNode title = latest.SelectSingleNode("title");
+                    Regex reg = new Regex("Release: v([\\d\\.])+");
+                    string versioninfo = reg.Match(title.InnerText).Value.Replace("Release: ", "").TrimStart(new char[] { 'v' });
 
-                Version NeededUpdate = Version.Parse(versioninfo);
-                int comp = Assembly.GetExecutingAssembly().GetName().Version.CompareTo(NeededUpdate);
-                this.Visible = (comp == -1);
+                    Version NeededUpdate = Version.Parse(versioninfo);
+                    int comp = Assembly.GetExecutingAssembly().GetName().Version.CompareTo(NeededUpdate);
+                    this.Visible = (comp == -1);
 
 
-                currentv.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-                latestv.Text = NeededUpdate.ToString();
+                    currentv.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                    latestv.Text = NeededUpdate.ToString();
+                }
+                catch { this.Visible = false;  }
             }
 
         }
