@@ -129,6 +129,14 @@ namespace HAP.Silverlight.Browser
                         sp.VerticalAlignment = System.Windows.VerticalAlignment.Center;
                         sp.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
                         sp.MouseLeftButtonUp += new MouseButtonEventHandler(HAPTreeNode_MouseLeftButtonUp);
+                        sp.AllowDrop = bitem.AccessControl == AccessControlActions.Change;
+                        if (sp.AllowDrop)
+                        {
+                            sp.DragEnter += new DragEventHandler(titem_DragEnter);
+                            sp.DragLeave += new DragEventHandler(titem_DragLeave);
+                            sp.Drop += new DragEventHandler(contentPan_Drop);
+                            sp.DragOver += new DragEventHandler(sp_DragOver);
+                        }
                         sp.Cursor = Cursors.Hand;
                         sp.MouseEnter += new MouseEventHandler(HAPTreeNode_MouseEnter);
                         sp.MouseLeave += new MouseEventHandler(HAPTreeNode_MouseLeave);
@@ -181,6 +189,47 @@ namespace HAP.Silverlight.Browser
                 }
                 else loaded = true;
             }
+        }
+
+        private void sp_DragOver(object sender, DragEventArgs e)
+        {
+            movetooltip.Margin = new Thickness(e.GetPosition(this).X + 10, e.GetPosition(this).Y + 10, 0, 0);
+            if (((IBitem)sender).Data.AccessControl == AccessControlActions.Change)
+            {
+                movetooltip.Visibility = System.Windows.Visibility.Visible;
+                nomove.Visibility = System.Windows.Visibility.Collapsed;
+                ((StackPanel)sender).Background = Resources["hover"] as LinearGradientBrush;
+            }
+            else
+            {
+                movetooltip.Visibility = System.Windows.Visibility.Collapsed;
+                nomove.Visibility = System.Windows.Visibility.Visible;
+            }
+            e.Handled = true;
+        }
+
+        private void titem_DragEnter(object sender, DragEventArgs e)
+        {
+            if (((IBitem)sender).Data.AccessControl == AccessControlActions.Change)
+            {
+                mousemode = MouseMode.Upload;
+                nomove.Visibility = System.Windows.Visibility.Visible;
+                movetooltip.Visibility = System.Windows.Visibility.Collapsed;
+                movetext.Text = "Upload to";
+                movefoldertext.Text = ((IBitem)sender).Data.Name;
+                uploadItem = ((IBitem)sender).Data;
+                e.Handled = true;
+            }
+        }
+
+        private void titem_DragLeave(object sender, DragEventArgs e)
+        {
+            ((StackPanel)sender).Background = new SolidColorBrush(Colors.Transparent);
+            mousemode = MouseMode.NoGo;
+            uploadItem = CurrentItem;
+            if (CurrentItem.AccessControl == AccessControlActions.Change) movefoldertext.Text = "This Folder";
+            movetooltip.Visibility = System.Windows.Visibility.Collapsed;
+            nomove.Visibility = System.Windows.Visibility.Visible;
         }
 
         private void listclient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
@@ -393,6 +442,14 @@ namespace HAP.Silverlight.Browser
             sp.MouseEnter += new MouseEventHandler(HAPTreeNode_MouseEnter);
             sp.MouseLeave += new MouseEventHandler(HAPTreeNode_MouseLeave);
             sp.MouseLeftButtonUp += new MouseButtonEventHandler(HAPTreeNode_MouseLeftButtonUp);
+            sp.AllowDrop = bitem.AccessControl == AccessControlActions.Change;
+            if (sp.AllowDrop)
+            {
+                sp.DragEnter += new DragEventHandler(titem_DragEnter);
+                sp.DragLeave += new DragEventHandler(titem_DragLeave);
+                sp.Drop += new DragEventHandler(contentPan_Drop);
+                sp.DragOver += new DragEventHandler(sp_DragOver);
+            }
             sp.Data = bitem;
             sp.Cursor = Cursors.Hand;
             Image img = new Image();
@@ -726,7 +783,7 @@ namespace HAP.Silverlight.Browser
         {
             uploadItem = CurrentItem;
             if (CurrentItem.AccessControl == AccessControlActions.Change) movefoldertext.Text = "This Folder";
-            ((BrowserItem)sender).Leave();
+            if (sender is BrowserItem) ((BrowserItem)sender).Leave();
         }
 
         private void item_DragEnter(object sender, DragEventArgs e)
@@ -737,9 +794,9 @@ namespace HAP.Silverlight.Browser
                 nomove.Visibility = System.Windows.Visibility.Visible;
                 movetooltip.Visibility = System.Windows.Visibility.Collapsed;
                 movetext.Text = "Upload to";
-                movefoldertext.Text = ((BrowserItem)sender).Data.Name;
-                ((BrowserItem)sender).Hover();
-                uploadItem = ((BrowserItem)sender).Data;
+                uploadItem = ((IBitem)sender).Data;
+                movefoldertext.Text = uploadItem.Name;
+                if (sender is BrowserItem) ((BrowserItem)sender).Hover();
                 e.Handled = true;
             }
         }
@@ -978,6 +1035,7 @@ namespace HAP.Silverlight.Browser
 
         private void contentPan_Drop(object sender, DragEventArgs e)
         {
+            if (sender is StackPanel) ((StackPanel)sender).Background = new SolidColorBrush(Colors.Transparent);
             if (e.Data == null) return;
             if (uploadItem == null) return;
 

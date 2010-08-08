@@ -8,6 +8,12 @@
     mc:Ignorable="d" xmlns:my="clr-namespace:HAP.Silverlight.Browser" d:DesignHeight="400" d:DesignWidth="800" MouseMove="UserControl_MouseMove" 
     MouseLeave="UserControl_MouseLeave" MouseLeftButtonUp="UserControl_MouseLeftButtonUp" DragEnter="UserControl_DragEnter" 
     DragOver="UserControl_DragOver" DragLeave="UserControl_DragLeave" Drop="UserControl_Drop" Loaded="UserControl_Loaded">
+    <UserControl.Resources>
+        <LinearGradientBrush x:Key="hover" EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FFEAF3FE" Offset="0" />
+            <GradientStop Color="#FFD0E5FE" Offset="1" />
+        </LinearGradientBrush>
+    </UserControl.Resources>
     <Grid x:Name="LayoutRoot" Background="White">
         <Grid>
             <Grid.RowDefinitions>
