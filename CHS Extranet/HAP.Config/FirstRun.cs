@@ -301,8 +301,11 @@ namespace HAP.Config
 
             #region Tracker
             XmlNode tracker = hapConfig.SelectSingleNode("tracker");
-            trackermaxstaff.Value = int.Parse(tracker.Attributes["maxstafflogons"].Value);
-            trackermaxstudent.Value = int.Parse(tracker.Attributes["maxstudentlogons"].Value);
+            if (tracker != null)
+            {
+                trackermaxstaff.Value = int.Parse(tracker.Attributes["maxstafflogons"].Value);
+                trackermaxstudent.Value = int.Parse(tracker.Attributes["maxstudentlogons"].Value);
+            }
             #endregion
 
             #region MyComputer
