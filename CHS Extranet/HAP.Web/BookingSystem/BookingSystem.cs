@@ -47,13 +47,20 @@ namespace HAP.Web.BookingSystem
         {
             get
             {
-                Dictionary<BookingKey, Booking> staticbookings = new Dictionary<BookingKey, Booking>();
+                Dictionary<BookingKey, Booking> staticbookings;
+                if (HttpContext.Current.Cache["staticbookings"] == null)
+                {
+                    staticbookings = new Dictionary<BookingKey, Booking>();
+                    XmlDocument doc = new XmlDocument();
+                    doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/StaticBookings.xml"));
 
-                XmlDocument doc = new XmlDocument();
-                doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/StaticBookings.xml"));
+                    foreach (XmlNode node in doc.SelectNodes("/Bookings/Booking"))
+                        staticbookings.Add(new BookingKey(node), new Booking(node));
 
-                foreach (XmlNode node in doc.SelectNodes("/Bookings/Booking"))
-                    staticbookings.Add(new BookingKey(node), new Booking(node));
+                    HttpContext.Current.Cache.Insert("staticbookings", staticbookings, new System.Web.Caching.CacheDependency(HttpContext.Current.Server.MapPath("~/App_Data/StaticBookings.xml")));
+
+                }
+                else staticbookings = HttpContext.Current.Cache["staticbookings"] as Dictionary<BookingKey, Booking>;
                 return staticbookings;
             }
         }
