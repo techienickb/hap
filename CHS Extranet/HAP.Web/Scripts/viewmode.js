@@ -78,7 +78,7 @@ else {
     var version = getCookie('mycompv');
     if (version != null && version != "") {
         changeversion(version);
-    }
+    } else document.getElementById('versionquest').style.display = 'block';
 }
 
 

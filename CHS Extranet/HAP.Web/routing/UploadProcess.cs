@@ -57,6 +57,7 @@ namespace HAP.Web.routing
                 {
                     SaveFile(context.Request.InputStream, fs);
                     fs.Close();
+                    fs.Dispose();
                 }
             }
             else
@@ -65,6 +66,7 @@ namespace HAP.Web.routing
                 {
                     SaveFile(context.Request.InputStream, fs);
                     fs.Close();
+                    fs.Dispose();
                 }
             }
             if (complete)

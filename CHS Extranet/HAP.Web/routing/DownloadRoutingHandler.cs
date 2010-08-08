@@ -99,7 +99,7 @@ namespace HAP.Web.routing
 
             string userhome = up.HomeDirectory;
             if (!userhome.EndsWith("\\")) userhome += "\\";
-            string path = RoutingPath.Replace('^', '&');
+            string path = RoutingPath.Replace('^', '&').Replace("%20", " ");
             uncpath unc = null;
             unc = config.MyComputer.UNCPaths[RoutingDrive];
             if (unc == null || !isAuth(unc)) context.Response.Redirect("/Extranet/unauthorised.aspx", true);
