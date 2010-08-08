@@ -26,7 +26,7 @@
                         <td><%# Eval("username") %></td>
                         <td><%# Eval("domainname") %></td>
                         <td><%# Eval("logonserver") %></td>
-                        <td>'<%# DateTime.Parse(Eval("logondatetime").ToString()).ToString("f") %></td>
+                        <td><%# DateTime.Parse(Eval("logondatetime").ToString()).ToString("f") %></td>
                     </tr>
                 </ItemTemplate>
                 <LayoutTemplate>
