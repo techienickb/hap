@@ -27,7 +27,7 @@ namespace HAP.Silverlight.Browser
 
         public string HAPV
         {
-            set { hapv.Text = value.Remove(0, 5).Replace(',', ' ').Replace(":", ": "); }
+            set { hapv.Text = value.Remove(0, 5).Replace('|', ' ').Replace(":", ": "); }
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
