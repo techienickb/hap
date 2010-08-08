@@ -125,7 +125,10 @@ namespace HAP.Web.API
             }
             catch (Exception e)
             {
-                context.Response.Write("ERROR: " + e.ToString() + "\\n" + e.Message);
+                if (e.ToString().Contains("is being used by another process") || e.Message.Contains("is being used by another process"))
+                    context.Response.Write("ERROR: I'm sorry to say but this file can not be moved.");
+                else
+                    context.Response.Write("ERROR: " + e.ToString() + "\\n" + e.Message);
             }
         }
     }

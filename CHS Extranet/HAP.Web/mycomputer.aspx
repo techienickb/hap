@@ -29,7 +29,7 @@
     <div id="maincol">
         <h1>My Computer</h1>
         <script type="text/javascript" src="/Extranet/Scripts/Silverlight.js"></script>
-        <div id="versionquest">
+        <div id="versionquest" style="display: none;">
             <div class="modalBackground" style="width: 100%; height: 100%; position: absolute; position: fixed; z-index: 2000; top: 0; left: 0; right: 0; bottom: 0;">
             </div>
             <div style="width: 100%; height: 100%; position: absolute; position: fixed; z-index: 2001; top: 0; left: 0; right: 0; bottom: 0;">

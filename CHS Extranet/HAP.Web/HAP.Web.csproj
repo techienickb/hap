@@ -147,6 +147,7 @@
     <Content Include="images\icons\rm.png" />
     <Content Include="images\icons\tracker-historic.png" />
     <Content Include="images\icons\tracker-live.png" />
+    <Content Include="images\icons\tracker.png" />
     <Content Include="images\icons\xaml.png" />
     <Content Include="images\icons\xml.png" />
     <Content Include="images\icons\xps.png" />
