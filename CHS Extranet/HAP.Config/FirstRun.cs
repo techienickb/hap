@@ -110,6 +110,20 @@ namespace HAP.Config
             }
             #endregion
 
+            #region Tracker
+            XmlNode tracker = hapConfig.SelectSingleNode("tracker");
+            if (tracker == null)
+            {
+                XmlElement track = doc.CreateElement("tracker");
+                track.SetAttribute("maxstudentlogons", "1");
+                track.SetAttribute("maxstafflogons", "4");
+                hapConfig.AppendChild(track);
+                tracker = hapConfig.SelectSingleNode("tracker");
+            }
+            tracker.Attributes["maxstudentlogons"].Value = trackermaxstudent.Value.ToString();
+            tracker.Attributes["maxstafflogons"].Value = trackermaxstaff.Value.ToString();
+            #endregion
+
             #region MyComputer
             XmlNode mycomp = hapConfig.SelectSingleNode("mycomputer");
             mycomp.Attributes["hideextensions"].Value = mycomputer_exext.Text;
@@ -283,6 +297,12 @@ namespace HAP.Config
                     hpl_updatedetails.Text = node.Attributes["showto"].Value;
                 else
                     homepagelinks.Rows.Add(node.Attributes["name"].Value, node.Attributes["description"].Value, node.Attributes["showto"].Value, node.Attributes["linklocation"].Value, node.Attributes["icon"].Value);
+            #endregion
+
+            #region Tracker
+            XmlNode tracker = hapConfig.SelectSingleNode("tracker");
+            trackermaxstaff.Value = int.Parse(tracker.Attributes["maxstafflogons"].Value);
+            trackermaxstudent.Value = int.Parse(tracker.Attributes["maxstudentlogons"].Value);
             #endregion
 
             #region MyComputer

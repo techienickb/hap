@@ -73,6 +73,11 @@
             this.label13 = new System.Windows.Forms.Label();
             this.wizardPage3 = new AeroWizard.WizardPage();
             this.homepagelinks = new System.Windows.Forms.DataGridView();
+            this.HPLName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ShowTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.LinkLocation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.HPLIcon = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label20 = new System.Windows.Forms.Label();
             this.hpl_updatedetails = new System.Windows.Forms.TextBox();
@@ -80,6 +85,12 @@
             this.tabControl3 = new System.Windows.Forms.TabControl();
             this.tabPage10 = new System.Windows.Forms.TabPage();
             this.uncpaths = new System.Windows.Forms.DataGridView();
+            this.Drive = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.PathName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.UNC = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.UNCEnableReadTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.UNCEnableWriteTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.enablemove = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.tabPage11 = new System.Windows.Forms.TabPage();
             this.uploadfilters = new System.Windows.Forms.DataGridView();
             this.FilterName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -119,17 +130,12 @@
             this.label19 = new System.Windows.Forms.Label();
             this.bs_maxdays = new System.Windows.Forms.NumericUpDown();
             this.folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
-            this.HPLName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ShowTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.LinkLocation = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.HPLIcon = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Drive = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.PathName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.UNC = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.UNCEnableReadTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.UNCEnableWriteTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.enablemove = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.wizardPage7 = new AeroWizard.WizardPage();
+            this.label24 = new System.Windows.Forms.Label();
+            this.trackermaxstudent = new System.Windows.Forms.NumericUpDown();
+            this.label25 = new System.Windows.Forms.Label();
+            this.trackermaxstaff = new System.Windows.Forms.NumericUpDown();
+            this.label26 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.wiz)).BeginInit();
             this.wizardPage1.SuspendLayout();
             this.wizardPage2.SuspendLayout();
@@ -156,6 +162,9 @@
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bs_max)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bs_maxdays)).BeginInit();
+            this.wizardPage7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackermaxstudent)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackermaxstaff)).BeginInit();
             this.SuspendLayout();
             // 
             // wiz
@@ -165,6 +174,7 @@
             this.wiz.Pages.Add(this.wizardPage1);
             this.wiz.Pages.Add(this.wizardPage2);
             this.wiz.Pages.Add(this.wizardPage3);
+            this.wiz.Pages.Add(this.wizardPage7);
             this.wiz.Pages.Add(this.wizardPage4);
             this.wiz.Pages.Add(this.wizardPage5);
             this.wiz.Pages.Add(this.wizardPage6);
@@ -564,7 +574,7 @@
             this.wizardPage3.Controls.Add(this.homepagelinks);
             this.wizardPage3.Controls.Add(this.panel1);
             this.wizardPage3.Name = "wizardPage3";
-            this.wizardPage3.NextPage = this.wizardPage4;
+            this.wizardPage3.NextPage = this.wizardPage7;
             this.wizardPage3.Size = new System.Drawing.Size(737, 352);
             this.wizardPage3.TabIndex = 2;
             this.wizardPage3.Text = "Home Page Links";
@@ -584,6 +594,36 @@
             this.homepagelinks.RowTemplate.Height = 24;
             this.homepagelinks.Size = new System.Drawing.Size(737, 309);
             this.homepagelinks.TabIndex = 2;
+            // 
+            // HPLName
+            // 
+            this.HPLName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.HPLName.HeaderText = "Name";
+            this.HPLName.Name = "HPLName";
+            // 
+            // Description
+            // 
+            this.Description.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Description.HeaderText = "Description";
+            this.Description.Name = "Description";
+            // 
+            // ShowTo
+            // 
+            this.ShowTo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ShowTo.HeaderText = "Show To";
+            this.ShowTo.Name = "ShowTo";
+            // 
+            // LinkLocation
+            // 
+            this.LinkLocation.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.LinkLocation.HeaderText = "Link Location";
+            this.LinkLocation.Name = "LinkLocation";
+            // 
+            // HPLIcon
+            // 
+            this.HPLIcon.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.HPLIcon.HeaderText = "Icon";
+            this.HPLIcon.Name = "HPLIcon";
             // 
             // panel1
             // 
@@ -658,6 +698,74 @@
             this.uncpaths.Name = "uncpaths";
             this.uncpaths.Size = new System.Drawing.Size(723, 266);
             this.uncpaths.TabIndex = 0;
+            // 
+            // Drive
+            // 
+            this.Drive.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.Drive.HeaderText = "Drive";
+            this.Drive.Items.AddRange(new object[] {
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "J",
+            "K",
+            "L",
+            "M",
+            "N",
+            "O",
+            "P",
+            "Q",
+            "R",
+            "S",
+            "T",
+            "U",
+            "V",
+            "W",
+            "X",
+            "Y",
+            "Z"});
+            this.Drive.Name = "Drive";
+            this.Drive.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Drive.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.Drive.Width = 59;
+            // 
+            // PathName
+            // 
+            this.PathName.HeaderText = "Name";
+            this.PathName.Name = "PathName";
+            // 
+            // UNC
+            // 
+            this.UNC.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.UNC.HeaderText = "UNC";
+            this.UNC.Name = "UNC";
+            // 
+            // UNCEnableReadTo
+            // 
+            this.UNCEnableReadTo.HeaderText = "Enable Read To";
+            this.UNCEnableReadTo.Name = "UNCEnableReadTo";
+            this.UNCEnableReadTo.Width = 140;
+            // 
+            // UNCEnableWriteTo
+            // 
+            this.UNCEnableWriteTo.HeaderText = "Enable Write To";
+            this.UNCEnableWriteTo.Name = "UNCEnableWriteTo";
+            this.UNCEnableWriteTo.Width = 140;
+            // 
+            // enablemove
+            // 
+            this.enablemove.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+            this.enablemove.HeaderText = "HTML Move";
+            this.enablemove.Name = "enablemove";
+            this.enablemove.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.enablemove.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.enablemove.Width = 90;
             // 
             // tabPage11
             // 
@@ -1027,103 +1135,69 @@
             this.folderBrowser.RootFolder = System.Environment.SpecialFolder.MyComputer;
             this.folderBrowser.ShowNewFolderButton = false;
             // 
-            // HPLName
+            // wizardPage7
             // 
-            this.HPLName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.HPLName.HeaderText = "Name";
-            this.HPLName.Name = "HPLName";
+            this.wizardPage7.Controls.Add(this.label26);
+            this.wizardPage7.Controls.Add(this.label25);
+            this.wizardPage7.Controls.Add(this.trackermaxstaff);
+            this.wizardPage7.Controls.Add(this.label24);
+            this.wizardPage7.Controls.Add(this.trackermaxstudent);
+            this.wizardPage7.Name = "wizardPage7";
+            this.wizardPage7.NextPage = this.wizardPage4;
+            this.wizardPage7.Size = new System.Drawing.Size(737, 352);
+            this.wizardPage7.TabIndex = 6;
+            this.wizardPage7.Text = "Logon Tracker";
             // 
-            // Description
+            // label24
             // 
-            this.Description.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Description.HeaderText = "Description";
-            this.Description.Name = "Description";
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(186, 25);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(118, 15);
+            this.label24.TabIndex = 17;
+            this.label24.Text = "Max Student Logons:";
             // 
-            // ShowTo
+            // trackermaxstudent
             // 
-            this.ShowTo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ShowTo.HeaderText = "Show To";
-            this.ShowTo.Name = "ShowTo";
+            this.trackermaxstudent.Location = new System.Drawing.Point(310, 23);
+            this.trackermaxstudent.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.trackermaxstudent.Name = "trackermaxstudent";
+            this.trackermaxstudent.Size = new System.Drawing.Size(48, 23);
+            this.trackermaxstudent.TabIndex = 16;
             // 
-            // LinkLocation
+            // label25
             // 
-            this.LinkLocation.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.LinkLocation.HeaderText = "Link Location";
-            this.LinkLocation.Name = "LinkLocation";
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(203, 54);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(101, 15);
+            this.label25.TabIndex = 19;
+            this.label25.Text = "Max Staff Logons:";
             // 
-            // HPLIcon
+            // trackermaxstaff
             // 
-            this.HPLIcon.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.HPLIcon.HeaderText = "Icon";
-            this.HPLIcon.Name = "HPLIcon";
+            this.trackermaxstaff.Location = new System.Drawing.Point(310, 52);
+            this.trackermaxstaff.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.trackermaxstaff.Name = "trackermaxstaff";
+            this.trackermaxstaff.Size = new System.Drawing.Size(48, 23);
+            this.trackermaxstaff.TabIndex = 18;
             // 
-            // Drive
+            // label26
             // 
-            this.Drive.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
-            this.Drive.HeaderText = "Drive";
-            this.Drive.Items.AddRange(new object[] {
-            "A",
-            "B",
-            "C",
-            "D",
-            "E",
-            "F",
-            "G",
-            "H",
-            "I",
-            "J",
-            "K",
-            "L",
-            "M",
-            "N",
-            "O",
-            "P",
-            "Q",
-            "R",
-            "S",
-            "T",
-            "U",
-            "V",
-            "W",
-            "X",
-            "Y",
-            "Z"});
-            this.Drive.Name = "Drive";
-            this.Drive.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Drive.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.Drive.Width = 59;
-            // 
-            // PathName
-            // 
-            this.PathName.HeaderText = "Name";
-            this.PathName.Name = "PathName";
-            // 
-            // UNC
-            // 
-            this.UNC.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.UNC.HeaderText = "UNC";
-            this.UNC.Name = "UNC";
-            // 
-            // UNCEnableReadTo
-            // 
-            this.UNCEnableReadTo.HeaderText = "Enable Read To";
-            this.UNCEnableReadTo.Name = "UNCEnableReadTo";
-            this.UNCEnableReadTo.Width = 140;
-            // 
-            // UNCEnableWriteTo
-            // 
-            this.UNCEnableWriteTo.HeaderText = "Enable Write To";
-            this.UNCEnableWriteTo.Name = "UNCEnableWriteTo";
-            this.UNCEnableWriteTo.Width = 140;
-            // 
-            // enablemove
-            // 
-            this.enablemove.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-            this.enablemove.HeaderText = "HTML Move";
-            this.enablemove.Name = "enablemove";
-            this.enablemove.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.enablemove.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.enablemove.Width = 98;
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(396, 43);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(79, 15);
+            this.label26.TabIndex = 1;
+            this.label26.Text = "0 = Unlimited";
             // 
             // FirstRun
             // 
@@ -1170,6 +1244,10 @@
             this.panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bs_max)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bs_maxdays)).EndInit();
+            this.wizardPage7.ResumeLayout(false);
+            this.wizardPage7.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackermaxstudent)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackermaxstaff)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1277,5 +1355,11 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn UNCEnableReadTo;
         private System.Windows.Forms.DataGridViewTextBoxColumn UNCEnableWriteTo;
         private System.Windows.Forms.DataGridViewCheckBoxColumn enablemove;
+        private AeroWizard.WizardPage wizardPage7;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.NumericUpDown trackermaxstaff;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.NumericUpDown trackermaxstudent;
     }
 }
