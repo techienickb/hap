@@ -9,9 +9,11 @@
     <asp:UpdatePanel runat="server" UpdateMode="Conditional">
         <Triggers>
             <asp:AsyncPostBackTrigger controlid="refreshtimer" eventname="Tick" />
+            <asp:AsyncPostBackTrigger controlid="ListView1" eventname="ItemCommand" />
         </Triggers>
         <ContentTemplate>
-            <asp:ListView ID="ListView1" runat="server" DataSourceID="xmlsource">
+            <asp:ListView ID="ListView1" runat="server" DataSourceID="xmlsource" 
+                onitemcommand="ListView1_ItemCommand">
                 <EmptyDataTemplate>
                     <table runat="server" style="">
                         <tr>
@@ -27,6 +29,7 @@
                         <td><%# Eval("domainname") %></td>
                         <td><%# Eval("logonserver") %></td>
                         <td><%# DateTime.Parse(Eval("logondatetime").ToString()).ToString("f") %></td>
+                        <td style="width: 60px"><asp:Button OnClientClick="return confirm('Are you sure?');" Font-Size="Smaller" runat="server" Text="Logoff" CommandName="Logoff" CommandArgument='<%# Eval("computername") %>' /></td>
                     </tr>
                 </ItemTemplate>
                 <LayoutTemplate>
@@ -37,6 +40,7 @@
                             <th runat="server"><div><label>Domain</label></div></th>
                             <th runat="server"><div><label>Logon Server</label></div></th>
                             <th runat="server"><div><label>Logon Date & Time</label></div></th>
+                            <th runat="server" style="width: 60px"><div><label>Action</label></div></th>
                         </tr>
                         <tr ID="itemPlaceholder" runat="server">
                         </tr>

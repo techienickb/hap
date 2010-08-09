@@ -243,29 +243,33 @@ namespace HAP.Silverlight.Browser
             newfolder.Visibility = CurrentItem.AccessControl == AccessControlActions.Change ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
             tempnode = ((HAPTreeNode)treeView1.SelectedItem);
             tempnode.Items.Clear();
-            if (e.Result.StartsWith("ERROR")) MessageBox.Show("An Error Occured");
-            else foreach (string s in e.Result.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
+            try
             {
-                string[] ss = s.Split(new char[] { '|' });
-                BrowserItem item = new BrowserItem(new BItem(ss[0], ss[1], ss[2], ss[3], (ss[3] == "File Folder" ? BType.Folder : (ss[3] == "Drive" ? BType.Drive : BType.File)), ss[4], ss[5]));
-                item.Activate += new EventHandler(item_Activate);
-                item.MouseEnter += new MouseEventHandler(item_MouseEnter);
-                if (CurrentItem.AccessControl == AccessControlActions.Change)
-                {
-                    item.DragEnter += new DragEventHandler(item_DragEnter);
-                    item.DragLeave += new DragEventHandler(item_DragLeave);
-                    item.MouseLeftButtonDown += new MouseButtonEventHandler(item_MouseLeftButtonDown);
-                    item.KeyUp += new KeyEventHandler(item_KeyUp);
-                }
-                item.MouseLeave += new MouseEventHandler(item_MouseLeave);
-                item.ReSort += new ResortHandler(item_ReSort);
-                //if (item.Data.BType == BType.Drive) item.DirectoryChange += new ChangeDirectoryHandler(computer_DirectoryChange);
-                //else 
-                item.DirectoryChange += new ChangeDirectoryHandler(item_DirectoryChange);
-                if (item.Data.BType == BType.Folder && item.Data.Name != "..") UpdateTree(item.Data);
-                contentPan.Children.Add(item);
-                item.Mode = ViewMode;
+                if (e.Result.StartsWith("ERROR")) MessageBox.Show("An Error Occured");
+                else foreach (string s in e.Result.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        string[] ss = s.Split(new char[] { '|' });
+                        BrowserItem item = new BrowserItem(new BItem(ss[0], ss[1], ss[2], ss[3], (ss[3] == "File Folder" ? BType.Folder : (ss[3] == "Drive" ? BType.Drive : BType.File)), ss[4], ss[5]));
+                        item.Activate += new EventHandler(item_Activate);
+                        item.MouseEnter += new MouseEventHandler(item_MouseEnter);
+                        if (CurrentItem.AccessControl == AccessControlActions.Change)
+                        {
+                            item.DragEnter += new DragEventHandler(item_DragEnter);
+                            item.DragLeave += new DragEventHandler(item_DragLeave);
+                            item.MouseLeftButtonDown += new MouseButtonEventHandler(item_MouseLeftButtonDown);
+                            item.KeyUp += new KeyEventHandler(item_KeyUp);
+                        }
+                        item.MouseLeave += new MouseEventHandler(item_MouseLeave);
+                        item.ReSort += new ResortHandler(item_ReSort);
+                        //if (item.Data.BType == BType.Drive) item.DirectoryChange += new ChangeDirectoryHandler(computer_DirectoryChange);
+                        //else 
+                        item.DirectoryChange += new ChangeDirectoryHandler(item_DirectoryChange);
+                        if (item.Data.BType == BType.Folder && item.Data.Name != "..") UpdateTree(item.Data);
+                        contentPan.Children.Add(item);
+                        item.Mode = ViewMode;
+                    }
             }
+            catch (Exception ex) { MessageBox.Show("An Error Occured\n" + ex.ToString(), "Error", MessageBoxButton.OK);  }
             reload = false;
         }
 
@@ -812,12 +816,12 @@ namespace HAP.Silverlight.Browser
                 organiseButton1.IsDelete = organiseButton1.IsRename = RightClickRename.IsEnabled = RightClickDelete.IsEnabled = CurrentItem.AccessControl == AccessControlActions.Change;
                 if (activeItems[0].Data.BType == BType.Folder)
                 {
-                    RightClickUpload.Visibility = System.Windows.Visibility.Visible;
+                    RightClickUpload.Visibility = CurrentItem.AccessControl == AccessControlActions.Change ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
                     RightClickUpload.Header = "Upload to " + activeItems[0].Data.Name;
                 }
                 else RightClickUpload.Visibility = System.Windows.Visibility.Collapsed;
                 if (activeItems[0].Data.Type == "Compressed (zipped) Folder")
-                    RightClickUNZIP.Visibility = System.Windows.Visibility.Visible;
+                    RightClickUNZIP.Visibility = CurrentItem.AccessControl == AccessControlActions.Change ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
                 else RightClickUNZIP.Visibility = System.Windows.Visibility.Collapsed;
                 RightClickZIP.Visibility = RightClickFolder.Visibility = System.Windows.Visibility.Collapsed;
             }
