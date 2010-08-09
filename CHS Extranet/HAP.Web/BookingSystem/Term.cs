@@ -140,10 +140,27 @@ namespace HAP.Web.BookingSystem
             return new Term();
         }
 
+        private XmlDocument TermsDoc
+        {
+            get
+            {
+                XmlDocument doc;
+                if (HttpContext.Current.Cache["terms"] == null)
+                {
+                    doc = new XmlDocument();
+                    doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/TermDates.xml"));
+
+                    HttpContext.Current.Cache.Insert("terms", doc, new System.Web.Caching.CacheDependency(HttpContext.Current.Server.MapPath("~/App_Data/TermDates.xml")));
+
+                }
+                else doc = HttpContext.Current.Cache["terms"] as XmlDocument;
+                return doc;
+            }
+        }
+
         public void ReadTerms()
         {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/TermDates.xml"));
+            XmlDocument doc = TermsDoc;
 
             foreach (XmlNode node in doc.SelectNodes("/Terms/Term"))
             {

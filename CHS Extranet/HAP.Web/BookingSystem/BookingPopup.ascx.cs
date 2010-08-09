@@ -156,8 +156,7 @@ namespace HAP.Web.BookingSystem
             date.Text = Date.ToLongDateString();
             if (!isAdmin)
             {
-                XmlDocument doc = new XmlDocument();
-                doc.Load(Server.MapPath("~/App_Data/Bookings.xml"));
+                XmlDocument doc = new BookingSystem().BookingsDoc;
                 int max = hapConfig.Current.BookingSystem.MaxBookingsPerWeek;
                 foreach (AdvancedBookingRight right in BookingSystem.BookingRights)
                     if (right.Username == Username)

@@ -46,8 +46,7 @@ namespace HAP.Web.API
             if (userhome.EndsWith("\\")) userhome = userhome.Remove(userhome.LastIndexOf('\\'));
             string path = "";
             unc = config.MyComputer.UNCPaths[RoutingDrive];
-            if (unc == null || !isWriteAuth(unc)) throw new Exception("ERROR: Unauthorised");
-            else path = string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username) + RoutingPath;
+            path = string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username) + RoutingPath;
 
             path = path.TrimEnd(new char[] { '\\' }).Replace('^', '&').Replace('/', '\\');
             return path;

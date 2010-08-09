@@ -64,8 +64,7 @@ namespace HAP.Web.BookingSystem
         {
             string room = removevars.Value.Split(new char[] { '@' }, StringSplitOptions.RemoveEmptyEntries)[0];
             string lesson = removevars.Value.Split(new char[] { '@' }, StringSplitOptions.RemoveEmptyEntries)[1];
-            XmlDocument doc = new XmlDocument();
-            doc.Load(Server.MapPath("~/App_Data/Bookings.xml"));
+            XmlDocument doc = BookingSystem.BookingsDoc;
             doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + Calendar1.SelectedDate.ToShortDateString() + "' and @lesson='" + lesson.ToString() + "' and @room='" + room + "']"));
             if (config.BookingSystem.Resources[room].ResourceType == ResourceType.Laptops)
             {

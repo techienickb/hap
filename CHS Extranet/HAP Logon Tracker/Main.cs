@@ -67,7 +67,7 @@ namespace HAP.Logon.Tracker
         private void CheckCount()
         {
             if (MaxLogons == 0) button1.Enabled = true;
-            else if (dataGridView1.Rows.Count <= MaxLogons) button1.Enabled = true;
+            else if (dataGridView1.Rows.Count < MaxLogons) button1.Enabled = true;
             else button1.Enabled = false;
         }
 
@@ -85,6 +85,41 @@ namespace HAP.Logon.Tracker
                 client.UploadStringAsync(new Uri(BaseUri, "tracker/api.ashx?op=" + Action.RemoteLogoff.ToString().ToLower()), "POST", dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString(), e.RowIndex);
                 this.Enabled = false;
                 this.Cursor = Cursors.AppStarting;
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Clicking this button will result in the system logging you off.", "Logoff?", MessageBoxButtons.OKCancel) == System.Windows.Forms.DialogResult.OK)
+            {
+                WebClient client = new WebClient();
+                client.UploadStringCompleted += new UploadStringCompletedEventHandler(client2_UploadStringCompleted);
+                client.UploadStringAsync(new Uri(BaseUri, "tracker/api.ashx?op=" + Action.RemoteLogoff.ToString().ToLower()), "POST", Dns.GetHostName(), -1);
+                this.Hide();
+            }
+        }
+
+        private void client2_UploadStringCompleted(object sender, UploadStringCompletedEventArgs e)
+        {
+            if (InvokeRequired) BeginInvoke(new UploadStringCompletedEventHandler(client2_UploadStringCompleted), sender, e);
+            else
+            {
+                try
+                {
+                    if (e.Result != "Done") MessageBox.Show(this, e.Result, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch (Exception ex)
+                {
+                    StreamWriter sw;
+                    string path = Path.GetFileNameWithoutExtension(Application.ExecutablePath) + ".log";
+                    if (!File.Exists(path))
+                        sw = File.CreateText(path);
+                    else sw = File.AppendText(path);
+                    sw.WriteLine(ex.ToString());
+                    sw.Close();
+                    sw.Dispose();
+                }
+                this.Close();
             }
         }
     }

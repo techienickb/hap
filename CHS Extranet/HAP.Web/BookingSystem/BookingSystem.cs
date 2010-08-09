@@ -30,10 +30,27 @@ namespace HAP.Web.BookingSystem
             }
         }
 
+        public static XmlDocument BookingsDoc
+        {
+            get
+            {
+                XmlDocument doc;
+                if (HttpContext.Current.Cache["bookings"] == null)
+                {
+                    doc = new XmlDocument();
+                    doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Bookings.xml"));
+
+                    HttpContext.Current.Cache.Insert("bookings", doc, new System.Web.Caching.CacheDependency(HttpContext.Current.Server.MapPath("~/App_Data/Bookings.xml")));
+
+                }
+                else doc = HttpContext.Current.Cache["bookings"] as XmlDocument;
+                return doc;
+            }
+        }
+
         public Booking getBooking(string room, string lesson)
         {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Bookings.xml"));
+            XmlDocument doc = BookingsDoc;
             if (!islessonFree(room, lesson))
             {
                 XmlNode node = doc.SelectSingleNode("/Bookings/Booking[@date='" + Date.ToShortDateString() + "' and @lesson='" + lesson + "' and @room='" + room + "']");
@@ -72,8 +89,7 @@ namespace HAP.Web.BookingSystem
 
         public bool islessonFree(string room, string lesson)
         {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Bookings.xml"));
+            XmlDocument doc = BookingsDoc;
             if (doc.SelectSingleNode("/Bookings/Booking[@date='" + Date.ToShortDateString() + "' and @lesson='" + lesson + "' and @room='" + room + "']") != null)
                 return false;
             return true;
@@ -109,25 +125,27 @@ namespace HAP.Web.BookingSystem
         {
             get
             {
-                List<AdvancedBookingRight> abr = new List<AdvancedBookingRight>();
-                XmlDocument doc = new XmlDocument();
-                doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/abr.xml"));
+                List<AdvancedBookingRight> abr;
+                if (HttpContext.Current.Cache["abr"] == null)
+                {
+                    abr = new List<AdvancedBookingRight>();
+                    XmlDocument doc = new XmlDocument();
+                    doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/abr.xml"));
 
-                foreach (XmlNode node in doc.SelectNodes("/ABR/Right"))
-                    abr.Add(new AdvancedBookingRight(node.Attributes["user"].Value, int.Parse(node.Attributes["weeksinadvanced"].Value), int.Parse(node.Attributes["bookingsperweek"].Value)));
+                    foreach (XmlNode node in doc.SelectNodes("/ABR/Right"))
+                        abr.Add(new AdvancedBookingRight(node.Attributes["user"].Value, int.Parse(node.Attributes["weeksinadvanced"].Value), int.Parse(node.Attributes["bookingsperweek"].Value)));
+
+                    HttpContext.Current.Cache.Insert("abr", abr, new System.Web.Caching.CacheDependency(HttpContext.Current.Server.MapPath("~/App_Data/abr.xml")));
+
+                }
+                else abr = HttpContext.Current.Cache["abr"] as List<AdvancedBookingRight>;
                 return abr;
             }
         }
 
         public AdvancedBookingRight[] getBookingRights()
         {
-            List<AdvancedBookingRight> abr = new List<AdvancedBookingRight>();
-            XmlDocument doc = new XmlDocument();
-            doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/abr.xml"));
-
-            foreach (XmlNode node in doc.SelectNodes("/ABR/Right"))
-                abr.Add(new AdvancedBookingRight(node.Attributes["user"].Value, int.Parse(node.Attributes["weeksinadvanced"].Value), int.Parse(node.Attributes["bookingsperweek"].Value)));
-            return abr.ToArray();
+            return BookingRights.ToArray();
         }
 
         public void updateBookingRights(AdvancedBookingRight right)
