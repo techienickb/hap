@@ -66,7 +66,7 @@ function popup(e) {
 
 function changeversion(e) {
     setCookie('mycompv', e, 30);
-    if (e == "sl") window.location.href = "/extranet/mycomputersl.aspx";
+    if (e == "sl") window.location.href = appdir + "/mycomputersl.aspx";
     else document.getElementById('versionquest').style.display = 'none';
     return false;
 }

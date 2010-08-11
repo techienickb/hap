@@ -46,7 +46,7 @@ namespace HAP.Silverlight.Browser
                 size.Text = _data.Size;
                 type.Text = _data.Type;
 
-                image1.Source = image2.Source = image3.Source = image4.Source = image5.Source = new BitmapImage(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + _data.Icon));
+                image1.Source = image2.Source = image3.Source = image4.Source = image5.Source = new BitmapImage(new Uri(HtmlPage.Document.DocumentUri, _data.Icon));
                 this.AllowDrop = (_data.BType == BType.Folder) && _data.AccessControl == AccessControlActions.Change;
                 key1.Visibility = key2.Visibility = key3.Visibility = key4.Visibility = key5.Visibility = (_data.AccessControl == AccessControlActions.Change ? Visibility.Collapsed : System.Windows.Visibility.Visible);
                 tooltip1.Content = tooltip2.Content = tooltip3.Content = tooltip4.Content = tooltip5.Content = (_data.AccessControl == AccessControlActions.None ? "This file/folder may not be accessible" : "This file/folder has restrictive permissions");
@@ -173,7 +173,7 @@ namespace HAP.Silverlight.Browser
             if (Activate != null) Activate(this, new EventArgs());
             if ((DateTime.Now.Ticks - LastTicks) < 2310000)
             {
-                if (_data.BType == BType.File) HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + this._data.Path));
+                if (_data.BType == BType.File) HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri, this._data.Path));
                 else if (DirectoryChange != null) DirectoryChange(this, this._data);
             }
             LastTicks = DateTime.Now.Ticks;
@@ -216,7 +216,7 @@ namespace HAP.Silverlight.Browser
 
             WebClient saveclient = new WebClient();
             saveclient.UploadStringCompleted += new UploadStringCompletedEventHandler(saveclient_UploadStringCompleted);
-            saveclient.UploadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + _data.Path.Replace("/api/mycomputer/list/", "/api/mycomputer/save/").Replace("/Download/", "/api/mycomputer/save/")), "POST", _d, new BUserState(resort, _d, _data.Name));
+            saveclient.UploadStringAsync(new Uri(HtmlPage.Document.DocumentUri, _data.Path.Replace("api/mycomputer/list/", "api/mycomputer/save/").Replace("Download/", "api/mycomputer/save/")), "POST", _d, new BUserState(resort, _d, _data.Name));
 
             _data.Name = name1.Text = name2.Text = name3.Text = name4.Text = name5.Text = textBox2.Text = textBox3.Text = textBox4.Text = textBox5.Text = textBox1.Text = newname;
             if (_data.Icon.Contains("NewFolder")) { _data.Icon.Replace("NewFolder", "folder"); Data = _data; }
@@ -303,7 +303,7 @@ namespace HAP.Silverlight.Browser
 
                 WebClient saveclient = new WebClient();
                 saveclient.UploadStringCompleted += new UploadStringCompletedEventHandler(saveclient_UploadStringCompleted);
-                saveclient.UploadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + _data.Path.Replace("/api/mycomputer/list/", "/api/mycomputer/save/").Replace("/Download/", "/api/mycomputer/save/")), "POST", _d, new BUserState(state.Resort, _d, _data.Name));
+                saveclient.UploadStringAsync(new Uri(HtmlPage.Document.DocumentUri, _data.Path.Replace("api/mycomputer/list/", "api/mycomputer/save/").Replace("Download/", "api/mycomputer/save/")), "POST", _d, new BUserState(state.Resort, _d, _data.Name));
 
                 _data.Name = name1.Text = name2.Text = name3.Text = name4.Text = name5.Text = textBox2.Text = textBox3.Text = textBox4.Text = textBox5.Text = textBox1.Text = newname;
             }
@@ -312,11 +312,11 @@ namespace HAP.Silverlight.Browser
         public int Move(bool resort, string folder)
         {
             string _d = "";
-            _d = "SAVETO:" + folder.Replace("/Extranet/api/mycomputer/list/", "").Replace('/', '\\') + "\\" + _data.Name;
+            _d = "SAVETO:" + folder.Replace("api/mycomputer/list/", "").Replace('/', '\\') + "\\" + _data.Name;
 
             WebClient saveclient = new WebClient();
             saveclient.UploadStringCompleted += new UploadStringCompletedEventHandler(saveclient_UploadStringCompleted3);
-            saveclient.UploadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + _data.Path.Replace("/api/mycomputer/list/", "/api/mycomputer/save/").Replace("/Download/", "/api/mycomputer/save/")), "POST", _d, new BUserState(resort, _d, _data.Name));
+            saveclient.UploadStringAsync(new Uri(HtmlPage.Document.DocumentUri, _data.Path.Replace("api/mycomputer/list/", "api/mycomputer/save/").Replace("Download/", "api/mycomputer/save/")), "POST", _d, new BUserState(resort, _d, _data.Name));
             return 0;
         }
 
@@ -369,7 +369,7 @@ namespace HAP.Silverlight.Browser
 
                 WebClient saveclient = new WebClient();
                 saveclient.UploadStringCompleted += new UploadStringCompletedEventHandler(saveclient_UploadStringCompleted3);
-                saveclient.UploadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + _data.Path.Replace("/api/mycomputer/list/", "/api/mycomputer/save/").Replace("/Download/", "/api/mycomputer/save/")), "POST", _d, new BUserState(state.Resort, _d, _data.Name));
+                saveclient.UploadStringAsync(new Uri(HtmlPage.Document.DocumentUri, _data.Path.Replace("api/mycomputer/list/", "api/mycomputer/save/").Replace("Download/", "api/mycomputer/save/")), "POST", _d, new BUserState(state.Resort, _d, _data.Name));
             }
         }
 
@@ -379,7 +379,7 @@ namespace HAP.Silverlight.Browser
             {
                 WebClient deleteclient = new WebClient();
                 deleteclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(deleteclient_DownloadStringCompleted);
-                deleteclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + _data.Path.Replace("/api/mycomputer/list/", "/api/mycomputer/delete/").Replace("/Download/", "/api/mycomputer/delete/")), false);
+                deleteclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri, _data.Path.Replace("api/mycomputer/list/", "api/mycomputer/delete/").Replace("Download", "api/mycomputer/delete/")), false);
             }
             return 0;
             //so some saving stuff;

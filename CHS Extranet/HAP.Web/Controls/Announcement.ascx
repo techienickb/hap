@@ -5,7 +5,7 @@
 
         <div id="EditAnn">
         <asp:LinkButton runat="server" CssClass="EditAnnLink" ToolTip="Edit Announcement" ID="EditAnnouncement">
-            <img runat="server" src="/extranet/images/icons/edit.png" alt="Edit Announcement" />
+            <img runat="server" src="images/icons/edit.png" alt="Edit Announcement" />
         </asp:LinkButton>
         <asp:Literal runat="server" ID="AnnouncementText" />
         </div>

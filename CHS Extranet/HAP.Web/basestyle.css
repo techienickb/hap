@@ -1,6 +1,6 @@
 ﻿html { font-family: Calibri, Tahoma; font-size: medium; }
 a img { border: 0; }
-#Download { float: right; position: absolute; right: 5px; border-radius: 3px; -moz-border-radius: 3px; top: 0; border: solid 1px #7da2ce; padding: 2px 5px; border-top: 0; background: url(/Extranet/images/bar-a-hover.gif) repeat-x left center; }
+#Download { float: right; position: absolute; right: 5px; border-radius: 3px; -moz-border-radius: 3px; top: 0; border: solid 1px #7da2ce; padding: 2px 5px; border-top: 0; background: url(images/bar-a-hover.gif) repeat-x left center; }
 #CoreProperties h1 { margin: 0; padding: 0; font-weight: normal; font-size: 18px; }
 #CoreProperties table { width: 100%; border: solid 1px #d9d9d9; border-collapse: collapse; font-size: 12px; }
 #CoreProperties table td { text-align: center; }

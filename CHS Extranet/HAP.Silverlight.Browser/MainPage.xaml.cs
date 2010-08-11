@@ -25,7 +25,7 @@ namespace HAP.Silverlight.Browser
             activeItems = new List<BrowserItem>();
             Filter = new List<string>();
             ViewMode = Browser.ViewMode.Tile;
-            CurrentItem = new BItem("My School Computer", "", "", "", BType.Drive, "/Extranet/api/mycomputer/listdrives", AccessControlActions.Change);
+            CurrentItem = new BItem("My School Computer", "", "", "", BType.Drive, "api/mycomputer/listdrives", AccessControlActions.Change);
             newfolder.Visibility = System.Windows.Visibility.Collapsed;
             HAPTreeNode root = new HAPTreeNode();
             root.Data = CurrentItem;
@@ -67,7 +67,7 @@ namespace HAP.Silverlight.Browser
 
             WebClient driveclient = new WebClient();
             driveclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(driveclient_DownloadStringCompleted);
-            driveclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + "/extranet/api/mycomputer/listdrives"), false);
+            driveclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri, "api/mycomputer/listdrives"), false);
         }
 
         #region Variables
@@ -178,7 +178,7 @@ namespace HAP.Silverlight.Browser
                     if (p.Length == 0) loaded = true;
                     else
                     {
-                        string s = "/extranet/api/mycomputer/list/" + p.Split(new char[] { '/' })[0];
+                        string s = "api/mycomputer/list/" + p.Split(new char[] { '/' })[0];
                         if (p.Split(new char[] { '/' }).Length > 1) GetTreeNode(s, treeView1.Items).IsExpanded = true;
                         else
                         {
@@ -282,7 +282,7 @@ namespace HAP.Silverlight.Browser
             CurrentItem = ((HAPTreeNode)sender).Data;
             WebClient listclient = new WebClient();
             listclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(driveclient_DownloadStringCompleted);
-            listclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + CurrentItem.Path));
+            listclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri, CurrentItem.Path));
             HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + HtmlPage.Document.DocumentUri.LocalPath + "#"));
         }
 
@@ -299,8 +299,8 @@ namespace HAP.Silverlight.Browser
             }
             WebClient listclient = new WebClient();
             listclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(listclient_DownloadStringCompleted);
-            listclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + CurrentItem.Path));
-            HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + HtmlPage.Document.DocumentUri.LocalPath + "#" + CurrentItem.Path.ToLower().Remove(0, 30)));
+            listclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri, CurrentItem.Path));
+            HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + HtmlPage.Document.DocumentUri.LocalPath + "#" + CurrentItem.Path.ToLower().Remove(0, 20)));
         }
 
         private void HAPTreeNode_Expanded(object sender, RoutedEventArgs e)
@@ -316,7 +316,7 @@ namespace HAP.Silverlight.Browser
                 }
                 WebClient listclient = new WebClient();
                 listclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(treereloadclient_DownloadStringCompleted);
-                listclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + tempnode.Data.Path));
+                listclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri, tempnode.Data.Path));
             }
         }
 
@@ -482,8 +482,9 @@ namespace HAP.Silverlight.Browser
         private void back_Click(object sender, RoutedEventArgs e)
         {
             DateTime expireDate = DateTime.Now.AddDays(1);
-            string newCookie = "mycompv=html;expires=" + expireDate.ToString("R");
+            string newCookie = "mycompv=html;path=/;expires=" + expireDate.ToString("R");
             HtmlPage.Document.SetProperty("cookie", newCookie);
+            HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri, "mycomputer.aspx"));
         }
 
         private void barContextButton1_Click(object sender, EventArgs e)
@@ -518,7 +519,7 @@ namespace HAP.Silverlight.Browser
 
         private void home_Click(object sender, RoutedEventArgs e)
         {
-            HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + "/extranet/"));
+            HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri, "./"));
         }
 
         private void helpButton1_Click(object sender, RoutedEventArgs e)
@@ -562,7 +563,7 @@ namespace HAP.Silverlight.Browser
             int count = 0;
             foreach (BrowserItem i in contentPan.Children.Where(I => ((BrowserItem)I).Data.BType == BType.Folder))
                 if (i.Data.Name.StartsWith("New Folder")) count++;
-            BrowserItem item = new BrowserItem(new BItem("New Folder" + (count == 0 ? "" : " " + count), "/extranet/images/icons/Newfolder.png", "", "Folder", BType.Folder, CurrentItem.Path + "/New Folder" + (count == 0 ? "" : " " + (count + 1)), AccessControlActions.Change));
+            BrowserItem item = new BrowserItem(new BItem("New Folder" + (count == 0 ? "" : " " + count), "images/icons/Newfolder.png", "", "Folder", BType.Folder, CurrentItem.Path + "/New Folder" + (count == 0 ? "" : " " + (count + 1)), AccessControlActions.Change));
             item.Activate += new EventHandler(item_Activate);
             item.MouseEnter += new MouseEventHandler(item_MouseEnter);
             if (CurrentItem.AccessControl == AccessControlActions.Change)
@@ -590,7 +591,7 @@ namespace HAP.Silverlight.Browser
             activeItems.Add(item);
             WebClient newfolderclient = new WebClient();
             newfolderclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(newfolderclient_DownloadStringCompleted);
-            newfolderclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + item.Data.Path.Replace("/api/mycomputer/list/", "/api/mycomputer/new/")), false);
+            newfolderclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri, item.Data.Path.Replace("api/mycomputer/list/", "api/mycomputer/new/")), false);
         }
         private void newfolderclient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
         {
@@ -708,7 +709,7 @@ namespace HAP.Silverlight.Browser
                 }
                 else if (e.Key == Key.Enter && item.Data.BType == BType.File)
                 {
-                    HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + item.Data.Path));
+                    HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri, item.Data.Path));
                     e.Handled = true;
                 }
             }
@@ -891,8 +892,8 @@ namespace HAP.Silverlight.Browser
 
             WebClient listclient = new WebClient();
             listclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(listclient_DownloadStringCompleted);
-            listclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + CurrentItem.Path));
-            HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + HtmlPage.Document.DocumentUri.LocalPath + "#" + CurrentItem.Path.ToLower().Remove(0, 30)));
+            listclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri, CurrentItem.Path));
+            HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + HtmlPage.Document.DocumentUri.LocalPath + "#" + CurrentItem.Path.ToLower().Remove(0, 20)));
         }
 
         private void RightClickDelete_Click(object sender, RoutedEventArgs e)
@@ -1077,8 +1078,8 @@ namespace HAP.Silverlight.Browser
                 reload = true;
                 WebClient listclient = new WebClient();
                 listclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(listclient_DownloadStringCompleted);
-                listclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + CurrentItem.Path));
-                HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + HtmlPage.Document.DocumentUri.LocalPath + "#" + CurrentItem.Path.ToLower().Remove(0, 30)));
+                listclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri, CurrentItem.Path));
+                HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + HtmlPage.Document.DocumentUri.LocalPath + "#" + CurrentItem.Path.ToLower().Remove(0, 20)));
             }
             UploadQueue.Children.Remove(item);
             if (UploadQueue.Children.Count > 0)

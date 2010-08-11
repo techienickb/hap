@@ -88,7 +88,7 @@ namespace HAP.Web
             {
                 breadcrumbrepeater.Visible = false;
                 foreach (uncpath path in config.MyComputer.UNCPaths)
-                    if (isAuth(path)) items.Add(new MyComputerItem(path.Name, string.Format("{0} on {1}", path.Name, config.BaseSettings.EstablishmentCode), string.Format("/Extranet/MyComputer/{0}", path.Drive), "netdrive.png", false));
+                    if (isAuth(path)) items.Add(new MyComputerItem(path.Name, string.Format("{0} on {1}", path.Name, config.BaseSettings.EstablishmentCode), string.Format("{1}/MyComputer/{0}", path.Drive, Request.ApplicationPath), "netdrive.png", false));
                 if (config.HomePageLinks["Access Learning Resources"] != null)
                 {
                     if (config.HomePageLinks["Access Learning Resources"].ShowTo == "All") items.Add(new MyComputerItem("Learning Resources", string.Format("{0} on {1}", "Learning Resources", config.BaseSettings.EstablishmentCode), config.HomePageLinks["Access Learning Resources"].LinkLocation, config.HomePageLinks["Access Learning Resources"].Icon.Remove(0, config.HomePageLinks["Access Learning Resources"].Icon.LastIndexOf('/') + 1), false));
@@ -112,7 +112,7 @@ namespace HAP.Web
                 //else
                 //{
                     unc = config.MyComputer.UNCPaths[RoutingDrive];
-                    if (unc == null || !isAuth(unc)) Response.Redirect("/Extranet/unauthorised.aspx", true);
+                    if (unc == null || !isAuth(unc)) Response.Redirect(Request.ApplicationPath + "/unauthorised.aspx", true);
                     else if (unc.UNC.Contains("%homepath%")) path = unc.UNC.Replace("%homepath%", up.HomeDirectory) + "\\" + RoutingPath;
                     else path = string.Format(unc.UNC, Username) + "\\" + RoutingPath;
                 //}
@@ -131,22 +131,22 @@ namespace HAP.Web
                 {
                     string sdirpath = subdir1.FullName;
                     sdirpath = sdirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username), unc.Drive);
-                    breadcrumbs.Add(new MyComputerItem(subdir1.Name, "", "/Extranet/MyComputer/" + sdirpath.Replace('&', '^').Replace('\\', '/'), "", false));
+                    breadcrumbs.Add(new MyComputerItem(subdir1.Name, "", Request.ApplicationPath + "/MyComputer/" + sdirpath.Replace('&', '^').Replace('\\', '/'), "", false));
                     try
                     {
                         subdir1 = subdir1.Parent;
                     }
                     catch { subdir1 = null; }
                 }
-                breadcrumbs.Add(new MyComputerItem(unc.Name, "", "/Extranet/MyComputer/" + unc.Drive, "", false));
-                breadcrumbs.Add(new MyComputerItem("My School Computer", "", "/Extranet/MyComputer.aspx", "", false));
+                breadcrumbs.Add(new MyComputerItem(unc.Name, "", Request.ApplicationPath + "/MyComputer/" + unc.Drive, "", false));
+                breadcrumbs.Add(new MyComputerItem("My School Computer", "", Request.ApplicationPath + "/MyComputer.aspx", "", false));
                 breadcrumbs.Reverse();
                 breadcrumbrepeater.Visible = true;
                 breadcrumbrepeater.DataSource = breadcrumbs.ToArray();
                 breadcrumbrepeater.DataBind();
 
-                if (!string.IsNullOrEmpty(RoutingPath)) items.Add(new MyComputerItem("..", "Up a Directory", "/Extranet/MyComputer/" + (RoutingDrive + "/" + RoutingPath).Remove((RoutingDrive + "/" + RoutingPath).LastIndexOf('/')), "folder.png", false));
-                //    items.Add(new MyComputerItem("My Computer", "Back to My Computer", "/Extranet/MyComputer.aspx", "school.png", false));
+                if (!string.IsNullOrEmpty(RoutingPath)) items.Add(new MyComputerItem("..", "Up a Directory", Request.ApplicationPath + "/MyComputer/" + (RoutingDrive + "/" + RoutingPath).Remove((RoutingDrive + "/" + RoutingPath).LastIndexOf('/')), "folder.png", false));
+                //    items.Add(new MyComputerItem("My Computer", "Back to My Computer", "/MyComputer.aspx", "school.png", false));
                 //else 
 
                 bool allowedit = isWriteAuth(config.MyComputer.UNCPaths[RoutingDrive]);
@@ -161,7 +161,7 @@ namespace HAP.Web
                                 string dirpath = subdir.FullName;
                                 dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username), unc.Drive);
                                 dirpath = dirpath.Replace('\\', '/');
-                                items.Add(new MyComputerItem(subdir.Name, "Last Modified: " + subdir.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/MyComputer/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(subdir), allowedit));
+                                items.Add(new MyComputerItem(subdir.Name, "Last Modified: " + subdir.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), Request.ApplicationPath + "/MyComputer/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(subdir), allowedit));
                             }
                         }
                         catch { }
@@ -176,20 +176,20 @@ namespace HAP.Web
                                 dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username), unc.Drive);
                                 dirpath = dirpath.Replace('\\', '/');
                                 if (!string.IsNullOrEmpty(file.Extension))
-                                    items.Add(new MyComputerItem(file.Name.Replace(file.Extension, ""), "Last Modified: " + file.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/Download/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(file), allowedit));
+                                    items.Add(new MyComputerItem(file.Name.Replace(file.Extension, ""), "Last Modified: " + file.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), Request.ApplicationPath + "/Download/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(file), allowedit));
                                 else
-                                    items.Add(new MyComputerItem(file.Name, "Last Modified: " + file.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), "/Extranet/Download/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(file), allowedit));
+                                    items.Add(new MyComputerItem(file.Name, "Last Modified: " + file.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), Request.ApplicationPath + "/Download/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(file), allowedit));
                             }
                         }
                         catch
                         {
-                            //Response.Redirect("/extranet/unauthorised.aspx?path=" + Server.UrlPathEncode(uae.Message), true);
+                            //Response.Redirect("/unauthorised.aspx?path=" + Server.UrlPathEncode(uae.Message), true);
                         }
                     }
                 }
                 catch (UnauthorizedAccessException uae)
                 {
-                    Response.Redirect("/extranet/unauthorised.aspx?path=" + Server.UrlPathEncode(uae.Message), true);
+                    Response.Redirect(Request.ApplicationPath + "/unauthorised.aspx?path=" + Server.UrlPathEncode(uae.Message), true);
                 }
             }
             browserrepeater.DataSource = items.ToArray();

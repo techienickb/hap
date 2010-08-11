@@ -91,7 +91,7 @@ namespace HAP.Web
 
                 uncpath unc = null;
                 unc = config.MyComputer.UNCPaths[p];
-                if (unc == null || !isWriteAuth(unc)) Response.Redirect("/Extranet/unauthorised.aspx", true);
+                if (unc == null || !isWriteAuth(unc)) Response.Redirect(Request.ApplicationPath + "/unauthorised.aspx", true);
                 else path = string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username) + path.Replace('/', '\\');
                 if (Request.QueryString["path"].Substring(0, 1) == "f")
                 {

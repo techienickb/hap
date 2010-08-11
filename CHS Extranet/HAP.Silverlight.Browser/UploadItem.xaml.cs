@@ -31,7 +31,7 @@ namespace HAP.Silverlight.Browser
             State = UploadItemState.Checking;
             Check();
             this.Uploaded += Uploaded;
-            BaseUri = HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + ParentData.Path.Replace("/api/mycomputer/list/", "/api/mycomputer/upload/");
+            BaseUri = new Uri(HtmlPage.Document.DocumentUri, ParentData.Path.Replace("api/mycomputer/list/", "api/mycomputer/upload/")).ToString();
         }
 
         public UploadItem(string name) : this()
@@ -81,7 +81,7 @@ namespace HAP.Silverlight.Browser
         {
             WebClient checkclient = new WebClient();
             checkclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(checkclient_DownloadStringCompleted);
-            checkclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + ParentData.Path.Replace("/api/mycomputer/list/", "/api/mycomputer/check/") + "/" + File.Name), false);
+            checkclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri, ParentData.Path.Replace("api/mycomputer/list/", "api/mycomputer/check/") + "/" + File.Name), false);
         }
 
         void checkclient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
@@ -95,7 +95,7 @@ namespace HAP.Silverlight.Browser
             if (s[0] == "EXISTS" && MessageBox.Show(File.Name + " already exists\nDo you want to overwrite?", "Overwrite", MessageBoxButton.OKCancel) == MessageBoxResult.Cancel) return;
             State = UploadItemState.Ready;
             queue.Children.Add(this);
-            image1.Source = new BitmapImage(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + s[1]));
+            image1.Source = new BitmapImage(new Uri(HtmlPage.Document.DocumentUri, s[1]));
             if (queue.Children.IndexOf(this) == 0) Dispatcher.BeginInvoke(() => { Upload(); }); //Upload();
         }
 

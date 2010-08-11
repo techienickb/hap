@@ -104,7 +104,7 @@ namespace HAP.Web
                 string p = Request.QueryString["path"].Substring(0, 1);
                 uncpath unc = null;
                     unc = config.MyComputer.UNCPaths[p];
-                    if (unc == null || !isWriteAuth(unc)) Response.Redirect("/Extranet/unauthorised.aspx", true);
+                    if (unc == null || !isWriteAuth(unc)) Response.Redirect(Request.ApplicationPath + "/unauthorised.aspx", true);
                     else path = string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username) + path.Replace('/', '\\');
                 //}
             }
@@ -118,7 +118,7 @@ namespace HAP.Web
             string p = Request.QueryString["path"].Substring(0, 1);
             uncpath unc = null;
                 unc = config.MyComputer.UNCPaths[p];
-                if (unc == null || !isWriteAuth(unc)) Response.Redirect("/Extranet/unauthorised.aspx", true);
+                if (unc == null || !isWriteAuth(unc)) Response.Redirect(Request.ApplicationPath + "/unauthorised.aspx", true);
                 else path = string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username) + path.Replace('/', '\\');
             if (FileUpload1.HasFile && isAuth(Path.GetExtension(FileUpload1.FileName))) FileUpload1.SaveAs(Path.Combine(path, FileUpload1.FileName));
             if (FileUpload2.HasFile && isAuth(Path.GetExtension(FileUpload2.FileName))) FileUpload2.SaveAs(Path.Combine(path, FileUpload2.FileName));

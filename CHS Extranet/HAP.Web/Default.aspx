@@ -13,7 +13,7 @@
         <asp:AjaxScriptManager runat="server" />
         <hap:announcement runat="server" />
         <hap:version runat="server" />
-        <a href="http://chsextranet.codeplex.com" target="_blank" style="text-align: center; display: block;"><img src="/extranet/images/haplogo.png" alt="Home Access Plus+ Logo" /></a>
+        <a href="http://chsextranet.codeplex.com" target="_blank" style="text-align: center; display: block;"><img src="<%=Request.ApplicationPath%>/images/haplogo.png" alt="Home Access Plus+ Logo" /></a>
         <asp:Image runat="server" ID="userimage" ImageAlign="Right" />
         <h2>Hello, <asp:Literal runat="server" ID="welcomename" />, welcome to Home Access Plus+</h2>
         <h3>My Details:</h3>

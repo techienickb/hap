@@ -34,11 +34,11 @@ namespace HAP.Silverlight.Browser
             busyindicator.IsBusy = true;
             List<string> ds = new List<string>();
             foreach (BItem item in Items)
-                ds.Add(item.Path.Replace("/Extranet/Download/", "").Replace("/Extranet/api/mycomputer/list/", ""));
+                ds.Add(item.Path.Replace("Download/", "").Replace("api/mycomputer/list/", ""));
             string _d = string.Join("\n", ds.ToArray());
             WebClient zipclient = new WebClient();
             zipclient.UploadStringCompleted += new UploadStringCompletedEventHandler(zipclient_UploadStringCompleted);
-            zipclient.UploadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + ParentItem.Path.Replace("/api/mycomputer/list/", "/api/mycomputer/zip/") + "/" + namebox.Text), "POST", _d);
+            zipclient.UploadStringAsync(new Uri(HtmlPage.Document.DocumentUri, ParentItem.Path.Replace("api/mycomputer/list/", "api/mycomputer/zip/") + "/" + namebox.Text), "POST", _d);
         }
 
         private void zipclient_UploadStringCompleted(object sender, UploadStringCompletedEventArgs e)

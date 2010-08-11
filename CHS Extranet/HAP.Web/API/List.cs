@@ -56,7 +56,7 @@ namespace HAP.Web.API
             context.Response.ContentType = "text/plain";
             AccessControlActions allowactions = isWriteAuth(unc) ? AccessControlActions.Change : AccessControlActions.View;
 
-            //if (!string.IsNullOrEmpty(RoutingPath)) context.Response.Write(string.Format(format, "..", "/extranet/images/icons/folder.png", "Up a Folder", "File Folder", "/Extranet/api/mycomputer/list/" + (RoutingDrive + "/" + RoutingPath).Replace("//", "/").Remove((RoutingDrive + "/" + RoutingPath).LastIndexOf('/') - 1), allowedit));
+            //if (!string.IsNullOrEmpty(RoutingPath)) context.Response.Write(string.Format(format, "..", "images/icons/folder.png", "Up a Folder", "File Folder", "api/mycomputer/list/" + (RoutingDrive + "/" + RoutingPath).Replace("//", "/").Remove((RoutingDrive + "/" + RoutingPath).LastIndexOf('/') - 1), allowedit));
 
             try
             {
@@ -75,7 +75,7 @@ namespace HAP.Web.API
                             catch { actions = AccessControlActions.None; }
 
                             string dirpath = Converter.UNCtoDrive2(subdir.FullName, unc, userhome);
-                            context.Response.Write(string.Format(format, subdir.Name, "/extranet/images/icons/" + MyComputerItem.ParseForImage(subdir), "", "File Folder", "/Extranet/api/mycomputer/list/" + dirpath.Replace('&', '^'), actions));
+                            context.Response.Write(string.Format(format, subdir.Name, "images/icons/" + MyComputerItem.ParseForImage(subdir), "", "File Folder", "api/mycomputer/list/" + dirpath.Replace('&', '^'), actions));
                         }
                     }
                     catch { }
@@ -98,15 +98,15 @@ namespace HAP.Web.API
                             catch { filetype = "File"; }
 
                             string dirpath = Converter.UNCtoDrive2(file.FullName, unc, userhome);
-                            string thumb = "/extranet/images/icons/" + MyComputerItem.ParseForImage(file);
+                            string thumb = "images/icons/" + MyComputerItem.ParseForImage(file);
                             if (file.Extension.ToLower().Equals(".png") || file.Extension.ToLower().Equals(".jpg") || file.Extension.ToLower().Equals(".jpeg") || file.Extension.ToLower().Equals(".gif") || file.Extension.ToLower().Equals(".bmp") || file.Extension.ToLower().Equals(".wmf"))
-                                thumb = "/Extranet/api/mycomputer/thumb/" + dirpath.Replace('&', '^');
-                            context.Response.Write(string.Format(format, filename, thumb, parseLength(file.Length), filetype, "/Extranet/Download/" + dirpath.Replace('&', '^'), allowactions));
+                                thumb = "api/mycomputer/thumb/" + dirpath.Replace('&', '^');
+                            context.Response.Write(string.Format(format, filename, thumb, parseLength(file.Length), filetype, "Download/" + dirpath.Replace('&', '^'), allowactions));
                         }
                     }
                     catch
                     {
-                        //Response.Redirect("/extranet/unauthorised.aspx?path=" + Server.UrlPathEncode(uae.Message), true);
+                        //Response.Redirect("unauthorised.aspx?path=" + Server.UrlPathEncode(uae.Message), true);
                     }
                 }
             }
