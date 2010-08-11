@@ -37,11 +37,18 @@ namespace HAP.Web.BookingSystem.admin
         }
         public CustomDataType[] getUsers()
         {
-            List<CustomDataType> users = new List<CustomDataType>();
-            foreach (UserInfo user in ADUtil.FindUsers())
-                if (string.IsNullOrEmpty(user.Notes)) users.Add(new CustomDataType(user.LoginName, user.LoginName.ToLower()));
-                else users.Add(new CustomDataType(string.Format("{0} - ({1})", user.LoginName, user.Notes), user.LoginName.ToLower()));
-            return users.ToArray();
+            List<CustomDataType> cache;
+            if (HttpContext.Current.Cache["userddlcache"] != null)
+                cache = HttpContext.Current.Cache["userddlcache"] as List<CustomDataType>;
+            else
+            {
+                cache = new List<CustomDataType>();
+                foreach (UserInfo user in ADUtil.FindUsers())
+                    if (string.IsNullOrEmpty(user.Notes)) cache.Add(new CustomDataType(user.LoginName, user.LoginName.ToLower()));
+                    else cache.Add(new CustomDataType(string.Format("{0} - ({1})", user.LoginName, user.Notes), user.LoginName.ToLower()));
+                HttpContext.Current.Cache.Insert("userddlcache", cache, new System.Web.Caching.CacheDependency(new string[] { }, new string[] { }), DateTime.Now.AddHours(1), TimeSpan.Zero);
+            }
+            return cache.ToArray();
         }
 
         public Day[] getDays()

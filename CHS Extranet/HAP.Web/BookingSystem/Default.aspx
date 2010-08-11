@@ -104,11 +104,8 @@
                 $get('Cal').style.top = (getPosition($get('daylist')) + 30) + "px";
                 setIDs();
             }
-            function beginRequestHandler(sender, args) {
-                $get('modalBackground').style.display = "block";
-                $get('loadingPopup').style.display = "block";
-            }
             function endRequestHandler(sender, args) {
+                $get('loadingPopup').style.display = "none";
                 var error = args.get_error();
                 if (error != undefined) {
                     alert(error.message);
