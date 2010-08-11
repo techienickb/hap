@@ -1,4 +1,4 @@
-﻿#daylist { border: solid 1px #7da2ce; overflow: auto; border-bottom: 0; }
+﻿#daylist { border: solid 1px #7da2ce; overflow: auto; border-bottom: 0; width: 912px; margin: 0 auto; }
 #daylist h1, .popupContent h1 { height: 30px; text-align: center; background: url(../images/bar.gif) repeat-x; line-height: 30px; color: #1f3976; font-size: medium; margin: 0; font-weight: normal; padding: 0; overflow: hidden; }
 #daylist h1 a { display: block; margin: 4px; line-height: 22px; height: 22px; }
 #daylist h1 a:hover { background: url(../images/bar-a-hover.gif) repeat-x left center; margin: 3px; border-radius: 3px; -moz-border-radius: 3px; text-decoration: none; border: solid 1px #7da2ce; }
@@ -64,7 +64,7 @@
 
 .modalPopup 
 {
-    background: #fff url(/Extranet/images/bar.gif) repeat-x top left;
+	background: #fff url(/Extranet/images/bar.gif) repeat-x top left;
 	border-width:1px;
 	border-style:solid;
 	border-color: #7da2ce;

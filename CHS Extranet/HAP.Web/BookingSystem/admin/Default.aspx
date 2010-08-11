@@ -98,7 +98,12 @@
                             <asp:ObjectDataSource ID="StaticBookingsDS" runat="server" DataObjectTypeName="HAP.Web.BookingSystem.Booking" DeleteMethod="deleteStaticBooking" InsertMethod="addStaticBooking" SelectMethod="getStaticBookingsArray" TypeName="HAP.Web.BookingSystem.BookingSystem" UpdateMethod="updateStaticBooking" />
                             <asp:DetailsView ID="DetailsView1" runat="server" AutoGenerateRows="False" DataSourceID="StaticBookingsDS" DefaultMode="Insert" EnableModelValidation="True">
                                 <Fields>
-                                    <asp:BoundField DataField="Day" HeaderText="Day" SortExpression="Day" ControlStyle-Width="20px" />
+                                    <asp:TemplateField HeaderText="Day" SortExpression="Day">
+                                        <InsertItemTemplate>
+                                            <asp:DropDownList ID="dayDDL" runat="server" SelectedValue='<%# Bind("Day") %>' DataSourceID="dayds" DataTextField="Name" DataValueField="Value" />
+                                        </InsertItemTemplate>
+                                        <ItemTemplate><asp:Label runat="server" ID="day" Text='<%# Bind("Day") %>'></asp:Label></ItemTemplate>
+                                    </asp:TemplateField>
                                     <asp:TemplateField HeaderText="Lesson" SortExpression="Lesson">
                                         <InsertItemTemplate>
                                             <asp:DropDownList ID="LessonDDL" runat="server" SelectedValue='<%# Bind("Lesson") %>' DataSourceID="lessonsds" DataTextField="Name" DataValueField="Name" />
@@ -113,12 +118,20 @@
                                         <ItemTemplate><asp:Label runat="server" ID="room" Text='<%# Bind("Room") %>'></asp:Label></ItemTemplate>
                                     </asp:TemplateField>
                                     <asp:BoundField DataField="Name" HeaderText="Lesson Name" SortExpression="Name" />
-                                    <asp:BoundField DataField="Username" HeaderText="Username" SortExpression="Username" />
+                                    <asp:TemplateField HeaderText="Username" SortExpression="Username">
+                                        <InsertItemTemplate>
+                                            <asp:DropDownList ID="UsernameDDL" runat="server" SelectedValue='<%# Bind("Username") %>' DataSourceID="usersds"  DataTextField="Key" DataValueField="Value">
+                                            </asp:DropDownList>
+                                        </InsertItemTemplate>
+                                        <ItemTemplate><asp:Label runat="server" ID="username" Text='<%# Bind("Username") %>'></asp:Label></ItemTemplate>
+                                    </asp:TemplateField>
                                     <asp:CommandField ButtonType="Button" ShowCancelButton="False" ShowInsertButton="True" />
                                 </Fields>
                             </asp:DetailsView>
                             <asp:ObjectDataSource ID="resourcesds" runat="server" SelectMethod="getResources" TypeName="HAP.Web.BookingSystem.admin.Default" />
                             <asp:ObjectDataSource ID="lessonsds" runat="server" SelectMethod="getLessons" TypeName="HAP.Web.BookingSystem.admin.Default" />
+                            <asp:ObjectDataSource ID="dayds" runat="server" SelectMethod="getDays" TypeName="HAP.Web.BookingSystem.admin.Default" />
+                            <asp:ObjectDataSource ID="usersds" runat="server" SelectMethod="getUsers" TypeName="HAP.Web.BookingSystem.admin.Default" />
                         </ContentTemplate>
                     </asp:UpdatePanel>
                     <asp:UpdatePanelAnimationExtender ID="UpdatePanelAnimationExtender1" runat="server" TargetControlID="UpdatePanel1">

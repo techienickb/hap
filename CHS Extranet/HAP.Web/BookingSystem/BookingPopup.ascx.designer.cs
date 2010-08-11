@@ -94,6 +94,15 @@ namespace HAP.Web.BookingSystem {
         protected global::System.Web.UI.WebControls.DropDownList BookYear;
         
         /// <summary>
+        /// subjects control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater subjects;
+        
+        /// <summary>
         /// BookLesson control.
         /// </summary>
         /// <remarks>

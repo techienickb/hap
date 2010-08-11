@@ -156,7 +156,7 @@ namespace HAP.Web.BookingSystem
             date.Text = Date.ToLongDateString();
             if (!isAdmin)
             {
-                XmlDocument doc = new BookingSystem().BookingsDoc;
+                XmlDocument doc = BookingSystem.BookingsDoc;
                 int max = hapConfig.Current.BookingSystem.MaxBookingsPerWeek;
                 foreach (AdvancedBookingRight right in BookingSystem.BookingRights)
                     if (right.Username == Username)
@@ -167,6 +167,12 @@ namespace HAP.Web.BookingSystem
                 if (x > max) { manybookings.Visible = true; bookingform.Visible = book.Visible = false; }
                 else { manybookings.Visible = false; bookingform.Visible = book.Visible = true; }
             }
+            List<subject> subjectsds = new List<subject>();
+            foreach (subject s in hapConfig.Current.BookingSystem.Subjects)
+                subjectsds.Add(s);
+            subjectsds.Sort();
+            subjects.DataSource = subjectsds.ToArray();
+            subjects.DataBind();
         }
 
         #region Login

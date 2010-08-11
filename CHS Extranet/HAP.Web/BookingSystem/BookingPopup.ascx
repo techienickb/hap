@@ -15,7 +15,12 @@
                                 Year: 
                                 <asp:DropDownList runat="server" ID="BookYear" Width="60px"><asp:ListItem Value="">--</asp:ListItem><asp:ListItem>7</asp:ListItem><asp:ListItem>8</asp:ListItem><asp:ListItem>9</asp:ListItem><asp:ListItem>10</asp:ListItem><asp:ListItem>11</asp:ListItem><asp:ListItem>12</asp:ListItem><asp:ListItem>13</asp:ListItem></asp:DropDownList>
                                 Subject: 
-                                <asp:TextBox ID="BookLesson" Width="100px" runat="server" /><asp:RequiredFieldValidator ControlToValidate="BookLesson" runat="server" ErrorMessage="*" />
+                                <select id="subjectsddl" onchange="subjectchance(this)" style="width: 100px;">
+                                    <option value="" selected="selected">- Subject -</option>
+                                    <asp:Repeater runat="server" ID="subjects"><ItemTemplate><option value="<%#Eval("Name") %>"><%#Eval("Name") %></option></ItemTemplate></asp:Repeater>
+                                    <option value="CUSTOM">Custom</option>
+                                </select>
+                                <asp:TextBox ID="BookLesson" style="display: none;" Width="100px" runat="server" /><asp:RequiredFieldValidator ControlToValidate="BookLesson" runat="server" ErrorMessage="*" />
                                 <asp:Panel runat="server" ID="equptbooking" style="display: none;">
                                     Room: <asp:TextBox ID="equiproom" runat="server" Width="40px" />
                                 </asp:Panel>
@@ -43,6 +48,18 @@
                         ltbookingID = "<%=ltbooking.ClientID %>";
                         equipID = "<%=equiproom.ClientID %>";
                         inID = "<%=inLab.ClientID %>";
+                        subjectlist = "<%=subjects.ClientID%>";
+                        subjectbox = "<%=BookLesson.ClientID%>";
                     }
                     setIDs();
+                    function subjectchance(selectbox) {
+                        var chosenoption = selectbox.options[selectbox.selectedIndex] //this refers to "selectmenu"
+                        if (chosenoption.value == "CUSTOM") {
+                            document.getElementById(subjectbox).value = "" //open target site (based on option's value attr) in new window
+                            document.getElementById(subjectbox).style.display = '';
+                        } else {
+                            document.getElementById(subjectbox).value = chosenoption.value
+                            document.getElementById(subjectbox).style.display = 'none';
+                        }
+                    }
                 </script>

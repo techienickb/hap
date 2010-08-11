@@ -41,5 +41,11 @@ namespace HAP.Web.Configuration
         {
             get { return (lessons)base["lessons"]; }
         }
+
+        [ConfigurationProperty("subjects", IsDefaultCollection = false)]
+        public subjects Subjects
+        {
+            get { return (subjects)base["subjects"]; }
+        }
     }
 }

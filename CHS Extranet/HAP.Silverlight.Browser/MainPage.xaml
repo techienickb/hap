@@ -42,6 +42,7 @@
                 </Grid.Background>
                 <StackPanel Orientation="Horizontal">
                     <my:BarButton x:Name="home" Margin="4,3,0,4" Text="Home Access Plus+ Home" Click="home_Click" ToolTip="Go back to Home Access Plus+'s Home Page" />
+                    <my:BarButton x:Name="back" Margin="0,3,0,4" Text="Basic Version" ToolTip="Go back to Basic Version of the My Computer Browser" Click="back_Click" />
                     <my:OrganiseButton x:Name="organiseButton1" SelectAllClick="organiseButton1_SelectAllClick" MouseLeftButtonDown="organiseButton1_MouseLeftButtonDown" />
                     <my:BarButton x:Name="newfolder" Text="New Folder" Click="newfolder_Click" ToolTip="Create a New Folder in the Current Folder" />
                 </StackPanel>

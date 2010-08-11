@@ -478,6 +478,14 @@ namespace HAP.Silverlight.Browser
         #endregion
 
         #region Bar/Context Events
+
+        private void back_Click(object sender, RoutedEventArgs e)
+        {
+            DateTime expireDate = DateTime.Now.AddDays(1);
+            string newCookie = "mycompv=html;expires=" + expireDate.ToString("R");
+            HtmlPage.Document.SetProperty("cookie", newCookie);
+        }
+
         private void barContextButton1_Click(object sender, EventArgs e)
         {
             ViewMode = barContextButton1.Mode;
