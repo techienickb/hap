@@ -148,15 +148,6 @@ namespace HAP.Web.BookingSystem.admin {
         protected global::System.Web.UI.WebControls.ObjectDataSource usersds;
         
         /// <summary>
-        /// UpdatePanelAnimationExtender1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.UpdatePanelAnimationExtender UpdatePanelAnimationExtender1;
-        
-        /// <summary>
         /// TabPanel3 control.
         /// </summary>
         /// <remarks>
@@ -191,15 +182,6 @@ namespace HAP.Web.BookingSystem.admin {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ObjectDataSource ABRDS;
-        
-        /// <summary>
-        /// UpdatePanelAnimationExtender2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.UpdatePanelAnimationExtender UpdatePanelAnimationExtender2;
         
         /// <summary>
         /// message control.

@@ -1,6 +1,9 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/chs.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="HAP.Web.BookingSystem.admin.Default" %>
 <%@ Import Namespace="HAP.Web.BookingSystem" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
+<asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
+    <link href="../bookingsystem.css" rel="stylesheet" type="text/css" />
+</asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="body" runat="server">
    <h1>IT Booking System</h1>
    <asp:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server" />
@@ -134,12 +137,6 @@
                             <asp:ObjectDataSource ID="usersds" runat="server" SelectMethod="getUsers" TypeName="HAP.Web.BookingSystem.admin.Default" />
                         </ContentTemplate>
                     </asp:UpdatePanel>
-                    <asp:UpdatePanelAnimationExtender ID="UpdatePanelAnimationExtender1" runat="server" TargetControlID="UpdatePanel1">
-                        <Animations>
-                            <OnUpdated><FadeIn minimumOpacity=".2" /></OnUpdated>
-                            <OnUpdating><FadeOut minimumOpacity=".2" /></OnUpdating>
-                        </Animations>
-                    </asp:UpdatePanelAnimationExtender>
                 </div></ContentTemplate>
         </asp:TabPanel>
         <asp:TabPanel ID="TabPanel3" runat="server">
@@ -278,14 +275,30 @@
                             UpdateMethod="updateBookingRights" DeleteMethod="deleteBookingRights" />
                     </ContentTemplate>
                 </asp:UpdatePanel>
-                <asp:UpdatePanelAnimationExtender ID="UpdatePanelAnimationExtender2" runat="server" TargetControlID="UpdatePanel2">
-                    <Animations>
-                        <OnUpdated><FadeIn minimumOpacity=".2" /></OnUpdated>
-                        <OnUpdating><FadeOut minimumOpacity=".2" /></OnUpdating>
-                    </Animations>
-                </asp:UpdatePanelAnimationExtender>
             </ContentTemplate>
         </asp:TabPanel>
     </asp:TabContainer>
     <asp:Literal runat="server" ID="message" />
+    <div id="modalBackground" class="modalBackground" style="display: none;"></div>
+    <div id="loadingPopup" style="display: none;">
+        <div class="popupContent" style="width: 220px">
+            <h1>Loading</h1>
+            <img src="../loading.gif" alt="" />
+        </div>
+    </div>
+    <script type="text/javascript">
+        function endRequestHandler(sender, args) {
+            var error = args.get_error();
+            if (error != undefined) {
+                alert(error.message);
+                args.set_errorHandled(true);
+            }
+            $get('modalBackground').style.display = $get('loadingPopup').style.display = "none";
+        }
+        function beginRequestHandler(sender, args) {
+            $get('modalBackground').style.display = $get('loadingPopup').style.display = "block";
+        }
+        Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(beginRequestHandler);
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandler);
+    </script>
 </asp:Content>
