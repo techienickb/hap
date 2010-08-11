@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using HAP.Web.Configuration;
 using System.Configuration;
+using HAP.Web.HelpDesk;
 
 namespace HAP.Web.BookingSystem.admin
 {
@@ -33,6 +34,33 @@ namespace HAP.Web.BookingSystem.admin
             foreach (lesson les in hapConfig.Current.BookingSystem.Lessons)
                 Lessons.Add(les);
             return Lessons.ToArray();
+        }
+        public CustomDataType[] getUsers()
+        {
+            List<CustomDataType> users = new List<CustomDataType>();
+            foreach (UserInfo user in ADUtil.FindUsers())
+                if (string.IsNullOrEmpty(user.Notes)) users.Add(new CustomDataType(user.LoginName, user.LoginName.ToLower()));
+                else users.Add(new CustomDataType(string.Format("{0} - ({1})", user.LoginName, user.Notes), user.LoginName.ToLower()));
+            return users.ToArray();
+        }
+
+        public Day[] getDays()
+        {
+            List<Day> Days = new List<Day>();
+            Days.Add(new Day("Monday (1)", 1));
+            Days.Add(new Day("Tuesday (2)", 2));
+            Days.Add(new Day("Wednesday (3)", 3));
+            Days.Add(new Day("Thursday (4)", 4));
+            Days.Add(new Day("Friday (5)", 5));
+            if (hapConfig.Current.BookingSystem.TwoWeekTimetable)
+            {
+                Days.Add(new Day("Monday (6)", 6));
+                Days.Add(new Day("Tuesday (7)", 7));
+                Days.Add(new Day("Wednesday (8)", 8));
+                Days.Add(new Day("Thursday (9)", 9));
+                Days.Add(new Day("Friday (10)", 10));
+            }
+            return Days.ToArray();
         }
 
         void ABR_ItemDeleting(object sender, ListViewDeleteEventArgs e)
@@ -87,5 +115,19 @@ namespace HAP.Web.BookingSystem.admin
         {
             new BookingSystem().deleteStaticBooking1(e.Values[1].ToString(), e.Values[2].ToString(), int.Parse(e.Values[0].ToString()));
         }
+    }
+
+    public class Day
+    {
+        public Day(string Name, int Value) { this.Name = Name; this.Value = Value; }
+        public string Name { get; private set; }
+        public int Value { get; private set; }
+    }
+
+    public class CustomDataType
+    {
+        public CustomDataType(string Key, string Value) { this.Key = Key; this.Value = Value; }
+        public string Key { get; private set; }
+        public string Value { get; private set; }
     }
 }

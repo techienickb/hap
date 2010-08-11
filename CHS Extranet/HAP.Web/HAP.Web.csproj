@@ -315,6 +315,8 @@
     <Compile Include="Configuration\bookingResource.cs" />
     <Compile Include="Configuration\bookingResources.cs" />
     <Compile Include="Configuration\bookingSystem.cs" />
+    <Compile Include="Configuration\subject.cs" />
+    <Compile Include="Configuration\subjects.cs" />
     <Compile Include="Configuration\tracker.cs" />
     <Compile Include="Configuration\ouobjects.cs" />
     <Compile Include="Configuration\ouobject.cs" />

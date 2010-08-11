@@ -81,6 +81,12 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.label20 = new System.Windows.Forms.Label();
             this.hpl_updatedetails = new System.Windows.Forms.TextBox();
+            this.wizardPage7 = new AeroWizard.WizardPage();
+            this.label26 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.trackermaxstaff = new System.Windows.Forms.NumericUpDown();
+            this.label24 = new System.Windows.Forms.Label();
+            this.trackermaxstudent = new System.Windows.Forms.NumericUpDown();
             this.wizardPage4 = new AeroWizard.WizardPage();
             this.tabControl3 = new System.Windows.Forms.TabControl();
             this.tabPage10 = new System.Windows.Forms.TabPage();
@@ -109,7 +115,7 @@
             this.label16 = new System.Windows.Forms.Label();
             this.announcementBox_ShowTo = new System.Windows.Forms.TextBox();
             this.wizardPage6 = new AeroWizard.WizardPage();
-            this.tabControl2 = new System.Windows.Forms.TabControl();
+            this.bookingsystem_Subjectsd = new System.Windows.Forms.TabControl();
             this.tabPage8 = new System.Windows.Forms.TabPage();
             this.Resources = new System.Windows.Forms.DataGridView();
             this.ResName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -130,12 +136,9 @@
             this.label19 = new System.Windows.Forms.Label();
             this.bs_maxdays = new System.Windows.Forms.NumericUpDown();
             this.folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
-            this.wizardPage7 = new AeroWizard.WizardPage();
-            this.label24 = new System.Windows.Forms.Label();
-            this.trackermaxstudent = new System.Windows.Forms.NumericUpDown();
-            this.label25 = new System.Windows.Forms.Label();
-            this.trackermaxstaff = new System.Windows.Forms.NumericUpDown();
-            this.label26 = new System.Windows.Forms.Label();
+            this.bs_subjects = new System.Windows.Forms.TabPage();
+            this.bssubjects = new System.Windows.Forms.DataGridView();
+            this.Subject = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.wiz)).BeginInit();
             this.wizardPage1.SuspendLayout();
             this.wizardPage2.SuspendLayout();
@@ -144,6 +147,9 @@
             this.wizardPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.homepagelinks)).BeginInit();
             this.panel1.SuspendLayout();
+            this.wizardPage7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackermaxstaff)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackermaxstudent)).BeginInit();
             this.wizardPage4.SuspendLayout();
             this.tabControl3.SuspendLayout();
             this.tabPage10.SuspendLayout();
@@ -154,7 +160,7 @@
             this.wizardPage5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.proxyport)).BeginInit();
             this.wizardPage6.SuspendLayout();
-            this.tabControl2.SuspendLayout();
+            this.bookingsystem_Subjectsd.SuspendLayout();
             this.tabPage8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Resources)).BeginInit();
             this.tabPage9.SuspendLayout();
@@ -162,9 +168,8 @@
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bs_max)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bs_maxdays)).BeginInit();
-            this.wizardPage7.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackermaxstudent)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackermaxstaff)).BeginInit();
+            this.bs_subjects.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bssubjects)).BeginInit();
             this.SuspendLayout();
             // 
             // wiz
@@ -651,6 +656,70 @@
             this.hpl_updatedetails.Size = new System.Drawing.Size(207, 23);
             this.hpl_updatedetails.TabIndex = 0;
             // 
+            // wizardPage7
+            // 
+            this.wizardPage7.Controls.Add(this.label26);
+            this.wizardPage7.Controls.Add(this.label25);
+            this.wizardPage7.Controls.Add(this.trackermaxstaff);
+            this.wizardPage7.Controls.Add(this.label24);
+            this.wizardPage7.Controls.Add(this.trackermaxstudent);
+            this.wizardPage7.Name = "wizardPage7";
+            this.wizardPage7.NextPage = this.wizardPage4;
+            this.wizardPage7.Size = new System.Drawing.Size(737, 352);
+            this.wizardPage7.TabIndex = 6;
+            this.wizardPage7.Text = "Logon Tracker";
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(396, 43);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(79, 15);
+            this.label26.TabIndex = 1;
+            this.label26.Text = "0 = Unlimited";
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(203, 54);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(101, 15);
+            this.label25.TabIndex = 19;
+            this.label25.Text = "Max Staff Logons:";
+            // 
+            // trackermaxstaff
+            // 
+            this.trackermaxstaff.Location = new System.Drawing.Point(310, 52);
+            this.trackermaxstaff.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.trackermaxstaff.Name = "trackermaxstaff";
+            this.trackermaxstaff.Size = new System.Drawing.Size(48, 23);
+            this.trackermaxstaff.TabIndex = 18;
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(186, 25);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(118, 15);
+            this.label24.TabIndex = 17;
+            this.label24.Text = "Max Student Logons:";
+            // 
+            // trackermaxstudent
+            // 
+            this.trackermaxstudent.Location = new System.Drawing.Point(310, 23);
+            this.trackermaxstudent.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.trackermaxstudent.Name = "trackermaxstudent";
+            this.trackermaxstudent.Size = new System.Drawing.Size(48, 23);
+            this.trackermaxstudent.TabIndex = 16;
+            // 
             // wizardPage4
             // 
             this.wizardPage4.Controls.Add(this.tabControl3);
@@ -925,7 +994,7 @@
             // 
             // wizardPage6
             // 
-            this.wizardPage6.Controls.Add(this.tabControl2);
+            this.wizardPage6.Controls.Add(this.bookingsystem_Subjectsd);
             this.wizardPage6.Controls.Add(this.panel2);
             this.wizardPage6.IsFinishPage = true;
             this.wizardPage6.Name = "wizardPage6";
@@ -933,16 +1002,17 @@
             this.wizardPage6.TabIndex = 5;
             this.wizardPage6.Text = "Booking System";
             // 
-            // tabControl2
+            // bookingsystem_Subjectsd
             // 
-            this.tabControl2.Controls.Add(this.tabPage8);
-            this.tabControl2.Controls.Add(this.tabPage9);
-            this.tabControl2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl2.Location = new System.Drawing.Point(0, 94);
-            this.tabControl2.Name = "tabControl2";
-            this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(737, 258);
-            this.tabControl2.TabIndex = 7;
+            this.bookingsystem_Subjectsd.Controls.Add(this.tabPage8);
+            this.bookingsystem_Subjectsd.Controls.Add(this.tabPage9);
+            this.bookingsystem_Subjectsd.Controls.Add(this.bs_subjects);
+            this.bookingsystem_Subjectsd.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bookingsystem_Subjectsd.Location = new System.Drawing.Point(0, 94);
+            this.bookingsystem_Subjectsd.Name = "bookingsystem_Subjectsd";
+            this.bookingsystem_Subjectsd.SelectedIndex = 0;
+            this.bookingsystem_Subjectsd.Size = new System.Drawing.Size(737, 258);
+            this.bookingsystem_Subjectsd.TabIndex = 7;
             // 
             // tabPage8
             // 
@@ -1135,69 +1205,33 @@
             this.folderBrowser.RootFolder = System.Environment.SpecialFolder.MyComputer;
             this.folderBrowser.ShowNewFolderButton = false;
             // 
-            // wizardPage7
+            // bs_subjects
             // 
-            this.wizardPage7.Controls.Add(this.label26);
-            this.wizardPage7.Controls.Add(this.label25);
-            this.wizardPage7.Controls.Add(this.trackermaxstaff);
-            this.wizardPage7.Controls.Add(this.label24);
-            this.wizardPage7.Controls.Add(this.trackermaxstudent);
-            this.wizardPage7.Name = "wizardPage7";
-            this.wizardPage7.NextPage = this.wizardPage4;
-            this.wizardPage7.Size = new System.Drawing.Size(737, 352);
-            this.wizardPage7.TabIndex = 6;
-            this.wizardPage7.Text = "Logon Tracker";
+            this.bs_subjects.Controls.Add(this.bssubjects);
+            this.bs_subjects.Location = new System.Drawing.Point(4, 24);
+            this.bs_subjects.Name = "bs_subjects";
+            this.bs_subjects.Padding = new System.Windows.Forms.Padding(3);
+            this.bs_subjects.Size = new System.Drawing.Size(729, 230);
+            this.bs_subjects.TabIndex = 2;
+            this.bs_subjects.Text = "Subjects";
+            this.bs_subjects.UseVisualStyleBackColor = true;
             // 
-            // label24
+            // bssubjects
             // 
-            this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(186, 25);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(118, 15);
-            this.label24.TabIndex = 17;
-            this.label24.Text = "Max Student Logons:";
+            this.bssubjects.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.bssubjects.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.bssubjects.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Subject});
+            this.bssubjects.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bssubjects.Location = new System.Drawing.Point(3, 3);
+            this.bssubjects.Name = "bssubjects";
+            this.bssubjects.Size = new System.Drawing.Size(723, 224);
+            this.bssubjects.TabIndex = 0;
             // 
-            // trackermaxstudent
+            // Subject
             // 
-            this.trackermaxstudent.Location = new System.Drawing.Point(310, 23);
-            this.trackermaxstudent.Maximum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.trackermaxstudent.Name = "trackermaxstudent";
-            this.trackermaxstudent.Size = new System.Drawing.Size(48, 23);
-            this.trackermaxstudent.TabIndex = 16;
-            // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(203, 54);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(101, 15);
-            this.label25.TabIndex = 19;
-            this.label25.Text = "Max Staff Logons:";
-            // 
-            // trackermaxstaff
-            // 
-            this.trackermaxstaff.Location = new System.Drawing.Point(310, 52);
-            this.trackermaxstaff.Maximum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.trackermaxstaff.Name = "trackermaxstaff";
-            this.trackermaxstaff.Size = new System.Drawing.Size(48, 23);
-            this.trackermaxstaff.TabIndex = 18;
-            // 
-            // label26
-            // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(396, 43);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(79, 15);
-            this.label26.TabIndex = 1;
-            this.label26.Text = "0 = Unlimited";
+            this.Subject.HeaderText = "Subject";
+            this.Subject.Name = "Subject";
             // 
             // FirstRun
             // 
@@ -1223,6 +1257,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.homepagelinks)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.wizardPage7.ResumeLayout(false);
+            this.wizardPage7.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackermaxstaff)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackermaxstudent)).EndInit();
             this.wizardPage4.ResumeLayout(false);
             this.tabControl3.ResumeLayout(false);
             this.tabPage10.ResumeLayout(false);
@@ -1235,7 +1273,7 @@
             this.wizardPage5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.proxyport)).EndInit();
             this.wizardPage6.ResumeLayout(false);
-            this.tabControl2.ResumeLayout(false);
+            this.bookingsystem_Subjectsd.ResumeLayout(false);
             this.tabPage8.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Resources)).EndInit();
             this.tabPage9.ResumeLayout(false);
@@ -1244,10 +1282,8 @@
             this.panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bs_max)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bs_maxdays)).EndInit();
-            this.wizardPage7.ResumeLayout(false);
-            this.wizardPage7.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackermaxstudent)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackermaxstaff)).EndInit();
+            this.bs_subjects.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.bssubjects)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1317,7 +1353,7 @@
         private System.Windows.Forms.TextBox announcementBox_EditTo;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.TextBox announcementBox_ShowTo;
-        private System.Windows.Forms.TabControl tabControl2;
+        private System.Windows.Forms.TabControl bookingsystem_Subjectsd;
         private System.Windows.Forms.TabPage tabPage8;
         private System.Windows.Forms.DataGridView Resources;
         private System.Windows.Forms.TabPage tabPage9;
@@ -1361,5 +1397,8 @@
         private System.Windows.Forms.NumericUpDown trackermaxstaff;
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.NumericUpDown trackermaxstudent;
+        private System.Windows.Forms.TabPage bs_subjects;
+        private System.Windows.Forms.DataGridView bssubjects;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Subject;
     }
 }

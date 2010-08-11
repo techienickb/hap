@@ -208,6 +208,18 @@ namespace HAP.Config
                     les.AppendChild(el);
                 }
             }
+
+            XmlNode subs = bs.SelectSingleNode("subjects");
+            subs.RemoveAll();
+            foreach (DataGridViewRow row in bssubjects.Rows)
+            {
+                if (!row.IsNewRow)
+                {
+                    XmlElement el = doc.CreateElement("add");
+                    el.SetAttribute("name", row.Cells[0].Value.ToString());
+                    subs.AppendChild(el);
+                }
+            }
             #endregion
 
             doc.Save(path);
@@ -337,6 +349,8 @@ namespace HAP.Config
                 Resources.Rows.Add(node.Attributes["name"].Value, node.Attributes["type"].Value, node.Attributes["emailadmin"] != null ? bool.Parse(node.Attributes["emailadmin"].Value) : false, node.Attributes["enablecharging"] != null ? bool.Parse(node.Attributes["enablecharging"].Value) : false, node.Attributes["enable"] != null ? bool.Parse(node.Attributes["enable"].Value) : true);
             foreach (XmlNode node in bs.SelectNodes("lessons/add"))
                 lessons.Rows.Add(node.Attributes["name"].Value, node.Attributes["type"] == null ? "Lesson" : node.Attributes["type"].Value, node.Attributes["starttime"].Value, node.Attributes["endtime"].Value);
+            foreach (XmlNode node in bs.SelectNodes("subjects/add"))
+                bssubjects.Rows.Add(node.Attributes["name"].Value);
             #endregion
         }
     }
