@@ -16,7 +16,7 @@
                         <asp:HyperLink runat="server" style="float: right;" NavigateUrl="admin/" ID="adminlink" Visible="false">Booking System Admin</asp:HyperLink>
                         <hap:SIMS runat="server" />
                         <a href="javascript:showOverview()" style="float: right;">Overview</a>
-                        <a href="/extranet/" style="float: right; padding: 0 5px;">Home Access Plus+ Home</a>
+                        <a href="<%=Request.ApplicationPath %>" style="float: right; padding: 0 5px;">Home Access Plus+ Home</a>
                         <h1>IT Booking System</h1>
                         <p>Click on a Free period to book a room, or click on a booking to remove it.  Click on <%=Calendar1.SelectedDate.DayOfWeek.ToString() %> to change the day. Week: <asp:Label runat="server" ID="weeknum" /></p>
                         <hap:DayList runat="server" id="daylist" ItemWidth="152" />

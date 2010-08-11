@@ -48,10 +48,10 @@ namespace HAP.Silverlight.Browser
         private void SpecifcFolder_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             busyindicator.IsBusy = true;
-            string _d = ParentItem.Path.Replace("/Extranet/Download/", "").Replace("/Extranet/api/mycomputer/list/", "") + "/" + foldername.Text;
+            string _d = ParentItem.Path.Replace("Download/", "").Replace("api/mycomputer/list/", "") + "/" + foldername.Text;
             WebClient zipclient = new WebClient();
             zipclient.UploadStringCompleted += new UploadStringCompletedEventHandler(zipclient_UploadStringCompleted);
-            zipclient.UploadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + Item.Path.Replace("/Download/", "/api/mycomputer/unzip/")), "POST", _d);
+            zipclient.UploadStringAsync(new Uri(HtmlPage.Document.DocumentUri, Item.Path.Replace("Download/", "api/mycomputer/unzip/")), "POST", _d);
         }
 
         private void zipclient_UploadStringCompleted(object sender, UploadStringCompletedEventArgs e)
@@ -72,10 +72,10 @@ namespace HAP.Silverlight.Browser
 
         private void CurrentFolder_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            string _d = ParentItem.Path.Replace("/Extranet/Download/", "").Replace("/Extranet/api/mycomputer/list/", "");
+            string _d = ParentItem.Path.Replace("Download/", "").Replace("api/mycomputer/list/", "");
             WebClient zipclient = new WebClient();
             zipclient.UploadStringCompleted += new UploadStringCompletedEventHandler(zipclient_UploadStringCompleted);
-            zipclient.UploadStringAsync(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + Item.Path.Replace("/Download/", "/api/mycomputer/unzip/")), "POST", _d);
+            zipclient.UploadStringAsync(new Uri(HtmlPage.Document.DocumentUri, Item.Path.Replace("Download/", "api/mycomputer/unzip/")), "POST", _d);
             this.DialogResult = true;
         }
 

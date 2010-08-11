@@ -156,16 +156,16 @@ var SimpleContextMenu = {
 
             SimpleContextMenu._menuElement = document.getElementById(menuElementId);
             var file = false;
-            if (el.href.match(/\/extranet\/download\//i)) file = true;
+            if (el.href.match(/\/download\//i)) file = true;
             SimpleContextMenu._menuElement.getElementsByTagName('a')[0].href = SimpleContextMenu._menuElement.getElementsByTagName('a')[2].href = SimpleContextMenu._menuElement.getElementsByTagName('a')[4].href = SimpleContextMenu._menuElement.getElementsByTagName('a')[5].href = '#' + (file ? "F!" : "") + el.href.substring(el.href.lastIndexOf('/') + 1);
-            SimpleContextMenu._menuElement.getElementsByTagName('a')[1].href = el.href.replace(/\/extranet\/mycomputer\//gi, "/extranet/move.aspx?path=").replace(/\/extranet\/download\//gi, "/extranet/move.aspx?path=f/");
+            SimpleContextMenu._menuElement.getElementsByTagName('a')[1].href = el.href.replace(/\/mycomputer\//gi, "/move.aspx?path=").replace(/\/download\//gi, "/move.aspx?path=f/");
             if (el.href.match(/.docx/i)) {
-                SimpleContextMenu._menuElement.getElementsByTagName('a')[3].href = el.href.replace(/\/extranet\/download/gi, "/extranet/preview");
+                SimpleContextMenu._menuElement.getElementsByTagName('a')[3].href = el.href.replace(/\/download/gi, "/preview");
                 SimpleContextMenu._menuElement.getElementsByTagName('a')[3].style.display = "block";
             }
             else if (!file) SimpleContextMenu._menuElement.getElementsByTagName('a')[4].style.display = "block";
             else if (el.href.match(/.xls/i)) {
-                SimpleContextMenu._menuElement.getElementsByTagName('a')[3].href = el.href.replace(/\/extranet\/download/gi, "/extranet/preview");
+                SimpleContextMenu._menuElement.getElementsByTagName('a')[3].href = el.href.replace(/\/download/gi, "/preview");
                 SimpleContextMenu._menuElement.getElementsByTagName('a')[3].style.display = "block";
             }
             else if (el.href.match(/.zip/i)) SimpleContextMenu._menuElement.getElementsByTagName('a')[5].style.display = "block";

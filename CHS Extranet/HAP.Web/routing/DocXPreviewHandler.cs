@@ -115,7 +115,7 @@ namespace HAP.Web.routing
             path = RoutingPath.Replace('^', '&');
             uncpath unc = null;
             unc = config.MyComputer.UNCPaths[RoutingDrive];
-            if (unc == null || !isWriteAuth(unc)) context.Response.Redirect("/Extranet/unauthorised.aspx", true);
+            if (unc == null || !isWriteAuth(unc)) context.Response.Redirect(context.Request.ApplicationPath + "/unauthorised.aspx", true);
             else path = Path.Combine(string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username), path.Replace('/', '\\'));
 
             // Open document
@@ -135,7 +135,7 @@ namespace HAP.Web.routing
 
                 context.Response.WriteLine("  <head>");
                 context.Response.WriteLine("    <title>" + coreProperties.Title + "</title>");
-                context.Response.WriteLine("    <link href=\"/extranet/basestyle.css\" rel=\"stylesheet\" type=\"text/css\" />");
+                context.Response.WriteLine("    <link href=\"" + context.Request.ApplicationPath + "/basestyle.css\" rel=\"stylesheet\" type=\"text/css\" />");
                 RenderStyles(context, document);
                 context.Response.WriteLine("  </head>");
 
@@ -172,7 +172,7 @@ namespace HAP.Web.routing
         private void RenderDownloadLink(System.Web.HttpContext context)
         {
             context.Response.WriteLine("   <div id=\"Download\">");
-            context.Response.WriteLine("     Download document: <a href=\"/extranet/download/" + RoutingDrive + "/" + RoutingPath + "\">" + Path.GetFileName(path) + "</a>");
+            context.Response.WriteLine("     Download document: <a href=\"" + context.Request.ApplicationPath + "/download/" + RoutingDrive + "/" + RoutingPath + "\">" + Path.GetFileName(path) + "</a>");
             context.Response.WriteLine("   </div>");
         }
 

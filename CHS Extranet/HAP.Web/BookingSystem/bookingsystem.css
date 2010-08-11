@@ -64,7 +64,7 @@
 
 .modalPopup 
 {
-	background: #fff url(/Extranet/images/bar.gif) repeat-x top left;
+	background: #fff url(../images/bar.gif) repeat-x top left;
 	border-width:1px;
 	border-style:solid;
 	border-color: #7da2ce;

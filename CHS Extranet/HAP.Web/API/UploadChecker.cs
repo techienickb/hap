@@ -42,7 +42,7 @@ namespace HAP.Web.API
             context.Response.ContentType = "text/plain";
             context.Response.Write(file.Exists ? "EXISTS" : "OK");
             context.Response.Write("\n");
-            context.Response.Write("/extranet/images/icons/" + MyComputerItem.ParseForImage(file));
+            context.Response.Write("images/icons/" + MyComputerItem.ParseForImage(file));
         }
     }
 }

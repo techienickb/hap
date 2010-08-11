@@ -192,7 +192,7 @@ namespace HAP.Web.HelpDesk
                 newticketeditor.Content).Replace("{3}",
                 newticketroom.Text).Replace("{4}",
                 up.DisplayName).Replace("{5}",
-                Request.Url.Host);
+                Request.Url.Host + Request.ApplicationPath);
 
             SmtpClient smtp = new SmtpClient(config.BaseSettings.SMTPServer);
             if (!string.IsNullOrEmpty(config.BaseSettings.SMTPServerUsername))
@@ -252,7 +252,7 @@ namespace HAP.Web.HelpDesk
                 newadminticketsubject.Text).Replace("{2}", 
                 newadminticketeditor.Content).Replace("{3}", 
                 user.DisplayName).Replace("{4}", 
-                Request.Url.Host);
+                Request.Url.Host + Request.ApplicationPath);
             
             SmtpClient smtp = new SmtpClient(config.BaseSettings.SMTPServer);
             if (!string.IsNullOrEmpty(config.BaseSettings.SMTPServerUsername))
@@ -293,7 +293,7 @@ namespace HAP.Web.HelpDesk
                     (CheckFixed.Checked ? "Closed" : "Updated")).Replace("{2}",
                     newnote.Content).Replace("{3}",
                     (CheckFixed.Checked ? "reopen" : "update")).Replace("{4}",
-                    Request.Url.Host);
+                    Request.Url.Host + Request.ApplicationPath);
 
                 SmtpClient smtp = new SmtpClient(config.BaseSettings.SMTPServer);
                 if (!string.IsNullOrEmpty(config.BaseSettings.SMTPServerUsername))
@@ -321,7 +321,7 @@ namespace HAP.Web.HelpDesk
                 mes.Body = fs.ReadToEnd().Replace("{0}", TicketID).Replace("{1}",
                     newnote.Content).Replace("{2}",
                     up.DisplayName).Replace("{3}",
-                    Request.Url.Host);
+                    Request.Url.Host + Request.ApplicationPath);
 
                 SmtpClient smtp = new SmtpClient(config.BaseSettings.SMTPServer);
                 if (!string.IsNullOrEmpty(config.BaseSettings.SMTPServerUsername))
