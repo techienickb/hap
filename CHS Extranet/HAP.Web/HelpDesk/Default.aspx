@@ -30,7 +30,7 @@
                     New Support Ticket
                     <i>Open a New Support Ticket</i>
                 </a>
-                <a href="<%=Request.ApplicationPath%>/HelpDesk/ticket/-2" runat="server" id="newadminsupportticket">
+                <a href="~/HelpDesk/ticket/-2" runat="server" id="newadminsupportticket">
                     <img src="<%=Request.ApplicationPath%>/Images/StatusIcons/newadmin.png" alt="" />
                     New Admin Support Ticket
                     <i>Open a New Admin Support Ticket</i>

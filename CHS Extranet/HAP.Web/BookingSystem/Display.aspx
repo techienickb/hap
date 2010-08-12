@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Display Board System</title>
-    <link href="<%=Request.ApplicationPath %>/StyleSheet.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="~/StyleSheet.css" rel="stylesheet" type="text/css" media="screen" />
     <style type="text/css">
         .Outter { width: 340px; float: left; overflow: hidden; }
         #header { width: 985px; margin: 0 auto; background-color: #fff; height: 170px;  }
