@@ -32,9 +32,12 @@ namespace HAP.Web.Tracker
             doc.Load(context.Server.MapPath("~/App_Data/tracker.xml"));
             if (op == "clear")
             {
-                foreach (XmlNode node in doc.SelectNodes(string.Format("/Tracker/Event[@logoffdatetime='' and @computername='{0}']", c)))
-                    node.Attributes["logoffdatetime"].Value = DateTime.Now.ToString("s");
-
+                try
+                {
+                    foreach (XmlNode node in doc.SelectNodes(string.Format("/Tracker/Event[@logoffdatetime='' and @computername='{0}']", c)))
+                        node.Attributes["logoffdatetime"].Value = DateTime.Now.ToString("s");
+                }
+                catch { }
                 context.Response.Write("Done");
             }
             else if (op == "remotelogoff")
@@ -59,34 +62,42 @@ namespace HAP.Web.Tracker
             }
             else
             {
-                XmlElement e = doc.CreateElement("Event");
-                e.SetAttribute("logondatetime", DateTime.Now.ToString("s"));
-                e.SetAttribute("logoffdatetime", "");
-                hapConfig hap = hapConfig.Current;
-                string username = "", domainname = "";
-                foreach (string s in c.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
+                try
                 {
-                    if (s.StartsWith("username")) username = s.Split(new char[] { '|' })[1];
-                    else if (s.StartsWith("domainname")) domainname = s.Split(new char[] { '|' })[1];
-                    e.SetAttribute(s.Split(new char[] { '|' })[0], s.Split(new char[] { '|' })[1]);
+                    XmlElement e = doc.CreateElement("Event");
+                    e.SetAttribute("logondatetime", DateTime.Now.ToString("s"));
+                    e.SetAttribute("logoffdatetime", "");
+                    hapConfig hap = hapConfig.Current;
+                    string username = "", domainname = "";
+                    foreach (string s in c.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        if (s.StartsWith("username")) username = s.Split(new char[] { '|' })[1];
+                        else if (s.StartsWith("domainname")) domainname = s.Split(new char[] { '|' })[1];
+                        e.SetAttribute(s.Split(new char[] { '|' })[0], s.Split(new char[] { '|' })[1]);
+                    }
+                    List<string> resp = new List<string>();
+                    foreach (XmlNode node in doc.SelectNodes(string.Format("/Tracker/Event[@logoffdatetime='' and @username='{0}' and @domainname='{1}']", username, domainname)))
+                        resp.Add(string.Format("{0}|{1}", node.Attributes["computername"].Value, node.Attributes["logondatetime"].Value));
+                    if (resp.Count > 0 && isStudent(username)) context.Response.Write("EXISTS\nStudent:" + hap.Tracker.MaxStudentLogons + "\n" + string.Join("\n", resp.ToArray()));
+                    else if (resp.Count > 0 && isAdmin(username)) context.Response.Write("EXISTS\nAdmin:0\n" + string.Join("\n", resp.ToArray()));
+                    else if (resp.Count > 0) context.Response.Write("EXISTS\nStaff:" + hap.Tracker.MaxStaffLogons + "\n" + string.Join("\n", resp.ToArray()));
+                    else context.Response.Write("Done");
+                    doc.SelectSingleNode("/Tracker").AppendChild(e);
                 }
-                List<string> resp = new List<string>();
-                foreach (XmlNode node in doc.SelectNodes(string.Format("/Tracker/Event[@logoffdatetime='' and @username='{0}' and @domainname='{1}']", username, domainname)))
-                    resp.Add(string.Format("{0}|{1}", node.Attributes["computername"].Value, node.Attributes["logondatetime"].Value));
-                if (resp.Count > 0 && isStudent(username)) context.Response.Write("EXISTS\nStudent:" + hap.Tracker.MaxStudentLogons + "\n" + string.Join("\n", resp.ToArray()));
-                else if (resp.Count > 0 && isAdmin(username)) context.Response.Write("EXISTS\nAdmin:0\n" + string.Join("\n", resp.ToArray()));
-                else if (resp.Count > 0) context.Response.Write("EXISTS\nStaff:" + hap.Tracker.MaxStaffLogons + "\n" + string.Join("\n", resp.ToArray()));
-                else context.Response.Write("Done");
-                doc.SelectSingleNode("/Tracker").AppendChild(e);
+                catch { context.Response.Write("Done"); }
             }
             XmlWriterSettings set = new XmlWriterSettings();
             set.Indent = true;
             set.IndentChars = "   ";
             set.Encoding = System.Text.Encoding.UTF8;
             XmlWriter writer = XmlWriter.Create(context.Server.MapPath("~/App_Data/Tracker.xml"), set);
-            doc.Save(writer);
-            writer.Flush();
-            writer.Close();
+            try
+            {
+                doc.Save(writer);
+                writer.Flush();
+                writer.Close();
+            }
+            catch { writer.Close(); }
         }
 
         private bool isAdmin(string username)

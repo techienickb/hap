@@ -47,17 +47,7 @@ namespace HAP.Logon.Tracker
                     if (e.Result == "Done") dataGridView1.Rows.RemoveAt((int)e.UserState);
                     else MessageBox.Show(this, e.Result, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                catch (Exception ex)
-                {
-                    StreamWriter sw;
-                    string path = Path.GetFileNameWithoutExtension(Application.ExecutablePath) + ".log";
-                    if (!File.Exists(path))
-                        sw = File.CreateText(path);
-                    else sw = File.AppendText(path);
-                    sw.WriteLine(ex.ToString());
-                    sw.Close();
-                    sw.Dispose();
-                }
+                catch { }
                 this.Enabled = true;
                 this.Cursor = Cursors.Default;
                 CheckCount();
@@ -108,17 +98,7 @@ namespace HAP.Logon.Tracker
                 {
                     if (e.Result != "Done") MessageBox.Show(this, e.Result, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                catch (Exception ex)
-                {
-                    StreamWriter sw;
-                    string path = Path.GetFileNameWithoutExtension(Application.ExecutablePath) + ".log";
-                    if (!File.Exists(path))
-                        sw = File.CreateText(path);
-                    else sw = File.AppendText(path);
-                    sw.WriteLine(ex.ToString());
-                    sw.Close();
-                    sw.Dispose();
-                }
+                catch { }
                 this.Close();
             }
         }

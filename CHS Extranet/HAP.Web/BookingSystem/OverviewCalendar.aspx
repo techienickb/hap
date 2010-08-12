@@ -7,7 +7,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head runat="server">
         <title>Overview Calendar</title>
-        <link href="../basestyle.css" rel="stylesheet" type="text/css" />
+        <link href="~/basestyle.css" rel="stylesheet" type="text/css" />
         <link href="bookingsystem.css" rel="stylesheet" type="text/css" />
     </head>
     <body>

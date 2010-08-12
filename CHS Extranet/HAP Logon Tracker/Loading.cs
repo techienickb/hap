@@ -59,17 +59,7 @@ namespace HAP.Logon.Tracker
                         bg.ShowDialog(this);
                     }
                 }
-                catch (Exception ex)
-                {
-                    StreamWriter sw;
-                    string path = Path.GetFileNameWithoutExtension(Application.ExecutablePath) + ".log";
-                    if (!File.Exists(path))
-                        sw = File.CreateText(path);
-                    else sw = File.AppendText(path);
-                    sw.WriteLine(ex.ToString());
-                    sw.Close();
-                    sw.Dispose();
-                }
+                catch { }
 
                 this.Close();
             }
