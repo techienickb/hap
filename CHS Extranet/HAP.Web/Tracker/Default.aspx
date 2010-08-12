@@ -15,5 +15,10 @@
             Historic Logs
             <i>Drill down through the Historic Logs</i>
         </a>
+        <a href="../">
+            <img src="../images/icons/school.png" alt="" />
+            Home Access Plus+ Home
+            <i>Go Back to the Home Access Plus+ Homepage</i>
+        </a>
     </p>
 </asp:Content>
