@@ -19,6 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{A881389B-1A3
 	ProjectSection(SolutionItems) = preProject
 		Binaries\AeroWizard.dll = Binaries\AeroWizard.dll
 		Binaries\AeroWizard.xml = Binaries\AeroWizard.xml
+		Binaries\AjaxControlToolkit.dll = Binaries\AjaxControlToolkit.dll
 		Binaries\Microsoft.WindowsAPICodePack.dll = Binaries\Microsoft.WindowsAPICodePack.dll
 		Binaries\Microsoft.WindowsAPICodePack.Shell.dll = Binaries\Microsoft.WindowsAPICodePack.Shell.dll
 	EndProjectSection

@@ -25,7 +25,7 @@ namespace HAP.Web.Controls
                 XmlDocument xmldoc = new XmlDocument();
                 try
                 {
-                    xmldoc.LoadXml(client.DownloadString("http://chsextranet.codeplex.com/Project/ProjectRss.aspx?ProjectRSSFeed=codeplex://release/chsextranet"));
+                    xmldoc.LoadXml(client.DownloadString("http://hap.codeplex.com/Project/ProjectRss.aspx?ProjectRSSFeed=codeplex://release/hap"));
 
                     XmlNode latest = xmldoc.SelectNodes("/rss/channel/item")[0];
                     XmlNode title = latest.SelectSingleNode("title");

@@ -3,7 +3,7 @@
     <link href="../mycomputer.css" rel="stylesheet" type="text/css" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
-    <div style="text-align: center;"><a href="http://chsextranet.codeplex.com" target="_blank"><img src="logontracker.png" alt="Logon Tracker" /></a></div>
+    <div style="text-align: center;"><a href="http://hap.codeplex.com" target="_blank"><img src="logontracker.png" alt="Logon Tracker" /></a></div>
     <p id="HomeButtons">
         <a href="live.aspx">
             <img src="../images/icons/tracker-live.png" alt="" />
