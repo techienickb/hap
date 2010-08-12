@@ -27,7 +27,7 @@ namespace HAP.Silverlight
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            string baseuri = string.Format("{0}://{1}/extranet/upload/", HtmlPage.Document.DocumentUri.Scheme, HtmlPage.Document.DocumentUri.Host + (HtmlPage.Document.DocumentUri.Port != 80 && HtmlPage.Document.DocumentUri.Port != 443 ? ":" + HtmlPage.Document.DocumentUri.Port.ToString() : ""));
+            string baseuri = string.Format("{0}://{1}/{2}/upload/", HtmlPage.Document.DocumentUri.Scheme, HtmlPage.Document.DocumentUri.Host + (HtmlPage.Document.DocumentUri.Port != 80 && HtmlPage.Document.DocumentUri.Port != 443 ? ":" + HtmlPage.Document.DocumentUri.Port.ToString() : ""), HtmlPage.Document.DocumentUri.AbsolutePath.Split(new char[] { '/' })[0]);
             MainPage mp = new MainPage(HttpUtility.HtmlDecode(e.InitParams["Path"]), e.InitParams["Filters"].Replace('\\', ','), baseuri);
             this.RootVisual = mp;
 
