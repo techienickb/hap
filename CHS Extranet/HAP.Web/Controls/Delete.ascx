@@ -1,6 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Delete.ascx.cs" Inherits="HAP.Web.Controls.Delete" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
-<%@ Register Assembly="System.Web.Ajax" Namespace="System.Web.UI" TagPrefix="asp" %>
     <asp:Button runat="server" Text="Delete" style="display: none;" id="deleteclicker" />
     <asp:Panel runat="server" ID="deletebox" Width="300px" style="display: none;" CssClass="modalPopup">
         <h1>Are you sure you want to delete?</h1>

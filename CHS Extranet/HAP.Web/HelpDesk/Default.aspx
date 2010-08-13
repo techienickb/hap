@@ -1,7 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/chs.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="HAP.Web.HelpDesk.Default" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit.HTMLEditor" TagPrefix="asp" %>
-<%@ Register Assembly="System.Web.Ajax" Namespace="System.Web.UI" TagPrefix="asp" %>
-
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="<%=Request.ApplicationPath%>/HelpDesk/helpdesksheet.css" rel="stylesheet" type="text/css" />
     <%if (!string.IsNullOrEmpty(TicketID)) { %>
@@ -11,7 +10,7 @@
     <%} %>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
-    <asp:AjaxScriptManager runat="server" />
+    <asp:ToolkitScriptManager runat="server" />
     <div id="maincol">
         <div id="ticketlist">
             <h1>Tickets <asp:DropDownList ID="statusselection" AutoPostBack="true" Width="80px" runat="server">

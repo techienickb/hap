@@ -1,6 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Rename.ascx.cs" Inherits="HAP.Web.Controls.Rename" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
-<%@ Register Assembly="System.Web.Ajax" Namespace="System.Web.UI" TagPrefix="asp" %>
     <asp:Button runat="server" Text="Rename" style="display: none;" id="renameclicker" />
     <asp:Panel runat="server" ID="renamebox" Width="300px" style="display: none;" CssClass="modalPopup">
         <h1>Rename</h1>

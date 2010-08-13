@@ -1,6 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Unzip.ascx.cs" Inherits="HAP.Web.Controls.Unzip" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
-<%@ Register Assembly="System.Web.Ajax" Namespace="System.Web.UI" TagPrefix="asp" %>
     <asp:Button runat="server" Text="Unzip" style="display: none;" id="unzipclicker" />
     <asp:Panel runat="server" ID="unzipbox" Width="300px" style="display: none;" CssClass="modalPopup">
         <h1>Unzip</h1>

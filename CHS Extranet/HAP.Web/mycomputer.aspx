@@ -1,6 +1,5 @@
 ﻿<%@ Page Title="Crickhowell High School - IT - Extranet - My Computer" Language="C#" MasterPageFile="~/chs.master" AutoEventWireup="true" CodeBehind="mycomputer.aspx.cs" Inherits="HAP.Web.mycomputer" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
-<%@ Register Assembly="System.Web.Ajax" Namespace="System.Web.UI" TagPrefix="asp" %>
 <%@ Register Src="~/Controls/NewFolder.ascx" TagName="NewFolder" TagPrefix="hap" %>
 <%@ Register Src="~/Controls/Delete.ascx" TagName="Delete" TagPrefix="hap" %>
 <%@ Register Src="~/Controls/Rename.ascx" TagName="Rename" TagPrefix="hap" %>
@@ -26,7 +25,7 @@
 </asp:Content>
 
 <asp:Content ContentPlaceHolderID="body" runat="server">
-	<asp:AjaxScriptManager runat="server" />
+	<asp:ToolkitScriptManager runat="server" />
 	<div id="maincol">
 		<h1>My Computer</h1>
 		<script type="text/javascript" src="<%=Request.ApplicationPath %>/Scripts/Silverlight.js"></script>

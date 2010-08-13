@@ -1,6 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Upload.ascx.cs" Inherits="HAP.Web.Controls.Upload" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
-<%@ Register Assembly="System.Web.Ajax" Namespace="System.Web.UI" TagPrefix="asp" %>
 	<asp:Hyperlink runat="server" ID="uploadclicker" Text="Upload" NavigateUrl="javascript:ShowUploader();" />
 	<asp:Panel runat="server" ID="uploadbox" Width="600px" style="display: none;" CssClass="modalPopup">
 		<h1>Upload File</h1>
