@@ -10,7 +10,7 @@
 </asp:Content>
 <asp:Content ID="Content2" runat="server" ContentPlaceHolderID="body">
             <div>
-                <asp:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server" />
+                <asp:ToolkitScriptManager runat="server" />
                 <asp:UpdatePanel ID="UpdatePanel1" runat="server"><ContentTemplate>
                     <div onclick="hideCal();">
                         <asp:HyperLink runat="server" style="float: right;" NavigateUrl="admin/" ID="adminlink" Visible="false">Booking System Admin</asp:HyperLink>

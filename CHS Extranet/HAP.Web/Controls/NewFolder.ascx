@@ -1,6 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="NewFolder.ascx.cs" Inherits="HAP.Web.Controls.NewFolder" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
-<%@ Register Assembly="System.Web.Ajax" Namespace="System.Web.UI" TagPrefix="asp" %>
     <asp:LinkButton runat="server" Text="New Folder" ID="newfolderlink" />
     <asp:Panel runat="server" ID="newfolderbox" Width="300px" style="display: none;" CssClass="modalPopup">
         <h1>New Folder</h1>

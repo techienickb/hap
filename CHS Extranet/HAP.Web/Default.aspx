@@ -2,7 +2,6 @@
 <%@ Register TagName="announcement" TagPrefix="hap" Src="~/Controls/Announcement.ascx" %>
 <%@ Register TagName="version" TagPrefix="hap" Src="~/Controls/UpdateChecker.ascx" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
-<%@ Register Assembly="System.Web.Ajax" Namespace="System.Web.UI" TagPrefix="asp" %>
 
 <asp:Content runat="server" ContentPlaceHolderID="head">
     <link href="mycomputer.css" rel="stylesheet" type="text/css" />
@@ -10,7 +9,7 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
     <div id="maincol">
-        <asp:AjaxScriptManager runat="server" />
+        <asp:ToolkitScriptManager runat="server" />
         <hap:announcement runat="server" />
         <hap:version runat="server" />
         <a href="http://hap.codeplex.com" target="_blank" style="text-align: center; display: block;"><img src="<%=Request.ApplicationPath%>/images/haplogo.png" alt="Home Access Plus+ Logo" /></a>

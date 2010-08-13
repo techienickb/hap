@@ -1,6 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Zip.ascx.cs" Inherits="HAP.Web.Controls.Zip" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
-<%@ Register Assembly="System.Web.Ajax" Namespace="System.Web.UI" TagPrefix="asp" %>
     <asp:Button runat="server" Text="Zip" style="display: none;" id="zipclicker" />
     <asp:Panel runat="server" ID="zipbox" Width="300px" style="display: none;" CssClass="modalPopup">
         <h1>Are you sure you want to ZIP up this Folder?</h1>

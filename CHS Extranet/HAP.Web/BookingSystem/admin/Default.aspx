@@ -6,7 +6,7 @@
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="body" runat="server">
    <h1>IT Booking System</h1>
-   <asp:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server" />
+   <asp:ToolkitScriptManager runat="server" />
     <asp:HyperLink runat="server" NavigateUrl="~/">Back to Home Access Plus</asp:HyperLink> | 
     <asp:HyperLink runat="server" NavigateUrl="~/bookingsystem/">Back to the Booking System</asp:HyperLink>
     <asp:TabContainer ID="TabContainer1" runat="server" Width="98%">

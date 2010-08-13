@@ -1,6 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="BookingPopup.ascx.cs" Inherits="HAP.Web.BookingSystem.BookingPopup" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
-<%@ Register Assembly="System.Web.Ajax" Namespace="System.Web.UI" TagPrefix="asp" %>
                 <div id="modalBackground" class="modalBackground" style="display: none;"></div>
                 <div id="modalPopup" style="display: none;">
                     <asp:Panel runat="server" ID="Popup" Width="500px" CssClass="popupContent">
