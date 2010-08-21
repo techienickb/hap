@@ -117,6 +117,8 @@ namespace HAP.Silverlight.Browser
                 {
                     string[] ss = s.Split(new char[] { '|' });
                     BItem bitem = new BItem(ss[0], ss[1], "", "Drive", BType.Drive, ss[2], ss[3]);
+                    bitem.Changed += new BItemChangeHandler(bitem_Changed);
+                    bitem.Deleted += new BItemChangeHandler(bitem_Delete);
                     BrowserItem item;
                     if (ss.Length > 4)
                         item = new BrowserItem(bitem, double.Parse(ss[4]));
@@ -249,7 +251,10 @@ namespace HAP.Silverlight.Browser
                 else foreach (string s in e.Result.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
                     {
                         string[] ss = s.Split(new char[] { '|' });
-                        BrowserItem item = new BrowserItem(new BItem(ss[0], ss[1], ss[2], ss[3], (ss[3] == "File Folder" ? BType.Folder : (ss[3] == "Drive" ? BType.Drive : BType.File)), ss[4], ss[5]));
+                        BItem bitem = new BItem(ss[0], ss[1], ss[2], ss[3], (ss[3] == "File Folder" ? BType.Folder : (ss[3] == "Drive" ? BType.Drive : BType.File)), ss[4], ss[5]);
+                        bitem.Changed += new BItemChangeHandler(bitem_Changed);
+                        bitem.Deleted += new BItemChangeHandler(bitem_Delete);
+                        BrowserItem item = new BrowserItem(bitem);
                         item.Activate += new EventHandler(item_Activate);
                         item.MouseEnter += new MouseEventHandler(item_MouseEnter);
                         if (CurrentItem.AccessControl == AccessControlActions.Change)
@@ -412,7 +417,10 @@ namespace HAP.Silverlight.Browser
             else foreach (string s in e.Result.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     string[] ss = s.Split(new char[] { '|' });
-                    BrowserItem item = new BrowserItem(new BItem(ss[0], ss[1], ss[2], ss[3], (ss[3] == "File Folder" ? BType.Folder : (ss[3] == "Drive" ? BType.Drive : BType.File)), ss[4], ss[5]));
+                    BItem bitem = new BItem(ss[0], ss[1], ss[2], ss[3], (ss[3] == "File Folder" ? BType.Folder : (ss[3] == "Drive" ? BType.Drive : BType.File)), ss[4], ss[5]);
+                    bitem.Deleted += new BItemChangeHandler(bitem_Delete);
+                    bitem.Changed += new BItemChangeHandler(bitem_Changed);
+                    BrowserItem item = new BrowserItem(bitem);
                     if (item.Data.BType == BType.Folder && item.Data.Name != "..") UpdateTree(item.Data);
                 }
             if (!loaded)
@@ -611,6 +619,28 @@ namespace HAP.Silverlight.Browser
         #endregion
 
         #region ItemEvents
+
+        void bitem_Delete(BItem e)
+        {
+            try
+            {
+                HAPTreeNode item = GetTreeNode(e.Path, ((TreeViewItem)treeView1.Items[0]).Items);
+                ((HAPTreeNode)item.Parent).Items.Remove(item);
+            }
+            catch { }
+        }
+
+        private void bitem_Changed(BItem e)
+        {
+            try
+            {
+                HAPTreeNode item = GetTreeNode(e.Path, ((TreeViewItem)treeView1.Items[0]).Items);
+                StackPanel sp = item.Header as StackPanel;
+                TextBlock tb = sp.Children[1] as TextBlock;
+                tb.Text = e.Name;
+            }
+            catch { }
+        }
 
         public void AddItem(BrowserItem item, bool Resort)
         {
@@ -1104,9 +1134,4 @@ namespace HAP.Silverlight.Browser
             return false;
         }
     }
-
-    public enum ViewMode { List, SmallIcon, Icon, LargeIcon, Tile }
-    public enum MouseMode { NoGo, Move, Normal, Upload }
-    public delegate void ResortHandler(object sender, bool resort);
-    public delegate void SelectHandler(string path);
 }

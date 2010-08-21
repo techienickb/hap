@@ -37,7 +37,7 @@ namespace HAP.Silverlight.Browser
 
         private void TextBlock_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            HtmlPage.PopupWindow(new Uri("http://chsextranet.codeplex.com"), "_codeplex", new HtmlPopupWindowOptions());
+            HtmlPage.PopupWindow(new Uri("http://hap.codeplex.com"), "_codeplex", new HtmlPopupWindowOptions());
         }
     }
 }

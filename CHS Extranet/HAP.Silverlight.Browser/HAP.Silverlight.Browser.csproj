@@ -92,6 +92,7 @@
       <DependentUpon>BrowserItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="BStackPanel.cs" />
+    <Compile Include="Common.cs" />
     <Compile Include="FirefoxMessage.xaml.cs">
       <DependentUpon>FirefoxMessage.xaml</DependentUpon>
     </Compile>
