@@ -47,6 +47,7 @@
 	</style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
+	<h1>My School Computer - Enhanced Version</h1>
 	<div id="silverlightControlHost">
 		<object data="data:application/x-silverlight-2," type="application/x-silverlight-2" width="100%" height="100%">
 		  <param name="source" value="clientbin/HAP.Silverlight.Browser.xap"/>

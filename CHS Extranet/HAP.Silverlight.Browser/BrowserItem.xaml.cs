@@ -216,7 +216,7 @@ namespace HAP.Silverlight.Browser
 
             WebClient saveclient = new WebClient();
             saveclient.UploadStringCompleted += new UploadStringCompletedEventHandler(saveclient_UploadStringCompleted);
-            saveclient.UploadStringAsync(new Uri(HtmlPage.Document.DocumentUri, _data.Path.Replace("api/mycomputer/list/", "api/mycomputer/save/").Replace("Download/", "api/mycomputer/save/")), "POST", _d, new BUserState(resort, _d, _data.Name));
+            saveclient.UploadStringAsync(Common.GetUri(this._data, UriType.Save), "POST", _d, new BUserState(resort, _d, _data.Name));
 
             _data.Name = name1.Text = name2.Text = name3.Text = name4.Text = name5.Text = textBox2.Text = textBox3.Text = textBox4.Text = textBox5.Text = textBox1.Text = newname;
             if (_data.Icon.Contains("NewFolder")) { _data.Icon.Replace("NewFolder", "folder"); Data = _data; }
@@ -303,7 +303,7 @@ namespace HAP.Silverlight.Browser
 
                 WebClient saveclient = new WebClient();
                 saveclient.UploadStringCompleted += new UploadStringCompletedEventHandler(saveclient_UploadStringCompleted);
-                saveclient.UploadStringAsync(new Uri(HtmlPage.Document.DocumentUri, _data.Path.Replace("api/mycomputer/list/", "api/mycomputer/save/").Replace("Download/", "api/mycomputer/save/")), "POST", _d, new BUserState(state.Resort, _d, _data.Name));
+                saveclient.UploadStringAsync(Common.GetUri(this._data, UriType.Save), "POST", _d, new BUserState(state.Resort, _d, _data.Name));
 
                 _data.Name = name1.Text = name2.Text = name3.Text = name4.Text = name5.Text = textBox2.Text = textBox3.Text = textBox4.Text = textBox5.Text = textBox1.Text = newname;
             }
@@ -312,11 +312,11 @@ namespace HAP.Silverlight.Browser
         public int Move(bool resort, string folder)
         {
             string _d = "";
-            _d = "SAVETO:" + folder.Replace("api/mycomputer/list/", "").Replace('/', '\\') + "\\" + _data.Name;
+            _d = "SAVETO:" + folder.Remove(0, 20).Replace('/', '\\') + "\\" + _data.Name;
 
             WebClient saveclient = new WebClient();
             saveclient.UploadStringCompleted += new UploadStringCompletedEventHandler(saveclient_UploadStringCompleted3);
-            saveclient.UploadStringAsync(new Uri(HtmlPage.Document.DocumentUri, _data.Path.Replace("api/mycomputer/list/", "api/mycomputer/save/").Replace("Download/", "api/mycomputer/save/")), "POST", _d, new BUserState(resort, _d, _data.Name));
+            saveclient.UploadStringAsync(Common.GetUri(this._data, UriType.Save), "POST", _d, new BUserState(resort, _d, _data.Name));
             return 0;
         }
 
@@ -369,7 +369,7 @@ namespace HAP.Silverlight.Browser
 
                 WebClient saveclient = new WebClient();
                 saveclient.UploadStringCompleted += new UploadStringCompletedEventHandler(saveclient_UploadStringCompleted3);
-                saveclient.UploadStringAsync(new Uri(HtmlPage.Document.DocumentUri, _data.Path.Replace("api/mycomputer/list/", "api/mycomputer/save/").Replace("Download/", "api/mycomputer/save/")), "POST", _d, new BUserState(state.Resort, _d, _data.Name));
+                saveclient.UploadStringAsync(Common.GetUri(this._data, UriType.Save), "POST", _d, new BUserState(state.Resort, _d, _data.Name));
             }
         }
 
@@ -379,7 +379,7 @@ namespace HAP.Silverlight.Browser
             {
                 WebClient deleteclient = new WebClient();
                 deleteclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(deleteclient_DownloadStringCompleted);
-                deleteclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri, _data.Path.Replace("api/mycomputer/list/", "api/mycomputer/delete/").Replace("Download", "api/mycomputer/delete/")), false);
+                deleteclient.DownloadStringAsync(Common.GetUri(this._data, UriType.Delete), false);
             }
             return 0;
             //so some saving stuff;
@@ -395,6 +395,7 @@ namespace HAP.Silverlight.Browser
                 MessageBox.Show(e.Result);
             else
             {
+                _data.Delete();
                 ((WrapPanel)Parent).Children.Remove(this);
             }
         }
@@ -460,62 +461,4 @@ namespace HAP.Silverlight.Browser
             else Tile.Background = Icon.Background = List.Background = SmallIcon.Background = MediumIcon.Background = new SolidColorBrush(Colors.Transparent);
         }
     }
-
-    public delegate void ChangeDirectoryHandler(object sender, BItem e);
-
-    public class BItem : IComparable
-    {
-        public string Name { get; set; }
-        public string Icon { get; set; }
-        public string Size { get; set; }
-        public string Type { get; set; }
-        public BType BType { get; set; }
-        public string Path { get; set; }
-        public AccessControlActions AccessControl { get; set; }
-
-        public BItem(string name, string icon, string size, string type, BType btype, string path, AccessControlActions access)
-        {
-            Name = name;
-            Icon = icon;
-            Type = type;
-            Size = size;
-            BType = btype;
-            Path = path;
-            AccessControl = access;
-        }
-
-        public BItem(string name, string icon, string size, string type, BType btype, string path, string access)
-        {
-            Name = name;
-            Icon = icon;
-            Type = type;
-            Size = size;
-            BType = btype;
-            Path = path;
-            AccessControl = (AccessControlActions)Enum.Parse(typeof(AccessControlActions), access, true);
-        }
-
-        public int CompareTo(object obj)
-        {
-            return Name.CompareTo(((BItem)obj).Name);
-        }
-    }
-
-    public enum BType { Folder, File, Drive }
-
-    public class BUserState
-    {
-        public BUserState(bool Resort, string Data, string oldname)
-        {
-            this.Resort = Resort;
-            this.Data = Data;
-            this.oldname = oldname;
-        }
-
-        public bool Resort { get; set; }
-        public string Data { get; set; }
-        public string oldname { get; set; }
-    }
-
-    public enum AccessControlActions { Change, View, None }
 }
