@@ -26,9 +26,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{A881389B-1A3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP Logon Tracker", "HAP Logon Tracker\HAP Logon Tracker.csproj", "{5254C771-C9B6-4261-BC11-FED83C526CE0}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HAP Logon Tracker Installer", "HAP Logon Tracker Installer\HAP Logon Tracker Installer.vdproj", "{E10211DD-09C4-4756-AC4D-36C73A73FCEB}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 7
+		SccNumberOfProjects = 8
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs08
 		SccLocalPath0 = .
@@ -50,6 +52,9 @@ Global
 		SccProjectUniqueName6 = HAP\u0020Logon\u0020Tracker\\HAP\u0020Logon\u0020Tracker.csproj
 		SccProjectName6 = HAP\u0020Logon\u0020Tracker
 		SccLocalPath6 = HAP\u0020Logon\u0020Tracker
+		SccProjectUniqueName7 = HAP\u0020Logon\u0020Tracker\u0020Installer\\HAP\u0020Logon\u0020Tracker\u0020Installer.vdproj
+		SccProjectName7 = HAP\u0020Logon\u0020Tracker\u0020Installer
+		SccLocalPath7 = HAP\u0020Logon\u0020Tracker\u0020Installer
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -120,6 +125,12 @@ Global
 		{5254C771-C9B6-4261-BC11-FED83C526CE0}.Release|Mixed Platforms.Build.0 = Release|x86
 		{5254C771-C9B6-4261-BC11-FED83C526CE0}.Release|x86.ActiveCfg = Release|x86
 		{5254C771-C9B6-4261-BC11-FED83C526CE0}.Release|x86.Build.0 = Release|x86
+		{E10211DD-09C4-4756-AC4D-36C73A73FCEB}.Debug|Any CPU.ActiveCfg = Debug
+		{E10211DD-09C4-4756-AC4D-36C73A73FCEB}.Debug|Mixed Platforms.ActiveCfg = Debug
+		{E10211DD-09C4-4756-AC4D-36C73A73FCEB}.Debug|x86.ActiveCfg = Debug
+		{E10211DD-09C4-4756-AC4D-36C73A73FCEB}.Release|Any CPU.ActiveCfg = Release
+		{E10211DD-09C4-4756-AC4D-36C73A73FCEB}.Release|Mixed Platforms.ActiveCfg = Release
+		{E10211DD-09C4-4756-AC4D-36C73A73FCEB}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

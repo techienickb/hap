@@ -31,7 +31,11 @@ namespace HAP.Logon.Tracker
                     label2.Text = string.Format(label2.Text, MaxLogons);
                 }
                 else
+                {
                     dataGridView1.Rows.Add(s.Remove(s.LastIndexOf('|')).TrimEnd(new char[] { '|' }), DateTime.Parse(s.Remove(0, s.IndexOf('|')).TrimStart(new char[] { '|' })).ToString("f"), "Logoff");
+                    label2.Text = "Check you logged on to these computers";
+                    MaxLogons = 0;
+                }
             }
             CheckCount();
         }
