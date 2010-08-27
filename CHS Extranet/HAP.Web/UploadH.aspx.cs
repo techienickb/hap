@@ -35,11 +35,9 @@ namespace HAP.Web
 
         private bool isAuth(string extension)
         {
-            bool vis = false;
             foreach (uploadfilter filter in config.MyComputer.UploadFilters)
-                if (filter.Filter.Replace("*", "").Contains(extension)) vis = isAuth(filter);
-            vis = isAuth(config.MyComputer.UploadFilters["All Files"]);
-            return vis;
+                if (filter.Filter.Contains(extension)) return true;
+            return isAuth(config.MyComputer.UploadFilters["All Files"]);
         }
 
         private bool isAuth(uploadfilter filter)
