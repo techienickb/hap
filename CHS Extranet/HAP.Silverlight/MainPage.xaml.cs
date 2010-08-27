@@ -38,6 +38,14 @@ namespace HAP.Silverlight
             path = Path;
             filters = Filters;
             BaseUri = baseuri;
+            try
+            {
+                AllowDrop = true;
+            }
+            catch
+            {
+                textBlock1.Text = "Click the '...' button to upload (Drag disabled due to Firefox restrictions)";
+            }
         }
 
         private void UserControl_Drop(object sender, DragEventArgs e)

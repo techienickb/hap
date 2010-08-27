@@ -76,6 +76,15 @@ namespace HAP.Web {
         protected global::System.Web.UI.WebControls.FileUpload FileUpload5;
         
         /// <summary>
+        /// message control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal message;
+        
+        /// <summary>
         /// uploadbtn control.
         /// </summary>
         /// <remarks>

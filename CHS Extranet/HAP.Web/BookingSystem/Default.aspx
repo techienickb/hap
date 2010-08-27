@@ -47,85 +47,94 @@
                         <h1>Loading</h1>
                         <img src="loading.gif" alt="" />
                     </div>
+                    <div class="modalBackground" style="background: transparent; cursor: wait;"></div>
                 </div>
             </div>
-        <script type="text/javascript">
-            var lessonID = "";
-            var roomID = "";
-            var bookingvarsID = "";
-            var ltbookingID = "";
-            var inID = "";
-            var equipID = "";
-            function book(room, roomtype, lesson) {
-                $get('modalBackground').style.display = "block";
-                $get('modalPopup').style.display = "block";
-                $get(lessonID).innerHTML = lesson;
-                $get(bookingvarsID).value = room + "@" + lesson;
-                $get(roomID).innerHTML = room;
-                if (roomtype.match(/Laptops/gi) || roomtype.match(/Equipment/gi)) {
-                    $get(inID).innerHTML = "&nbsp;with the&nbsp;";
-                    if (roomtype.match(/Laptops/gi)) $get(ltbookingID).style.display = "";
-                    else $get(equipID).style.display = "";
-                } else {
-                    $get(inID).innerHTML = "&nbsp;in&nbsp;";
-                    $get(ltbookingID).style.display = $get(equipID).style.display = "none";
+            <script type="text/javascript">
+                var lessonID = "";
+                var roomID = "";
+                var bookingvarsID = "";
+                var ltbookingID = "";
+                var inID = "";
+                var equipID = "";
+                function book(room, roomtype, lesson) {
+                    $get('modalBackground').style.display = "block";
+                    $get('modalPopup').style.display = "block";
+                    $get(lessonID).innerHTML = lesson;
+                    $get(bookingvarsID).value = room + "@" + lesson;
+                    $get(roomID).innerHTML = room;
+                    if (roomtype.match(/Laptops/gi) || roomtype.match(/Equipment/gi)) {
+                        $get(inID).innerHTML = "&nbsp;with the&nbsp;";
+                        if (roomtype.match(/Laptops/gi)) $get(ltbookingID).style.display = "";
+                        else $get(equipID).style.display = "";
+                    } else {
+                        $get(inID).innerHTML = "&nbsp;in&nbsp;";
+                        $get(ltbookingID).style.display = $get(equipID).style.display = "none";
+                    }
                 }
-            }
-            function remove(room, lesson) {
-                if (confirm("Are you sure you want to remove this booking?")) {
-                    $get('<%=removevars.ClientID %>').value = room + "@" + lesson;
-                    $get('<%=remove.ClientID %>').click();
+                function remove(room, lesson) {
+                    if (confirm("Are you sure you want to remove this booking?")) {
+                        $get('<%=removevars.ClientID %>').value = room + "@" + lesson;
+                        $get('<%=remove.ClientID %>').click();
+                    }
                 }
-            }
-            var showcal = false;
-            function changeDate() {
-                if ($get('Cal').style.display == "") {
-                    $get('Cal').style.display = "block";
-                    $get('Cal').style.top = (getPosition($get('daylist')) + 30) + "px";
-                    showcal = true;
+                var showcal = false;
+                function changeDate() {
+                    if ($get('Cal').style.display == "") {
+                        $get('Cal').style.display = "block";
+                        $get('Cal').style.top = (getPositionY($get('daylist')) + 30) + "px";
+                        $get('Cal').style.left = getPositionX($get('daylist')) + "px";
+                        showcal = true;
+                    }
                 }
-            }
-            function hideCal() {
-                if (!showcal) return;
-                showcal = false;
-                $get('Cal').style.display = "";
-            }
-            function showOverview() {
-                $get('modalBackground').style.display = "block";
-                $get('OverviewBox').style.display = "block";
-            }
-            function hideOverview() {
-                $get('modalBackground').style.display = "none";
-                $get('OverviewBox').style.display = "none";
-            }
-            function resetCal(sender, args) {
-                if (showcal) $get('Cal').style.display = "block";
-                $get('loadingPopup').style.display = "none";
-                $get('Cal').style.top = (getPosition($get('daylist')) + 30) + "px";
-                setIDs();
-            }
-            function endRequestHandler(sender, args) {
-                $get('loadingPopup').style.display = "none";
-                var error = args.get_error();
-                if (error != undefined) {
-                    alert(error.message);
-                    args.set_errorHandled(true);
+                function hideCal() {
+                    if (!showcal) return;
+                    showcal = false;
+                    $get('Cal').style.display = "";
                 }
-            }
-            function beginRequestHandler(sender, args) {
-                $get('modalBackground').style.display = "block";
-                $get('loadingPopup').style.display = "block";
-            }
-            function getPosition(obj) {
-                var topValue = 0;
-                while (obj) {
-                    topValue += obj.offsetTop;
-                    obj = obj.offsetParent;
+                function showOverview() {
+                    $get('modalBackground').style.display = "block";
+                    $get('OverviewBox').style.display = "block";
                 }
-                return topValue;
-            }
-            Sys.Application.add_load(resetCal);
-            Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(beginRequestHandler);
-            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandler);
-        </script>
+                function hideOverview() {
+                    $get('modalBackground').style.display = "none";
+                    $get('OverviewBox').style.display = "none";
+                }
+                function resetCal(sender, args) {
+                    setIDs();
+                    if (showcal) changeDate();
+                    $get('loadingPopup').style.display = "none";
+                }
+                function endRequestHandler(sender, args) {
+                    $get('loadingPopup').style.display = "none";
+                    var error = args.get_error();
+                    if (error != undefined) {
+                        alert(error.message);
+                        args.set_errorHandled(true);
+                    }
+                }
+                function beginRequestHandler(sender, args) {
+                    $get('modalBackground').style.display = "block";
+                    $get('loadingPopup').style.display = "block";
+                }
+                function getPositionY(obj) {
+                    var topValue = 0;
+                    while (obj) {
+                        topValue += obj.offsetTop;
+                        obj = obj.offsetParent;
+                    }
+                    return topValue;
+                }
+                function getPositionX(obj) {
+                    var topValue = 0;
+                    while (obj) {
+                        topValue += obj.offsetLeft;
+                        obj = obj.offsetParent;
+                    }
+                    return topValue;
+                }
+                Sys.Application.add_load(resetCal);
+                Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(beginRequestHandler);
+                Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandler);
+            </script>
 </asp:Content>

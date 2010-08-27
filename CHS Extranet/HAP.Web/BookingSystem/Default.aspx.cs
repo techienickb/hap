@@ -89,14 +89,7 @@ namespace HAP.Web.BookingSystem
                 else if (doc.SelectSingleNode("/Bookings/Booking[@date='" + Calendar1.SelectedDate.ToShortDateString() + "' and @lesson='" + previouslesson.OldID.ToString() + "' and @room='" + room.ToString() + "' and @name='UNAVAILABLE']") != null)
                     doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + Calendar1.SelectedDate.ToShortDateString() + "' and @lesson='" + previouslesson.OldID.ToString() + "' and @room='" + room.ToString() + "' and @name='UNAVAILABLE']"));
             }
-            XmlWriterSettings set = new XmlWriterSettings();
-            set.Indent = true;
-            set.IndentChars = "   ";
-            set.Encoding = System.Text.Encoding.UTF8;
-            XmlWriter writer = XmlWriter.Create(Server.MapPath("~/App_Data/Bookings.xml"), set);
-            doc.Save(writer);
-            writer.Flush();
-            writer.Close();
+            BookingSystem.BookingsDoc = doc;
             DataBind();
         }
 

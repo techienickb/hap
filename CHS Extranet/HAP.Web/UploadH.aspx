@@ -14,6 +14,7 @@
         <div>File 3: <asp:FileUpload ID="FileUpload3" runat="server" /></div>
         <div>File 4: <asp:FileUpload ID="FileUpload4" runat="server" /></div>
         <div>File 5: <asp:FileUpload ID="FileUpload5" runat="server" /></div>
+        <asp:Literal runat="server" ID="message" />
         <div style="text-align: right;">
             <asp:Button ID="uploadbtn" runat="server" Text="Upload" onclick="uploadbtn_Click" />
             <asp:Button ID="uploadbtnClose" runat="server" Text="Upload + Close" onclick="uploadbtn_Click" />
