@@ -513,6 +513,7 @@ namespace HAP.Web.HelpDesk
 
         public static UserInfo GetUserInfo(string username)
         {
+            if (config == null) config = hapConfig.Current;
             try
             {
                 DirectoryEntry usersDE = new DirectoryEntry(ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString, config.ADSettings.ADUsername, config.ADSettings.ADPassword);

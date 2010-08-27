@@ -47,6 +47,7 @@ namespace HAP.Web.BookingSystem
                     if (Page.User.IsInRole("Domain Admins") || b.Username == Username) bookie = true;
                     string lessonname = b.Name;
                     if (lessonname.Length > 17) lessonname = lessonname.Remove(17) + "...";
+                    if (lessonname.Length > 16 && b.Static) lessonname = lessonname.Remove(14) + "...";
                     if (b.Name == "FREE")
                         writer.Write("<span><a href=\"javascript:book('{0}', '{1}', '{2}');\">FREE</a></span>", Room, RoomType, b.Lesson);
                     else if (!b.Static)

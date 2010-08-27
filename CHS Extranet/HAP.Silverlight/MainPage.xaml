@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" d:DesignHeight="315" d:DesignWidth="430" Visibility="Visible" Drop="UserControl_Drop" AllowDrop="True" xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk" DragOver="UserControl_DragOver" DragLeave="UserControl_DragLeave" DragEnter="UserControl_DragEnter">
+    mc:Ignorable="d" d:DesignHeight="315" d:DesignWidth="430" Visibility="Visible" Drop="UserControl_Drop" xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk" DragOver="UserControl_DragOver" DragLeave="UserControl_DragLeave" DragEnter="UserControl_DragEnter">
 
     <Grid x:Name="LayoutRoot" Background="Transparent">
         <ScrollViewer Name="scrollViewer1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" BorderThickness="0" FontSize="12" Margin="0,0,0,26">

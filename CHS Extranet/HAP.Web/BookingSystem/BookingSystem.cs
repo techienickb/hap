@@ -46,6 +46,18 @@ namespace HAP.Web.BookingSystem
                 else doc = HttpContext.Current.Cache["bookings"] as XmlDocument;
                 return doc;
             }
+            set
+            {
+                XmlWriterSettings set = new XmlWriterSettings();
+                set.Indent = true;
+                set.IndentChars = "   ";
+                set.Encoding = System.Text.Encoding.UTF8;
+                XmlWriter writer = XmlWriter.Create(HttpContext.Current.Server.MapPath("~/App_Data/Bookings.xml"), set);
+                value.Save(writer);
+                writer.Flush();
+                writer.Close();
+                HttpContext.Current.Cache.Remove("bookings");
+            }
         }
 
         public Booking getBooking(string room, string lesson)
