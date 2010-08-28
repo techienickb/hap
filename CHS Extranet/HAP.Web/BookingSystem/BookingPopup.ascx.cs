@@ -35,8 +35,7 @@ namespace HAP.Web.BookingSystem
 
         protected void book_Click(object sender, EventArgs e)
         {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(Server.MapPath("~/App_Data/Bookings.xml"));
+            XmlDocument doc = BookingSystem.BookingsDoc;
             XmlElement node = doc.CreateElement("Booking");
             node.SetAttribute("date", Date.ToShortDateString());
             string lessonint = bookingvars.Value.Split(new char[] { '@' }, StringSplitOptions.RemoveEmptyEntries)[1];
@@ -96,14 +95,7 @@ namespace HAP.Web.BookingSystem
             }
             #endregion
 
-            XmlWriterSettings set = new XmlWriterSettings();
-            set.Indent = true;
-            set.IndentChars = "   ";
-            set.Encoding = System.Text.Encoding.UTF8;
-            XmlWriter writer = XmlWriter.Create(Server.MapPath("~/App_Data/Bookings.xml"), set);
-            doc.Save(writer);
-            writer.Flush();
-            writer.Close();
+            BookingSystem.BookingsDoc = doc;
             Booking booking = new BookingSystem(Date).getBooking(roomstr, lessonint);
             iCalGenerator.Generate(booking, Date);
             if (config.BookingSystem.Resources[roomstr].EmailAdmin) iCalGenerator.Generate(booking, Date, config.BaseSettings.AdminEmailUser);
