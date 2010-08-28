@@ -170,6 +170,7 @@ namespace HAP.Web.BookingSystem
             node.Attributes["weeksinadvanced"].Value = right.Weeksahead.ToString();
 
             doc.Save(HttpContext.Current.Server.MapPath("~/App_Data/abr.xml"));
+            HttpContext.Current.Cache.Remove("abr");
         }
 
         public void deleteBookingRights(AdvancedBookingRight right)
@@ -185,6 +186,7 @@ namespace HAP.Web.BookingSystem
             doc.SelectSingleNode("/ABR").RemoveChild(node);
 
             doc.Save(HttpContext.Current.Server.MapPath("~/App_Data/abr.xml"));
+            HttpContext.Current.Cache.Remove("abr");
         }
 
         public void addBookingRights(AdvancedBookingRight right)
@@ -205,6 +207,7 @@ namespace HAP.Web.BookingSystem
             bookings.AppendChild(node);
 
             doc.Save(HttpContext.Current.Server.MapPath("~/App_Data/abr.xml"));
+            HttpContext.Current.Cache.Remove("abr");
         }
 
         public Booking[] getStaticBookingsArray()
