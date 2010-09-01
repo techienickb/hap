@@ -93,7 +93,7 @@ namespace HAP.Web.API
                                 RegistryKey rkRoot = Registry.ClassesRoot;
                                 string keyref = rkRoot.OpenSubKey(file.Extension).GetValue("").ToString();
                                 filetype = rkRoot.OpenSubKey(keyref).GetValue("").ToString();
-                                filename = filename.Replace(file.Extension, "");
+                                filename = filename.Remove(filename.LastIndexOf(file.Extension));
                             }
                             catch { filetype = "File"; }
 

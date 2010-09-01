@@ -190,11 +190,6 @@ namespace HAP.Silverlight.Browser
 
         public int Save()
         {
-            if (textBox1.Text.ToLower() == _data.Name.ToLower())
-            {
-                this.IsRename = false;
-                return -1;
-            }
             return Save(true);
         }
 
@@ -209,7 +204,12 @@ namespace HAP.Silverlight.Browser
                 case ViewMode.SmallIcon: newname = textBox4.Text; break;
                 case ViewMode.Icon: newname = textBox5.Text; break;
             }
-            if (newname == "") { MessageBox.Show("I Can't Rename this to Nothing", "Error", MessageBoxButton.OK); return -1; }
+            if (newname == "" || newname.ToLower().Equals(_data.Name.ToLower()))
+            {
+                if (MessageBox.Show(newname == "" ? "I Can't Rename this to Nothing" : "I'm already called this", "Error", MessageBoxButton.OKCancel) == MessageBoxResult.Cancel)
+                    this.IsRename = false;
+                return -1;
+            }
 
             string _d = "";
             _d = "SAVETO:" + newname;
