@@ -25,7 +25,7 @@ namespace HAP.Silverlight.Browser
             activeItems = new List<BrowserItem>();
             Filter = new List<string>();
             ViewMode = Browser.ViewMode.Tile;
-            CurrentItem = new BItem("My School Computer", "", "", "", BType.Drive, "api/mycomputer/listdrives", AccessControlActions.Change);
+            CurrentItem = new BItem("My School Computer", "", "", "", BType.Drive, "api/mycomputer/listdrives", AccessControlActions.None);
             newfolder.Visibility = System.Windows.Visibility.Collapsed;
             HAPTreeNode root = new HAPTreeNode();
             root.Data = CurrentItem;
@@ -427,7 +427,7 @@ namespace HAP.Silverlight.Browser
             {
                 string p = HtmlPage.Document.DocumentUri.AbsoluteUri;
                 p = p.Replace("%20", " ").Remove(0, p.IndexOf('#') + 1);
-                p = p.Remove(0, tempnode.Data.Path.Remove(0, 30).Length + 1);
+                p = p.Remove(0, tempnode.Data.Path.Remove(0, 20).Length + 1);
                 if (p.Split(new char[] { '/' }).Length > 1)
                     GetTreeNode(tempnode.Data.Path + "/" + p.Split(new char[] { '/' })[0], tempnode.Items).IsExpanded = true;
                 else
@@ -852,7 +852,7 @@ namespace HAP.Silverlight.Browser
         {
             if (activeItems.Count == 1)
             {
-                organiseButton1.IsDelete = organiseButton1.IsRename = RightClickRename.IsEnabled = RightClickDelete.IsEnabled = CurrentItem.AccessControl == AccessControlActions.Change;
+                organiseButton1.IsDelete = organiseButton1.IsRename = RightClickRename.IsEnabled = RightClickDelete.IsEnabled = ((activeItems[0].Data.BType == BType.Drive) ? false : CurrentItem.AccessControl == AccessControlActions.Change);
                 if (activeItems[0].Data.BType == BType.Folder)
                 {
                     RightClickUpload.Visibility = CurrentItem.AccessControl == AccessControlActions.Change ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
@@ -866,18 +866,35 @@ namespace HAP.Silverlight.Browser
             }
             else if (activeItems.Count > 1)
             {
-                organiseButton1.IsDelete = RightClickDelete.IsEnabled = CurrentItem.AccessControl == AccessControlActions.Change;
-                organiseButton1.IsRename = RightClickRename.IsEnabled = false;
-                RightClickUpload.Visibility = RightClickUNZIP.Visibility = System.Windows.Visibility.Collapsed;
-                RightClickFolder.Visibility = RightClickZIP.Visibility = CurrentItem.AccessControl == AccessControlActions.Change ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+                bool a = false;
+                foreach (BrowserItem i in activeItems) if (i.Data.BType == BType.Drive) a = true;
+                if (a)
+                {
+                    organiseButton1.IsDelete = RightClickDelete.IsEnabled = false;
+                    RightClickFolder.Visibility = RightClickZIP.Visibility = RightClickUpload.Visibility = RightClickUNZIP.Visibility = System.Windows.Visibility.Collapsed;
+                }
+                else
+                {
+                    organiseButton1.IsDelete = RightClickDelete.IsEnabled = CurrentItem.AccessControl == AccessControlActions.Change;
+                    organiseButton1.IsRename = RightClickRename.IsEnabled = false;
+                    RightClickUpload.Visibility = RightClickUNZIP.Visibility = System.Windows.Visibility.Collapsed;
+                    RightClickFolder.Visibility = RightClickZIP.Visibility = CurrentItem.AccessControl == AccessControlActions.Change ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+                }
             }
             else
             {
                 RightClickUpload.Header = "Upload to " + CurrentItem.Name;
-                organiseButton1.IsDelete = organiseButton1.IsRename = false;
-                RightClickRename.IsEnabled = RightClickDelete.IsEnabled = false;
-                RightClickUNZIP.Visibility = RightClickZIP.Visibility = System.Windows.Visibility.Collapsed;
-                RightClickFolder.Visibility = RightClickUpload.Visibility = CurrentItem.AccessControl == AccessControlActions.Change ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+                if (CurrentItem.BType == BType.Drive)
+                {
+                    organiseButton1.IsDelete = organiseButton1.IsRename = RightClickRename.IsEnabled = RightClickDelete.IsEnabled = false;
+                    RightClickUNZIP.Visibility = RightClickZIP.Visibility = RightClickFolder.Visibility = RightClickUpload.Visibility = System.Windows.Visibility.Collapsed;
+                }
+                else
+                {
+                    organiseButton1.IsDelete = organiseButton1.IsRename = RightClickRename.IsEnabled = RightClickDelete.IsEnabled = false;
+                    RightClickUNZIP.Visibility = RightClickZIP.Visibility = System.Windows.Visibility.Collapsed;
+                    RightClickFolder.Visibility = RightClickUpload.Visibility = CurrentItem.AccessControl == AccessControlActions.Change ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+                }
             }
         }
 
