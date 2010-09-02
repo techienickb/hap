@@ -48,7 +48,7 @@ namespace HAP.Silverlight.Browser
     public enum UriType { Save, Delete, Zip, Unzip }
     public enum ViewMode { List, SmallIcon, Icon, LargeIcon, Tile }
     public enum MouseMode { NoGo, Move, Normal, Upload }
-    public enum BType { Folder, File, Drive }
+    public enum BType { Root, Folder, File, Drive }
     public enum AccessControlActions { Change, View, None }
     #endregion
 
