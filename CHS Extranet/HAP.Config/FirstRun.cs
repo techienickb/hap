@@ -77,6 +77,10 @@ namespace HAP.Config
             umd.SetAttribute("name", "Update My Details");
             umd.SetAttribute("showto", hpl_updatedetails.Text);
             hpl.AppendChild(umd);
+            umd = doc.CreateElement("add");
+            umd.SetAttribute("name", "Change My Password");
+            umd.SetAttribute("showto", hpl_changepass.Text);
+            hpl.AppendChild(umd);
             foreach (DataGridViewRow row in homepagelinks.Rows)
             {
                 if (!row.IsNewRow)
@@ -307,6 +311,8 @@ namespace HAP.Config
             foreach (XmlNode node in hpl.SelectNodes("add"))
                 if (node.Attributes["name"].Value == "Update My Details")
                     hpl_updatedetails.Text = node.Attributes["showto"].Value;
+                else if (node.Attributes["name"].Value == "Change My Password")
+                    hpl_changepass.Text = node.Attributes["showto"].Value;
                 else
                     homepagelinks.Rows.Add(node.Attributes["name"].Value, node.Attributes["description"].Value, node.Attributes["showto"].Value, node.Attributes["linklocation"].Value, node.Attributes["icon"].Value);
             #endregion

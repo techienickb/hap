@@ -58,6 +58,15 @@ namespace HAP.Web {
         protected global::System.Web.UI.WebControls.Literal email;
         
         /// <summary>
+        /// passwordprompt control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::HAP.Web.Controls.ChangePassword passwordprompt;
+        
+        /// <summary>
         /// updatemydetails control.
         /// </summary>
         /// <remarks>

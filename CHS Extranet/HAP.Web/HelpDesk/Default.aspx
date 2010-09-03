@@ -10,7 +10,6 @@
     <%} %>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
-    <asp:ToolkitScriptManager runat="server" />
     <div id="maincol">
         <div id="ticketlist">
             <h1>Tickets <asp:DropDownList ID="statusselection" AutoPostBack="true" Width="80px" runat="server">

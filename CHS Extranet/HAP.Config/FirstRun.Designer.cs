@@ -129,6 +129,9 @@
             this.LessonType = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.StartTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.EndTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.bs_subjects = new System.Windows.Forms.TabPage();
+            this.bssubjects = new System.Windows.Forms.DataGridView();
+            this.Subject = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label18 = new System.Windows.Forms.Label();
             this.bs_twoweek = new System.Windows.Forms.CheckBox();
@@ -136,9 +139,8 @@
             this.label19 = new System.Windows.Forms.Label();
             this.bs_maxdays = new System.Windows.Forms.NumericUpDown();
             this.folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
-            this.bs_subjects = new System.Windows.Forms.TabPage();
-            this.bssubjects = new System.Windows.Forms.DataGridView();
-            this.Subject = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label27 = new System.Windows.Forms.Label();
+            this.hpl_changepass = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.wiz)).BeginInit();
             this.wizardPage1.SuspendLayout();
             this.wizardPage2.SuspendLayout();
@@ -165,11 +167,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.Resources)).BeginInit();
             this.tabPage9.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lessons)).BeginInit();
+            this.bs_subjects.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bssubjects)).BeginInit();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bs_max)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bs_maxdays)).BeginInit();
-            this.bs_subjects.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.bssubjects)).BeginInit();
             this.SuspendLayout();
             // 
             // wiz
@@ -632,6 +634,8 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.label27);
+            this.panel1.Controls.Add(this.hpl_changepass);
             this.panel1.Controls.Add(this.label20);
             this.panel1.Controls.Add(this.hpl_updatedetails);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
@@ -643,7 +647,7 @@
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(30, 19);
+            this.label20.Location = new System.Drawing.Point(3, 19);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(155, 15);
             this.label20.TabIndex = 1;
@@ -651,9 +655,9 @@
             // 
             // hpl_updatedetails
             // 
-            this.hpl_updatedetails.Location = new System.Drawing.Point(197, 16);
+            this.hpl_updatedetails.Location = new System.Drawing.Point(170, 16);
             this.hpl_updatedetails.Name = "hpl_updatedetails";
-            this.hpl_updatedetails.Size = new System.Drawing.Size(207, 23);
+            this.hpl_updatedetails.Size = new System.Drawing.Size(186, 23);
             this.hpl_updatedetails.TabIndex = 0;
             // 
             // wizardPage7
@@ -1137,6 +1141,34 @@
             this.EndTime.Name = "EndTime";
             this.EndTime.Width = 79;
             // 
+            // bs_subjects
+            // 
+            this.bs_subjects.Controls.Add(this.bssubjects);
+            this.bs_subjects.Location = new System.Drawing.Point(4, 24);
+            this.bs_subjects.Name = "bs_subjects";
+            this.bs_subjects.Padding = new System.Windows.Forms.Padding(3);
+            this.bs_subjects.Size = new System.Drawing.Size(729, 230);
+            this.bs_subjects.TabIndex = 2;
+            this.bs_subjects.Text = "Subjects";
+            this.bs_subjects.UseVisualStyleBackColor = true;
+            // 
+            // bssubjects
+            // 
+            this.bssubjects.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.bssubjects.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.bssubjects.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Subject});
+            this.bssubjects.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bssubjects.Location = new System.Drawing.Point(3, 3);
+            this.bssubjects.Name = "bssubjects";
+            this.bssubjects.Size = new System.Drawing.Size(723, 224);
+            this.bssubjects.TabIndex = 0;
+            // 
+            // Subject
+            // 
+            this.Subject.HeaderText = "Subject";
+            this.Subject.Name = "Subject";
+            // 
             // panel2
             // 
             this.panel2.Controls.Add(this.label18);
@@ -1205,33 +1237,21 @@
             this.folderBrowser.RootFolder = System.Environment.SpecialFolder.MyComputer;
             this.folderBrowser.ShowNewFolderButton = false;
             // 
-            // bs_subjects
+            // label27
             // 
-            this.bs_subjects.Controls.Add(this.bssubjects);
-            this.bs_subjects.Location = new System.Drawing.Point(4, 24);
-            this.bs_subjects.Name = "bs_subjects";
-            this.bs_subjects.Padding = new System.Windows.Forms.Padding(3);
-            this.bs_subjects.Size = new System.Drawing.Size(729, 230);
-            this.bs_subjects.TabIndex = 2;
-            this.bs_subjects.Text = "Subjects";
-            this.bs_subjects.UseVisualStyleBackColor = true;
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(369, 19);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(173, 15);
+            this.label27.TabIndex = 3;
+            this.label27.Text = "Show Change My Password To:";
             // 
-            // bssubjects
+            // hpl_changepass
             // 
-            this.bssubjects.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.bssubjects.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.bssubjects.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Subject});
-            this.bssubjects.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bssubjects.Location = new System.Drawing.Point(3, 3);
-            this.bssubjects.Name = "bssubjects";
-            this.bssubjects.Size = new System.Drawing.Size(723, 224);
-            this.bssubjects.TabIndex = 0;
-            // 
-            // Subject
-            // 
-            this.Subject.HeaderText = "Subject";
-            this.Subject.Name = "Subject";
+            this.hpl_changepass.Location = new System.Drawing.Point(548, 16);
+            this.hpl_changepass.Name = "hpl_changepass";
+            this.hpl_changepass.Size = new System.Drawing.Size(186, 23);
+            this.hpl_changepass.TabIndex = 2;
             // 
             // FirstRun
             // 
@@ -1278,12 +1298,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.Resources)).EndInit();
             this.tabPage9.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.lessons)).EndInit();
+            this.bs_subjects.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.bssubjects)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bs_max)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bs_maxdays)).EndInit();
-            this.bs_subjects.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.bssubjects)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1400,5 +1420,7 @@
         private System.Windows.Forms.TabPage bs_subjects;
         private System.Windows.Forms.DataGridView bssubjects;
         private System.Windows.Forms.DataGridViewTextBoxColumn Subject;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.TextBox hpl_changepass;
     }
 }

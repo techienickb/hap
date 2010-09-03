@@ -4,7 +4,6 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
     <div style="text-align: center; font-size: 140%">Live <a href="./"><img src="logontracker-small.png" alt="Logon Tracker" style="vertical-align: middle;" /></a></div>
-    <asp:ScriptManager runat="server" />
     <asp:Timer ID="refreshtimer" runat="server" Interval="5000" ontick="refreshtimer_Tick" />
     <asp:UpdatePanel runat="server" UpdateMode="Conditional">
         <Triggers>

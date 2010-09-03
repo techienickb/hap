@@ -1,5 +1,6 @@
 ﻿<%@ Master Language="C#" %>
 <%@ Register Assembly="HAP.Web" Namespace="HAP.Web.Controls" TagPrefix="hap" %>
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -15,6 +16,19 @@
     </head>
     <body>
         <form runat="server">
+            <asp:ToolkitScriptManager runat="server" />
+            <div id="useroutter"><div id="user">
+                Logged in as: <%=Page.User.Identity.Name %> |
+                <asp:LinkButton runat="server" ID="LogoffButton">Logoff</asp:LinkButton>
+            </div></div>
+            <asp:Panel runat="server" ID="LogoffBox" style="display: none;" CssClass="modalPopup" Width="350px">
+                <h1>Logoff</h1>
+                <p style="text-align: center;">To Logoff, you will need to close your browser</p>
+                <div class="modalButtons">
+                    <asp:Button ID="logoutok_btn" runat="server" Text="Ok" />
+                </div>
+            </asp:Panel>
+            <asp:ModalPopupExtender runat="server" TargetControlID="LogoffButton" PopupControlID="LogoffBox" BackgroundCssClass="modalBackground" OkControlID="logoutok_btn" />
             <div id="baseContent">
                 <asp:ContentPlaceHolder id="body" runat="server" />
             </div>

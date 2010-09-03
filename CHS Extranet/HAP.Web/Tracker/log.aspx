@@ -4,8 +4,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
     <div style="text-align: center;">Historic <a href="./"><img src="logontracker-small.png" style="vertical-align: middle;" alt="Logon Tracker" /></a></div>
-    <asp:ScriptManager ID="ScriptManager1" runat="server" />
-        <asp:UpdatePanel ID="UpdatePanel1" runat="server" ChildrenAsTriggers="true">
+    <asp:UpdatePanel ID="UpdatePanel1" runat="server" ChildrenAsTriggers="true">
         <ContentTemplate>
             <table border="0" class="trackertable">
                 <tr valign="top">

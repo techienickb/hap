@@ -105,6 +105,7 @@
     <Content Include="App_Data\Announcement.xml" />
     <Content Include="App_Data\Tickets.xml" />
     <Content Include="basestyle.css" />
+    <Content Include="Controls\ChangePassword.ascx" />
     <Content Include="Controls\Delete.ascx" />
     <Content Include="Controls\Rename.ascx" />
     <Content Include="Controls\Unzip.ascx" />
@@ -334,6 +335,13 @@
     <Compile Include="Configuration\uncpaths.cs" />
     <Compile Include="Configuration\uploadfilter.cs" />
     <Compile Include="Configuration\uploadfilters.cs" />
+    <Compile Include="Controls\ChangePassword.ascx.cs">
+      <DependentUpon>ChangePassword.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\ChangePassword.ascx.designer.cs">
+      <DependentUpon>ChangePassword.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Delete.ascx.cs">
       <DependentUpon>Delete.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
