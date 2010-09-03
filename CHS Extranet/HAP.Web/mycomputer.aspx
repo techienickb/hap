@@ -25,7 +25,6 @@
 </asp:Content>
 
 <asp:Content ContentPlaceHolderID="body" runat="server">
-	<asp:ToolkitScriptManager runat="server" />
 	<div id="maincol">
 		<h1>My Computer</h1>
 		<script type="text/javascript" src="<%=Request.ApplicationPath %>/Scripts/Silverlight.js"></script>

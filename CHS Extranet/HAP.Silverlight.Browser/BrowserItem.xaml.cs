@@ -206,7 +206,7 @@ namespace HAP.Silverlight.Browser
             }
             if (newname == "" || newname.ToLower().Equals(_data.Name.ToLower()))
             {
-                if (MessageBox.Show(newname == "" ? "I Can't Rename this to Nothing" : "I'm already called this", "Error", MessageBoxButton.OKCancel) == MessageBoxResult.Cancel)
+                if (MessageBox.Show("Please enter a different name for this file/folder or press cancel to keep the current name.", "Error", MessageBoxButton.OKCancel) == MessageBoxResult.Cancel)
                     this.IsRename = false;
                 return -1;
             }

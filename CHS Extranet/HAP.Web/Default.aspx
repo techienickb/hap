@@ -1,6 +1,7 @@
 ﻿<%@ Page Title="Crickhowell High School - IT - Home Access Plus+" Language="C#" MasterPageFile="~/chs.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="HAP.Web.Default" %>
 <%@ Register TagName="announcement" TagPrefix="hap" Src="~/Controls/Announcement.ascx" %>
 <%@ Register TagName="version" TagPrefix="hap" Src="~/Controls/UpdateChecker.ascx" %>
+<%@ Register TagName="password" TagPrefix="hap" Src="~/Controls/ChangePassword.ascx" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 
 <asp:Content runat="server" ContentPlaceHolderID="head">
@@ -9,7 +10,6 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
     <div id="maincol">
-        <asp:ToolkitScriptManager runat="server" />
         <hap:announcement runat="server" />
         <hap:version runat="server" />
         <a href="http://hap.codeplex.com" target="_blank" style="text-align: center; display: block;"><img src="<%=Request.ApplicationPath%>/images/haplogo.png" alt="Home Access Plus+ Logo" /></a>
@@ -21,6 +21,7 @@
             <li><asp:Literal runat="server" ID="form" /></li>
             <li><b>Email Address: </b><asp:Literal runat="server" ID="email" /></li>
         </ul>
+        <hap:password runat="server" id="passwordprompt" />
         <asp:Button runat="server" Text="Update My Details" ID="updatemydetails" />
         <p id="HomeButtons">
             <asp:Repeater ID="homepagelinks" runat="server">

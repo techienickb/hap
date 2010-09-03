@@ -7,10 +7,28 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace HAP.Web.Tracker {
+namespace HAP.Web.Controls {
     
     
-    public partial class log {
+    public partial class ChangePassword {
+        
+        /// <summary>
+        /// ChangePass control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ChangePass;
+        
+        /// <summary>
+        /// ChangePassBox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel ChangePassBox;
         
         /// <summary>
         /// UpdatePanel1 control.
@@ -22,75 +40,57 @@ namespace HAP.Web.Tracker {
         protected global::System.Web.UI.UpdatePanel UpdatePanel1;
         
         /// <summary>
-        /// computerfilter control.
+        /// currentpass control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList computerfilter;
+        protected global::System.Web.UI.WebControls.TextBox currentpass;
         
         /// <summary>
-        /// ipfilter control.
+        /// newpass control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ipfilter;
+        protected global::System.Web.UI.WebControls.TextBox newpass;
         
         /// <summary>
-        /// userfilter control.
+        /// confpass control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList userfilter;
+        protected global::System.Web.UI.WebControls.TextBox confpass;
         
         /// <summary>
-        /// domainfilter control.
+        /// errormess control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList domainfilter;
+        protected global::System.Web.UI.WebControls.Label errormess;
         
         /// <summary>
-        /// lsfilter control.
+        /// savepass control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList lsfilter;
+        protected global::System.Web.UI.WebControls.Button savepass;
         
         /// <summary>
-        /// logondt control.
+        /// ok_btn control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList logondt;
-        
-        /// <summary>
-        /// logoffdt control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList logoffdt;
-        
-        /// <summary>
-        /// ListView1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ListView ListView1;
+        protected global::System.Web.UI.WebControls.Button ok_btn;
     }
 }

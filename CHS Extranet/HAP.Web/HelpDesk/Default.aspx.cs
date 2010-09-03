@@ -518,7 +518,7 @@ namespace HAP.Web.HelpDesk
             {
                 DirectoryEntry usersDE = new DirectoryEntry(ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
                 DirectorySearcher ds = new DirectorySearcher(usersDE);
-                ds.Filter = "(sAMAccountName=*" + username + ")";
+                ds.Filter = "(sAMAccountName=" + username + ")";
                 ds.PropertiesToLoad.Add("cn");
                 ds.PropertiesToLoad.Add(UserProperty.UserName);
                 ds.PropertiesToLoad.Add(UserProperty.DisplayName);

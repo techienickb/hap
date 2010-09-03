@@ -82,9 +82,18 @@ namespace HAP.Web
                     if (!vis) vis = User.IsInRole(s);
                 updatemydetails.Visible = vis;
             }
+            aet = config.HomePageLinks["Change My Password"].ShowTo;
+            if (aet == "None") passwordprompt.Visible = false;
+            else if (aet != "All")
+            {
+                bool vis = false;
+                foreach (string s in aet.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
+                    if (!vis) vis = User.IsInRole(s);
+                passwordprompt.Visible = vis;
+            }
             List<homepagelink> links = new List<homepagelink>();
             foreach (homepagelink link in config.HomePageLinks)
-                if (link.Name != "Update My Details")
+                if (link.Name != "Update My Details" && link.Name != "Change My Password")
                 {
                     if (link.ShowTo == "All") links.Add(link);
                     else if (link.ShowTo != "None")
