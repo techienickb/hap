@@ -19,16 +19,8 @@
             <asp:ToolkitScriptManager runat="server" />
             <div id="useroutter"><div id="user">
                 Logged in as: <%=Page.User.Identity.Name %> |
-                <asp:LinkButton runat="server" ID="LogoffButton">Logoff</asp:LinkButton>
+                <a href="./" onclick="alert('To logoff you will need to close the browser'); return false;">Logoff</a>
             </div></div>
-            <asp:Panel runat="server" ID="LogoffBox" style="display: none;" CssClass="modalPopup" Width="350px">
-                <h1>Logoff</h1>
-                <p style="text-align: center;">To Logoff, you will need to close your browser</p>
-                <div class="modalButtons">
-                    <asp:Button ID="logoutok_btn" runat="server" Text="Ok" />
-                </div>
-            </asp:Panel>
-            <asp:ModalPopupExtender runat="server" TargetControlID="LogoffButton" PopupControlID="LogoffBox" BackgroundCssClass="modalBackground" OkControlID="logoutok_btn" />
             <div id="baseContent">
                 <asp:ContentPlaceHolder id="body" runat="server" />
             </div>
