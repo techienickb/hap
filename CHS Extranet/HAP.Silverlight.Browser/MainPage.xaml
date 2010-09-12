@@ -77,6 +77,11 @@
                                         <Image Height="16" Width="16" Source="/HAP.Silverlight.Browser;component/upload.png" />
                                     </toolkit:MenuItem.Icon>
                                 </toolkit:MenuItem>
+                                <toolkit:MenuItem Visibility="Collapsed" x:Name="RightClickDownload" Header="Download" Click="RightClickDownload_Click">
+                                    <toolkit:MenuItem.Icon>
+                                        <Image Height="16" Width="16" Source="/HAP.Silverlight.Browser;component/download.png" />
+                                    </toolkit:MenuItem.Icon>
+                                </toolkit:MenuItem>
                                 <toolkit:Separator />
                                 <toolkit:MenuItem Header="Rename" x:Name="RightClickRename" Click="RightClickRename_Click">
                                     <toolkit:MenuItem.Icon>

@@ -853,7 +853,8 @@ namespace HAP.Silverlight.Browser
             if (activeItems.Count == 1)
             {
                 organiseButton1.IsDelete = organiseButton1.IsRename = RightClickRename.IsEnabled = RightClickDelete.IsEnabled = ((activeItems[0].Data.BType == BType.Drive) ? false : CurrentItem.AccessControl == AccessControlActions.Change);
-                RightClickUpload.Visibility = CurrentItem.AccessControl == AccessControlActions.Change ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+                RightClickDownload.Visibility = activeItems[0].Data.BType == BType.File ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+                RightClickUpload.Visibility = (activeItems[0].Data.BType == BType.Folder && activeItems[0].Data.AccessControl == AccessControlActions.Change) ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
                 RightClickUpload.Header = "Upload to " + activeItems[0].Data.Name;
                 if (activeItems[0].Data.Type == "Compressed (zipped) Folder")
                     RightClickUNZIP.Visibility = CurrentItem.AccessControl == AccessControlActions.Change ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
@@ -864,14 +865,14 @@ namespace HAP.Silverlight.Browser
             {
                 organiseButton1.IsDelete = RightClickDelete.IsEnabled = CurrentItem.AccessControl == AccessControlActions.Change;
                 organiseButton1.IsRename = RightClickRename.IsEnabled = false;
-                RightClickUpload.Visibility = RightClickUNZIP.Visibility = System.Windows.Visibility.Collapsed;
+                RightClickDownload.Visibility = RightClickUpload.Visibility = RightClickUNZIP.Visibility = System.Windows.Visibility.Collapsed;
                 RightClickFolder.Visibility = RightClickZIP.Visibility = CurrentItem.AccessControl == AccessControlActions.Change ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
             }
             else
             {
                 RightClickUpload.Header = "Upload to " + CurrentItem.Name;
                 organiseButton1.IsDelete = organiseButton1.IsRename = RightClickRename.IsEnabled = RightClickDelete.IsEnabled = false;
-                RightClickUNZIP.Visibility = RightClickZIP.Visibility = System.Windows.Visibility.Collapsed;
+                RightClickDownload.Visibility = RightClickUNZIP.Visibility = RightClickZIP.Visibility = System.Windows.Visibility.Collapsed;
                 RightClickFolder.Visibility = RightClickUpload.Visibility = CurrentItem.AccessControl == AccessControlActions.Change ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
             }
         }
@@ -886,6 +887,12 @@ namespace HAP.Silverlight.Browser
             if (dlg.ShowDialog().Value)
                 foreach (FileInfo file in dlg.Files)
                     new UploadItem(file, activeItems.Count == 1 ? activeItems[0].Data : CurrentItem, ref UploadQueue, new RoutedEventHandler(ui_Uploaded));
+        }
+
+        private void RightClickDownload_Click(object sender, RoutedEventArgs e)
+        {
+            rightclick = true;
+            HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri, activeItems[0].Data.Path));
         }
 
         private void RightClickZIP_Click(object sender, RoutedEventArgs e)
