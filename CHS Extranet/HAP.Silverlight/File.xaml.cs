@@ -69,7 +69,7 @@ namespace HAP.Silverlight
         {
             WebClient client = new WebClient();
             client.DownloadStringCompleted += new DownloadStringCompletedEventHandler(client_DownloadStringCompleted);
-            client.DownloadStringAsync(new Uri(BaseUri + "check/" + path.TrimEnd(new char[] { '/' }) + "/" + Fileinfo.Name));
+            client.DownloadStringAsync(new Uri(BaseUri.ToString() + "check/" + path.TrimEnd(new char[] { '/' }) + "/" + Fileinfo.Name));            
         }
 
         void client_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
