@@ -175,15 +175,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HAP Logon Tracker"
-        "ProductCode" = "8:{0E1878A0-5002-48B3-AB84-97C0FF322067}"
-        "PackageCode" = "8:{629F740C-76AD-44F5-80AE-800EF923C6CE}"
+        "ProductCode" = "8:{5587262D-A486-43F5-9142-B37A9C8507CD}"
+        "PackageCode" = "8:{D1930A37-D0C7-48C8-B0E8-DA4FC3132112}"
         "UpgradeCode" = "8:{41BAC840-CB78-47EF-859E-15CC9CA146CD}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:2.0"
+        "ProductVersion" = "8:2.1"
         "Manufacturer" = "8:nb development"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://hap.codeplex.com"
@@ -697,7 +697,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_F47A0FA6B10D42E78AF036853715DA0F"
             {
-            "SourcePath" = "8:"
+            "SourcePath" = "8:..\\HAP Logon Tracker\\obj\\x86\\Debug\\HAP Logon Tracker.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_58116FF90CDA4CF08D407CF0B83FF282"

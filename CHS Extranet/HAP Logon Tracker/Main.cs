@@ -36,9 +36,9 @@ namespace HAP.Logon.Tracker
                 {
                     if ((s.StartsWith("Student") || s.StartsWith("Staff")) && s.Contains(":"))
                     {
-                        MaxLogons = int.Parse(s.Remove(0, s.IndexOf(':')).TrimStart(new char[] { ':' }).Remove(s.IndexOf('!')).TrimEnd(new char[] { '!' }));
+                        MaxLogons = int.Parse(s.Remove(s.IndexOf('!')).Remove(0, s.IndexOf(':') + 1));
                         label2.Text = string.Format(label2.Text, MaxLogons);
-                        code = s.Remove(0, s.IndexOf('!')).TrimStart(new char[] { '!' });
+                        code = s.Remove(0, s.IndexOf('!') + 1);
                     }
                     else
                     {
@@ -46,7 +46,7 @@ namespace HAP.Logon.Tracker
                         MaxLogons = 0;
                     }
                 }
-                else dataGridView1.Rows.Add(s.Remove(s.LastIndexOf('|')).TrimEnd(new char[] { '|' }), DateTime.Parse(s.Remove(0, s.IndexOf('|')).TrimStart(new char[] { '|' })).ToString("f"), "Logoff");
+                else dataGridView1.Rows.Add(s.Remove(s.LastIndexOf('|')), DateTime.Parse(s.Remove(0, s.IndexOf('|') + 1)).ToString("f"), "Logoff");
 
             }
             CheckCount();
@@ -101,7 +101,7 @@ namespace HAP.Logon.Tracker
             {
                 if (new OverrideCode(code).ShowDialog(this) == System.Windows.Forms.DialogResult.OK) this.Close();
             }
-            else if (MessageBox.Show("Clicking this button will result in the system logging you off.", "Logoff?", MessageBoxButtons.OKCancel) == System.Windows.Forms.DialogResult.OK)
+            else if (MessageBox.Show(this, "Clicking this button will result in the system logging you off.", "Logoff?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.OK)
             {
                 WebClient client = new WebClient();
                 client.UploadStringCompleted += new UploadStringCompletedEventHandler(client2_UploadStringCompleted);
