@@ -15,27 +15,39 @@ namespace HAP.Logon.Tracker
         public Main()
         {
             InitializeComponent();
+            KeepOpen = true;
+            Override = false;
         }
 
         public Uri BaseUri { get; set; }
+        private bool KeepOpen;
+        private bool Override;
+        private string code;
 
         public int MaxLogons { get; set; }
         public void SetGrid(string data)
         {
             data = data.Remove(0, 7);
-            foreach (string s in data.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
+            string[] datas = data.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            for (int x = 0; x < datas.Length; x++)
             {
-                if ((s.StartsWith("Student") || s.StartsWith("Staff")) && s.Contains(":"))
+                string s = datas[x];
+                if (x == 0)
                 {
-                    MaxLogons = int.Parse(s.Remove(0, s.IndexOf(':')).TrimStart(new char[] { ':' }));
-                    label2.Text = string.Format(label2.Text, MaxLogons);
+                    if ((s.StartsWith("Student") || s.StartsWith("Staff")) && s.Contains(":"))
+                    {
+                        MaxLogons = int.Parse(s.Remove(0, s.IndexOf(':')).TrimStart(new char[] { ':' }).Remove(s.IndexOf('!')).TrimEnd(new char[] { '!' }));
+                        label2.Text = string.Format(label2.Text, MaxLogons);
+                        code = s.Remove(0, s.IndexOf('!')).TrimStart(new char[] { '!' });
+                    }
+                    else
+                    {
+                        label2.Text = "Check you logged on to these computers";
+                        MaxLogons = 0;
+                    }
                 }
-                else
-                {
-                    dataGridView1.Rows.Add(s.Remove(s.LastIndexOf('|')).TrimEnd(new char[] { '|' }), DateTime.Parse(s.Remove(0, s.IndexOf('|')).TrimStart(new char[] { '|' })).ToString("f"), "Logoff");
-                    label2.Text = "Check you logged on to these computers";
-                    MaxLogons = 0;
-                }
+                else dataGridView1.Rows.Add(s.Remove(s.LastIndexOf('|')).TrimEnd(new char[] { '|' }), DateTime.Parse(s.Remove(0, s.IndexOf('|')).TrimStart(new char[] { '|' })).ToString("f"), "Logoff");
+
             }
             CheckCount();
         }
@@ -60,9 +72,10 @@ namespace HAP.Logon.Tracker
 
         private void CheckCount()
         {
-            if (MaxLogons == 0) button1.Enabled = true;
-            else if (dataGridView1.Rows.Count < MaxLogons) button1.Enabled = true;
-            else button1.Enabled = false;
+            if (MaxLogons == 0) Done.Enabled = true;
+            else if (dataGridView1.Rows.Count < (MaxLogons - 1)) Done.Enabled = true;
+            else Done.Enabled = false;
+            KeepOpen = !Done.Enabled;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -84,7 +97,11 @@ namespace HAP.Logon.Tracker
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Clicking this button will result in the system logging you off.", "Logoff?", MessageBoxButtons.OKCancel) == System.Windows.Forms.DialogResult.OK)
+            if (Override)
+            {
+                if (new OverrideCode(code).ShowDialog(this) == System.Windows.Forms.DialogResult.OK) this.Close();
+            }
+            else if (MessageBox.Show("Clicking this button will result in the system logging you off.", "Logoff?", MessageBoxButtons.OKCancel) == System.Windows.Forms.DialogResult.OK)
             {
                 WebClient client = new WebClient();
                 client.UploadStringCompleted += new UploadStringCompletedEventHandler(client2_UploadStringCompleted);
@@ -105,6 +122,21 @@ namespace HAP.Logon.Tracker
                 catch { }
                 this.Close();
             }
+        }
+
+        private void Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = KeepOpen;
+        }
+
+        private void Main_KeyDown(object sender, KeyEventArgs e)
+        {
+            Override = e.Control;
+        }
+
+        private void Main_KeyUp(object sender, KeyEventArgs e)
+        {
+            Override = false;
         }
     }
 }
