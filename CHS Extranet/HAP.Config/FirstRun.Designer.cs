@@ -79,6 +79,8 @@
             this.LinkLocation = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.HPLIcon = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label27 = new System.Windows.Forms.Label();
+            this.hpl_changepass = new System.Windows.Forms.TextBox();
             this.label20 = new System.Windows.Forms.Label();
             this.hpl_updatedetails = new System.Windows.Forms.TextBox();
             this.wizardPage7 = new AeroWizard.WizardPage();
@@ -139,8 +141,8 @@
             this.label19 = new System.Windows.Forms.Label();
             this.bs_maxdays = new System.Windows.Forms.NumericUpDown();
             this.folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
-            this.label27 = new System.Windows.Forms.Label();
-            this.hpl_changepass = new System.Windows.Forms.TextBox();
+            this.trackeroverride = new System.Windows.Forms.TextBox();
+            this.label28 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.wiz)).BeginInit();
             this.wizardPage1.SuspendLayout();
             this.wizardPage2.SuspendLayout();
@@ -644,6 +646,22 @@
             this.panel1.Size = new System.Drawing.Size(737, 43);
             this.panel1.TabIndex = 3;
             // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(369, 19);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(173, 15);
+            this.label27.TabIndex = 3;
+            this.label27.Text = "Show Change My Password To:";
+            // 
+            // hpl_changepass
+            // 
+            this.hpl_changepass.Location = new System.Drawing.Point(548, 16);
+            this.hpl_changepass.Name = "hpl_changepass";
+            this.hpl_changepass.Size = new System.Drawing.Size(186, 23);
+            this.hpl_changepass.TabIndex = 2;
+            // 
             // label20
             // 
             this.label20.AutoSize = true;
@@ -662,6 +680,8 @@
             // 
             // wizardPage7
             // 
+            this.wizardPage7.Controls.Add(this.trackeroverride);
+            this.wizardPage7.Controls.Add(this.label28);
             this.wizardPage7.Controls.Add(this.label26);
             this.wizardPage7.Controls.Add(this.label25);
             this.wizardPage7.Controls.Add(this.trackermaxstaff);
@@ -1237,21 +1257,21 @@
             this.folderBrowser.RootFolder = System.Environment.SpecialFolder.MyComputer;
             this.folderBrowser.ShowNewFolderButton = false;
             // 
-            // label27
+            // trackeroverride
             // 
-            this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(369, 19);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(173, 15);
-            this.label27.TabIndex = 3;
-            this.label27.Text = "Show Change My Password To:";
+            this.trackeroverride.Location = new System.Drawing.Point(310, 81);
+            this.trackeroverride.Name = "trackeroverride";
+            this.trackeroverride.Size = new System.Drawing.Size(268, 23);
+            this.trackeroverride.TabIndex = 39;
             // 
-            // hpl_changepass
+            // label28
             // 
-            this.hpl_changepass.Location = new System.Drawing.Point(548, 16);
-            this.hpl_changepass.Name = "hpl_changepass";
-            this.hpl_changepass.Size = new System.Drawing.Size(186, 23);
-            this.hpl_changepass.TabIndex = 2;
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(181, 84);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(125, 15);
+            this.label28.TabIndex = 38;
+            this.label28.Text = "Admin Override Code:";
             // 
             // FirstRun
             // 
@@ -1422,5 +1442,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Subject;
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.TextBox hpl_changepass;
+        private System.Windows.Forms.TextBox trackeroverride;
+        private System.Windows.Forms.Label label28;
     }
 }

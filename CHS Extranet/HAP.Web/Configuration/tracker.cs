@@ -21,5 +21,12 @@ namespace HAP.Web.Configuration
             get { return (int)this["maxstafflogons"]; }
             set { this["maxstafflogons"] = value; }
         }
+
+        [ConfigurationProperty("overridecode", DefaultValue = "", IsRequired = false)]
+        public string OverrideCode
+        {
+            get { return (string)this["overridecode"]; }
+            set { this["overridecode"] = value; }
+        }
     }
 }

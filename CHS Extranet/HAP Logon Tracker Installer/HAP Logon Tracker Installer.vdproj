@@ -50,6 +50,19 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
         "Release"
@@ -162,15 +175,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HAP Logon Tracker"
-        "ProductCode" = "8:{9401F121-1CC5-4BB1-9FBD-568FDED027D7}"
-        "PackageCode" = "8:{73AAAB8B-39AF-4277-B41A-33D9F1B254BE}"
+        "ProductCode" = "8:{0E1878A0-5002-48B3-AB84-97C0FF322067}"
+        "PackageCode" = "8:{629F740C-76AD-44F5-80AE-800EF923C6CE}"
         "UpgradeCode" = "8:{41BAC840-CB78-47EF-859E-15CC9CA146CD}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.3"
+        "ProductVersion" = "8:2.0"
         "Manufacturer" = "8:nb development"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://hap.codeplex.com"
@@ -684,7 +697,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_F47A0FA6B10D42E78AF036853715DA0F"
             {
-            "SourcePath" = "8:..\\HAP Logon Tracker\\obj\\x86\\Release\\HAP Logon Tracker.exe"
+            "SourcePath" = "8:"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_58116FF90CDA4CF08D407CF0B83FF282"

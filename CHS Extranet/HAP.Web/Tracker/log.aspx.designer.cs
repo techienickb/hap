@@ -13,6 +13,60 @@ namespace HAP.Web.Tracker {
     public partial class log {
         
         /// <summary>
+        /// archive control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button archive;
+        
+        /// <summary>
+        /// archivelogs control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel archivelogs;
+        
+        /// <summary>
+        /// startdate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox startdate;
+        
+        /// <summary>
+        /// enddate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox enddate;
+        
+        /// <summary>
+        /// archivelogsb control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button archivelogsb;
+        
+        /// <summary>
+        /// ok_btn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ok_btn;
+        
+        /// <summary>
         /// UpdatePanel1 control.
         /// </summary>
         /// <remarks>
@@ -40,6 +94,15 @@ namespace HAP.Web.Tracker {
         protected global::System.Web.UI.WebControls.DropDownList ipfilter;
         
         /// <summary>
+        /// computersort control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton computersort;
+        
+        /// <summary>
         /// userfilter control.
         /// </summary>
         /// <remarks>
@@ -47,6 +110,15 @@ namespace HAP.Web.Tracker {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList userfilter;
+        
+        /// <summary>
+        /// usernamesort control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton usernamesort;
         
         /// <summary>
         /// domainfilter control.
@@ -58,6 +130,15 @@ namespace HAP.Web.Tracker {
         protected global::System.Web.UI.WebControls.DropDownList domainfilter;
         
         /// <summary>
+        /// domainsort control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton domainsort;
+        
+        /// <summary>
         /// lsfilter control.
         /// </summary>
         /// <remarks>
@@ -65,6 +146,15 @@ namespace HAP.Web.Tracker {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList lsfilter;
+        
+        /// <summary>
+        /// serversort control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton serversort;
         
         /// <summary>
         /// logondt control.
@@ -76,6 +166,15 @@ namespace HAP.Web.Tracker {
         protected global::System.Web.UI.WebControls.DropDownList logondt;
         
         /// <summary>
+        /// logonDTsort control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton logonDTsort;
+        
+        /// <summary>
         /// logoffdt control.
         /// </summary>
         /// <remarks>
@@ -85,12 +184,21 @@ namespace HAP.Web.Tracker {
         protected global::System.Web.UI.WebControls.DropDownList logoffdt;
         
         /// <summary>
+        /// logoffDTsort control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton logoffDTsort;
+        
+        /// <summary>
         /// ListView1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ListView ListView1;
+        protected global::System.Web.UI.WebControls.Repeater ListView1;
     }
 }

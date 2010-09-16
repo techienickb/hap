@@ -126,6 +126,7 @@ namespace HAP.Config
             }
             tracker.Attributes["maxstudentlogons"].Value = trackermaxstudent.Value.ToString();
             tracker.Attributes["maxstafflogons"].Value = trackermaxstaff.Value.ToString();
+            tracker.Attributes["overridecode"].Value = trackeroverride.Text;
             #endregion
 
             #region MyComputer
@@ -323,6 +324,7 @@ namespace HAP.Config
             {
                 trackermaxstaff.Value = int.Parse(tracker.Attributes["maxstafflogons"].Value);
                 trackermaxstudent.Value = int.Parse(tracker.Attributes["maxstudentlogons"].Value);
+                trackeroverride.Text = tracker.Attributes["overridecode"].Value;
             }
             #endregion
 

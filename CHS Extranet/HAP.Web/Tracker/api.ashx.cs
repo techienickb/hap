@@ -78,9 +78,9 @@ namespace HAP.Web.Tracker
                     List<string> resp = new List<string>();
                     foreach (XmlNode node in doc.SelectNodes(string.Format("/Tracker/Event[@logoffdatetime='' and @username='{0}' and @domainname='{1}']", username, domainname)))
                         resp.Add(string.Format("{0}|{1}", node.Attributes["computername"].Value, node.Attributes["logondatetime"].Value));
-                    if (resp.Count > 0 && isStudent(username)) context.Response.Write("EXISTS\nStudent:" + hap.Tracker.MaxStudentLogons + "\n" + string.Join("\n", resp.ToArray()));
-                    else if (resp.Count > 0 && isAdmin(username)) context.Response.Write("EXISTS\nAdmin:0\n" + string.Join("\n", resp.ToArray()));
-                    else if (resp.Count > 0) context.Response.Write("EXISTS\nStaff:" + hap.Tracker.MaxStaffLogons + "\n" + string.Join("\n", resp.ToArray()));
+                    if (resp.Count > 0 && isStudent(username)) context.Response.Write("EXISTS\nStudent:" + hap.Tracker.MaxStudentLogons + "!" + hap.Tracker.OverrideCode + "\n" + string.Join("\n", resp.ToArray()));
+                    else if (resp.Count > 0 && isAdmin(username)) context.Response.Write("EXISTS\nAdmin:0!" + hap.Tracker.OverrideCode + "\n" + string.Join("\n", resp.ToArray()));
+                    else if (resp.Count > 0) context.Response.Write("EXISTS\nStaff:" + hap.Tracker.MaxStaffLogons + "!" + hap.Tracker.OverrideCode +"\n" + string.Join("\n", resp.ToArray()));
                     else context.Response.Write("Done");
                     doc.SelectSingleNode("/Tracker").AppendChild(e);
                 }
