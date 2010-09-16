@@ -59,7 +59,7 @@
   <ItemGroup>
     <Reference Include="AeroWizard, Version=1.0.3851.25993, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\AeroWizard\bin\Release\AeroWizard.dll</HintPath>
+      <HintPath>..\Binaries\AeroWizard.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

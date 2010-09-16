@@ -9,6 +9,8 @@ using System.Management;
 using System.DirectoryServices;
 using System.Configuration;
 using System.Security.Principal;
+using System.Web.Security;
+using System.Threading;
 
 namespace HAP.Web.Tracker
 {
@@ -80,7 +82,7 @@ namespace HAP.Web.Tracker
                         resp.Add(string.Format("{0}|{1}", node.Attributes["computername"].Value, node.Attributes["logondatetime"].Value));
                     if (resp.Count > 0 && isStudent(username)) context.Response.Write("EXISTS\nStudent:" + hap.Tracker.MaxStudentLogons + "!" + hap.Tracker.OverrideCode + "\n" + string.Join("\n", resp.ToArray()));
                     else if (resp.Count > 0 && isAdmin(username)) context.Response.Write("EXISTS\nAdmin:0!" + hap.Tracker.OverrideCode + "\n" + string.Join("\n", resp.ToArray()));
-                    else if (resp.Count > 0) context.Response.Write("EXISTS\nStaff:" + hap.Tracker.MaxStaffLogons + "!" + hap.Tracker.OverrideCode +"\n" + string.Join("\n", resp.ToArray()));
+                    else if (resp.Count > 0) context.Response.Write("EXISTS\nStaff:" + hap.Tracker.MaxStaffLogons + "!" + hap.Tracker.OverrideCode + "\n" + string.Join("\n", resp.ToArray()));
                     else context.Response.Write("Done");
                     doc.SelectSingleNode("/Tracker").AppendChild(e);
                 }
@@ -97,21 +99,29 @@ namespace HAP.Web.Tracker
                 writer.Flush();
                 writer.Close();
             }
-            catch { writer.Close(); }
+            catch
+            {
+                try
+                {
+                    Thread.Sleep(10);
+                    doc.Save(writer);
+                    writer.Flush();
+                    writer.Close();
+                }
+                catch { writer.Close(); }
+            }
         }
 
         private bool isAdmin(string username)
         {
-            string ConnStringName = ConfigurationManager.ConnectionStrings["ADConnectionString"].ConnectionString;
-            DirectoryEntry root = new DirectoryEntry(ConnStringName, hapConfig.Current.ADSettings.ADUsername, hapConfig.Current.ADSettings.ADPassword, AuthenticationTypes.ServerBind);
-            return CHS.ActiveDirectoryHelper.IsUserInRole(root, CHS.ActiveDirectoryHelper.GetDomainName(ConnStringName), username, "Domain Admins");
+            foreach (string s in Roles.GetRolesForUser(username))
+                if (s == "Domain Admins") return true;
+            return false;
         }
 
         private bool isStudent(string username)
         {
-            string ConnStringName = ConfigurationManager.ConnectionStrings["ADConnectionString"].ConnectionString;
-            DirectoryEntry root = new DirectoryEntry(ConnStringName, hapConfig.Current.ADSettings.ADUsername, hapConfig.Current.ADSettings.ADPassword, AuthenticationTypes.ServerBind);
-            return CHS.ActiveDirectoryHelper.IsUserInRole(root, CHS.ActiveDirectoryHelper.GetDomainName(ConnStringName), username, hapConfig.Current.ADSettings.StudentsGroupName);
+            return Roles.IsUserInRole(username, hapConfig.Current.ADSettings.StudentsGroupName);
         }
 
         public bool IsReusable
