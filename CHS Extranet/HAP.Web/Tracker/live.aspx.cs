@@ -58,5 +58,37 @@ namespace HAP.Web.Tracker
             writer.Close();
             ListView1.DataBind();
         }
+
+        protected void logalloff_Click(object sender, EventArgs e)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(Server.MapPath("~/App_Data/tracker.xml"));
+            foreach (XmlNode node in doc.SelectNodes("/Tracker/Event[@logoffdatetime='']"))
+            {
+                try
+                {
+                    ConnectionOptions connoptions = new ConnectionOptions();
+                    connoptions.Username = hapConfig.Current.ADSettings.ADUsername;
+                    connoptions.Password = hapConfig.Current.ADSettings.ADPassword;
+                    ManagementScope scope = new ManagementScope(string.Format(@"\\{0}\ROOT\CIMV2", node.Attributes["computername"].Value), connoptions);
+                    scope.Connect();
+                    ObjectQuery oq = new ObjectQuery("Select Name From Win32_OperatingSystem");
+                    ManagementObjectSearcher q = new ManagementObjectSearcher(scope, oq);
+                    foreach (ManagementObject o in q.Get())
+                        o.InvokeMethod("Win32Shutdown", new object[] { 4 });
+                }
+                catch { }
+                node.Attributes["logoffdatetime"].Value = DateTime.Now.ToString("s");
+                XmlWriterSettings set = new XmlWriterSettings();
+                set.Indent = true;
+                set.IndentChars = "   ";
+                set.Encoding = System.Text.Encoding.UTF8;
+                XmlWriter writer = XmlWriter.Create(Server.MapPath("~/App_Data/Tracker.xml"), set);
+                doc.Save(writer);
+                writer.Flush();
+                writer.Close();
+            }
+            ListView1.DataBind();
+        }
     }
 }

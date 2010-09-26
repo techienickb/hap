@@ -38,13 +38,13 @@ namespace HAP.Logon.Tracker
                     {
                         MaxLogons = int.Parse(s.Remove(s.IndexOf('!')).Remove(0, s.IndexOf(':') + 1));
                         label2.Text = string.Format(label2.Text, MaxLogons);
-                        code = s.Remove(0, s.IndexOf('!') + 1);
                     }
                     else
                     {
                         label2.Text = "Check you logged on to these computers";
                         MaxLogons = 0;
                     }
+                    code = s.Remove(0, s.IndexOf('!') + 1);
                 }
                 else dataGridView1.Rows.Add(s.Remove(s.LastIndexOf('|')), DateTime.Parse(s.Remove(0, s.IndexOf('|') + 1)).ToString("f"), "Logoff");
 
@@ -99,7 +99,7 @@ namespace HAP.Logon.Tracker
         {
             if (Override)
             {
-                if (new OverrideCode(code).ShowDialog(this) == System.Windows.Forms.DialogResult.OK) this.Close();
+                if (new OverrideCode(code).ShowDialog(this) == System.Windows.Forms.DialogResult.OK) { this.KeepOpen = false; this.Close(); }
             }
             else if (MessageBox.Show(this, "Clicking this button will result in the system logging you off.", "Logoff?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.OK)
             {
@@ -108,6 +108,8 @@ namespace HAP.Logon.Tracker
                 client.UploadStringAsync(new Uri(BaseUri, "tracker/api.ashx?op=" + Action.RemoteLogoff.ToString().ToLower()), "POST", Dns.GetHostName(), -1);
                 this.Hide();
             }
+            Override = false;
+            this.DialogResult = System.Windows.Forms.DialogResult.None;
         }
 
         private void client2_UploadStringCompleted(object sender, UploadStringCompletedEventArgs e)
@@ -120,6 +122,7 @@ namespace HAP.Logon.Tracker
                     if (e.Result != "Done") MessageBox.Show(this, e.Result, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 catch { }
+                this.KeepOpen = false;
                 this.Close();
             }
         }

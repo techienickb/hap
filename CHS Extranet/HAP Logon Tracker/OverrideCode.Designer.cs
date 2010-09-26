@@ -72,7 +72,7 @@
             // Done
             // 
             this.Done.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.Done.Enabled = false;
+            this.Done.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.Done.Location = new System.Drawing.Point(187, 11);
             this.Done.Name = "Done";
             this.Done.Size = new System.Drawing.Size(90, 26);

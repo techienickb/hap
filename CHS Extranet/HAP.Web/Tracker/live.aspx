@@ -47,7 +47,9 @@
                 </LayoutTemplate>
             </asp:ListView>
             <asp:XmlDataSource ID="xmlsource" runat="server" DataFile="~/App_Data/tracker.xml" XPath="/Tracker/Event[@logoffdatetime='']" />
+            <div style="overflow: hidden; ">
+                <asp:Button runat="server" style="float: right;" id="logalloff" OnClientClick="return confirm('This may take some time...');" onclick="logalloff_Click" Text="Log All Off" />
+            </div>
         </ContentTemplate>
     </asp:UpdatePanel>
-
 </asp:Content>
