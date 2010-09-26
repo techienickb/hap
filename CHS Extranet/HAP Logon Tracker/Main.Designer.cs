@@ -91,6 +91,8 @@
             this.Cancel.Text = "&Cancel";
             this.Cancel.UseVisualStyleBackColor = true;
             this.Cancel.Click += new System.EventHandler(this.button2_Click);
+            this.Cancel.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Main_KeyDown);
+            this.Cancel.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Main_KeyUp);
             // 
             // Done
             // 
