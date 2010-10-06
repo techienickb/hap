@@ -892,7 +892,7 @@ namespace HAP.Silverlight.Browser
         private void RightClickDownload_Click(object sender, RoutedEventArgs e)
         {
             rightclick = true;
-            HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri, activeItems[0].Data.Path));
+            HtmlPage.PopupWindow(new Uri(HtmlPage.Document.DocumentUri, activeItems[0].Data.Path), "_download", new HtmlPopupWindowOptions());
         }
 
         private void RightClickZIP_Click(object sender, RoutedEventArgs e)
