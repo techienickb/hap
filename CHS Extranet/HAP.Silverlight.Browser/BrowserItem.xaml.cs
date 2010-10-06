@@ -173,7 +173,7 @@ namespace HAP.Silverlight.Browser
             if (Activate != null) Activate(this, new EventArgs());
             if ((DateTime.Now.Ticks - LastTicks) < 2310000)
             {
-                if (_data.BType == BType.File) HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri, this._data.Path));
+                if (_data.BType == BType.File) HtmlPage.PopupWindow(new Uri(HtmlPage.Document.DocumentUri, this._data.Path), "_hapdownload", new HtmlPopupWindowOptions());
                 else if (DirectoryChange != null) DirectoryChange(this, this._data);
             }
             LastTicks = DateTime.Now.Ticks;

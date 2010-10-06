@@ -17,6 +17,7 @@ namespace HAP.Logon.Tracker
             InitializeComponent();
             KeepOpen = true;
             Override = false;
+            Done.Enabled = false;
         }
 
         public Uri BaseUri { get; set; }
@@ -72,9 +73,9 @@ namespace HAP.Logon.Tracker
 
         private void CheckCount()
         {
+            Done.Enabled = false;
             if (MaxLogons == 0) Done.Enabled = true;
             else if (dataGridView1.Rows.Count < (MaxLogons - 1)) Done.Enabled = true;
-            else Done.Enabled = false;
             KeepOpen = !Done.Enabled;
         }
 
@@ -100,6 +101,7 @@ namespace HAP.Logon.Tracker
             if (Override)
             {
                 if (new OverrideCode(code).ShowDialog(this) == System.Windows.Forms.DialogResult.OK) { this.KeepOpen = false; this.Close(); }
+                else this.KeepOpen = true;
             }
             else if (MessageBox.Show(this, "Clicking this button will result in the system logging you off.", "Logoff?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.OK)
             {
