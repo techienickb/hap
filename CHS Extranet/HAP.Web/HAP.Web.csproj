@@ -97,6 +97,7 @@
     <Content Include="BookingSystem\OverviewCalendar.ascx" />
     <Content Include="BookingSystem\OverviewCalendar.aspx" />
     <Content Include="BookingSystem\SIMS.ascx" />
+    <Content Include="BookingSystem\WeekView.aspx" />
     <Content Include="ClientBin\HAP.Silverlight.Browser.xap" />
     <Content Include="ClientBin\HAP.Silverlight.xap" />
     <Content Include="Controls\Announcement.ascx" />
@@ -305,6 +306,14 @@
       <DependentUpon>SIMS.ascx</DependentUpon>
     </Compile>
     <Compile Include="BookingSystem\Term.cs" />
+    <Compile Include="BookingSystem\WeekView.aspx.cs">
+      <DependentUpon>WeekView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BookingSystem\WeekView.aspx.designer.cs">
+      <DependentUpon>WeekView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="BookingSystem\WeekViewRow.cs" />
     <Compile Include="Configuration\announcementBox.cs" />
     <Compile Include="Configuration\bookingResource.cs" />
     <Compile Include="Configuration\bookingResources.cs" />

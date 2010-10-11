@@ -40,6 +40,8 @@
                             <TitleStyle CssClass="calhead" BackColor="Transparent" />
                         </hap:BookingCalendar>
                     </div>
+                    <asp:HiddenField runat="server" id="datestamp" value="" />
+                    <asp:Button runat="server" id="sub1" style="display: none;" Click="sub1_Click" />
                 </ContentTemplate></asp:UpdatePanel>
                 <div id="loadingPopup" style="display: none;">
                     <div class="popupContent" style="width: 220px">
@@ -135,5 +137,12 @@
                 Sys.Application.add_load(resetCal);
                 Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(beginRequestHandler);
                 Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandler);
+
+                try {
+                    if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) {
+                        $get('<%=datestamp.ClientID %>').value = window.location.href.split('#')[1];
+                        $get('<%=sub1.ClientID%>').click();
+                    }
+                } catch (ex) { alert(ex); }
             </script>
 </asp:Content>

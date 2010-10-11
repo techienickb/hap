@@ -75,3 +75,12 @@
 }
 .modalPopup h1 { margin: 0; padding: 0; height: 28px; line-height: 26px; font-size: medium; color: #1f3976; font-weight: normal; }
 .modalButtons { text-align: right; border-top: solid 1px #7da2ce; padding: 4px; }
+
+
+#weekview { width: 100%; overflow: auto; }
+#weekview .lessoncol { float: left; border: solid 1px #7da2ce; border-left-width: 0; background: #fff url(../images/bar.gif) repeat-x top left; border-radius: 3px; -moz-border-radius: 3px; cursor: pointer; }
+#weekview .lessoncol h2 { background: transparent; margin: 0; padding: 0; height: 30px; line-height: 30px; font-size: large; color: #1f3976; font-weight: normal; text-align: center; }
+#weekview .lessoncol div { height: 40px; padding: 4px 10px; overflow: hidden; }
+#weekview .lessoncol i { display: block; font-size: smaller; }
+.alt { background: #dedede; }
+#weekview div { overflow: hidden; }

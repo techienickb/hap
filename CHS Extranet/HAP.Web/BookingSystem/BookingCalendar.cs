@@ -9,6 +9,7 @@ using HAP.Web.Configuration;
 using System.Text;
 using System.DirectoryServices.AccountManagement;
 using System.IO;
+using System.Xml;
 
 namespace HAP.Web.BookingSystem
 {
@@ -21,11 +22,12 @@ namespace HAP.Web.BookingSystem
             hapConfig config = hapConfig.Current;
             _isAdmin = HttpContext.Current.User.IsInRole("Domain Admins");
 
-            this.SelectionMode = CalendarSelectionMode.Day;
+            this.SelectionMode = CalendarSelectionMode.DayWeek;
             this.maxday = config.BookingSystem.MaxDays;
             foreach (AdvancedBookingRight right in BookingSystem.BookingRights)
                 if (right.Username == Username)
                     this.maxday = 7 * right.Weeksahead;
+
 
             Terms terms = new Terms();
             if (Terms.getTerm(DateTime.Now).Name == null)
@@ -70,17 +72,43 @@ namespace HAP.Web.BookingSystem
         protected override void Render(HtmlTextWriter html)
         {
             StringBuilder sb = new StringBuilder();
-            StringWriter tr = new StringWriter(sb);
-            HtmlTextWriter writer = new HtmlTextWriter(tr);
-            base.Render(writer);
-            writer.Flush();
-            writer.Close();
-            tr.Flush();
-            tr.Close();
-            String s = sb.ToString();
-            s = s.Replace(" style=\"color:Black\" title=\"Go to the previous month\">", " title=\"Go to the previous month\">");
-            s = s.Replace(" style=\"color:Black\" title=\"Go to the next month\">", " title=\"Go to the next month\">");
-            html.Write(s.Replace("<th class=\"dayhead\" align=\"center\" abbr=\"Saturday\" scope=\"col\" style=\"color:#646464;background-color:White;font-size:8pt;font-weight:bold;\">Sat</th><th class=\"dayhead\" align=\"center\" abbr=\"Sunday\" scope=\"col\" style=\"color:#646464;background-color:White;font-size:8pt;font-weight:bold;\">Sun</th>", ""));
+            StringWriter sw = new StringWriter(sb);
+            HtmlTextWriter calendar = new HtmlTextWriter(sw);
+            base.Render(calendar);
+
+            // Load the XHTML to a XML document for processing
+            XmlDocument xml = new XmlDocument();
+            xml.Load(new StringReader(sw.ToString()));
+            // The Calendar control renders as a table, so navigate to the
+            // second TR which has the day headers.
+            XmlElement root = xml.DocumentElement;
+            XmlNode oldNode = root.SelectNodes("/table/tr")[1];
+            XmlNode sundayNode = oldNode.ChildNodes[6];
+            XmlNode saturdayNode = oldNode.ChildNodes[7];
+            XmlNode newNode = oldNode;
+            newNode.RemoveChild(sundayNode);
+            newNode.RemoveChild(saturdayNode);
+            root.ReplaceChild(oldNode, newNode);
+
+
+            oldNode = root.SelectNodes("/table/tr")[0];
+            newNode = oldNode;
+            newNode.ChildNodes[0].Attributes["colspan"].Value = "6";
+            root.ReplaceChild(oldNode, newNode);
+
+            XmlElement newroot = root;
+
+            int i = 0;
+            foreach (XmlNode node in root.SelectNodes("/table/tr")) {
+                if (node.ChildNodes.Count == 1 && i > 0)
+                    newroot.RemoveChild(node);
+                i++;
+            }
+
+
+            // Replace the buffer
+            html.WriteLine(newroot.OuterXml);
+
             if (!isAdmin) html.WriteLine("<div margin=\"4px 2px; text-align: center;\">You can select a day up to " + this.maxday + " days from today</div>");
             html.WriteLine("<!--{0}-->", this.maxday);
         }
@@ -89,7 +117,7 @@ namespace HAP.Web.BookingSystem
 
         protected override void OnDayRender(TableCell cell, CalendarDay day)
         {
-            base.OnDayRender(cell, day);
+            if (!day.IsWeekend) base.OnDayRender(cell, day);
             int dotw = 0;
             switch (DateTime.Now.DayOfWeek)
             {
