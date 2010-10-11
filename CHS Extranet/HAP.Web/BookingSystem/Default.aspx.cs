@@ -31,6 +31,10 @@ namespace HAP.Web.BookingSystem
             this.Title = string.Format("{0} - Home Access Plus+ - IT Booking System", config.BaseSettings.EstablishmentName);
         }
 
+        protected void sub1_Click(object sender, EventArgs e)
+        {
+        }
+
         public bool isAdmin { get; set; }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -45,6 +49,8 @@ namespace HAP.Web.BookingSystem
                     d = d.AddDays(1);
             }
             else d = Calendar1.SelectedDates[0];
+            if (!string.IsNullOrWhiteSpace(datestamp.Value)) d = DateTime.Parse(datestamp.Value);
+            datestamp.Value = string.Empty;
             Calendar1.SelectedDates.Clear();
             Calendar1.SelectedDates.Add(d);
             if (!IsPostBack) Calendar1.DataBind();
@@ -97,6 +103,7 @@ namespace HAP.Web.BookingSystem
 
         protected void Calendar1_SelectionChanged(object sender, EventArgs e)
         {
+            if (Calendar1.SelectedDates.Count > 1) Response.Redirect("weekview.aspx?d=" + Calendar1.SelectedDates[0].ToShortDateString());
             DataBind();
         }
 
