@@ -31,15 +31,11 @@ namespace CHS
 
         protected override void RenderContents(HtmlTextWriter output)
         {
-                if (HttpContext.Current.Cache["CHSheader"] == null)
-                {
-                    HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create("http://www.crickhowell-hs.powys.sch.uk/it/");
-                    req.Accept = "text/html";
-                    req.UserAgent = "CHS Internal Header/CHSIH 1.0";
-                    WebResponse res = req.GetResponse();
-                    HttpContext.Current.Cache.Insert("CHSheader", res.GetResponseStream(), null, DateTime.Now.AddHours(1), TimeSpan.Zero);
-                }
-                StreamReader sr = new StreamReader((Stream)HttpContext.Current.Cache["CHSheader"]);
+                HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create("http://www.crickhowell-hs.powys.sch.uk/it/");
+                req.Accept = "text/html";
+                req.UserAgent = "CHS Internal Header/CHSIH 1.0";
+                WebResponse res = req.GetResponse();
+                StreamReader sr = new StreamReader(res.GetResponseStream());
                 string line = "";
                 bool startwrite = false;
                 while (line != null)
