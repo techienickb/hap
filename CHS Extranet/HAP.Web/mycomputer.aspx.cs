@@ -161,7 +161,7 @@ namespace HAP.Web
                                 string dirpath = subdir.FullName;
                                 dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username), unc.Drive);
                                 dirpath = dirpath.Replace('\\', '/');
-                                items.Add(new MyComputerItem(subdir.Name, "Last Modified: " + subdir.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), Request.ApplicationPath + "/MyComputer/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(subdir), allowedit));
+                                items.Add(new MyComputerItem(subdir.Name, "Last Modified: " + subdir.LastWriteTime.ToString("g"), Request.ApplicationPath + "/MyComputer/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(subdir), allowedit));
                             }
                         }
                         catch { }
@@ -178,7 +178,7 @@ namespace HAP.Web
                                 if (!string.IsNullOrEmpty(file.Extension))
                                     items.Add(new MyComputerItem(file.Name.Replace(file.Extension, ""), "Last Modified: " + file.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), Request.ApplicationPath + "/Download/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(file), allowedit));
                                 else
-                                    items.Add(new MyComputerItem(file.Name, "Last Modified: " + file.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), Request.ApplicationPath + "/Download/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(file), allowedit));
+                                    items.Add(new MyComputerItem(file.Name, "Last Modified: " + file.LastWriteTime.ToString("g"), Request.ApplicationPath + "/Download/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(file), allowedit));
                             }
                         }
                         catch
