@@ -5,7 +5,7 @@ using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
 using System.Security.Principal;
 
-namespace CHS
+namespace HAP.AD
 {
 	public static class ActiveDirectoryHelper
 	{

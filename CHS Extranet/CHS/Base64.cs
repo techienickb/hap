@@ -12,7 +12,7 @@ using System.Web.UI.WebControls.WebParts;
 /// <summary>
 /// Summary description for Base64
 /// </summary>
-namespace CHS.Base64
+namespace HAP.AD.Base64
 {
     public class Base64Encoder
     {

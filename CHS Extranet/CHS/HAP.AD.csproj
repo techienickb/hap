@@ -9,8 +9,8 @@
     <ProjectGuid>{36468E14-F8AF-4794-AB76-25571A54682F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CHS</RootNamespace>
-    <AssemblyName>CHS</AssemblyName>
+    <RootNamespace>HAP.AD</RootNamespace>
+    <AssemblyName>HAP.AD</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Nonshipping>true</Nonshipping>

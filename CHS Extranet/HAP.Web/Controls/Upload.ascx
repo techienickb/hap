@@ -25,7 +25,7 @@
 		</object>
 		
 		<div class="modalButtons">
-			<input type="button" value="Switch to HTML Uploader" onclick="window.open('<%=Request.ApplicationPath%>/uploadh.aspx?path=<%=((HAP.Web.routing.IMyComputerDisplay)Page).RoutingDrive %>/<%=((HAP.Web.routing.IMyComputerDisplay)Page).RoutingPath %>', 'CHSUpload', 'toolbar=0,status=0,statusbar=0,menubar=0,menu=0,address=0,addressbar=0,width=600,height=400', true);" />
+			<input type="button" value="Switch to HTML Uploader" onclick="window.open('<%=Request.ApplicationPath%>/uploadh.aspx?path=<%=((HAP.Web.routing.IMyComputerDisplay)Page).RoutingDrive %>/<%=((HAP.Web.routing.IMyComputerDisplay)Page).RoutingPath %>', 'HAPUpload', 'toolbar=0,status=0,statusbar=0,menubar=0,menu=0,address=0,addressbar=0,width=600,height=400', true);" />
 			<asp:Button runat="server" ID="cancel" Text="Close" />
 		</div>
 	</asp:Panel>

@@ -45,7 +45,7 @@ function popup(e) {
         deleteclick.click();
     }
     else if (e.innerHTML == "Move")
-        window.open(e.href, 'CHSMove', 'toolbar=0,status=0,statusbar=0,menubar=0,menu=0,address=0,addressbar=0,width=500,height=500', true);
+        window.open(e.href, 'HAPMove', 'toolbar=0,status=0,statusbar=0,menubar=0,menu=0,address=0,addressbar=0,width=500,height=500', true);
     else if (e.innerHTML == "Unzip") {
         unzipitem.value = e.href.substring(e.href.lastIndexOf('#') + 1).replace(/%20/gi, " ").replace(/\^/gi, "&").replace(/%5E/gi, "&");
         if (e.href.match(/#F!/i)) unzipitemname.innerHTML = e.href.substring(e.href.lastIndexOf('#') + 3).replace(/%20/gi, " ").replace(/\^/gi, "&").replace(/%5E/gi, "&");
@@ -59,8 +59,8 @@ function popup(e) {
         zipclick.click();
     }
     else if (e.innerHTML == "HTML Preview")
-        window.open(e.href, 'CHSPreview', 'toolbar=0,status=0,statusbar=0,menubar=0,menu=0,address=0,addressbar=0,width=800,scrollbars=0,height=600', true);
-    else window.open(e.href, 'CHSUpload', 'toolbar=0,status=0,statusbar=0,menubar=0,menu=0,address=0,addressbar=0,width=600,height=400', true);
+        window.open(e.href, 'HAPPreview', 'toolbar=0,status=0,statusbar=0,menubar=0,menu=0,address=0,addressbar=0,width=800,scrollbars=0,height=600', true);
+    else window.open(e.href, 'HAPUpload', 'toolbar=0,status=0,statusbar=0,menubar=0,menu=0,address=0,addressbar=0,width=600,height=400', true);
     return false;
 }
 

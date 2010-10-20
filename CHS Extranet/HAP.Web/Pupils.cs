@@ -9,7 +9,7 @@ using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
 using System.Collections.Generic;
 using System.Xml;
-using CHS.Base64;
+using HAP.AD.Base64;
 
 namespace HAP.Web
 {

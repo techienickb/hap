@@ -8,7 +8,7 @@ using System.Web.UI.WebControls;
 using System.Net;
 using System.IO;
 
-namespace CHS
+namespace HAP.AD
 {
     [DefaultProperty("Text")]
     [ToolboxData("<{0}:Navigation runat=\"server\" Selected=\"\" />")]
