@@ -5,7 +5,7 @@ using System.Configuration.Provider;
 using System.DirectoryServices;
 using System.Web.Security;
 
-namespace CHS
+namespace HAP.AD
 {
 	public sealed class ActiveDirectoryRoleProvider : RoleProvider
 	{

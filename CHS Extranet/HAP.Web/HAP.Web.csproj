@@ -514,9 +514,9 @@
     <Content Include="chs.master" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CHS\CHS.csproj">
+    <ProjectReference Include="..\CHS\HAP.AD.csproj">
       <Project>{36468E14-F8AF-4794-AB76-25571A54682F}</Project>
-      <Name>CHS</Name>
+      <Name>HAP.AD</Name>
     </ProjectReference>
     <ProjectReference Include="..\HAP.Config\HAP.Config.csproj">
       <Project>{8E445E7B-246A-446A-B3B2-ED4F51C21768}</Project>

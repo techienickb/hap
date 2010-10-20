@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Web", "HAP.Web\HAP.Web.
 		{E1C14EF8-AD23-48F5-9EFF-9A2F4A07CCC9} = {E1C14EF8-AD23-48F5-9EFF-9A2F4A07CCC9}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CHS", "CHS\CHS.csproj", "{36468E14-F8AF-4794-AB76-25571A54682F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.AD", "CHS\HAP.AD.csproj", "{36468E14-F8AF-4794-AB76-25571A54682F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Silverlight", "HAP.Silverlight\HAP.Silverlight.csproj", "{9DCDBB22-ECEB-4220-A0FE-E786189F0B08}"
 EndProject
@@ -34,27 +34,27 @@ Global
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs08
 		SccLocalPath0 = .
-		SccProjectUniqueName1 = CHS\\CHS.csproj
-		SccProjectName1 = CHS
-		SccLocalPath1 = CHS
-		SccProjectUniqueName2 = HAP.Silverlight\\HAP.Silverlight.csproj
-		SccProjectName2 = HAP.Silverlight
-		SccLocalPath2 = HAP.Silverlight
-		SccProjectUniqueName3 = HAP.Web\\HAP.Web.csproj
-		SccProjectName3 = HAP.Web
-		SccLocalPath3 = HAP.Web
-		SccProjectUniqueName4 = HAP.Config\\HAP.Config.csproj
-		SccProjectName4 = HAP.Config
-		SccLocalPath4 = HAP.Config
-		SccProjectUniqueName5 = HAP.Silverlight.Browser\\HAP.Silverlight.Browser.csproj
-		SccProjectName5 = HAP.Silverlight.Browser
-		SccLocalPath5 = HAP.Silverlight.Browser
-		SccProjectUniqueName6 = HAP\u0020Logon\u0020Tracker\\HAP\u0020Logon\u0020Tracker.csproj
-		SccProjectName6 = HAP\u0020Logon\u0020Tracker
-		SccLocalPath6 = HAP\u0020Logon\u0020Tracker
-		SccProjectUniqueName7 = HAP\u0020Logon\u0020Tracker\u0020Installer\\HAP\u0020Logon\u0020Tracker\u0020Installer.vdproj
-		SccProjectName7 = HAP\u0020Logon\u0020Tracker\u0020Installer
-		SccLocalPath7 = HAP\u0020Logon\u0020Tracker\u0020Installer
+		SccProjectUniqueName1 = HAP.Silverlight\\HAP.Silverlight.csproj
+		SccProjectName1 = HAP.Silverlight
+		SccLocalPath1 = HAP.Silverlight
+		SccProjectUniqueName2 = HAP.Web\\HAP.Web.csproj
+		SccProjectName2 = HAP.Web
+		SccLocalPath2 = HAP.Web
+		SccProjectUniqueName3 = HAP.Config\\HAP.Config.csproj
+		SccProjectName3 = HAP.Config
+		SccLocalPath3 = HAP.Config
+		SccProjectUniqueName4 = HAP.Silverlight.Browser\\HAP.Silverlight.Browser.csproj
+		SccProjectName4 = HAP.Silverlight.Browser
+		SccLocalPath4 = HAP.Silverlight.Browser
+		SccProjectUniqueName5 = HAP\u0020Logon\u0020Tracker\\HAP\u0020Logon\u0020Tracker.csproj
+		SccProjectName5 = HAP\u0020Logon\u0020Tracker
+		SccLocalPath5 = HAP\u0020Logon\u0020Tracker
+		SccProjectUniqueName6 = HAP\u0020Logon\u0020Tracker\u0020Installer\\HAP\u0020Logon\u0020Tracker\u0020Installer.vdproj
+		SccProjectName6 = HAP\u0020Logon\u0020Tracker\u0020Installer
+		SccLocalPath6 = HAP\u0020Logon\u0020Tracker\u0020Installer
+		SccProjectUniqueName7 = CHS\\HAP.AD.csproj
+		SccProjectName7 = CHS
+		SccLocalPath7 = CHS
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

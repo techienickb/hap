@@ -10,7 +10,7 @@ using System.Web.Security;
 using System.Data;
 using System.DirectoryServices.AccountManagement;
 
-namespace CHS
+namespace HAP.AD
 {
 	public class ActiveDirectoryMembershipProvider : System.Web.Security.ActiveDirectoryMembershipProvider
 	{
