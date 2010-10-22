@@ -100,8 +100,9 @@ namespace HAP.Web.BookingSystem
                     else if ((date > this.halfTerm.EndDate) && (date <= this.EndDate))
                     {
                         int y = cal.GetWeekOfYear(this.halfTerm.EndDate.AddDays(3), CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
-                        int a = (((x - y) % 2) == 0) ? this.startWeekNum + 1 : this.startWeekNum;
-                        if (a == 3) a = 1;
+                        int a = (((x - y) % 2) == 0) ? this.startWeekNum : this.startWeekNum + 1;
+                        if (this.startWeekNum == 2) a = (a == 2 ? 1 : 2);
+                        if (a > 2) a = 1;
                         return a;
                     }
                     else return 0;
