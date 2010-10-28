@@ -176,7 +176,7 @@ namespace HAP.Web
                                 dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username), unc.Drive);
                                 dirpath = dirpath.Replace('\\', '/');
                                 if (!string.IsNullOrEmpty(file.Extension))
-                                    items.Add(new MyComputerItem(file.Name.Replace(file.Extension, ""), "Last Modified: " + file.LastWriteTime.ToString("dd/MM/yy hh:mm tt"), Request.ApplicationPath + "/Download/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(file), allowedit));
+                                    items.Add(new MyComputerItem(file.Name.Replace(file.Extension, ""), "Last Modified: " + file.LastWriteTime.ToString("g"), Request.ApplicationPath + "/Download/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(file), allowedit));
                                 else
                                     items.Add(new MyComputerItem(file.Name, "Last Modified: " + file.LastWriteTime.ToString("g"), Request.ApplicationPath + "/Download/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(file), allowedit));
                             }
