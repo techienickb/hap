@@ -56,11 +56,11 @@ namespace HAP.Web.API
                 {
                     FileInfo file = new FileInfo(path);
                     string fname = file.Name;
-                    if (fname.EndsWith(file.Extension)) fname = fname.Remove(fname.IndexOf(file.Extension));
+                    if (fname.EndsWith(file.Extension) && !string.IsNullOrWhiteSpace(file.Extension)) fname = fname.Remove(fname.IndexOf(file.Extension));
                     if (c.StartsWith("SAVETO:"))
                     {
                         c = c.Remove(0, 7);
-                        if (c.EndsWith(file.Extension)) c = c.Remove(c.LastIndexOf(file.Extension));
+                        if (c.EndsWith(file.Extension) && !string.IsNullOrWhiteSpace(file.Extension)) c = c.Remove(c.LastIndexOf(file.Extension));
                         string p2 = path.Replace(fname, c);
                         if (folder) p2 = Converter.DriveToUNC(c);
                         FileInfo f2 = new FileInfo(p2);
@@ -85,7 +85,7 @@ namespace HAP.Web.API
                         if (folder) p2 = p2.Replace(file.Directory.Name + "\\", "");
                         File.Delete(p2);
                     }
-                    if (folder) file.MoveTo(Converter.DriveToUNC(c));
+                    if (folder) file.MoveTo(Converter.DriveToUNC(c) + file.Extension);
                     else file.MoveTo(file.FullName.Replace(fname, c));
                 }
                 else
