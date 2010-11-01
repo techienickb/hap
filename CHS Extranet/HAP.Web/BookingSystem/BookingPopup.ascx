@@ -51,8 +51,8 @@
                         subjectbox = "<%=BookLesson.ClientID%>";
                     }
                     setIDs();
-                    function subjectchance(selectbox) {
-                        var chosenoption = selectbox.options[selectbox.selectedIndex] //this refers to "selectmenu"
+                    function subjectchance(box) {
+                        var chosenoption = box.options[box.selectedIndex] //this refers to "selectmenu"
                         if (chosenoption.value == "CUSTOM") {
                             document.getElementById(subjectbox).value = "" //open target site (based on option's value attr) in new window
                             document.getElementById(subjectbox).style.display = '';
