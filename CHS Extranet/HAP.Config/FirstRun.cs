@@ -177,6 +177,7 @@ namespace HAP.Config
             bs.Attributes["maxbookingsperweek"].Value = bs_max.Value.ToString();
             bs.Attributes["maxdays"].Value = bs_maxdays.Value.ToString();
             bs.Attributes["twoweektimetable"].Value = bs_twoweek.Checked.ToString();
+            bs.Attributes["keepxmlclean"].Value = bs_keepxmlclean.Checked.ToString();
 
             XmlNode res = bs.SelectSingleNode("resources");
             res.RemoveAll();
@@ -353,6 +354,8 @@ namespace HAP.Config
             bs_max.Value = int.Parse(bs.Attributes["maxbookingsperweek"].Value);
             bs_maxdays.Value = int.Parse(bs.Attributes["maxdays"].Value);
             bs_twoweek.Checked = bool.Parse(bs.Attributes["twoweektimetable"].Value);
+            if (bs.Attributes["keepxmlclean"] != null) bs_keepxmlclean.Checked = bool.Parse(bs.Attributes["keepxmlclean"].Value);
+            else bs_keepxmlclean.Checked = true;
             foreach (XmlNode node in bs.SelectNodes("resources/add"))
                 Resources.Rows.Add(node.Attributes["name"].Value, node.Attributes["type"].Value, node.Attributes["emailadmin"] != null ? bool.Parse(node.Attributes["emailadmin"].Value) : false, node.Attributes["enablecharging"] != null ? bool.Parse(node.Attributes["enablecharging"].Value) : false, node.Attributes["enable"] != null ? bool.Parse(node.Attributes["enable"].Value) : true);
             foreach (XmlNode node in bs.SelectNodes("lessons/add"))

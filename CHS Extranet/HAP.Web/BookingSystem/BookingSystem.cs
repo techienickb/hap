@@ -48,6 +48,15 @@ namespace HAP.Web.BookingSystem
             }
             set
             {
+                if (hapConfig.Current.BookingSystem.KeepXmlClean)
+                {
+                    List<XmlNode> nodes = new List<XmlNode>();
+                    foreach (XmlNode node in value.SelectNodes("/Bookings/Booking"))
+                        if (DateTime.Parse(node.Attributes["date"].Value) < DateTime.Now.AddDays(-7))
+                            nodes.Add(node);
+                    foreach (XmlNode node in nodes)
+                        value.SelectSingleNode("/Bookings").RemoveChild(node);
+                }
                 XmlWriterSettings set = new XmlWriterSettings();
                 set.Indent = true;
                 set.IndentChars = "   ";

@@ -84,6 +84,8 @@
             this.label20 = new System.Windows.Forms.Label();
             this.hpl_updatedetails = new System.Windows.Forms.TextBox();
             this.wizardPage7 = new AeroWizard.WizardPage();
+            this.trackeroverride = new System.Windows.Forms.TextBox();
+            this.label28 = new System.Windows.Forms.Label();
             this.label26 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
             this.trackermaxstaff = new System.Windows.Forms.NumericUpDown();
@@ -141,8 +143,7 @@
             this.label19 = new System.Windows.Forms.Label();
             this.bs_maxdays = new System.Windows.Forms.NumericUpDown();
             this.folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
-            this.trackeroverride = new System.Windows.Forms.TextBox();
-            this.label28 = new System.Windows.Forms.Label();
+            this.bs_keepxmlclean = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.wiz)).BeginInit();
             this.wizardPage1.SuspendLayout();
             this.wizardPage2.SuspendLayout();
@@ -693,6 +694,22 @@
             this.wizardPage7.TabIndex = 6;
             this.wizardPage7.Text = "Logon Tracker";
             // 
+            // trackeroverride
+            // 
+            this.trackeroverride.Location = new System.Drawing.Point(310, 81);
+            this.trackeroverride.Name = "trackeroverride";
+            this.trackeroverride.Size = new System.Drawing.Size(268, 23);
+            this.trackeroverride.TabIndex = 39;
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(181, 84);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(125, 15);
+            this.label28.TabIndex = 38;
+            this.label28.Text = "Admin Override Code:";
+            // 
             // label26
             // 
             this.label26.AutoSize = true;
@@ -1032,10 +1049,10 @@
             this.bookingsystem_Subjectsd.Controls.Add(this.tabPage9);
             this.bookingsystem_Subjectsd.Controls.Add(this.bs_subjects);
             this.bookingsystem_Subjectsd.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bookingsystem_Subjectsd.Location = new System.Drawing.Point(0, 94);
+            this.bookingsystem_Subjectsd.Location = new System.Drawing.Point(0, 75);
             this.bookingsystem_Subjectsd.Name = "bookingsystem_Subjectsd";
             this.bookingsystem_Subjectsd.SelectedIndex = 0;
-            this.bookingsystem_Subjectsd.Size = new System.Drawing.Size(737, 258);
+            this.bookingsystem_Subjectsd.Size = new System.Drawing.Size(737, 277);
             this.bookingsystem_Subjectsd.TabIndex = 7;
             // 
             // tabPage8
@@ -1044,7 +1061,7 @@
             this.tabPage8.Location = new System.Drawing.Point(4, 24);
             this.tabPage8.Name = "tabPage8";
             this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage8.Size = new System.Drawing.Size(729, 230);
+            this.tabPage8.Size = new System.Drawing.Size(729, 249);
             this.tabPage8.TabIndex = 0;
             this.tabPage8.Text = "Resources";
             this.tabPage8.UseVisualStyleBackColor = true;
@@ -1062,7 +1079,7 @@
             this.Resources.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Resources.Location = new System.Drawing.Point(3, 3);
             this.Resources.Name = "Resources";
-            this.Resources.Size = new System.Drawing.Size(723, 224);
+            this.Resources.Size = new System.Drawing.Size(723, 243);
             this.Resources.TabIndex = 0;
             // 
             // ResName
@@ -1191,6 +1208,7 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.bs_keepxmlclean);
             this.panel2.Controls.Add(this.label18);
             this.panel2.Controls.Add(this.bs_twoweek);
             this.panel2.Controls.Add(this.bs_max);
@@ -1199,7 +1217,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(737, 94);
+            this.panel2.Size = new System.Drawing.Size(737, 75);
             this.panel2.TabIndex = 8;
             // 
             // label18
@@ -1215,7 +1233,7 @@
             // 
             this.bs_twoweek.AutoSize = true;
             this.bs_twoweek.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.bs_twoweek.Location = new System.Drawing.Point(65, 70);
+            this.bs_twoweek.Location = new System.Drawing.Point(298, 17);
             this.bs_twoweek.Name = "bs_twoweek";
             this.bs_twoweek.Size = new System.Drawing.Size(143, 19);
             this.bs_twoweek.TabIndex = 5;
@@ -1257,21 +1275,17 @@
             this.folderBrowser.RootFolder = System.Environment.SpecialFolder.MyComputer;
             this.folderBrowser.ShowNewFolderButton = false;
             // 
-            // trackeroverride
+            // bs_keepxmlclean
             // 
-            this.trackeroverride.Location = new System.Drawing.Point(310, 81);
-            this.trackeroverride.Name = "trackeroverride";
-            this.trackeroverride.Size = new System.Drawing.Size(268, 23);
-            this.trackeroverride.TabIndex = 39;
-            // 
-            // label28
-            // 
-            this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(181, 84);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(125, 15);
-            this.label28.TabIndex = 38;
-            this.label28.Text = "Admin Override Code:";
+            this.bs_keepxmlclean.AutoSize = true;
+            this.bs_keepxmlclean.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.bs_keepxmlclean.Location = new System.Drawing.Point(326, 44);
+            this.bs_keepxmlclean.Name = "bs_keepxmlclean";
+            this.bs_keepxmlclean.Size = new System.Drawing.Size(115, 19);
+            this.bs_keepxmlclean.TabIndex = 6;
+            this.bs_keepxmlclean.Text = "Keep XML Clean:";
+            this.bs_keepxmlclean.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.bs_keepxmlclean.UseVisualStyleBackColor = true;
             // 
             // FirstRun
             // 
@@ -1444,5 +1458,6 @@
         private System.Windows.Forms.TextBox hpl_changepass;
         private System.Windows.Forms.TextBox trackeroverride;
         private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.CheckBox bs_keepxmlclean;
     }
 }
