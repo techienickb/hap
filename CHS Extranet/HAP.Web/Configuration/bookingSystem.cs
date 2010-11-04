@@ -15,6 +15,13 @@ namespace HAP.Web.Configuration
             set { this["maxbookingsperweek"] = value.ToString(); }
         }
 
+        [ConfigurationProperty("keepxmlclean", DefaultValue = true, IsRequired = false)]
+        public bool KeepXmlClean
+        {
+            get { return (bool)this["keepxmlclean"]; }
+            set { this["keepxmlclean"] = value; }
+        }
+
 
         [ConfigurationProperty("maxdays", DefaultValue = 14, IsRequired = true)]
         public int MaxDays
