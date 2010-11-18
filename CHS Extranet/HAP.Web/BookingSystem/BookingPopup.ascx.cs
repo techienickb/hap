@@ -51,6 +51,7 @@ namespace HAP.Web.BookingSystem
             else if (config.BookingSystem.Resources[roomstr].ResourceType == ResourceType.Equipment)
                 node.SetAttribute("equiproom", equiproom.Text);
             node.SetAttribute("room", roomstr);
+            node.SetAttribute("uid", ((isAdmin) ? userlist.SelectedValue : Username) + DateTime.Now.ToString(iCalGenerator.DateFormat));
             node.SetAttribute("username", (isAdmin) ? userlist.SelectedValue : Username);
             string year = "Year " + BookYear.SelectedItem.Text + " ";
             if (BookYear.SelectedValue == "") year = "";

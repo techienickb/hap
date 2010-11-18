@@ -70,6 +70,13 @@ namespace HAP.Web.BookingSystem
         {
             string room = removevars.Value.Split(new char[] { '@' }, StringSplitOptions.RemoveEmptyEntries)[0];
             string lesson = removevars.Value.Split(new char[] { '@' }, StringSplitOptions.RemoveEmptyEntries)[1];
+            BookingSystem bs = new BookingSystem(Calendar1.SelectedDate);
+            Booking b = bs.getBooking(room, lesson);
+            if (!string.IsNullOrEmpty(b.uid))
+            {
+                iCalGenerator.GenerateCancel(b, Calendar1.SelectedDate);
+                if (config.BookingSystem.Resources[room].EmailAdmin) iCalGenerator.Generate(b, Calendar1.SelectedDate, config.BaseSettings.AdminEmailUser);
+            }
             XmlDocument doc = BookingSystem.BookingsDoc;
             doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + Calendar1.SelectedDate.ToShortDateString() + "' and @lesson='" + lesson.ToString() + "' and @room='" + room + "']"));
             if (config.BookingSystem.Resources[room].ResourceType == ResourceType.Laptops)
