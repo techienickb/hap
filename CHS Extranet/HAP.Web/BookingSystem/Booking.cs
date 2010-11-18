@@ -27,6 +27,7 @@ namespace HAP.Web.BookingSystem
             if (node.Attributes["ltheadphones"] != null) this.LTHeadPhones = bool.Parse(node.Attributes["ltheadphones"].Value);
             else this.LTHeadPhones = false;
             if (node.Attributes["equiproom"] != null) this.EquipRoom = node.Attributes["equiproom"].Value;
+            if (node.Attributes["uid"] != null) this.uid = node.Attributes["uid"].Value;
         }
 
         public Booking(XmlNode node, int day)
@@ -43,6 +44,7 @@ namespace HAP.Web.BookingSystem
             if (node.Attributes["ltheadphones"] != null) this.LTHeadPhones = bool.Parse(node.Attributes["ltheadphones"].Value);
             else this.LTHeadPhones = false;
             if (node.Attributes["equiproom"] != null) this.EquipRoom = node.Attributes["equiproom"].Value;
+            if (node.Attributes["uid"] != null) this.uid = node.Attributes["uid"].Value;
         }
 
         public Booking(int day, string lesson, string room, string name, string username)
@@ -65,7 +67,7 @@ namespace HAP.Web.BookingSystem
         public string EquipRoom { get; set; }
         public int LTCount { get; set; }
         public bool Static { get; set; }
-
+        public string uid { get; set; }
         public UserInfo User
         {
             get
