@@ -96,15 +96,27 @@ namespace HAP.Silverlight.Browser
 
         #region drive/list events
 
+        private void SetDrop(bool val)
+        {
+            this.AllowDrop = contentPan.AllowDrop = RightClickFolder.IsEnabled = val;
+            newfolder.Visibility = val ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+        }
+
+        private void AddItem(BrowserItem item)
+        {
+            contentPan.Children.Add(item);
+            item.Mode = ViewMode;
+        }
+
+        private void AddTreeItem(HAPTreeNode currentnode, HAPTreeNode newnode)
+        {
+            currentnode.Items.Add(newnode);
+        }
+
         private void driveclient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
         {
-            Dispatcher.BeginInvoke(new DownloadStringCompletedEventHandler(driveclient_DownloadStringCompleted2), sender, e);
-        }
-        private void driveclient_DownloadStringCompleted2(object sender, DownloadStringCompletedEventArgs e)
-        {
-            this.AllowDrop = contentPan.AllowDrop = RightClickFolder.IsEnabled = CurrentItem.AccessControl == AccessControlActions.Change;
-            newfolder.Visibility = CurrentItem.AccessControl == AccessControlActions.Change ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
-            if (loaded) ClearItems();
+            Dispatcher.BeginInvoke(new SetBool(SetDrop), CurrentItem.AccessControl == AccessControlActions.Change);
+            if (loaded)  Dispatcher.BeginInvoke(new Action(ClearItems));
             foreach (string s in e.Result.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
             {
                 if (s.StartsWith("FILTER"))
@@ -158,7 +170,8 @@ namespace HAP.Silverlight.Browser
                         HAPTreeNode ttitem = new HAPTreeNode();
                         ttitem.Header = "Loading...";
                         titem.Items.Add(ttitem);
-                        ((HAPTreeNode)treeView1.Items[0]).Items.Add(titem);
+                        Dispatcher.BeginInvoke(new AddTeeeHandler(AddTreeItem), (HAPTreeNode)treeView1.Items[0], titem);
+                        //((HAPTreeNode)treeView1.Items[0]).Items.Add(titem);
                     }
                     item.KeyUp += new KeyEventHandler(item_KeyUp);
                     item.MouseEnter += new MouseEventHandler(item_MouseEnter);
@@ -167,30 +180,33 @@ namespace HAP.Silverlight.Browser
                     item.Activate += new EventHandler(item_Activate);
                     item.ReSort += new ResortHandler(item_ReSort);
                     item.DirectoryChange += new ChangeDirectoryHandler(item_DirectoryChange);
-                    contentPan.Children.Add(item);
-                    item.Mode = ViewMode;
+                    Dispatcher.BeginInvoke(new AddItemHandler(AddItem), item);
+                    //contentPan.Children.Add(item);
+                    //item.Mode = ViewMode;
                 }
             }
-            if (!loaded)
+            if (!loaded) Dispatcher.BeginInvoke(new Action(ContinueLoad));
+        }
+
+        private void ContinueLoad()
+        {
+            string p = HtmlPage.Document.DocumentUri.AbsoluteUri;
+            if (p.Contains('#'))
             {
-                string p = HtmlPage.Document.DocumentUri.AbsoluteUri;
-                if (p.Contains('#'))
+                p = p.Remove(0, p.IndexOf('#') + 1);
+                if (p.Length == 0) loaded = true;
+                else
                 {
-                    p = p.Remove(0, p.IndexOf('#') + 1);
-                    if (p.Length == 0) loaded = true;
+                    string s = "api/mycomputer/list/" + p.Split(new char[] { '/' })[0];
+                    if (p.Split(new char[] { '/' }).Length > 1) GetTreeNode(s, treeView1.Items).IsExpanded = true;
                     else
                     {
-                        string s = "api/mycomputer/list/" + p.Split(new char[] { '/' })[0];
-                        if (p.Split(new char[] { '/' }).Length > 1) GetTreeNode(s, treeView1.Items).IsExpanded = true;
-                        else
-                        {
-                            loaded = true;
-                            treeView1.SelectItem(GetTreeNode(s, treeView1.Items));
-                        }
+                        loaded = true;
+                        treeView1.SelectItem(GetTreeNode(s, treeView1.Items));
                     }
                 }
-                else loaded = true;
             }
+            else loaded = true;
         }
 
         private void sp_DragOver(object sender, DragEventArgs e)
@@ -234,17 +250,17 @@ namespace HAP.Silverlight.Browser
             nomove.Visibility = System.Windows.Visibility.Visible;
         }
 
-        private void listclient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
+        private void ClearNode()
         {
-            Dispatcher.BeginInvoke(new DownloadStringCompletedEventHandler(listclient_DownloadStringCompleted2), sender, e);
-        }
-        private void listclient_DownloadStringCompleted2(object sender, DownloadStringCompletedEventArgs e)
-        {
-            ClearItems();
-            this.AllowDrop = contentPan.AllowDrop = RightClickFolder.IsEnabled = CurrentItem.AccessControl == AccessControlActions.Change;
-            newfolder.Visibility = CurrentItem.AccessControl == AccessControlActions.Change ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
             tempnode = ((HAPTreeNode)treeView1.SelectedItem);
             tempnode.Items.Clear();
+        }
+
+        private void listclient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
+        {
+            Dispatcher.BeginInvoke(new Action(ClearItems));
+            Dispatcher.BeginInvoke(new SetBool(SetDrop), CurrentItem.AccessControl == AccessControlActions.Change);
+            Dispatcher.BeginInvoke(new Action(ClearNode));
             try
             {
                 if (e.Result.StartsWith("ERROR")) MessageBox.Show("An Error Occured");
@@ -269,9 +285,8 @@ namespace HAP.Silverlight.Browser
                         //if (item.Data.BType == BType.Drive) item.DirectoryChange += new ChangeDirectoryHandler(computer_DirectoryChange);
                         //else 
                         item.DirectoryChange += new ChangeDirectoryHandler(item_DirectoryChange);
-                        if (item.Data.BType == BType.Folder && item.Data.Name != "..") UpdateTree(item.Data);
-                        contentPan.Children.Add(item);
-                        item.Mode = ViewMode;
+                        if (item.Data.BType == BType.Folder && item.Data.Name != "..") Dispatcher.BeginInvoke(new UpdateTree(UpdateTree), item.Data);
+                        Dispatcher.BeginInvoke(new AddItemHandler(AddItem), item);
                     }
             }
             catch (Exception ex) { MessageBox.Show("An Error Occured\n" + ex.ToString(), "Error", MessageBoxButton.OK);  }

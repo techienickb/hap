@@ -225,6 +225,7 @@
     <Content Include="xls.aspx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\CheckPermissions.cs" />
     <Compile Include="API\Converter.cs" />
     <Compile Include="API\Thumbs.cs" />
     <Compile Include="API\Inf.cs" />

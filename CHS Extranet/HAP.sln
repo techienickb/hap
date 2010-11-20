@@ -20,6 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{A881389B-1A3
 		Binaries\AeroWizard.dll = Binaries\AeroWizard.dll
 		Binaries\AeroWizard.xml = Binaries\AeroWizard.xml
 		Binaries\AjaxControlToolkit.dll = Binaries\AjaxControlToolkit.dll
+		C:\Users\Nick\AppData\Local\Temp\Rar$DR02.536\Fluent Ribbon Control Suite 1.3\.NET 4\Assembly\Fluent.dll = C:\Users\Nick\AppData\Local\Temp\Rar$DR02.536\Fluent Ribbon Control Suite 1.3\.NET 4\Assembly\Fluent.dll
 		Binaries\Microsoft.WindowsAPICodePack.dll = Binaries\Microsoft.WindowsAPICodePack.dll
 		Binaries\Microsoft.WindowsAPICodePack.Shell.dll = Binaries\Microsoft.WindowsAPICodePack.Shell.dll
 	EndProjectSection
@@ -28,9 +29,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP Logon Tracker", "HAP Lo
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HAP Logon Tracker Installer", "HAP Logon Tracker Installer\HAP Logon Tracker Installer.vdproj", "{E10211DD-09C4-4756-AC4D-36C73A73FCEB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.ComputerBrowser", "HAP.ComputerBrowser\HAP.ComputerBrowser.csproj", "{8672CF3C-0B66-4DFD-ACC0-658B22225E96}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 8
+		SccNumberOfProjects = 9
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs08
 		SccLocalPath0 = .
@@ -55,6 +58,9 @@ Global
 		SccProjectUniqueName7 = CHS\\HAP.AD.csproj
 		SccProjectName7 = CHS
 		SccLocalPath7 = CHS
+		SccProjectUniqueName8 = HAP.ComputerBrowser\\HAP.ComputerBrowser.csproj
+		SccProjectName8 = HAP.ComputerBrowser
+		SccLocalPath8 = HAP.ComputerBrowser
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -151,6 +157,19 @@ Global
 		{E10211DD-09C4-4756-AC4D-36C73A73FCEB}.Release|x64.ActiveCfg = Release
 		{E10211DD-09C4-4756-AC4D-36C73A73FCEB}.Release|x64.Build.0 = Release
 		{E10211DD-09C4-4756-AC4D-36C73A73FCEB}.Release|x86.ActiveCfg = Release
+		{8672CF3C-0B66-4DFD-ACC0-658B22225E96}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{8672CF3C-0B66-4DFD-ACC0-658B22225E96}.Debug|Any CPU.Build.0 = Debug|x86
+		{8672CF3C-0B66-4DFD-ACC0-658B22225E96}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{8672CF3C-0B66-4DFD-ACC0-658B22225E96}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{8672CF3C-0B66-4DFD-ACC0-658B22225E96}.Debug|x64.ActiveCfg = Debug|x86
+		{8672CF3C-0B66-4DFD-ACC0-658B22225E96}.Debug|x86.ActiveCfg = Debug|x86
+		{8672CF3C-0B66-4DFD-ACC0-658B22225E96}.Debug|x86.Build.0 = Debug|x86
+		{8672CF3C-0B66-4DFD-ACC0-658B22225E96}.Release|Any CPU.ActiveCfg = Release|x86
+		{8672CF3C-0B66-4DFD-ACC0-658B22225E96}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{8672CF3C-0B66-4DFD-ACC0-658B22225E96}.Release|Mixed Platforms.Build.0 = Release|x86
+		{8672CF3C-0B66-4DFD-ACC0-658B22225E96}.Release|x64.ActiveCfg = Release|x86
+		{8672CF3C-0B66-4DFD-ACC0-658B22225E96}.Release|x86.ActiveCfg = Release|x86
+		{8672CF3C-0B66-4DFD-ACC0-658B22225E96}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

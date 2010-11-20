@@ -20,6 +20,7 @@ namespace HAP.Web.API
             RouteTable.Routes.Add(new Route("api/mycomputer/upload/{*path}", new UploadHandler()));
             RouteTable.Routes.Add(new Route("api/mycomputer/zip/{*path}", new ZipHandler()));
             RouteTable.Routes.Add(new Route("api/mycomputer/unzip/{*path}", new UnZipHandler()));
+            RouteTable.Routes.Add(new Route("api/mycomputer/checkperm/{*path}", new CheckPermissions()));
             RouteTable.Routes.Add(new Route("api/inf", new InfHandler()));
         }
     }

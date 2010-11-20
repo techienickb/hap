@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Browser;
+using System.Collections.Generic;
 
 namespace HAP.Silverlight.Browser
 {
@@ -57,6 +58,10 @@ namespace HAP.Silverlight.Browser
     public delegate void BItemChangeHandler(BItem e);
     public delegate void ResortHandler(object sender, bool resort);
     public delegate void SelectHandler(string path);
+    public delegate void AddItemHandler(BrowserItem item);
+    public delegate void AddTeeeHandler(HAPTreeNode currentitem, HAPTreeNode newitem);
+    public delegate void UpdateTree(BItem bitem);
+    public delegate void SetBool(bool allow);
     #endregion
 
     public class BItem : IComparable
