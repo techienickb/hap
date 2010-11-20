@@ -42,11 +42,16 @@ namespace HAP.Web.API
             pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
             up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Username);
 
-            userhome = up.HomeDirectory;
-            if (userhome.EndsWith("\\")) userhome = userhome.Remove(userhome.LastIndexOf('\\'));
+            userhome = "";
+            string u = "";
+            if (!string.IsNullOrEmpty(up.HomeDirectory))
+            {
+                u = userhome = up.HomeDirectory;
+                if (userhome.EndsWith("\\")) userhome = userhome.Remove(userhome.LastIndexOf('\\'));
+            }
             string path = "";
             unc = config.MyComputer.UNCPaths[RoutingDrive];
-            path = string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username) + RoutingPath;
+            path = string.Format(unc.UNC.Replace("%homepath%", u), Username) + RoutingPath;
 
             path = path.TrimEnd(new char[] { '\\' }).Replace('^', '&').Replace('/', '\\');
             return path;

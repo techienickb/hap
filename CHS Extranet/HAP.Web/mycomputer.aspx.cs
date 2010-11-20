@@ -104,8 +104,13 @@ namespace HAP.Web
             }
             else
             {
-                string userhome = up.HomeDirectory;
-                if (!userhome.EndsWith("\\")) userhome += "\\";
+                string u = "";
+                string userhome = u;
+                if (!string.IsNullOrEmpty(up.HomeDirectory))
+                {
+                    u = userhome = up.HomeDirectory;
+                    if (!userhome.EndsWith("\\")) userhome += "\\";
+                }
                 string path = "";
                 uncpath unc = null;
                 //if (RoutingDrive == "N") path = up.HomeDirectory + "\\" + RoutingPath;
@@ -113,10 +118,9 @@ namespace HAP.Web
                 //{
                     unc = config.MyComputer.UNCPaths[RoutingDrive];
                     if (unc == null || !isAuth(unc)) Response.Redirect(Request.ApplicationPath + "/unauthorised.aspx", true);
-                    else if (unc.UNC.Contains("%homepath%")) path = unc.UNC.Replace("%homepath%", up.HomeDirectory) + "\\" + RoutingPath;
+                    else if (unc.UNC.Contains("%homepath%")) path = unc.UNC.Replace("%homepath%", u) + "\\" + RoutingPath;
                     else path = string.Format(unc.UNC, Username) + "\\" + RoutingPath;
                 //}
-
                 List<MyComputerItem> breadcrumbs = new List<MyComputerItem>();
 
                 path = path.TrimEnd(new char[] { '\\' }).Replace('^', '&').Replace('/', '\\');
@@ -124,13 +128,13 @@ namespace HAP.Web
                 newfolderlink.Directory = DeleteBox.Dir = RenameBox.Dir = UnzipBox.Dir = ZipBox.Dir = dir;
                 newfolderlink.DataBind();
                 DirectoryInfo subdir1 = dir;
-                string uncroot = string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username);
+                string uncroot = string.Format(unc.UNC.Replace("%homepath%", u), Username);
                 uncroot = uncroot.TrimEnd(new char[] { '\\' });
                 DirectoryInfo rootdir = new DirectoryInfo(uncroot);
                 while (subdir1.FullName != rootdir.FullName && subdir1 != null)
                 {
                     string sdirpath = subdir1.FullName;
-                    sdirpath = sdirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username), unc.Drive);
+                    sdirpath = sdirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", u), Username), unc.Drive);
                     breadcrumbs.Add(new MyComputerItem(subdir1.Name, "", Request.ApplicationPath + "/MyComputer/" + sdirpath.Replace('&', '^').Replace('\\', '/'), "", false));
                     try
                     {
@@ -159,7 +163,7 @@ namespace HAP.Web
                             if (!subdir.Name.ToLower().Contains("recycle"))
                             {
                                 string dirpath = subdir.FullName;
-                                dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username), unc.Drive);
+                                dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", u), Username), unc.Drive);
                                 dirpath = dirpath.Replace('\\', '/');
                                 items.Add(new MyComputerItem(subdir.Name, "Last Modified: " + subdir.LastWriteTime.ToString("g"), Request.ApplicationPath + "/MyComputer/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(subdir), allowedit));
                             }
@@ -173,7 +177,7 @@ namespace HAP.Web
                             if (!file.Name.ToLower().Contains("thumbs") && checkext(file.Extension))
                             {
                                 string dirpath = file.FullName;
-                                dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username), unc.Drive);
+                                dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", u), Username), unc.Drive);
                                 dirpath = dirpath.Replace('\\', '/');
                                 if (!string.IsNullOrEmpty(file.Extension))
                                     items.Add(new MyComputerItem(file.Name.Replace(file.Extension, ""), "Last Modified: " + file.LastWriteTime.ToString("g"), Request.ApplicationPath + "/Download/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(file), allowedit));
