@@ -28,7 +28,6 @@ namespace HAP.Silverlight
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             string baseuri = new Uri(HtmlPage.Document.DocumentUri, "/" + HtmlPage.Document.DocumentUri.AbsolutePath.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries)[0] + "/upload/").ToString();
-            MessageBox.Show(baseuri);
             MainPage mp = new MainPage(HttpUtility.HtmlDecode(e.InitParams["Path"]), e.InitParams["Filters"].Replace('\\', ','), baseuri);
             this.RootVisual = mp;
 

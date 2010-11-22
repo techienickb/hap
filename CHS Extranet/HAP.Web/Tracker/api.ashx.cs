@@ -93,22 +93,20 @@ namespace HAP.Web.Tracker
             set.IndentChars = "   ";
             set.Encoding = System.Text.Encoding.UTF8;
             XmlWriter writer = XmlWriter.Create(context.Server.MapPath("~/App_Data/Tracker.xml"), set);
-            try
-            {
-                doc.Save(writer);
-                writer.Flush();
-                writer.Close();
-            }
-            catch
+            bool saved = false;
+            while (!saved)
             {
                 try
                 {
-                    Thread.Sleep(10);
                     doc.Save(writer);
                     writer.Flush();
                     writer.Close();
+                    saved = true;
                 }
-                catch { writer.Close(); }
+                catch
+                {
+                    Thread.Sleep(10);
+                }
             }
         }
 
