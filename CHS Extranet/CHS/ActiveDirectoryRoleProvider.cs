@@ -14,6 +14,7 @@ namespace HAP.AD
 		public string ConnStringName;
 		public string DomainName;
 		public DirectoryEntry DirectoryRoot;
+		public bool Cache;
 
 		public override void Initialize(string name, NameValueCollection config)
 		{
@@ -46,11 +47,13 @@ namespace HAP.AD
 			DomainName = ActiveDirectoryHelper.GetDomainName(ConnStringName);
 
 			ApplicationName = config["applicationName"];
+
+			Cache = bool.Parse(config["cache"] ?? "false");
 		}
 
 		public override bool IsUserInRole(string username, string roleName)
 		{
-			return ActiveDirectoryHelper.IsUserInRole(DirectoryRoot, DomainName, username, roleName);
+			return ActiveDirectoryHelper.IsUserInRole(DirectoryRoot, DomainName, username, roleName, Cache);
 		}
 
 		public override string[] GetRolesForUser(string username)
@@ -85,7 +88,7 @@ namespace HAP.AD
 
 		public override string[] GetUsersInRole(string roleName)
 		{
-			return ActiveDirectoryHelper.GetUsersInRole(DirectoryRoot, DomainName, roleName);
+			return ActiveDirectoryHelper.GetUsersInRole(DirectoryRoot, DomainName, roleName, Cache);
 		}
 
 		public override string[] GetAllRoles()

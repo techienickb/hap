@@ -70,50 +70,6 @@ namespace HAP.Config
             }
             #endregion
 
-            #region Home Page Links
-            XmlNode hpl = hapConfig.SelectSingleNode("homepagelinks");
-            hpl.RemoveAll();
-            XmlElement umd = doc.CreateElement("add");
-            umd.SetAttribute("name", "Update My Details");
-            umd.SetAttribute("showto", hpl_updatedetails.Text);
-            hpl.AppendChild(umd);
-            umd = doc.CreateElement("add");
-            umd.SetAttribute("name", "Change My Password");
-            umd.SetAttribute("showto", hpl_changepass.Text);
-            hpl.AppendChild(umd);
-            foreach (DataGridViewRow row in homepagelinks.Rows)
-            {
-                if (!row.IsNewRow)
-                {
-                    XmlElement el = doc.CreateElement("add");
-                    el.SetAttribute("name", row.Cells[0].Value.ToString());
-                    el.SetAttribute("description", row.Cells[1].Value.ToString());
-                    el.SetAttribute("showto", row.Cells[2].Value.ToString());
-                    el.SetAttribute("linklocation", row.Cells[3].Value.ToString());
-                    el.SetAttribute("icon", row.Cells[4].Value.ToString());
-                    hpl.AppendChild(el);
-                    try
-                    {
-                        if (row.Cells[0].Value.ToString() == "Help Desk")
-                        {
-                            XmlDocument doc1 = new XmlDocument();
-                            doc1.Load(Path.Combine(Directory.GetParent(Path.GetDirectoryName(Application.ExecutablePath)).FullName, "HelpDesk", "web.config"));
-                            doc1.SelectSingleNode("/configuration/system.web/authorization/allow").Attributes["roles"].Value = row.Cells[2].Value.ToString();
-                            doc1.Save(Path.Combine(Directory.GetParent(Path.GetDirectoryName(Application.ExecutablePath)).FullName, "HelpDesk", "web.config"));
-                        }
-                        else if (row.Cells[0].Value.ToString() == "Booking System")
-                        {
-                            XmlDocument doc1 = new XmlDocument();
-                            doc1.Load(Path.Combine(Directory.GetParent(Path.GetDirectoryName(Application.ExecutablePath)).FullName, "BookingSystem", "web.config"));
-                            doc1.SelectSingleNode("/configuration/location/system.web/authorization/allow").Attributes["roles"].Value = row.Cells[2].Value.ToString();
-                            doc1.Save(Path.Combine(Directory.GetParent(Path.GetDirectoryName(Application.ExecutablePath)).FullName, "BookingSystem", "web.config"));
-                        }
-                    }
-                    catch { }
-                }
-            }
-            #endregion
-
             #region Tracker
             XmlNode tracker = hapConfig.SelectSingleNode("tracker");
             if (tracker == null)
@@ -306,17 +262,6 @@ namespace HAP.Config
             foreach (XmlNode node in ouobs.SelectNodes("add"))
                 adous.Rows.Add(node.Attributes["name"].Value, node.Attributes["path"].Value, node.Attributes["ignore"] == null ? false: true);
 
-            #endregion
-
-            #region Home Page Links
-            XmlNode hpl = hapConfig.SelectSingleNode("homepagelinks");
-            foreach (XmlNode node in hpl.SelectNodes("add"))
-                if (node.Attributes["name"].Value == "Update My Details")
-                    hpl_updatedetails.Text = node.Attributes["showto"].Value;
-                else if (node.Attributes["name"].Value == "Change My Password")
-                    hpl_changepass.Text = node.Attributes["showto"].Value;
-                else
-                    homepagelinks.Rows.Add(node.Attributes["name"].Value, node.Attributes["description"].Value, node.Attributes["showto"].Value, node.Attributes["linklocation"].Value, node.Attributes["icon"].Value);
             #endregion
 
             #region Tracker

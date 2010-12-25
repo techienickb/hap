@@ -79,19 +79,10 @@
     <Compile Include="FirstRun.Designer.cs">
       <DependentUpon>FirstRun.cs</DependentUpon>
     </Compile>
-    <Compile Include="OUSelector.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="OUSelector.Designer.cs">
-      <DependentUpon>OUSelector.cs</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FirstRun.resx">
       <DependentUpon>FirstRun.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OUSelector.resx">
-      <DependentUpon>OUSelector.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

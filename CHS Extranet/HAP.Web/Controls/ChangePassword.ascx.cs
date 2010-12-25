@@ -14,6 +14,8 @@ namespace HAP.Web.Controls
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!Page.IsPostBack)
+                ChangePass.Text = hapConfig.Current.HomePageLinks.Buttons["cmp"].Description;
         }
 
         public string Username

@@ -72,17 +72,6 @@
             this.ad_Username = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.wizardPage3 = new AeroWizard.WizardPage();
-            this.homepagelinks = new System.Windows.Forms.DataGridView();
-            this.HPLName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ShowTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.LinkLocation = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.HPLIcon = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.label27 = new System.Windows.Forms.Label();
-            this.hpl_changepass = new System.Windows.Forms.TextBox();
-            this.label20 = new System.Windows.Forms.Label();
-            this.hpl_updatedetails = new System.Windows.Forms.TextBox();
             this.wizardPage7 = new AeroWizard.WizardPage();
             this.trackeroverride = new System.Windows.Forms.TextBox();
             this.label28 = new System.Windows.Forms.Label();
@@ -137,21 +126,21 @@
             this.bssubjects = new System.Windows.Forms.DataGridView();
             this.Subject = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.bs_keepxmlclean = new System.Windows.Forms.CheckBox();
             this.label18 = new System.Windows.Forms.Label();
             this.bs_twoweek = new System.Windows.Forms.CheckBox();
             this.bs_max = new System.Windows.Forms.NumericUpDown();
             this.label19 = new System.Windows.Forms.Label();
             this.bs_maxdays = new System.Windows.Forms.NumericUpDown();
             this.folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
-            this.bs_keepxmlclean = new System.Windows.Forms.CheckBox();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label27 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.wiz)).BeginInit();
             this.wizardPage1.SuspendLayout();
             this.wizardPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.adous)).BeginInit();
             this.panel4.SuspendLayout();
             this.wizardPage3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.homepagelinks)).BeginInit();
-            this.panel1.SuspendLayout();
             this.wizardPage7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackermaxstaff)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackermaxstudent)).BeginInit();
@@ -223,7 +212,7 @@
             this.wizardPage1.Controls.Add(this.groupBox1);
             this.wizardPage1.Name = "wizardPage1";
             this.wizardPage1.NextPage = this.wizardPage2;
-            this.wizardPage1.Size = new System.Drawing.Size(737, 352);
+            this.wizardPage1.Size = new System.Drawing.Size(737, 350);
             this.wizardPage1.TabIndex = 0;
             this.wizardPage1.Text = "Base Settings";
             // 
@@ -439,7 +428,7 @@
             this.wizardPage2.Controls.Add(this.panel4);
             this.wizardPage2.Name = "wizardPage2";
             this.wizardPage2.NextPage = this.wizardPage3;
-            this.wizardPage2.Size = new System.Drawing.Size(737, 352);
+            this.wizardPage2.Size = new System.Drawing.Size(737, 350);
             this.wizardPage2.TabIndex = 1;
             this.wizardPage2.Text = "Active Directory Settings";
             // 
@@ -455,7 +444,7 @@
             this.adous.Location = new System.Drawing.Point(0, 157);
             this.adous.MultiSelect = false;
             this.adous.Name = "adous";
-            this.adous.Size = new System.Drawing.Size(737, 195);
+            this.adous.Size = new System.Drawing.Size(737, 193);
             this.adous.TabIndex = 13;
             // 
             // ouName
@@ -581,103 +570,13 @@
             // 
             // wizardPage3
             // 
-            this.wizardPage3.Controls.Add(this.homepagelinks);
-            this.wizardPage3.Controls.Add(this.panel1);
+            this.wizardPage3.Controls.Add(this.label27);
+            this.wizardPage3.Controls.Add(this.label20);
             this.wizardPage3.Name = "wizardPage3";
             this.wizardPage3.NextPage = this.wizardPage7;
-            this.wizardPage3.Size = new System.Drawing.Size(737, 352);
+            this.wizardPage3.Size = new System.Drawing.Size(737, 350);
             this.wizardPage3.TabIndex = 2;
             this.wizardPage3.Text = "Home Page Links";
-            // 
-            // homepagelinks
-            // 
-            this.homepagelinks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.homepagelinks.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.HPLName,
-            this.Description,
-            this.ShowTo,
-            this.LinkLocation,
-            this.HPLIcon});
-            this.homepagelinks.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.homepagelinks.Location = new System.Drawing.Point(0, 43);
-            this.homepagelinks.Name = "homepagelinks";
-            this.homepagelinks.RowTemplate.Height = 24;
-            this.homepagelinks.Size = new System.Drawing.Size(737, 309);
-            this.homepagelinks.TabIndex = 2;
-            // 
-            // HPLName
-            // 
-            this.HPLName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.HPLName.HeaderText = "Name";
-            this.HPLName.Name = "HPLName";
-            // 
-            // Description
-            // 
-            this.Description.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Description.HeaderText = "Description";
-            this.Description.Name = "Description";
-            // 
-            // ShowTo
-            // 
-            this.ShowTo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ShowTo.HeaderText = "Show To";
-            this.ShowTo.Name = "ShowTo";
-            // 
-            // LinkLocation
-            // 
-            this.LinkLocation.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.LinkLocation.HeaderText = "Link Location";
-            this.LinkLocation.Name = "LinkLocation";
-            // 
-            // HPLIcon
-            // 
-            this.HPLIcon.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.HPLIcon.HeaderText = "Icon";
-            this.HPLIcon.Name = "HPLIcon";
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.label27);
-            this.panel1.Controls.Add(this.hpl_changepass);
-            this.panel1.Controls.Add(this.label20);
-            this.panel1.Controls.Add(this.hpl_updatedetails);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(737, 43);
-            this.panel1.TabIndex = 3;
-            // 
-            // label27
-            // 
-            this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(369, 19);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(173, 15);
-            this.label27.TabIndex = 3;
-            this.label27.Text = "Show Change My Password To:";
-            // 
-            // hpl_changepass
-            // 
-            this.hpl_changepass.Location = new System.Drawing.Point(548, 16);
-            this.hpl_changepass.Name = "hpl_changepass";
-            this.hpl_changepass.Size = new System.Drawing.Size(186, 23);
-            this.hpl_changepass.TabIndex = 2;
-            // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(3, 19);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(155, 15);
-            this.label20.TabIndex = 1;
-            this.label20.Text = "Show Update My Details To:";
-            // 
-            // hpl_updatedetails
-            // 
-            this.hpl_updatedetails.Location = new System.Drawing.Point(170, 16);
-            this.hpl_updatedetails.Name = "hpl_updatedetails";
-            this.hpl_updatedetails.Size = new System.Drawing.Size(186, 23);
-            this.hpl_updatedetails.TabIndex = 0;
             // 
             // wizardPage7
             // 
@@ -1220,6 +1119,18 @@
             this.panel2.Size = new System.Drawing.Size(737, 75);
             this.panel2.TabIndex = 8;
             // 
+            // bs_keepxmlclean
+            // 
+            this.bs_keepxmlclean.AutoSize = true;
+            this.bs_keepxmlclean.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.bs_keepxmlclean.Location = new System.Drawing.Point(326, 44);
+            this.bs_keepxmlclean.Name = "bs_keepxmlclean";
+            this.bs_keepxmlclean.Size = new System.Drawing.Size(115, 19);
+            this.bs_keepxmlclean.TabIndex = 6;
+            this.bs_keepxmlclean.Text = "Keep XML Clean:";
+            this.bs_keepxmlclean.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.bs_keepxmlclean.UseVisualStyleBackColor = true;
+            // 
             // label18
             // 
             this.label18.AutoSize = true;
@@ -1275,17 +1186,25 @@
             this.folderBrowser.RootFolder = System.Environment.SpecialFolder.MyComputer;
             this.folderBrowser.ShowNewFolderButton = false;
             // 
-            // bs_keepxmlclean
+            // label20
             // 
-            this.bs_keepxmlclean.AutoSize = true;
-            this.bs_keepxmlclean.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.bs_keepxmlclean.Location = new System.Drawing.Point(326, 44);
-            this.bs_keepxmlclean.Name = "bs_keepxmlclean";
-            this.bs_keepxmlclean.Size = new System.Drawing.Size(115, 19);
-            this.bs_keepxmlclean.TabIndex = 6;
-            this.bs_keepxmlclean.Text = "Keep XML Clean:";
-            this.bs_keepxmlclean.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.bs_keepxmlclean.UseVisualStyleBackColor = true;
+            this.label20.AutoSize = true;
+            this.label20.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label20.Location = new System.Drawing.Point(15, 13);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(459, 21);
+            this.label20.TabIndex = 1;
+            this.label20.Text = "Please Edit the Web.Config File Directly for this Part of the Config";
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.label27.Location = new System.Drawing.Point(28, 43);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(478, 90);
+            this.label27.TabIndex = 1;
+            this.label27.Text = resources.GetString("label27.Text");
             // 
             // FirstRun
             // 
@@ -1308,9 +1227,7 @@
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
             this.wizardPage3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.homepagelinks)).EndInit();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.wizardPage3.PerformLayout();
             this.wizardPage7.ResumeLayout(false);
             this.wizardPage7.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackermaxstaff)).EndInit();
@@ -1387,10 +1304,6 @@
         private System.Windows.Forms.TextBox ad_Password;
         private System.Windows.Forms.TextBox ad_Username;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.DataGridView homepagelinks;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label label20;
-        private System.Windows.Forms.TextBox hpl_updatedetails;
         private System.Windows.Forms.TabControl tabControl3;
         private System.Windows.Forms.TabPage tabPage10;
         private System.Windows.Forms.DataGridView uncpaths;
@@ -1434,11 +1347,6 @@
         private System.Windows.Forms.DataGridViewComboBoxColumn LessonType;
         private System.Windows.Forms.DataGridViewTextBoxColumn StartTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn EndTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn HPLName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Description;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ShowTo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn LinkLocation;
-        private System.Windows.Forms.DataGridViewTextBoxColumn HPLIcon;
         private System.Windows.Forms.DataGridViewComboBoxColumn Drive;
         private System.Windows.Forms.DataGridViewTextBoxColumn PathName;
         private System.Windows.Forms.DataGridViewTextBoxColumn UNC;
@@ -1454,10 +1362,10 @@
         private System.Windows.Forms.TabPage bs_subjects;
         private System.Windows.Forms.DataGridView bssubjects;
         private System.Windows.Forms.DataGridViewTextBoxColumn Subject;
-        private System.Windows.Forms.Label label27;
-        private System.Windows.Forms.TextBox hpl_changepass;
         private System.Windows.Forms.TextBox trackeroverride;
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.CheckBox bs_keepxmlclean;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.Label label20;
     }
 }
