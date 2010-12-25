@@ -4,6 +4,7 @@ using System.Configuration.Provider;
 using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
 using System.Security.Principal;
+using System.Web;
 
 namespace HAP.AD
 {
@@ -150,41 +151,42 @@ namespace HAP.AD
 		/// <param name="domainName"></param>
 		/// <param name="username"></param>
 		/// <param name="roleName"></param>
+		/// <param name="cache">Use Caches</param>
 		/// <returns></returns>
-		public static bool IsUserInRole(DirectoryEntry root, string domainName, string username, string roleName)
+		public static bool IsUserInRole(DirectoryEntry root, string domainName, string username, string roleName, bool cache)
 		{
-			foreach (string user in GetUsersInRole(root, domainName, roleName))
+			foreach (string user in GetUsersInRole(root, domainName, roleName, cache))
 				if (username == user) return true;
 			return false;
 		}
 
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="root"></param>
-        /// <param name="username"></param>
-        /// <returns></returns>
-        public static string[] GetRolesForUser(DirectoryEntry root, string username)
-        {
-            var user = getUser(root, username);
-            var roles = new List<string>();
-            IdentityReferenceCollection groupCollection = ExpandTokenGroups(user).Translate(typeof(NTAccount), false);
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="root"></param>
+		/// <param name="username"></param>
+		/// <returns></returns>
+		public static string[] GetRolesForUser(DirectoryEntry root, string username)
+		{
+			var user = getUser(root, username);
+			var roles = new List<string>();
+			IdentityReferenceCollection groupCollection = ExpandTokenGroups(user).Translate(typeof(NTAccount), false);
 
-            if (groupCollection != null)
-                foreach (object g in groupCollection)
-                {
-                    try
-                    {
-                        NTAccount group = g as NTAccount;
-                        String roleName = group.ToString().Substring(group.ToString().IndexOf(@"\") + 1);
-                        if (roleName != String.Empty)
-                            roles.Add(roleName);
-                    }
-                    catch { }
-                }
-            return roles.ToArray();
-        }
+			if (groupCollection != null)
+				foreach (object g in groupCollection)
+				{
+					try
+					{
+						NTAccount group = g as NTAccount;
+						String roleName = group.ToString().Substring(group.ToString().IndexOf(@"\") + 1);
+						if (roleName != String.Empty)
+							roles.Add(roleName);
+					}
+					catch { }
+				}
+			return roles.ToArray();
+		}
 
 		/// <summary>
 		/// 
@@ -192,27 +194,38 @@ namespace HAP.AD
 		/// <param name="root"></param>
 		/// <param name="domainName"></param>
 		/// <param name="roleName"></param>
+		/// <param name="usecache">Use cached results</param>
 		/// <returns></returns>
-		public static string[] GetUsersInRole(DirectoryEntry root, string domainName, string roleName)
+		public static string[] GetUsersInRole(DirectoryEntry root, string domainName, string roleName, bool usecache)
 		{
 			if (!RoleExists(root, roleName))
 				throw new ProviderException(String.Format(ERROR_ROLE_NOT_FOUND, roleName));
 
 			var results = new List<string>();
-			using (var context = new PrincipalContext(ContextType.Domain, null, domainName))
+			bool reloadres = false;
+			if (usecache)
 			{
-				try
-				{
-					var p = GroupPrincipal.FindByIdentity(context, IdentityType.SamAccountName, roleName);
-					var users = p.GetMembers(true);
-					foreach (UserPrincipal user in users)
-						results.Add(user.SamAccountName);
-				}
-				catch (Exception ex)
-				{
-					throw new ProviderException(ERROR_ACTIVEDIRECTORY_QUERY, ex);
-				}
+				HttpContext c = HttpContext.Current;
+				reloadres = c.Cache["rolecache:" + roleName] == null;
+				if (!reloadres) results = (List<string>)c.Cache["rolecache:" + roleName];
 			}
+			else reloadres = true;
+			if (reloadres)
+				using (var context = new PrincipalContext(ContextType.Domain, null, domainName))
+				{
+					try
+					{
+						var p = GroupPrincipal.FindByIdentity(context, IdentityType.SamAccountName, roleName);
+						var users = p.GetMembers(true);
+						foreach (UserPrincipal user in users)
+							results.Add(user.SamAccountName);
+					}
+					catch (Exception ex)
+					{
+						throw new ProviderException(ERROR_ACTIVEDIRECTORY_QUERY, ex);
+					}
+				}
+			if (usecache) HttpContext.Current.Cache.Insert("rolecache:" + roleName, results, null, System.Web.Caching.Cache.NoAbsoluteExpiration, new TimeSpan(0, 10, 0));
 			return results.ToArray();
 		}
 
@@ -222,27 +235,38 @@ namespace HAP.AD
 		/// <param name="root"></param>
 		/// <param name="domainName"></param>
 		/// <param name="roleName"></param>
+		/// <param name="usecache"></param>
 		/// <returns></returns>
-		public static string[] GetUserNamesInRole(DirectoryEntry root, string domainName, string roleName)
+		public static string[] GetUserNamesInRole(DirectoryEntry root, string domainName, string roleName, bool usecache)
 		{
 			if (!RoleExists(root, roleName))
 				throw new ProviderException(String.Format(ERROR_ROLE_NOT_FOUND, roleName));
 
 			var results = new List<string>();
-			using (var context = new PrincipalContext(ContextType.Domain, null, domainName))
+			bool reloadres = false;
+			if (usecache)
 			{
-				try
-				{
-					var p = GroupPrincipal.FindByIdentity(context, IdentityType.SamAccountName, roleName);
-					var users = p.GetMembers(true);
-					foreach (UserPrincipal user in users)
-						results.Add(user.Name);
-				}
-				catch (Exception ex)
-				{
-					throw new ProviderException(ERROR_ACTIVEDIRECTORY_QUERY, ex);
-				}
+				HttpContext c = HttpContext.Current;
+				reloadres = c.Cache["rolenamescache:" + roleName] == null;
+				if (!reloadres) results = (List<string>)c.Cache["rolenamescache:" + roleName];
 			}
+			else reloadres = true;
+			if (reloadres)
+				using (var context = new PrincipalContext(ContextType.Domain, null, domainName))
+				{
+					try
+					{
+						var p = GroupPrincipal.FindByIdentity(context, IdentityType.SamAccountName, roleName);
+						var users = p.GetMembers(true);
+						foreach (UserPrincipal user in users)
+							results.Add(user.Name);
+					}
+					catch (Exception ex)
+					{
+						throw new ProviderException(ERROR_ACTIVEDIRECTORY_QUERY, ex);
+					}
+				}
+			if (usecache) HttpContext.Current.Cache.Insert("rolenamescache:" + roleName, results, null, System.Web.Caching.Cache.NoAbsoluteExpiration, new TimeSpan(0, 10, 0));
 			return results.ToArray();
 		}
 

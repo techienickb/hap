@@ -89,18 +89,6 @@ namespace HAP.Web
                 breadcrumbrepeater.Visible = false;
                 foreach (uncpath path in config.MyComputer.UNCPaths)
                     if (isAuth(path)) items.Add(new MyComputerItem(path.Name, string.Format("{0} on {1}", path.Name, config.BaseSettings.EstablishmentCode), string.Format("{1}/MyComputer/{0}", path.Drive, Request.ApplicationPath), "netdrive.png", false));
-                if (config.HomePageLinks["Access Learning Resources"] != null)
-                {
-                    if (config.HomePageLinks["Access Learning Resources"].ShowTo == "All") items.Add(new MyComputerItem("Learning Resources", string.Format("{0} on {1}", "Learning Resources", config.BaseSettings.EstablishmentCode), config.HomePageLinks["Access Learning Resources"].LinkLocation, config.HomePageLinks["Access Learning Resources"].Icon.Remove(0, config.HomePageLinks["Access Learning Resources"].Icon.LastIndexOf('/') + 1), false));
-                    else if (config.HomePageLinks["Access Learning Resources"].ShowTo != "None")
-                    {
-                        bool vis = false;
-                        foreach (string s in config.HomePageLinks["Access Learning Resources"].ShowTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                            if (!vis) vis = User.IsInRole(s);
-                        if (vis) items.Add(new MyComputerItem("Learning Resources", string.Format("{0} on {1}", "Learning Resources", config.BaseSettings.EstablishmentCode), config.HomePageLinks["Access Learning Resources"].LinkLocation, config.HomePageLinks["Access Learning Resources"].Icon.Remove(0, config.HomePageLinks["Access Learning Resources"].Icon.LastIndexOf('/') + 1), false));
-                    }
-
-                }
             }
             else
             {

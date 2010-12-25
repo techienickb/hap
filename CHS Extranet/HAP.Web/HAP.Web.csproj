@@ -319,6 +319,9 @@
     <Compile Include="Configuration\bookingResource.cs" />
     <Compile Include="Configuration\bookingResources.cs" />
     <Compile Include="Configuration\bookingSystem.cs" />
+    <Compile Include="Configuration\homepagelinks.cs" />
+    <Compile Include="Configuration\homepagelinkgroup.cs" />
+    <Compile Include="Configuration\homepagelinkgrouplinks.cs" />
     <Compile Include="Configuration\subject.cs" />
     <Compile Include="Configuration\subjects.cs" />
     <Compile Include="Configuration\tracker.cs" />
@@ -338,7 +341,7 @@
     <Compile Include="Configuration\baseSettings.cs" />
     <Compile Include="Configuration\hapConfig.cs" />
     <Compile Include="Configuration\homepagelink.cs" />
-    <Compile Include="Configuration\homepagelinks.cs" />
+    <Compile Include="Configuration\homepagelinkgroups.cs" />
     <Compile Include="Configuration\uncpath.cs" />
     <Compile Include="Configuration\uncpaths.cs" />
     <Compile Include="Configuration\uploadfilter.cs" />

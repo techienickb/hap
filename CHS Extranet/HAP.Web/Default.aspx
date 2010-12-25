@@ -23,17 +23,26 @@
         </ul>
         <hap:password runat="server" id="passwordprompt" />
         <asp:Button runat="server" Text="Update My Details" ID="updatemydetails" />
-        <p id="HomeButtons">
+        <div id="HomeButtons">
             <asp:Repeater ID="homepagelinks" runat="server">
                 <ItemTemplate>
-                    <asp:HyperLink runat="server" ID="mycomputer" NavigateUrl='<%#Eval("LinkLocation")%>'>
-                        <img runat="server" src='<%#Eval("Icon")%>' alt="" />
-                        <%#Eval("Name") %>
-                        <i><%#Eval("Description") %></i>
-                    </asp:HyperLink>
+                    <div>
+                        <h1><%#Eval("Name") %></h1>
+                        <div>
+                            <asp:Repeater runat="server" DataSource='<%#((HAP.Web.Configuration.homepagelinkgroup)Container.DataItem).Links.FilteredLinks %>'>
+                                <ItemTemplate> 
+                                    <asp:HyperLink runat="server" ID="mycomputer" NavigateUrl='<%#Eval("LinkLocation")%>' Target='<%#Eval("LinkTarget") %>'>
+                                        <img runat="server" src='<%#Eval("Icon")%>' alt="" />
+                                        <%#Eval("Name") %>
+                                        <i><%#Eval("Description") %></i>
+                                    </asp:HyperLink>
+                                </ItemTemplate>
+                            </asp:Repeater>
+                        </div>
+                    </div>
                 </ItemTemplate>
             </asp:Repeater>
-        </p>
+        </div>
         <asp:ModalPopupExtender ID="ModalPopupExtender1" runat="server" TargetControlID="updatemydetails" PopupControlID="editmode" BackgroundCssClass="modalBackground" OkControlID="ok_btn" />
         <asp:Panel runat="server" ID="editmode" style="display: none;" CssClass="modalPopup" Width="300px">
             <h1>Edit my Details</h1>

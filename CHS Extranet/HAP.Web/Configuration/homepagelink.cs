@@ -40,6 +40,12 @@ namespace HAP.Web.Configuration
             get { return (string)this["linklocation"]; }
             set { this["linklocation"] = value; }
         }
+        [ConfigurationProperty("linktarget", DefaultValue = "_self", IsRequired = false)]
+        public string LinkTarget
+        {
+            get { return (string)this["linktarget"]; }
+            set { this["linktarget"] = value; }
+        }
         [ConfigurationProperty("icon", DefaultValue = "~/images/icons/net.png", IsRequired = false)]
         public string Icon
         {

@@ -73,7 +73,8 @@ namespace HAP.Web
             if (User.IsInRole(config.ADSettings.StudentsGroupName)) form.Text = string.Format("<b>Form: </b>{0}", form.Text);
             else form.Text = string.Format("<b>Department: </b>{0}", form.Text);
             email.Text = up.EmailAddress;
-            string aet = config.HomePageLinks["Update My Details"].ShowTo;
+            updatemydetails.Text = config.HomePageLinks.Buttons["umd"].Description;
+            string aet = config.HomePageLinks.Buttons["umd"].ShowTo;
             if (aet == "None") updatemydetails.Visible = false;
             else if (aet != "All")
             {
@@ -82,7 +83,7 @@ namespace HAP.Web
                     if (!vis) vis = User.IsInRole(s);
                 updatemydetails.Visible = vis;
             }
-            aet = config.HomePageLinks["Change My Password"].ShowTo;
+            aet = config.HomePageLinks.Buttons["cmp"].ShowTo;
             if (aet == "None") passwordprompt.Visible = false;
             else if (aet != "All")
             {
@@ -91,18 +92,15 @@ namespace HAP.Web
                     if (!vis) vis = User.IsInRole(s);
                 passwordprompt.Visible = vis;
             }
-            List<homepagelink> links = new List<homepagelink>();
-            foreach (homepagelink link in config.HomePageLinks)
-                if (link.Name != "Update My Details" && link.Name != "Change My Password")
+            List<homepagelinkgroup> groups = new List<homepagelinkgroup>();
+            foreach (homepagelinkgroup group in config.HomePageLinks.Groups)
+                if (group.ShowTo == "All") groups.Add(group);
+                else if (group.ShowTo != "None")
                 {
-                    if (link.ShowTo == "All") links.Add(link);
-                    else if (link.ShowTo != "None")
-                    {
-                        bool vis = false;
-                        foreach (string s in link.ShowTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                            if (!vis) vis = User.IsInRole(s);
-                        if (vis) links.Add(link);
-                    }
+                    bool vis = false;
+                    foreach (string s in group.ShowTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
+                        if (!vis) vis = User.IsInRole(s);
+                    if (vis) groups.Add(group);
                 }
 
             if (!Page.IsPostBack)
@@ -117,7 +115,7 @@ namespace HAP.Web
                 if (User.IsInRole(config.ADSettings.StudentsGroupName)) formlabel.Text = "<b>Form: </b>";
                 else formlabel.Text = "<b>Department: </b>";
             }
-            homepagelinks.DataSource = links.ToArray();
+            homepagelinks.DataSource = groups.ToArray();
             homepagelinks.DataBind();
         }
 
