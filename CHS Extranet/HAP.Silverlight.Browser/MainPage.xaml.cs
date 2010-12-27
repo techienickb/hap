@@ -303,7 +303,7 @@ namespace HAP.Silverlight.Browser
             WebClient listclient = new WebClient();
             listclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(driveclient_DownloadStringCompleted);
             listclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri, CurrentItem.Path));
-            HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + HtmlPage.Document.DocumentUri.LocalPath + "#"));
+            HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri, "mycomputersl.aspx#"));
         }
 
         private void HAPTreeNode_Selected(object sender, RoutedEventArgs e)
@@ -320,7 +320,7 @@ namespace HAP.Silverlight.Browser
             WebClient listclient = new WebClient();
             listclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(listclient_DownloadStringCompleted);
             listclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri, CurrentItem.Path));
-            HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + HtmlPage.Document.DocumentUri.LocalPath + "#" + CurrentItem.Path.ToLower().Remove(0, 20)));
+            HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri, "mycomputersl.aspx#" + CurrentItem.Path.ToLower().Remove(0, 20)));
         }
 
         private void HAPTreeNode_Expanded(object sender, RoutedEventArgs e)
@@ -940,7 +940,7 @@ namespace HAP.Silverlight.Browser
             WebClient listclient = new WebClient();
             listclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(listclient_DownloadStringCompleted);
             listclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri, CurrentItem.Path));
-            HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + HtmlPage.Document.DocumentUri.LocalPath + "#" + CurrentItem.Path.ToLower().Remove(0, 20)));
+            HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri, "mycomputersl.aspx#" + CurrentItem.Path.ToLower().Remove(0, 20)));
         }
 
         private void RightClickDelete_Click(object sender, RoutedEventArgs e)
@@ -1126,7 +1126,7 @@ namespace HAP.Silverlight.Browser
                 WebClient listclient = new WebClient();
                 listclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(listclient_DownloadStringCompleted);
                 listclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri, CurrentItem.Path));
-                HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri.Scheme + "://" + HtmlPage.Document.DocumentUri.Host + HtmlPage.Document.DocumentUri.LocalPath + "#" + CurrentItem.Path.ToLower().Remove(0, 20)));
+                HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri, "mycomputersl.aspx#" + CurrentItem.Path.ToLower().Remove(0, 20)));
             }
             UploadQueue.Children.Remove(item);
             if (UploadQueue.Children.Count > 0)
