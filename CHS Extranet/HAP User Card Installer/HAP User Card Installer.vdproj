@@ -21,14 +21,20 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_F466058A19FBFC522A8754474611E60A"
+        "MsmKey" = "8:_B3FD8CD70B4F4413B73F6C3F76438618"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C5F910C85B6ADC25C1854F59CEBC0414"
         "OwnerKey" = "8:_6B0C790E4D0541E08029F29A0E13A882"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_F466058A19FBFC522A8754474611E60A"
+        "OwnerKey" = "8:_C5F910C85B6ADC25C1854F59CEBC0414"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -92,6 +98,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -121,14 +135,34 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F466058A19FBFC522A8754474611E60A"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B3FD8CD70B4F4413B73F6C3F76438618"
+            {
+            "SourcePath" = "8:..\\HAP User Card\\usercardi.ico"
+            "TargetName" = "8:usercardi.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_E33176755DA74BE6811343A9DFA22840"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_C5F910C85B6ADC25C1854F59CEBC0414"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:Hardcodet.Wpf.TaskbarNotification, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_F466058A19FBFC522A8754474611E60A"
+                    "_C5F910C85B6ADC25C1854F59CEBC0414"
                     {
                     "Name" = "8:Hardcodet.Wpf.TaskbarNotification.dll"
                     "Attributes" = "3:512"
