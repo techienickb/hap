@@ -1,5 +1,5 @@
 ﻿<Window x:Class="HAP.UserCard.MainWindow" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
-        xmlns:tbi="http://www.hardcodet.net/taskbar" xmlns:u="clr-namespace:HAP.UserCard" u:WindowBehavior.HideCloseButton="True" Icon="/HAP User Card;component/usercard.ico"
+        xmlns:tbi="http://www.hardcodet.net/taskbar" xmlns:u="clr-namespace:HAP.UserCard" u:WindowBehavior.HideCloseButton="True"
         Title="My User Card" Height="339" Width="345" Topmost="True" ShowInTaskbar="False" ResizeMode="NoResize" Background="White" Deactivated="Window_Deactivated" Loaded="Window_Loaded">
     <Window.Resources>
         <Style TargetType="{x:Type TabItem}">
@@ -80,9 +80,9 @@
         <TabControl Name="tabs" SelectionChanged="tabs_SelectionChanged">
             <TabItem Header="Me" Name="me">
                 <Grid>
-                    <TextBlock Text="" Name="name" Margin="6,24,6,0" VerticalAlignment="Top" FontSize="16" Width="311" TextAlignment="Center" />
+                    <TextBlock Text="UN" Name="name" Margin="6,24,6,0" VerticalAlignment="Top" FontSize="16" Width="311" TextAlignment="Center" />
                     <ComboBox Height="23" Margin="6,61,6,0" Name="department" VerticalAlignment="Top" Visibility="Hidden" MouseLeave="department_MouseLeave" Width="311" ItemTemplate="{StaticResource ResourceKey=departmentlistitem}" SelectionChanged="department_SelectionChanged" />
-                    <TextBlock Text="" Margin="18,64,0,0" VerticalAlignment="Top" MouseEnter="TextBlock_MouseEnter" Name="departmenttext" Width="290" HorizontalAlignment="Left" />
+                    <TextBlock Text="UN" Margin="18,64,0,0" VerticalAlignment="Top" MouseEnter="TextBlock_MouseEnter" Name="departmenttext" Width="290" HorizontalAlignment="Left" />
                     <TextBox Name="email" VerticalAlignment="Top" Margin="6,99,6,0" Height="22" Width="311" IsReadOnly="True" BorderBrush="{x:Null}" />
                     <Button Content="Save" Height="26" HorizontalAlignment="Right" Margin="0,0,6,106" Name="save" VerticalAlignment="Bottom" Width="91" Visibility="Hidden" IsDefault="False" Click="save_Click" />
                 </Grid>
@@ -108,6 +108,6 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <tbi:TaskbarIcon Name="tbi" TrayLeftMouseUp="tbi_TrayLeftMouseUp" VerticalAlignment="Bottom" IconSource="/HAP User Card;component/usercard.ico" />
+        <tbi:TaskbarIcon Name="tbi" TrayLeftMouseUp="tbi_TrayLeftMouseUp" />
     </Grid>
 </Window>

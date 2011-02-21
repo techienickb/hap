@@ -29,9 +29,12 @@ namespace HAP.UserCard
 
         public static bool ExtendGlassFrame(Window window, Thickness margin)
         {
-            if (!DwmIsCompositionEnabled())
-                return false;
-
+            try
+            {
+                if (!DwmIsCompositionEnabled())
+                    return false;
+            }
+            catch { return false; }
             IntPtr hwnd = new WindowInteropHelper(window).Handle;
             if (hwnd == IntPtr.Zero)
                 throw new InvalidOperationException("The Window must be shown before extending glass.");
