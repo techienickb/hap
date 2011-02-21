@@ -29,6 +29,7 @@ namespace HAP.UserCard
             InitializeComponent();
             SourceInitialized += new EventHandler(MainWindow_SourceInitialized);
             Hide();
+            tbi.Icon = new System.Drawing.Icon("usercardi.ico");
             tbi.Visibility = System.Windows.Visibility.Visible;
             Cursor = controlled.Cursor = Cursors.AppStarting;
             pass.Visibility = controlled.Visibility = isStudent ? System.Windows.Visibility.Hidden : System.Windows.Visibility.Visible;
