@@ -87,6 +87,7 @@
     <Content Include="App_Data\tracker.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="App_Data\UserCards.xml" />
     <Content Include="BookingSystem\admin\Default.aspx" />
     <Content Include="BookingSystem\BookingPopup.ascx" />
     <Content Include="BookingSystem\bookingsystem.css" />
@@ -213,6 +214,8 @@
     <Content Include="Tracker\tracker.css" />
     <Content Include="unauthorised.aspx" />
     <Content Include="UploadH.aspx" />
+    <Content Include="UserCard\api.asmx" />
+    <Content Include="UserCard\Default.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -500,6 +503,18 @@
     <Compile Include="UploadH.aspx.designer.cs">
       <DependentUpon>UploadH.aspx</DependentUpon>
     </Compile>
+    <Compile Include="UserCard\api.asmx.cs">
+      <DependentUpon>api.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserCard\Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserCard\Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="UserCard\Sys.cs" />
     <Compile Include="WordVisualizer\CoreProperties.cs" />
     <Compile Include="WordVisualizer\DisplayModeEnumeration.cs" />
     <Compile Include="WordVisualizer\EmuUnit.cs" />
@@ -568,6 +583,7 @@
     </None>
     <None Include="Thanks.rtf" />
     <Content Include="Tracker\Web.config" />
+    <Content Include="UserCard\Web.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

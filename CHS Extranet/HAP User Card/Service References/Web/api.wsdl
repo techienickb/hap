@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://hap.codeplex.com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://hap.codeplex.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://hap.codeplex.com/">
+      <s:element name="getInit">
+        <s:complexType />
+      </s:element>
+      <s:element name="getInitResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getInitResult" type="tns:Init" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="Init">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="StudentGroupName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ADConString" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StudentEmailFormat" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="username" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="getDepartments">
+        <s:complexType />
+      </s:element>
+      <s:element name="getDepartmentsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getDepartmentsResult" type="tns:ArrayOfDepartment" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfDepartment">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Department" nillable="true" type="tns:Department" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Department">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="getForms">
+        <s:complexType />
+      </s:element>
+      <s:element name="getFormsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getFormsResult" type="tns:ArrayOfForm" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfForm">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Form" nillable="true" type="tns:Form" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Form">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="OU" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="getFormsIn">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ou" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getFormsInResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getFormsInResult" type="tns:ArrayOfForm" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ResetPassword">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="username" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ResetPasswordResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ResetPasswordResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="getInitSoapIn">
+    <wsdl:part name="parameters" element="tns:getInit" />
+  </wsdl:message>
+  <wsdl:message name="getInitSoapOut">
+    <wsdl:part name="parameters" element="tns:getInitResponse" />
+  </wsdl:message>
+  <wsdl:message name="getDepartmentsSoapIn">
+    <wsdl:part name="parameters" element="tns:getDepartments" />
+  </wsdl:message>
+  <wsdl:message name="getDepartmentsSoapOut">
+    <wsdl:part name="parameters" element="tns:getDepartmentsResponse" />
+  </wsdl:message>
+  <wsdl:message name="getFormsSoapIn">
+    <wsdl:part name="parameters" element="tns:getForms" />
+  </wsdl:message>
+  <wsdl:message name="getFormsSoapOut">
+    <wsdl:part name="parameters" element="tns:getFormsResponse" />
+  </wsdl:message>
+  <wsdl:message name="getFormsInSoapIn">
+    <wsdl:part name="parameters" element="tns:getFormsIn" />
+  </wsdl:message>
+  <wsdl:message name="getFormsInSoapOut">
+    <wsdl:part name="parameters" element="tns:getFormsInResponse" />
+  </wsdl:message>
+  <wsdl:message name="ResetPasswordSoapIn">
+    <wsdl:part name="parameters" element="tns:ResetPassword" />
+  </wsdl:message>
+  <wsdl:message name="ResetPasswordSoapOut">
+    <wsdl:part name="parameters" element="tns:ResetPasswordResponse" />
+  </wsdl:message>
+  <wsdl:portType name="apiSoap">
+    <wsdl:operation name="getInit">
+      <wsdl:input message="tns:getInitSoapIn" />
+      <wsdl:output message="tns:getInitSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getDepartments">
+      <wsdl:input message="tns:getDepartmentsSoapIn" />
+      <wsdl:output message="tns:getDepartmentsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getForms">
+      <wsdl:input message="tns:getFormsSoapIn" />
+      <wsdl:output message="tns:getFormsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getFormsIn">
+      <wsdl:input message="tns:getFormsInSoapIn" />
+      <wsdl:output message="tns:getFormsInSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ResetPassword">
+      <wsdl:input message="tns:ResetPasswordSoapIn" />
+      <wsdl:output message="tns:ResetPasswordSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="apiSoap" type="tns:apiSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getInit">
+      <soap:operation soapAction="http://hap.codeplex.com/getInit" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDepartments">
+      <soap:operation soapAction="http://hap.codeplex.com/getDepartments" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getForms">
+      <soap:operation soapAction="http://hap.codeplex.com/getForms" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getFormsIn">
+      <soap:operation soapAction="http://hap.codeplex.com/getFormsIn" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ResetPassword">
+      <soap:operation soapAction="http://hap.codeplex.com/ResetPassword" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="apiSoap12" type="tns:apiSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getInit">
+      <soap12:operation soapAction="http://hap.codeplex.com/getInit" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDepartments">
+      <soap12:operation soapAction="http://hap.codeplex.com/getDepartments" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getForms">
+      <soap12:operation soapAction="http://hap.codeplex.com/getForms" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getFormsIn">
+      <soap12:operation soapAction="http://hap.codeplex.com/getFormsIn" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ResetPassword">
+      <soap12:operation soapAction="http://hap.codeplex.com/ResetPassword" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="api">
+    <wsdl:port name="apiSoap" binding="tns:apiSoap">
+      <soap:address location="https://folders.crickhowell-hs.powys.sch.uk/extranet/usercard/api.asmx" />
+    </wsdl:port>
+    <wsdl:port name="apiSoap12" binding="tns:apiSoap12">
+      <soap12:address location="https://folders.crickhowell-hs.powys.sch.uk/extranet/usercard/api.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

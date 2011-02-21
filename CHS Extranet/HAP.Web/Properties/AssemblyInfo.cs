@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("nb development")]
 [assembly: AssemblyProduct("HAP")]
-[assembly: AssemblyCopyright("Copyright © nb development 2009-2010")]
+[assembly: AssemblyCopyright("Copyright © nb development 2009-2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("5.4.5")]
-[assembly: AssemblyFileVersion("5.4.5")]
+[assembly: AssemblyVersion("6.0.0")]
+[assembly: AssemblyFileVersion("6.0.0")]
