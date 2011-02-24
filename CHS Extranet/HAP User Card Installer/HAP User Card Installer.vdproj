@@ -105,6 +105,19 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
     }
@@ -231,15 +244,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HAP User Card"
-        "ProductCode" = "8:{C8545D7B-2846-4CD2-88C4-921C3C3D2DE7}"
-        "PackageCode" = "8:{57FF45AB-D761-4608-8B71-63218466197C}"
+        "ProductCode" = "8:{67A44BE9-D05F-4724-BB3E-B871A3243761}"
+        "PackageCode" = "8:{6377B72A-348C-49A1-A99A-ABA718F0D756}"
         "UpgradeCode" = "8:{0CF47738-A77D-412C-BBDE-703A91AFCF26}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:1.1.0"
         "Manufacturer" = "8:nb development"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://hap.codeplex.com"

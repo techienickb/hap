@@ -41,6 +41,7 @@ namespace HAP.UserCard
 
         void tabs_MouseWheel(object sender, MouseWheelEventArgs e)
         {
+            if (isStudent) return;
             if (e.Delta > 0 && tabs.SelectedIndex < 2) tabs.SelectedIndex++;
             else if (tabs.SelectedIndex > 0 && e.Delta < 0) tabs.SelectedIndex--;
 
