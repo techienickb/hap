@@ -28,11 +28,22 @@ namespace HAP.UserCard
         {
             InitializeComponent();
             SourceInitialized += new EventHandler(MainWindow_SourceInitialized);
+            tabs.MouseWheel += new MouseWheelEventHandler(tabs_MouseWheel);
             Hide();
             tbi.Icon = new System.Drawing.Icon("usercardi.ico");
             tbi.Visibility = System.Windows.Visibility.Visible;
             Cursor = controlled.Cursor = Cursors.AppStarting;
             pass.Visibility = controlled.Visibility = isStudent ? System.Windows.Visibility.Hidden : System.Windows.Visibility.Visible;
+            Web.apiSoapClient c = new Web.apiSoapClient();
+            c.getInitCompleted += new EventHandler<Web.getInitCompletedEventArgs>(c_getInitCompleted);
+            c.getInitAsync();
+        }
+
+        void tabs_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (e.Delta > 0 && tabs.SelectedIndex < 2) tabs.SelectedIndex++;
+            else if (tabs.SelectedIndex > 0 && e.Delta < 0) tabs.SelectedIndex--;
+
         }
 
         string path = "";
@@ -155,9 +166,7 @@ namespace HAP.UserCard
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Web.apiSoapClient c = new Web.apiSoapClient();
-            c.getInitCompleted += new EventHandler<Web.getInitCompletedEventArgs>(c_getInitCompleted);
-            c.getInitAsync();
+
         }
 
         void c_getInitCompleted(object sender, Web.getInitCompletedEventArgs e)
