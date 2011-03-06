@@ -42,3 +42,4 @@
 .popupContent { background: #fff url(../images/bar.gif) repeat-x top left; padding: 4px; border: solid 1px #7da2ce; width: 500px; margin: 0 auto; border-radius: 3px; -moz-border-radius: 3px; }
 .popupContent div {  }
 .popupContent h1 { background: transparent; margin: 0; padding: 0; height: 28px; line-height: 26px; font-size: medium; color: #1f3976; font-weight: normal; }
+#logheader img { vertical-align: middle; }

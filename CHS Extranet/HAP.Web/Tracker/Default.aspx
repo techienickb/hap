@@ -10,7 +10,7 @@
             Live Tracker
             <i>View the live action from the tracker</i>
         </a>
-        <a href="log.aspx">
+        <a href="logs.aspx">
             <img src="../images/icons/tracker-historic.png" alt="" />
             Historic Logs
             <i>Drill down through the Historic Logs</i>
