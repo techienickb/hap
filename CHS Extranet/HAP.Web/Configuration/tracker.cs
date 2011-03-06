@@ -28,5 +28,12 @@ namespace HAP.Web.Configuration
             get { return (string)this["overridecode"]; }
             set { this["overridecode"] = value; }
         }
+
+        [ConfigurationProperty("provider", DefaultValue = "XML", IsRequired = false)]
+        public string Provider
+        {
+            get { return (string)this["provider"]; }
+            set { this["provider"] = value; }
+        }
     }
 }

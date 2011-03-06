@@ -20,55 +20,21 @@ namespace HAP.Logon.Tracker
             Done.Enabled = false;
         }
 
-        public Uri BaseUri { get; set; }
+        public api.api API { get; set; }
         private bool KeepOpen;
         private bool Override;
         private string code;
-
+        private api.UT Usertype;
         public int MaxLogons { get; set; }
-        public void SetGrid(string data)
+        public void SetGrid(api.LogonsList data)
         {
-            data = data.Remove(0, 7);
-            string[] datas = data.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
-            for (int x = 0; x < datas.Length; x++)
-            {
-                string s = datas[x];
-                if (x == 0)
-                {
-                    if ((s.StartsWith("Student") || s.StartsWith("Staff")) && s.Contains(":"))
-                    {
-                        MaxLogons = int.Parse(s.Remove(s.IndexOf('!')).Remove(0, s.IndexOf(':') + 1));
-                        label2.Text = string.Format(label2.Text, MaxLogons);
-                    }
-                    else
-                    {
-                        label2.Text = "Check you logged on to these computers";
-                        MaxLogons = 0;
-                    }
-                    code = s.Remove(0, s.IndexOf('!') + 1);
-                }
-                else dataGridView1.Rows.Add(s.Remove(s.LastIndexOf('|')), DateTime.Parse(s.Remove(0, s.IndexOf('|') + 1)).ToString("f"), "Logoff");
-
-            }
+            code = data.OverrideCode;
+            MaxLogons = data.MaxLogons;
+            Usertype = data.UserType;
+            label2.Text = (Usertype == api.UT.Student) ? string.Format(label2.Text, MaxLogons) : "Check you logged on to these computers";
+            foreach (api.trackerlogentry entry in data.Logons)
+                dataGridView1.Rows.Add(entry.ComputerName, entry.DomainName, entry.LogOnDateTime.ToString("f"), "Logoff");
             CheckCount();
-        }
-
-
-        private void client_UploadStringCompleted(object sender, UploadStringCompletedEventArgs e)
-        {
-            if (InvokeRequired) BeginInvoke(new UploadStringCompletedEventHandler(client_UploadStringCompleted), sender, e);
-            else
-            {
-                try
-                {
-                    if (e.Result == "Done") dataGridView1.Rows.RemoveAt((int)e.UserState);
-                    else MessageBox.Show(this, e.Result, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                catch { }
-                this.Enabled = true;
-                this.Cursor = Cursors.Default;
-                CheckCount();
-            }
         }
 
         private void CheckCount()
@@ -86,13 +52,29 @@ namespace HAP.Logon.Tracker
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex == 2)
+            if (e.ColumnIndex == 3)
             {
-                WebClient client = new WebClient();
-                client.UploadStringCompleted += new UploadStringCompletedEventHandler(client_UploadStringCompleted);
-                client.UploadStringAsync(new Uri(BaseUri, "tracker/api.ashx?op=" + Action.RemoteLogoff.ToString().ToLower()), "POST", dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString(), e.RowIndex);
+                API.RemoteLogoffCompleted += new api.RemoteLogoffCompletedEventHandler(API_RemoteLogoffCompleted);
+                API.RemoteLogoffAsync(dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString(), dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString(), e.RowIndex);
                 this.Enabled = false;
                 this.Cursor = Cursors.AppStarting;
+            }
+        }
+
+        void API_RemoteLogoffCompleted(object sender, AsyncCompletedEventArgs e)
+        {
+            if (InvokeRequired) BeginInvoke(new api.RemoteLogoffCompletedEventHandler(API_RemoteLogoffCompleted), sender, e);
+            else
+            {
+                try
+                {
+                    if (e.Error != null) MessageBox.Show(this, e.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    else dataGridView1.Rows.RemoveAt((int)e.UserState);
+                }
+                catch { }
+                this.Enabled = true;
+                this.Cursor = Cursors.Default;
+                CheckCount();
             }
         }
 
@@ -105,28 +87,11 @@ namespace HAP.Logon.Tracker
             }
             else if (MessageBox.Show(this, "Clicking this button will result in the system logging you off.", "Logoff?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.OK)
             {
-                WebClient client = new WebClient();
-                client.UploadStringCompleted += new UploadStringCompletedEventHandler(client2_UploadStringCompleted);
-                client.UploadStringAsync(new Uri(BaseUri, "tracker/api.ashx?op=" + Action.RemoteLogoff.ToString().ToLower()), "POST", Dns.GetHostName(), -1);
+                API.RemoteLogoffAsync(Dns.GetHostName(), Environment.UserDomainName);
                 this.Hide();
             }
             Override = false;
             this.DialogResult = System.Windows.Forms.DialogResult.None;
-        }
-
-        private void client2_UploadStringCompleted(object sender, UploadStringCompletedEventArgs e)
-        {
-            if (InvokeRequired) BeginInvoke(new UploadStringCompletedEventHandler(client2_UploadStringCompleted), sender, e);
-            else
-            {
-                try
-                {
-                    if (e.Result != "Done") MessageBox.Show(this, e.Result, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                catch { }
-                this.KeepOpen = false;
-                this.Close();
-            }
         }
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)

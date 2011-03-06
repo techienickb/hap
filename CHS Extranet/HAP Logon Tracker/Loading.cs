@@ -13,56 +13,55 @@ namespace HAP.Logon.Tracker
     public partial class Loading : Form
     {
         private Action action;
-        private Uri baseurl;
-        private WebClient client;
+        private api.api api;
         public Loading(Action action, string baseurl)
         {
             InitializeComponent();
+            this.api = new api.api();
+            this.api.Url = new Uri(new Uri(baseurl), "tracker/api.asmx").ToString();
+            this.api.LogonCompleted += new Tracker.api.LogonCompletedEventHandler(api_LogonCompleted);
+            this.api.ClearCompleted += new Tracker.api.ClearCompletedEventHandler(api_ClearCompleted);
             this.action = action;
-            this.baseurl = new Uri(baseurl);
             if (action == Action.Clear) label1.Text = "Refreshing the Tracker...";
             else label1.Text = "Registering your Logon...";
             this.Text = "Logon Tracker - " + label1.Text;
         }
 
-        private void Loading_Load(object sender, EventArgs e)
+
+
+        void  api_ClearCompleted(object sender, AsyncCompletedEventArgs e)
         {
-            client = new WebClient();
-            client.UploadStringCompleted += new UploadStringCompletedEventHandler(client_UploadStringCompleted);
-            string sb = "";
-            if (action == Action.Clear) sb = Dns.GetHostName();
-            else
-            {
-                sb += "computername|" + Dns.GetHostName() + "\n";
-                sb += "username|" + Environment.UserName + "\n";
-                sb += "domainname|" + Environment.UserDomainName + "\n";
-                foreach (IPAddress ip in Dns.GetHostEntry(Dns.GetHostName()).AddressList)
-                    if (ip.ToString().Contains(".")) { sb += "ip|" + ip.ToString() + "\n"; break; }
-                sb += "logonserver|" + Environment.GetEnvironmentVariable("logonserver") + "\n";
-                sb += "os|" + Environment.OSVersion.VersionString;
-            }
-            client.UploadStringAsync(new Uri(baseurl, "tracker/api.ashx?op=" + action.ToString().ToLower()), sb.ToString());
+            if (e.Error != null) MessageBox.Show(e.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            Close();
         }
 
-        private void client_UploadStringCompleted(object sender, UploadStringCompletedEventArgs e)
+        void  api_LogonCompleted(object sender, api.LogonCompletedEventArgs e)
         {
-            if (InvokeRequired) BeginInvoke(new UploadStringCompletedEventHandler(client_UploadStringCompleted), sender, e);
+            if (e.Error != null) MessageBox.Show(e.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
             {
-                try
+                if (e.Result.Logons.Length > 0)
                 {
-                    if (e.Result != "Done")
-                    {
-                        Background bg = new Background();
-                        bg.Main.SetGrid(e.Result);
-                        bg.Main.BaseUri = baseurl;
-                        bg.ShowDialog(this);
-                    }
+                    Background bg = new Background();
+                    bg.Main.SetGrid(e.Result);
+                    bg.Main.API = api;
+                    bg.ShowDialog(this);
                 }
-                catch { }
-
-                this.Close();
             }
+            Close();
+        }
+
+        private void Loading_Load(object sender, EventArgs e)
+        {
+            if (action == Action.Clear) api.ClearAsync(Dns.GetHostName(), Environment.UserDomainName);
+            else
+            {
+                string ip1 = "";
+                foreach (IPAddress ip in Dns.GetHostEntry(Dns.GetHostName()).AddressList)
+                    if (ip.ToString().Contains(".")) { ip1 = ip.ToString(); break; }
+                api.LogonAsync(Environment.UserName, Dns.GetHostName(), Environment.UserDomainName, ip1, Environment.GetEnvironmentVariable("logonserver"), Environment.OSVersion.VersionString);
+            }
+            
         }
     }
 

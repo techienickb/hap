@@ -4,25 +4,44 @@ using System.Linq;
 using System.Web;
 using System.Xml;
 using System.Net;
+using System.IO;
+using HAP.Web.Configuration;
 
 namespace HAP.Web.Tracker
 {
     public class trackerlog : List<trackerlogentry>
     {
-        public trackerlog() : base()
+        public trackerlog() : this(false)
         {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/tracker.xml"));
-            foreach (XmlNode node in doc.SelectNodes("/Tracker/Event"))
-                this.Add(new trackerlogentry(node));
         }
 
-        public void Filter(IPAddress IP)
+        public trackerlog(bool loadfull) : base()
         {
-            List<trackerlogentry> removeentries = new List<trackerlogentry>();
-            foreach (trackerlogentry entry in this)
-                if (entry.IP.ToString() != IP.ToString()) removeentries.Add(entry);
-            foreach (trackerlogentry entry in removeentries) this.Remove(entry);
+            if (hapConfig.Current.Tracker.Provider == "XML") foreach (trackerlogentry tle in xml.GetLogs(loadfull)) this.Add(tle);
+            this.Sort(delegate(trackerlogentry e1, trackerlogentry e2) { return e1.LogOnDateTime.CompareTo(e2.LogOnDateTime); });
+        }
+
+        public trackerlog(int year, int month) : base()
+        {
+            if (hapConfig.Current.Tracker.Provider == "XML") foreach (trackerlogentry tle in xml.GetLogs(true)) if (tle.LogOnDateTime.Month == month && tle.LogOnDateTime.Year == year) this.Add(tle);
+            this.Sort(delegate(trackerlogentry e1, trackerlogentry e2) { return e1.LogOnDateTime.CompareTo(e2.LogOnDateTime); });
+        }
+
+        public trackerlog(int year, int month, string pc) : base()
+        {
+            if (hapConfig.Current.Tracker.Provider == "XML") foreach (trackerlogentry tle in xml.GetLogs(true)) if (tle.LogOnDateTime.Month == month && tle.LogOnDateTime.Year == year && tle.ComputerName == pc) this.Add(tle);
+            this.Sort(delegate(trackerlogentry e1, trackerlogentry e2) { return e1.LogOnDateTime.CompareTo(e2.LogOnDateTime); });
+        }
+
+        public trackerlog(DateTime date, string pc) : base()
+        {
+            if (hapConfig.Current.Tracker.Provider == "XML") foreach (trackerlogentry tle in xml.GetLogs(true)) if (tle.LogOnDateTime.Date == date && tle.ComputerName == pc) this.Add(tle);
+            this.Sort(delegate(trackerlogentry e1, trackerlogentry e2) { return e1.LogOnDateTime.CompareTo(e2.LogOnDateTime); });
+        }
+        public trackerlog(DateTime date): base()
+        {
+            if (hapConfig.Current.Tracker.Provider == "XML") foreach (trackerlogentry tle in xml.GetLogs(true)) if (tle.LogOnDateTime.Date == date) this.Add(tle);
+            this.Sort(delegate(trackerlogentry e1, trackerlogentry e2) { return e1.LogOnDateTime.CompareTo(e2.LogOnDateTime); });
         }
 
         public void Filter(TrackerStringValue Property, string Value)
@@ -42,6 +61,9 @@ namespace HAP.Web.Tracker
                         break;
                     case TrackerStringValue.LogonServer:
                         if (entry.LogonServer != Value) removeentries.Add(entry);
+                        break;
+                    case TrackerStringValue.IP:
+                        if (entry.IP != Value) removeentries.Add(entry);
                         break;
             }
             foreach (trackerlogentry entry in removeentries) this.Remove(entry);
@@ -64,32 +86,50 @@ namespace HAP.Web.Tracker
         }
 
         public static trackerlog Current { get { return new trackerlog(); } }
+
+        public static trackerlog CurrentFull { get { return new trackerlog(true); } }
     }
 
-    public enum TrackerStringValue { ComputerName, UserName, DomainName, LogonServer }
+    public enum TrackerStringValue { ComputerName, UserName, DomainName, LogonServer, IP }
     public enum TrackerDateTimeValue { LogOn, LogOff }
 
     public class trackerlogentry
     {
-        public IPAddress IP { get; set; }
+        public string IP { get; set; }
         public string ComputerName { get; set; }
         public string UserName { get; set; }
         public string DomainName { get; set; }
         public string LogonServer { get; set; }
+        public string OS { get; set; }
         public DateTime LogOnDateTime { get; set; }
         public DateTime LogOffDateTime { get; set; }
 
         public trackerlogentry(XmlNode node)
         {
-            IP = IPAddress.Parse(node.Attributes["ip"].Value);
+            IP = node.Attributes["ip"].Value;
             ComputerName = node.Attributes["computername"].Value;
             UserName = node.Attributes["username"].Value;
             DomainName = node.Attributes["domainname"].Value;
             LogonServer = node.Attributes["logonserver"].Value;
+            OS = node.Attributes["os"].Value;
             if (!string.IsNullOrWhiteSpace(node.Attributes["logoffdatetime"].Value))
                 LogOffDateTime = DateTime.Parse(node.Attributes["logoffdatetime"].Value);
             if (!string.IsNullOrWhiteSpace(node.Attributes["logondatetime"].Value))
                 LogOnDateTime = DateTime.Parse(node.Attributes["logondatetime"].Value);
+        }
+        public trackerlogentry(string IP, string Computer, string User, string Domain, string LogonServer, string os, DateTime LogonDateTime)
+        {
+            this.IP = IP;
+            ComputerName = Computer;
+            UserName = User;
+            DomainName = DomainName;
+            OS = os;
+            this.LogonServer = LogonServer;
+            LogOnDateTime = LogOnDateTime;
+        }
+
+        public trackerlogentry()
+        {
         }
     }
 }

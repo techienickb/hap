@@ -22,5 +22,15 @@ namespace HAP.Logon.Tracker.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://folders.crickhowell-hs.powys.sch.uk/extranet/tracker/api.asmx")]
+        public string HAP_Logon_Tracker_api_api {
+            get {
+                return ((string)(this["HAP_Logon_Tracker_api_api"]));
+            }
+        }
     }
 }

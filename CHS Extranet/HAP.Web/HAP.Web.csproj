@@ -68,6 +68,7 @@
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Web.DataVisualization" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Web.Services" />
@@ -130,6 +131,7 @@
     <Content Include="images\headbg.png" />
     <Content Include="images\icons\config.png" />
     <Content Include="images\icons\cs.png" />
+    <Content Include="images\icons\Imageres18.png" />
     <Content Include="images\icons\mydownloads.png" />
     <Content Include="images\icons\myfavs.png" />
     <Content Include="images\icons\NewFolder.png" />
@@ -149,6 +151,7 @@
     <Content Include="images\icons\xps.png" />
     <Content Include="images\loading.gif" />
     <Content Include="images\logo.png" />
+    <Content Include="Tracker\api.asmx" />
     <Content Include="Tracker\log.aspx" />
     <Content Include="Tracker\logontracker-small.png" />
     <Content Include="images\Silverlight-Prompt.png" />
@@ -207,10 +210,10 @@
     <Content Include="Scripts\rightclick.js" />
     <Content Include="Scripts\viewmode.js" />
     <Content Include="Scripts\Silverlight.js" />
-    <Content Include="Tracker\api.ashx" />
     <Content Include="Tracker\Default.aspx" />
     <Content Include="Tracker\live.aspx" />
     <Content Include="Tracker\logontracker.png" />
+    <Content Include="Tracker\logs.aspx" />
     <Content Include="Tracker\tracker.css" />
     <Content Include="unauthorised.aspx" />
     <Content Include="UploadH.aspx" />
@@ -463,10 +466,19 @@
     <Compile Include="routing\UploadHandler.cs" />
     <Compile Include="routing\UploadProcess.cs" />
     <Compile Include="routing\UploadTransferHandler.cs" />
-    <Compile Include="Tracker\api.ashx.cs">
-      <DependentUpon>api.ashx</DependentUpon>
-      <SubType>Code</SubType>
+    <Compile Include="Tracker\api.asmx.cs">
+      <DependentUpon>api.asmx</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Tracker\Logons.cs" />
+    <Compile Include="Tracker\logs.aspx.cs">
+      <DependentUpon>logs.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tracker\logs.aspx.designer.cs">
+      <DependentUpon>logs.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Tracker\xml.cs" />
     <Compile Include="Tracker\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -584,6 +596,10 @@
     <None Include="Thanks.rtf" />
     <Content Include="Tracker\Web.config" />
     <Content Include="UserCard\Web.config" />
+    <Content Include="Tracker\api.ashx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\temp\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

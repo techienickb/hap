@@ -13,58 +13,13 @@ namespace HAP.Web.Tracker {
     public partial class log {
         
         /// <summary>
-        /// archive control.
+        /// pcchart control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button archive;
-        
-        /// <summary>
-        /// archivelogs control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel archivelogs;
-        
-        /// <summary>
-        /// startdate control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox startdate;
-        
-        /// <summary>
-        /// enddate control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox enddate;
-        
-        /// <summary>
-        /// archivelogsb control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button archivelogsb;
-        
-        /// <summary>
-        /// ok_btn control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button ok_btn;
+        protected global::System.Web.UI.DataVisualization.Charting.Chart pcchart;
         
         /// <summary>
         /// UpdatePanel1 control.
