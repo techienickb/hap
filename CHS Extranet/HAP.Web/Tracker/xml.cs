@@ -16,8 +16,7 @@ namespace HAP.Web.Tracker
     {
         public static void Clear(string Computer, string DomainName)
         {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/tracker.xml"));
+            XmlDocument doc = Doc;
             try
             {
                 foreach (XmlNode node in doc.SelectNodes(string.Format("/Tracker/Event[@logoffdatetime='' and @computername='{0}' and @domainname='{1}']", Computer, DomainName)))
@@ -30,8 +29,7 @@ namespace HAP.Web.Tracker
         public static trackerlogentry[] Logon(string Username, string Computer, string DomainName, string IP, string LogonServer, string OS)
         {
             List<trackerlogentry> ll = new List<trackerlogentry>();
-            XmlDocument doc = new XmlDocument();
-            doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/tracker.xml"));
+            XmlDocument doc = Doc;
             XmlElement e = doc.CreateElement("Event");
             e.SetAttribute("logondatetime", DateTime.Now.ToString("s"));
             e.SetAttribute("logoffdatetime", "");
@@ -51,8 +49,7 @@ namespace HAP.Web.Tracker
 
         public static void RemoteLogoff(string Computer, string DomainName)
         {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/tracker.xml"));
+            XmlDocument doc = Doc;
             try
             {
                 ConnectionOptions connoptions = new ConnectionOptions();
@@ -79,22 +76,50 @@ namespace HAP.Web.Tracker
                 foreach (FileInfo file in new DirectoryInfo(HttpContext.Current.Server.MapPath("~/App_Data")).GetFiles("tracker*xml"))
                 {
                     XmlDocument doc = new XmlDocument();
-                    doc.Load(file.FullName);
+                    bool loaded = false;
+                    while (!loaded)
+                    {
+                        try
+                        {
+                            doc.Load(file.FullName);
+                            loaded = true;
+                        }
+                        catch { Thread.Sleep(100); }
+                    }
                     foreach (XmlNode node in doc.SelectNodes("/Tracker/Event"))
                         tle.Add(new trackerlogentry(node));
                 }
             }
             else
             {
-                XmlDocument doc = new XmlDocument();
-                doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/tracker.xml"));
+                XmlDocument doc = Doc;
                 foreach (XmlNode node in doc.SelectNodes("/Tracker/Event"))
                     tle.Add(new trackerlogentry(node));
             }
             return tle.ToArray();
         }
 
-
+        static XmlDocument Doc
+        {
+            get
+            {
+                bool loaded = false;
+                XmlDocument doc = new XmlDocument();
+                while (!loaded)
+                {
+                    try
+                    {
+                        doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/tracker.xml"));
+                        loaded = true;
+                    }
+                    catch
+                    {
+                        Thread.Sleep(100);
+                    }
+                }
+                return doc;
+            }
+        }
 
         static void Save(XmlDocument doc)
         {

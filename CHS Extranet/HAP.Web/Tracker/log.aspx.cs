@@ -101,8 +101,6 @@ namespace HAP.Web.Tracker
                         pcchart.Series[0].Points.Add(p);
                     }
                 }
-                ListView1.DataSource = tlog.ToArray();
-                ListView1.DataBind();
             }
             else
             {
@@ -138,12 +136,19 @@ namespace HAP.Web.Tracker
             }
         }
         private trackerlog tlog;
+        protected string showtable = " style=\"display: none;\"";
         hapConfig config;
         protected override void OnInitComplete(EventArgs e)
         {
             Mode = RouteData.Values["day"] != null ? mode.day : RouteData.Values["computer"] != null ? mode.pc : mode.month;
             config = hapConfig.Current;
             this.Title = string.Format("{0} - Home Access Plus+ - Logon Tracker - Historic Logs", config.BaseSettings.EstablishmentName);
+        }
+
+        protected void showdata_Click(object sender, EventArgs e)
+        {
+            showdata.Visible = false;
+            showtable = "";
         }
 
         protected void computerfilter_SelectedIndexChanged(object sender, EventArgs e)

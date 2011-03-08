@@ -35,7 +35,8 @@
     </div>
     <asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Conditional" runat="server" ChildrenAsTriggers="true">
         <ContentTemplate>
-            <table border="0" class="trackertable">
+            <asp:Button ID="showdata" runat="server" Text="Show Data" OnClick="showdata_Click" />
+            <table border="0" class="trackertable"<%=showtable %>>
                 <tr valign="top">
                     <th>
                         <div><label>Computer</label>
