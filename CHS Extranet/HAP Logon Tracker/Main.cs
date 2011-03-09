@@ -41,7 +41,7 @@ namespace HAP.Logon.Tracker
         {
             Done.Enabled = false;
             if (MaxLogons == 0) Done.Enabled = true;
-            else if (dataGridView1.Rows.Count < (MaxLogons - 1)) Done.Enabled = true;
+            else if (dataGridView1.Rows.Count < MaxLogons) Done.Enabled = true;
             KeepOpen = !Done.Enabled;
         }
 
