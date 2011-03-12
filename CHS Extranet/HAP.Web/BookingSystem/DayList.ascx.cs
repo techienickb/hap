@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using HAP.Web.Configuration;
 using System.Configuration;
 using System.ComponentModel;
+using HAP.Data.BookingSystem;
 
 namespace HAP.Web.BookingSystem
 {

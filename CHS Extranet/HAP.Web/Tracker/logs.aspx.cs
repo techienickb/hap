@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using System.Xml;
 using System.IO;
 using HAP.Web.Configuration;
+using HAP.Data.Tracker;
 
 namespace HAP.Web.Tracker
 {

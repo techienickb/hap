@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace HAP.Web.Tracker
+namespace HAP.Data.Tracker
 {
     public class LogonsList
     {

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data;
 using System.Configuration;
 using System.Linq;
 using System.Web;
@@ -12,7 +11,7 @@ using System.Web.UI.WebControls.WebParts;
 /// <summary>
 /// Summary description for Base64
 /// </summary>
-namespace HAP.AD.Base64
+namespace HAP.Data.Base64
 {
     public class Base64Encoder
     {

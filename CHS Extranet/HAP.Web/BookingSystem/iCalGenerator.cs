@@ -11,6 +11,7 @@ using System.Globalization;
 using System.Net.Mime;
 using System.Net;
 using System.DirectoryServices.AccountManagement;
+using HAP.Data.BookingSystem;
 
 namespace HAP.Web.BookingSystem
 {

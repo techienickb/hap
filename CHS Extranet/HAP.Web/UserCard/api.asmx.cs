@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Services;
 using HAP.Web.Configuration;
+using HAP.Data.UserCard;
 
 namespace HAP.Web.UserCard
 {

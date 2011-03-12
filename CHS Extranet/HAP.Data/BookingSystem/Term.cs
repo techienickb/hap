@@ -7,7 +7,7 @@ using System.Globalization;
 using HAP.Web.Configuration;
 using System.Configuration;
 
-namespace HAP.Web.BookingSystem
+namespace HAP.Data.BookingSystem
 {
     public struct HalfTerm
     {

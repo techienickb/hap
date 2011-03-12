@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Xml;
 
-namespace HAP.Web.BookingSystem
+namespace HAP.Data.BookingSystem
 {
     public struct BookingKey
     {

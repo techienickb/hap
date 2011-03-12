@@ -5,10 +5,10 @@ using System.DirectoryServices.AccountManagement;
 using HAP.Web.Configuration;
 using System.Configuration;
 using System.Xml;
-using HAP.Web.HelpDesk;
 using System.Collections.Generic;
+using HAP.AD;
 
-namespace HAP.Web.BookingSystem
+namespace HAP.Data.BookingSystem
 {
     public class Booking
     {

@@ -252,13 +252,10 @@
     <Compile Include="BookingSystem\admin\Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
-    <Compile Include="BookingSystem\AdvancedBookingRight.cs" />
     <Compile Include="BookingSystem\api.ashx.cs">
       <DependentUpon>api.ashx</DependentUpon>
     </Compile>
-    <Compile Include="BookingSystem\Booking.cs" />
     <Compile Include="BookingSystem\BookingCalendar.cs" />
-    <Compile Include="BookingSystem\BookingKey.cs" />
     <Compile Include="BookingSystem\BookingPopup.ascx.cs">
       <DependentUpon>BookingPopup.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -266,7 +263,6 @@
     <Compile Include="BookingSystem\BookingPopup.ascx.designer.cs">
       <DependentUpon>BookingPopup.ascx</DependentUpon>
     </Compile>
-    <Compile Include="BookingSystem\BookingSystem.cs" />
     <Compile Include="BookingSystem\BigBookingCalendar.cs" />
     <Compile Include="BookingSystem\DayList.ascx.cs">
       <DependentUpon>DayList.ascx</DependentUpon>
@@ -312,7 +308,6 @@
     <Compile Include="BookingSystem\SIMS.ascx.designer.cs">
       <DependentUpon>SIMS.ascx</DependentUpon>
     </Compile>
-    <Compile Include="BookingSystem\Term.cs" />
     <Compile Include="BookingSystem\WeekView.aspx.cs">
       <DependentUpon>WeekView.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -321,21 +316,6 @@
       <DependentUpon>WeekView.aspx</DependentUpon>
     </Compile>
     <Compile Include="BookingSystem\WeekViewRow.cs" />
-    <Compile Include="Configuration\announcementBox.cs" />
-    <Compile Include="Configuration\bookingResource.cs" />
-    <Compile Include="Configuration\bookingResources.cs" />
-    <Compile Include="Configuration\bookingSystem.cs" />
-    <Compile Include="Configuration\homepagelinks.cs" />
-    <Compile Include="Configuration\homepagelinkgroup.cs" />
-    <Compile Include="Configuration\homepagelinkgrouplinks.cs" />
-    <Compile Include="Configuration\subject.cs" />
-    <Compile Include="Configuration\subjects.cs" />
-    <Compile Include="Configuration\tracker.cs" />
-    <Compile Include="Configuration\ouobjects.cs" />
-    <Compile Include="Configuration\ouobject.cs" />
-    <Compile Include="Configuration\mycomputer.cs" />
-    <Compile Include="Configuration\lesson.cs" />
-    <Compile Include="Configuration\lessons.cs" />
     <Compile Include="Controls\Announcement.ascx.cs">
       <DependentUpon>Announcement.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -343,15 +323,6 @@
     <Compile Include="Controls\Announcement.ascx.designer.cs">
       <DependentUpon>Announcement.ascx</DependentUpon>
     </Compile>
-    <Compile Include="Configuration\adSettings.cs" />
-    <Compile Include="Configuration\baseSettings.cs" />
-    <Compile Include="Configuration\hapConfig.cs" />
-    <Compile Include="Configuration\homepagelink.cs" />
-    <Compile Include="Configuration\homepagelinkgroups.cs" />
-    <Compile Include="Configuration\uncpath.cs" />
-    <Compile Include="Configuration\uncpaths.cs" />
-    <Compile Include="Configuration\uploadfilter.cs" />
-    <Compile Include="Configuration\uploadfilters.cs" />
     <Compile Include="Controls\ChangePassword.ascx.cs">
       <DependentUpon>ChangePassword.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -436,7 +407,6 @@
     <Compile Include="p.ashx.cs">
       <DependentUpon>p.ashx</DependentUpon>
     </Compile>
-    <Compile Include="Pupils.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -454,14 +424,14 @@
     <Compile Include="MyComputerItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="routing\BookingSystemDisplayRoutingHandler.cs" />
-    <Compile Include="routing\IBookingSystemDisplay.cs" />
-    <Compile Include="routing\ITicketDisplay.cs" />
-    <Compile Include="routing\HelpDeskRoutingHandler.cs" />
     <Compile Include="routing\DocXPreviewHandler.cs" />
-    <Compile Include="routing\PreviewRoutingHandler.cs" />
     <Compile Include="routing\DownloadRoutingHandler.cs" />
+    <Compile Include="routing\HelpDeskRoutingHandler.cs" />
+    <Compile Include="routing\IBookingSystemDisplay.cs" />
     <Compile Include="routing\IMyComputerDisplay.cs" />
+    <Compile Include="routing\ITicketDisplay.cs" />
     <Compile Include="routing\MyComputerRoutingHandler.cs" />
+    <Compile Include="routing\PreviewRoutingHandler.cs" />
     <Compile Include="routing\UploadCheckerHandler.cs" />
     <Compile Include="routing\UploadHandler.cs" />
     <Compile Include="routing\UploadProcess.cs" />
@@ -470,7 +440,6 @@
       <DependentUpon>api.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Tracker\Logons.cs" />
     <Compile Include="Tracker\logs.aspx.cs">
       <DependentUpon>logs.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -552,6 +521,18 @@
     <ProjectReference Include="..\HAP.Config\HAP.Config.csproj">
       <Project>{8E445E7B-246A-446A-B3B2-ED4F51C21768}</Project>
       <Name>HAP.Config</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HAP.Data.SQL\HAP.Data.SQL.csproj">
+      <Project>{D7498641-1837-480E-8AA0-4466CDB5FB12}</Project>
+      <Name>HAP.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HAP.Data\HAP.Data.csproj">
+      <Project>{66768D2F-2190-4B13-BB6C-7195A342DB9A}</Project>
+      <Name>HAP.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HAP.Web.Configuration\HAP.Web.Configuration.csproj">
+      <Project>{472C6692-1464-44ED-A2DB-5A8EE3E698C0}</Project>
+      <Name>HAP.Web.Configuration</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -8,6 +8,7 @@ using System.ComponentModel;
 using HAP.Web.Configuration;
 using System.Configuration;
 using System.DirectoryServices.AccountManagement;
+using HAP.Data.BookingSystem;
 
 namespace HAP.Web.BookingSystem
 {
@@ -37,7 +38,7 @@ namespace HAP.Web.BookingSystem
 
             ResourceType RoomType = config.BookingSystem.Resources[Room].ResourceType;
 
-            BookingSystem bs = new BookingSystem(Date);
+            HAP.Data.BookingSystem.BookingSystem bs = new HAP.Data.BookingSystem.BookingSystem(Date);
             foreach (lesson lesson in config.BookingSystem.Lessons)
                 if (Show == "All" || Show == lesson.Name)
                 {

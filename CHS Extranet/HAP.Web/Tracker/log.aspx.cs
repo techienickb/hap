@@ -9,6 +9,7 @@ using System.Xml;
 using System.Net;
 using System.IO;
 using System.Web.UI.DataVisualization.Charting;
+using HAP.Data.Tracker;
 
 namespace HAP.Web.Tracker
 {

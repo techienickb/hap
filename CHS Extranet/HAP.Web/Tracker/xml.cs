@@ -9,6 +9,7 @@ using HAP.Web.Configuration;
 using System.Management;
 using System.Net;
 using System.IO;
+using HAP.Data.Tracker;
 
 namespace HAP.Web.Tracker
 {
@@ -45,27 +46,6 @@ namespace HAP.Web.Tracker
             doc.SelectSingleNode("/Tracker").AppendChild(e);
             Save(doc);
             return ll.ToArray();
-        }
-
-        public static void RemoteLogoff(string Computer, string DomainName)
-        {
-            XmlDocument doc = Doc;
-            try
-            {
-                ConnectionOptions connoptions = new ConnectionOptions();
-                connoptions.Username = hapConfig.Current.ADSettings.ADUsername;
-                connoptions.Password = hapConfig.Current.ADSettings.ADPassword;
-                ManagementScope scope = new ManagementScope(string.Format(@"\\{0}\ROOT\CIMV2", Computer), connoptions);
-                scope.Connect();
-                ObjectQuery oq = new ObjectQuery("Select Name From Win32_OperatingSystem");
-                ManagementObjectSearcher q = new ManagementObjectSearcher(scope, oq);
-                foreach (ManagementObject o in q.Get())
-                    o.InvokeMethod("Win32Shutdown", new object[] { 4 });
-            }
-            catch { }
-            foreach (XmlNode node in doc.SelectNodes(string.Format("/Tracker/Event[@logoffdatetime='' and @computername='{0}' and @domainname='{1}']", Computer, DomainName)))
-                node.Attributes["logoffdatetime"].Value = DateTime.Now.ToString("s");
-            Save(doc);
         }
 
         public static trackerlogentry[] GetLogs(bool loadall)
