@@ -35,12 +35,12 @@ namespace HAP.Data.Tracker
         public trackerlogentry(string IP, string Computer, string User, string Domain, string LogonServer, string os, DateTime LogonDateTime)
         {
             this.IP = IP;
-            ComputerName = Computer;
-            UserName = User;
-            DomainName = DomainName;
-            OS = os;
+            this.ComputerName = Computer;
+            this.UserName = User;
+            this.DomainName = Domain;
+            this.OS = os;
             this.LogonServer = LogonServer;
-            LogOnDateTime = LogOnDateTime;
+            this.LogOnDateTime = LogonDateTime;
         }
 
         public trackerlogentry()

@@ -11,7 +11,7 @@ using System.Net;
 using System.IO;
 using HAP.Data.Tracker;
 
-namespace HAP.Web.Tracker
+namespace HAP.Data.Tracker
 {
     public class xml
     {
@@ -123,6 +123,11 @@ namespace HAP.Web.Tracker
                     Thread.Sleep(10);
                 }
             }
+        }
+
+        public static void DeleteAll()
+        {
+            foreach (FileInfo file in new DirectoryInfo(HttpContext.Current.Server.MapPath("~/App_Data")).GetFiles("tracker*xml")) file.Delete();
         }
     }
 }

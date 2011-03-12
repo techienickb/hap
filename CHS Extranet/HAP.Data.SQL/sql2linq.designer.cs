@@ -28,15 +28,15 @@ namespace HAP.Data.SQL
 		
 		private static System.Data.Linq.Mapping.MappingSource mappingSource = new AttributeMappingSource();
 		
-	#region Extensibility Method Definitions
-	partial void OnCreated();
-	partial void InsertTrackerEvent(TrackerEvent instance);
-	partial void UpdateTrackerEvent(TrackerEvent instance);
-	partial void DeleteTrackerEvent(TrackerEvent instance);
-	#endregion
+    #region Extensibility Method Definitions
+    partial void OnCreated();
+    partial void InsertTrackerEvent(TrackerEvent instance);
+    partial void UpdateTrackerEvent(TrackerEvent instance);
+    partial void DeleteTrackerEvent(TrackerEvent instance);
+    #endregion
 		
 		public sql2linqDataContext() : 
-				base("", mappingSource)
+				base("Data Source=.\\SQLEXPRESS;Initial Catalog=hap;Integrated Security=True", mappingSource)
 		{
 			OnCreated();
 		}
@@ -80,6 +80,8 @@ namespace HAP.Data.SQL
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
+		private int _id;
+		
 		private System.DateTime _LogonDateTime;
 		
 		private string _Username;
@@ -96,34 +98,56 @@ namespace HAP.Data.SQL
 		
 		private string _os;
 		
-	#region Extensibility Method Definitions
-	partial void OnLoaded();
-	partial void OnValidate(System.Data.Linq.ChangeAction action);
-	partial void OnCreated();
-	partial void OnLogonDateTimeChanging(System.DateTime value);
-	partial void OnLogonDateTimeChanged();
-	partial void OnUsernameChanging(string value);
-	partial void OnUsernameChanged();
-	partial void OnComputerNameChanging(string value);
-	partial void OnComputerNameChanged();
-	partial void OnLogoffDateTimeChanging(System.Nullable<System.DateTime> value);
-	partial void OnLogoffDateTimeChanged();
-	partial void OndomainnameChanging(string value);
-	partial void OndomainnameChanged();
-	partial void OnipChanging(string value);
-	partial void OnipChanged();
-	partial void OnlogonserverChanging(string value);
-	partial void OnlogonserverChanged();
-	partial void OnosChanging(string value);
-	partial void OnosChanged();
-	#endregion
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidChanging(int value);
+    partial void OnidChanged();
+    partial void OnLogonDateTimeChanging(System.DateTime value);
+    partial void OnLogonDateTimeChanged();
+    partial void OnUsernameChanging(string value);
+    partial void OnUsernameChanged();
+    partial void OnComputerNameChanging(string value);
+    partial void OnComputerNameChanged();
+    partial void OnLogoffDateTimeChanging(System.Nullable<System.DateTime> value);
+    partial void OnLogoffDateTimeChanged();
+    partial void OndomainnameChanging(string value);
+    partial void OndomainnameChanged();
+    partial void OnipChanging(string value);
+    partial void OnipChanged();
+    partial void OnlogonserverChanging(string value);
+    partial void OnlogonserverChanged();
+    partial void OnosChanging(string value);
+    partial void OnosChanged();
+    #endregion
 		
 		public TrackerEvent()
 		{
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LogonDateTime", DbType="DateTime NOT NULL", IsPrimaryKey=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this.OnidChanging(value);
+					this.SendPropertyChanging();
+					this._id = value;
+					this.SendPropertyChanged("id");
+					this.OnidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LogonDateTime", DbType="DateTime NOT NULL")]
 		public System.DateTime LogonDateTime
 		{
 			get
@@ -143,7 +167,7 @@ namespace HAP.Data.SQL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Username", DbType="NVarChar(50) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Username", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
 		public string Username
 		{
 			get
@@ -163,7 +187,7 @@ namespace HAP.Data.SQL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ComputerName", DbType="NVarChar(50) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ComputerName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
 		public string ComputerName
 		{
 			get

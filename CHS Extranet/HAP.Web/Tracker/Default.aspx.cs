@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using HAP.Web.Configuration;
+using System.IO;
 
 namespace HAP.Web.Tracker
 {
@@ -12,7 +13,7 @@ namespace HAP.Web.Tracker
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            dbup.Visible = (config.Tracker.Provider != "XML" && new DirectoryInfo(Server.MapPath("~/App_Data/")).GetFiles("tracker*xml").Length > 0);
         }
 
         hapConfig config;

@@ -15,6 +15,11 @@
             Historic Logs
             <i>Drill down through the Historic Logs</i>
         </a>
+        <asp:HyperLink ID="dbup" runat="server" Visible="false" NavigateUrl="~/Tracker/XML2SQL.aspx">
+            <img src="../images/icons/dbup.png" alt="" />
+            XML 2 SQL
+            <i>Upgrade from XML to a SQL Database</i>
+        </asp:HyperLink>
         <a href="../">
             <img src="../images/icons/school.png" alt="" />
             Home Access Plus+ Home
