@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using System.IO;
 using System.Xml;
 using HAP.Web.Configuration;
+using HAP.Data.BookingSystem;
 
 namespace HAP.Web.BookingSystem
 {
@@ -42,7 +43,7 @@ namespace HAP.Web.BookingSystem
                         doc.Load(Server.MapPath("~/App_Data/Bookings.xml"));
                         string[] s = line.Split(new char[] { ',' });
                         string day = s[6].Replace("\"", "").Split(new char[] { ':' })[0];
-                        BookingSystem bs = new BookingSystem(DayToDate(day));
+                        HAP.Data.BookingSystem.BookingSystem bs = new HAP.Data.BookingSystem.BookingSystem(DayToDate(day));
                         string lesson = "Lesson " + s[6].Replace("\"", "").Split(new char[] { ':' })[1];
                         if (bs.islessonFree(s[0].Replace("\"", ""), lesson))
                         {

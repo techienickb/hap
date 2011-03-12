@@ -9,6 +9,8 @@ using HAP.Web.Configuration;
 using System.DirectoryServices.AccountManagement;
 using System.Xml;
 using HAP.Web.HelpDesk;
+using HAP.AD;
+using HAP.Data.BookingSystem;
 
 namespace HAP.Web.BookingSystem
 {
@@ -35,7 +37,7 @@ namespace HAP.Web.BookingSystem
 
         protected void book_Click(object sender, EventArgs e)
         {
-            XmlDocument doc = BookingSystem.BookingsDoc;
+            XmlDocument doc = HAP.Data.BookingSystem.BookingSystem.BookingsDoc;
             XmlElement node = doc.CreateElement("Booking");
             node.SetAttribute("date", Date.ToShortDateString());
             string lessonint = bookingvars.Value.Split(new char[] { '@' }, StringSplitOptions.RemoveEmptyEntries)[1];
@@ -60,7 +62,7 @@ namespace HAP.Web.BookingSystem
             #region Charging
             if (config.BookingSystem.Resources[roomstr].EnableCharging)
             {
-                BookingSystem bs = new BookingSystem(Date);
+                HAP.Data.BookingSystem.BookingSystem bs = new HAP.Data.BookingSystem.BookingSystem(Date);
                 int index = config.BookingSystem.Lessons.IndexOf(config.BookingSystem.Lessons[lessonint]);
                 if (index > 0 && bs.islessonFree(roomstr, config.BookingSystem.Lessons[index - 1].Name))
                 {
@@ -96,8 +98,8 @@ namespace HAP.Web.BookingSystem
             }
             #endregion
 
-            BookingSystem.BookingsDoc = doc;
-            Booking booking = new BookingSystem(Date).getBooking(roomstr, lessonint);
+            HAP.Data.BookingSystem.BookingSystem.BookingsDoc = doc;
+            Booking booking = new HAP.Data.BookingSystem.BookingSystem(Date).getBooking(roomstr, lessonint);
             iCalGenerator.Generate(booking, Date);
             if (config.BookingSystem.Resources[roomstr].EmailAdmin) iCalGenerator.Generate(booking, Date, config.BaseSettings.AdminEmailUser);
             BookYear.SelectedIndex = 0;
@@ -149,9 +151,9 @@ namespace HAP.Web.BookingSystem
             date.Text = Date.ToLongDateString();
             if (!isAdmin)
             {
-                XmlDocument doc = BookingSystem.BookingsDoc;
+                XmlDocument doc = HAP.Data.BookingSystem.BookingSystem.BookingsDoc;
                 int max = hapConfig.Current.BookingSystem.MaxBookingsPerWeek;
-                foreach (AdvancedBookingRight right in BookingSystem.BookingRights)
+                foreach (AdvancedBookingRight right in HAP.Data.BookingSystem.BookingSystem.BookingRights)
                     if (right.Username == Username)
                         max = right.Numperweek;
                 int x = 0;

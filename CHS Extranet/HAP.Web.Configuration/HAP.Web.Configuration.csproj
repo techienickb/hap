@@ -6,11 +6,11 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{36468E14-F8AF-4794-AB76-25571A54682F}</ProjectGuid>
+    <ProjectGuid>{472C6692-1464-44ED-A2DB-5A8EE3E698C0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HAP.AD</RootNamespace>
-    <AssemblyName>HAP.AD</AssemblyName>
+    <RootNamespace>HAP.Web.Configuration</RootNamespace>
+    <AssemblyName>HAP.Web.Configuration</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Nonshipping>true</Nonshipping>
@@ -18,7 +18,6 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,7 +29,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
+    <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -39,29 +38,41 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.configuration" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.DirectoryServices" />
-    <Reference Include="System.DirectoryServices.AccountManagement" />
-    <Reference Include="System.Web.ApplicationServices" />
-    <Reference Include="System.Xml" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActiveDirectoryHelper.cs" />
-    <Compile Include="ActiveDirectoryMembershipProvider.cs" />
-    <Compile Include="ActiveDirectoryRoleProvider.cs" />
-    <Compile Include="ADUtil.cs" />
-    <Compile Include="Navigation.cs" />
+    <Compile Include="adSettings.cs" />
+    <Compile Include="announcementBox.cs" />
+    <Compile Include="baseSettings.cs" />
+    <Compile Include="bookingResource.cs" />
+    <Compile Include="bookingResources.cs" />
+    <Compile Include="bookingSystem.cs" />
+    <Compile Include="hapConfig.cs" />
+    <Compile Include="homepagelink.cs" />
+    <Compile Include="homepagelinkgroup.cs" />
+    <Compile Include="homepagelinkgrouplinks.cs" />
+    <Compile Include="homepagelinkgroups.cs" />
+    <Compile Include="homepagelinks.cs" />
+    <Compile Include="lesson.cs" />
+    <Compile Include="lessons.cs" />
+    <Compile Include="mycomputer.cs" />
+    <Compile Include="ouobject.cs" />
+    <Compile Include="ouobjects.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\HAP.Web.Configuration\HAP.Web.Configuration.csproj">
-      <Project>{472C6692-1464-44ED-A2DB-5A8EE3E698C0}</Project>
-      <Name>HAP.Web.Configuration</Name>
-    </ProjectReference>
+    <Compile Include="subject.cs" />
+    <Compile Include="subjects.cs" />
+    <Compile Include="tracker.cs" />
+    <Compile Include="uncpath.cs" />
+    <Compile Include="uncpaths.cs" />
+    <Compile Include="uploadfilter.cs" />
+    <Compile Include="uploadfilters.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

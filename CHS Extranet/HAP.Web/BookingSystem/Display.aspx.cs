@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using HAP.Web.Configuration;
 using System.Configuration;
 using HAP.Web.routing;
+using HAP.Data.BookingSystem;
 
 namespace HAP.Web.BookingSystem
 {
@@ -15,7 +16,7 @@ namespace HAP.Web.BookingSystem
         protected void Page_Load(object sender, EventArgs e)
         {
             Response.ExpiresAbsolute = DateTime.Now;
-            bs = new BookingSystem();
+            bs = new HAP.Data.BookingSystem.BookingSystem();
             hapConfig config = hapConfig.Current;
             if (Page.FindControl(Room) != null)
             {
@@ -74,7 +75,7 @@ namespace HAP.Web.BookingSystem
                     }
             }
         }
-        protected BookingSystem bs;
+        protected HAP.Data.BookingSystem.BookingSystem bs;
 
         protected string getName(object o)
         {

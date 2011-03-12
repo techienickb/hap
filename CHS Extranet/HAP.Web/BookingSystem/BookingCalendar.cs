@@ -10,6 +10,7 @@ using System.Text;
 using System.DirectoryServices.AccountManagement;
 using System.IO;
 using System.Xml;
+using HAP.Data.BookingSystem;
 
 namespace HAP.Web.BookingSystem
 {
@@ -24,7 +25,7 @@ namespace HAP.Web.BookingSystem
 
             this.SelectionMode = CalendarSelectionMode.DayWeek;
             this.maxday = config.BookingSystem.MaxDays;
-            foreach (AdvancedBookingRight right in BookingSystem.BookingRights)
+            foreach (AdvancedBookingRight right in HAP.Data.BookingSystem.BookingSystem.BookingRights)
                 if (right.Username == Username)
                     this.maxday = 7 * right.Weeksahead;
 

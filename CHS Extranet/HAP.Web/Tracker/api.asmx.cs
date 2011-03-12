@@ -6,6 +6,8 @@ using System.Web.Services;
 using System.Xml;
 using HAP.Web.Configuration;
 using System.Web.Security;
+using HAP.Data.Tracker;
+using System.Management;
 
 namespace HAP.Web.Tracker
 {
@@ -38,7 +40,20 @@ namespace HAP.Web.Tracker
         [WebMethod]
         public void RemoteLogoff(string Computer, string DomainName)
         {
-            if (hapConfig.Current.Tracker.Provider == "XML") xml.RemoteLogoff(Computer, DomainName);
+            try
+            {
+                ConnectionOptions connoptions = new ConnectionOptions();
+                connoptions.Username = hapConfig.Current.ADSettings.ADUsername;
+                connoptions.Password = hapConfig.Current.ADSettings.ADPassword;
+                ManagementScope scope = new ManagementScope(string.Format(@"\\{0}\ROOT\CIMV2", Computer), connoptions);
+                scope.Connect();
+                ObjectQuery oq = new ObjectQuery("Select Name From Win32_OperatingSystem");
+                ManagementObjectSearcher q = new ManagementObjectSearcher(scope, oq);
+                foreach (ManagementObject o in q.Get())
+                    o.InvokeMethod("Win32Shutdown", new object[] { 4 });
+            }
+            catch { }
+            if (hapConfig.Current.Tracker.Provider == "XML") xml.Clear(Computer, DomainName);
         }
         
         bool isAdmin(string username)

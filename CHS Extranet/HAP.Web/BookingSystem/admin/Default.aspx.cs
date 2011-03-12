@@ -7,6 +7,8 @@ using System.Web.UI.WebControls;
 using HAP.Web.Configuration;
 using System.Configuration;
 using HAP.Web.HelpDesk;
+using HAP.AD;
+using HAP.Data.BookingSystem;
 
 namespace HAP.Web.BookingSystem.admin
 {
@@ -72,7 +74,7 @@ namespace HAP.Web.BookingSystem.admin
 
         void ABR_ItemDeleting(object sender, ListViewDeleteEventArgs e)
         {
-            new BookingSystem().deleteBookingRights1(e.Values[0].ToString());
+            new HAP.Data.BookingSystem.BookingSystem().deleteBookingRights1(e.Values[0].ToString());
         }
 
         void SaveButton_Click(object sender, EventArgs e)
@@ -120,7 +122,7 @@ namespace HAP.Web.BookingSystem.admin
 
         void staticbookingsgrid_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
-            new BookingSystem().deleteStaticBooking1(e.Values[1].ToString(), e.Values[2].ToString(), int.Parse(e.Values[0].ToString()));
+            new HAP.Data.BookingSystem.BookingSystem().deleteStaticBooking1(e.Values[1].ToString(), e.Values[2].ToString(), int.Parse(e.Values[0].ToString()));
         }
     }
 

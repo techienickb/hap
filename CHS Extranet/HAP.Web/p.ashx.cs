@@ -6,7 +6,8 @@ using System.Configuration;
 using System.Drawing;
 using System.IO;
 using System.Drawing.Imaging;
-using HAP.AD.Base64;
+using HAP.Data;
+using HAP.Data.Base64;
 
 namespace HAP.Web
 {

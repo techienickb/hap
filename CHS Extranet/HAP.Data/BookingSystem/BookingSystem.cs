@@ -6,7 +6,7 @@ using System.Xml;
 using HAP.Web.Configuration;
 using System.Configuration;
 
-namespace HAP.Web.BookingSystem
+namespace HAP.Data.BookingSystem
 {
     public class BookingSystem
     {
