@@ -48,5 +48,25 @@ namespace HAP.Data.SQL
             }
             return tle.ToArray();
         }
+
+        public static void UpgradeFromXML()
+        {
+            sql2linqDataContext sdc = new sql2linqDataContext(ConfigurationManager.ConnectionStrings[hapConfig.Current.Tracker.Provider].ConnectionString);
+            foreach (trackerlogentry tle in HAP.Data.Tracker.xml.GetLogs(true).OrderBy(t => t.LogOnDateTime))
+            {
+                TrackerEvent newe = new TrackerEvent();
+                newe.LogonDateTime = tle.LogOnDateTime;
+                newe.logonserver = tle.LogonServer;
+                newe.ip = tle.IP;
+                newe.ComputerName = tle.ComputerName;
+                newe.Username = tle.UserName;
+                newe.domainname = tle.DomainName;
+                newe.os = tle.OS;
+                if (tle.LogOffDateTime != null) newe.LogoffDateTime = tle.LogOffDateTime;
+                sdc.TrackerEvents.InsertOnSubmit(newe);
+            }
+            sdc.SubmitChanges();
+            xml.DeleteAll();
+        }
     }
 }

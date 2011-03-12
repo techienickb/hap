@@ -58,19 +58,7 @@
     <Compile Include="Tracker.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="sql2linq.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>sql2linq.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="sql2linq.dbml.layout">
-      <DependentUpon>sql2linq.dbml</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HAP.Data\HAP.Data.csproj">
@@ -81,6 +69,18 @@
       <Project>{472C6692-1464-44ED-A2DB-5A8EE3E698C0}</Project>
       <Name>HAP.Web.Configuration</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="sql2linq.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>sql2linq.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="sql2linq.dbml.layout">
+      <DependentUpon>sql2linq.dbml</DependentUpon>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

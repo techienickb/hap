@@ -2,10 +2,10 @@
 <ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="sql2linq">
   <DataContextMoniker Name="/sql2linqDataContext" />
   <nestedChildShapes>
-    <classShape Id="62b4a22b-006e-4707-9205-c0c5d276df6d" absoluteBounds="3.625, 1.875, 2, 2.3478011067708335">
+    <classShape Id="1b3e0668-d992-496b-be6d-5af860127bef" absoluteBounds="0.875, 0.75, 2, 2.5401025390625">
       <DataClassMoniker Name="/sql2linqDataContext/TrackerEvent" />
       <nestedChildShapes>
-        <elementListCompartment Id="5267f26e-a31a-4d23-8e3d-9e2f905d1150" absoluteBounds="3.6399999999999997, 2.335, 1.9700000000000002, 1.7878011067708335" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="a12d3dec-3c86-40fb-a4af-1c3354263e0b" absoluteBounds="0.88999999999999968, 1.21, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
   </nestedChildShapes>
