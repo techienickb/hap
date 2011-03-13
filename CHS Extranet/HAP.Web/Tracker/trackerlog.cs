@@ -12,8 +12,11 @@ namespace HAP.Web.Tracker
 {
     public class trackerlog : List<trackerlogentry>
     {
-        public trackerlog() : this(false)
+        public trackerlog():base()
         {
+            if (hapConfig.Current.Tracker.Provider == "XML") foreach (trackerlogentry tle in xml.GetLogs(false).Where(l => !l.LogOffDateTime.HasValue)) this.Add(tle);
+            else foreach (trackerlogentry tle in HAP.Data.SQL.Tracker.GetLogs(false).Where(l => !l.LogOffDateTime.HasValue)) this.Add(tle);
+            this.Sort(delegate(trackerlogentry e1, trackerlogentry e2) { return e1.LogOnDateTime.CompareTo(e2.LogOnDateTime); });
         }
 
         public trackerlog(bool loadfull) : base()
@@ -85,7 +88,7 @@ namespace HAP.Web.Tracker
                         if (entry.LogOnDateTime.Date != Value.Date) removeentries.Add(entry);
                         break;
                     case TrackerDateTimeValue.LogOff:
-                        if (entry.LogOffDateTime.Date != Value.Date) removeentries.Add(entry);
+                        if (entry.LogOffDateTime.Value.Date != Value.Date) removeentries.Add(entry);
                         break;
                 }
             foreach (trackerlogentry entry in removeentries) this.Remove(entry);

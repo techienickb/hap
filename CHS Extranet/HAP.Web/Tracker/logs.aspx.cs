@@ -15,6 +15,7 @@ namespace HAP.Web.Tracker
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            archive.Visible = hapConfig.Current.Tracker.Provider == "XML";
             List<DateTime> d = new List<DateTime>();
             foreach (trackerlogentry entry in trackerlog.CurrentFull)
             {

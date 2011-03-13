@@ -47,13 +47,13 @@ namespace HAP.Web.Tracker
                     if (!domainfilter.Items.Contains(new ListItem(entry.DomainName))) domainfilter.Items.Add(new ListItem(entry.DomainName));
                     if (!lsfilter.Items.Contains(new ListItem(entry.LogonServer))) lsfilter.Items.Add(new ListItem(entry.LogonServer));
                     if (!logondt.Items.Contains(new ListItem(entry.LogOnDateTime.ToShortDateString()))) logondt.Items.Add(new ListItem(entry.LogOnDateTime.ToShortDateString()));
-                    if (entry.LogOffDateTime.Year == 1)
+                    if (entry.LogOffDateTime.HasValue)
                     {
-                        if (!logoffdt.Items.Contains(new ListItem("Not Logged Off", entry.LogOffDateTime.ToShortDateString()))) logoffdt.Items.Add(new ListItem("Not Logged Off", entry.LogOffDateTime.ToShortDateString()));
+                        if (!logoffdt.Items.Contains(new ListItem(entry.LogOffDateTime.Value.ToShortDateString()))) logoffdt.Items.Add(new ListItem(entry.LogOffDateTime.Value.ToShortDateString()));
                     }
                     else
                     {
-                        if (!logoffdt.Items.Contains(new ListItem(entry.LogOffDateTime.ToShortDateString()))) logoffdt.Items.Add(new ListItem(entry.LogOffDateTime.ToShortDateString()));
+                        if (!logoffdt.Items.Contains(new ListItem("Not Logged Off", entry.LogOffDateTime.Value.ToShortDateString()))) logoffdt.Items.Add(new ListItem("Not Logged Off", entry.LogOffDateTime.Value.ToShortDateString()));
                     }
                 }
                 int dim = 30;
@@ -189,7 +189,7 @@ namespace HAP.Web.Tracker
                     tlog.Sort(delegate(trackerlogentry e1, trackerlogentry e2) { return e1.LogOnDateTime.CompareTo(e2.LogOnDateTime); });
                     break;
                 case "LogoffDT":
-                    tlog.Sort(delegate(trackerlogentry e1, trackerlogentry e2) { return e1.LogOffDateTime.CompareTo(e2.LogOffDateTime); });
+                    tlog.Sort(delegate(trackerlogentry e1, trackerlogentry e2) { return e1.LogOffDateTime.Value.CompareTo(e2.LogOffDateTime.Value); });
                     break;
             }
 
