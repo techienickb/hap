@@ -146,27 +146,27 @@
             // Column1
             // 
             this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Column1.FillWeight = 120F;
             this.Column1.HeaderText = "Computer Name";
             this.Column1.Name = "Column1";
             this.Column1.ReadOnly = true;
             // 
             // Domainname
             // 
-            this.Domainname.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Domainname.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.Domainname.HeaderText = "Domain Name";
             this.Domainname.Name = "Domainname";
             this.Domainname.ReadOnly = true;
+            this.Domainname.Width = 117;
             // 
             // Column2
             // 
-            this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             this.Column2.DefaultCellStyle = dataGridViewCellStyle1;
-            this.Column2.FillWeight = 181.4815F;
             this.Column2.HeaderText = "Logon Date & Time";
             this.Column2.Name = "Column2";
             this.Column2.ReadOnly = true;
+            this.Column2.Width = 109;
             // 
             // Column3
             // 

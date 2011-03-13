@@ -24,6 +24,7 @@ namespace HAP.Web.Tracker
         public void Clear(string Computer, string DomainName)
         {
             if (hapConfig.Current.Tracker.Provider == "XML") xml.Clear(Computer, DomainName);
+            else HAP.Data.SQL.Tracker.Clear(Computer, DomainName);
         }
 
         [WebMethod]
@@ -31,6 +32,7 @@ namespace HAP.Web.Tracker
         {
             LogonsList ll = new LogonsList();
             if (hapConfig.Current.Tracker.Provider == "XML") ll.Logons = xml.Logon(Username, Computer, DomainName, IP, LogonServer, os);
+            else ll.Logons = HAP.Data.SQL.Tracker.Logon(Username, Computer, DomainName, IP, LogonServer, os);
             ll.OverrideCode = hapConfig.Current.Tracker.OverrideCode;
             ll.MaxLogons = isAdmin(Username) ? 0 : isStudent(Username) ? hapConfig.Current.Tracker.MaxStudentLogons : hapConfig.Current.Tracker.MaxStaffLogons;
             ll.UserType = isAdmin(Username) ? UT.Admin : isStudent(Username) ? UT.Student : UT.Staff;
@@ -54,6 +56,7 @@ namespace HAP.Web.Tracker
             }
             catch { }
             if (hapConfig.Current.Tracker.Provider == "XML") xml.Clear(Computer, DomainName);
+            else HAP.Data.SQL.Tracker.Clear(Computer, DomainName);
         }
         
         bool isAdmin(string username)

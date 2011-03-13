@@ -11,8 +11,7 @@
             <asp:AsyncPostBackTrigger controlid="ListView1" eventname="ItemCommand" />
         </Triggers>
         <ContentTemplate>
-            <asp:ListView ID="ListView1" runat="server" DataSourceID="xmlsource" 
-                onitemcommand="ListView1_ItemCommand">
+            <asp:ListView ID="ListView1" runat="server" onitemcommand="ListView1_ItemCommand">
                 <EmptyDataTemplate>
                     <table runat="server" style="">
                         <tr>
@@ -22,13 +21,13 @@
                 </EmptyDataTemplate>
                 <ItemTemplate>
                     <tr style="">
-                        <td><%# Eval("computername") %>(<%# Eval("ip") %>)
+                        <td><%# Eval("ComputerName") %>(<%# Eval("IP") %>)
                         </td>
-                        <td><%# Eval("username") %></td>
-                        <td><%# Eval("domainname") %></td>
-                        <td><%# Eval("logonserver") %></td>
-                        <td><%# DateTime.Parse(Eval("logondatetime").ToString()).ToString("f") %></td>
-                        <td style="width: 60px"><asp:Button OnClientClick="return confirm('Are you sure?');" Font-Size="Smaller" runat="server" Text="Logoff" CommandName="Logoff" CommandArgument='<%# Eval("computername") %>' /></td>
+                        <td><%# Eval("UserName") %></td>
+                        <td><%# Eval("DomainName") %></td>
+                        <td><%# Eval("LogonServer") %></td>
+                        <td><%# DateTime.Parse(Eval("LogOnDateTime").ToString()).ToString("f")%></td>
+                        <td style="width: 60px"><asp:Button OnClientClick="return confirm('Are you sure?');" Font-Size="Smaller" runat="server" Text="Logoff" CommandName="Logoff" CommandArgument='<%# Eval("ComputerName") %>|<%#Eval("DomainName") %>' /></td>
                     </tr>
                 </ItemTemplate>
                 <LayoutTemplate>
@@ -46,7 +45,6 @@
                     </table>
                 </LayoutTemplate>
             </asp:ListView>
-            <asp:XmlDataSource ID="xmlsource" runat="server" DataFile="~/App_Data/tracker.xml" XPath="/Tracker/Event[@logoffdatetime='']" />
             <div style="overflow: hidden; ">
                 <asp:Button runat="server" style="float: right;" id="logalloff" OnClientClick="return confirm('This may take some time...');" onclick="logalloff_Click" Text="Log All Off" />
             </div>

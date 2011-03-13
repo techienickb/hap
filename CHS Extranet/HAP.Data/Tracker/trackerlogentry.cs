@@ -17,7 +17,7 @@ namespace HAP.Data.Tracker
         public string LogonServer { get; set; }
         public string OS { get; set; }
         public DateTime LogOnDateTime { get; set; }
-        public DateTime LogOffDateTime { get; set; }
+        public Nullable<DateTime> LogOffDateTime { get; set; }
 
         public trackerlogentry(XmlNode node)
         {
@@ -29,8 +29,8 @@ namespace HAP.Data.Tracker
             OS = node.Attributes["os"].Value;
             if (!string.IsNullOrWhiteSpace(node.Attributes["logoffdatetime"].Value))
                 LogOffDateTime = DateTime.Parse(node.Attributes["logoffdatetime"].Value);
-            if (!string.IsNullOrWhiteSpace(node.Attributes["logondatetime"].Value))
-                LogOnDateTime = DateTime.Parse(node.Attributes["logondatetime"].Value);
+            else LogOffDateTime = null;
+            LogOnDateTime = DateTime.Parse(node.Attributes["logondatetime"].Value);
         }
         public trackerlogentry(string IP, string Computer, string User, string Domain, string LogonServer, string os, DateTime LogonDateTime)
         {
@@ -41,10 +41,12 @@ namespace HAP.Data.Tracker
             this.OS = os;
             this.LogonServer = LogonServer;
             this.LogOnDateTime = LogonDateTime;
+            this.LogOffDateTime = null;
         }
 
         public trackerlogentry()
         {
+            this.LogOffDateTime = null;
         }
     }
 }
