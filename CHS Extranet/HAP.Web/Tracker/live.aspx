@@ -27,9 +27,9 @@
                         <td><%# Eval("DomainName") %></td>
                         <td><%# Eval("LogonServer") %></td>
                         <td><%# DateTime.Parse(Eval("LogOnDateTime").ToString()).ToString("f")%></td>
-                        <td style="width: 60px"><asp:Button OnClientClick="return confirm('Are you sure?');" Font-Size="Smaller" runat="server" Text="Logoff" CommandName="Logoff" CommandArgument='<%# Eval("ComputerName") %>|<%#Eval("DomainName") %>' /></td>
+                        <td style="width: 60px"><asp:Button OnClientClick="return confirm('Are you sure?');" Font-Size="Smaller" runat="server" Text="Logoff" CommandName="Logoff" CommandArgument='<%# Eval("ComputerName").ToString() + "|" + Eval("DomainName").ToString() %>' /></td>
                     </tr>
-                </ItemTemplate>
+                </ItemTemplate>24
                 <LayoutTemplate>
                     <table ID="itemPlaceholderContainer" runat="server" border="0" style="" class="trackertable">
                         <tr runat="server">
