@@ -214,7 +214,7 @@ namespace HAP.Logon.Tracker.api {
         
         private string overrideCodeField;
         
-        private trackerlogentry[] logonsField;
+        private trackerlogentrysmall[] logonsField;
         
         /// <remarks/>
         public UT UserType {
@@ -247,7 +247,7 @@ namespace HAP.Logon.Tracker.api {
         }
         
         /// <remarks/>
-        public trackerlogentry[] Logons {
+        public trackerlogentrysmall[] Logons {
             get {
                 return this.logonsField;
             }
@@ -279,9 +279,7 @@ namespace HAP.Logon.Tracker.api {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://hap.codeplex.com/")]
-    public partial class trackerlogentry {
-        
-        private string ipField;
+    public partial class trackerlogentrysmall {
         
         private string computerNameField;
         
@@ -289,23 +287,7 @@ namespace HAP.Logon.Tracker.api {
         
         private string domainNameField;
         
-        private string logonServerField;
-        
-        private string osField;
-        
         private System.DateTime logOnDateTimeField;
-        
-        private System.DateTime logOffDateTimeField;
-        
-        /// <remarks/>
-        public string IP {
-            get {
-                return this.ipField;
-            }
-            set {
-                this.ipField = value;
-            }
-        }
         
         /// <remarks/>
         public string ComputerName {
@@ -338,42 +320,12 @@ namespace HAP.Logon.Tracker.api {
         }
         
         /// <remarks/>
-        public string LogonServer {
-            get {
-                return this.logonServerField;
-            }
-            set {
-                this.logonServerField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string OS {
-            get {
-                return this.osField;
-            }
-            set {
-                this.osField = value;
-            }
-        }
-        
-        /// <remarks/>
         public System.DateTime LogOnDateTime {
             get {
                 return this.logOnDateTimeField;
             }
             set {
                 this.logOnDateTimeField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public System.DateTime LogOffDateTime {
-            get {
-                return this.logOffDateTimeField;
-            }
-            set {
-                this.logOffDateTimeField = value;
             }
         }
     }

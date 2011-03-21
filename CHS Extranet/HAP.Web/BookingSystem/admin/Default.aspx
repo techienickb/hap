@@ -91,7 +91,7 @@
                         </table></FooterTemplate>
                 </asp:Repeater>
                 <asp:ObjectDataSource ID="termdatesDataSource" runat="server" SelectMethod="ToArray"
-                    TypeName="HAP.Web.BookingSystem.Terms"></asp:ObjectDataSource>
+                    TypeName="HAP.Data.BookingSystem.Terms"></asp:ObjectDataSource>
                 <p class="PanelSaveButton" style="text-align: right;">
                     <asp:Button ID="SaveButton" runat="server" Text="Save" />
                 </p>
@@ -117,9 +117,9 @@
                                     <asp:CommandField ButtonType="Button" ShowDeleteButton="True" ShowEditButton="True" />
                                 </Columns>
                             </asp:GridView>
-                            <asp:ObjectDataSource ID="StaticBookingsDS" runat="server" DataObjectTypeName="HAP.Web.BookingSystem.Booking"
+                            <asp:ObjectDataSource ID="StaticBookingsDS" runat="server" DataObjectTypeName="HAP.Data.BookingSystem.Booking"
                                 DeleteMethod="deleteStaticBooking" InsertMethod="addStaticBooking" SelectMethod="getStaticBookingsArray"
-                                TypeName="HAP.Web.BookingSystem.BookingSystem" UpdateMethod="updateStaticBooking" />
+                                TypeName="HAP.Data.BookingSystem.BookingSystem" UpdateMethod="updateStaticBooking" />
                             <asp:DetailsView ID="DetailsView1" runat="server" AutoGenerateRows="False" DataSourceID="StaticBookingsDS"
                                 DefaultMode="Insert" EnableModelValidation="True">
                                 <Fields>
@@ -307,8 +307,8 @@
                                 </table>
                             </LayoutTemplate>
                         </asp:ListView>
-                        <asp:ObjectDataSource ID="ABRDS" runat="server" DataObjectTypeName="HAP.Web.BookingSystem.AdvancedBookingRight"
-                            InsertMethod="addBookingRights" SelectMethod="getBookingRights" TypeName="HAP.Web.BookingSystem.BookingSystem"
+                        <asp:ObjectDataSource ID="ABRDS" runat="server" DataObjectTypeName="HAP.Data.BookingSystem.AdvancedBookingRight"
+                            InsertMethod="addBookingRights" SelectMethod="getBookingRights" TypeName="HAP.Data.BookingSystem.BookingSystem"
                             UpdateMethod="updateBookingRights" DeleteMethod="deleteBookingRights" />
                     </ContentTemplate>
                 </asp:UpdatePanel>

@@ -27,8 +27,6 @@ namespace HAP.Logon.Tracker
             this.Text = "Logon Tracker - " + label1.Text;
         }
 
-
-
         void  api_ClearCompleted(object sender, AsyncCompletedEventArgs e)
         {
             if (e.Error != null) MessageBox.Show(e.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

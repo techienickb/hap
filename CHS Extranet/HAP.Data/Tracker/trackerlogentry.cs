@@ -49,4 +49,30 @@ namespace HAP.Data.Tracker
             this.LogOffDateTime = null;
         }
     }
+
+
+    public class trackerlogentrysmall
+    {
+        public string ComputerName { get; set; }
+        public string UserName { get; set; }
+        public string DomainName { get; set; }
+        public DateTime LogOnDateTime { get; set; }
+
+        public trackerlogentrysmall(XmlNode node)
+        {
+            ComputerName = node.Attributes["computername"].Value;
+            UserName = node.Attributes["username"].Value;
+            DomainName = node.Attributes["domainname"].Value;
+            LogOnDateTime = DateTime.Parse(node.Attributes["logondatetime"].Value);
+        }
+        public trackerlogentrysmall(string Computer, string User, string Domain, DateTime LogonDateTime)
+        {
+            this.ComputerName = Computer;
+            this.UserName = User;
+            this.DomainName = Domain;
+            this.LogOnDateTime = LogonDateTime;
+        }
+
+        public trackerlogentrysmall() { }
+    }
 }

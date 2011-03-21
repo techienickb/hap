@@ -10,7 +10,7 @@ namespace HAP.Data.Tracker
         public UT UserType { get; set; }
         public int MaxLogons { get; set; }
         public string OverrideCode { get; set; }
-        public trackerlogentry[] Logons { get; set; }
+        public trackerlogentrysmall[] Logons { get; set; }
     }
 
     public enum UT { Admin, Staff, Student }

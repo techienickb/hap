@@ -18,12 +18,12 @@ namespace HAP.Data.SQL
             sdc.SubmitChanges();
         }
 
-        public static trackerlogentry[] Logon(string Username, string Computer, string DomainName, string IP, string LogonServer, string OS)
+        public static trackerlogentrysmall[] Logon(string Username, string Computer, string DomainName, string IP, string LogonServer, string OS)
         {
             sql2linqDataContext sdc = new sql2linqDataContext(ConfigurationManager.ConnectionStrings[hapConfig.Current.Tracker.Provider].ConnectionString);
-            List<trackerlogentry> ll = new List<trackerlogentry>();
+            List<trackerlogentrysmall> ll = new List<trackerlogentrysmall>();
             foreach (TrackerEvent te in sdc.TrackerEvents.Where(t => t.Username == Username && t.domainname == DomainName && !t.LogoffDateTime.HasValue))
-                ll.Add(new trackerlogentry(te.ip, te.ComputerName, te.Username, te.domainname, te.logonserver, te.os, te.LogonDateTime));
+                ll.Add(new trackerlogentrysmall(te.ComputerName, te.Username, te.domainname, te.LogonDateTime));
             TrackerEvent newe = new TrackerEvent();
             newe.LogonDateTime = DateTime.Now;
             newe.logonserver = LogonServer;
