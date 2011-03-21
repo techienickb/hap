@@ -60,8 +60,6 @@ namespace HAP.Web.Tracker
 
         protected void logalloff_Click(object sender, EventArgs e)
         {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(Server.MapPath("~/App_Data/tracker.xml"));
             foreach (trackerlogentry entry in trackerlog.Current)
             {
                 try
