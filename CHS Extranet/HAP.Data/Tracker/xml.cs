@@ -27,9 +27,9 @@ namespace HAP.Data.Tracker
             Save(doc);
         }
 
-        public static trackerlogentry[] Logon(string Username, string Computer, string DomainName, string IP, string LogonServer, string OS)
+        public static trackerlogentrysmall[] Logon(string Username, string Computer, string DomainName, string IP, string LogonServer, string OS)
         {
-            List<trackerlogentry> ll = new List<trackerlogentry>();
+            List<trackerlogentrysmall> ll = new List<trackerlogentrysmall>();
             XmlDocument doc = Doc;
             XmlElement e = doc.CreateElement("Event");
             e.SetAttribute("logondatetime", DateTime.Now.ToString("s"));
@@ -42,7 +42,7 @@ namespace HAP.Data.Tracker
             e.SetAttribute("logonserver", LogonServer);
             hapConfig hap = hapConfig.Current;
             foreach (XmlNode node in doc.SelectNodes(string.Format("/Tracker/Event[@logoffdatetime='' and @username='{0}' and @domainname='{1}']", Username, DomainName)))
-                ll.Add(new trackerlogentry(node));
+                ll.Add(new trackerlogentrysmall(node));
             doc.SelectSingleNode("/Tracker").AppendChild(e);
             Save(doc);
             return ll.ToArray();
