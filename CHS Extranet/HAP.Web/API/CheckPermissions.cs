@@ -6,6 +6,7 @@ using System.Security.AccessControl;
 using System.Web.Routing;
 using HAP.Web.Configuration;
 using System.IO;
+using HAP.Data.ComputerBrowser;
 
 namespace HAP.Web.API
 {

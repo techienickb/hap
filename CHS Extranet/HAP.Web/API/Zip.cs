@@ -14,6 +14,7 @@ using System.DirectoryServices.AccountManagement;
 using System.Xml;
 using System.IO;
 using ICSharpCode.SharpZipLib.Zip;
+using HAP.Data.ComputerBrowser;
 
 namespace HAP.Web.API
 {

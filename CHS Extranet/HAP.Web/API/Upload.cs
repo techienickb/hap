@@ -8,6 +8,7 @@ using HAP.Web.Configuration;
 using HAP.Web.routing;
 using System.IO;
 using System.Configuration;
+using HAP.Data.ComputerBrowser;
 
 namespace HAP.Web.API
 {

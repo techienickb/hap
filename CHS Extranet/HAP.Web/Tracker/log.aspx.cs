@@ -53,7 +53,7 @@ namespace HAP.Web.Tracker
                     }
                     else
                     {
-                        if (!logoffdt.Items.Contains(new ListItem("Not Logged Off", entry.LogOffDateTime.Value.ToShortDateString()))) logoffdt.Items.Add(new ListItem("Not Logged Off", entry.LogOffDateTime.Value.ToShortDateString()));
+                        if (!logoffdt.Items.Contains(new ListItem("Not Logged Off", ""))) logoffdt.Items.Add(new ListItem("Not Logged Off", ""));
                     }
                 }
                 int dim = 30;
@@ -130,7 +130,7 @@ namespace HAP.Web.Tracker
                 if (logondt.SelectedValue != "All")
                     tlog.Filter(TrackerDateTimeValue.LogOff, DateTime.Parse(logondt.SelectedValue));
                 if (logoffdt.SelectedValue != "All")
-                    tlog.Filter(TrackerDateTimeValue.LogOff, DateTime.Parse(logoffdt.SelectedValue));
+                    tlog.Filter(TrackerDateTimeValue.LogOff, logoffdt.SelectedValue);
 
                 ListView1.DataSource = tlog.ToArray();
                 ListView1.DataBind();
@@ -154,11 +154,14 @@ namespace HAP.Web.Tracker
 
         protected void computerfilter_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            showdata.Visible = false;
+            showtable = "";
         }
 
         protected void sort_Command(object sender, CommandEventArgs e)
         {
+            showdata.Visible = false;
+            showtable = "";
             if (tlog == null)
             {
                 if (Mode == mode.month)
@@ -189,7 +192,7 @@ namespace HAP.Web.Tracker
                     tlog.Sort(delegate(trackerlogentry e1, trackerlogentry e2) { return e1.LogOnDateTime.CompareTo(e2.LogOnDateTime); });
                     break;
                 case "LogoffDT":
-                    tlog.Sort(delegate(trackerlogentry e1, trackerlogentry e2) { return e1.LogOffDateTime.Value.CompareTo(e2.LogOffDateTime.Value); });
+                    tlog.Sort(delegate(trackerlogentry e1, trackerlogentry e2) { return e1.LogOffDateTime.HasValue ? (e2.LogOffDateTime.HasValue ? e1.LogOffDateTime.Value.CompareTo(e2.LogOffDateTime.Value) : 1) : -1; });
                     break;
             }
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.IO;
 
-namespace HAP.Web
+namespace HAP.Data.ComputerBrowser
 {
     public class MyComputerItem
     {
