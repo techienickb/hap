@@ -7,6 +7,7 @@ using System.Configuration;
 using System.DirectoryServices.AccountManagement;
 using System.IO;
 using System.Web.Routing;
+using HAP.Data.ComputerBrowser;
 
 namespace HAP.Web.API
 {

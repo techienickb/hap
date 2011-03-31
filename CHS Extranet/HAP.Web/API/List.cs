@@ -14,7 +14,7 @@ using System.DirectoryServices.AccountManagement;
 using System.Xml;
 using System.IO;
 using Microsoft.Win32;
-using System.Security.AccessControl;
+using HAP.Data.ComputerBrowser;
 
 namespace HAP.Web.API
 {

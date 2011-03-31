@@ -53,6 +53,11 @@
     <Compile Include="BookingSystem\BookingKey.cs" />
     <Compile Include="BookingSystem\BookingSystem.cs" />
     <Compile Include="BookingSystem\Term.cs" />
+    <Compile Include="ComputerBrowser\ComputerBrowserAPIItem.cs" />
+    <Compile Include="ComputerBrowser\Converter.cs" />
+    <Compile Include="ComputerBrowser\FileCheckResponse.cs" />
+    <Compile Include="ComputerBrowser\MyComputerItem.cs" />
+    <Compile Include="ComputerBrowser\PrimaryResponse.cs" />
     <Compile Include="Pupils.cs" />
     <Compile Include="Tracker\Logons.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

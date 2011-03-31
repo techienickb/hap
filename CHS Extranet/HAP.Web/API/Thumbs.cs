@@ -16,6 +16,7 @@ using System.IO;
 using Microsoft.Win32;
 using System.Drawing;
 using System.Drawing.Imaging;
+using HAP.Data.ComputerBrowser;
 
 namespace HAP.Web.API
 {

@@ -101,7 +101,7 @@
                         <td><%# Eval("DomainName") %></td>
                         <td><%# Eval("LogonServer") %></td>
                         <td style="width: 160px"><a href="<%=Request.ApplicationPath %>/tracker/<%# ((DateTime)Eval("LogOnDateTime")).ToString("yyyy/M") %>/d/<%# ((DateTime)Eval("LogOnDateTime")).Day %>/"><%# ((DateTime)Eval("LogOnDateTime")).ToString("dd MMMM yyyy") %></a> <%# ((DateTime)Eval("LogOnDateTime")).ToString("HH:mm") %></td>
-                        <td style="width: 160px"><%# ((bool)Eval("LogOffDateTime.HasValue")) ? ((DateTime)Eval("LogOffDateTime.Value")).ToString("f") : "" %></td>
+                        <td style="width: 160px"><%# (Eval("LogOffDateTime") == null) ? "" : ((DateTime)Eval("LogOffDateTime")).ToString("f")%></td>
                     </tr>
                 </ItemTemplate>
             </asp:Repeater>

@@ -13,6 +13,7 @@ using System.Configuration;
 using System.DirectoryServices.AccountManagement;
 using System.Xml;
 using System.IO;
+using HAP.Data.ComputerBrowser;
 
 namespace HAP.Web.API
 {

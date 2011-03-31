@@ -7,7 +7,7 @@ using HAP.Web.Configuration;
 using System.DirectoryServices.AccountManagement;
 using Microsoft.Win32;
 
-namespace HAP.Web.API
+namespace HAP.Data.ComputerBrowser
 {
     public class Converter
     {
@@ -62,6 +62,11 @@ namespace HAP.Web.API
             return DriveToUNC(Path.Remove(0, 1), Path.Substring(0, 1));
         }
 
+        public static string DriveToUNC(string Path, out uncpath unc, out string userhome)
+        {
+            return DriveToUNC(Path.Remove(0, 2), Path.Substring(0, 1), out unc, out userhome);
+        }
+
         public static string UNCtoDrive(string dirpath, uncpath unc, string userhome)
         {
             dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", userhome), Username), unc.Drive + ":");
@@ -111,6 +116,20 @@ namespace HAP.Web.API
                 mime = rk.GetValue("Content Type").ToString();
             return mime;
 
+        }
+
+        public static string parseLength(object size)
+        {
+            decimal d = decimal.Parse(size.ToString() + ".00");
+            string[] s = { "bytes", "KB", "MB", "GB", "TB", "PB" };
+            int x = 0;
+            while (d > 1024)
+            {
+                d = d / 1024;
+                x++;
+            }
+            d = Math.Round(d, 2);
+            return d.ToString() + " " + s[x];
         }
     }
 }

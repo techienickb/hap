@@ -11,6 +11,7 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using HAP.Web.Configuration;
 using HAP.Web.routing;
+using HAP.Data.ComputerBrowser;
 
 namespace HAP.Web
 {

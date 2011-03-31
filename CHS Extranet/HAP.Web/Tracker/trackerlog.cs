@@ -88,10 +88,23 @@ namespace HAP.Web.Tracker
                         if (entry.LogOnDateTime.Date != Value.Date) removeentries.Add(entry);
                         break;
                     case TrackerDateTimeValue.LogOff:
-                        if (entry.LogOffDateTime.Value.Date != Value.Date) removeentries.Add(entry);
+                        if (!entry.LogOffDateTime.HasValue) removeentries.Add(entry);
+                        else if (entry.LogOffDateTime.Value.Date != Value.Date) removeentries.Add(entry);
                         break;
                 }
             foreach (trackerlogentry entry in removeentries) this.Remove(entry);
+        }
+
+        public void Filter(TrackerDateTimeValue Property, string Value)
+        {
+            if (string.IsNullOrEmpty(Value) && Property == TrackerDateTimeValue.LogOff)
+            {
+                List<trackerlogentry> removeentries = new List<trackerlogentry>();
+                foreach (trackerlogentry entry in this)
+                    if (entry.LogOffDateTime.HasValue) removeentries.Add(entry);
+                foreach (trackerlogentry entry in removeentries) this.Remove(entry);
+            }
+            else Filter(Property, DateTime.Parse(Value));
         }
 
         public static trackerlog Current { get { return new trackerlog(); } }
