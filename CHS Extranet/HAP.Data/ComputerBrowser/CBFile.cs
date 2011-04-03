@@ -38,12 +38,12 @@ namespace HAP.Data.ComputerBrowser
             catch { Type = "File"; }
             Thumb = "images/icons/" + MyComputerItem.ParseForImage(file);
             if (file.Extension.ToLower().Equals(".png") || file.Extension.ToLower().Equals(".jpg") || file.Extension.ToLower().Equals(".jpeg") || file.Extension.ToLower().Equals(".gif") || file.Extension.ToLower().Equals(".bmp") || file.Extension.ToLower().Equals(".wmf"))
-                Thumb = "api/mycomputer/thumb/" + dirpath.Replace('&', '^');
+                Thumb = "api/mycomputer/thumb/" + Converter.UNCtoDrive2(file.FullName, unc, userhome).Replace('&', '^');
             BType = ComputerBrowser.BType.File;
             CreatedTime = file.CreationTime;
             ModifiedTime = file.LastWriteTime;
             Size = parseLength(file.Length);
-            Path = Converter.UNCtoDrive(file.Name, unc, userhome);
+            Path = Converter.UNCtoDrive(file.FullName, unc, userhome);
         }
 
         public CBFile(DirectoryInfo dir, uncpath unc, string userhome)
@@ -55,7 +55,7 @@ namespace HAP.Data.ComputerBrowser
             BType = ComputerBrowser.BType.Folder;
             CreatedTime = dir.CreationTime;
             ModifiedTime = dir.LastWriteTime;
-            Path = Converter.UNCtoDrive(dir.Name, unc, userhome);
+            Path = Converter.UNCtoDrive(dir.FullName, unc, userhome);
         }
 
         public static string parseLength(object size)

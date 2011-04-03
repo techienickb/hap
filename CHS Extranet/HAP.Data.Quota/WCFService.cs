@@ -26,8 +26,14 @@ namespace HAP.Data.Quota
     [DataContract]
     public class QuotaInfo
     {
+        public QuotaInfo() { Used = Free = Total = -1; }
+
         [DataMember]
         public double Used { get; set; }
+
+        [DataMember]
+        public double Free { get; set; }
+
         [DataMember]
         public double Total { get; set; }
 

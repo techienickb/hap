@@ -90,6 +90,30 @@
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:element name="GetFreeSpacePercentage">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userhome" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFreeSpacePercentageResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetFreeSpacePercentageResult" type="tns:QuotaInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="QuotaInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ExtensionData" type="tns:ExtensionDataObject" />
+          <s:element minOccurs="1" maxOccurs="1" name="Free" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="Total" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="Used" type="s:double" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ExtensionDataObject" />
     </s:schema>
   </wsdl:types>
   <wsdl:message name="getInitSoapIn">
@@ -122,6 +146,12 @@
   <wsdl:message name="ResetPasswordSoapOut">
     <wsdl:part name="parameters" element="tns:ResetPasswordResponse" />
   </wsdl:message>
+  <wsdl:message name="GetFreeSpacePercentageSoapIn">
+    <wsdl:part name="parameters" element="tns:GetFreeSpacePercentage" />
+  </wsdl:message>
+  <wsdl:message name="GetFreeSpacePercentageSoapOut">
+    <wsdl:part name="parameters" element="tns:GetFreeSpacePercentageResponse" />
+  </wsdl:message>
   <wsdl:portType name="apiSoap">
     <wsdl:operation name="getInit">
       <wsdl:input message="tns:getInitSoapIn" />
@@ -142,6 +172,10 @@
     <wsdl:operation name="ResetPassword">
       <wsdl:input message="tns:ResetPasswordSoapIn" />
       <wsdl:output message="tns:ResetPasswordSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFreeSpacePercentage">
+      <wsdl:input message="tns:GetFreeSpacePercentageSoapIn" />
+      <wsdl:output message="tns:GetFreeSpacePercentageSoapOut" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="apiSoap" type="tns:apiSoap">
@@ -191,6 +225,15 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetFreeSpacePercentage">
+      <soap:operation soapAction="http://hap.codeplex.com/GetFreeSpacePercentage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="apiSoap12" type="tns:apiSoap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
@@ -232,6 +275,15 @@
     </wsdl:operation>
     <wsdl:operation name="ResetPassword">
       <soap12:operation soapAction="http://hap.codeplex.com/ResetPassword" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFreeSpacePercentage">
+      <soap12:operation soapAction="http://hap.codeplex.com/GetFreeSpacePercentage" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

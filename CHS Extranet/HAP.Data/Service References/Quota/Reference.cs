@@ -23,6 +23,9 @@ namespace HAP.Data.Quota {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private double FreeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private double TotalField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -35,6 +38,19 @@ namespace HAP.Data.Quota {
             }
             set {
                 this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public double Free {
+            get {
+                return this.FreeField;
+            }
+            set {
+                if ((this.FreeField.Equals(value) != true)) {
+                    this.FreeField = value;
+                    this.RaisePropertyChanged("Free");
+                }
             }
         }
         

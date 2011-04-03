@@ -179,6 +179,7 @@ namespace HAP.UserCard
         {
             name.Text = up.DisplayName;
             email.Text = up.EmailAddress;
+            homedrive.Text = up.HomeDrive;
             pass.Visibility = controlled.Visibility = isStudent ? System.Windows.Visibility.Hidden : System.Windows.Visibility.Visible;
             if (!isStudent) controlled.Visibility = string.IsNullOrEmpty(Properties.Settings.Default.ControlledOU) ? System.Windows.Visibility.Hidden : controlled.Visibility;
             departmenttext.Text = dep;
@@ -194,6 +195,7 @@ namespace HAP.UserCard
         string adun = "";
         string adpw = "";
         string sgn = "";
+        string hd = "";
         void doInit(object data)
         {
             //try
@@ -208,6 +210,7 @@ namespace HAP.UserCard
                 sgn = e.Result.StudentGroupName;
                 pcontext = new PrincipalContext(ContextType.Domain, ad, adun, adpw);
                 up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Environment.UserName);
+                if (!string.IsNullOrEmpty(up.HomeDrive)) hd = up.HomeDirectory;
                 isStudent = up.IsMemberOf(GroupPrincipal.FindByIdentity(pcontext, e.Result.StudentGroupName));
                 adc = e.Result.ADConString;
                 DirectoryEntry usersDE = new DirectoryEntry(adc, adun, adpw);
@@ -229,10 +232,82 @@ namespace HAP.UserCard
                 Web.apiSoapClient c = new Web.apiSoapClient();
                 c.getDepartmentsCompleted += new EventHandler<Web.getDepartmentsCompletedEventArgs>(c_getDepartmentsCompleted);
                 c.getFormsInCompleted += new EventHandler<Web.getFormsInCompletedEventArgs>(c_getFormsInCompleted);
+                c.GetFreeSpacePercentageCompleted += new EventHandler<Web.GetFreeSpacePercentageCompletedEventArgs>(c_GetFreeSpacePercentageCompleted);
                 if (isStudent) c.getFormsInAsync(path.Remove(path.IndexOf(',')).Remove(0, path.IndexOf('=') + 1));
                 else c.getDepartmentsAsync();
+                if (!string.IsNullOrEmpty(up.HomeDrive)) c.GetFreeSpacePercentageAsync(up.UserPrincipalName, up.HomeDirectory);
             //}
             //catch { Close();  }
+        }
+
+        private Thread us = null;
+        public void updatespace()
+        {
+            Thread.Sleep(new TimeSpan(0, 2, 0));
+
+            Web.apiSoapClient c = new Web.apiSoapClient();
+            c.GetFreeSpacePercentageCompleted += new EventHandler<Web.GetFreeSpacePercentageCompletedEventArgs>(c_GetFreeSpacePercentageCompleted);
+            c.GetFreeSpacePercentageAsync(up.UserPrincipalName, up.HomeDirectory);
+        }
+
+        void c_GetFreeSpacePercentageCompleted(object sender, Web.GetFreeSpacePercentageCompletedEventArgs e)
+        {
+            Dispatcher.BeginInvoke(new EventHandler<Web.GetFreeSpacePercentageCompletedEventArgs>(UpdateSpace), sender, e);
+        }
+
+        void UpdateSpace(object sender, Web.GetFreeSpacePercentageCompletedEventArgs e)
+        {
+            if (e.Error != null || e.Result.Total == -1)
+            {
+                try
+                {
+                    long freeBytesForUser, totalBytes, freeBytes;
+                    if (Win32.GetDiskFreeSpaceEx(hd, out freeBytesForUser, out totalBytes, out freeBytes))
+                    {
+                        drivespaceprog.Maximum = totalBytes;
+                        drivespaceprog.Value = drivespaceprog.Maximum - freeBytes;
+                        freespace.Text = freespace.Text = "Free Space: " + parseLength(freeBytes);
+                    }
+                }
+                catch { drivespaceprog.Maximum = 0; }
+            }
+            else if (e.Result.Total > 0 && e.Result == null)
+            {
+                drivespaceprog.Maximum = e.Result.Total;
+                drivespaceprog.Value = e.Result.Used;
+                freespace.Text = freespace.Text = "Free Space: " + parseLength(e.Result.Total - e.Result.Used);
+            }
+            totalspace.Text = "Total Space: " + parseLength(drivespaceprog.Maximum);
+            if (drivespaceprog.Maximum > 0)
+            {
+                DriveSpace.Visibility = System.Windows.Visibility.Visible;
+                homedrive.Text = hd;
+                drivespaceper.Text = string.Format("{0}%", Math.Round((100 - Convert.ToDecimal(drivespaceprog.Maximum) / Convert.ToDecimal(drivespaceprog.Value)), 2));
+                if (us == null) us = new Thread(new ThreadStart(updatespace));
+                us.Start();
+            }
+        }
+
+
+        internal static class Win32
+        {
+            [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+            internal static extern bool GetDiskFreeSpaceEx(string drive, out long freeBytesForUser, out long totalBytes, out long freeBytes);
+
+        }
+
+        public static string parseLength(object size)
+        {
+            decimal d = decimal.Parse(size.ToString() + ".00");
+            string[] s = { "bytes", "KB", "MB", "GB", "TB", "PB" };
+            int x = 0;
+            while (d > 1024)
+            {
+                d = d / 1024;
+                x++;
+            }
+            d = Math.Round(d, 2);
+            return d.ToString() + " " + s[x];
         }
 
         private void DoCheck()
@@ -487,6 +562,12 @@ namespace HAP.UserCard
                 else save.Visibility = System.Windows.Visibility.Visible;
             }
             departmenttext.Text = (department.SelectedItem is Web.Department) ? ((Web.Department)department.SelectedItem).Name : ((Web.Form)department.SelectedItem).Name;
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            us.Abort();
+            us = null;
         }
     }
 }
