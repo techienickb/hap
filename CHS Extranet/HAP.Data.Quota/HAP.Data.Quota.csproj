@@ -3,17 +3,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>
-    </ProductVersion>
+    <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{472C6692-1464-44ED-A2DB-5A8EE3E698C0}</ProjectGuid>
+    <ProjectGuid>{335B9841-60EA-49CD-A32B-5866902330F5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HAP.Web.Configuration</RootNamespace>
-    <AssemblyName>HAP.Web.Configuration</AssemblyName>
+    <RootNamespace>HAP.Data.Quota</RootNamespace>
+    <AssemblyName>HAP.Data.Quota</AssemblyName>
+    <ProjectTypeGuids>{3D9AD99F-2412-4246-B90B-4EAA41C64699};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <StartArguments>/client:"WcfTestClient.exe"</StartArguments>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Nonshipping>true</Nonshipping>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
@@ -37,46 +37,44 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Management" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Web" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="adSettings.cs" />
-    <Compile Include="announcementBox.cs" />
-    <Compile Include="baseSettings.cs" />
-    <Compile Include="bookingResource.cs" />
-    <Compile Include="bookingResources.cs" />
-    <Compile Include="bookingSystem.cs" />
-    <Compile Include="hapConfig.cs" />
-    <Compile Include="homepagelink.cs" />
-    <Compile Include="homepagelinkgroup.cs" />
-    <Compile Include="homepagelinkgrouplinks.cs" />
-    <Compile Include="homepagelinkgroups.cs" />
-    <Compile Include="homepagelinks.cs" />
-    <Compile Include="lesson.cs" />
-    <Compile Include="lessons.cs" />
-    <Compile Include="mycomputer.cs" />
-    <Compile Include="ouobject.cs" />
-    <Compile Include="ouobjects.cs" />
+    <Compile Include="IService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="quotaserver.cs" />
-    <Compile Include="quotaservers.cs" />
-    <Compile Include="subject.cs" />
-    <Compile Include="subjects.cs" />
-    <Compile Include="tracker.cs" />
-    <Compile Include="uncpath.cs" />
-    <Compile Include="uncpaths.cs" />
-    <Compile Include="uploadfilter.cs" />
-    <Compile Include="uploadfilters.cs" />
+    <Compile Include="WCFService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="DiskQuotaTypeLibrary">
+      <Guid>{7988B57C-EC89-11CF-9C00-00AA00A14F56}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{3D9AD99F-2412-4246-B90B-4EAA41C64699}">
+        <WcfProjectProperties>
+          <AutoStart>True</AutoStart>
+        </WcfProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

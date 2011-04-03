@@ -26,5 +26,11 @@ namespace HAP.Web.Configuration
             get { return (string)this["hideextensions"]; }
             set { this["hideextensions"] = value; }
         }
+
+        [ConfigurationProperty("quotaservers", IsDefaultCollection = false)]
+        public quotaservers quotaservers
+        {
+            get { return (quotaservers)base["quotaservers"]; }
+        }
     }
 }

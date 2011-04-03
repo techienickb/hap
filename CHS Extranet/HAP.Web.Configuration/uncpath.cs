@@ -52,5 +52,14 @@ namespace HAP.Web.Configuration
             get { return (bool)this["enablemove"]; }
             set { this["enablemove"] = value; }
         }
+
+        [ConfigurationProperty("usage", DefaultValue = UsageMode.DriveSpace, IsRequired = false)]
+        public UsageMode Usage
+        {
+            get { return (UsageMode)this["enablemove"]; }
+            set { this["enablemove"] = value; }
+        }
     }
+
+    public enum UsageMode { DriveSpace, Quota }
 }
