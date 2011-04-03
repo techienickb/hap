@@ -10,6 +10,8 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Configuration;
 using System.DirectoryServices.AccountManagement;
+using Microsoft.Win32;
+using ICSharpCode.SharpZipLib.Zip;
 
 namespace HAP.Web
 {
@@ -58,16 +60,30 @@ namespace HAP.Web
             List<ComputerBrowserAPIItem> items = new List<ComputerBrowserAPIItem>();
             foreach (uncpath path in config.MyComputer.UNCPaths)
             {
-                string space = "";
+                decimal space = -1;
                 bool showspace = false;
                 if (HttpContext.Current.User.IsInRole("Domain Admins") || !path.UNC.Contains("%homepath%")) showspace = isWriteAuth(path);
                 if (showspace)
                 {
-                    if (Win32.GetDiskFreeSpaceEx(string.Format(path.UNC.Replace("%homepath%", userhome), Username), out freeBytesForUser, out totalBytes, out freeBytes))
-                        space = "|" + Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
-                    else space = "";
+                    if (path.Usage == UsageMode.DriveSpace)
+                    {
+                        if (Win32.GetDiskFreeSpaceEx(string.Format(path.UNC.Replace("%homepath%", userhome), Username), out freeBytesForUser, out totalBytes, out freeBytes))
+                            space = Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
+                    }
+                    else
+                    {
+                        try
+                        {
+                            HAP.Data.Quota.QuotaInfo qi = HAP.Data.ComputerBrowser.Quota.GetQuota(Username, string.Format(path.UNC.Replace("%homepath%", userhome)));
+                            space = Math.Round(100 - ((Convert.ToDecimal(qi.Used) / Convert.ToDecimal(qi.Total)) * 100), 2);
+                            if (qi.Total == -1)
+                                if (Win32.GetDiskFreeSpaceEx(string.Format(path.UNC.Replace("%homepath%", userhome), Username), out freeBytesForUser, out totalBytes, out freeBytes))
+                                    space = Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
+                        }
+                        catch { }
+                    }
                 }
-                if (isAuth(path)) items.Add(new ComputerBrowserAPIItem(path.Name, "images/icons/netdrive.png", space, "Drive", BType.Drive, path.Drive + ":", isWriteAuth(path) ? AccessControlActions.Change : AccessControlActions.View));
+                if (isAuth(path)) items.Add(new ComputerBrowserAPIItem(path.Name, "images/icons/netdrive.png", space.ToString(), "Drive", BType.Drive, path.Drive + ":", isWriteAuth(path) ? AccessControlActions.Change : AccessControlActions.View));
             }
             res.Items = items.ToArray();
             List<uploadfilter> filters = new List<uploadfilter>();
@@ -76,6 +92,138 @@ namespace HAP.Web
             res.Filters = filters.ToArray();
 
             return res;
+        }
+
+        //method for listing
+        [WebMethod]
+        public ComputerBrowserAPIItem[] List(string path)
+        {
+            List<ComputerBrowserAPIItem> items = new List<ComputerBrowserAPIItem>();
+            uncpath unc; string userhome;
+            Converter.DriveToUNC(path, out unc, out userhome);
+            AccessControlActions allowactions = isWriteAuth(unc) ? AccessControlActions.Change : AccessControlActions.View;
+
+            DirectoryInfo dir = new DirectoryInfo(path);
+            foreach (DirectoryInfo subdir in dir.GetDirectories())
+                try
+                {
+                    if (!subdir.Name.ToLower().Contains("recycle") && subdir.Attributes != FileAttributes.Hidden && subdir.Attributes != FileAttributes.System && !subdir.Name.ToLower().Contains("system volume info"))
+                    {
+                        AccessControlActions actions = allowactions;
+                        if (actions == AccessControlActions.Change)
+                        {
+                            try { File.Create(Path.Combine(subdir.FullName, "temp.ini")).Close(); File.Delete(Path.Combine(subdir.FullName, "temp.ini")); }
+                            catch { actions = AccessControlActions.View; }
+                        }
+                        try { subdir.GetDirectories(); }
+                        catch { actions = AccessControlActions.None; }
+
+                        string dirpath = Converter.UNCtoDrive(subdir.FullName, unc, userhome);
+                        items.Add(new ComputerBrowserAPIItem(subdir, unc, userhome, actions));
+                    }
+                }
+                catch { }
+
+            foreach (FileInfo file in dir.GetFiles())
+            {
+                try
+                {
+                    if (!file.Name.ToLower().Contains("thumbs") && checkext(file.Extension) && file.Attributes != FileAttributes.Hidden && file.Attributes != FileAttributes.System)
+                    {
+                        string dirpath = Converter.UNCtoDrive2(file.FullName, unc, userhome);
+                        items.Add(new ComputerBrowserAPIItem(file, unc, userhome, allowactions, "Download/" + dirpath.Replace('&', '^')));
+                    }
+                }
+                catch
+                {
+                    //Response.Redirect("unauthorised.aspx?path=" + Server.UrlPathEncode(uae.Message), true);
+                }
+            }
+            return items.ToArray();
+        }
+
+        //method for renaming/saving
+        [WebMethod]
+        public CBFile[] Save(CBFile Current, string newpath, bool overwrite)
+        {
+            uncpath unc; string userhome;
+            string path = Converter.DriveToUNC(Current.Path, out unc, out userhome);
+            newpath = Converter.DriveToUNC(newpath, out unc, out userhome);
+
+            if (File.Exists(path))
+            {
+                FileInfo file = new FileInfo(path);
+                string fname = file.Name;
+                if (fname.EndsWith(file.Extension) && !string.IsNullOrWhiteSpace(file.Extension)) fname = fname.Remove(fname.IndexOf(file.Extension));
+                if (!overwrite)
+                {
+                    if (File.Exists(newpath)) return new CBFile[] { new CBFile(new FileInfo(newpath), unc, userhome) };
+                }
+                else File.Delete(newpath);
+                file.MoveTo(newpath);
+            }
+            else
+            {
+                DirectoryInfo file = new DirectoryInfo(path);
+
+                if (!overwrite)
+                {
+                    if (Directory.Exists(newpath)) return new CBFile[] { new CBFile( new DirectoryInfo(newpath), unc, userhome) };
+                }
+                else Directory.Delete(newpath);
+                file.MoveTo(newpath);
+            }
+            return new CBFile[] { };
+        }
+
+        //method for deleting
+        [WebMethod]
+        public void Delete(string path)
+        {
+            path = Converter.DriveToUNC(path);
+            if (File.Exists(path)) File.Delete(path);
+            else Directory.Delete(path, true);
+        }
+
+        //method for Creating a New Folder
+        [WebMethod]
+        public void NewFolder(string basepath, string foldername)
+        {
+            basepath = Converter.DriveToUNC(basepath);
+            Directory.CreateDirectory(Path.Combine(basepath, foldername));
+        }
+
+        //method for ZIPPING
+        [WebMethod]
+        public void ZIP(string basepath, string filename, params string[] filepaths)
+        {
+            string path = Path.Combine(Converter.DriveToUNC(basepath), filename);
+            ZipFile zf;
+            if (File.Exists(Path.Combine(basepath, filename)))
+                zf = new ZipFile(path);
+            else zf = ZipFile.Create(path);
+            zf.BeginUpdate();
+            foreach (string s in filepaths)
+            {
+                string p = Converter.DriveToUNC(s);
+                if (File.Exists(p))
+                    zf.Add(p);
+                else if (Directory.Exists(p))
+                    zf.AddDirectory(p);
+            }
+            zf.CommitUpdate();
+            zf.Close();
+        }
+
+        //method for Unzipping
+        [WebMethod]
+        public void Unzip(string zipfile, string extractfolder)
+        {
+            string path = Converter.DriveToUNC(zipfile);
+            string c = Converter.DriveToUNC(extractfolder);
+            if (!Directory.Exists(c)) Directory.CreateDirectory(c);
+            FastZip fastZip = new FastZip();
+            fastZip.ExtractZip(path, c, "");
         }
 
         //method for upload the files. This will be called from Silverlight code behind.
@@ -147,6 +295,28 @@ namespace HAP.Web
                 return vis;
             }
             return false;
+        }
+
+        public static string parseLength(object size)
+        {
+            decimal d = decimal.Parse(size.ToString() + ".00");
+            string[] s = { "bytes", "KB", "MB", "GB", "TB", "PB" };
+            int x = 0;
+            while (d > 1024)
+            {
+                d = d / 1024;
+                x++;
+            }
+            d = Math.Round(d, 2);
+            return d.ToString() + " " + s[x];
+        }
+
+        public bool checkext(string extension)
+        {
+            string[] exc = hapConfig.Current.MyComputer.HideExtensions.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string s in exc)
+                if (s.ToLower() == extension.ToLower()) return false;
+            return true;
         }
 
         private string Username

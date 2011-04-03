@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="4e66478f-fc4c-48a4-b48e-31404c9646dd" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://chs01:8011/HAPQuotaService" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="HAPQuotaService.xsd" MetadataType="Schema" ID="84c84925-3302-4c5d-b4e0-c332171f13b1" SourceId="1" SourceUrl="http://chs01:8011/HAPQuotaService?xsd=xsd1" />
+    <MetadataFile FileName="HAPQuotaService1.xsd" MetadataType="Schema" ID="d39207a1-635c-4236-a4ab-bbb3385ed605" SourceId="1" SourceUrl="http://chs01:8011/HAPQuotaService?xsd=xsd0" />
+    <MetadataFile FileName="HAPQuotaService2.xsd" MetadataType="Schema" ID="ab202b9d-8f78-4f98-b73e-05f889df6cac" SourceId="1" SourceUrl="http://chs01:8011/HAPQuotaService?xsd=xsd2" />
+    <MetadataFile FileName="WCFService.wsdl" MetadataType="Wsdl" ID="8d34b20a-b002-46ff-ae0b-3edad62883f8" SourceId="1" SourceUrl="http://chs01:8011/HAPQuotaService" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

@@ -2,24 +2,34 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Runtime.InteropServices;
+using System.IO;
+using HAP.Web.Configuration;
 
 namespace HAP.Data.ComputerBrowser
 {
-    public class ComputerBrowserAPIItem
+    public class ComputerBrowserAPIItem : CBFile
     {
-        public string Name { get; private set; }
-        public string Icon { get; private set; }
-        public string Size { get; private set; }
-        public string Type { get; private set; }
-        public BType BType { get; private set; }
-        public string Path { get; private set; }
+        public string Download { get; private set; }
         public AccessControlActions AccessControl { get; private set; }
 
-        public ComputerBrowserAPIItem()
+        public ComputerBrowserAPIItem() : base()
         {
         }
 
-        public ComputerBrowserAPIItem(string name, string icon, string size, string type, BType btype, string path, AccessControlActions access)
+        public ComputerBrowserAPIItem(FileInfo file, uncpath unc, string userhome, AccessControlActions access, [Optional, DefaultParameterValue("")] string download) : base(file, unc, userhome)
+        {
+            AccessControl = access;
+            Download = download;
+        }
+
+        public ComputerBrowserAPIItem(DirectoryInfo dir, uncpath unc, string userhome, AccessControlActions access, [Optional, DefaultParameterValue("")] string download) : base(dir, unc, userhome)
+        {
+            AccessControl = access;
+            Download = download;
+        }
+
+        public ComputerBrowserAPIItem(string name, string icon, string size, string type, BType btype, string path, AccessControlActions access, [Optional, DefaultParameterValue("")] string download)
         {
             Name = name;
             Icon = icon;
@@ -28,9 +38,10 @@ namespace HAP.Data.ComputerBrowser
             BType = btype;
             Path = path;
             AccessControl = access;
+            Download = download;
         }
 
-        public ComputerBrowserAPIItem(string name, string icon, string size, string type, BType btype, string path, string access)
+        public ComputerBrowserAPIItem(string name, string icon, string size, string type, BType btype, string path, string access, [Optional, DefaultParameterValue("")] string download)
         {
             Name = name;
             Icon = icon;
@@ -38,6 +49,7 @@ namespace HAP.Data.ComputerBrowser
             Size = size;
             BType = btype;
             Path = path;
+            Download = download;
             AccessControl = (AccessControlActions)Enum.Parse(typeof(AccessControlActions), access, true);
         }
 
