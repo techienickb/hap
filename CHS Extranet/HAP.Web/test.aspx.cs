@@ -16,8 +16,8 @@ namespace HAP.Web
 
         protected void ask_Click(object sender, EventArgs e)
         {
-            resp.Text = HAP.Data.ComputerBrowser.Quota.GetQuota(Username, "\\\\chs01\\nick.$").Used.ToString();
-            resp.Text += "<br />" + HAP.Data.ComputerBrowser.Quota.GetQuota(Username, "\\\\chs01\\nick.$").Total.ToString();
+            resp.Text = HAP.Data.ComputerBrowser.Quota.GetQuota(Username, "\\\\chs01\\" + Username + ".$").Used.ToString();
+            resp.Text += "<br />" + HAP.Data.ComputerBrowser.Quota.GetQuota(Username, "\\\\chs01\\" + Username + ".$").Total.ToString();
         }
 
         public string Username

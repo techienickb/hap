@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Services;
 using HAP.Web.Configuration;
 using HAP.Data.UserCard;
+using System.Runtime.InteropServices;
 
 namespace HAP.Web.UserCard
 {
@@ -49,6 +50,12 @@ namespace HAP.Web.UserCard
                 return "I've reset " + username + "'s password to 'password'\nThey will be prompted to change it when the log on";
             }
             catch (Exception e) { return e.ToString(); }
+        }
+
+        [WebMethod]
+        public HAP.Data.Quota.QuotaInfo GetFreeSpacePercentage(string username, string userhome)
+        {
+            return HAP.Data.ComputerBrowser.Quota.GetQuota(username, userhome);
         }
     }
 }
