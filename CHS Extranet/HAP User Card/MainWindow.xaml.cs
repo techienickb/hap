@@ -30,13 +30,21 @@ namespace HAP.UserCard
             SourceInitialized += new EventHandler(MainWindow_SourceInitialized);
             tabs.MouseWheel += new MouseWheelEventHandler(tabs_MouseWheel);
             Hide();
-            tbi.Icon = new System.Drawing.Icon("usercardi.ico");
-            tbi.Visibility = System.Windows.Visibility.Visible;
+            System.Windows.Forms.NotifyIcon icon = new System.Windows.Forms.NotifyIcon();
+            icon.Icon = new System.Drawing.Icon("usercardi.ico", new System.Drawing.Size(16, 16));
+            icon.Text = this.Title;
+            icon.Click += new EventHandler(icon_Click);
+            icon.Visible = true;
             Cursor = controlled.Cursor = Cursors.AppStarting;
             pass.Visibility = controlled.Visibility = isStudent ? System.Windows.Visibility.Hidden : System.Windows.Visibility.Visible;
             Web.apiSoapClient c = new Web.apiSoapClient();
             c.getInitCompleted += new EventHandler<Web.getInitCompletedEventArgs>(c_getInitCompleted);
             c.getInitAsync();
+        }
+
+        void icon_Click(object sender, EventArgs e)
+        {
+            Show();
         }
 
         void tabs_MouseWheel(object sender, MouseWheelEventArgs e)
@@ -146,11 +154,6 @@ namespace HAP.UserCard
             reset.IsEnabled = username.Text.Length > 0;
         }
 
-        private void tbi_TrayLeftMouseUp(object sender, RoutedEventArgs e)
-        {
-            Show();
-        }
-
         private void Window_Deactivated(object sender, EventArgs e)
         {
             Hide();
@@ -210,12 +213,14 @@ namespace HAP.UserCard
                 sgn = e.Result.StudentGroupName;
                 pcontext = new PrincipalContext(ContextType.Domain, ad, adun, adpw);
                 up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Environment.UserName);
+                //up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, "rmstaff");
                 if (!string.IsNullOrEmpty(up.HomeDrive)) hd = up.HomeDirectory;
                 isStudent = up.IsMemberOf(GroupPrincipal.FindByIdentity(pcontext, e.Result.StudentGroupName));
                 adc = e.Result.ADConString;
                 DirectoryEntry usersDE = new DirectoryEntry(adc, adun, adpw);
                 DirectorySearcher ds = new DirectorySearcher(usersDE);
                 ds.Filter = "(sAMAccountName=" + Environment.UserName + ")";
+                //ds.Filter = "(sAMAccountName=rmstaff)";
                 ds.PropertiesToLoad.Add("department");
                 SearchResult r = ds.FindOne();
                 try
@@ -235,7 +240,7 @@ namespace HAP.UserCard
                 c.GetFreeSpacePercentageCompleted += new EventHandler<Web.GetFreeSpacePercentageCompletedEventArgs>(c_GetFreeSpacePercentageCompleted);
                 if (isStudent) c.getFormsInAsync(path.Remove(path.IndexOf(',')).Remove(0, path.IndexOf('=') + 1));
                 else c.getDepartmentsAsync();
-                if (!string.IsNullOrEmpty(up.HomeDrive)) c.GetFreeSpacePercentageAsync(up.UserPrincipalName, up.HomeDirectory);
+                if (!string.IsNullOrEmpty(up.HomeDrive)) c.GetFreeSpacePercentageAsync(up.Name, up.HomeDirectory);
             //}
             //catch { Close();  }
         }
@@ -247,7 +252,7 @@ namespace HAP.UserCard
 
             Web.apiSoapClient c = new Web.apiSoapClient();
             c.GetFreeSpacePercentageCompleted += new EventHandler<Web.GetFreeSpacePercentageCompletedEventArgs>(c_GetFreeSpacePercentageCompleted);
-            c.GetFreeSpacePercentageAsync(up.UserPrincipalName, up.HomeDirectory);
+            c.GetFreeSpacePercentageAsync(up.Name, up.HomeDirectory);
         }
 
         void c_GetFreeSpacePercentageCompleted(object sender, Web.GetFreeSpacePercentageCompletedEventArgs e)
@@ -271,7 +276,7 @@ namespace HAP.UserCard
                 }
                 catch { drivespaceprog.Maximum = 0; }
             }
-            else if (e.Result.Total > 0 && e.Result == null)
+            else
             {
                 drivespaceprog.Maximum = e.Result.Total;
                 drivespaceprog.Value = e.Result.Used;
@@ -282,7 +287,7 @@ namespace HAP.UserCard
             {
                 DriveSpace.Visibility = System.Windows.Visibility.Visible;
                 homedrive.Text = hd;
-                drivespaceper.Text = string.Format("{0}%", Math.Round((100 - Convert.ToDecimal(drivespaceprog.Maximum) / Convert.ToDecimal(drivespaceprog.Value)), 2));
+                drivespaceper.Text = string.Format("{0}%", 100 - Math.Round((Convert.ToDecimal(drivespaceprog.Maximum + ".00") / Convert.ToDecimal(drivespaceprog.Value + ".00")), 2));
                 if (us == null) us = new Thread(new ThreadStart(updatespace));
                 us.Start();
             }
@@ -294,6 +299,16 @@ namespace HAP.UserCard
             [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
             internal static extern bool GetDiskFreeSpaceEx(string drive, out long freeBytesForUser, out long totalBytes, out long freeBytes);
 
+        }
+
+        public static decimal parseLengthD(object size)
+        {
+            decimal d = decimal.Parse(size.ToString() + ".00");
+            while (d > 1024)
+            {
+                d = d / 1024;
+            }
+            return Math.Round(d, 2);
         }
 
         public static string parseLength(object size)
