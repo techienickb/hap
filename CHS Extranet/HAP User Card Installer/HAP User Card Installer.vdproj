@@ -21,12 +21,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_75EF7E3A4DAC023C3AAC812E16489A51"
-        "OwnerKey" = "8:_6B0C790E4D0541E08029F29A0E13A882"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_B3FD8CD70B4F4413B73F6C3F76438618"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -35,12 +29,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_6B0C790E4D0541E08029F29A0E13A882"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_75EF7E3A4DAC023C3AAC812E16489A51"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -148,37 +136,6 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_75EF7E3A4DAC023C3AAC812E16489A51"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Hardcodet.Wpf.TaskbarNotification, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_75EF7E3A4DAC023C3AAC812E16489A51"
-                    {
-                    "Name" = "8:Hardcodet.Wpf.TaskbarNotification.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Hardcodet.Wpf.TaskbarNotification.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_E33176755DA74BE6811343A9DFA22840"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B3FD8CD70B4F4413B73F6C3F76438618"
             {
             "SourcePath" = "8:..\\HAP User Card\\usercardi.ico"
@@ -244,15 +201,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HAP User Card"
-        "ProductCode" = "8:{4F70BD6E-8584-4F4E-9A3B-5A1D53FCB155}"
-        "PackageCode" = "8:{836B9489-F1A2-412A-A9C0-380D256C90B4}"
+        "ProductCode" = "8:{C4892FAB-1AEF-409C-99BF-8C929F08B091}"
+        "PackageCode" = "8:{56B69D64-42B5-46F8-9681-B8919EBEE0FC}"
         "UpgradeCode" = "8:{0CF47738-A77D-412C-BBDE-703A91AFCF26}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.2.0"
+        "ProductVersion" = "8:1.5"
         "Manufacturer" = "8:nb development"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://hap.codeplex.com"

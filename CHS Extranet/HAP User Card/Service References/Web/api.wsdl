@@ -90,6 +90,20 @@
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:element name="getPhoto">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="upn" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getPhotoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getPhotoResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
       <s:element name="GetFreeSpacePercentage">
         <s:complexType>
           <s:sequence>
@@ -146,6 +160,12 @@
   <wsdl:message name="ResetPasswordSoapOut">
     <wsdl:part name="parameters" element="tns:ResetPasswordResponse" />
   </wsdl:message>
+  <wsdl:message name="getPhotoSoapIn">
+    <wsdl:part name="parameters" element="tns:getPhoto" />
+  </wsdl:message>
+  <wsdl:message name="getPhotoSoapOut">
+    <wsdl:part name="parameters" element="tns:getPhotoResponse" />
+  </wsdl:message>
   <wsdl:message name="GetFreeSpacePercentageSoapIn">
     <wsdl:part name="parameters" element="tns:GetFreeSpacePercentage" />
   </wsdl:message>
@@ -172,6 +192,10 @@
     <wsdl:operation name="ResetPassword">
       <wsdl:input message="tns:ResetPasswordSoapIn" />
       <wsdl:output message="tns:ResetPasswordSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getPhoto">
+      <wsdl:input message="tns:getPhotoSoapIn" />
+      <wsdl:output message="tns:getPhotoSoapOut" />
     </wsdl:operation>
     <wsdl:operation name="GetFreeSpacePercentage">
       <wsdl:input message="tns:GetFreeSpacePercentageSoapIn" />
@@ -218,6 +242,15 @@
     </wsdl:operation>
     <wsdl:operation name="ResetPassword">
       <soap:operation soapAction="http://hap.codeplex.com/ResetPassword" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getPhoto">
+      <soap:operation soapAction="http://hap.codeplex.com/getPhoto" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -275,6 +308,15 @@
     </wsdl:operation>
     <wsdl:operation name="ResetPassword">
       <soap12:operation soapAction="http://hap.codeplex.com/ResetPassword" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getPhoto">
+      <soap12:operation soapAction="http://hap.codeplex.com/getPhoto" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
