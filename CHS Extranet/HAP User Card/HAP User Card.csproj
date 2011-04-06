@@ -68,6 +68,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Base64.cs" />
+    <Compile Include="Dialog.xaml.cs">
+      <DependentUpon>Dialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="OU.cs" />
     <Compile Include="Service References\Web\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -75,6 +79,10 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="WindowBehavior.cs" />
+    <Page Include="Dialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -157,6 +165,18 @@
     <None Include="usercardi.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\263.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\256.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\261.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\262.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

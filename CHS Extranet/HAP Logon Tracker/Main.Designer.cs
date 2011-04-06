@@ -153,20 +153,20 @@
             // Domainname
             // 
             this.Domainname.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Domainname.HeaderText = "Domain Name";
+            this.Domainname.HeaderText = "Domain";
             this.Domainname.Name = "Domainname";
             this.Domainname.ReadOnly = true;
-            this.Domainname.Width = 117;
+            this.Domainname.Width = 78;
             // 
             // Column2
             // 
-            this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+            this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             this.Column2.DefaultCellStyle = dataGridViewCellStyle1;
-            this.Column2.HeaderText = "Logon Date & Time";
+            this.Column2.HeaderText = "Logon Time";
             this.Column2.Name = "Column2";
             this.Column2.ReadOnly = true;
-            this.Column2.Width = 109;
+            this.Column2.Width = 102;
             // 
             // Column3
             // 

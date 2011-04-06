@@ -16,6 +16,7 @@ using System.Windows.Interop;
 using System.DirectoryServices.AccountManagement;
 using System.DirectoryServices;
 using System.Threading;
+using System.IO;
 
 namespace HAP.UserCard
 {
@@ -30,18 +31,18 @@ namespace HAP.UserCard
             SourceInitialized += new EventHandler(MainWindow_SourceInitialized);
             tabs.MouseWheel += new MouseWheelEventHandler(tabs_MouseWheel);
             Hide();
-            System.Windows.Forms.NotifyIcon icon = new System.Windows.Forms.NotifyIcon();
-            icon.Icon = new System.Drawing.Icon("usercardi.ico", new System.Drawing.Size(16, 16));
-            icon.Text = this.Title;
-            icon.Click += new EventHandler(icon_Click);
-            icon.Visible = true;
+            Icon = new System.Windows.Forms.NotifyIcon();
+            Icon.Icon = new System.Drawing.Icon("usercardi.ico", new System.Drawing.Size(16, 16));
+            Icon.Text = this.Title;
+            Icon.Click += new EventHandler(icon_Click);
+            Icon.Visible = true;
             Cursor = controlled.Cursor = Cursors.AppStarting;
             pass.Visibility = controlled.Visibility = isStudent ? System.Windows.Visibility.Hidden : System.Windows.Visibility.Visible;
             Web.apiSoapClient c = new Web.apiSoapClient();
             c.getInitCompleted += new EventHandler<Web.getInitCompletedEventArgs>(c_getInitCompleted);
             c.getInitAsync();
         }
-
+        public System.Windows.Forms.NotifyIcon Icon { get; private set; }
         void icon_Click(object sender, EventArgs e)
         {
             Show();
@@ -138,17 +139,6 @@ namespace HAP.UserCard
 
         #endregion
 
-        private void TextBlock_MouseEnter(object sender, MouseEventArgs e)
-        {
-            department.Visibility = System.Windows.Visibility.Visible;
-            ((TextBlock)sender).Visibility = System.Windows.Visibility.Hidden;
-        }
-
-        private void department_MouseLeave(object sender, MouseEventArgs e)
-        {
-            department.Visibility = System.Windows.Visibility.Hidden; departmenttext.Visibility = System.Windows.Visibility.Visible;
-        }
-
         private void username_KeyUp(object sender, KeyEventArgs e)
         {
             reset.IsEnabled = username.Text.Length > 0;
@@ -157,15 +147,6 @@ namespace HAP.UserCard
         private void Window_Deactivated(object sender, EventArgs e)
         {
             Hide();
-        }
-
-        private void tabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            reset.IsEnabled = false;
-            save.IsDefault = reset.IsDefault = false;
-            if (tabs.SelectedIndex == 0) save.IsDefault = true;
-            else if (tabs.SelectedIndex == 1) reset.IsDefault = true;
-            username.Text = "";
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -182,13 +163,10 @@ namespace HAP.UserCard
         {
             name.Text = up.DisplayName;
             email.Text = up.EmailAddress;
-            homedrive.Text = up.HomeDrive;
+            homedrive.Text = string.Format("{0} ({1})", up.HomeDrive, up.HomeDirectory);
             pass.Visibility = controlled.Visibility = isStudent ? System.Windows.Visibility.Hidden : System.Windows.Visibility.Visible;
             if (!isStudent) controlled.Visibility = string.IsNullOrEmpty(Properties.Settings.Default.ControlledOU) ? System.Windows.Visibility.Hidden : controlled.Visibility;
             departmenttext.Text = dep;
-            save.Visibility = System.Windows.Visibility.Hidden;
-            save.IsEnabled = true;
-            save.Content = "Save";
             Cursor = Cursors.Arrow;
         }
 
@@ -199,6 +177,7 @@ namespace HAP.UserCard
         string adpw = "";
         string sgn = "";
         string hd = "";
+        string hdd = "";
         void doInit(object data)
         {
             //try
@@ -221,6 +200,7 @@ namespace HAP.UserCard
                 DirectorySearcher ds = new DirectorySearcher(usersDE);
                 ds.Filter = "(sAMAccountName=" + Environment.UserName + ")";
                 //ds.Filter = "(sAMAccountName=rmstaff)";
+                ds.PropertiesToLoad.Add("rmCom2000-UsrMgr-uPN");
                 ds.PropertiesToLoad.Add("department");
                 SearchResult r = ds.FindOne();
                 try
@@ -232,27 +212,62 @@ namespace HAP.UserCard
                 path = r.Path.Remove(0, r.Path.IndexOf(',') + 1);
 
                 Dispatcher.BeginInvoke(new Action(UpdateUser));
-                Dispatcher.BeginInvoke(new Action(DoCheck));
 
                 Web.apiSoapClient c = new Web.apiSoapClient();
-                c.getDepartmentsCompleted += new EventHandler<Web.getDepartmentsCompletedEventArgs>(c_getDepartmentsCompleted);
-                c.getFormsInCompleted += new EventHandler<Web.getFormsInCompletedEventArgs>(c_getFormsInCompleted);
                 c.GetFreeSpacePercentageCompleted += new EventHandler<Web.GetFreeSpacePercentageCompletedEventArgs>(c_GetFreeSpacePercentageCompleted);
-                if (isStudent) c.getFormsInAsync(path.Remove(path.IndexOf(',')).Remove(0, path.IndexOf('=') + 1));
-                else c.getDepartmentsAsync();
+                if (!isStudent)
+                {
+                    ThreadStart ts = new ThreadStart(LoadControlled);
+                    if (!string.IsNullOrEmpty(Properties.Settings.Default.ControlledOU)) new Thread(ts).Start();
+                }
+                else 
+                {
+                    try
+                    {
+                        if (r.Properties["rmCom2000-UsrMgr-uPN"] != null)
+                        {
+                            c.getPhotoCompleted += new EventHandler<Web.getPhotoCompletedEventArgs>(c_getPhotoCompleted);
+                            c.getPhotoAsync(r.Properties["rmCom2000-UsrMgr-uPN"][0].ToString());
+                        }
+                    }
+                    catch { }
+                }
                 if (!string.IsNullOrEmpty(up.HomeDrive)) c.GetFreeSpacePercentageAsync(up.Name, up.HomeDirectory);
             //}
             //catch { Close();  }
         }
 
+        void c_getPhotoCompleted(object sender, Web.getPhotoCompletedEventArgs e)
+        {
+            if (e.Error == null && !string.IsNullOrEmpty(e.Result)) Dispatcher.BeginInvoke(new Action<string>(updatephoto), e.Result);
+        }
+
+        void updatephoto(string photo)
+        {
+            MemoryStream stream = new MemoryStream(Base64Encoder.FromBase64(photo));
+            BitmapImage image = new BitmapImage();
+            image.BeginInit();
+            image.StreamSource = stream;
+            image.EndInit();
+            Photo.Source = image;
+        }
+
         private Thread us = null;
+        private bool closing = false;
         public void updatespace()
         {
-            Thread.Sleep(new TimeSpan(0, 2, 0));
+            while (!closing)
+            {
+                try
+                {
+                    Thread.Sleep(new TimeSpan(0, 2, 0));
+                }
+                catch (ThreadInterruptedException) { break; }
 
-            Web.apiSoapClient c = new Web.apiSoapClient();
-            c.GetFreeSpacePercentageCompleted += new EventHandler<Web.GetFreeSpacePercentageCompletedEventArgs>(c_GetFreeSpacePercentageCompleted);
-            c.GetFreeSpacePercentageAsync(up.Name, up.HomeDirectory);
+                Web.apiSoapClient c = new Web.apiSoapClient();
+                c.GetFreeSpacePercentageCompleted += new EventHandler<Web.GetFreeSpacePercentageCompletedEventArgs>(c_GetFreeSpacePercentageCompleted);
+                c.GetFreeSpacePercentageAsync(up.Name, up.HomeDirectory);
+            }
         }
 
         void c_GetFreeSpacePercentageCompleted(object sender, Web.GetFreeSpacePercentageCompletedEventArgs e)
@@ -262,6 +277,7 @@ namespace HAP.UserCard
 
         void UpdateSpace(object sender, Web.GetFreeSpacePercentageCompletedEventArgs e)
         {
+            if (us != null) us.Abort();
             if (e.Error != null || e.Result.Total == -1)
             {
                 try
@@ -286,29 +302,24 @@ namespace HAP.UserCard
             if (drivespaceprog.Maximum > 0)
             {
                 DriveSpace.Visibility = System.Windows.Visibility.Visible;
-                homedrive.Text = hd;
-                drivespaceper.Text = string.Format("{0}%", 100 - Math.Round((Convert.ToDecimal(drivespaceprog.Maximum + ".00") / Convert.ToDecimal(drivespaceprog.Value + ".00")), 2));
-                if (us == null) us = new Thread(new ThreadStart(updatespace));
-                us.Start();
+                decimal d = Math.Round(((Convert.ToDecimal(drivespaceprog.Value) / Convert.ToDecimal(drivespaceprog.Maximum)) * 100), 2);
+                drivespaceper.Text = d + "%";
+                if (d < 5 && !hasShownWarning) if (Dialog.ShowMessageDialog("You are running low on Space\nTry deleting some old files to free up space", "Low Space", DialogIcon.Warning).HasValue) hasShownWarning = true;
+                if (us == null)
+                {
+                    us = new Thread(new ThreadStart(updatespace));
+                    us.Start();
+                }
             }
         }
 
+        private bool hasShownWarning = false;
 
         internal static class Win32
         {
             [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
             internal static extern bool GetDiskFreeSpaceEx(string drive, out long freeBytesForUser, out long totalBytes, out long freeBytes);
 
-        }
-
-        public static decimal parseLengthD(object size)
-        {
-            decimal d = decimal.Parse(size.ToString() + ".00");
-            while (d > 1024)
-            {
-                d = d / 1024;
-            }
-            return Math.Round(d, 2);
         }
 
         public static string parseLength(object size)
@@ -323,15 +334,6 @@ namespace HAP.UserCard
             }
             d = Math.Round(d, 2);
             return d.ToString() + " " + s[x];
-        }
-
-        private void DoCheck()
-        {
-            if (!up.LastLogon.HasValue) { MessageBox.Show("Please Update Your " + (isStudent ? "Form" : "Department"), "Attention", MessageBoxButton.OK, MessageBoxImage.Exclamation); Show(); }
-            else
-            {
-                if (DateTime.Now.Month == 9 && up.LastLogon.Value.Month != 9) { MessageBox.Show("Please check your " + (isStudent ? "Form" : "Department"), "Attention", MessageBoxButton.OK, MessageBoxImage.Exclamation); Show(); }
-            }
         }
 
         private List<OU> OUs;
@@ -385,64 +387,6 @@ namespace HAP.UserCard
             return alObjects;
         }
 
-        void c_getFormsInCompleted(object sender, Web.getFormsInCompletedEventArgs e)
-        {
-            Dispatcher.BeginInvoke(new EventHandler<Web.getFormsInCompletedEventArgs>(c_getFormsInCompleted1), sender, e);
-        }
-
-        void c_getFormsInCompleted1(object sender, Web.getFormsInCompletedEventArgs e)
-        {
-            department.ItemsSource = e.Result;
-            if (e.Result.Count(a => a.Name == departmenttext.Text) > 0) department.SelectedItem = e.Result.Single(a => a.Name == departmenttext.Text);
-        }
-
-        void c_getDepartmentsCompleted(object sender, Web.getDepartmentsCompletedEventArgs e)
-        {
-            Dispatcher.BeginInvoke(new EventHandler<Web.getDepartmentsCompletedEventArgs>(c_getDepartmentsCompleted1), sender, e);
-        }
-
-        void c_getDepartmentsCompleted1(object sender, Web.getDepartmentsCompletedEventArgs e)
-        {
-            department.ItemsSource = e.Result;
-            if (e.Result.Count(a => a.Name == departmenttext.Text) > 0) department.SelectedItem = e.Result.Single(a => a.Name == departmenttext.Text);
-            ThreadStart ts = new ThreadStart(LoadControlled);
-            if (!string.IsNullOrEmpty(Properties.Settings.Default.ControlledOU)) new Thread(ts).Start();
-        }
-
-
-        private void save_Click(object sender, RoutedEventArgs e)
-        {
-            Cursor = Cursors.AppStarting;
-            save.Content = "Saving...";
-            save.IsEnabled = false;
-            string d = (department.SelectedItem is Web.Department) ? ((Web.Department)department.SelectedItem).Name : ((Web.Form)department.SelectedItem).Name;
-            up.Description = string.Format("{0} {1} in {2}", up.GivenName, up.Surname, d);
-            if (isStudent && !string.IsNullOrEmpty(sef)) up.EmailAddress = string.Format(sef, Environment.UserName);
-            new Thread(new ParameterizedThreadStart(UpdateUserData)).Start(d);
-        }
-
-        private void UpdateUserData(object d)
-        {
-
-            up.Save();
-
-            DirectoryEntry usersDE = new DirectoryEntry(adc, adun, adpw);
-            DirectorySearcher ds = new DirectorySearcher(usersDE);
-            ds.Filter = "(sAMAccountName=" + Environment.UserName + ")";
-            ds.PropertiesToLoad.Add("cn");
-            SearchResult r = ds.FindOne();
-            DirectoryEntry theUserDE = new DirectoryEntry(r.Path, adun, adpw);
-
-
-            if (theUserDE.Properties["Department"].Count == 0) theUserDE.Properties["Department"].Add(d.ToString());
-            else theUserDE.Properties["Department"][0] = d.ToString();
-            theUserDE.CommitChanges();
-
-            dep = d.ToString();
-            Dispatcher.BeginInvoke(new Action(UpdateUser));
-
-        }
-
         private void reset_Click(object sender, RoutedEventArgs e)
         {
             reset.Content = "Resetting...";
@@ -451,7 +395,7 @@ namespace HAP.UserCard
             {
                 new Thread(new ParameterizedThreadStart(doreset)).Start(username.Text);
             }
-            catch (Exception ex) { MessageBox.Show(ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+            catch (Exception ex) { Dialog.ShowMessage(ex.ToString(), "Error", DialogIcon.Error); }
         }
 
         private void doreset(object o)
@@ -471,14 +415,14 @@ namespace HAP.UserCard
         delegate void donereset(string displayname);
         private void DoneReset(string displayname)
         {
-            MessageBox.Show("I've reset " + displayname + "'s password to 'password'\nThey will be asked to change it when they log on", "Confirmation", MessageBoxButton.OK, MessageBoxImage.Information);
+            Dialog.ShowMessage("I've reset " + displayname + "'s password to 'password'\nThey will be asked to change it when they log on", "Confirmation", DialogIcon.Info);
             reset.Content = "Reset";
             username.Text = "";
             reset.IsEnabled = true;
         }
         private void ErrorReset(string error)
         {
-            MessageBox.Show(error, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            Dialog.ShowMessage(error, "Error", DialogIcon.Error);
             reset.Content = "Reset";
             reset.IsEnabled = true;
         }
@@ -516,9 +460,10 @@ namespace HAP.UserCard
                     user.CommitChanges();
                     user.Close();
                 }
-                catch { }
+                catch { continue; }
             }
-            Dispatcher.BeginInvoke(new Action(DoneEnabled));
+
+            Dispatcher.BeginInvoke(new Action<string>(DoneEnabled), item.Name);
         }
 
         private void Disable(object o)
@@ -536,27 +481,33 @@ namespace HAP.UserCard
                     user.CommitChanges();
                     user.Close();
                 }
-                catch { }
+                catch { continue; }
             }
-            Dispatcher.BeginInvoke(new Action(DoneDisabled));
+
+            Dispatcher.BeginInvoke(new Action<string>(DoneDisabled), item.Name);
         }
 
-        private void DoneEnabled()
+        private void tabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            reset.IsEnabled = false;
+            reset.IsDefault = tabs.SelectedIndex == 1;
+            username.Text = "";
+        }
+
+        private void DoneEnabled(string name)
         {
             controlled.Cursor = Cursors.Arrow;
             enable.IsEnabled = disable.IsEnabled = true;
             enable.Content = "Enable";
-            OU item = ((TreeViewItem)treeView1.SelectedItem).DataContext as OU;
-            MessageBox.Show(this, "Users in group " + item.Name + " are now Enabled", "Enabled", MessageBoxButton.OK, MessageBoxImage.Information);
+            Dialog.ShowMessage("Users in group " + name + " are now Enabled", "Enabled", DialogIcon.Info);
         }
 
-        private void DoneDisabled()
+        private void DoneDisabled(string name)
         {
             controlled.Cursor = Cursors.Arrow;
             enable.IsEnabled = disable.IsEnabled = true;
             disable.Content = "Disable";
-            OU item = ((TreeViewItem)treeView1.SelectedItem).DataContext as OU;
-            MessageBox.Show(this, "Users in group " + item.Name + " are now Disabled", "Disabled", MessageBoxButton.OK, MessageBoxImage.Information);
+            Dialog.ShowMessage("Users in group " + name + " are now Disabled", "Disabled", DialogIcon.Info);
         }
 
         private void treeView1_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -564,24 +515,9 @@ namespace HAP.UserCard
             enable.IsEnabled = disable.IsEnabled = (treeView1.SelectedItem != null && !((TreeViewItem)treeView1.SelectedItem).HasItems);
         }
 
-        private void department_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (department.SelectedItem is Web.Department)
-            {
-                if (((Web.Department)department.SelectedItem).Name == departmenttext.Text) save.Visibility = System.Windows.Visibility.Hidden;
-                else save.Visibility = System.Windows.Visibility.Visible;
-            }
-            else if (department.SelectedItem is Web.Form)
-            {
-                if (((Web.Form)department.SelectedItem).Name == departmenttext.Text) save.Visibility = System.Windows.Visibility.Hidden;
-                else save.Visibility = System.Windows.Visibility.Visible;
-            }
-            departmenttext.Text = (department.SelectedItem is Web.Department) ? ((Web.Department)department.SelectedItem).Name : ((Web.Form)department.SelectedItem).Name;
-        }
-
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            us.Abort();
+            us.Interrupt();
             us = null;
         }
     }

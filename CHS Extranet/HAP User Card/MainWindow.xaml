@@ -3,7 +3,7 @@
         xmlns:tbi="http://www.hardcodet.net/taskbar" 
         xmlns:u="clr-namespace:HAP.UserCard" 
         u:WindowBehavior.HideCloseButton="True"
-        Title="My User Card" Height="339" Width="345" Topmost="True" 
+        Title="My User Card" Height="300" Width="345" Topmost="True" 
         ShowInTaskbar="False" ResizeMode="NoResize" Background="White" 
         Deactivated="Window_Deactivated" Loaded="Window_Loaded" Closing="Window_Closing">
     <Window.Resources>
@@ -85,14 +85,13 @@
         <TabControl Name="tabs" SelectionChanged="tabs_SelectionChanged">
             <TabItem Header="Me" Name="me">
                 <Grid>
-                    <TextBlock Text="UN" Name="name" Margin="6,24,6,0" VerticalAlignment="Top" FontSize="16" Width="311" TextAlignment="Center" />
-                    <ComboBox Height="23" Margin="6,61,6,0" Name="department" VerticalAlignment="Top" Visibility="Hidden" MouseLeave="department_MouseLeave" Width="311" ItemTemplate="{StaticResource ResourceKey=departmentlistitem}" SelectionChanged="department_SelectionChanged" />
-                    <TextBlock Text="UN" Margin="18,64,0,0" VerticalAlignment="Top" MouseEnter="TextBlock_MouseEnter" Name="departmenttext" Width="290" HorizontalAlignment="Left" />
-                    <TextBox Name="email" VerticalAlignment="Top" Margin="6,99,6,0" Height="22" Width="311" IsReadOnly="True" BorderBrush="{x:Null}" />
-                    <Button Content="Save" Height="26" HorizontalAlignment="Right" Margin="0,100,6,0" Name="save" VerticalAlignment="Top" Width="91" Visibility="Hidden" IsDefault="False" Click="save_Click" />
-                    <Grid Name="DriveSpace" Height="140" VerticalAlignment="Bottom"  Visibility="Hidden">
-                        <TextBlock HorizontalAlignment="Left" Margin="20,13,0,0" Text="Home Drive: " VerticalAlignment="Top" />
-                        <TextBox Width="210" VerticalAlignment="Top" HorizontalAlignment="Right" Text="N:" Margin="0,10,20,0" Name="homedrive" IsReadOnly="True" BorderBrush="{x:Null}" />
+                    <Image Height="100" HorizontalAlignment="Left" Margin="4,3,0,0" Name="Photo" Stretch="Fill" VerticalAlignment="Top" Width="100" Source="/HAP%20User%20Card;component/Images/Imageres18.png" />
+                    <TextBlock Text="UN" Name="name" Margin="116,24,7,0" VerticalAlignment="Top" FontSize="16" TextAlignment="Left" TextTrimming="CharacterEllipsis" />
+                    <TextBlock Text="UN" Margin="117,64,0,0" VerticalAlignment="Top" Name="departmenttext" HorizontalAlignment="Left" />
+                    <TextBox Name="email" VerticalAlignment="Top" Margin="114,81,6,0" Height="22" IsReadOnly="True" BorderThickness="0" />
+                    <Grid Name="DriveSpace" Height="120" VerticalAlignment="Bottom"  Visibility="Hidden">
+                        <TextBlock HorizontalAlignment="Left" Margin="26,13,0,0" Text="Home Drive: " VerticalAlignment="Top" />
+                        <TextBox Width="222" VerticalAlignment="Top" HorizontalAlignment="Right" Text="N:" BorderThickness="0" Margin="0,12,20,0" Name="homedrive" IsReadOnly="True" />
                         <TextBlock HorizontalAlignment="Left" Margin="26,45,20,0" Text="Free Space: " VerticalAlignment="Top" Name="freespace" />
                         <TextBlock Margin="160,45,0,0" Text="Total Space: " HorizontalAlignment="Left" VerticalAlignment="Top" Name="totalspace" />
                         <ProgressBar Height="22" HorizontalAlignment="Stretch" Margin="20,75,20,0" Name="drivespaceprog" VerticalAlignment="Top" />
