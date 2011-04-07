@@ -62,6 +62,8 @@
     <Compile Include="ComputerBrowser\PrimaryResponse.cs" />
     <Compile Include="ComputerBrowser\Quota.cs" />
     <Compile Include="ComputerBrowser\CBFile.cs" />
+    <Compile Include="ComputerBrowser\UNCPath.cs" />
+    <Compile Include="ComputerBrowser\UploadFilter.cs" />
     <Compile Include="Pupils.cs" />
     <Compile Include="Service References\Quota\Reference.cs">
       <AutoGen>True</AutoGen>

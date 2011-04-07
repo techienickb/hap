@@ -57,6 +57,22 @@ namespace HAP.Data.ComputerBrowser
             return path;
         }
 
+        public static string DriveToUNC(string RoutingPath, string RoutingDrive, out UNCPath unc, out string userhome)
+        {
+            uncpath u;
+            string s = DriveToUNC(RoutingPath, RoutingDrive, out u, out userhome);
+            UNCPath u1 = new UNCPath();
+            u1.Drive = u.Drive;
+            u1.EnableMove = u.EnableMove;
+            u1.EnableReadTo = u.EnableReadTo;
+            u1.EnableWriteTo = u.EnableWriteTo;
+            u1.Name = u.Name;
+            u1.UNC = u.UNC;
+            u1.Usage = u.Usage;
+            unc = u1;
+            return s;
+        }
+
         public static string DriveToUNC(string Path)
         {
             return DriveToUNC(Path.Remove(0, 1), Path.Substring(0, 1));
@@ -67,7 +83,19 @@ namespace HAP.Data.ComputerBrowser
             return DriveToUNC(Path.Remove(0, 2), Path.Substring(0, 1), out unc, out userhome);
         }
 
+        public static string DriveToUNC(string Path, out UNCPath unc, out string userhome)
+        {
+            return DriveToUNC(Path.Remove(0, 2), Path.Substring(0, 1), out unc, out userhome);
+        }
+
         public static string UNCtoDrive(string dirpath, uncpath unc, string userhome)
+        {
+            dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", userhome), Username), unc.Drive + ":");
+            dirpath = dirpath.Replace("\\\\", "\\");
+            return dirpath;
+        }
+
+        public static string UNCtoDrive(string dirpath, UNCPath unc, string userhome)
         {
             dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", userhome), Username), unc.Drive + ":");
             dirpath = dirpath.Replace("\\\\", "\\");
@@ -81,7 +109,28 @@ namespace HAP.Data.ComputerBrowser
             return dirpath;
         }
 
+        public static string UNCtoDrive2(string dirpath, UNCPath unc, string userhome)
+        {
+            dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", userhome), Username), unc.Drive);
+            dirpath = dirpath.Replace('\\', '/').Replace("//", "/");
+            return dirpath;
+        }
+
         static bool isWriteAuth(uncpath path)
+        {
+            if (path == null) return true;
+            if (path.EnableWriteTo == "All") return true;
+            else if (path.EnableWriteTo != "None")
+            {
+                bool vis = false;
+                foreach (string s in path.EnableWriteTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
+                    if (!vis) vis = Context.User.IsInRole(s);
+                return vis;
+            }
+            return false;
+        }
+
+        static bool isWriteAuth(UNCPath path)
         {
             if (path == null) return true;
             if (path.EnableWriteTo == "All") return true;

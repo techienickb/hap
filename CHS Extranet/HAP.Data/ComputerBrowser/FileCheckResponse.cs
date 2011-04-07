@@ -10,7 +10,7 @@ namespace HAP.Data.ComputerBrowser
     public class FileCheckResponse
     {
         public FileCheckResponse() { Code = FileCheckResponseCode.Deny; FileSize = "-1"; }
-        public FileCheckResponse(FileInfo file, uncpath unc, string userhome)
+        public FileCheckResponse(FileInfo file, UNCPath unc, string userhome)
         {
             if (file.Exists)
             {
@@ -25,7 +25,7 @@ namespace HAP.Data.ComputerBrowser
             else Code = FileCheckResponseCode.OK;
         }
 
-        public FileCheckResponse(string path, uncpath unc, string userhome)
+        public FileCheckResponse(string path, UNCPath unc, string userhome)
             : this(new FileInfo(path), unc, userhome)
         {
         }

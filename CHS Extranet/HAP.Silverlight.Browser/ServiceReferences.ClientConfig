@@ -1,0 +1,16 @@
+﻿<configuration>
+    <system.serviceModel>
+        <bindings>
+            <basicHttpBinding>
+                <binding name="apiSoap" maxBufferSize="2147483647" maxReceivedMessageSize="2147483647">
+                    <security mode="Transport" />
+                </binding>
+            </basicHttpBinding>
+        </bindings>
+        <client>
+            <endpoint address="https://folders.crickhowell-hs.powys.sch.uk/extranet/api.asmx"
+                binding="basicHttpBinding" bindingConfiguration="apiSoap"
+                contract="service.apiSoap" name="apiSoap" />
+        </client>
+    </system.serviceModel>
+</configuration>

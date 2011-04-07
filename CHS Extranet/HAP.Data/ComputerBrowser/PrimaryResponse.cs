@@ -9,7 +9,7 @@ namespace HAP.Data.ComputerBrowser
     public class PrimaryResponse
     {
         public ComputerBrowserAPIItem[] Items { get; set; }
-        public uploadfilter[] Filters { get; set; }
+        public UploadFilter[] Filters { get; set; }
         public string HAPName { get; set; }
         public string HAPVerion { get; set; }
     }

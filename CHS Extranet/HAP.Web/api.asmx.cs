@@ -29,7 +29,7 @@ namespace HAP.Web
         [WebMethod]
         public FileCheckResponse CheckFile(string FileName)
         {
-            string home; uncpath unc; string path = Converter.DriveToUNC(FileName, out unc, out home);
+            string home; UNCPath unc; string path = Converter.DriveToUNC(FileName, out unc, out home);
             return new FileCheckResponse(path, unc, home);
         }
 
@@ -58,8 +58,16 @@ namespace HAP.Web
 
             string userhome = up.HomeDirectory;
             List<ComputerBrowserAPIItem> items = new List<ComputerBrowserAPIItem>();
-            foreach (uncpath path in config.MyComputer.UNCPaths)
+            foreach (uncpath p in config.MyComputer.UNCPaths)
             {
+                UNCPath path = new UNCPath();
+                path.Drive = p.Drive;
+                path.EnableMove = p.EnableMove;
+                path.EnableReadTo = p.EnableReadTo;
+                path.EnableWriteTo = p.EnableWriteTo;
+                path.Name = p.Name;
+                path.UNC = p.UNC;
+                path.Usage = p.Usage;
                 decimal space = -1;
                 bool showspace = false;
                 if (HttpContext.Current.User.IsInRole("Domain Admins") || !path.UNC.Contains("%homepath%")) showspace = isWriteAuth(path);
@@ -86,9 +94,16 @@ namespace HAP.Web
                 if (isAuth(path)) items.Add(new ComputerBrowserAPIItem(path.Name, "images/icons/netdrive.png", space.ToString(), "Drive", BType.Drive, path.Drive + ":", isWriteAuth(path) ? AccessControlActions.Change : AccessControlActions.View));
             }
             res.Items = items.ToArray();
-            List<uploadfilter> filters = new List<uploadfilter>();
+            List<UploadFilter> filters = new List<UploadFilter>();
             foreach (uploadfilter filter in config.MyComputer.UploadFilters)
-                if (isAuth(filter)) filters.Add(filter);
+                if (isAuth(filter))
+                {
+                    UploadFilter u = new UploadFilter();
+                    u.EnableFor = filter.EnableFor;
+                    u.Filter = filter.Filter;
+                    u.Name = filter.Name;
+                    filters.Add(u);
+                }
             res.Filters = filters.ToArray();
 
             return res;
@@ -99,7 +114,7 @@ namespace HAP.Web
         public ComputerBrowserAPIItem[] List(string path)
         {
             List<ComputerBrowserAPIItem> items = new List<ComputerBrowserAPIItem>();
-            uncpath unc; string userhome;
+            UNCPath unc; string userhome;
             Converter.DriveToUNC(path, out unc, out userhome);
             AccessControlActions allowactions = isWriteAuth(unc) ? AccessControlActions.Change : AccessControlActions.View;
 
@@ -146,7 +161,7 @@ namespace HAP.Web
         [WebMethod]
         public CBFile[] Save(CBFile Current, string newpath, bool overwrite)
         {
-            uncpath unc; string userhome;
+            UNCPath unc; string userhome;
             string path = Converter.DriveToUNC(Current.Path, out unc, out userhome);
             newpath = Converter.DriveToUNC(newpath, out unc, out userhome);
 
@@ -240,6 +255,7 @@ namespace HAP.Web
             }
         }
 
+        #region Private Stuff
         internal static class Win32
         {
             [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
@@ -270,7 +286,7 @@ namespace HAP.Web
             return false;
         }
 
-        private bool isAuth(uncpath path)
+        private bool isAuth(UNCPath path)
         {
             if (path.EnableReadTo == "All") return true;
             else if (path.EnableReadTo != "None")
@@ -283,7 +299,7 @@ namespace HAP.Web
             return false;
         }
 
-        private bool isWriteAuth(uncpath path)
+        private bool isWriteAuth(UNCPath path)
         {
             if (path == null) return true;
             if (path.EnableWriteTo == "All") return true;
@@ -328,5 +344,7 @@ namespace HAP.Web
                 else return Context.User.Identity.Name;
             }
         }
+
+#endregion
     }
 }

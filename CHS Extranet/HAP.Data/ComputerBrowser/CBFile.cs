@@ -23,7 +23,7 @@ namespace HAP.Data.ComputerBrowser
 
         public CBFile() { }
 
-        public CBFile(FileInfo file, uncpath unc, string userhome)
+        public CBFile(FileInfo file, UNCPath unc, string userhome)
         {
             Extension = file.Extension;
             Type = "File";
@@ -46,7 +46,7 @@ namespace HAP.Data.ComputerBrowser
             Path = Converter.UNCtoDrive(file.FullName, unc, userhome);
         }
 
-        public CBFile(DirectoryInfo dir, uncpath unc, string userhome)
+        public CBFile(DirectoryInfo dir, UNCPath unc, string userhome)
         {
             Extension = dir.Extension;
             Type = "File Folder";
