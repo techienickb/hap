@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://hap.codeplex.com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://hap.codeplex.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://hap.codeplex.com/">
+      <s:element name="CheckFile">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="FileName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CheckFileResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CheckFileResult" type="tns:FileCheckResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="FileCheckResponse">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Code" type="tns:FileCheckResponseCode" />
+          <s:element minOccurs="0" maxOccurs="1" name="FileName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Extension" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FileSize" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="DateModified" nillable="true" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="DateCreated" nillable="true" type="s:dateTime" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="FileCheckResponseCode">
+        <s:restriction base="s:string">
+          <s:enumeration value="OK" />
+          <s:enumeration value="Exists" />
+          <s:enumeration value="Deny" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="ListDrives">
+        <s:complexType />
+      </s:element>
+      <s:element name="ListDrivesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ListDrivesResult" type="tns:PrimaryResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="PrimaryResponse">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Items" type="tns:ArrayOfComputerBrowserAPIItem" />
+          <s:element minOccurs="0" maxOccurs="1" name="Filters" type="tns:ArrayOfUploadFilter" />
+          <s:element minOccurs="0" maxOccurs="1" name="HAPName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HAPVerion" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfComputerBrowserAPIItem">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ComputerBrowserAPIItem" nillable="true" type="tns:ComputerBrowserAPIItem" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ComputerBrowserAPIItem">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:CBFile">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="Download" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="AccessControl" type="tns:AccessControlActions" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="CBFile">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Extension" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="CreatedTime" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="ModifiedTime" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="Icon" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Size" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Type" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Thumb" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Path" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="BType" type="tns:BType" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="BType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Root" />
+          <s:enumeration value="Folder" />
+          <s:enumeration value="File" />
+          <s:enumeration value="Drive" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="AccessControlActions">
+        <s:restriction base="s:string">
+          <s:enumeration value="Change" />
+          <s:enumeration value="View" />
+          <s:enumeration value="None" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="ArrayOfUploadFilter">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="UploadFilter" nillable="true" type="tns:UploadFilter" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="UploadFilter">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Filter" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="EnableFor" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="List">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="path" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ListResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ListResult" type="tns:ArrayOfComputerBrowserAPIItem" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Save">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Current" type="tns:CBFile" />
+            <s:element minOccurs="0" maxOccurs="1" name="newpath" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="overwrite" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SaveResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SaveResult" type="tns:ArrayOfCBFile" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfCBFile">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="CBFile" nillable="true" type="tns:CBFile" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="Delete">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="path" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="NewFolder">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="basepath" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="foldername" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="NewFolderResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="ZIP">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="basepath" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="filename" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="filepaths" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ZIPResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="Unzip">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="zipfile" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="extractfolder" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UnzipResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="UploadFile">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="FileName" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="StartByte" type="s:long" />
+            <s:element minOccurs="0" maxOccurs="1" name="Data" type="s:base64Binary" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UploadFileResponse">
+        <s:complexType />
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="CheckFileSoapIn">
+    <wsdl:part name="parameters" element="tns:CheckFile" />
+  </wsdl:message>
+  <wsdl:message name="CheckFileSoapOut">
+    <wsdl:part name="parameters" element="tns:CheckFileResponse" />
+  </wsdl:message>
+  <wsdl:message name="ListDrivesSoapIn">
+    <wsdl:part name="parameters" element="tns:ListDrives" />
+  </wsdl:message>
+  <wsdl:message name="ListDrivesSoapOut">
+    <wsdl:part name="parameters" element="tns:ListDrivesResponse" />
+  </wsdl:message>
+  <wsdl:message name="ListSoapIn">
+    <wsdl:part name="parameters" element="tns:List" />
+  </wsdl:message>
+  <wsdl:message name="ListSoapOut">
+    <wsdl:part name="parameters" element="tns:ListResponse" />
+  </wsdl:message>
+  <wsdl:message name="SaveSoapIn">
+    <wsdl:part name="parameters" element="tns:Save" />
+  </wsdl:message>
+  <wsdl:message name="SaveSoapOut">
+    <wsdl:part name="parameters" element="tns:SaveResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteSoapIn">
+    <wsdl:part name="parameters" element="tns:Delete" />
+  </wsdl:message>
+  <wsdl:message name="DeleteSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteResponse" />
+  </wsdl:message>
+  <wsdl:message name="NewFolderSoapIn">
+    <wsdl:part name="parameters" element="tns:NewFolder" />
+  </wsdl:message>
+  <wsdl:message name="NewFolderSoapOut">
+    <wsdl:part name="parameters" element="tns:NewFolderResponse" />
+  </wsdl:message>
+  <wsdl:message name="ZIPSoapIn">
+    <wsdl:part name="parameters" element="tns:ZIP" />
+  </wsdl:message>
+  <wsdl:message name="ZIPSoapOut">
+    <wsdl:part name="parameters" element="tns:ZIPResponse" />
+  </wsdl:message>
+  <wsdl:message name="UnzipSoapIn">
+    <wsdl:part name="parameters" element="tns:Unzip" />
+  </wsdl:message>
+  <wsdl:message name="UnzipSoapOut">
+    <wsdl:part name="parameters" element="tns:UnzipResponse" />
+  </wsdl:message>
+  <wsdl:message name="UploadFileSoapIn">
+    <wsdl:part name="parameters" element="tns:UploadFile" />
+  </wsdl:message>
+  <wsdl:message name="UploadFileSoapOut">
+    <wsdl:part name="parameters" element="tns:UploadFileResponse" />
+  </wsdl:message>
+  <wsdl:portType name="apiSoap">
+    <wsdl:operation name="CheckFile">
+      <wsdl:input message="tns:CheckFileSoapIn" />
+      <wsdl:output message="tns:CheckFileSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ListDrives">
+      <wsdl:input message="tns:ListDrivesSoapIn" />
+      <wsdl:output message="tns:ListDrivesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="List">
+      <wsdl:input message="tns:ListSoapIn" />
+      <wsdl:output message="tns:ListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Save">
+      <wsdl:input message="tns:SaveSoapIn" />
+      <wsdl:output message="tns:SaveSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Delete">
+      <wsdl:input message="tns:DeleteSoapIn" />
+      <wsdl:output message="tns:DeleteSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="NewFolder">
+      <wsdl:input message="tns:NewFolderSoapIn" />
+      <wsdl:output message="tns:NewFolderSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ZIP">
+      <wsdl:input message="tns:ZIPSoapIn" />
+      <wsdl:output message="tns:ZIPSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Unzip">
+      <wsdl:input message="tns:UnzipSoapIn" />
+      <wsdl:output message="tns:UnzipSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UploadFile">
+      <wsdl:input message="tns:UploadFileSoapIn" />
+      <wsdl:output message="tns:UploadFileSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="apiSoap" type="tns:apiSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CheckFile">
+      <soap:operation soapAction="http://hap.codeplex.com/CheckFile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListDrives">
+      <soap:operation soapAction="http://hap.codeplex.com/ListDrives" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="List">
+      <soap:operation soapAction="http://hap.codeplex.com/List" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Save">
+      <soap:operation soapAction="http://hap.codeplex.com/Save" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Delete">
+      <soap:operation soapAction="http://hap.codeplex.com/Delete" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="NewFolder">
+      <soap:operation soapAction="http://hap.codeplex.com/NewFolder" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ZIP">
+      <soap:operation soapAction="http://hap.codeplex.com/ZIP" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Unzip">
+      <soap:operation soapAction="http://hap.codeplex.com/Unzip" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UploadFile">
+      <soap:operation soapAction="http://hap.codeplex.com/UploadFile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="apiSoap12" type="tns:apiSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CheckFile">
+      <soap12:operation soapAction="http://hap.codeplex.com/CheckFile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListDrives">
+      <soap12:operation soapAction="http://hap.codeplex.com/ListDrives" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="List">
+      <soap12:operation soapAction="http://hap.codeplex.com/List" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Save">
+      <soap12:operation soapAction="http://hap.codeplex.com/Save" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Delete">
+      <soap12:operation soapAction="http://hap.codeplex.com/Delete" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="NewFolder">
+      <soap12:operation soapAction="http://hap.codeplex.com/NewFolder" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ZIP">
+      <soap12:operation soapAction="http://hap.codeplex.com/ZIP" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Unzip">
+      <soap12:operation soapAction="http://hap.codeplex.com/Unzip" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UploadFile">
+      <soap12:operation soapAction="http://hap.codeplex.com/UploadFile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="api">
+    <wsdl:port name="apiSoap" binding="tns:apiSoap">
+      <soap:address location="https://folders.crickhowell-hs.powys.sch.uk/extranet/api.asmx" />
+    </wsdl:port>
+    <wsdl:port name="apiSoap12" binding="tns:apiSoap12">
+      <soap12:address location="https://folders.crickhowell-hs.powys.sch.uk/extranet/api.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

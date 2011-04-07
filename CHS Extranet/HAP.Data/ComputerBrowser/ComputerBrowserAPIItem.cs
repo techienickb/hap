@@ -17,13 +17,13 @@ namespace HAP.Data.ComputerBrowser
         {
         }
 
-        public ComputerBrowserAPIItem(FileInfo file, uncpath unc, string userhome, AccessControlActions access, [Optional, DefaultParameterValue("")] string download) : base(file, unc, userhome)
+        public ComputerBrowserAPIItem(FileInfo file, UNCPath unc, string userhome, AccessControlActions access, [Optional, DefaultParameterValue("")] string download) : base(file, unc, userhome)
         {
             AccessControl = access;
             Download = download;
         }
 
-        public ComputerBrowserAPIItem(DirectoryInfo dir, uncpath unc, string userhome, AccessControlActions access, [Optional, DefaultParameterValue("")] string download) : base(dir, unc, userhome)
+        public ComputerBrowserAPIItem(DirectoryInfo dir, UNCPath unc, string userhome, AccessControlActions access, [Optional, DefaultParameterValue("")] string download) : base(dir, unc, userhome)
         {
             AccessControl = access;
             Download = download;
