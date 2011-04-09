@@ -11,6 +11,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Media.Imaging;
 using System.Text.RegularExpressions;
+using HAP.Silverlight.Browser.service;
 
 namespace HAP.Silverlight.Browser
 {
@@ -21,23 +22,23 @@ namespace HAP.Silverlight.Browser
             InitializeComponent();
         }
 
-        public FileExists(string filename, string path, string size, string datemod, string path2, string size2, string datemod2, ImageSource imageuri)
+        public FileExists(CBFile file1, CBFile file2, ImageSource imageuri)
         {
             InitializeComponent();
             image1.Source = image2.Source = imageuri;
             Regex reg = new Regex("\\(\\d\\)", RegexOptions.IgnoreCase);
-            Match m = reg.Match(filename);
+            Match m = reg.Match(file1.Name);
             int i = 1;
             if (m.Success) i = int.Parse(m.Value.Remove(m.Value.IndexOf(')')).Remove(0, 1));
             i++;
-            this.name3.Text = string.Format("The file you are copying will be renamed \"{0} ({1})\"", filename, i);
-            this.name1.Text = this.name2.Text = filename;
-            this.path1.Text = string.Format("{0} ({1})", filename, path);
-            this.path2.Text = string.Format("{0} ({1})", filename, path2);
-            this.size1.Text = string.Format("Size: {0}", size);
-            this.size2.Text = string.Format("Size: {0}", size2);
-            this.date1.Text = string.Format("Date modified: {0}", datemod);
-            this.date2.Text = string.Format("Date modified: {0}", datemod);
+            this.name3.Text = string.Format("The file you are copying will be renamed \"{0} ({1})\"", file1.Name, i);
+            this.name1.Text = this.name2.Text = file1.Name;
+            this.path1.Text = string.Format("{0} ({1})", file1.Name, file1.Path);
+            this.path2.Text = string.Format("{0} ({1})", file2.Name, file2.Path);
+            this.size1.Text = string.Format("Size: {0}", file1.Size);
+            this.size2.Text = string.Format("Size: {0}", file2.Size);
+            this.date1.Text = string.Format("Date modified: {0}", file1.ModifiedTime);
+            this.date2.Text = string.Format("Date modified: {0}", file2.ModifiedTime);
 
         }
 

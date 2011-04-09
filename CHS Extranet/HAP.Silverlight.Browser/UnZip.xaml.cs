@@ -10,6 +10,8 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Browser;
+using HAP.Silverlight.Browser.service;
+using System.ServiceModel;
 
 namespace HAP.Silverlight.Browser
 {
@@ -22,7 +24,11 @@ namespace HAP.Silverlight.Browser
             this.ParentItem = ParentItem;
             foldername.Text = Item.Name;
             Completed += CompletedEv;
+            soap = new apiSoapClient(new BasicHttpBinding(BasicHttpSecurityMode.Transport), new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
+            soap.UnzipCompleted += new EventHandler<System.ComponentModel.AsyncCompletedEventArgs>(soap_UnzipCompleted);
         }
+
+        public apiSoapClient soap { get; set; }
 
         public BItem Item { get; set; }
         public BItem ParentItem { get; set; }
@@ -49,33 +55,29 @@ namespace HAP.Silverlight.Browser
         {
             busyindicator.IsBusy = true;
             string _d = Common.GetPath(ParentItem) + "/" + foldername.Text;
-            WebClient zipclient = new WebClient();
-            zipclient.UploadStringCompleted += new UploadStringCompletedEventHandler(zipclient_UploadStringCompleted);
-            zipclient.UploadStringAsync(Common.GetUri(Item, UriType.Unzip), "POST", _d);
+            soap.UnzipAsync(Item.Path, _d);
         }
 
-        private void zipclient_UploadStringCompleted(object sender, UploadStringCompletedEventArgs e)
+        void soap_UnzipCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
         {
-            Dispatcher.BeginInvoke(new UploadStringCompletedEventHandler(zipclient_UploadStringCompleted2), sender, e);
+            Dispatcher.BeginInvoke(new EventHandler<System.ComponentModel.AsyncCompletedEventArgs>(soap_UnzipCompleted2), sender, e);
         }
 
-        private void zipclient_UploadStringCompleted2(object sender, UploadStringCompletedEventArgs e)
+        void soap_UnzipCompleted2(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
         {
             busyindicator.IsBusy = false;
-            if (e.Result == "DONE")
+            if (e.Error != null)
             {
                 if (Completed != null) Completed(this, new RoutedEventArgs());
                 this.DialogResult = true;
             }
-            else MessageBox.Show(e.Result);
+            else MessageBox.Show(e.Error.ToString());
         }
 
         private void CurrentFolder_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             string _d = Common.GetPath(ParentItem);
-            WebClient zipclient = new WebClient();
-            zipclient.UploadStringCompleted += new UploadStringCompletedEventHandler(zipclient_UploadStringCompleted);
-            zipclient.UploadStringAsync(Common.GetUri(Item, UriType.Unzip), "POST", _d);
+            soap.UnzipAsync(Item.Path, _d);
             this.DialogResult = true;
         }
 

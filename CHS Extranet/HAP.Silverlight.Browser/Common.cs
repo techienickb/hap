@@ -41,7 +41,7 @@ namespace HAP.Silverlight.Browser
 
         public static string GetPath(BItem Data)
         {
-            return Data.Path.Remove(0, Data.BType == BType.File ? 9 : 20);
+            return Data.Path;
         }
     }
 
@@ -49,8 +49,6 @@ namespace HAP.Silverlight.Browser
     public enum UriType { Save, Delete, Zip, Unzip }
     public enum ViewMode { List, SmallIcon, Icon, LargeIcon, Tile }
     public enum MouseMode { NoGo, Move, Normal, Upload }
-    public enum BType { Root, Folder, File, Drive }
-    public enum AccessControlActions { Change, View, None }
     #endregion
 
     #region Event
@@ -66,46 +64,37 @@ namespace HAP.Silverlight.Browser
 
     public class BItem : IComparable
     {
-        private string _name;
+        public service.ComputerBrowserAPIItem Source { get; set; }
         public string Name
         {
-            get { return this._name; }
+            get { return Source.Name; }
             set
             {
-                this._name = value;
+                Source.Name = value;
                 if (Changed != null) Changed(this);
             }
         }
-        public string Icon { get; set; }
-        public string Size { get; set; }
-        public string Type { get; set; }
-        public BType BType { get; set; }
-        public string Path { get; set; }
-        public AccessControlActions AccessControl { get; set; }
+        public string Icon { get { return Source.Icon; } set { Source.Icon = value; } }
+        public string Size { get { return Source.Size; } set { Source.Size = value; } }
+        public string Type { get { return Source.Type; } set { Source.Type = value; } }
+        public service.BType BType { get { return Source.BType; } set { Source.BType = value; } }
+        public string Path { get { return Source.Path; } set { Source.Path = value; } }
+        public service.AccessControlActions AccessControl { get { return Source.AccessControl; } set { Source.AccessControl = value; } }
         public event BItemChangeHandler Changed;
         public event BItemChangeHandler Deleted;
         public void Delete() { if (Deleted != null) Deleted(this); }
 
-        public BItem(string name, string icon, string size, string type, BType btype, string path, AccessControlActions access)
+        public BItem() { }
+        public BItem(service.ComputerBrowserAPIItem item)
         {
-            Name = name;
-            Icon = icon;
-            Type = type;
-            Size = size;
-            BType = btype;
-            Path = path;
-            AccessControl = access;
+            Source = item;
         }
-
-        public BItem(string name, string icon, string size, string type, BType btype, string path, string access)
+        public BItem(service.BType type, string name, service.AccessControlActions access)
         {
-            Name = name;
-            Icon = icon;
-            Type = type;
-            Size = size;
-            BType = btype;
-            Path = path;
-            AccessControl = (AccessControlActions)Enum.Parse(typeof(AccessControlActions), access, true);
+            Source = new service.ComputerBrowserAPIItem();
+            Source.BType = type;
+            Source.Name = name;
+            Source.AccessControl = access;
         }
 
         public int CompareTo(object obj)

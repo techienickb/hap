@@ -13,6 +13,8 @@ using System.IO;
 using System.Windows.Controls.Theming;
 using System.Windows.Browser;
 using System.Windows.Media.Imaging;
+using HAP.Silverlight.Browser.service;
+using System.ServiceModel;
 
 namespace HAP.Silverlight.Browser
 {
@@ -25,7 +27,7 @@ namespace HAP.Silverlight.Browser
             activeItems = new List<BrowserItem>();
             Filter = new List<string>();
             ViewMode = Browser.ViewMode.Tile;
-            CurrentItem = new BItem("My School Computer", "", "", "", BType.Root, "api/mycomputer/listdrives", AccessControlActions.None);
+            CurrentItem = new BItem(service.BType.Root, "My School Computer", service.AccessControlActions.None);
             newfolder.Visibility = System.Windows.Visibility.Collapsed;
             HAPTreeNode root = new HAPTreeNode();
             root.Data = CurrentItem;
@@ -43,7 +45,13 @@ namespace HAP.Silverlight.Browser
             sp.Children.Add(tb);
             root.Header = sp;
             treeView1.Items.Add(root);
+            soap = new apiSoapClient(new BasicHttpBinding(BasicHttpSecurityMode.Transport), new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
+            soap.ListCompleted += new EventHandler<ListCompletedEventArgs>(soap_ListCompleted);
+            soap.ListDrivesCompleted += new EventHandler<ListDrivesCompletedEventArgs>(soap_ListDrivesCompleted);
+            soap.NewFolderCompleted += new EventHandler<System.ComponentModel.AsyncCompletedEventArgs>(soap_NewFolderCompleted);
         }
+
+        public apiSoapClient soap { get; set; }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
@@ -64,10 +72,7 @@ namespace HAP.Silverlight.Browser
                 this.AllowDrop = false;
             }
             catch { }
-
-            WebClient driveclient = new WebClient();
-            driveclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(driveclient_DownloadStringCompleted);
-            driveclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri, "api/mycomputer/listdrives"), false);
+            soap.ListDrivesAsync();
         }
 
         #region Variables
@@ -113,79 +118,72 @@ namespace HAP.Silverlight.Browser
             currentnode.Items.Add(newnode);
         }
 
-        private void driveclient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
+        void soap_ListDrivesCompleted(object sender, ListDrivesCompletedEventArgs e)
         {
-            Dispatcher.BeginInvoke(new SetBool(SetDrop), CurrentItem.AccessControl == AccessControlActions.Change);
-            if (loaded)  Dispatcher.BeginInvoke(new Action(ClearItems));
-            foreach (string s in e.Result.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
+            Dispatcher.BeginInvoke(new SetBool(SetDrop), CurrentItem.AccessControl == service.AccessControlActions.Change);
+            if (loaded) Dispatcher.BeginInvoke(new Action(ClearItems));
+            foreach (service.UploadFilter filter in e.Result.Filters)
             {
-                if (s.StartsWith("FILTER"))
-                {
-                    if (!Filter.Contains(s.Remove(0, 6)))
-                        Filter.Add(s.Remove(0, 6));
-                }
-                else if (s.StartsWith("INFO")) Info = s.Remove(0, 4);
-                else
-                {
-                    string[] ss = s.Split(new char[] { '|' });
-                    BItem bitem = new BItem(ss[0], ss[1], "", "Drive", BType.Drive, ss[2], ss[3]);
-                    bitem.Changed += new BItemChangeHandler(bitem_Changed);
-                    bitem.Deleted += new BItemChangeHandler(bitem_Delete);
-                    BrowserItem item;
-                    if (ss.Length > 4)
-                        item = new BrowserItem(bitem, double.Parse(ss[4]));
-                    else item = new BrowserItem(bitem);
-                    if (!loaded)
-                    {
-                        HAPTreeNode titem = new HAPTreeNode();
-                        BStackPanel sp = new BStackPanel();
-                        sp.Orientation = Orientation.Horizontal;
-                        sp.VerticalAlignment = System.Windows.VerticalAlignment.Center;
-                        sp.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
-                        sp.MouseLeftButtonUp += new MouseButtonEventHandler(HAPTreeNode_MouseLeftButtonUp);
-                        sp.AllowDrop = bitem.AccessControl == AccessControlActions.Change;
-                        if (sp.AllowDrop)
-                        {
-                            sp.DragEnter += new DragEventHandler(titem_DragEnter);
-                            sp.DragLeave += new DragEventHandler(titem_DragLeave);
-                            sp.Drop += new DragEventHandler(contentPan_Drop);
-                            sp.DragOver += new DragEventHandler(sp_DragOver);
-                        }
-                        sp.Cursor = Cursors.Hand;
-                        sp.MouseEnter += new MouseEventHandler(HAPTreeNode_MouseEnter);
-                        sp.MouseLeave += new MouseEventHandler(HAPTreeNode_MouseLeave);
-                        sp.Data = bitem;
-                        Image img = new Image();
-                        img.Source = new BitmapImage(new Uri("/HAP.Silverlight.Browser;component/netdrive.png", UriKind.Relative));
-                        sp.Children.Add(img);
-                        TextBlock tb = new TextBlock();
-                        tb.Padding = new Thickness(4, 0, 0, 0);
-                        tb.Text = bitem.Name;
-                        sp.Children.Add(tb);
-                        titem.Header = sp;
-                        titem.Data = bitem;
-                        titem.Expanded += new RoutedEventHandler(HAPTreeNode_Expanded);
-                        titem.Unselected += new RoutedEventHandler(HAPTreeNode_Unselected);
-                        titem.Selected += new RoutedEventHandler(HAPTreeNode_Selected);
-                        HAPTreeNode ttitem = new HAPTreeNode();
-                        ttitem.Header = "Loading...";
-                        titem.Items.Add(ttitem);
-                        Dispatcher.BeginInvoke(new AddTeeeHandler(AddTreeItem), (HAPTreeNode)treeView1.Items[0], titem);
-                        //((HAPTreeNode)treeView1.Items[0]).Items.Add(titem);
-                    }
-                    item.KeyUp += new KeyEventHandler(item_KeyUp);
-                    item.MouseEnter += new MouseEventHandler(item_MouseEnter);
-                    item.MouseLeftButtonDown += new MouseButtonEventHandler(item_MouseLeftButtonDown);
-                    item.MouseLeave += new MouseEventHandler(item_MouseLeave);
-                    item.Activate += new EventHandler(item_Activate);
-                    item.ReSort += new ResortHandler(item_ReSort);
-                    item.DirectoryChange += new ChangeDirectoryHandler(item_DirectoryChange);
-                    Dispatcher.BeginInvoke(new AddItemHandler(AddItem), item);
-                    //contentPan.Children.Add(item);
-                    //item.Mode = ViewMode;
-                }
+                string f = string.Format("{0} ({2})|{1}", filter.Name, filter.Filter, filter.Filter.Replace(";", ","));
+                if (!Filter.Contains(f)) Filter.Add(f);
             }
-            if (!loaded) Dispatcher.BeginInvoke(new Action(ContinueLoad));
+            Info = string.Format("Name:{0}|Version:{1}", e.Result.HAPName, e.Result.HAPVerion);
+            foreach (service.ComputerBrowserAPIItem i in e.Result.Items)
+            {
+                BItem bitem = new BItem(i);
+                bitem.Changed += new BItemChangeHandler(bitem_Changed);
+                bitem.Deleted += new BItemChangeHandler(bitem_Delete);
+                BrowserItem item = new BrowserItem(bitem);
+                if (!loaded)
+                {
+                    HAPTreeNode titem = new HAPTreeNode();
+                    BStackPanel sp = new BStackPanel();
+                    sp.Orientation = Orientation.Horizontal;
+                    sp.VerticalAlignment = System.Windows.VerticalAlignment.Center;
+                    sp.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+                    sp.MouseLeftButtonUp += new MouseButtonEventHandler(HAPTreeNode_MouseLeftButtonUp);
+                    sp.AllowDrop = bitem.AccessControl == service.AccessControlActions.Change;
+                    if (sp.AllowDrop)
+                    {
+                        sp.DragEnter += new DragEventHandler(titem_DragEnter);
+                        sp.DragLeave += new DragEventHandler(titem_DragLeave);
+                        sp.Drop += new DragEventHandler(contentPan_Drop);
+                        sp.DragOver += new DragEventHandler(sp_DragOver);
+                    }
+                    sp.Cursor = Cursors.Hand;
+                    sp.MouseEnter += new MouseEventHandler(HAPTreeNode_MouseEnter);
+                    sp.MouseLeave += new MouseEventHandler(HAPTreeNode_MouseLeave);
+                    sp.Data = bitem;
+                    Image img = new Image();
+                    img.Source = new BitmapImage(new Uri("/HAP.Silverlight.Browser;component/netdrive.png", UriKind.Relative));
+                    sp.Children.Add(img);
+                    TextBlock tb = new TextBlock();
+                    tb.Padding = new Thickness(4, 0, 0, 0);
+                    tb.Text = bitem.Name;
+                    sp.Children.Add(tb);
+                    titem.Header = sp;
+                    titem.Data = bitem;
+                    titem.Expanded += new RoutedEventHandler(HAPTreeNode_Expanded);
+                    titem.Unselected += new RoutedEventHandler(HAPTreeNode_Unselected);
+                    titem.Selected += new RoutedEventHandler(HAPTreeNode_Selected);
+                    HAPTreeNode ttitem = new HAPTreeNode();
+                    ttitem.Header = "Loading...";
+                    titem.Items.Add(ttitem);
+                    Dispatcher.BeginInvoke(new AddTeeeHandler(AddTreeItem), (HAPTreeNode)treeView1.Items[0], titem);
+                    //((HAPTreeNode)treeView1.Items[0]).Items.Add(titem);
+                }
+                item.KeyUp += new KeyEventHandler(item_KeyUp);
+                item.MouseEnter += new MouseEventHandler(item_MouseEnter);
+                item.MouseLeftButtonDown += new MouseButtonEventHandler(item_MouseLeftButtonDown);
+                item.MouseLeave += new MouseEventHandler(item_MouseLeave);
+                item.Activate += new EventHandler(item_Activate);
+                item.ReSort += new ResortHandler(item_ReSort);
+                item.DirectoryChange += new ChangeDirectoryHandler(item_DirectoryChange);
+                Dispatcher.BeginInvoke(new AddItemHandler(AddItem), item);
+                //contentPan.Children.Add(item);
+                item.Mode = ViewMode;
+            }
+        if (!loaded) Dispatcher.BeginInvoke(new Action(ContinueLoad));
         }
 
         private void ContinueLoad()
@@ -197,7 +195,7 @@ namespace HAP.Silverlight.Browser
                 if (p.Length == 0) loaded = true;
                 else
                 {
-                    string s = "api/mycomputer/list/" + p.Split(new char[] { '/' })[0];
+                    string s = p.Split(new char[] { '/' })[0];
                     if (p.Split(new char[] { '/' }).Length > 1) GetTreeNode(s, treeView1.Items).IsExpanded = true;
                     else
                     {
@@ -212,7 +210,7 @@ namespace HAP.Silverlight.Browser
         private void sp_DragOver(object sender, DragEventArgs e)
         {
             movetooltip.Margin = new Thickness(e.GetPosition(this).X + 10, e.GetPosition(this).Y + 10, 0, 0);
-            if (((IBitem)sender).Data.AccessControl == AccessControlActions.Change)
+            if (((IBitem)sender).Data.AccessControl == service.AccessControlActions.Change)
             {
                 movetooltip.Visibility = System.Windows.Visibility.Visible;
                 nomove.Visibility = System.Windows.Visibility.Collapsed;
@@ -228,7 +226,7 @@ namespace HAP.Silverlight.Browser
 
         private void titem_DragEnter(object sender, DragEventArgs e)
         {
-            if (((IBitem)sender).Data.AccessControl == AccessControlActions.Change)
+            if (((IBitem)sender).Data.AccessControl == service.AccessControlActions.Change)
             {
                 mousemode = MouseMode.Upload;
                 nomove.Visibility = System.Windows.Visibility.Visible;
@@ -245,7 +243,7 @@ namespace HAP.Silverlight.Browser
             ((StackPanel)sender).Background = new SolidColorBrush(Colors.Transparent);
             mousemode = MouseMode.NoGo;
             uploadItem = CurrentItem;
-            if (CurrentItem.AccessControl == AccessControlActions.Change) movefoldertext.Text = "This Folder";
+            if (CurrentItem.AccessControl == service.AccessControlActions.Change) movefoldertext.Text = "This Folder";
             movetooltip.Visibility = System.Windows.Visibility.Collapsed;
             nomove.Visibility = System.Windows.Visibility.Visible;
         }
@@ -256,40 +254,39 @@ namespace HAP.Silverlight.Browser
             tempnode.Items.Clear();
         }
 
-        private void listclient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
+        private void soap_ListCompleted(object sender, ListCompletedEventArgs e)
         {
             Dispatcher.BeginInvoke(new Action(ClearItems));
-            Dispatcher.BeginInvoke(new SetBool(SetDrop), CurrentItem.AccessControl == AccessControlActions.Change);
+            Dispatcher.BeginInvoke(new SetBool(SetDrop), CurrentItem.AccessControl == service.AccessControlActions.Change);
             Dispatcher.BeginInvoke(new Action(ClearNode));
-            try
+
+            if (e.Error != null) MessageBox.Show(e.Error.ToString());
+            else
             {
-                if (e.Result.StartsWith("ERROR")) MessageBox.Show("An Error Occured");
-                else foreach (string s in e.Result.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
+                foreach (service.ComputerBrowserAPIItem i in e.Result)
+                {
+                    BItem bitem = new BItem(i);
+                    bitem.Changed += new BItemChangeHandler(bitem_Changed);
+                    bitem.Deleted += new BItemChangeHandler(bitem_Delete);
+                    BrowserItem item = new BrowserItem(bitem);
+                    item.Activate += new EventHandler(item_Activate);
+                    item.MouseEnter += new MouseEventHandler(item_MouseEnter);
+                    if (CurrentItem.AccessControl == service.AccessControlActions.Change)
                     {
-                        string[] ss = s.Split(new char[] { '|' });
-                        BItem bitem = new BItem(ss[0], ss[1], ss[2], ss[3], (ss[3] == "File Folder" ? BType.Folder : (ss[3] == "Drive" ? BType.Drive : BType.File)), ss[4], ss[5]);
-                        bitem.Changed += new BItemChangeHandler(bitem_Changed);
-                        bitem.Deleted += new BItemChangeHandler(bitem_Delete);
-                        BrowserItem item = new BrowserItem(bitem);
-                        item.Activate += new EventHandler(item_Activate);
-                        item.MouseEnter += new MouseEventHandler(item_MouseEnter);
-                        if (CurrentItem.AccessControl == AccessControlActions.Change)
-                        {
-                            item.DragEnter += new DragEventHandler(item_DragEnter);
-                            item.DragLeave += new DragEventHandler(item_DragLeave);
-                            item.MouseLeftButtonDown += new MouseButtonEventHandler(item_MouseLeftButtonDown);
-                            item.KeyUp += new KeyEventHandler(item_KeyUp);
-                        }
-                        item.MouseLeave += new MouseEventHandler(item_MouseLeave);
-                        item.ReSort += new ResortHandler(item_ReSort);
-                        //if (item.Data.BType == BType.Drive) item.DirectoryChange += new ChangeDirectoryHandler(computer_DirectoryChange);
-                        //else 
-                        item.DirectoryChange += new ChangeDirectoryHandler(item_DirectoryChange);
-                        if (item.Data.BType == BType.Folder && item.Data.Name != "..") Dispatcher.BeginInvoke(new UpdateTree(UpdateTree), item.Data);
-                        Dispatcher.BeginInvoke(new AddItemHandler(AddItem), item);
+                        item.DragEnter += new DragEventHandler(item_DragEnter);
+                        item.DragLeave += new DragEventHandler(item_DragLeave);
+                        item.MouseLeftButtonDown += new MouseButtonEventHandler(item_MouseLeftButtonDown);
+                        item.KeyUp += new KeyEventHandler(item_KeyUp);
                     }
+                    item.MouseLeave += new MouseEventHandler(item_MouseLeave);
+                    item.ReSort += new ResortHandler(item_ReSort);
+                    //if (item.Data.BType == BType.Drive) item.DirectoryChange += new ChangeDirectoryHandler(computer_DirectoryChange);
+                    //else 
+                    item.DirectoryChange += new ChangeDirectoryHandler(item_DirectoryChange);
+                    if (item.Data.BType == service.BType.Folder && item.Data.Name != "..") Dispatcher.BeginInvoke(new UpdateTree(UpdateTree), item.Data);
+                    Dispatcher.BeginInvoke(new AddItemHandler(AddItem), item);
+                }
             }
-            catch (Exception ex) { MessageBox.Show("An Error Occured\n" + ex.ToString(), "Error", MessageBoxButton.OK);  }
             reload = false;
         }
 
@@ -300,9 +297,7 @@ namespace HAP.Silverlight.Browser
         private void root_Selected(object sender, RoutedEventArgs e)
         {
             CurrentItem = ((HAPTreeNode)sender).Data;
-            WebClient listclient = new WebClient();
-            listclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(driveclient_DownloadStringCompleted);
-            listclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri, CurrentItem.Path));
+            soap.ListDrivesAsync();
             HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri, "mycomputersl.aspx#"));
         }
 
@@ -311,16 +306,14 @@ namespace HAP.Silverlight.Browser
             reload = true;
             CurrentItem = ((HAPTreeNode)treeView1.SelectedItem).Data;
             ((HAPTreeNode)treeView1.SelectedItem).IsExpanded = true;
-            if (CurrentItem.BType == BType.Folder)
+            if (CurrentItem.BType == service.BType.Folder)
             {
                 StackPanel sp = ((HAPTreeNode)treeView1.SelectedItem).Header as StackPanel;
                 Image img = sp.Children[0] as Image;
                 img.Source = new BitmapImage(new Uri("/HAP.Silverlight.Browser;component/folderopen.png", UriKind.Relative));
             }
-            WebClient listclient = new WebClient();
-            listclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(listclient_DownloadStringCompleted);
-            listclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri, CurrentItem.Path));
-            HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri, "mycomputersl.aspx#" + CurrentItem.Path.ToLower().Remove(0, 20)));
+            soap.ListAsync(CurrentItem.Path);
+            HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri, "mycomputersl.aspx#" + CurrentItem.Path));
         }
 
         private void HAPTreeNode_Expanded(object sender, RoutedEventArgs e)
@@ -328,22 +321,22 @@ namespace HAP.Silverlight.Browser
             if (!reload)
             {
                 tempnode = sender as HAPTreeNode;
-                if (tempnode.Data.BType == BType.Folder)
+                if (tempnode.Data.BType == service.BType.Folder)
                 {
                     StackPanel sp = tempnode.Header as StackPanel;
                     Image img = sp.Children[0] as Image;
                     img.Source = new BitmapImage(new Uri("/HAP.Silverlight.Browser;component/folderopen.png", UriKind.Relative));
                 }
-                WebClient listclient = new WebClient();
-                listclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(treereloadclient_DownloadStringCompleted);
-                listclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri, tempnode.Data.Path));
+                apiSoapClient asoap = new apiSoapClient(new BasicHttpBinding(BasicHttpSecurityMode.Transport), new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
+                asoap.ListCompleted += new EventHandler<ListCompletedEventArgs>(asoap_ListCompleted);
+                asoap.ListAsync(tempnode.Data.Path);
             }
         }
 
         private void HAPTreeNode_Collapsed(object sender, RoutedEventArgs e)
         {
             HAPTreeNode node = sender as HAPTreeNode;
-            if (node.Data.BType == BType.Folder)
+            if (node.Data.BType == service.BType.Folder)
             {
                 StackPanel sp = node.Header as StackPanel;
                 Image img = sp.Children[0] as Image;
@@ -354,7 +347,7 @@ namespace HAP.Silverlight.Browser
         private void HAPTreeNode_Unselected(object sender, RoutedEventArgs e)
         {
             HAPTreeNode node = sender as HAPTreeNode;
-            if (node.Data.BType == BType.Folder && (node.HasItems && node.IsExpanded))
+            if (node.Data.BType == service.BType.Folder && (node.HasItems && node.IsExpanded))
             {
                 StackPanel sp = node.Header as StackPanel;
                 Image img = sp.Children[0] as Image;
@@ -366,7 +359,7 @@ namespace HAP.Silverlight.Browser
         {
             if (drag)
             {
-                if (((IBitem)sender).Data.BType == BType.Folder || ((IBitem)sender).Data.BType == BType.Drive)
+                if (((IBitem)sender).Data.BType == service.BType.Folder || ((IBitem)sender).Data.BType == service.BType.Drive)
                 {
                     bool cont = false;
                     foreach (BrowserItem i in activeItems)
@@ -421,23 +414,23 @@ namespace HAP.Silverlight.Browser
             return item;
         }
 
-        private void treereloadclient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
+        void asoap_ListCompleted(object sender, ListCompletedEventArgs e)
         {
-            Dispatcher.BeginInvoke(new DownloadStringCompletedEventHandler(treereloadclient_DownloadStringCompleted2), sender, e);
+            Dispatcher.BeginInvoke(new EventHandler<ListCompletedEventArgs>(asoap_ListCompleted2), sender, e);
         }
-        private void treereloadclient_DownloadStringCompleted2(object sender, DownloadStringCompletedEventArgs e)
+
+        void asoap_ListCompleted2(object sender, ListCompletedEventArgs e)
         {
             tempnode.Items.Clear();
-            if (e.Result.StartsWith("ERROR")) MessageBox.Show("An Error Occured");
-            else foreach (string s in e.Result.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    string[] ss = s.Split(new char[] { '|' });
-                    BItem bitem = new BItem(ss[0], ss[1], ss[2], ss[3], (ss[3] == "File Folder" ? BType.Folder : (ss[3] == "Drive" ? BType.Drive : BType.File)), ss[4], ss[5]);
-                    bitem.Deleted += new BItemChangeHandler(bitem_Delete);
-                    bitem.Changed += new BItemChangeHandler(bitem_Changed);
-                    BrowserItem item = new BrowserItem(bitem);
-                    if (item.Data.BType == BType.Folder && item.Data.Name != "..") UpdateTree(item.Data);
-                }
+            if (e.Error != null) MessageBox.Show(e.Error.ToString());
+            else foreach (ComputerBrowserAPIItem i in e.Result)
+            {
+                BItem bitem = new BItem(i);
+                bitem.Deleted += new BItemChangeHandler(bitem_Delete);
+                bitem.Changed += new BItemChangeHandler(bitem_Changed);
+                BrowserItem item = new BrowserItem(bitem);
+                if (item.Data.BType == service.BType.Folder && item.Data.Name != "..") UpdateTree(item.Data);
+            }
             if (!loaded)
             {
                 string p = HtmlPage.Document.DocumentUri.AbsoluteUri;
@@ -448,7 +441,7 @@ namespace HAP.Silverlight.Browser
                 else
                 {
                     loaded = true;
-                    Dispatcher.BeginInvoke(new SelectHandler(SelectUpdatedNode), tempnode.Data.Path + "/" + p.Split(new char[] { '/' })[0]);
+                    SelectUpdatedNode(tempnode.Data.Path + "/" + p.Split(new char[] { '/' })[0]);
                 }
             }
             reload = false;
@@ -469,7 +462,7 @@ namespace HAP.Silverlight.Browser
             sp.MouseEnter += new MouseEventHandler(HAPTreeNode_MouseEnter);
             sp.MouseLeave += new MouseEventHandler(HAPTreeNode_MouseLeave);
             sp.MouseLeftButtonUp += new MouseButtonEventHandler(HAPTreeNode_MouseLeftButtonUp);
-            sp.AllowDrop = bitem.AccessControl == AccessControlActions.Change;
+            sp.AllowDrop = bitem.AccessControl == service.AccessControlActions.Change;
             if (sp.AllowDrop)
             {
                 sp.DragEnter += new DragEventHandler(titem_DragEnter);
@@ -556,22 +549,22 @@ namespace HAP.Silverlight.Browser
         {
             if (activeItems.Count == 1 && activeItems[0].Data.Name != ".." && activeItems[0].Data.Name != "My Computer")
             {
-                organiseButton1.IsDelete = organiseButton1.IsRename = RightClickRename.IsEnabled = RightClickDelete.IsEnabled = CurrentItem.AccessControl == AccessControlActions.Change;
+                organiseButton1.IsDelete = organiseButton1.IsRename = RightClickRename.IsEnabled = RightClickDelete.IsEnabled = CurrentItem.AccessControl == service.AccessControlActions.Change;
                 RightClickZIP.Visibility = RightClickFolder.Visibility = RightClickUNZIP.Visibility = System.Windows.Visibility.Collapsed;
             }
             else if (activeItems.Count > 1 && activeItems.Where(I => I.Data.Name == "My Computer" || I.Data.Name == "..").Count() == 0)
             {
-                organiseButton1.IsDelete = RightClickDelete.IsEnabled = CurrentItem.AccessControl == AccessControlActions.Change;
+                organiseButton1.IsDelete = RightClickDelete.IsEnabled = CurrentItem.AccessControl == service.AccessControlActions.Change;
                 organiseButton1.IsRename = RightClickRename.IsEnabled = false;
                 RightClickUNZIP.Visibility = System.Windows.Visibility.Collapsed;
-                RightClickFolder.Visibility = RightClickZIP.Visibility = CurrentItem.AccessControl == AccessControlActions.Change ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+                RightClickFolder.Visibility = RightClickZIP.Visibility = CurrentItem.AccessControl == service.AccessControlActions.Change ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
             }
             else
             {
                 organiseButton1.IsDelete = organiseButton1.IsRename = false;
                 RightClickRename.IsEnabled = RightClickDelete.IsEnabled = false;
                 RightClickUNZIP.Visibility = RightClickZIP.Visibility = System.Windows.Visibility.Collapsed;
-                RightClickFolder.Visibility = CurrentItem.AccessControl == AccessControlActions.Change ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+                RightClickFolder.Visibility = CurrentItem.AccessControl == service.AccessControlActions.Change ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
             }
         }
 
@@ -584,12 +577,16 @@ namespace HAP.Silverlight.Browser
             if (sender == RightClickFolder) rightclick = true;
             item_ReSort(this, true);
             int count = 0;
-            foreach (BrowserItem i in contentPan.Children.Where(I => ((BrowserItem)I).Data.BType == BType.Folder))
+            foreach (BrowserItem i in contentPan.Children.Where(I => ((BrowserItem)I).Data.BType == service.BType.Folder))
                 if (i.Data.Name.StartsWith("New Folder")) count++;
-            BrowserItem item = new BrowserItem(new BItem("New Folder" + (count == 0 ? "" : " " + count), "images/icons/Newfolder.png", "", "Folder", BType.Folder, CurrentItem.Path + "/New Folder" + (count == 0 ? "" : " " + (count + 1)), AccessControlActions.Change));
+            BItem bitem = new BItem(BType.Folder, "New Folder" + (count == 0 ? "" : " " + (count + 1)), AccessControlActions.Change);
+            bitem.Path = CurrentItem.Path + "/New Folder" + (count == 0 ? "" : " " + (count + 1));
+            bitem.Icon = "images/icons/Newfolder.png";
+            bitem.Type = "File Folder";
+            BrowserItem item = new BrowserItem(bitem);
             item.Activate += new EventHandler(item_Activate);
             item.MouseEnter += new MouseEventHandler(item_MouseEnter);
-            if (CurrentItem.AccessControl == AccessControlActions.Change)
+            if (CurrentItem.AccessControl == service.AccessControlActions.Change)
             {
                 item.DragEnter += new DragEventHandler(item_DragEnter);
                 item.DragLeave += new DragEventHandler(item_DragLeave);
@@ -599,7 +596,7 @@ namespace HAP.Silverlight.Browser
             item.MouseLeave += new MouseEventHandler(item_MouseLeave);
             item.ReSort += new ResortHandler(item_ReSort);
             item.DirectoryChange += new ChangeDirectoryHandler(item_DirectoryChange);
-            if (item.Data.BType == BType.Folder && item.Data.Name != "..") UpdateTree(item.Data);
+            if (item.Data.BType == service.BType.Folder && item.Data.Name != "..") UpdateTree(item.Data);
             contentPan.Children.Add(item);
             scroller.ScrollIntoView(item);
             item.Mode = ViewMode;
@@ -612,22 +609,21 @@ namespace HAP.Silverlight.Browser
                 else i.Active = false;
             activeItems.Clear();
             activeItems.Add(item);
-            WebClient newfolderclient = new WebClient();
-            newfolderclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(newfolderclient_DownloadStringCompleted);
-            newfolderclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri, item.Data.Path.Replace("api/mycomputer/list/", "api/mycomputer/new/")), false);
-        }
-        private void newfolderclient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
-        {
-            Dispatcher.BeginInvoke(new DownloadStringCompletedEventHandler(newfolderclient_DownloadStringCompleted2), sender, e);
+            soap.NewFolderAsync(CurrentItem.Path, bitem.Name);
         }
 
-        private void newfolderclient_DownloadStringCompleted2(object sender, DownloadStringCompletedEventArgs e)
+        void soap_NewFolderCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
         {
-            if (e.Result.StartsWith("ERROR"))
+             Dispatcher.BeginInvoke(new EventHandler<System.ComponentModel.AsyncCompletedEventArgs>(soap_NewFolderCompleted2), sender, e);
+        }
+
+        void soap_NewFolderCompleted2(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
+        {
+            if (e.Error == null)
             {
                 contentPan.Children.Remove(activeItems[0]);
                 activeItems.Clear();
-                MessageBox.Show(e.Result);
+                MessageBox.Show(e.Error.ToString());
             }
         }
 
@@ -744,7 +740,7 @@ namespace HAP.Silverlight.Browser
                     }
                     e.Handled = true;
                 }
-                else if (e.Key == Key.Enter && item.Data.BType != BType.File)
+                else if (e.Key == Key.Enter && item.Data.BType != service.BType.File)
                 {
                     CurrentItem = item.Data;
                     HAPTreeNode i = GetTreeNode(item.Data.Path, treeView1.Items);
@@ -752,7 +748,7 @@ namespace HAP.Silverlight.Browser
                     else MessageBox.Show("Error: " + item.Data.Path);
                     e.Handled = true;
                 }
-                else if (e.Key == Key.Enter && item.Data.BType == BType.File)
+                else if (e.Key == Key.Enter && item.Data.BType == service.BType.File)
                 {
                     HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri, item.Data.Path));
                     e.Handled = true;
@@ -823,7 +819,7 @@ namespace HAP.Silverlight.Browser
         {
             if (drag)
             {
-                if (((BrowserItem)sender).Data.BType == BType.Folder)
+                if (((BrowserItem)sender).Data.BType == service.BType.Folder)
                 {
                     if (activeItems.Contains((BrowserItem)sender)) mousemode = MouseMode.NoGo;
                     else
@@ -840,13 +836,13 @@ namespace HAP.Silverlight.Browser
         private void item_DragLeave(object sender, DragEventArgs e)
         {
             uploadItem = CurrentItem;
-            if (CurrentItem.AccessControl == AccessControlActions.Change) movefoldertext.Text = "This Folder";
+            if (CurrentItem.AccessControl == service.AccessControlActions.Change) movefoldertext.Text = "This Folder";
             if (sender is BrowserItem) ((BrowserItem)sender).Leave();
         }
 
         private void item_DragEnter(object sender, DragEventArgs e)
         {
-            if (CurrentItem.AccessControl == AccessControlActions.Change)
+            if (CurrentItem.AccessControl == service.AccessControlActions.Change)
             {
                 mousemode = MouseMode.Upload;
                 nomove.Visibility = System.Windows.Visibility.Visible;
@@ -867,28 +863,28 @@ namespace HAP.Silverlight.Browser
         {
             if (activeItems.Count == 1)
             {
-                organiseButton1.IsDelete = organiseButton1.IsRename = RightClickRename.IsEnabled = RightClickDelete.IsEnabled = ((activeItems[0].Data.BType == BType.Drive) ? false : CurrentItem.AccessControl == AccessControlActions.Change);
-                RightClickDownload.Visibility = activeItems[0].Data.BType == BType.File ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
-                RightClickUpload.Visibility = (activeItems[0].Data.BType == BType.Folder && activeItems[0].Data.AccessControl == AccessControlActions.Change) ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+                organiseButton1.IsDelete = organiseButton1.IsRename = RightClickRename.IsEnabled = RightClickDelete.IsEnabled = ((activeItems[0].Data.BType == service.BType.Drive) ? false : CurrentItem.AccessControl == service.AccessControlActions.Change);
+                RightClickDownload.Visibility = activeItems[0].Data.BType == service.BType.File ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+                RightClickUpload.Visibility = (activeItems[0].Data.BType == service.BType.Folder && activeItems[0].Data.AccessControl == service.AccessControlActions.Change) ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
                 RightClickUpload.Header = "Upload to " + activeItems[0].Data.Name;
                 if (activeItems[0].Data.Type == "Compressed (zipped) Folder")
-                    RightClickUNZIP.Visibility = CurrentItem.AccessControl == AccessControlActions.Change ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+                    RightClickUNZIP.Visibility = CurrentItem.AccessControl == service.AccessControlActions.Change ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
                 else RightClickUNZIP.Visibility = System.Windows.Visibility.Collapsed;
                 RightClickZIP.Visibility = RightClickFolder.Visibility = System.Windows.Visibility.Collapsed;
             }
             else if (activeItems.Count > 1)
             {
-                organiseButton1.IsDelete = RightClickDelete.IsEnabled = CurrentItem.AccessControl == AccessControlActions.Change;
+                organiseButton1.IsDelete = RightClickDelete.IsEnabled = CurrentItem.AccessControl == service.AccessControlActions.Change;
                 organiseButton1.IsRename = RightClickRename.IsEnabled = false;
                 RightClickDownload.Visibility = RightClickUpload.Visibility = RightClickUNZIP.Visibility = System.Windows.Visibility.Collapsed;
-                RightClickFolder.Visibility = RightClickZIP.Visibility = CurrentItem.AccessControl == AccessControlActions.Change ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+                RightClickFolder.Visibility = RightClickZIP.Visibility = CurrentItem.AccessControl == service.AccessControlActions.Change ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
             }
             else
             {
                 RightClickUpload.Header = "Upload to " + CurrentItem.Name;
                 organiseButton1.IsDelete = organiseButton1.IsRename = RightClickRename.IsEnabled = RightClickDelete.IsEnabled = false;
                 RightClickDownload.Visibility = RightClickUNZIP.Visibility = RightClickZIP.Visibility = System.Windows.Visibility.Collapsed;
-                RightClickFolder.Visibility = RightClickUpload.Visibility = CurrentItem.AccessControl == AccessControlActions.Change ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+                RightClickFolder.Visibility = RightClickUpload.Visibility = CurrentItem.AccessControl == service.AccessControlActions.Change ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
             }
         }
 
@@ -936,11 +932,8 @@ namespace HAP.Silverlight.Browser
 
         private void zipcompletedhandler2(object sender, RoutedEventArgs e)
         {
-
-            WebClient listclient = new WebClient();
-            listclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(listclient_DownloadStringCompleted);
-            listclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri, CurrentItem.Path));
-            HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri, "mycomputersl.aspx#" + CurrentItem.Path.ToLower().Remove(0, 20)));
+            soap.ListAsync(CurrentItem.Path);
+            HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri, "mycomputersl.aspx#" + CurrentItem.Path));
         }
 
         private void RightClickDelete_Click(object sender, RoutedEventArgs e)
@@ -1038,7 +1031,7 @@ namespace HAP.Silverlight.Browser
         {
             //MessageBox.Show(string.Join("\n", e.Data.GetFormats(false)));
             movetooltip.Margin = new Thickness(e.GetPosition(this).X + 10, e.GetPosition(this).Y + 10, 0, 0);
-            if (CurrentItem.AccessControl == AccessControlActions.Change)
+            if (CurrentItem.AccessControl == service.AccessControlActions.Change)
             {
                 movetext.Text = "Upload to";
                 movefoldertext.Text = "This Folder";
@@ -1058,7 +1051,7 @@ namespace HAP.Silverlight.Browser
         private void contentPan_DragOver(object sender, DragEventArgs e)
         {
             movetooltip.Margin = new Thickness(e.GetPosition(this).X + 10, e.GetPosition(this).Y + 10, 0, 0);
-            if (CurrentItem.AccessControl == AccessControlActions.Change)
+            if (CurrentItem.AccessControl == service.AccessControlActions.Change)
             {
                 movetooltip.Visibility = System.Windows.Visibility.Visible;
                 nomove.Visibility = System.Windows.Visibility.Collapsed;
@@ -1123,10 +1116,8 @@ namespace HAP.Silverlight.Browser
             if (CurrentItem == item.ParentData)
             {
                 reload = true;
-                WebClient listclient = new WebClient();
-                listclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(listclient_DownloadStringCompleted);
-                listclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri, CurrentItem.Path));
-                HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri, "mycomputersl.aspx#" + CurrentItem.Path.ToLower().Remove(0, 20)));
+                soap.ListAsync(CurrentItem.Path);
+                HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri, "mycomputersl.aspx#" + CurrentItem.Path));
             }
             UploadQueue.Children.Remove(item);
             if (UploadQueue.Children.Count > 0)

@@ -10,6 +10,8 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Browser;
+using HAP.Silverlight.Browser.service;
+using System.ServiceModel;
 
 namespace HAP.Silverlight.Browser
 {
@@ -32,33 +34,28 @@ namespace HAP.Silverlight.Browser
         {
             //this.DialogResult = true;
             busyindicator.IsBusy = true;
-            List<string> ds = new List<string>();
+            ArrayOfString aos = new ArrayOfString();
             foreach (BItem item in Items)
-                ds.Add(Common.GetPath(item));
-            string _d = string.Join("\n", ds.ToArray());
-            WebClient zipclient = new WebClient();
-            zipclient.UploadStringCompleted += new UploadStringCompletedEventHandler(zipclient_UploadStringCompleted);
-            zipclient.UploadStringAsync(new Uri(HtmlPage.Document.DocumentUri, "api/mycomputer/zip/" + Common.GetPath(ParentItem) + "/" + namebox.Text), "POST", _d);
+                aos.Add(Common.GetPath(item));
+            apiSoapClient soap = new apiSoapClient(new BasicHttpBinding(BasicHttpSecurityMode.Transport), new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
+            soap.ZIPCompleted += new EventHandler<System.ComponentModel.AsyncCompletedEventArgs>(soap_ZIPCompleted);
+            soap.ZIPAsync(Common.GetPath(ParentItem), namebox.Text, aos);
         }
 
-        private void zipclient_UploadStringCompleted(object sender, UploadStringCompletedEventArgs e)
+        void soap_ZIPCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
         {
-            Dispatcher.BeginInvoke(new UploadStringCompletedEventHandler(zipclient_UploadStringCompleted2), sender, e);
+            Dispatcher.BeginInvoke(new UploadStringCompletedEventHandler(soap_ZIPCompleted2), sender, e);
         }
 
-        private void zipclient_UploadStringCompleted2(object sender, UploadStringCompletedEventArgs e)
+        private void soap_ZIPCompleted2(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
         {
             busyindicator.IsBusy = false;
-            try
+            if (e.Error != null) MessageBox.Show(e.Error.ToString());
+            else
             {
-                if (e.Result == "DONE")
-                {
-                    if (ZipQuestionComplete != null) ZipQuestionComplete(this, new RoutedEventArgs());
-                    this.DialogResult = true;
-                }
-                else MessageBox.Show(e.Result);
+                if (ZipQuestionComplete != null) ZipQuestionComplete(this, new RoutedEventArgs());
+                this.DialogResult = true;
             }
-            catch (Exception ex) { MessageBox.Show("EX:" + ex.ToString()); }
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
