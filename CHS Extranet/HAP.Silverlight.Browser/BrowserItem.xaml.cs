@@ -12,6 +12,8 @@ using System.Windows.Shapes;
 using System.Windows.Media.Imaging;
 using System.Windows.Browser;
 using System.Text.RegularExpressions;
+using HAP.Silverlight.Browser.service;
+using System.ServiceModel;
 
 namespace HAP.Silverlight.Browser
 {
@@ -20,19 +22,22 @@ namespace HAP.Silverlight.Browser
         public BrowserItem()
         {
             InitializeComponent();
+            soap = new apiSoapClient(new BasicHttpBinding(BasicHttpSecurityMode.Transport), new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
+            soap.SaveCompleted += new EventHandler<SaveCompletedEventArgs>(soap_SaveCompleted);
+            soap.DeleteCompleted += new EventHandler<System.ComponentModel.AsyncCompletedEventArgs>(soap_DeleteCompleted);
         }
+
+        public apiSoapClient soap { get; set; }
+
         public BrowserItem(BItem data)
         {
             InitializeComponent();
             Data = data;
-        }
-
-        public BrowserItem(BItem data, double space)
-        {
-            InitializeComponent();
-            Data = data;
-            IsSpace = true;
-            Space = space;
+            if (!string.IsNullOrEmpty(data.Size) && data.BType == service.BType.Drive)
+            {
+                IsSpace = true;
+                Space = double.Parse(data.Size);
+            }
         }
 
         private BItem _data;
@@ -47,9 +52,9 @@ namespace HAP.Silverlight.Browser
                 type.Text = _data.Type;
 
                 image1.Source = image2.Source = image3.Source = image4.Source = image5.Source = new BitmapImage(new Uri(HtmlPage.Document.DocumentUri, _data.Icon));
-                this.AllowDrop = (_data.BType == BType.Folder) && _data.AccessControl == AccessControlActions.Change;
-                key1.Visibility = key2.Visibility = key3.Visibility = key4.Visibility = key5.Visibility = (_data.AccessControl == AccessControlActions.Change ? Visibility.Collapsed : System.Windows.Visibility.Visible);
-                tooltip1.Content = tooltip2.Content = tooltip3.Content = tooltip4.Content = tooltip5.Content = (_data.AccessControl == AccessControlActions.None ? "This file/folder may not be accessible" : "This file/folder has restrictive permissions");
+                this.AllowDrop = (_data.BType == service.BType.Folder) && _data.AccessControl == service.AccessControlActions.Change;
+                key1.Visibility = key2.Visibility = key3.Visibility = key4.Visibility = key5.Visibility = (_data.AccessControl == service.AccessControlActions.Change ? Visibility.Collapsed : System.Windows.Visibility.Visible);
+                tooltip1.Content = tooltip2.Content = tooltip3.Content = tooltip4.Content = tooltip5.Content = (_data.AccessControl == service.AccessControlActions.None ? "This file/folder may not be accessible" : "This file/folder has restrictive permissions");
             }
         }
 
@@ -173,7 +178,7 @@ namespace HAP.Silverlight.Browser
             if (Activate != null) Activate(this, new EventArgs());
             if ((DateTime.Now.Ticks - LastTicks) < 2310000)
             {
-                if (_data.BType == BType.File) HtmlPage.PopupWindow(new Uri(HtmlPage.Document.DocumentUri, this._data.Path), "_hapdownload", new HtmlPopupWindowOptions());
+                if (_data.BType == service.BType.File) HtmlPage.PopupWindow(new Uri(HtmlPage.Document.DocumentUri, this._data.Path), "_hapdownload", new HtmlPopupWindowOptions());
                 else if (DirectoryChange != null) DirectoryChange(this, this._data);
             }
             LastTicks = DateTime.Now.Ticks;
@@ -210,13 +215,10 @@ namespace HAP.Silverlight.Browser
                     this.IsRename = false;
                 return -1;
             }
-
-            string _d = "";
-            _d = "SAVETO:" + newname;
-
-            WebClient saveclient = new WebClient();
-            saveclient.UploadStringCompleted += new UploadStringCompletedEventHandler(saveclient_UploadStringCompleted);
-            saveclient.UploadStringAsync(Common.GetUri(this._data, UriType.Save), "POST", _d, new BUserState(resort, _d, _data.Name));
+            string _d = _data.Source.Path.Remove(0, _data.Source.Path.LastIndexOf('\\'));
+            _d = _d.Replace(_data.Source.Name, newname);
+            _d = _data.Source.Path.Remove(_data.Source.Path.LastIndexOf('\\')) + _d;
+            soap.SaveAsync((CBFile)_data.Source, _d, false, new BUserState(resort, _d, _data.Name));
 
             _data.Name = name1.Text = name2.Text = name3.Text = name4.Text = name5.Text = textBox2.Text = textBox3.Text = textBox4.Text = textBox5.Text = textBox1.Text = newname;
             if (_data.Icon.Contains("NewFolder")) { _data.Icon.Replace("NewFolder", "folder"); Data = _data; }
@@ -224,32 +226,29 @@ namespace HAP.Silverlight.Browser
             //so some saving stuff;
         }
 
-        public void saveclient_UploadStringCompleted(object sender, UploadStringCompletedEventArgs e)
+        void soap_SaveCompleted(object sender, SaveCompletedEventArgs e)
         {
-            Dispatcher.BeginInvoke(new UploadStringCompletedEventHandler(saveclient_UploadStringCompleted2), sender, e);
+            Dispatcher.BeginInvoke( new EventHandler<SaveCompletedEventArgs>(soap_SaveCompleted2), sender, e);
         }
 
         private BUserState state;
 
-        public void saveclient_UploadStringCompleted2(object sender, UploadStringCompletedEventArgs e)
+        void soap_SaveCompleted2(object sender, SaveCompletedEventArgs e)
         {
             state = (BUserState)e.UserState;
-            if (e.Result == "DONE")
+            if (e.Error != null)
+                MessageBox.Show(e.Error.ToString());
+            else if (e.Result.Count == 0)
             {
                 this.IsRename = false;
                 _data.Path = _data.Path.Replace(state.oldname, _data.Name);
                 if (ReSort != null && state.Resort) ReSort(this, true);
             }
-            else if (e.Result.StartsWith("EXISTS"))
-            {
-                string[] res = e.Result.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
-                state = (BUserState)e.UserState;
-                FileExists fe = new FileExists(res[1], res[2], res[3], res[4], res[5], res[6], res[7], image1.Source);
-                fe.FileExistComplete += new FileExistHandler(fe_FileExistComplete);
-            }
             else
             {
-                MessageBox.Show(e.Result);
+                state = (BUserState)e.UserState;
+                FileExists fe = new FileExists(_data.Source, e.Result[0], image1.Source);
+                fe.FileExistComplete += new FileExistHandler(fe_FileExistComplete);
             }
         }
 
@@ -295,15 +294,10 @@ namespace HAP.Silverlight.Browser
                     else newname += " (" + i + ")";
                 }
 
-                string _d = "";
-                if (e == ReplaceResult.Replace)
-                    _d = "OVERWRITE:";
-                else _d = "SAVETO:";
-                _d += newname;
-
-                WebClient saveclient = new WebClient();
-                saveclient.UploadStringCompleted += new UploadStringCompletedEventHandler(saveclient_UploadStringCompleted);
-                saveclient.UploadStringAsync(Common.GetUri(this._data, UriType.Save), "POST", _d, new BUserState(state.Resort, _d, _data.Name));
+                string _d = _data.Source.Path.Remove(0, _data.Source.Path.LastIndexOf('\\'));
+                _d = _d.Replace(_data.Source.Name, newname);
+                _d = _data.Source.Path.Remove(_data.Source.Path.LastIndexOf('\\')) + _d;
+                soap.SaveAsync((CBFile)_data.Source, _d, e == ReplaceResult.Replace, new BUserState(state.Resort, _d, _data.Name));
 
                 _data.Name = name1.Text = name2.Text = name3.Text = name4.Text = name5.Text = textBox2.Text = textBox3.Text = textBox4.Text = textBox5.Text = textBox1.Text = newname;
             }
@@ -311,36 +305,33 @@ namespace HAP.Silverlight.Browser
 
         public int Move(bool resort, string folder)
         {
-            string _d = "";
-            _d = "SAVETO:" + folder.Remove(0, 20).Replace('/', '\\') + "\\" + _data.Name;
-
-            WebClient saveclient = new WebClient();
-            saveclient.UploadStringCompleted += new UploadStringCompletedEventHandler(saveclient_UploadStringCompleted3);
-            saveclient.UploadStringAsync(Common.GetUri(this._data, UriType.Save), "POST", _d, new BUserState(resort, _d, _data.Name));
+            apiSoapClient soap1 = new apiSoapClient(new BasicHttpBinding(BasicHttpSecurityMode.Transport), new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
+            soap1.SaveCompleted += new EventHandler<SaveCompletedEventArgs>(soap1_SaveCompleted);
+            soap1.SaveAsync(this._data.Source, folder + "\\" + _data.Name, false, new BUserState(resort, folder + "\\" + _data.Name, _data.Name));
             return 0;
         }
 
-        public void saveclient_UploadStringCompleted3(object sender, UploadStringCompletedEventArgs e)
+        void soap1_SaveCompleted(object sender, SaveCompletedEventArgs e)
         {
-            Dispatcher.BeginInvoke(new UploadStringCompletedEventHandler(saveclient_UploadStringCompleted4), sender, e);
+            Dispatcher.BeginInvoke(new EventHandler<SaveCompletedEventArgs>(soap1_SaveCompleted2), sender, e);
         }
 
-        public void saveclient_UploadStringCompleted4(object sender, UploadStringCompletedEventArgs e)
+
+        public void soap1_SaveCompleted2(object sender, SaveCompletedEventArgs e)
         {
             state = (BUserState)e.UserState;
-            if (e.Result == "DONE")
-            {
+            if (e.Error != null) MessageBox.Show(e.Error.ToString());
+            else if (e.Result.Count == 0)
+            { 
                 ((WrapPanel)Parent).Children.Remove(this);
                 if (ReSort != null && state.Resort) ReSort(this, true);
             }
-            else if (e.Result.Contains("EXISTS"))
+            else 
             {
-                string[] res = e.Result.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
-                FileExists fe = new FileExists(res[1], res[2], res[3], res[4], res[5], res[6], res[7], image1.Source);
+                FileExists fe = new FileExists(_data.Source, e.Result[0], image1.Source);
                 fe.FileExistComplete += new FileExistHandler(fe_FileExistComplete3);
                 fe.Show();
             }
-            else MessageBox.Show(e.Result);
         }
 
         private void fe_FileExistComplete3(object sender, ReplaceResult e)
@@ -364,35 +355,29 @@ namespace HAP.Silverlight.Browser
                         _d = _d.Replace(m.Value, "(" + i + ")");
                     else _d += " (" + i + ")";
                 }
-                else _d.Replace("SAVETO", "OVERWRITE");
                 //_data.Name = name1.Text = name2.Text = name3.Text = name4.Text = name5.Text = textBox2.Text = textBox3.Text = textBox4.Text = textBox5.Text = textBox1.Text = newname;
-
-                WebClient saveclient = new WebClient();
-                saveclient.UploadStringCompleted += new UploadStringCompletedEventHandler(saveclient_UploadStringCompleted3);
-                saveclient.UploadStringAsync(Common.GetUri(this._data, UriType.Save), "POST", _d, new BUserState(state.Resort, _d, _data.Name));
+                apiSoapClient soap1 = new apiSoapClient(new BasicHttpBinding(BasicHttpSecurityMode.Transport), new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
+                soap1.SaveCompleted += new EventHandler<SaveCompletedEventArgs>(soap1_SaveCompleted);
+                soap1.SaveAsync(this._data.Source, _d, e == ReplaceResult.Replace, new BUserState(state.Resort, _d, _data.Name));
             }
         }
 
         public int Delete()
         {
-            if (MessageBox.Show("Are you sure you want to delete\n" + _data.Name + "?", "Question", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
-            {
-                WebClient deleteclient = new WebClient();
-                deleteclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(deleteclient_DownloadStringCompleted);
-                deleteclient.DownloadStringAsync(Common.GetUri(this._data, UriType.Delete), false);
-            }
+            if (MessageBox.Show("Are you sure you want to delete\n" + _data.Name + "?", "Question", MessageBoxButton.OKCancel) == MessageBoxResult.OK) soap.DeleteAsync(_data.Path);
             return 0;
             //so some saving stuff;
         }
 
-        private void deleteclient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
+        void soap_DeleteCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
         {
-            Dispatcher.BeginInvoke(new DownloadStringCompletedEventHandler(deleteclient_DownloadStringCompleted2), sender, e);
+            Dispatcher.BeginInvoke(new EventHandler<System.ComponentModel.AsyncCompletedEventArgs>(soap_DeleteCompleted2), sender, e);
         }
-        private void deleteclient_DownloadStringCompleted2(object sender, DownloadStringCompletedEventArgs e)
+
+
+        private void soap_DeleteCompleted2(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
         {
-            if (e.Result.StartsWith("ERROR"))
-                MessageBox.Show(e.Result);
+            if (e.Error != null) MessageBox.Show(e.Error.ToString());
             else
             {
                 _data.Delete();

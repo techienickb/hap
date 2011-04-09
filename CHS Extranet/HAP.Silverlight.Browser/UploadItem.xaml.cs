@@ -12,6 +12,8 @@ using System.Windows.Shapes;
 using System.IO;
 using System.Windows.Browser;
 using System.Windows.Media.Imaging;
+using HAP.Silverlight.Browser.service;
+using System.ServiceModel;
 
 namespace HAP.Silverlight.Browser
 {
@@ -21,6 +23,9 @@ namespace HAP.Silverlight.Browser
         {
             InitializeComponent();
             Progress.Value = 0;
+            BytesUploaded = 0;
+            soap = new apiSoapClient(new BasicHttpBinding(BasicHttpSecurityMode.Transport), new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
+            soap.UploadFileCompleted += new EventHandler<System.ComponentModel.AsyncCompletedEventArgs>(soap_UploadFileCompleted);
         }
 
         public UploadItem(FileInfo file, BItem item, ref StackPanel Queue, RoutedEventHandler Uploaded) : this()
@@ -31,7 +36,6 @@ namespace HAP.Silverlight.Browser
             State = UploadItemState.Checking;
             Check();
             this.Uploaded += Uploaded;
-            BaseUri = new Uri(HtmlPage.Document.DocumentUri, ParentData.Path.Replace("api/mycomputer/list/", "api/mycomputer/upload/")).ToString();
         }
 
         public UploadItem(string name) : this()
@@ -41,6 +45,7 @@ namespace HAP.Silverlight.Browser
             Progress.Value = 30;
         }
 
+        public apiSoapClient soap { get; set; }
         private StackPanel queue;
         public event RoutedEventHandler Uploaded;
         public BItem ParentData { get; set; }
@@ -50,7 +55,6 @@ namespace HAP.Silverlight.Browser
         public double Value { get { return Progress.Value; } }
         public double Value1 { get; set; }
         private FileInfo _file;
-        public string BaseUri { get; set; }
 
         public FileInfo File {
 
@@ -79,24 +83,27 @@ namespace HAP.Silverlight.Browser
 
         public void Check()
         {
-            WebClient checkclient = new WebClient();
-            checkclient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(checkclient_DownloadStringCompleted);
-            checkclient.DownloadStringAsync(new Uri(HtmlPage.Document.DocumentUri, ParentData.Path.Replace("api/mycomputer/list/", "api/mycomputer/check/") + "/" + File.Name), false);
+            soap.CheckFileCompleted += new EventHandler<CheckFileCompletedEventArgs>(soap_CheckFileCompleted);
+            soap.CheckFileAsync(ParentData.Path + '\\' + File.Name);
         }
 
-        void checkclient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
+        void soap_CheckFileCompleted(object sender, CheckFileCompletedEventArgs e)
         {
-            Dispatcher.BeginInvoke(new DownloadStringCompletedEventHandler(checkclient_DownloadStringCompleted2), sender, e);
+           Dispatcher.BeginInvoke(new EventHandler<CheckFileCompletedEventArgs>(soap_CheckFileCompleted2));
         }
 
-        void checkclient_DownloadStringCompleted2(object sender, DownloadStringCompletedEventArgs e)
+        void soap_CheckFileCompleted2(object sender, CheckFileCompletedEventArgs e)
         {
-            string[] s = e.Result.Split(new char[] { '\n' });
-            if (s[0] == "EXISTS" && MessageBox.Show(File.Name + " already exists\nDo you want to overwrite?", "Overwrite", MessageBoxButton.OKCancel) == MessageBoxResult.Cancel) return;
-            State = UploadItemState.Ready;
-            queue.Children.Add(this);
-            image1.Source = new BitmapImage(new Uri(HtmlPage.Document.DocumentUri, s[1]));
-            if (queue.Children.IndexOf(this) == 0) Dispatcher.BeginInvoke(() => { Upload(); }); //Upload();
+            if (e.Error != null) MessageBox.Show(e.Error.ToString());
+            else
+            {
+                if (e.Result.Code == FileCheckResponseCode.Exists && MessageBox.Show(File.Name + " already exists\nDo you want to overwrite?", "Overwrite", MessageBoxButton.OKCancel) == MessageBoxResult.Cancel) return;
+                State = UploadItemState.Ready;
+                queue.Children.Add(this);
+                image1.Source = new BitmapImage(new Uri(HtmlPage.Document.DocumentUri, e.Result.Thumb));
+                if (queue.Children.IndexOf(this) == 0) Dispatcher.BeginInvoke(() => { Upload(); }); //Upload();
+
+            }
         }
 
         private void remove_Click(object sender, RoutedEventArgs e)
@@ -114,53 +121,31 @@ namespace HAP.Silverlight.Browser
         public void Upload()
         {
             long temp = File.Length - BytesUploaded;
-
-            context.IsEnabled = false;
-            UriBuilder ub = new UriBuilder(BaseUri);
             bool complete = temp <= 20480;
-            ub.Query = string.Format("{3}filename={0}&StartByte={1}&Complete={2}", File.Name, BytesUploaded, complete, string.IsNullOrEmpty(ub.Query) ? "" : ub.Query.Remove(0, 1) + "&");
-            HttpWebRequest webrequest = (HttpWebRequest)WebRequest.Create(ub.Uri);
-            webrequest.Method = "POST";
-            webrequest.BeginGetRequestStream(new AsyncCallback(WriteCallback), webrequest);
-        }
-
-        private void WriteCallback(IAsyncResult asynchronousResult)
-        {
-            HttpWebRequest webrequest = (HttpWebRequest)asynchronousResult.AsyncState;
-            // End the operation.
-            Stream requestStream = webrequest.EndGetRequestStream(asynchronousResult);
+            context.IsEnabled = false;
 
             byte[] buffer = new Byte[4096];
             int bytesRead = 0;
             int tempTotal = 0;
             Stream fileStream = File.OpenRead();
             fileStream.Position = BytesUploaded;
-
             while ((bytesRead = fileStream.Read(buffer, 0, buffer.Length)) != 0 && tempTotal + bytesRead < 20480)
             {
-                requestStream.Write(buffer, 0, bytesRead);
-                requestStream.Flush();
+                MemoryStream ss = new MemoryStream();
+                ss.Write(buffer, 0, bytesRead);
+                soap.UploadFileAsync(ParentData.Path + '\\' + File.Name, BytesUploaded, ss.ToArray(), complete);
                 BytesUploaded += bytesRead;
                 tempTotal += bytesRead;
                 Value1 = (((double)BytesUploaded / (double)File.Length) * 100);
                 Dispatcher.BeginInvoke(new UpdateUIDelegate(UpdateUI), "");
             }
-            fileStream.Close();
-            requestStream.Close();
-            webrequest.BeginGetResponse(new AsyncCallback(ReadCallback), webrequest);
         }
 
-        private void ReadCallback(IAsyncResult asynchronousResult)
+        void soap_UploadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
         {
-            HttpWebRequest webrequest = (HttpWebRequest)asynchronousResult.AsyncState;
-            HttpWebResponse response = (HttpWebResponse)webrequest.EndGetResponse(asynchronousResult);
-            StreamReader reader = new StreamReader(response.GetResponseStream());
-
-            string responsestring = reader.ReadToEnd();
-            reader.Close();
-
+            if (e.Error != null) MessageBox.Show(e.Error.ToString());
             if (BytesUploaded < File.Length) Dispatcher.BeginInvoke(() => { Upload(); });
-            else State = UploadItemState.Done; 
+            else State = UploadItemState.Done;
             Dispatcher.BeginInvoke(new UpdateUIDelegate(UpdateUI), "");
         }
     }

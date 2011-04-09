@@ -21,6 +21,7 @@
           <s:element minOccurs="1" maxOccurs="1" name="Code" type="tns:FileCheckResponseCode" />
           <s:element minOccurs="0" maxOccurs="1" name="FileName" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="Extension" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Thumb" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="FileSize" type="s:string" />
           <s:element minOccurs="1" maxOccurs="1" name="DateModified" nillable="true" type="s:dateTime" />
           <s:element minOccurs="1" maxOccurs="1" name="DateCreated" nillable="true" type="s:dateTime" />
@@ -197,6 +198,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="FileName" type="s:string" />
             <s:element minOccurs="1" maxOccurs="1" name="StartByte" type="s:long" />
             <s:element minOccurs="0" maxOccurs="1" name="Data" type="s:base64Binary" />
+            <s:element minOccurs="1" maxOccurs="1" name="Complete" type="s:boolean" />
           </s:sequence>
         </s:complexType>
       </s:element>

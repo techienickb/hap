@@ -10,8 +10,8 @@ namespace HAP.Data.ComputerBrowser
 {
     public class ComputerBrowserAPIItem : CBFile
     {
-        public string Download { get; private set; }
-        public AccessControlActions AccessControl { get; private set; }
+        public string Download { get; set; }
+        public AccessControlActions AccessControl { get; set; }
 
         public ComputerBrowserAPIItem() : base()
         {

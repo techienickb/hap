@@ -243,7 +243,7 @@ namespace HAP.Web
 
         //method for upload the files. This will be called from Silverlight code behind.
         [WebMethod]
-        public void UploadFile(string FileName, long StartByte, byte[] Data)
+        public void UploadFile(string FileName, long StartByte, byte[] Data, bool Complete)
         {
             string home; uncpath unc; string path = Converter.DriveToUNC(FileName, out unc, out home);
             FileStream fs = (StartByte > 0 && File.Exists(path)) ? File.Open(path, FileMode.Append) : File.Create(path);

@@ -26,6 +26,8 @@ namespace HAP.Silverlight.Browser.service {
         
         private string ExtensionField;
         
+        private string ThumbField;
+        
         private string FileSizeField;
         
         private System.Nullable<System.DateTime> DateModifiedField;
@@ -72,6 +74,19 @@ namespace HAP.Silverlight.Browser.service {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=3)]
+        public string Thumb {
+            get {
+                return this.ThumbField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ThumbField, value) != true)) {
+                    this.ThumbField = value;
+                    this.RaisePropertyChanged("Thumb");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=4)]
         public string FileSize {
             get {
                 return this.FileSizeField;
@@ -84,7 +99,7 @@ namespace HAP.Silverlight.Browser.service {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=4)]
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=5)]
         public System.Nullable<System.DateTime> DateModified {
             get {
                 return this.DateModifiedField;
@@ -97,7 +112,7 @@ namespace HAP.Silverlight.Browser.service {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=5)]
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=6)]
         public System.Nullable<System.DateTime> DateCreated {
             get {
                 return this.DateCreatedField;
@@ -1123,13 +1138,17 @@ namespace HAP.Silverlight.Browser.service {
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
         public byte[] Data;
         
+        [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
+        public bool Complete;
+        
         public UploadFileRequestBody() {
         }
         
-        public UploadFileRequestBody(string FileName, long StartByte, byte[] Data) {
+        public UploadFileRequestBody(string FileName, long StartByte, byte[] Data, bool Complete) {
             this.FileName = FileName;
             this.StartByte = StartByte;
             this.Data = Data;
+            this.Complete = Complete;
         }
     }
     
@@ -1866,12 +1885,13 @@ namespace HAP.Silverlight.Browser.service {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        private System.IAsyncResult BeginUploadFile(string FileName, long StartByte, byte[] Data, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult BeginUploadFile(string FileName, long StartByte, byte[] Data, bool Complete, System.AsyncCallback callback, object asyncState) {
             HAP.Silverlight.Browser.service.UploadFileRequest inValue = new HAP.Silverlight.Browser.service.UploadFileRequest();
             inValue.Body = new HAP.Silverlight.Browser.service.UploadFileRequestBody();
             inValue.Body.FileName = FileName;
             inValue.Body.StartByte = StartByte;
             inValue.Body.Data = Data;
+            inValue.Body.Complete = Complete;
             return ((HAP.Silverlight.Browser.service.apiSoap)(this)).BeginUploadFile(inValue, callback, asyncState);
         }
         
@@ -1889,7 +1909,8 @@ namespace HAP.Silverlight.Browser.service {
             string FileName = ((string)(inValues[0]));
             long StartByte = ((long)(inValues[1]));
             byte[] Data = ((byte[])(inValues[2]));
-            return this.BeginUploadFile(FileName, StartByte, Data, callback, asyncState);
+            bool Complete = ((bool)(inValues[3]));
+            return this.BeginUploadFile(FileName, StartByte, Data, Complete, callback, asyncState);
         }
         
         private object[] OnEndUploadFile(System.IAsyncResult result) {
@@ -1904,11 +1925,11 @@ namespace HAP.Silverlight.Browser.service {
             }
         }
         
-        public void UploadFileAsync(string FileName, long StartByte, byte[] Data) {
-            this.UploadFileAsync(FileName, StartByte, Data, null);
+        public void UploadFileAsync(string FileName, long StartByte, byte[] Data, bool Complete) {
+            this.UploadFileAsync(FileName, StartByte, Data, Complete, null);
         }
         
-        public void UploadFileAsync(string FileName, long StartByte, byte[] Data, object userState) {
+        public void UploadFileAsync(string FileName, long StartByte, byte[] Data, bool Complete, object userState) {
             if ((this.onBeginUploadFileDelegate == null)) {
                 this.onBeginUploadFileDelegate = new BeginOperationDelegate(this.OnBeginUploadFile);
             }
@@ -1921,7 +1942,8 @@ namespace HAP.Silverlight.Browser.service {
             base.InvokeAsync(this.onBeginUploadFileDelegate, new object[] {
                         FileName,
                         StartByte,
-                        Data}, this.onEndUploadFileDelegate, this.onUploadFileCompletedDelegate, userState);
+                        Data,
+                        Complete}, this.onEndUploadFileDelegate, this.onUploadFileCompletedDelegate, userState);
         }
         
         private System.IAsyncResult OnBeginOpen(object[] inValues, System.AsyncCallback callback, object asyncState) {
