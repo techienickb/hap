@@ -76,7 +76,6 @@
           <s:element minOccurs="0" maxOccurs="1" name="Icon" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="Size" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="Type" type="s:string" />
-          <s:element minOccurs="0" maxOccurs="1" name="Thumb" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="Path" type="s:string" />
           <s:element minOccurs="1" maxOccurs="1" name="BType" type="tns:BType" />
         </s:sequence>

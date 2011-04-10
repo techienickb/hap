@@ -69,8 +69,7 @@ namespace HAP.Web
                 path.UNC = p.UNC;
                 path.Usage = p.Usage;
                 decimal space = -1;
-                bool showspace = false;
-                if (HttpContext.Current.User.IsInRole("Domain Admins") || !path.UNC.Contains("%homepath%")) showspace = isWriteAuth(path);
+                bool showspace = isWriteAuth(path);
                 if (showspace)
                 {
                     if (path.Usage == UsageMode.DriveSpace)
@@ -115,9 +114,8 @@ namespace HAP.Web
         {
             List<ComputerBrowserAPIItem> items = new List<ComputerBrowserAPIItem>();
             UNCPath unc; string userhome;
-            Converter.DriveToUNC(path, out unc, out userhome);
+            path = Converter.DriveToUNC(path, out unc, out userhome);
             AccessControlActions allowactions = isWriteAuth(unc) ? AccessControlActions.Change : AccessControlActions.View;
-
             DirectoryInfo dir = new DirectoryInfo(path);
             foreach (DirectoryInfo subdir in dir.GetDirectories())
                 try
@@ -195,7 +193,7 @@ namespace HAP.Web
         [WebMethod]
         public void Delete(string path)
         {
-            path = Converter.DriveToUNC(path);
+            path = Converter.DriveToUNC(path.Remove(1, 1));
             if (File.Exists(path)) File.Delete(path);
             else Directory.Delete(path, true);
         }

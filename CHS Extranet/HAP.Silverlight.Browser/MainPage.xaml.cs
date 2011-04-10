@@ -196,11 +196,11 @@ namespace HAP.Silverlight.Browser
                 else
                 {
                     string s = p.Split(new char[] { '/' })[0];
-                    if (p.Split(new char[] { '/' }).Length > 1) GetTreeNode(s, treeView1.Items).IsExpanded = true;
+                    if (p.Split(new char[] { '/' }).Length > 1) GetTreeNode(s, ((HAPTreeNode)treeView1.Items[0]).Items).IsExpanded = true;
                     else
                     {
                         loaded = true;
-                        treeView1.SelectItem(GetTreeNode(s, treeView1.Items));
+                        treeView1.SelectItem(GetTreeNode(s, ((HAPTreeNode)treeView1.Items[0]).Items));
                     }
                 }
             }
@@ -449,7 +449,7 @@ namespace HAP.Silverlight.Browser
 
         private void SelectUpdatedNode(string path)
         {
-            treeView1.SelectItem(GetTreeNode(path, treeView1.Items));//.IsSelected = true;
+            treeView1.SelectItem(GetTreeNode(path, ((HAPTreeNode)treeView1.Items[0]).Items));//.IsSelected = true;
         }
 
         private void UpdateTree(BItem bitem)
@@ -721,7 +721,7 @@ namespace HAP.Silverlight.Browser
         private void item_DirectoryChange(object sender, BItem e)
         {
             CurrentItem = e;
-            HAPTreeNode i = GetTreeNode(e.Path, treeView1.Items);
+            HAPTreeNode i = GetTreeNode(e.Path, ((HAPTreeNode)treeView1.Items[0]).Items);
             if (i.Header.ToString() != "E") treeView1.SelectItem(i);
             else MessageBox.Show("Error: " + e.Path);
         }
@@ -743,7 +743,7 @@ namespace HAP.Silverlight.Browser
                 else if (e.Key == Key.Enter && item.Data.BType != service.BType.File)
                 {
                     CurrentItem = item.Data;
-                    HAPTreeNode i = GetTreeNode(item.Data.Path, treeView1.Items);
+                    HAPTreeNode i = GetTreeNode(item.Data.Path, ((HAPTreeNode)treeView1.Items[0]).Items);
                     if (i.Header.ToString() != "E") treeView1.SelectItem(i);
                     else MessageBox.Show("Error: " + item.Data.Path);
                     e.Handled = true;
