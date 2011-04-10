@@ -340,8 +340,6 @@ namespace HAP.Silverlight.Browser.service {
         
         private string TypeField;
         
-        private string ThumbField;
-        
         private string PathField;
         
         private HAP.Silverlight.Browser.service.BType BTypeField;
@@ -438,19 +436,6 @@ namespace HAP.Silverlight.Browser.service {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=7)]
-        public string Thumb {
-            get {
-                return this.ThumbField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ThumbField, value) != true)) {
-                    this.ThumbField = value;
-                    this.RaisePropertyChanged("Thumb");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=8)]
         public string Path {
             get {
                 return this.PathField;
@@ -463,7 +448,7 @@ namespace HAP.Silverlight.Browser.service {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=9)]
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=8)]
         public HAP.Silverlight.Browser.service.BType BType {
             get {
                 return this.BTypeField;

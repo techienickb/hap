@@ -17,7 +17,6 @@ namespace HAP.Data.ComputerBrowser
         public string Icon { get; set; }
         public string Size { get; set; }
         public string Type { get; set; }
-        public string Thumb { get; set; }
         public string Path { get; set; }
         public BType BType { get; set; }
 
@@ -36,9 +35,9 @@ namespace HAP.Data.ComputerBrowser
                 Name = Name.Remove(Name.LastIndexOf(file.Extension));
             }
             catch { Type = "File"; }
-            Thumb = "images/icons/" + MyComputerItem.ParseForImage(file);
+            Icon = "images/icons/" + MyComputerItem.ParseForImage(file);
             if (file.Extension.ToLower().Equals(".png") || file.Extension.ToLower().Equals(".jpg") || file.Extension.ToLower().Equals(".jpeg") || file.Extension.ToLower().Equals(".gif") || file.Extension.ToLower().Equals(".bmp") || file.Extension.ToLower().Equals(".wmf"))
-                Thumb = "api/mycomputer/thumb/" + Converter.UNCtoDrive2(file.FullName, unc, userhome).Replace('&', '^');
+                Icon = "api/mycomputer/thumb/" + Converter.UNCtoDrive2(file.FullName, unc, userhome).Replace('&', '^');
             BType = ComputerBrowser.BType.File;
             CreatedTime = file.CreationTime;
             ModifiedTime = file.LastWriteTime;
@@ -51,7 +50,7 @@ namespace HAP.Data.ComputerBrowser
             Extension = dir.Extension;
             Type = "File Folder";
             Name = dir.Name;
-            Thumb = "images/icons/" + MyComputerItem.ParseForImage(dir);
+            Icon = "images/icons/" + MyComputerItem.ParseForImage(dir);
             BType = ComputerBrowser.BType.Folder;
             CreatedTime = dir.CreationTime;
             ModifiedTime = dir.LastWriteTime;

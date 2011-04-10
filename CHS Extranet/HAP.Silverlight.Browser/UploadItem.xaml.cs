@@ -24,8 +24,6 @@ namespace HAP.Silverlight.Browser
             InitializeComponent();
             Progress.Value = 0;
             BytesUploaded = 0;
-            soap = new apiSoapClient(new BasicHttpBinding(BasicHttpSecurityMode.Transport), new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
-            soap.UploadFileCompleted += new EventHandler<System.ComponentModel.AsyncCompletedEventArgs>(soap_UploadFileCompleted);
         }
 
         public UploadItem(FileInfo file, BItem item, ref StackPanel Queue, RoutedEventHandler Uploaded) : this()
@@ -83,13 +81,15 @@ namespace HAP.Silverlight.Browser
 
         public void Check()
         {
+            soap = new apiSoapClient(new BasicHttpBinding(BasicHttpSecurityMode.Transport), new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
+            soap.UploadFileCompleted += new EventHandler<System.ComponentModel.AsyncCompletedEventArgs>(soap_UploadFileCompleted);
             soap.CheckFileCompleted += new EventHandler<CheckFileCompletedEventArgs>(soap_CheckFileCompleted);
             soap.CheckFileAsync(ParentData.Path + '\\' + File.Name);
         }
 
         void soap_CheckFileCompleted(object sender, CheckFileCompletedEventArgs e)
         {
-           Dispatcher.BeginInvoke(new EventHandler<CheckFileCompletedEventArgs>(soap_CheckFileCompleted2));
+           Dispatcher.BeginInvoke(new EventHandler<CheckFileCompletedEventArgs>(soap_CheckFileCompleted2), sender, e);
         }
 
         void soap_CheckFileCompleted2(object sender, CheckFileCompletedEventArgs e)
@@ -101,6 +101,7 @@ namespace HAP.Silverlight.Browser
                 State = UploadItemState.Ready;
                 queue.Children.Add(this);
                 image1.Source = new BitmapImage(new Uri(HtmlPage.Document.DocumentUri, e.Result.Thumb));
+                BytesUploaded = 0;
                 if (queue.Children.IndexOf(this) == 0) Dispatcher.BeginInvoke(() => { Upload(); }); //Upload();
 
             }
@@ -120,25 +121,20 @@ namespace HAP.Silverlight.Browser
 
         public void Upload()
         {
+            soap = new apiSoapClient(new BasicHttpBinding(BasicHttpSecurityMode.Transport), new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
+            soap.UploadFileCompleted += new EventHandler<System.ComponentModel.AsyncCompletedEventArgs>(soap_UploadFileCompleted);
             long temp = File.Length - BytesUploaded;
-            bool complete = temp <= 20480;
-            context.IsEnabled = false;
-
             byte[] buffer = new Byte[4096];
-            int bytesRead = 0;
-            int tempTotal = 0;
             Stream fileStream = File.OpenRead();
             fileStream.Position = BytesUploaded;
-            while ((bytesRead = fileStream.Read(buffer, 0, buffer.Length)) != 0 && tempTotal + bytesRead < 20480)
-            {
-                MemoryStream ss = new MemoryStream();
-                ss.Write(buffer, 0, bytesRead);
-                soap.UploadFileAsync(ParentData.Path + '\\' + File.Name, BytesUploaded, ss.ToArray(), complete);
-                BytesUploaded += bytesRead;
-                tempTotal += bytesRead;
-                Value1 = (((double)BytesUploaded / (double)File.Length) * 100);
-                Dispatcher.BeginInvoke(new UpdateUIDelegate(UpdateUI), "");
-            }
+            int a = buffer.Length;
+            if (temp < a) a = Convert.ToInt32(temp);
+            int bytesRead = fileStream.Read(buffer, 0, a);
+            soap.UploadFileAsync(ParentData.Path + '\\' + File.Name, BytesUploaded, buffer, false);
+            BytesUploaded += bytesRead;
+            Value1 = (((double)BytesUploaded / (double)File.Length) * 100);
+            fileStream.Close();
+            fileStream.Dispose();
         }
 
         void soap_UploadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)

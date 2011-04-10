@@ -155,7 +155,6 @@
     <Content Include="images\icons\xps.png" />
     <Content Include="images\loading.gif" />
     <Content Include="images\logo.png" />
-    <Content Include="test.aspx" />
     <Content Include="Tracker\api.asmx" />
     <Content Include="Tracker\log.aspx" />
     <Content Include="Tracker\logontracker-small.png" />
@@ -444,13 +443,6 @@
     <Compile Include="routing\UploadHandler.cs" />
     <Compile Include="routing\UploadProcess.cs" />
     <Compile Include="routing\UploadTransferHandler.cs" />
-    <Compile Include="test.aspx.cs">
-      <DependentUpon>test.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="test.aspx.designer.cs">
-      <DependentUpon>test.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Tracker\api.asmx.cs">
       <DependentUpon>api.asmx</DependentUpon>
       <SubType>Component</SubType>

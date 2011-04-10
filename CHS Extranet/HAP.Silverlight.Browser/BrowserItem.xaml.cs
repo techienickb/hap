@@ -22,12 +22,7 @@ namespace HAP.Silverlight.Browser
         public BrowserItem()
         {
             InitializeComponent();
-            soap = new apiSoapClient(new BasicHttpBinding(BasicHttpSecurityMode.Transport), new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
-            soap.SaveCompleted += new EventHandler<SaveCompletedEventArgs>(soap_SaveCompleted);
-            soap.DeleteCompleted += new EventHandler<System.ComponentModel.AsyncCompletedEventArgs>(soap_DeleteCompleted);
         }
-
-        public apiSoapClient soap { get; set; }
 
         public BrowserItem(BItem data)
         {
@@ -35,8 +30,16 @@ namespace HAP.Silverlight.Browser
             Data = data;
             if (!string.IsNullOrEmpty(data.Size) && data.BType == service.BType.Drive)
             {
-                IsSpace = true;
-                Space = double.Parse(data.Size);
+                double s;
+                if (double.TryParse(data.Size, out s))
+                {
+                    if (s > -1)
+                    {
+                        IsSpace = true;
+                        Space = s;
+                    }
+                    else { size.Text = ""; }
+                } else size.Text = "";
             }
         }
 
@@ -178,7 +181,7 @@ namespace HAP.Silverlight.Browser
             if (Activate != null) Activate(this, new EventArgs());
             if ((DateTime.Now.Ticks - LastTicks) < 2310000)
             {
-                if (_data.BType == service.BType.File) HtmlPage.PopupWindow(new Uri(HtmlPage.Document.DocumentUri, this._data.Path), "_hapdownload", new HtmlPopupWindowOptions());
+                if (_data.BType == service.BType.File) HtmlPage.PopupWindow(new Uri(HtmlPage.Document.DocumentUri, Data.Source.Download), "_hapdownload", new HtmlPopupWindowOptions());
                 else if (DirectoryChange != null) DirectoryChange(this, this._data);
             }
             LastTicks = DateTime.Now.Ticks;
@@ -218,6 +221,8 @@ namespace HAP.Silverlight.Browser
             string _d = _data.Source.Path.Remove(0, _data.Source.Path.LastIndexOf('\\'));
             _d = _d.Replace(_data.Source.Name, newname);
             _d = _data.Source.Path.Remove(_data.Source.Path.LastIndexOf('\\')) + _d;
+            apiSoapClient soap = new apiSoapClient(new BasicHttpBinding(BasicHttpSecurityMode.Transport), new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
+            soap.SaveCompleted += new EventHandler<SaveCompletedEventArgs>(soap_SaveCompleted);
             soap.SaveAsync((CBFile)_data.Source, _d, false, new BUserState(resort, _d, _data.Name));
 
             _data.Name = name1.Text = name2.Text = name3.Text = name4.Text = name5.Text = textBox2.Text = textBox3.Text = textBox4.Text = textBox5.Text = textBox1.Text = newname;
@@ -297,6 +302,8 @@ namespace HAP.Silverlight.Browser
                 string _d = _data.Source.Path.Remove(0, _data.Source.Path.LastIndexOf('\\'));
                 _d = _d.Replace(_data.Source.Name, newname);
                 _d = _data.Source.Path.Remove(_data.Source.Path.LastIndexOf('\\')) + _d;
+                apiSoapClient soap = new apiSoapClient(new BasicHttpBinding(BasicHttpSecurityMode.Transport), new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
+                soap.SaveCompleted += new EventHandler<SaveCompletedEventArgs>(soap_SaveCompleted);
                 soap.SaveAsync((CBFile)_data.Source, _d, e == ReplaceResult.Replace, new BUserState(state.Resort, _d, _data.Name));
 
                 _data.Name = name1.Text = name2.Text = name3.Text = name4.Text = name5.Text = textBox2.Text = textBox3.Text = textBox4.Text = textBox5.Text = textBox1.Text = newname;
@@ -364,6 +371,8 @@ namespace HAP.Silverlight.Browser
 
         public int Delete()
         {
+            apiSoapClient soap = new apiSoapClient(new BasicHttpBinding(BasicHttpSecurityMode.Transport), new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
+            soap.DeleteCompleted += new EventHandler<System.ComponentModel.AsyncCompletedEventArgs>(soap_DeleteCompleted);
             if (MessageBox.Show("Are you sure you want to delete\n" + _data.Name + "?", "Question", MessageBoxButton.OKCancel) == MessageBoxResult.OK) soap.DeleteAsync(_data.Path);
             return 0;
             //so some saving stuff;
