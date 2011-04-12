@@ -26,7 +26,7 @@ namespace HAP.UserCard
 
         public bool isDialog { get; private set; }
 
-        public new Nullable<bool> ShowDialog(string text, [Optional, DefaultParameterValue("User Card Info")] string caption, [Optional, DefaultParameterValue(DialogIcon.Info)] DialogIcon Icon)
+        public Nullable<bool> ShowDialog(string text, [Optional, DefaultParameterValue("User Card Info")] string caption, [Optional, DefaultParameterValue(DialogIcon.Info)] DialogIcon Icon)
         {
             this.text.Text = text;
             this.Title = caption;
@@ -42,7 +42,7 @@ namespace HAP.UserCard
             return ShowDialog();
         }
 
-        public new void Show(string text, [Optional, DefaultParameterValue("User Card Info")] string caption, [Optional, DefaultParameterValue(DialogIcon.Info)] DialogIcon Icon)
+        public void Show(string text, [Optional, DefaultParameterValue("User Card Info")] string caption, [Optional, DefaultParameterValue(DialogIcon.Info)] DialogIcon Icon)
         {
             this.text.Text = text;
             this.Title = caption;
