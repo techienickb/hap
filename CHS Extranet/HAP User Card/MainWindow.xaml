@@ -7,6 +7,16 @@
         ShowInTaskbar="False" ResizeMode="NoResize" Background="White" 
         Deactivated="Window_Deactivated" Loaded="Window_Loaded" Closing="Window_Closing">
     <Window.Resources>
+        <Storyboard x:Key="hidemess">
+            <DoubleAnimation Storyboard.TargetName="infomess" Storyboard.TargetProperty="Opacity" From="0" To="1.0" Duration="0:0:0.5" BeginTime="0:0:0" />
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="infomess" Storyboard.TargetProperty="Visibility">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Static Visibility.Visible}" />
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimation Storyboard.TargetName="infomess" Storyboard.TargetProperty="Opacity" From="1.0" To="0.0" Duration="0:0:2" BeginTime="0:0:2" />
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="infomess" Storyboard.TargetProperty="Visibility">
+                <DiscreteObjectKeyFrame KeyTime="0:0:4" Value="{x:Static Visibility.Hidden}" />
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
         <Style TargetType="{x:Type TabItem}">
             <Setter Property="Template">
                 <Setter.Value>
@@ -119,6 +129,12 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
-        </TabControl>       
+        </TabControl>
+        <Border HorizontalAlignment="Center" Opacity="0" Name="infomess" VerticalAlignment="Center" Padding="5" Background="#FFF1F5FB" BorderBrush="#FF7B7B73" BorderThickness="1" CornerRadius="6" Visibility="Hidden">
+            <StackPanel Orientation="Horizontal">
+                <Image Height="32" Margin="0,0,0,0" Stretch="None" VerticalAlignment="Center" Width="32" Source="/HAP%20User%20Card;component/Images/261.png" />
+                <TextBlock Text="Label" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Stretch" Name="text" TextWrapping="Wrap" />
+            </StackPanel>
+        </Border>
     </Grid>
 </Window>

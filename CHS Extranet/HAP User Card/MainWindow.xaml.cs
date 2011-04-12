@@ -17,6 +17,7 @@ using System.DirectoryServices.AccountManagement;
 using System.DirectoryServices;
 using System.Threading;
 using System.IO;
+using System.Windows.Media.Animation;
 
 namespace HAP.UserCard
 {
@@ -277,7 +278,6 @@ namespace HAP.UserCard
 
         void UpdateSpace(object sender, Web.GetFreeSpacePercentageCompletedEventArgs e)
         {
-            if (us != null) us.Abort();
             if (e.Error != null || e.Result.Total == -1)
             {
                 try
@@ -304,7 +304,7 @@ namespace HAP.UserCard
                 DriveSpace.Visibility = System.Windows.Visibility.Visible;
                 decimal d = Math.Round(((Convert.ToDecimal(drivespaceprog.Value) / Convert.ToDecimal(drivespaceprog.Maximum)) * 100), 2);
                 drivespaceper.Text = d + "%";
-                if (d < 5 && !hasShownWarning) if (Dialog.ShowMessageDialog("You are running low on Space\nTry deleting some old files to free up space", "Low Space", DialogIcon.Warning).HasValue) hasShownWarning = true;
+                if ((100 - d) < 5 && !hasShownWarning) if (Dialog.ShowMessageDialog("You are running low on Space\nTry deleting some old files to free up space", "Low Space", DialogIcon.Warning).HasValue) hasShownWarning = true;
                 if (us == null)
                 {
                     us = new Thread(new ThreadStart(updatespace));
@@ -429,9 +429,9 @@ namespace HAP.UserCard
 
         private void enable_Click(object sender, RoutedEventArgs e)
         {
+            controlled.Cursor = Cursors.AppStarting;
             enable.IsEnabled = disable.IsEnabled = false;
             enable.Content = "Enabling...";
-            controlled.Cursor = Cursors.AppStarting;
             OU item = ((TreeViewItem)treeView1.SelectedItem).DataContext as OU;
             new Thread(new ParameterizedThreadStart(Enable)).Start(item);
         }
@@ -440,9 +440,9 @@ namespace HAP.UserCard
         {
             controlled.Cursor = Cursors.AppStarting;
             enable.IsEnabled = disable.IsEnabled = false;
-            disable.Content = "Disabling...";
             OU item = ((TreeViewItem)treeView1.SelectedItem).DataContext as OU;
             new Thread(new ParameterizedThreadStart(Disable)).Start(item);
+            disable.Content = "Disabling...";
         }
 
         private void Enable(object o)
@@ -452,7 +452,7 @@ namespace HAP.UserCard
             {
                 try
                 {
-                    DirectoryEntry user = new DirectoryEntry("LDAP://" + ou.OUPath);
+                    DirectoryEntry user = new DirectoryEntry("LDAP://" + ou.OUPath, adun, adpw);
                     int val = (int)user.Properties["userAccountControl"].Value;
                     user.Properties["userAccountControl"].Value = val & ~0x2;
                     //ADS_UF_NORMAL_ACCOUNT;
@@ -473,7 +473,7 @@ namespace HAP.UserCard
             {
                 try
                 {
-                    DirectoryEntry user = new DirectoryEntry("LDAP://" + ou.OUPath);
+                    DirectoryEntry user = new DirectoryEntry("LDAP://" + ou.OUPath, adun, adpw);
                     int val = (int)user.Properties["userAccountControl"].Value;
                     user.Properties["userAccountControl"].Value = val | 0x2;
                     //ADS_UF_ACCOUNTDISABLE;
@@ -499,7 +499,8 @@ namespace HAP.UserCard
             controlled.Cursor = Cursors.Arrow;
             enable.IsEnabled = disable.IsEnabled = true;
             enable.Content = "Enable";
-            Dialog.ShowMessage("Users in group " + name + " are now Enabled", "Enabled", DialogIcon.Info);
+            text.Text = "Users in group " + name + " are now Enabled";
+            ((Storyboard)this.Resources["hidemess"]).Begin();
         }
 
         private void DoneDisabled(string name)
@@ -507,7 +508,8 @@ namespace HAP.UserCard
             controlled.Cursor = Cursors.Arrow;
             enable.IsEnabled = disable.IsEnabled = true;
             disable.Content = "Disable";
-            Dialog.ShowMessage("Users in group " + name + " are now Disabled", "Disabled", DialogIcon.Info);
+            text.Text = "Users in group " + name + " are now Disabled";
+            ((Storyboard)this.Resources["hidemess"]).Begin();
         }
 
         private void treeView1_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
