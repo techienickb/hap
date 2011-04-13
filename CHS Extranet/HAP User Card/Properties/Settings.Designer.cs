@@ -32,5 +32,14 @@ namespace HAP.UserCard.Properties {
                 return ((string)(this["ControlledOU"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowHelpDesk {
+            get {
+                return ((bool)(this["ShowHelpDesk"]));
+            }
+        }
     }
 }

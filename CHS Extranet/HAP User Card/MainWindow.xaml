@@ -3,10 +3,11 @@
         xmlns:tbi="http://www.hardcodet.net/taskbar" 
         xmlns:u="clr-namespace:HAP.UserCard" 
         u:WindowBehavior.HideCloseButton="True"
-        Title="My User Card" Height="300" Width="345" Topmost="True" 
+        Title="My User Card" Height="350" Width="393" Topmost="True" 
         ShowInTaskbar="False" ResizeMode="NoResize" Background="White" 
         Deactivated="Window_Deactivated" Loaded="Window_Loaded" Closing="Window_Closing">
     <Window.Resources>
+        <u:imageconverter x:Key="ic" />
         <Storyboard x:Key="hidemess">
             <DoubleAnimation Storyboard.TargetName="infomess" Storyboard.TargetProperty="Opacity" From="0" To="1.0" Duration="0:0:0.5" BeginTime="0:0:0" />
             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="infomess" Storyboard.TargetProperty="Visibility">
@@ -95,13 +96,13 @@
         <TabControl Name="tabs" SelectionChanged="tabs_SelectionChanged">
             <TabItem Header="Me" Name="me">
                 <Grid>
-                    <Image Height="100" HorizontalAlignment="Left" Margin="4,3,0,0" Name="Photo" Stretch="Fill" VerticalAlignment="Top" Width="100" Source="/HAP%20User%20Card;component/Images/Imageres18.png" />
-                    <TextBlock Text="UN" Name="name" Margin="116,24,7,0" VerticalAlignment="Top" FontSize="16" TextAlignment="Left" TextTrimming="CharacterEllipsis" />
-                    <TextBlock Text="UN" Margin="117,64,0,0" VerticalAlignment="Top" Name="departmenttext" HorizontalAlignment="Left" />
-                    <TextBox Name="email" VerticalAlignment="Top" Margin="114,81,6,0" Height="22" IsReadOnly="True" BorderThickness="0" />
-                    <Grid Name="DriveSpace" Height="120" VerticalAlignment="Bottom"  Visibility="Hidden">
+                    <Image Height="148" HorizontalAlignment="Left" Margin="4,3,0,0" Name="Photo" Stretch="None" VerticalAlignment="Top" Width="148" Source="/HAP%20User%20Card;component/Images/Imageres18.png" />
+                    <TextBlock Text="UN" Name="name" Margin="156,44,7,0" VerticalAlignment="Top" FontSize="16" TextAlignment="Left" TextTrimming="CharacterEllipsis" />
+                    <TextBlock Text="UN" Margin="157,78,0,0" Name="departmenttext" HorizontalAlignment="Left" Height="16" VerticalAlignment="Top" />
+                    <TextBox Name="email" VerticalAlignment="Top" Margin="154,101,6,0" Height="22" IsReadOnly="True" BorderThickness="0" />
+                    <Grid Name="DriveSpace" Height="131" VerticalAlignment="Bottom"  Visibility="Hidden">
                         <TextBlock HorizontalAlignment="Left" Margin="26,13,0,0" Text="Home Drive: " VerticalAlignment="Top" />
-                        <TextBox Width="222" VerticalAlignment="Top" HorizontalAlignment="Right" Text="N:" BorderThickness="0" Margin="0,12,20,0" Name="homedrive" IsReadOnly="True" />
+                        <TextBox VerticalAlignment="Top" Text="N:" BorderThickness="0" Margin="101,12,20,0" Name="homedrive" IsReadOnly="True" />
                         <TextBlock HorizontalAlignment="Left" Margin="26,45,20,0" Text="Free Space: " VerticalAlignment="Top" Name="freespace" />
                         <TextBlock Margin="160,45,0,0" Text="Total Space: " HorizontalAlignment="Left" VerticalAlignment="Top" Name="totalspace" />
                         <ProgressBar Height="22" HorizontalAlignment="Stretch" Margin="20,75,20,0" Name="drivespaceprog" VerticalAlignment="Top" />
@@ -110,10 +111,10 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Reset Passwords" Name="pass">
-                <Grid>
-                    <TextBlock Text="Username: " Margin="30,87,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" />
-                    <TextBox Height="23" HorizontalAlignment="Left" Margin="103,84,0,0" Name="username" VerticalAlignment="Top" Width="146" KeyUp="username_KeyUp" />
-                    <Button Content="Reset" Height="26" Width="91" Name="reset" Margin="103,122,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" IsEnabled="False" Click="reset_Click" />
+                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="Username: " Margin="0,3,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" />
+                    <TextBox Height="23" HorizontalAlignment="Left" Margin="68,0,0,0" Name="username" VerticalAlignment="Top" Width="146" KeyUp="username_KeyUp" />
+                    <Button Content="Reset" Height="26" Width="118" Name="reset" Margin="0,30,0,0" VerticalAlignment="Top" HorizontalAlignment="Right" IsEnabled="False" Click="reset_Click" />
                 </Grid>
             </TabItem>
             <TabItem Header="Controlled Users" Name="controlled">
@@ -122,11 +123,59 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="40" />
                     </Grid.RowDefinitions>
-                    <TreeView Name="treeView1" Grid.Row="0" Padding="10" BorderThickness="0" SelectedItemChanged="treeView1_SelectedItemChanged" />
-                    <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <Button Name="enable" Content="Enable" Height="25" Margin="5,0" Width="160" Click="enable_Click" IsEnabled="False" />
-                        <Button Name="disable" Content="Disable" Height="25" Width="160" Click="disable_Click" IsEnabled="False" />
-                    </StackPanel>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TreeView Name="treeView1" Grid.Row="0" Padding="10" BorderThickness="0" SelectedItemChanged="treeView1_SelectedItemChanged" Grid.ColumnSpan="2" />
+                    <Button Name="enable" Content="Enable" Height="25" Margin="6,6,3,6" Click="enable_Click" IsEnabled="False" Grid.Row="1" />
+                    <Button Name="disable" Content="Disable" Height="25" Margin="3,6,6,6" Click="disable_Click" IsEnabled="False" Grid.Row="1" Grid.Column="1" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="Help Desk" Name="helpdesk">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="My Tickets" Grid.Row="0" Margin="10,10,0,0" Foreground="#FF2F5F93" FontSize="14" />
+                    <ListView Name="ticketbox" Margin="6" Visibility="Collapsed" Grid.Row="1" MouseDoubleClick="ticketbox_MouseDoubleClick">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Width="34">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Image Source="{Binding Path=Status, Converter={StaticResource ic}}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Width="34">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Image Source="{Binding Path=Priority, Converter={StaticResource ic}}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Subject" Width="220">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=Subject}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Room" Width="50">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=Room}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Button Content="New Ticket" Name="newticket" Width="100" Height="23" Margin="0,0,6,6" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="2" Click="newticket_Click" />
+                    <TextBlock Grid.Row="1" Name="notickets" Text="No Open Tickets" VerticalAlignment="Center" HorizontalAlignment="Center" />
                 </Grid>
             </TabItem>
         </TabControl>

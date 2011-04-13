@@ -358,6 +358,7 @@ namespace HAP.Web.HelpDesk
 
     public class Note
     {
+        public Note() { }
         public DateTime Date { get; set; }
         public UserPrincipal User { get; set; }
         public string NoteText { get; set; }
@@ -381,6 +382,7 @@ namespace HAP.Web.HelpDesk
 
     public class Ticket
     {
+        public Ticket() { }
         public static Ticket Parse(XmlNode node) { return new Ticket(node); }
         public int Id { get; set; }
         public string Subject { get; set; }

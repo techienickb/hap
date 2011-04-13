@@ -124,112 +124,6 @@ namespace HAP.UserCard.Web {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="Department", Namespace="http://hap.codeplex.com/")]
-    [System.SerializableAttribute()]
-    public partial class Department : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string NameField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
-        public string Name {
-            get {
-                return this.NameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.NameField, value) != true)) {
-                    this.NameField = value;
-                    this.RaisePropertyChanged("Name");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="Form", Namespace="http://hap.codeplex.com/")]
-    [System.SerializableAttribute()]
-    public partial class Form : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string NameField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string OUField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
-        public string Name {
-            get {
-                return this.NameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.NameField, value) != true)) {
-                    this.NameField = value;
-                    this.RaisePropertyChanged("Name");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
-        public string OU {
-            get {
-                return this.OUField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.OUField, value) != true)) {
-                    this.OUField = value;
-                    this.RaisePropertyChanged("OU");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="QuotaInfo", Namespace="http://hap.codeplex.com/")]
     [System.SerializableAttribute()]
     public partial class QuotaInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -347,6 +241,221 @@ namespace HAP.UserCard.Web {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="Ticket", Namespace="http://hap.codeplex.com/")]
+    [System.SerializableAttribute()]
+    public partial class Ticket : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        private int IdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string SubjectField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string PriorityField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string StatusField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string UserField;
+        
+        private System.DateTime DateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private HAP.UserCard.Web.Note[] NotesField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public int Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
+        public string Subject {
+            get {
+                return this.SubjectField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SubjectField, value) != true)) {
+                    this.SubjectField = value;
+                    this.RaisePropertyChanged("Subject");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
+        public string Priority {
+            get {
+                return this.PriorityField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PriorityField, value) != true)) {
+                    this.PriorityField = value;
+                    this.RaisePropertyChanged("Priority");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=3)]
+        public string Status {
+            get {
+                return this.StatusField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.StatusField, value) != true)) {
+                    this.StatusField = value;
+                    this.RaisePropertyChanged("Status");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=4)]
+        public string User {
+            get {
+                return this.UserField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.UserField, value) != true)) {
+                    this.UserField = value;
+                    this.RaisePropertyChanged("User");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=5)]
+        public System.DateTime Date {
+            get {
+                return this.DateField;
+            }
+            set {
+                if ((this.DateField.Equals(value) != true)) {
+                    this.DateField = value;
+                    this.RaisePropertyChanged("Date");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=6)]
+        public HAP.UserCard.Web.Note[] Notes {
+            get {
+                return this.NotesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NotesField, value) != true)) {
+                    this.NotesField = value;
+                    this.RaisePropertyChanged("Notes");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="Note", Namespace="http://hap.codeplex.com/")]
+    [System.SerializableAttribute()]
+    public partial class Note : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        private System.DateTime DateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string UserField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NoteTextField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public System.DateTime Date {
+            get {
+                return this.DateField;
+            }
+            set {
+                if ((this.DateField.Equals(value) != true)) {
+                    this.DateField = value;
+                    this.RaisePropertyChanged("Date");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
+        public string User {
+            get {
+                return this.UserField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.UserField, value) != true)) {
+                    this.UserField = value;
+                    this.RaisePropertyChanged("User");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
+        public string NoteText {
+            get {
+                return this.NoteTextField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NoteTextField, value) != true)) {
+                    this.NoteTextField = value;
+                    this.RaisePropertyChanged("NoteText");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="http://hap.codeplex.com/", ConfigurationName="Web.apiSoap")]
     public interface apiSoap {
@@ -359,42 +468,6 @@ namespace HAP.UserCard.Web {
         System.IAsyncResult BegingetInit(HAP.UserCard.Web.getInitRequest request, System.AsyncCallback callback, object asyncState);
         
         HAP.UserCard.Web.getInitResponse EndgetInit(System.IAsyncResult result);
-        
-        // CODEGEN: Generating message contract since element name getDepartmentsResult from namespace http://hap.codeplex.com/ is not marked nillable
-        [System.ServiceModel.OperationContractAttribute(Action="http://hap.codeplex.com/getDepartments", ReplyAction="*")]
-        HAP.UserCard.Web.getDepartmentsResponse getDepartments(HAP.UserCard.Web.getDepartmentsRequest request);
-        
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://hap.codeplex.com/getDepartments", ReplyAction="*")]
-        System.IAsyncResult BegingetDepartments(HAP.UserCard.Web.getDepartmentsRequest request, System.AsyncCallback callback, object asyncState);
-        
-        HAP.UserCard.Web.getDepartmentsResponse EndgetDepartments(System.IAsyncResult result);
-        
-        // CODEGEN: Generating message contract since element name getFormsResult from namespace http://hap.codeplex.com/ is not marked nillable
-        [System.ServiceModel.OperationContractAttribute(Action="http://hap.codeplex.com/getForms", ReplyAction="*")]
-        HAP.UserCard.Web.getFormsResponse getForms(HAP.UserCard.Web.getFormsRequest request);
-        
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://hap.codeplex.com/getForms", ReplyAction="*")]
-        System.IAsyncResult BegingetForms(HAP.UserCard.Web.getFormsRequest request, System.AsyncCallback callback, object asyncState);
-        
-        HAP.UserCard.Web.getFormsResponse EndgetForms(System.IAsyncResult result);
-        
-        // CODEGEN: Generating message contract since element name ou from namespace http://hap.codeplex.com/ is not marked nillable
-        [System.ServiceModel.OperationContractAttribute(Action="http://hap.codeplex.com/getFormsIn", ReplyAction="*")]
-        HAP.UserCard.Web.getFormsInResponse getFormsIn(HAP.UserCard.Web.getFormsInRequest request);
-        
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://hap.codeplex.com/getFormsIn", ReplyAction="*")]
-        System.IAsyncResult BegingetFormsIn(HAP.UserCard.Web.getFormsInRequest request, System.AsyncCallback callback, object asyncState);
-        
-        HAP.UserCard.Web.getFormsInResponse EndgetFormsIn(System.IAsyncResult result);
-        
-        // CODEGEN: Generating message contract since element name username from namespace http://hap.codeplex.com/ is not marked nillable
-        [System.ServiceModel.OperationContractAttribute(Action="http://hap.codeplex.com/ResetPassword", ReplyAction="*")]
-        HAP.UserCard.Web.ResetPasswordResponse ResetPassword(HAP.UserCard.Web.ResetPasswordRequest request);
-        
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://hap.codeplex.com/ResetPassword", ReplyAction="*")]
-        System.IAsyncResult BeginResetPassword(HAP.UserCard.Web.ResetPasswordRequest request, System.AsyncCallback callback, object asyncState);
-        
-        HAP.UserCard.Web.ResetPasswordResponse EndResetPassword(System.IAsyncResult result);
         
         // CODEGEN: Generating message contract since element name upn from namespace http://hap.codeplex.com/ is not marked nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://hap.codeplex.com/getPhoto", ReplyAction="*")]
@@ -413,6 +486,24 @@ namespace HAP.UserCard.Web {
         System.IAsyncResult BeginGetFreeSpacePercentage(HAP.UserCard.Web.GetFreeSpacePercentageRequest request, System.AsyncCallback callback, object asyncState);
         
         HAP.UserCard.Web.GetFreeSpacePercentageResponse EndGetFreeSpacePercentage(System.IAsyncResult result);
+        
+        // CODEGEN: Generating message contract since element name username from namespace http://hap.codeplex.com/ is not marked nillable
+        [System.ServiceModel.OperationContractAttribute(Action="http://hap.codeplex.com/getMyTickets", ReplyAction="*")]
+        HAP.UserCard.Web.getMyTicketsResponse getMyTickets(HAP.UserCard.Web.getMyTicketsRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://hap.codeplex.com/getMyTickets", ReplyAction="*")]
+        System.IAsyncResult BegingetMyTickets(HAP.UserCard.Web.getMyTicketsRequest request, System.AsyncCallback callback, object asyncState);
+        
+        HAP.UserCard.Web.getMyTicketsResponse EndgetMyTickets(System.IAsyncResult result);
+        
+        // CODEGEN: Generating message contract since element name subject from namespace http://hap.codeplex.com/ is not marked nillable
+        [System.ServiceModel.OperationContractAttribute(Action="http://hap.codeplex.com/setNewTicket", ReplyAction="*")]
+        HAP.UserCard.Web.setNewTicketResponse setNewTicket(HAP.UserCard.Web.setNewTicketRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://hap.codeplex.com/setNewTicket", ReplyAction="*")]
+        System.IAsyncResult BeginsetNewTicket(HAP.UserCard.Web.setNewTicketRequest request, System.AsyncCallback callback, object asyncState);
+        
+        HAP.UserCard.Web.setNewTicketResponse EndsetNewTicket(System.IAsyncResult result);
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -473,264 +564,6 @@ namespace HAP.UserCard.Web {
         
         public getInitResponseBody(HAP.UserCard.Web.Init getInitResult) {
             this.getInitResult = getInitResult;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    public partial class getDepartmentsRequest {
-        
-        [System.ServiceModel.MessageBodyMemberAttribute(Name="getDepartments", Namespace="http://hap.codeplex.com/", Order=0)]
-        public HAP.UserCard.Web.getDepartmentsRequestBody Body;
-        
-        public getDepartmentsRequest() {
-        }
-        
-        public getDepartmentsRequest(HAP.UserCard.Web.getDepartmentsRequestBody Body) {
-            this.Body = Body;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.Runtime.Serialization.DataContractAttribute()]
-    public partial class getDepartmentsRequestBody {
-        
-        public getDepartmentsRequestBody() {
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    public partial class getDepartmentsResponse {
-        
-        [System.ServiceModel.MessageBodyMemberAttribute(Name="getDepartmentsResponse", Namespace="http://hap.codeplex.com/", Order=0)]
-        public HAP.UserCard.Web.getDepartmentsResponseBody Body;
-        
-        public getDepartmentsResponse() {
-        }
-        
-        public getDepartmentsResponse(HAP.UserCard.Web.getDepartmentsResponseBody Body) {
-            this.Body = Body;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://hap.codeplex.com/")]
-    public partial class getDepartmentsResponseBody {
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
-        public HAP.UserCard.Web.Department[] getDepartmentsResult;
-        
-        public getDepartmentsResponseBody() {
-        }
-        
-        public getDepartmentsResponseBody(HAP.UserCard.Web.Department[] getDepartmentsResult) {
-            this.getDepartmentsResult = getDepartmentsResult;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    public partial class getFormsRequest {
-        
-        [System.ServiceModel.MessageBodyMemberAttribute(Name="getForms", Namespace="http://hap.codeplex.com/", Order=0)]
-        public HAP.UserCard.Web.getFormsRequestBody Body;
-        
-        public getFormsRequest() {
-        }
-        
-        public getFormsRequest(HAP.UserCard.Web.getFormsRequestBody Body) {
-            this.Body = Body;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.Runtime.Serialization.DataContractAttribute()]
-    public partial class getFormsRequestBody {
-        
-        public getFormsRequestBody() {
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    public partial class getFormsResponse {
-        
-        [System.ServiceModel.MessageBodyMemberAttribute(Name="getFormsResponse", Namespace="http://hap.codeplex.com/", Order=0)]
-        public HAP.UserCard.Web.getFormsResponseBody Body;
-        
-        public getFormsResponse() {
-        }
-        
-        public getFormsResponse(HAP.UserCard.Web.getFormsResponseBody Body) {
-            this.Body = Body;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://hap.codeplex.com/")]
-    public partial class getFormsResponseBody {
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
-        public HAP.UserCard.Web.Form[] getFormsResult;
-        
-        public getFormsResponseBody() {
-        }
-        
-        public getFormsResponseBody(HAP.UserCard.Web.Form[] getFormsResult) {
-            this.getFormsResult = getFormsResult;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    public partial class getFormsInRequest {
-        
-        [System.ServiceModel.MessageBodyMemberAttribute(Name="getFormsIn", Namespace="http://hap.codeplex.com/", Order=0)]
-        public HAP.UserCard.Web.getFormsInRequestBody Body;
-        
-        public getFormsInRequest() {
-        }
-        
-        public getFormsInRequest(HAP.UserCard.Web.getFormsInRequestBody Body) {
-            this.Body = Body;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://hap.codeplex.com/")]
-    public partial class getFormsInRequestBody {
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
-        public string ou;
-        
-        public getFormsInRequestBody() {
-        }
-        
-        public getFormsInRequestBody(string ou) {
-            this.ou = ou;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    public partial class getFormsInResponse {
-        
-        [System.ServiceModel.MessageBodyMemberAttribute(Name="getFormsInResponse", Namespace="http://hap.codeplex.com/", Order=0)]
-        public HAP.UserCard.Web.getFormsInResponseBody Body;
-        
-        public getFormsInResponse() {
-        }
-        
-        public getFormsInResponse(HAP.UserCard.Web.getFormsInResponseBody Body) {
-            this.Body = Body;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://hap.codeplex.com/")]
-    public partial class getFormsInResponseBody {
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
-        public HAP.UserCard.Web.Form[] getFormsInResult;
-        
-        public getFormsInResponseBody() {
-        }
-        
-        public getFormsInResponseBody(HAP.UserCard.Web.Form[] getFormsInResult) {
-            this.getFormsInResult = getFormsInResult;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    public partial class ResetPasswordRequest {
-        
-        [System.ServiceModel.MessageBodyMemberAttribute(Name="ResetPassword", Namespace="http://hap.codeplex.com/", Order=0)]
-        public HAP.UserCard.Web.ResetPasswordRequestBody Body;
-        
-        public ResetPasswordRequest() {
-        }
-        
-        public ResetPasswordRequest(HAP.UserCard.Web.ResetPasswordRequestBody Body) {
-            this.Body = Body;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://hap.codeplex.com/")]
-    public partial class ResetPasswordRequestBody {
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
-        public string username;
-        
-        public ResetPasswordRequestBody() {
-        }
-        
-        public ResetPasswordRequestBody(string username) {
-            this.username = username;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    public partial class ResetPasswordResponse {
-        
-        [System.ServiceModel.MessageBodyMemberAttribute(Name="ResetPasswordResponse", Namespace="http://hap.codeplex.com/", Order=0)]
-        public HAP.UserCard.Web.ResetPasswordResponseBody Body;
-        
-        public ResetPasswordResponse() {
-        }
-        
-        public ResetPasswordResponse(HAP.UserCard.Web.ResetPasswordResponseBody Body) {
-            this.Body = Body;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://hap.codeplex.com/")]
-    public partial class ResetPasswordResponseBody {
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
-        public string ResetPasswordResult;
-        
-        public ResetPasswordResponseBody() {
-        }
-        
-        public ResetPasswordResponseBody(string ResetPasswordResult) {
-            this.ResetPasswordResult = ResetPasswordResult;
         }
     }
     
@@ -874,6 +707,154 @@ namespace HAP.UserCard.Web {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class getMyTicketsRequest {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="getMyTickets", Namespace="http://hap.codeplex.com/", Order=0)]
+        public HAP.UserCard.Web.getMyTicketsRequestBody Body;
+        
+        public getMyTicketsRequest() {
+        }
+        
+        public getMyTicketsRequest(HAP.UserCard.Web.getMyTicketsRequestBody Body) {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://hap.codeplex.com/")]
+    public partial class getMyTicketsRequestBody {
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        public string username;
+        
+        public getMyTicketsRequestBody() {
+        }
+        
+        public getMyTicketsRequestBody(string username) {
+            this.username = username;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class getMyTicketsResponse {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="getMyTicketsResponse", Namespace="http://hap.codeplex.com/", Order=0)]
+        public HAP.UserCard.Web.getMyTicketsResponseBody Body;
+        
+        public getMyTicketsResponse() {
+        }
+        
+        public getMyTicketsResponse(HAP.UserCard.Web.getMyTicketsResponseBody Body) {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://hap.codeplex.com/")]
+    public partial class getMyTicketsResponseBody {
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        public HAP.UserCard.Web.Ticket[] getMyTicketsResult;
+        
+        public getMyTicketsResponseBody() {
+        }
+        
+        public getMyTicketsResponseBody(HAP.UserCard.Web.Ticket[] getMyTicketsResult) {
+            this.getMyTicketsResult = getMyTicketsResult;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class setNewTicketRequest {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="setNewTicket", Namespace="http://hap.codeplex.com/", Order=0)]
+        public HAP.UserCard.Web.setNewTicketRequestBody Body;
+        
+        public setNewTicketRequest() {
+        }
+        
+        public setNewTicketRequest(HAP.UserCard.Web.setNewTicketRequestBody Body) {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://hap.codeplex.com/")]
+    public partial class setNewTicketRequestBody {
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        public string subject;
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=1)]
+        public string note;
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
+        public string room;
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=3)]
+        public string username;
+        
+        public setNewTicketRequestBody() {
+        }
+        
+        public setNewTicketRequestBody(string subject, string note, string room, string username) {
+            this.subject = subject;
+            this.note = note;
+            this.room = room;
+            this.username = username;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class setNewTicketResponse {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="setNewTicketResponse", Namespace="http://hap.codeplex.com/", Order=0)]
+        public HAP.UserCard.Web.setNewTicketResponseBody Body;
+        
+        public setNewTicketResponse() {
+        }
+        
+        public setNewTicketResponse(HAP.UserCard.Web.setNewTicketResponseBody Body) {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://hap.codeplex.com/")]
+    public partial class setNewTicketResponseBody {
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        public HAP.UserCard.Web.Ticket[] setNewTicketResult;
+        
+        public setNewTicketResponseBody() {
+        }
+        
+        public setNewTicketResponseBody(HAP.UserCard.Web.Ticket[] setNewTicketResult) {
+            this.setNewTicketResult = setNewTicketResult;
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface apiSoapChannel : HAP.UserCard.Web.apiSoap, System.ServiceModel.IClientChannel {
     }
@@ -893,82 +874,6 @@ namespace HAP.UserCard.Web {
             get {
                 base.RaiseExceptionIfNecessary();
                 return ((HAP.UserCard.Web.Init)(this.results[0]));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class getDepartmentsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
-        private object[] results;
-        
-        public getDepartmentsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
-            this.results = results;
-        }
-        
-        public HAP.UserCard.Web.Department[] Result {
-            get {
-                base.RaiseExceptionIfNecessary();
-                return ((HAP.UserCard.Web.Department[])(this.results[0]));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class getFormsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
-        private object[] results;
-        
-        public getFormsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
-            this.results = results;
-        }
-        
-        public HAP.UserCard.Web.Form[] Result {
-            get {
-                base.RaiseExceptionIfNecessary();
-                return ((HAP.UserCard.Web.Form[])(this.results[0]));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class getFormsInCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
-        private object[] results;
-        
-        public getFormsInCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
-            this.results = results;
-        }
-        
-        public HAP.UserCard.Web.Form[] Result {
-            get {
-                base.RaiseExceptionIfNecessary();
-                return ((HAP.UserCard.Web.Form[])(this.results[0]));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class ResetPasswordCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
-        private object[] results;
-        
-        public ResetPasswordCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
-            this.results = results;
-        }
-        
-        public string Result {
-            get {
-                base.RaiseExceptionIfNecessary();
-                return ((string)(this.results[0]));
             }
         }
     }
@@ -1013,6 +918,44 @@ namespace HAP.UserCard.Web {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public partial class getMyTicketsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        public getMyTicketsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        public HAP.UserCard.Web.Ticket[] Result {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((HAP.UserCard.Web.Ticket[])(this.results[0]));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public partial class setNewTicketCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        public setNewTicketCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        public HAP.UserCard.Web.Ticket[] Result {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((HAP.UserCard.Web.Ticket[])(this.results[0]));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class apiSoapClient : System.ServiceModel.ClientBase<HAP.UserCard.Web.apiSoap>, HAP.UserCard.Web.apiSoap {
         
         private BeginOperationDelegate onBegingetInitDelegate;
@@ -1020,30 +963,6 @@ namespace HAP.UserCard.Web {
         private EndOperationDelegate onEndgetInitDelegate;
         
         private System.Threading.SendOrPostCallback ongetInitCompletedDelegate;
-        
-        private BeginOperationDelegate onBegingetDepartmentsDelegate;
-        
-        private EndOperationDelegate onEndgetDepartmentsDelegate;
-        
-        private System.Threading.SendOrPostCallback ongetDepartmentsCompletedDelegate;
-        
-        private BeginOperationDelegate onBegingetFormsDelegate;
-        
-        private EndOperationDelegate onEndgetFormsDelegate;
-        
-        private System.Threading.SendOrPostCallback ongetFormsCompletedDelegate;
-        
-        private BeginOperationDelegate onBegingetFormsInDelegate;
-        
-        private EndOperationDelegate onEndgetFormsInDelegate;
-        
-        private System.Threading.SendOrPostCallback ongetFormsInCompletedDelegate;
-        
-        private BeginOperationDelegate onBeginResetPasswordDelegate;
-        
-        private EndOperationDelegate onEndResetPasswordDelegate;
-        
-        private System.Threading.SendOrPostCallback onResetPasswordCompletedDelegate;
         
         private BeginOperationDelegate onBegingetPhotoDelegate;
         
@@ -1056,6 +975,18 @@ namespace HAP.UserCard.Web {
         private EndOperationDelegate onEndGetFreeSpacePercentageDelegate;
         
         private System.Threading.SendOrPostCallback onGetFreeSpacePercentageCompletedDelegate;
+        
+        private BeginOperationDelegate onBegingetMyTicketsDelegate;
+        
+        private EndOperationDelegate onEndgetMyTicketsDelegate;
+        
+        private System.Threading.SendOrPostCallback ongetMyTicketsCompletedDelegate;
+        
+        private BeginOperationDelegate onBeginsetNewTicketDelegate;
+        
+        private EndOperationDelegate onEndsetNewTicketDelegate;
+        
+        private System.Threading.SendOrPostCallback onsetNewTicketCompletedDelegate;
         
         public apiSoapClient() {
         }
@@ -1078,17 +1009,13 @@ namespace HAP.UserCard.Web {
         
         public event System.EventHandler<getInitCompletedEventArgs> getInitCompleted;
         
-        public event System.EventHandler<getDepartmentsCompletedEventArgs> getDepartmentsCompleted;
-        
-        public event System.EventHandler<getFormsCompletedEventArgs> getFormsCompleted;
-        
-        public event System.EventHandler<getFormsInCompletedEventArgs> getFormsInCompleted;
-        
-        public event System.EventHandler<ResetPasswordCompletedEventArgs> ResetPasswordCompleted;
-        
         public event System.EventHandler<getPhotoCompletedEventArgs> getPhotoCompleted;
         
         public event System.EventHandler<GetFreeSpacePercentageCompletedEventArgs> GetFreeSpacePercentageCompleted;
+        
+        public event System.EventHandler<getMyTicketsCompletedEventArgs> getMyTicketsCompleted;
+        
+        public event System.EventHandler<setNewTicketCompletedEventArgs> setNewTicketCompleted;
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         HAP.UserCard.Web.getInitResponse HAP.UserCard.Web.apiSoap.getInit(HAP.UserCard.Web.getInitRequest request) {
@@ -1157,290 +1084,6 @@ namespace HAP.UserCard.Web {
                 this.ongetInitCompletedDelegate = new System.Threading.SendOrPostCallback(this.OngetInitCompleted);
             }
             base.InvokeAsync(this.onBegingetInitDelegate, null, this.onEndgetInitDelegate, this.ongetInitCompletedDelegate, userState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        HAP.UserCard.Web.getDepartmentsResponse HAP.UserCard.Web.apiSoap.getDepartments(HAP.UserCard.Web.getDepartmentsRequest request) {
-            return base.Channel.getDepartments(request);
-        }
-        
-        public HAP.UserCard.Web.Department[] getDepartments() {
-            HAP.UserCard.Web.getDepartmentsRequest inValue = new HAP.UserCard.Web.getDepartmentsRequest();
-            inValue.Body = new HAP.UserCard.Web.getDepartmentsRequestBody();
-            HAP.UserCard.Web.getDepartmentsResponse retVal = ((HAP.UserCard.Web.apiSoap)(this)).getDepartments(inValue);
-            return retVal.Body.getDepartmentsResult;
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult HAP.UserCard.Web.apiSoap.BegingetDepartments(HAP.UserCard.Web.getDepartmentsRequest request, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BegingetDepartments(request, callback, asyncState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        public System.IAsyncResult BegingetDepartments(System.AsyncCallback callback, object asyncState) {
-            HAP.UserCard.Web.getDepartmentsRequest inValue = new HAP.UserCard.Web.getDepartmentsRequest();
-            inValue.Body = new HAP.UserCard.Web.getDepartmentsRequestBody();
-            return ((HAP.UserCard.Web.apiSoap)(this)).BegingetDepartments(inValue, callback, asyncState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        HAP.UserCard.Web.getDepartmentsResponse HAP.UserCard.Web.apiSoap.EndgetDepartments(System.IAsyncResult result) {
-            return base.Channel.EndgetDepartments(result);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        public HAP.UserCard.Web.Department[] EndgetDepartments(System.IAsyncResult result) {
-            HAP.UserCard.Web.getDepartmentsResponse retVal = ((HAP.UserCard.Web.apiSoap)(this)).EndgetDepartments(result);
-            return retVal.Body.getDepartmentsResult;
-        }
-        
-        private System.IAsyncResult OnBegingetDepartments(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            return this.BegingetDepartments(callback, asyncState);
-        }
-        
-        private object[] OnEndgetDepartments(System.IAsyncResult result) {
-            HAP.UserCard.Web.Department[] retVal = this.EndgetDepartments(result);
-            return new object[] {
-                    retVal};
-        }
-        
-        private void OngetDepartmentsCompleted(object state) {
-            if ((this.getDepartmentsCompleted != null)) {
-                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.getDepartmentsCompleted(this, new getDepartmentsCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
-            }
-        }
-        
-        public void getDepartmentsAsync() {
-            this.getDepartmentsAsync(null);
-        }
-        
-        public void getDepartmentsAsync(object userState) {
-            if ((this.onBegingetDepartmentsDelegate == null)) {
-                this.onBegingetDepartmentsDelegate = new BeginOperationDelegate(this.OnBegingetDepartments);
-            }
-            if ((this.onEndgetDepartmentsDelegate == null)) {
-                this.onEndgetDepartmentsDelegate = new EndOperationDelegate(this.OnEndgetDepartments);
-            }
-            if ((this.ongetDepartmentsCompletedDelegate == null)) {
-                this.ongetDepartmentsCompletedDelegate = new System.Threading.SendOrPostCallback(this.OngetDepartmentsCompleted);
-            }
-            base.InvokeAsync(this.onBegingetDepartmentsDelegate, null, this.onEndgetDepartmentsDelegate, this.ongetDepartmentsCompletedDelegate, userState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        HAP.UserCard.Web.getFormsResponse HAP.UserCard.Web.apiSoap.getForms(HAP.UserCard.Web.getFormsRequest request) {
-            return base.Channel.getForms(request);
-        }
-        
-        public HAP.UserCard.Web.Form[] getForms() {
-            HAP.UserCard.Web.getFormsRequest inValue = new HAP.UserCard.Web.getFormsRequest();
-            inValue.Body = new HAP.UserCard.Web.getFormsRequestBody();
-            HAP.UserCard.Web.getFormsResponse retVal = ((HAP.UserCard.Web.apiSoap)(this)).getForms(inValue);
-            return retVal.Body.getFormsResult;
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult HAP.UserCard.Web.apiSoap.BegingetForms(HAP.UserCard.Web.getFormsRequest request, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BegingetForms(request, callback, asyncState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        public System.IAsyncResult BegingetForms(System.AsyncCallback callback, object asyncState) {
-            HAP.UserCard.Web.getFormsRequest inValue = new HAP.UserCard.Web.getFormsRequest();
-            inValue.Body = new HAP.UserCard.Web.getFormsRequestBody();
-            return ((HAP.UserCard.Web.apiSoap)(this)).BegingetForms(inValue, callback, asyncState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        HAP.UserCard.Web.getFormsResponse HAP.UserCard.Web.apiSoap.EndgetForms(System.IAsyncResult result) {
-            return base.Channel.EndgetForms(result);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        public HAP.UserCard.Web.Form[] EndgetForms(System.IAsyncResult result) {
-            HAP.UserCard.Web.getFormsResponse retVal = ((HAP.UserCard.Web.apiSoap)(this)).EndgetForms(result);
-            return retVal.Body.getFormsResult;
-        }
-        
-        private System.IAsyncResult OnBegingetForms(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            return this.BegingetForms(callback, asyncState);
-        }
-        
-        private object[] OnEndgetForms(System.IAsyncResult result) {
-            HAP.UserCard.Web.Form[] retVal = this.EndgetForms(result);
-            return new object[] {
-                    retVal};
-        }
-        
-        private void OngetFormsCompleted(object state) {
-            if ((this.getFormsCompleted != null)) {
-                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.getFormsCompleted(this, new getFormsCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
-            }
-        }
-        
-        public void getFormsAsync() {
-            this.getFormsAsync(null);
-        }
-        
-        public void getFormsAsync(object userState) {
-            if ((this.onBegingetFormsDelegate == null)) {
-                this.onBegingetFormsDelegate = new BeginOperationDelegate(this.OnBegingetForms);
-            }
-            if ((this.onEndgetFormsDelegate == null)) {
-                this.onEndgetFormsDelegate = new EndOperationDelegate(this.OnEndgetForms);
-            }
-            if ((this.ongetFormsCompletedDelegate == null)) {
-                this.ongetFormsCompletedDelegate = new System.Threading.SendOrPostCallback(this.OngetFormsCompleted);
-            }
-            base.InvokeAsync(this.onBegingetFormsDelegate, null, this.onEndgetFormsDelegate, this.ongetFormsCompletedDelegate, userState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        HAP.UserCard.Web.getFormsInResponse HAP.UserCard.Web.apiSoap.getFormsIn(HAP.UserCard.Web.getFormsInRequest request) {
-            return base.Channel.getFormsIn(request);
-        }
-        
-        public HAP.UserCard.Web.Form[] getFormsIn(string ou) {
-            HAP.UserCard.Web.getFormsInRequest inValue = new HAP.UserCard.Web.getFormsInRequest();
-            inValue.Body = new HAP.UserCard.Web.getFormsInRequestBody();
-            inValue.Body.ou = ou;
-            HAP.UserCard.Web.getFormsInResponse retVal = ((HAP.UserCard.Web.apiSoap)(this)).getFormsIn(inValue);
-            return retVal.Body.getFormsInResult;
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult HAP.UserCard.Web.apiSoap.BegingetFormsIn(HAP.UserCard.Web.getFormsInRequest request, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BegingetFormsIn(request, callback, asyncState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        public System.IAsyncResult BegingetFormsIn(string ou, System.AsyncCallback callback, object asyncState) {
-            HAP.UserCard.Web.getFormsInRequest inValue = new HAP.UserCard.Web.getFormsInRequest();
-            inValue.Body = new HAP.UserCard.Web.getFormsInRequestBody();
-            inValue.Body.ou = ou;
-            return ((HAP.UserCard.Web.apiSoap)(this)).BegingetFormsIn(inValue, callback, asyncState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        HAP.UserCard.Web.getFormsInResponse HAP.UserCard.Web.apiSoap.EndgetFormsIn(System.IAsyncResult result) {
-            return base.Channel.EndgetFormsIn(result);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        public HAP.UserCard.Web.Form[] EndgetFormsIn(System.IAsyncResult result) {
-            HAP.UserCard.Web.getFormsInResponse retVal = ((HAP.UserCard.Web.apiSoap)(this)).EndgetFormsIn(result);
-            return retVal.Body.getFormsInResult;
-        }
-        
-        private System.IAsyncResult OnBegingetFormsIn(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            string ou = ((string)(inValues[0]));
-            return this.BegingetFormsIn(ou, callback, asyncState);
-        }
-        
-        private object[] OnEndgetFormsIn(System.IAsyncResult result) {
-            HAP.UserCard.Web.Form[] retVal = this.EndgetFormsIn(result);
-            return new object[] {
-                    retVal};
-        }
-        
-        private void OngetFormsInCompleted(object state) {
-            if ((this.getFormsInCompleted != null)) {
-                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.getFormsInCompleted(this, new getFormsInCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
-            }
-        }
-        
-        public void getFormsInAsync(string ou) {
-            this.getFormsInAsync(ou, null);
-        }
-        
-        public void getFormsInAsync(string ou, object userState) {
-            if ((this.onBegingetFormsInDelegate == null)) {
-                this.onBegingetFormsInDelegate = new BeginOperationDelegate(this.OnBegingetFormsIn);
-            }
-            if ((this.onEndgetFormsInDelegate == null)) {
-                this.onEndgetFormsInDelegate = new EndOperationDelegate(this.OnEndgetFormsIn);
-            }
-            if ((this.ongetFormsInCompletedDelegate == null)) {
-                this.ongetFormsInCompletedDelegate = new System.Threading.SendOrPostCallback(this.OngetFormsInCompleted);
-            }
-            base.InvokeAsync(this.onBegingetFormsInDelegate, new object[] {
-                        ou}, this.onEndgetFormsInDelegate, this.ongetFormsInCompletedDelegate, userState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        HAP.UserCard.Web.ResetPasswordResponse HAP.UserCard.Web.apiSoap.ResetPassword(HAP.UserCard.Web.ResetPasswordRequest request) {
-            return base.Channel.ResetPassword(request);
-        }
-        
-        public string ResetPassword(string username) {
-            HAP.UserCard.Web.ResetPasswordRequest inValue = new HAP.UserCard.Web.ResetPasswordRequest();
-            inValue.Body = new HAP.UserCard.Web.ResetPasswordRequestBody();
-            inValue.Body.username = username;
-            HAP.UserCard.Web.ResetPasswordResponse retVal = ((HAP.UserCard.Web.apiSoap)(this)).ResetPassword(inValue);
-            return retVal.Body.ResetPasswordResult;
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult HAP.UserCard.Web.apiSoap.BeginResetPassword(HAP.UserCard.Web.ResetPasswordRequest request, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginResetPassword(request, callback, asyncState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        public System.IAsyncResult BeginResetPassword(string username, System.AsyncCallback callback, object asyncState) {
-            HAP.UserCard.Web.ResetPasswordRequest inValue = new HAP.UserCard.Web.ResetPasswordRequest();
-            inValue.Body = new HAP.UserCard.Web.ResetPasswordRequestBody();
-            inValue.Body.username = username;
-            return ((HAP.UserCard.Web.apiSoap)(this)).BeginResetPassword(inValue, callback, asyncState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        HAP.UserCard.Web.ResetPasswordResponse HAP.UserCard.Web.apiSoap.EndResetPassword(System.IAsyncResult result) {
-            return base.Channel.EndResetPassword(result);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        public string EndResetPassword(System.IAsyncResult result) {
-            HAP.UserCard.Web.ResetPasswordResponse retVal = ((HAP.UserCard.Web.apiSoap)(this)).EndResetPassword(result);
-            return retVal.Body.ResetPasswordResult;
-        }
-        
-        private System.IAsyncResult OnBeginResetPassword(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            string username = ((string)(inValues[0]));
-            return this.BeginResetPassword(username, callback, asyncState);
-        }
-        
-        private object[] OnEndResetPassword(System.IAsyncResult result) {
-            string retVal = this.EndResetPassword(result);
-            return new object[] {
-                    retVal};
-        }
-        
-        private void OnResetPasswordCompleted(object state) {
-            if ((this.ResetPasswordCompleted != null)) {
-                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.ResetPasswordCompleted(this, new ResetPasswordCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
-            }
-        }
-        
-        public void ResetPasswordAsync(string username) {
-            this.ResetPasswordAsync(username, null);
-        }
-        
-        public void ResetPasswordAsync(string username, object userState) {
-            if ((this.onBeginResetPasswordDelegate == null)) {
-                this.onBeginResetPasswordDelegate = new BeginOperationDelegate(this.OnBeginResetPassword);
-            }
-            if ((this.onEndResetPasswordDelegate == null)) {
-                this.onEndResetPasswordDelegate = new EndOperationDelegate(this.OnEndResetPassword);
-            }
-            if ((this.onResetPasswordCompletedDelegate == null)) {
-                this.onResetPasswordCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnResetPasswordCompleted);
-            }
-            base.InvokeAsync(this.onBeginResetPasswordDelegate, new object[] {
-                        username}, this.onEndResetPasswordDelegate, this.onResetPasswordCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -1591,6 +1234,164 @@ namespace HAP.UserCard.Web {
             base.InvokeAsync(this.onBeginGetFreeSpacePercentageDelegate, new object[] {
                         username,
                         userhome}, this.onEndGetFreeSpacePercentageDelegate, this.onGetFreeSpacePercentageCompletedDelegate, userState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        HAP.UserCard.Web.getMyTicketsResponse HAP.UserCard.Web.apiSoap.getMyTickets(HAP.UserCard.Web.getMyTicketsRequest request) {
+            return base.Channel.getMyTickets(request);
+        }
+        
+        public HAP.UserCard.Web.Ticket[] getMyTickets(string username) {
+            HAP.UserCard.Web.getMyTicketsRequest inValue = new HAP.UserCard.Web.getMyTicketsRequest();
+            inValue.Body = new HAP.UserCard.Web.getMyTicketsRequestBody();
+            inValue.Body.username = username;
+            HAP.UserCard.Web.getMyTicketsResponse retVal = ((HAP.UserCard.Web.apiSoap)(this)).getMyTickets(inValue);
+            return retVal.Body.getMyTicketsResult;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.IAsyncResult HAP.UserCard.Web.apiSoap.BegingetMyTickets(HAP.UserCard.Web.getMyTicketsRequest request, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BegingetMyTickets(request, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public System.IAsyncResult BegingetMyTickets(string username, System.AsyncCallback callback, object asyncState) {
+            HAP.UserCard.Web.getMyTicketsRequest inValue = new HAP.UserCard.Web.getMyTicketsRequest();
+            inValue.Body = new HAP.UserCard.Web.getMyTicketsRequestBody();
+            inValue.Body.username = username;
+            return ((HAP.UserCard.Web.apiSoap)(this)).BegingetMyTickets(inValue, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        HAP.UserCard.Web.getMyTicketsResponse HAP.UserCard.Web.apiSoap.EndgetMyTickets(System.IAsyncResult result) {
+            return base.Channel.EndgetMyTickets(result);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public HAP.UserCard.Web.Ticket[] EndgetMyTickets(System.IAsyncResult result) {
+            HAP.UserCard.Web.getMyTicketsResponse retVal = ((HAP.UserCard.Web.apiSoap)(this)).EndgetMyTickets(result);
+            return retVal.Body.getMyTicketsResult;
+        }
+        
+        private System.IAsyncResult OnBegingetMyTickets(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            string username = ((string)(inValues[0]));
+            return this.BegingetMyTickets(username, callback, asyncState);
+        }
+        
+        private object[] OnEndgetMyTickets(System.IAsyncResult result) {
+            HAP.UserCard.Web.Ticket[] retVal = this.EndgetMyTickets(result);
+            return new object[] {
+                    retVal};
+        }
+        
+        private void OngetMyTicketsCompleted(object state) {
+            if ((this.getMyTicketsCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.getMyTicketsCompleted(this, new getMyTicketsCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void getMyTicketsAsync(string username) {
+            this.getMyTicketsAsync(username, null);
+        }
+        
+        public void getMyTicketsAsync(string username, object userState) {
+            if ((this.onBegingetMyTicketsDelegate == null)) {
+                this.onBegingetMyTicketsDelegate = new BeginOperationDelegate(this.OnBegingetMyTickets);
+            }
+            if ((this.onEndgetMyTicketsDelegate == null)) {
+                this.onEndgetMyTicketsDelegate = new EndOperationDelegate(this.OnEndgetMyTickets);
+            }
+            if ((this.ongetMyTicketsCompletedDelegate == null)) {
+                this.ongetMyTicketsCompletedDelegate = new System.Threading.SendOrPostCallback(this.OngetMyTicketsCompleted);
+            }
+            base.InvokeAsync(this.onBegingetMyTicketsDelegate, new object[] {
+                        username}, this.onEndgetMyTicketsDelegate, this.ongetMyTicketsCompletedDelegate, userState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        HAP.UserCard.Web.setNewTicketResponse HAP.UserCard.Web.apiSoap.setNewTicket(HAP.UserCard.Web.setNewTicketRequest request) {
+            return base.Channel.setNewTicket(request);
+        }
+        
+        public HAP.UserCard.Web.Ticket[] setNewTicket(string subject, string note, string room, string username) {
+            HAP.UserCard.Web.setNewTicketRequest inValue = new HAP.UserCard.Web.setNewTicketRequest();
+            inValue.Body = new HAP.UserCard.Web.setNewTicketRequestBody();
+            inValue.Body.subject = subject;
+            inValue.Body.note = note;
+            inValue.Body.room = room;
+            inValue.Body.username = username;
+            HAP.UserCard.Web.setNewTicketResponse retVal = ((HAP.UserCard.Web.apiSoap)(this)).setNewTicket(inValue);
+            return retVal.Body.setNewTicketResult;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.IAsyncResult HAP.UserCard.Web.apiSoap.BeginsetNewTicket(HAP.UserCard.Web.setNewTicketRequest request, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginsetNewTicket(request, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public System.IAsyncResult BeginsetNewTicket(string subject, string note, string room, string username, System.AsyncCallback callback, object asyncState) {
+            HAP.UserCard.Web.setNewTicketRequest inValue = new HAP.UserCard.Web.setNewTicketRequest();
+            inValue.Body = new HAP.UserCard.Web.setNewTicketRequestBody();
+            inValue.Body.subject = subject;
+            inValue.Body.note = note;
+            inValue.Body.room = room;
+            inValue.Body.username = username;
+            return ((HAP.UserCard.Web.apiSoap)(this)).BeginsetNewTicket(inValue, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        HAP.UserCard.Web.setNewTicketResponse HAP.UserCard.Web.apiSoap.EndsetNewTicket(System.IAsyncResult result) {
+            return base.Channel.EndsetNewTicket(result);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public HAP.UserCard.Web.Ticket[] EndsetNewTicket(System.IAsyncResult result) {
+            HAP.UserCard.Web.setNewTicketResponse retVal = ((HAP.UserCard.Web.apiSoap)(this)).EndsetNewTicket(result);
+            return retVal.Body.setNewTicketResult;
+        }
+        
+        private System.IAsyncResult OnBeginsetNewTicket(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            string subject = ((string)(inValues[0]));
+            string note = ((string)(inValues[1]));
+            string room = ((string)(inValues[2]));
+            string username = ((string)(inValues[3]));
+            return this.BeginsetNewTicket(subject, note, room, username, callback, asyncState);
+        }
+        
+        private object[] OnEndsetNewTicket(System.IAsyncResult result) {
+            HAP.UserCard.Web.Ticket[] retVal = this.EndsetNewTicket(result);
+            return new object[] {
+                    retVal};
+        }
+        
+        private void OnsetNewTicketCompleted(object state) {
+            if ((this.setNewTicketCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.setNewTicketCompleted(this, new setNewTicketCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void setNewTicketAsync(string subject, string note, string room, string username) {
+            this.setNewTicketAsync(subject, note, room, username, null);
+        }
+        
+        public void setNewTicketAsync(string subject, string note, string room, string username, object userState) {
+            if ((this.onBeginsetNewTicketDelegate == null)) {
+                this.onBeginsetNewTicketDelegate = new BeginOperationDelegate(this.OnBeginsetNewTicket);
+            }
+            if ((this.onEndsetNewTicketDelegate == null)) {
+                this.onEndsetNewTicketDelegate = new EndOperationDelegate(this.OnEndsetNewTicket);
+            }
+            if ((this.onsetNewTicketCompletedDelegate == null)) {
+                this.onsetNewTicketCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnsetNewTicketCompleted);
+            }
+            base.InvokeAsync(this.onBeginsetNewTicketDelegate, new object[] {
+                        subject,
+                        note,
+                        room,
+                        username}, this.onEndsetNewTicketDelegate, this.onsetNewTicketCompletedDelegate, userState);
         }
     }
 }
