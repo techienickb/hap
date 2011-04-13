@@ -575,5 +575,10 @@ namespace HAP.UserCard
             c.getMyTicketsCompleted += new EventHandler<Web.getMyTicketsCompletedEventArgs>(c_getMyTicketsCompleted);
             c.getMyTicketsAsync(Environment.UserName);
         }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            nt_Done();
+        }
     }
 }
