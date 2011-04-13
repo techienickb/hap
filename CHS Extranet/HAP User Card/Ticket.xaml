@@ -1,0 +1,62 @@
+﻿<Window x:Class="HAP.UserCard.Ticket" xmlns:u="clr-namespace:HAP.UserCard" 
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{Binding Path=Subject, StringFormat=Ticket: \{0\}}" Height="315" Width="560" Icon="/HAP%20User%20Card;component/usercard.ico" WindowStyle="SingleBorderWindow" WindowStartupLocation="CenterScreen" MinWidth="560" MinHeight="315">
+    <Window.Resources>
+        <u:htmlconverter x:Key="htmlc" />
+        <u:actualwidthboxconverter x:Key="awbc" />
+    </Window.Resources>
+    <Grid Margin="6">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="6" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="6" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+        <TextBlock VerticalAlignment="Top" Text="Status: " HorizontalAlignment="Right" />
+        <TextBlock VerticalAlignment="Top" Text="{Binding Path=Status}" Grid.Column="1" />
+        <TextBlock VerticalAlignment="Top" Text="Priority: " Grid.Column="3" HorizontalAlignment="Right" />
+        <TextBlock VerticalAlignment="Top" Text="{Binding Path=Priority}" Grid.Column="4" />
+        <TextBlock VerticalAlignment="Top" Text="Date Opened: " Grid.Row="1" HorizontalAlignment="Right" />
+        <TextBlock VerticalAlignment="Top" Text="{Binding Path=Date}" Grid.Column="1" Grid.Row="1" />
+        <TextBlock VerticalAlignment="Top" Text="Opened By: " Grid.Row="1" Grid.Column="3" HorizontalAlignment="Right" />
+        <TextBlock VerticalAlignment="Top" Text="{Binding Path=User}" Grid.Column="4" Grid.Row="1" />
+        <ScrollViewer Grid.Row="3" Grid.ColumnSpan="5" BorderThickness="1" Margin="-7,0" BorderBrush="Gray">
+            <ListBox ItemsSource="{Binding Path=Notes}" BorderThickness="0" ScrollViewer.CanContentScroll="False" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBox, AncestorLevel=1}, Path=ActualWidth, Converter={StaticResource awbc}}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="5" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="2*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Date: " HorizontalAlignment="Right" />
+                            <TextBlock Text="{Binding Path=Date}" Grid.Column="1" />
+                            <TextBlock Text="User: " HorizontalAlignment="Right" Grid.Column="3" />
+                            <TextBlock Text="{Binding Path=User}" Grid.Column="4" />
+                            <TextBlock Text="{Binding Path=NoteText, Converter={StaticResource ResourceKey=htmlc}}" Grid.ColumnSpan="5" Grid.Row="1" TextWrapping="Wrap" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </ScrollViewer>
+        <Button Content="Close" Grid.Row="5" Grid.ColumnSpan="5" HorizontalAlignment="Right" Width="75" IsDefault="True" IsCancel="True" Click="Button_Click" />
+        <TextBlock Grid.Row="5" HorizontalAlignment="Stretch" Text="To Update this ticket, please visit the website" VerticalAlignment="Top" Grid.ColumnSpan="2" />
+    </Grid>
+</Window>

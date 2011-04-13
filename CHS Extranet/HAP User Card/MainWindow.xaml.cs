@@ -38,7 +38,7 @@ namespace HAP.UserCard
             Icon.Click += new EventHandler(icon_Click);
             Icon.Visible = true;
             Cursor = controlled.Cursor = Cursors.AppStarting;
-            pass.Visibility = controlled.Visibility = isStudent ? System.Windows.Visibility.Hidden : System.Windows.Visibility.Visible;
+            pass.Visibility = helpdesk.Visibility = controlled.Visibility = isStudent ? System.Windows.Visibility.Hidden : System.Windows.Visibility.Visible;
             Web.apiSoapClient c = new Web.apiSoapClient();
             c.getInitCompleted += new EventHandler<Web.getInitCompletedEventArgs>(c_getInitCompleted);
             c.getInitAsync();
@@ -52,7 +52,7 @@ namespace HAP.UserCard
         void tabs_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (isStudent) return;
-            if (e.Delta > 0 && tabs.SelectedIndex < 2) tabs.SelectedIndex++;
+            if (e.Delta > 0 && tabs.SelectedIndex < 3) tabs.SelectedIndex++;
             else if (tabs.SelectedIndex > 0 && e.Delta < 0) tabs.SelectedIndex--;
 
         }
@@ -94,7 +94,7 @@ namespace HAP.UserCard
 
         void MainWindow_SourceInitialized(object sender, EventArgs e)
         {
-            WindowBehavior.ExtendGlassFrame(this, new Thickness(0, 27, 0, 0));
+            WindowBehavior.ExtendGlassFrame(this, new Thickness(0, 26, 0, 0));
             WindowInteropHelper wih = new WindowInteropHelper(this);
             IntPtr hMonitor = MonitorFromWindow(wih.Handle, MONITOR_DEFAULTTONEAREST);
             MONITORINFOEX monitorInfo = new MONITORINFOEX();
@@ -165,8 +165,12 @@ namespace HAP.UserCard
             name.Text = up.DisplayName;
             email.Text = up.EmailAddress;
             homedrive.Text = string.Format("{0} ({1})", up.HomeDrive, up.HomeDirectory);
-            pass.Visibility = controlled.Visibility = isStudent ? System.Windows.Visibility.Hidden : System.Windows.Visibility.Visible;
-            if (!isStudent) controlled.Visibility = string.IsNullOrEmpty(Properties.Settings.Default.ControlledOU) ? System.Windows.Visibility.Hidden : controlled.Visibility;
+            pass.Visibility = helpdesk.Visibility = controlled.Visibility = isStudent ? System.Windows.Visibility.Hidden : System.Windows.Visibility.Visible;
+            if (!isStudent)
+            {
+                controlled.Visibility = string.IsNullOrEmpty(Properties.Settings.Default.ControlledOU) ? System.Windows.Visibility.Hidden : controlled.Visibility;
+                helpdesk.Visibility = Properties.Settings.Default.ShowHelpDesk ? controlled.Visibility : System.Windows.Visibility.Hidden;
+            }
             departmenttext.Text = dep;
             Cursor = Cursors.Arrow;
         }
@@ -220,6 +224,8 @@ namespace HAP.UserCard
                 {
                     ThreadStart ts = new ThreadStart(LoadControlled);
                     if (!string.IsNullOrEmpty(Properties.Settings.Default.ControlledOU)) new Thread(ts).Start();
+                    c.getMyTicketsCompleted += new EventHandler<Web.getMyTicketsCompletedEventArgs>(c_getMyTicketsCompleted);
+                    c.getMyTicketsAsync(Environment.UserName);
                 }
                 else 
                 {
@@ -237,6 +243,31 @@ namespace HAP.UserCard
             //}
             //catch { Close();  }
         }
+
+        void c_getMyTicketsCompleted(object sender, Web.getMyTicketsCompletedEventArgs e)
+        {
+            if (e.Error != null) Dialog.ShowMessage(e.Error.ToString(), "Error", DialogIcon.Error);
+            else
+            {
+                Dispatcher.BeginInvoke(new EventHandler<Web.getMyTicketsCompletedEventArgs>(c_getMyTicketsCompleted2), sender, e);
+            }
+        }
+
+        void c_getMyTicketsCompleted2(object sender, Web.getMyTicketsCompletedEventArgs e)
+        {
+            if (e.Result.Length > 0)
+            {
+                ticketbox.Visibility = System.Windows.Visibility.Visible;
+                notickets.Visibility = System.Windows.Visibility.Hidden;
+                ticketbox.ItemsSource = e.Result;
+            }
+            else
+            {
+                ticketbox.Visibility = System.Windows.Visibility.Hidden;
+                notickets.Visibility = System.Windows.Visibility.Visible;
+            }
+        }
+
 
         void c_getPhotoCompleted(object sender, Web.getPhotoCompletedEventArgs e)
         {
@@ -491,6 +522,7 @@ namespace HAP.UserCard
         {
             reset.IsEnabled = false;
             reset.IsDefault = tabs.SelectedIndex == 1;
+            newticket.IsDefault = tabs.SelectedIndex == 3;
             username.Text = "";
         }
 
@@ -521,6 +553,27 @@ namespace HAP.UserCard
         {
             us.Interrupt();
             us = null;
+        }
+
+        private void ticketbox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left && ticketbox.SelectedIndex > -1)
+                new Ticket((Web.Ticket)ticketbox.SelectedItem).Show();
+
+        }
+
+        private void newticket_Click(object sender, RoutedEventArgs e)
+        {
+            NewTicket nt = new NewTicket();
+            nt.Done += new Action(nt_Done);
+            nt.Show();
+        }
+
+        void nt_Done()
+        {
+            Web.apiSoapClient c = new Web.apiSoapClient();
+            c.getMyTicketsCompleted += new EventHandler<Web.getMyTicketsCompletedEventArgs>(c_getMyTicketsCompleted);
+            c.getMyTicketsAsync(Environment.UserName);
         }
     }
 }
