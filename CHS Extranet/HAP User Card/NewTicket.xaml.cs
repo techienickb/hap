@@ -39,7 +39,7 @@ namespace HAP.UserCard
         {
             Web.apiSoapClient c = new Web.apiSoapClient();
             c.setNewTicketCompleted += new EventHandler<Web.setNewTicketCompletedEventArgs>(c_setNewTicketCompleted);
-            c.setNewTicketAsync(subject.Text, notetext.Text, room.Text, Environment.UserName);
+            c.setNewTicketAsync(subject.Text, notetext.Text.Replace("\n", "<br />\n"), room.Text, Environment.UserName);
         }
 
         void c_setNewTicketCompleted(object sender, Web.setNewTicketCompletedEventArgs e)
