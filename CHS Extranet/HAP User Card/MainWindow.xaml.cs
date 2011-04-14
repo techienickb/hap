@@ -246,7 +246,7 @@ namespace HAP.UserCard
 
         void c_getMyTicketsCompleted(object sender, Web.getMyTicketsCompletedEventArgs e)
         {
-            if (e.Error != null) Dialog.ShowMessage(e.Error.ToString(), "Error", DialogIcon.Error);
+            if (e.Error != null) MessageBox.Show(e.Error.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             else
             {
                 Dispatcher.BeginInvoke(new EventHandler<Web.getMyTicketsCompletedEventArgs>(c_getMyTicketsCompleted2), sender, e);
@@ -426,7 +426,7 @@ namespace HAP.UserCard
             {
                 new Thread(new ParameterizedThreadStart(doreset)).Start(username.Text);
             }
-            catch (Exception ex) { Dialog.ShowMessage(ex.ToString(), "Error", DialogIcon.Error); }
+            catch (Exception ex) { MessageBox.Show(ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
 
         private void doreset(object o)
@@ -453,7 +453,7 @@ namespace HAP.UserCard
         }
         private void ErrorReset(string error)
         {
-            Dialog.ShowMessage(error, "Error", DialogIcon.Error);
+            MessageBox.Show(error, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             reset.Content = "Reset";
             reset.IsEnabled = true;
         }

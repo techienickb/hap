@@ -13,6 +13,8 @@ using System.Xml;
 using System.Net.Mail;
 using System.Net;
 using System.IO;
+using HAP.AD;
+using System.DirectoryServices;
 
 namespace HAP.Web.UserCard
 {
@@ -65,7 +67,14 @@ namespace HAP.Web.UserCard
             XmlDocument doc = new XmlDocument();
             doc.Load(Server.MapPath("~/App_Data/Tickets.xml"));
             string xpath = string.Format("/Tickets/Ticket[@status!='Fixed']");
-            if (up.IsMemberOf(GroupPrincipal.FindByIdentity(pcontext, "Domain Admins")))
+            GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, "Domain Admins");
+            bool ia = false;
+            try
+            {
+                ia = up.IsMemberOf(gp);
+            }
+            catch { }
+            if (ia)
             {
                 List<Ticket> tickets = new List<Ticket>();
                 foreach (XmlNode node in doc.SelectNodes(xpath))
