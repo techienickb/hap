@@ -202,7 +202,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HAP User Card"
         "ProductCode" = "8:{AFC1DB80-5523-4C11-BE49-225F688DF6C4}"
-        "PackageCode" = "8:{A54CA868-08F5-4363-AC7A-C0F80892A707}"
+        "PackageCode" = "8:{05C04B61-0C04-41DD-97B6-9229D41FE207}"
         "UpgradeCode" = "8:{0CF47738-A77D-412C-BBDE-703A91AFCF26}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -737,7 +737,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_6B0C790E4D0541E08029F29A0E13A882"
             {
-            "SourcePath" = "8:..\\HAP User Card\\obj\\x86\\Debug\\HAP User Card.exe"
+            "SourcePath" = "8:..\\HAP User Card\\obj\\x86\\Release\\HAP User Card.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_E33176755DA74BE6811343A9DFA22840"

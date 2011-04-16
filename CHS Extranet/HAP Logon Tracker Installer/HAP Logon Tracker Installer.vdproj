@@ -15,14 +15,14 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_F47A0FA6B10D42E78AF036853715DA0F"
+        "MsmKey" = "8:_A97940507EC144FD845A505AEDC0B09B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_F47A0FA6B10D42E78AF036853715DA0F"
+        "OwnerKey" = "8:_A97940507EC144FD845A505AEDC0B09B"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -176,7 +176,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HAP Logon Tracker"
         "ProductCode" = "8:{AC36F8E9-0CE4-4785-90F2-7EA7587C69BC}"
-        "PackageCode" = "8:{9437FCCF-ECAF-4DFA-A326-0BEC121A330E}"
+        "PackageCode" = "8:{A5F9B3A2-1A01-4B00-8FF0-50C177756DED}"
         "UpgradeCode" = "8:{41BAC840-CB78-47EF-859E-15CC9CA146CD}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -193,7 +193,7 @@
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
         "ARPURLINFOABOUT" = "8:http://www.nbdev.co.uk"
-        "ARPPRODUCTICON" = "8:_F47A0FA6B10D42E78AF036853715DA0F"
+        "ARPPRODUCTICON" = "8:_A97940507EC144FD845A505AEDC0B09B"
         "ARPIconIndex" = "3:32512"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
@@ -208,68 +208,12 @@
             {
                 "Keys"
                 {
-                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_26B08B62678F40A89F9077573EA68DEB"
-                    {
-                    "Name" = "8:Software"
-                    "Condition" = "8:"
-                    "AlwaysCreate" = "11:FALSE"
-                    "DeleteAtUninstall" = "11:FALSE"
-                    "Transitive" = "11:FALSE"
-                        "Keys"
-                        {
-                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_54B5BB08141D43ED840B52F307B7A0F1"
-                            {
-                            "Name" = "8:[Manufacturer]"
-                            "Condition" = "8:"
-                            "AlwaysCreate" = "11:FALSE"
-                            "DeleteAtUninstall" = "11:FALSE"
-                            "Transitive" = "11:FALSE"
-                                "Keys"
-                                {
-                                }
-                                "Values"
-                                {
-                                }
-                            }
-                        }
-                        "Values"
-                        {
-                        }
-                    }
                 }
             }
             "HKCU"
             {
                 "Keys"
                 {
-                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_200D8EB3463542CBBE0E9BB67F988F76"
-                    {
-                    "Name" = "8:Software"
-                    "Condition" = "8:"
-                    "AlwaysCreate" = "11:FALSE"
-                    "DeleteAtUninstall" = "11:FALSE"
-                    "Transitive" = "11:FALSE"
-                        "Keys"
-                        {
-                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_10E87A3C340D45F59D3630E9899C79D0"
-                            {
-                            "Name" = "8:[Manufacturer]"
-                            "Condition" = "8:"
-                            "AlwaysCreate" = "11:FALSE"
-                            "DeleteAtUninstall" = "11:FALSE"
-                            "Transitive" = "11:FALSE"
-                                "Keys"
-                                {
-                                }
-                                "Values"
-                                {
-                                }
-                            }
-                        }
-                        "Values"
-                        {
-                        }
-                    }
                 }
             }
             "HKCR"
@@ -695,9 +639,9 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_F47A0FA6B10D42E78AF036853715DA0F"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_A97940507EC144FD845A505AEDC0B09B"
             {
-            "SourcePath" = "8:..\\HAP Logon Tracker\\obj\\x86\\Debug\\HAP Logon Tracker.exe"
+            "SourcePath" = "8:..\\HAP Logon Tracker\\obj\\x86\\Release\\HAP Logon Tracker.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_58116FF90CDA4CF08D407CF0B83FF282"
