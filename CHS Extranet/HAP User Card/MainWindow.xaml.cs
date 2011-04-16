@@ -32,18 +32,18 @@ namespace HAP.UserCard
             SourceInitialized += new EventHandler(MainWindow_SourceInitialized);
             tabs.MouseWheel += new MouseWheelEventHandler(tabs_MouseWheel);
             Hide();
-            Icon = new System.Windows.Forms.NotifyIcon();
-            Icon.Icon = new System.Drawing.Icon("usercardi.ico", new System.Drawing.Size(16, 16));
-            Icon.Text = this.Title;
-            Icon.Click += new EventHandler(icon_Click);
-            Icon.Visible = true;
+            icon = new System.Windows.Forms.NotifyIcon();
+            icon.Icon = new System.Drawing.Icon("usercardi.ico", new System.Drawing.Size(16, 16));
+            icon.Text = this.Title;
+            icon.Click += new EventHandler(icon_Click);
+            icon.Visible = true;
             Cursor = controlled.Cursor = Cursors.AppStarting;
             pass.Visibility = helpdesk.Visibility = controlled.Visibility = isStudent ? System.Windows.Visibility.Hidden : System.Windows.Visibility.Visible;
             Web.apiSoapClient c = new Web.apiSoapClient();
             c.getInitCompleted += new EventHandler<Web.getInitCompletedEventArgs>(c_getInitCompleted);
             c.getInitAsync();
         }
-        public System.Windows.Forms.NotifyIcon Icon { get; private set; }
+        public System.Windows.Forms.NotifyIcon icon { get; private set; }
         void icon_Click(object sender, EventArgs e)
         {
             Show();
@@ -182,7 +182,6 @@ namespace HAP.UserCard
         string adpw = "";
         string sgn = "";
         string hd = "";
-        string hdd = "";
         void doInit(object data)
         {
             //try
