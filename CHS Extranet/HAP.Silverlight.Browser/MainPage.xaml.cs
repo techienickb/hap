@@ -25,6 +25,7 @@ namespace HAP.Silverlight.Browser
             InitializeComponent();
             loaded = false;
             activeItems = new List<BrowserItem>();
+            RememberActive = null;
             Filter = new List<string>();
             ViewMode = Browser.ViewMode.Tile;
             CurrentItem = new BItem(service.BType.Root, "My School Computer", service.AccessControlActions.None);
@@ -191,12 +192,12 @@ namespace HAP.Silverlight.Browser
             string p = HtmlPage.Document.DocumentUri.AbsoluteUri;
             if (p.Contains('#'))
             {
-                p = p.Remove(0, p.IndexOf('#') + 1);
+                p = p.Replace("%5C", "\\").Replace("%20", " ").Remove(0, p.IndexOf('#') + 1);
                 if (p.Length == 0) loaded = true;
                 else
                 {
-                    string s = p.Split(new char[] { '/' })[0];
-                    if (p.Split(new char[] { '/' }).Length > 1) GetTreeNode(s, ((HAPTreeNode)treeView1.Items[0]).Items).IsExpanded = true;
+                    string s = p.Split(new char[] { '\\' })[0];
+                    if (p.Split(new char[] { '\\' }).Length > 1) GetTreeNode(s, ((HAPTreeNode)treeView1.Items[0]).Items).IsExpanded = true;
                     else
                     {
                         loaded = true;
@@ -253,7 +254,7 @@ namespace HAP.Silverlight.Browser
             tempnode = ((HAPTreeNode)treeView1.SelectedItem);
             tempnode.Items.Clear();
         }
-
+        public string RememberActive { get; set; }
         private void soap_ListCompleted(object sender, ListCompletedEventArgs e)
         {
             Dispatcher.BeginInvoke(new Action(ClearItems));
@@ -284,10 +285,12 @@ namespace HAP.Silverlight.Browser
                     //else 
                     item.DirectoryChange += new ChangeDirectoryHandler(item_DirectoryChange);
                     if (item.Data.BType == service.BType.Folder && item.Data.Name != "..") Dispatcher.BeginInvoke(new UpdateTree(UpdateTree), item.Data);
+                    if (RememberActive != null) item.Active = item.Data.Path == RememberActive;
                     Dispatcher.BeginInvoke(new AddItemHandler(AddItem), item);
                 }
             }
             reload = false;
+            RememberActive = null;
         }
 
         #endregion
@@ -434,14 +437,14 @@ namespace HAP.Silverlight.Browser
             if (!loaded)
             {
                 string p = HtmlPage.Document.DocumentUri.AbsoluteUri;
-                p = p.Replace("%20", " ").Remove(0, p.IndexOf('#') + 1);
-                p = p.Remove(0, tempnode.Data.Path.Remove(0, 20).Length + 1);
-                if (p.Split(new char[] { '/' }).Length > 1)
-                    GetTreeNode(tempnode.Data.Path + "/" + p.Split(new char[] { '/' })[0], tempnode.Items).IsExpanded = true;
+                p = p.Replace("%20", " ").Replace("%5C", "\\").Remove(0, p.IndexOf('#') + 1);
+                p = p.Remove(0, tempnode.Data.Path.Length + 1);
+                if (p.Split(new char[] { '\\' }).Length > 1)
+                    GetTreeNode(tempnode.Data.Path + "\\" + p.Split(new char[] { '\\' })[0], tempnode.Items).IsExpanded = true;
                 else
                 {
                     loaded = true;
-                    SelectUpdatedNode(tempnode.Data.Path + "/" + p.Split(new char[] { '/' })[0]);
+                    Dispatcher.BeginInvoke(new Action<string>(SelectUpdatedNode), tempnode.Data.Path + "\\" + p.Split(new char[] { '\\' })[0]);
                 }
             }
             reload = false;
@@ -497,8 +500,7 @@ namespace HAP.Silverlight.Browser
 
         private void back_Click(object sender, RoutedEventArgs e)
         {
-            DateTime expireDate = DateTime.Now.AddDays(1);
-            string newCookie = "mycompv=html;path=/;expires=" + expireDate.ToString("R");
+            string newCookie = "mycompv=html;path=/";
             HtmlPage.Document.SetProperty("cookie", newCookie);
             HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri, "mycomputer.aspx"));
         }
@@ -575,41 +577,11 @@ namespace HAP.Silverlight.Browser
         private void newfolder_Click(object sender, RoutedEventArgs e)
         {
             if (sender == RightClickFolder) rightclick = true;
-            item_ReSort(this, true);
             int count = 0;
             foreach (BrowserItem i in contentPan.Children.Where(I => ((BrowserItem)I).Data.BType == service.BType.Folder))
                 if (i.Data.Name.StartsWith("New Folder")) count++;
-            BItem bitem = new BItem(BType.Folder, "New Folder" + (count == 0 ? "" : " " + (count + 1)), AccessControlActions.Change);
-            bitem.Path = CurrentItem.Path + "/New Folder" + (count == 0 ? "" : " " + (count + 1));
-            bitem.Icon = "images/icons/Newfolder.png";
-            bitem.Type = "File Folder";
-            BrowserItem item = new BrowserItem(bitem);
-            item.Activate += new EventHandler(item_Activate);
-            item.MouseEnter += new MouseEventHandler(item_MouseEnter);
-            if (CurrentItem.AccessControl == service.AccessControlActions.Change)
-            {
-                item.DragEnter += new DragEventHandler(item_DragEnter);
-                item.DragLeave += new DragEventHandler(item_DragLeave);
-                item.MouseLeftButtonDown += new MouseButtonEventHandler(item_MouseLeftButtonDown);
-                item.KeyUp += new KeyEventHandler(item_KeyUp);
-            }
-            item.MouseLeave += new MouseEventHandler(item_MouseLeave);
-            item.ReSort += new ResortHandler(item_ReSort);
-            item.DirectoryChange += new ChangeDirectoryHandler(item_DirectoryChange);
-            if (item.Data.BType == service.BType.Folder && item.Data.Name != "..") UpdateTree(item.Data);
-            contentPan.Children.Add(item);
-            scroller.ScrollIntoView(item);
-            item.Mode = ViewMode;
-            item.Active = true;
-            item.IsRename = true;
-            foreach (BrowserItem i in activeItems)
-                if (i.IsRename)
-                    if (i.Save(false) == 0) i.Active = false;
-                    else return;
-                else i.Active = false;
-            activeItems.Clear();
-            activeItems.Add(item);
-            soap.NewFolderAsync(CurrentItem.Path, bitem.Name);
+            RememberActive = CurrentItem.Path + "\\New Folder" + (count == 0 ? "" : " " + (count + 1));
+            soap.NewFolderAsync(CurrentItem.Path, "New Folder" + (count == 0 ? "" : " " + (count + 1)));
         }
 
         void soap_NewFolderCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
@@ -619,11 +591,17 @@ namespace HAP.Silverlight.Browser
 
         void soap_NewFolderCompleted2(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
         {
-            if (e.Error == null)
+            if (e.Error != null)
             {
                 contentPan.Children.Remove(activeItems[0]);
                 activeItems.Clear();
-                MessageBox.Show(e.Error.ToString());
+                MessageBox.Show("Error Creating the New Folder");
+            }
+            else
+            {
+                reload = true;
+                ((HAPTreeNode)treeView1.SelectedItem).IsExpanded = true;
+                soap.ListAsync(CurrentItem.Path);
             }
         }
 
@@ -635,7 +613,7 @@ namespace HAP.Silverlight.Browser
         {
             try
             {
-                HAPTreeNode item = GetTreeNode(e.Path, ((TreeViewItem)treeView1.Items[0]).Items);
+                HAPTreeNode item = GetTreeNode(e.Path, ((HAPTreeNode)treeView1.Items[0]).Items);
                 ((HAPTreeNode)item.Parent).Items.Remove(item);
             }
             catch { }
@@ -645,7 +623,7 @@ namespace HAP.Silverlight.Browser
         {
             try
             {
-                HAPTreeNode item = GetTreeNode(e.Path, ((TreeViewItem)treeView1.Items[0]).Items);
+                HAPTreeNode item = GetTreeNode(e.Path, ((HAPTreeNode)treeView1.Items[0]).Items);
                 StackPanel sp = item.Header as StackPanel;
                 TextBlock tb = sp.Children[1] as TextBlock;
                 tb.Text = e.Name;
@@ -779,8 +757,14 @@ namespace HAP.Silverlight.Browser
                     files.Add(item);
                 files.Sort();
                 contentPan.Children.Clear();
+                Dispatcher.BeginInvoke(new Action(ClearNode));
                 foreach (BrowserItem item in drives) contentPan.Children.Add(item);
-                foreach (BrowserItem item in folders) contentPan.Children.Add(item);
+                foreach (BrowserItem item in folders)
+                {
+                    contentPan.Children.Add(item);
+                    Dispatcher.BeginInvoke(new UpdateTree(UpdateTree), item.Data);
+                    Dispatcher.BeginInvoke(new AddItemHandler(AddItem), item);
+                }
                 foreach (BrowserItem item in files) contentPan.Children.Add(item);
                 if (sender is BrowserItem) scroller.ScrollIntoView((BrowserItem)sender);
             }
@@ -903,7 +887,7 @@ namespace HAP.Silverlight.Browser
         private void RightClickDownload_Click(object sender, RoutedEventArgs e)
         {
             rightclick = true;
-            HtmlPage.PopupWindow(new Uri(HtmlPage.Document.DocumentUri, activeItems[0].Data.Path), "_download", new HtmlPopupWindowOptions());
+            HtmlPage.PopupWindow(new Uri(HtmlPage.Document.DocumentUri, activeItems[0].Data.Source.Download), "_download", new HtmlPopupWindowOptions());
         }
 
         private void RightClickZIP_Click(object sender, RoutedEventArgs e)

@@ -179,7 +179,7 @@ namespace HAP.Silverlight.Browser
             e.Handled = true;
             Active = true;
             if (Activate != null) Activate(this, new EventArgs());
-            if ((DateTime.Now.Ticks - LastTicks) < 2310000)
+            if ((DateTime.Now.Ticks - LastTicks) < 2400000)
             {
                 if (_data.BType == service.BType.File) HtmlPage.PopupWindow(new Uri(HtmlPage.Document.DocumentUri, Data.Source.Download), "_hapdownload", new HtmlPopupWindowOptions());
                 else if (DirectoryChange != null) DirectoryChange(this, this._data);
@@ -375,7 +375,6 @@ namespace HAP.Silverlight.Browser
             soap.DeleteCompleted += new EventHandler<System.ComponentModel.AsyncCompletedEventArgs>(soap_DeleteCompleted);
             if (MessageBox.Show("Are you sure you want to delete\n" + _data.Name + "?", "Question", MessageBoxButton.OKCancel) == MessageBoxResult.OK) soap.DeleteAsync(_data.Path);
             return 0;
-            //so some saving stuff;
         }
 
         void soap_DeleteCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
@@ -386,7 +385,7 @@ namespace HAP.Silverlight.Browser
 
         private void soap_DeleteCompleted2(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
         {
-            if (e.Error != null) MessageBox.Show(e.Error.ToString());
+            if (e.Error != null) MessageBox.Show("I can't delete this " + Data.Type);
             else
             {
                 _data.Delete();

@@ -66,7 +66,7 @@ namespace HAP.Silverlight.Browser
         void soap_UnzipCompleted2(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
         {
             busyindicator.IsBusy = false;
-            if (e.Error != null)
+            if (e.Error == null)
             {
                 if (Completed != null) Completed(this, new RoutedEventArgs());
                 this.DialogResult = true;
