@@ -179,11 +179,8 @@ namespace HAP.Web
             {
                 DirectoryInfo file = new DirectoryInfo(path);
 
-                if (!overwrite)
-                {
-                    if (Directory.Exists(newpath)) return new CBFile[] { new CBFile( new DirectoryInfo(newpath), unc, userhome) };
-                }
-                else Directory.Delete(newpath);
+                if (!overwrite && Directory.Exists(newpath)) return new CBFile[] { new CBFile( new DirectoryInfo(newpath), unc, userhome) };
+                else if (Directory.Exists(newpath)) Directory.Delete(newpath);
                 file.MoveTo(newpath);
             }
             return new CBFile[] { };
@@ -193,7 +190,8 @@ namespace HAP.Web
         [WebMethod]
         public void Delete(string path)
         {
-            path = Converter.DriveToUNC(path.Remove(1, 1));
+            UNCPath unc; string userhome;
+            path = Converter.DriveToUNC(path, out unc, out userhome);
             if (File.Exists(path)) File.Delete(path);
             else Directory.Delete(path, true);
         }
@@ -202,7 +200,8 @@ namespace HAP.Web
         [WebMethod]
         public void NewFolder(string basepath, string foldername)
         {
-            basepath = Converter.DriveToUNC(basepath);
+            UNCPath unc; string userhome;
+            basepath = Converter.DriveToUNC(basepath, out unc, out userhome);
             Directory.CreateDirectory(Path.Combine(basepath, foldername));
         }
 
@@ -210,7 +209,9 @@ namespace HAP.Web
         [WebMethod]
         public void ZIP(string basepath, string filename, params string[] filepaths)
         {
-            string path = Path.Combine(Converter.DriveToUNC(basepath), filename);
+            UNCPath unc; string userhome;
+            basepath = Converter.DriveToUNC(basepath, out unc, out userhome);
+            string path = Path.Combine(basepath, filename);
             ZipFile zf;
             if (File.Exists(Path.Combine(basepath, filename)))
                 zf = new ZipFile(path);
@@ -218,7 +219,7 @@ namespace HAP.Web
             zf.BeginUpdate();
             foreach (string s in filepaths)
             {
-                string p = Converter.DriveToUNC(s);
+                string p = Converter.DriveToUNC(s, out unc, out userhome);
                 if (File.Exists(p))
                     zf.Add(p);
                 else if (Directory.Exists(p))
@@ -232,8 +233,9 @@ namespace HAP.Web
         [WebMethod]
         public void Unzip(string zipfile, string extractfolder)
         {
-            string path = Converter.DriveToUNC(zipfile);
-            string c = Converter.DriveToUNC(extractfolder);
+            UNCPath unc; string userhome;
+            string path = Converter.DriveToUNC(zipfile, out unc, out userhome);
+            string c = Converter.DriveToUNC(extractfolder, out unc, out userhome);
             if (!Directory.Exists(c)) Directory.CreateDirectory(c);
             FastZip fastZip = new FastZip();
             fastZip.ExtractZip(path, c, "");

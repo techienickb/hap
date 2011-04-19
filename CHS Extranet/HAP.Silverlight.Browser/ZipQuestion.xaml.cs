@@ -44,7 +44,7 @@ namespace HAP.Silverlight.Browser
 
         void soap_ZIPCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
         {
-            Dispatcher.BeginInvoke(new UploadStringCompletedEventHandler(soap_ZIPCompleted2), sender, e);
+            Dispatcher.BeginInvoke(new EventHandler<System.ComponentModel.AsyncCompletedEventArgs>(soap_ZIPCompleted2), sender, e);
         }
 
         private void soap_ZIPCompleted2(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
