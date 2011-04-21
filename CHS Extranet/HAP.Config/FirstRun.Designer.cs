@@ -28,9 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FirstRun));
             this.wiz = new AeroWizard.WizardControl();
             this.wizardPage1 = new AeroWizard.WizardPage();
+            this.rmcc3 = new System.Windows.Forms.CheckBox();
             this.base_StudentPhotoEnable = new System.Windows.Forms.CheckBox();
             this.base_StudentPhoto = new System.Windows.Forms.TextBox();
             this.base_SMTPPassword = new System.Windows.Forms.TextBox();
@@ -39,7 +41,6 @@
             this.base_SMTPSSL = new System.Windows.Forms.CheckBox();
             this.base_SMTPPort = new System.Windows.Forms.TextBox();
             this.base_SMTPAddress = new System.Windows.Forms.TextBox();
-            this.base_StudentEmailFormat = new System.Windows.Forms.TextBox();
             this.base_AdminUsername = new System.Windows.Forms.TextBox();
             this.base_AdminEmail = new System.Windows.Forms.TextBox();
             this.base_Code = new System.Windows.Forms.TextBox();
@@ -49,7 +50,6 @@
             this.label9 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -72,7 +72,13 @@
             this.ad_Username = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.wizardPage3 = new AeroWizard.WizardPage();
+            this.label27 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
             this.wizardPage7 = new AeroWizard.WizardPage();
+            this.tracker_sqlconstringlink = new System.Windows.Forms.LinkLabel();
+            this.tracker_sqlconstring = new System.Windows.Forms.TextBox();
+            this.tracker_provider = new System.Windows.Forms.ComboBox();
+            this.label29 = new System.Windows.Forms.Label();
             this.trackeroverride = new System.Windows.Forms.TextBox();
             this.label28 = new System.Windows.Forms.Label();
             this.label26 = new System.Windows.Forms.Label();
@@ -89,12 +95,15 @@
             this.UNC = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.UNCEnableReadTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.UNCEnableWriteTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.enablemove = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.tabPage11 = new System.Windows.Forms.TabPage();
             this.uploadfilters = new System.Windows.Forms.DataGridView();
             this.FilterName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Filter = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FilterEnableFor = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.quotaservers = new System.Windows.Forms.DataGridView();
             this.panel3 = new System.Windows.Forms.Panel();
             this.label21 = new System.Windows.Forms.Label();
             this.mycomputer_exext = new System.Windows.Forms.TextBox();
@@ -133,8 +142,11 @@
             this.label19 = new System.Windows.Forms.Label();
             this.bs_maxdays = new System.Windows.Forms.NumericUpDown();
             this.folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
-            this.label20 = new System.Windows.Forms.Label();
-            this.label27 = new System.Windows.Forms.Label();
+            this.quotaexpression = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.quotaserver = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.quotadrive = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.wiz)).BeginInit();
             this.wizardPage1.SuspendLayout();
             this.wizardPage2.SuspendLayout();
@@ -150,6 +162,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.uncpaths)).BeginInit();
             this.tabPage11.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.uploadfilters)).BeginInit();
+            this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.quotaservers)).BeginInit();
             this.panel3.SuspendLayout();
             this.wizardPage5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.proxyport)).BeginInit();
@@ -164,6 +178,7 @@
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bs_max)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bs_maxdays)).BeginInit();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // wiz
@@ -186,6 +201,7 @@
             // 
             // wizardPage1
             // 
+            this.wizardPage1.Controls.Add(this.rmcc3);
             this.wizardPage1.Controls.Add(this.base_StudentPhotoEnable);
             this.wizardPage1.Controls.Add(this.base_StudentPhoto);
             this.wizardPage1.Controls.Add(this.base_SMTPPassword);
@@ -194,7 +210,6 @@
             this.wizardPage1.Controls.Add(this.base_SMTPSSL);
             this.wizardPage1.Controls.Add(this.base_SMTPPort);
             this.wizardPage1.Controls.Add(this.base_SMTPAddress);
-            this.wizardPage1.Controls.Add(this.base_StudentEmailFormat);
             this.wizardPage1.Controls.Add(this.base_AdminUsername);
             this.wizardPage1.Controls.Add(this.base_AdminEmail);
             this.wizardPage1.Controls.Add(this.base_Code);
@@ -204,7 +219,6 @@
             this.wizardPage1.Controls.Add(this.label9);
             this.wizardPage1.Controls.Add(this.label7);
             this.wizardPage1.Controls.Add(this.label6);
-            this.wizardPage1.Controls.Add(this.label5);
             this.wizardPage1.Controls.Add(this.label4);
             this.wizardPage1.Controls.Add(this.label3);
             this.wizardPage1.Controls.Add(this.label2);
@@ -216,10 +230,20 @@
             this.wizardPage1.TabIndex = 0;
             this.wizardPage1.Text = "Base Settings";
             // 
+            // rmcc3
+            // 
+            this.rmcc3.AutoSize = true;
+            this.rmcc3.Location = new System.Drawing.Point(352, 53);
+            this.rmcc3.Name = "rmcc3";
+            this.rmcc3.Size = new System.Drawing.Size(69, 19);
+            this.rmcc3.TabIndex = 49;
+            this.rmcc3.Text = "RM CC3";
+            this.rmcc3.UseVisualStyleBackColor = true;
+            // 
             // base_StudentPhotoEnable
             // 
             this.base_StudentPhotoEnable.AutoSize = true;
-            this.base_StudentPhotoEnable.Location = new System.Drawing.Point(154, 297);
+            this.base_StudentPhotoEnable.Location = new System.Drawing.Point(154, 271);
             this.base_StudentPhotoEnable.Name = "base_StudentPhotoEnable";
             this.base_StudentPhotoEnable.Size = new System.Drawing.Size(15, 14);
             this.base_StudentPhotoEnable.TabIndex = 48;
@@ -229,7 +253,7 @@
             // base_StudentPhoto
             // 
             this.base_StudentPhoto.Enabled = false;
-            this.base_StudentPhoto.Location = new System.Drawing.Point(310, 292);
+            this.base_StudentPhoto.Location = new System.Drawing.Point(310, 266);
             this.base_StudentPhoto.Name = "base_StudentPhoto";
             this.base_StudentPhoto.Size = new System.Drawing.Size(207, 23);
             this.base_StudentPhoto.TabIndex = 47;
@@ -237,7 +261,7 @@
             // base_SMTPPassword
             // 
             this.base_SMTPPassword.Enabled = false;
-            this.base_SMTPPassword.Location = new System.Drawing.Point(310, 264);
+            this.base_SMTPPassword.Location = new System.Drawing.Point(310, 238);
             this.base_SMTPPassword.Name = "base_SMTPPassword";
             this.base_SMTPPassword.Size = new System.Drawing.Size(100, 23);
             this.base_SMTPPassword.TabIndex = 46;
@@ -246,7 +270,7 @@
             // base_SMTPUsername
             // 
             this.base_SMTPUsername.Enabled = false;
-            this.base_SMTPUsername.Location = new System.Drawing.Point(310, 236);
+            this.base_SMTPUsername.Location = new System.Drawing.Point(310, 210);
             this.base_SMTPUsername.Name = "base_SMTPUsername";
             this.base_SMTPUsername.Size = new System.Drawing.Size(100, 23);
             this.base_SMTPUsername.TabIndex = 45;
@@ -254,7 +278,7 @@
             // base_SMTPAuth
             // 
             this.base_SMTPAuth.AutoSize = true;
-            this.base_SMTPAuth.Location = new System.Drawing.Point(180, 255);
+            this.base_SMTPAuth.Location = new System.Drawing.Point(180, 229);
             this.base_SMTPAuth.Name = "base_SMTPAuth";
             this.base_SMTPAuth.Size = new System.Drawing.Size(15, 14);
             this.base_SMTPAuth.TabIndex = 44;
@@ -265,7 +289,7 @@
             // 
             this.base_SMTPSSL.AutoSize = true;
             this.base_SMTPSSL.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.base_SMTPSSL.Location = new System.Drawing.Point(237, 216);
+            this.base_SMTPSSL.Location = new System.Drawing.Point(237, 190);
             this.base_SMTPSSL.Name = "base_SMTPSSL";
             this.base_SMTPSSL.Size = new System.Drawing.Size(81, 19);
             this.base_SMTPSSL.TabIndex = 42;
@@ -275,7 +299,7 @@
             // 
             // base_SMTPPort
             // 
-            this.base_SMTPPort.Location = new System.Drawing.Point(310, 189);
+            this.base_SMTPPort.Location = new System.Drawing.Point(310, 163);
             this.base_SMTPPort.Name = "base_SMTPPort";
             this.base_SMTPPort.Size = new System.Drawing.Size(36, 23);
             this.base_SMTPPort.TabIndex = 41;
@@ -283,17 +307,10 @@
             // 
             // base_SMTPAddress
             // 
-            this.base_SMTPAddress.Location = new System.Drawing.Point(310, 161);
+            this.base_SMTPAddress.Location = new System.Drawing.Point(310, 135);
             this.base_SMTPAddress.Name = "base_SMTPAddress";
             this.base_SMTPAddress.Size = new System.Drawing.Size(207, 23);
             this.base_SMTPAddress.TabIndex = 40;
-            // 
-            // base_StudentEmailFormat
-            // 
-            this.base_StudentEmailFormat.Location = new System.Drawing.Point(310, 134);
-            this.base_StudentEmailFormat.Name = "base_StudentEmailFormat";
-            this.base_StudentEmailFormat.Size = new System.Drawing.Size(268, 23);
-            this.base_StudentEmailFormat.TabIndex = 39;
             // 
             // base_AdminUsername
             // 
@@ -316,6 +333,7 @@
             this.base_Code.Name = "base_Code";
             this.base_Code.Size = new System.Drawing.Size(36, 23);
             this.base_Code.TabIndex = 36;
+            this.base_Code.KeyUp += new System.Windows.Forms.KeyEventHandler(this.base_Code_KeyUp);
             // 
             // base_Name
             // 
@@ -327,7 +345,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(170, 295);
+            this.label11.Location = new System.Drawing.Point(170, 269);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(131, 15);
             this.label11.TabIndex = 34;
@@ -336,7 +354,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(207, 267);
+            this.label10.Location = new System.Drawing.Point(207, 241);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(94, 15);
             this.label10.TabIndex = 33;
@@ -345,7 +363,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(203, 239);
+            this.label9.Location = new System.Drawing.Point(203, 213);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(97, 15);
             this.label9.TabIndex = 32;
@@ -354,7 +372,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(235, 192);
+            this.label7.Location = new System.Drawing.Point(235, 166);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(66, 15);
             this.label7.TabIndex = 31;
@@ -363,20 +381,11 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(175, 164);
+            this.label6.Location = new System.Drawing.Point(175, 138);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(121, 15);
             this.label6.TabIndex = 30;
             this.label6.Text = "SMTP Server Address:";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(175, 137);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(124, 15);
-            this.label5.TabIndex = 29;
-            this.label5.Text = "Student Email Format:";
             // 
             // label4
             // 
@@ -416,7 +425,7 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Location = new System.Drawing.Point(187, 241);
+            this.groupBox1.Location = new System.Drawing.Point(187, 215);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(91, 35);
             this.groupBox1.TabIndex = 43;
@@ -578,8 +587,33 @@
             this.wizardPage3.TabIndex = 2;
             this.wizardPage3.Text = "Home Page Links";
             // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.label27.Location = new System.Drawing.Point(28, 43);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(478, 90);
+            this.label27.TabIndex = 1;
+            this.label27.Text = resources.GetString("label27.Text");
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label20.Location = new System.Drawing.Point(15, 13);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(664, 21);
+            this.label20.TabIndex = 1;
+            this.label20.Text = "Please Edit the Web.Config File Directly for this Part of the Config After Comple" +
+    "ting this Wizard";
+            // 
             // wizardPage7
             // 
+            this.wizardPage7.Controls.Add(this.tracker_sqlconstringlink);
+            this.wizardPage7.Controls.Add(this.tracker_sqlconstring);
+            this.wizardPage7.Controls.Add(this.tracker_provider);
+            this.wizardPage7.Controls.Add(this.label29);
             this.wizardPage7.Controls.Add(this.trackeroverride);
             this.wizardPage7.Controls.Add(this.label28);
             this.wizardPage7.Controls.Add(this.label26);
@@ -589,21 +623,65 @@
             this.wizardPage7.Controls.Add(this.trackermaxstudent);
             this.wizardPage7.Name = "wizardPage7";
             this.wizardPage7.NextPage = this.wizardPage4;
-            this.wizardPage7.Size = new System.Drawing.Size(737, 352);
+            this.wizardPage7.Size = new System.Drawing.Size(737, 350);
             this.wizardPage7.TabIndex = 6;
             this.wizardPage7.Text = "Logon Tracker";
+            // 
+            // tracker_sqlconstringlink
+            // 
+            this.tracker_sqlconstringlink.AutoSize = true;
+            this.tracker_sqlconstringlink.Location = new System.Drawing.Point(139, 142);
+            this.tracker_sqlconstringlink.Name = "tracker_sqlconstringlink";
+            this.tracker_sqlconstringlink.Size = new System.Drawing.Size(165, 15);
+            this.tracker_sqlconstringlink.TabIndex = 1;
+            this.tracker_sqlconstringlink.TabStop = true;
+            this.tracker_sqlconstringlink.Text = "SQL Server Connection String:";
+            this.tracker_sqlconstringlink.Visible = false;
+            this.tracker_sqlconstringlink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.tracker_sqlconstringlink_LinkClicked);
+            // 
+            // tracker_sqlconstring
+            // 
+            this.tracker_sqlconstring.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tracker_sqlconstring.Location = new System.Drawing.Point(310, 139);
+            this.tracker_sqlconstring.Name = "tracker_sqlconstring";
+            this.tracker_sqlconstring.Size = new System.Drawing.Size(407, 23);
+            this.tracker_sqlconstring.TabIndex = 41;
+            this.tracker_sqlconstring.Visible = false;
+            // 
+            // tracker_provider
+            // 
+            this.tracker_provider.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.tracker_provider.FormattingEnabled = true;
+            this.tracker_provider.Items.AddRange(new object[] {
+            "Microsoft SQL Server",
+            "XML"});
+            this.tracker_provider.Location = new System.Drawing.Point(310, 110);
+            this.tracker_provider.Name = "tracker_provider";
+            this.tracker_provider.Size = new System.Drawing.Size(165, 23);
+            this.tracker_provider.TabIndex = 40;
+            this.tracker_provider.SelectedIndexChanged += new System.EventHandler(this.tracker_provider_SelectedIndexChanged);
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(250, 113);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(54, 15);
+            this.label29.TabIndex = 1;
+            this.label29.Text = "Provider:";
             // 
             // trackeroverride
             // 
             this.trackeroverride.Location = new System.Drawing.Point(310, 81);
             this.trackeroverride.Name = "trackeroverride";
-            this.trackeroverride.Size = new System.Drawing.Size(268, 23);
+            this.trackeroverride.Size = new System.Drawing.Size(121, 23);
             this.trackeroverride.TabIndex = 39;
             // 
             // label28
             // 
             this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(181, 84);
+            this.label28.Location = new System.Drawing.Point(179, 84);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(125, 15);
             this.label28.TabIndex = 38;
@@ -666,7 +744,7 @@
             this.wizardPage4.Controls.Add(this.panel3);
             this.wizardPage4.Name = "wizardPage4";
             this.wizardPage4.NextPage = this.wizardPage5;
-            this.wizardPage4.Size = new System.Drawing.Size(737, 352);
+            this.wizardPage4.Size = new System.Drawing.Size(737, 350);
             this.wizardPage4.TabIndex = 3;
             this.wizardPage4.Text = "My Computer";
             // 
@@ -674,11 +752,12 @@
             // 
             this.tabControl3.Controls.Add(this.tabPage10);
             this.tabControl3.Controls.Add(this.tabPage11);
+            this.tabControl3.Controls.Add(this.tabPage1);
             this.tabControl3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl3.Location = new System.Drawing.Point(0, 52);
             this.tabControl3.Name = "tabControl3";
             this.tabControl3.SelectedIndex = 0;
-            this.tabControl3.Size = new System.Drawing.Size(737, 300);
+            this.tabControl3.Size = new System.Drawing.Size(737, 298);
             this.tabControl3.TabIndex = 3;
             // 
             // tabPage10
@@ -687,7 +766,7 @@
             this.tabPage10.Location = new System.Drawing.Point(4, 24);
             this.tabPage10.Name = "tabPage10";
             this.tabPage10.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage10.Size = new System.Drawing.Size(729, 272);
+            this.tabPage10.Size = new System.Drawing.Size(729, 270);
             this.tabPage10.TabIndex = 0;
             this.tabPage10.Text = "UNC Paths";
             this.tabPage10.UseVisualStyleBackColor = true;
@@ -701,11 +780,12 @@
             this.UNC,
             this.UNCEnableReadTo,
             this.UNCEnableWriteTo,
+            this.Column1,
             this.enablemove});
             this.uncpaths.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uncpaths.Location = new System.Drawing.Point(3, 3);
             this.uncpaths.Name = "uncpaths";
-            this.uncpaths.Size = new System.Drawing.Size(723, 266);
+            this.uncpaths.Size = new System.Drawing.Size(723, 264);
             this.uncpaths.TabIndex = 0;
             // 
             // Drive
@@ -767,14 +847,24 @@
             this.UNCEnableWriteTo.Name = "UNCEnableWriteTo";
             this.UNCEnableWriteTo.Width = 140;
             // 
+            // Column1
+            // 
+            this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Column1.HeaderText = "Usage";
+            this.Column1.Items.AddRange(new object[] {
+            "Drive Space",
+            "Quota Data"});
+            this.Column1.Name = "Column1";
+            this.Column1.Width = 45;
+            // 
             // enablemove
             // 
             this.enablemove.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-            this.enablemove.HeaderText = "HTML Move";
+            this.enablemove.HeaderText = "Move";
             this.enablemove.Name = "enablemove";
             this.enablemove.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.enablemove.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.enablemove.Width = 90;
+            this.enablemove.Width = 62;
             // 
             // tabPage11
             // 
@@ -782,7 +872,7 @@
             this.tabPage11.Location = new System.Drawing.Point(4, 24);
             this.tabPage11.Name = "tabPage11";
             this.tabPage11.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage11.Size = new System.Drawing.Size(729, 272);
+            this.tabPage11.Size = new System.Drawing.Size(729, 270);
             this.tabPage11.TabIndex = 1;
             this.tabPage11.Text = "Upload Filters";
             this.tabPage11.UseVisualStyleBackColor = true;
@@ -798,7 +888,7 @@
             this.uploadfilters.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uploadfilters.Location = new System.Drawing.Point(3, 3);
             this.uploadfilters.Name = "uploadfilters";
-            this.uploadfilters.Size = new System.Drawing.Size(723, 266);
+            this.uploadfilters.Size = new System.Drawing.Size(723, 264);
             this.uploadfilters.TabIndex = 1;
             // 
             // FilterName
@@ -820,6 +910,30 @@
             this.FilterEnableFor.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.FilterEnableFor.HeaderText = "Enable For";
             this.FilterEnableFor.Name = "FilterEnableFor";
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.quotaservers);
+            this.tabPage1.Location = new System.Drawing.Point(4, 24);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(729, 270);
+            this.tabPage1.TabIndex = 2;
+            this.tabPage1.Text = "Quota Servers";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // quotaservers
+            // 
+            this.quotaservers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.quotaservers.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.quotaexpression,
+            this.quotaserver,
+            this.quotadrive});
+            this.quotaservers.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.quotaservers.Location = new System.Drawing.Point(3, 3);
+            this.quotaservers.Name = "quotaservers";
+            this.quotaservers.Size = new System.Drawing.Size(723, 264);
+            this.quotaservers.TabIndex = 0;
             // 
             // panel3
             // 
@@ -859,7 +973,7 @@
             this.wizardPage5.Controls.Add(this.announcementBox_ShowTo);
             this.wizardPage5.Name = "wizardPage5";
             this.wizardPage5.NextPage = this.wizardPage6;
-            this.wizardPage5.Size = new System.Drawing.Size(737, 352);
+            this.wizardPage5.Size = new System.Drawing.Size(737, 350);
             this.wizardPage5.TabIndex = 4;
             this.wizardPage5.Text = "Announcement Box";
             // 
@@ -938,7 +1052,7 @@
             this.wizardPage6.Controls.Add(this.panel2);
             this.wizardPage6.IsFinishPage = true;
             this.wizardPage6.Name = "wizardPage6";
-            this.wizardPage6.Size = new System.Drawing.Size(737, 352);
+            this.wizardPage6.Size = new System.Drawing.Size(737, 350);
             this.wizardPage6.TabIndex = 5;
             this.wizardPage6.Text = "Booking System";
             // 
@@ -951,7 +1065,7 @@
             this.bookingsystem_Subjectsd.Location = new System.Drawing.Point(0, 75);
             this.bookingsystem_Subjectsd.Name = "bookingsystem_Subjectsd";
             this.bookingsystem_Subjectsd.SelectedIndex = 0;
-            this.bookingsystem_Subjectsd.Size = new System.Drawing.Size(737, 277);
+            this.bookingsystem_Subjectsd.Size = new System.Drawing.Size(737, 275);
             this.bookingsystem_Subjectsd.TabIndex = 7;
             // 
             // tabPage8
@@ -960,7 +1074,7 @@
             this.tabPage8.Location = new System.Drawing.Point(4, 24);
             this.tabPage8.Name = "tabPage8";
             this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage8.Size = new System.Drawing.Size(729, 249);
+            this.tabPage8.Size = new System.Drawing.Size(729, 247);
             this.tabPage8.TabIndex = 0;
             this.tabPage8.Text = "Resources";
             this.tabPage8.UseVisualStyleBackColor = true;
@@ -978,7 +1092,7 @@
             this.Resources.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Resources.Location = new System.Drawing.Point(3, 3);
             this.Resources.Name = "Resources";
-            this.Resources.Size = new System.Drawing.Size(723, 243);
+            this.Resources.Size = new System.Drawing.Size(723, 241);
             this.Resources.TabIndex = 0;
             // 
             // ResName
@@ -1026,7 +1140,7 @@
             this.tabPage9.Location = new System.Drawing.Point(4, 24);
             this.tabPage9.Name = "tabPage9";
             this.tabPage9.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage9.Size = new System.Drawing.Size(729, 230);
+            this.tabPage9.Size = new System.Drawing.Size(729, 247);
             this.tabPage9.TabIndex = 1;
             this.tabPage9.Text = "Lessons";
             this.tabPage9.UseVisualStyleBackColor = true;
@@ -1043,7 +1157,7 @@
             this.lessons.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lessons.Location = new System.Drawing.Point(3, 3);
             this.lessons.Name = "lessons";
-            this.lessons.Size = new System.Drawing.Size(723, 224);
+            this.lessons.Size = new System.Drawing.Size(723, 241);
             this.lessons.TabIndex = 0;
             // 
             // LessonName
@@ -1083,7 +1197,7 @@
             this.bs_subjects.Location = new System.Drawing.Point(4, 24);
             this.bs_subjects.Name = "bs_subjects";
             this.bs_subjects.Padding = new System.Windows.Forms.Padding(3);
-            this.bs_subjects.Size = new System.Drawing.Size(729, 230);
+            this.bs_subjects.Size = new System.Drawing.Size(729, 247);
             this.bs_subjects.TabIndex = 2;
             this.bs_subjects.Text = "Subjects";
             this.bs_subjects.UseVisualStyleBackColor = true;
@@ -1097,7 +1211,7 @@
             this.bssubjects.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bssubjects.Location = new System.Drawing.Point(3, 3);
             this.bssubjects.Name = "bssubjects";
-            this.bssubjects.Size = new System.Drawing.Size(723, 224);
+            this.bssubjects.Size = new System.Drawing.Size(723, 241);
             this.bssubjects.TabIndex = 0;
             // 
             // Subject
@@ -1186,25 +1300,67 @@
             this.folderBrowser.RootFolder = System.Environment.SpecialFolder.MyComputer;
             this.folderBrowser.ShowNewFolderButton = false;
             // 
-            // label20
+            // quotaexpression
             // 
-            this.label20.AutoSize = true;
-            this.label20.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label20.Location = new System.Drawing.Point(15, 13);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(459, 21);
-            this.label20.TabIndex = 1;
-            this.label20.Text = "Please Edit the Web.Config File Directly for this Part of the Config";
+            this.quotaexpression.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.quotaexpression.HeaderText = "Expression";
+            this.quotaexpression.Name = "quotaexpression";
             // 
-            // label27
+            // quotaserver
             // 
-            this.label27.AutoSize = true;
-            this.label27.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.label27.Location = new System.Drawing.Point(28, 43);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(478, 90);
-            this.label27.TabIndex = 1;
-            this.label27.Text = resources.GetString("label27.Text");
+            this.quotaserver.FillWeight = 200F;
+            this.quotaserver.HeaderText = "Server";
+            this.quotaserver.Name = "quotaserver";
+            this.quotaserver.Width = 200;
+            // 
+            // quotadrive
+            // 
+            this.quotadrive.HeaderText = "Server Drive";
+            this.quotadrive.Items.AddRange(new object[] {
+            "A:",
+            "B:",
+            "C:",
+            "D:",
+            "E:",
+            "F:",
+            "G:",
+            "H:",
+            "I:",
+            "J:",
+            "K:",
+            "L:",
+            "M:",
+            "N:",
+            "O:",
+            "P:",
+            "Q:",
+            "R:",
+            "S:",
+            "T:",
+            "U:",
+            "V:",
+            "W:",
+            "X:",
+            "Y:",
+            "Z:"});
+            this.quotadrive.Name = "quotadrive";
+            this.quotadrive.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.quotadrive.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.removeToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(142, 26);
+            // 
+            // removeToolStripMenuItem
+            // 
+            this.removeToolStripMenuItem.Name = "removeToolStripMenuItem";
+            this.removeToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
+            this.removeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.removeToolStripMenuItem.Text = "Remove";
+            this.removeToolStripMenuItem.Click += new System.EventHandler(this.removeToolStripMenuItem_Click);
             // 
             // FirstRun
             // 
@@ -1238,6 +1394,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.uncpaths)).EndInit();
             this.tabPage11.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.uploadfilters)).EndInit();
+            this.tabPage1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.quotaservers)).EndInit();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.wizardPage5.ResumeLayout(false);
@@ -1255,6 +1413,7 @@
             this.panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bs_max)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bs_maxdays)).EndInit();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1276,7 +1435,6 @@
         private System.Windows.Forms.CheckBox base_SMTPSSL;
         private System.Windows.Forms.TextBox base_SMTPPort;
         private System.Windows.Forms.TextBox base_SMTPAddress;
-        private System.Windows.Forms.TextBox base_StudentEmailFormat;
         private System.Windows.Forms.TextBox base_AdminUsername;
         private System.Windows.Forms.TextBox base_AdminEmail;
         private System.Windows.Forms.TextBox base_Code;
@@ -1286,7 +1444,6 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
@@ -1347,12 +1504,6 @@
         private System.Windows.Forms.DataGridViewComboBoxColumn LessonType;
         private System.Windows.Forms.DataGridViewTextBoxColumn StartTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn EndTime;
-        private System.Windows.Forms.DataGridViewComboBoxColumn Drive;
-        private System.Windows.Forms.DataGridViewTextBoxColumn PathName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn UNC;
-        private System.Windows.Forms.DataGridViewTextBoxColumn UNCEnableReadTo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn UNCEnableWriteTo;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn enablemove;
         private AeroWizard.WizardPage wizardPage7;
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.Label label25;
@@ -1367,5 +1518,24 @@
         private System.Windows.Forms.CheckBox bs_keepxmlclean;
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.TextBox tracker_sqlconstring;
+        private System.Windows.Forms.ComboBox tracker_provider;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.LinkLabel tracker_sqlconstringlink;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Drive;
+        private System.Windows.Forms.DataGridViewTextBoxColumn PathName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn UNC;
+        private System.Windows.Forms.DataGridViewTextBoxColumn UNCEnableReadTo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn UNCEnableWriteTo;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn enablemove;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.DataGridView quotaservers;
+        private System.Windows.Forms.CheckBox rmcc3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn quotaexpression;
+        private System.Windows.Forms.DataGridViewTextBoxColumn quotaserver;
+        private System.Windows.Forms.DataGridViewComboBoxColumn quotadrive;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem removeToolStripMenuItem;
     }
 }
