@@ -181,7 +181,13 @@ namespace HAP.Config
             bs.Attributes["maxdays"].Value = bs_maxdays.Value.ToString();
             bs.Attributes["twoweektimetable"].Value = bs_twoweek.Checked.ToString();
             bs.Attributes["keepxmlclean"].Value = bs_keepxmlclean.Checked.ToString();
-
+            if (bs.Attributes["admingroups"] != null) bs.Attributes.RemoveNamedItem("admingroups");
+            if (!string.IsNullOrWhiteSpace(bs_admingroups.Text))
+            {
+                XmlAttribute a = doc.CreateAttribute("admingroups");
+                a.Value = bs_admingroups.Text;
+                bs.Attributes.Append(a);
+            }
             XmlNode res = bs.SelectSingleNode("resources");
             res.RemoveAll();
             foreach (DataGridViewRow row in Resources.Rows)
@@ -383,6 +389,7 @@ namespace HAP.Config
             bs_max.Value = int.Parse(bs.Attributes["maxbookingsperweek"].Value);
             bs_maxdays.Value = int.Parse(bs.Attributes["maxdays"].Value);
             bs_twoweek.Checked = bool.Parse(bs.Attributes["twoweektimetable"].Value);
+            if (bs.Attributes["admingroups"] != null) bs_admingroups.Text = bs.Attributes["admingroups"].Value;
             if (bs.Attributes["keepxmlclean"] != null) bs_keepxmlclean.Checked = bool.Parse(bs.Attributes["keepxmlclean"].Value);
             else bs_keepxmlclean.Checked = true;
             foreach (XmlNode node in bs.SelectNodes("resources/add"))

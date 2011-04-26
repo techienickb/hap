@@ -176,6 +176,10 @@ namespace HAP.Web.BookingSystem
         {
             get
             {
+                bool vis = false;
+                foreach (string s in hapConfig.Current.BookingSystem.AdminGroups.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
+                    if (!vis) vis = HttpContext.Current.User.IsInRole(s);
+                if (vis) return true;
                 return HttpContext.Current.User.IsInRole("Domain Admins");
             }
         }

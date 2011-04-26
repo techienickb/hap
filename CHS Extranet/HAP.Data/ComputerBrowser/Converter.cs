@@ -11,7 +11,7 @@ namespace HAP.Data.ComputerBrowser
 {
     public class Converter
     {
-        static HttpContext Context;
+        static HttpContext Context { get { return HttpContext.Current; } }
 
         public static string DriveToUNC(string RoutingPath, string RoutingDrive)
         {
@@ -27,7 +27,6 @@ namespace HAP.Data.ComputerBrowser
 
         public static string DriveToUNC(string RoutingPath, string RoutingDrive, out uncpath unc, out string userhome)
         {
-            Context = HttpContext.Current;
             hapConfig config = hapConfig.Current;
             string _ActiveDirectoryConnectionString = "";
             string _DomainDN = "";
@@ -179,6 +178,19 @@ namespace HAP.Data.ComputerBrowser
             }
             d = Math.Round(d, 2);
             return d.ToString() + " " + s[x];
+        }
+
+        public static UNCPath ToUNCPath(uncpath unc)
+        {
+            UNCPath Unc = new UNCPath();
+            Unc.Drive = unc.Drive;
+            Unc.EnableMove = unc.EnableMove;
+            Unc.EnableReadTo = unc.EnableReadTo;
+            Unc.EnableWriteTo = unc.EnableWriteTo;
+            Unc.Name = unc.Name;
+            Unc.UNC = unc.UNC;
+            Unc.Usage = unc.Usage;
+            return Unc;
         }
     }
 }

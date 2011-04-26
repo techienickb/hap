@@ -8,16 +8,19 @@ a img { border: 0; }
 #browser { background: #fff; overflow: auto; height: 503px; border: solid 1px #7da2ce; border-top: 0; }
 #browser a, #HomeButtons a { float: left; margin: 3px; border: solid 0px #fff; border-radius: 3px; -moz-border-radius: 3px; color: #000; padding: 5px; width: 280px; height: 40px; line-height: 20px; display: block; overflow: hidden; text-decoration: none; }
 #browser a i, #HomeButtons a i { font-style: normal; color: #999; display: block; font-size: small; }
+#browser a u { display: block; height: 12px; border: solid 1px gray; border-radius: 3px; background: transparent url(images/progressbar.png) repeat-x top left; overflow: hidden; margin: 0; }
+#browser a u span { height: 12px; background: transparent url(images/progressbar-active.png) repeat-x top left; display: block; }
+#browser a u label { position: absolute; top: 0; left: 0; right: 0; bottom: 0; text-align: center; font-size: 11px; }
 #browser a:hover, #HomeButtons a:hover { border: solid 1px #7da2ce; margin: 2px; background: #f9fbfd url(images/browser-a-hover.gif) repeat-x; text-decoration: none; }
 #browser a img, #HomeButtons a img { float: left; margin: 0 4px 0 0; height: 40px; border: 0; }
 #browser.Icons a { width: 64px; height: auto; text-align: center; line-height: normal; }
-#browser.Icons a i { display: none; }
+#browser.Icons a i, #browser.Icons a u { display: none; }
 #browser.Icons a:hover { background: transparent url(images/browser-a-hover.gif) repeat-x bottom; }
 #browser.Icons a img { float: none; margin: 0 0 4px 0; height: 64px; }
 #browser.List a { width: auto; display:block; height: 16px; }
 #browser.List a:hover { background: transparent url(images/browser-a-hover.gif) repeat-x bottom; }
 #browser.List a img { height: 16px; }
-#browser.List a i { display: none; }
+#browser.List a i, #browser.List a u { display: none; }
 
 #breadcrumbs { height: 20px; line-height: 20px; overflow: hidden; background: #fff; border: solid 1px #7da2ce; border-top: 0; padding: 0 2px; }
 #breadcrumbs a { height: 20px; font-size: 12px; line-height: 20px; float: left; padding: 0 5px 0 5px; border-right: solid 1px white; border-left: solid 1px white; color: #000; }
@@ -35,7 +38,7 @@ h1.Announcement b { font-size: 16px; }
 #EditAnn a.EditAnnLink { position: absolute; right: 0; float: right; }
 #EditAnn a.EditAnnLink img { vertical-align: middle; text-decoration: none; height: 48px; }
 
-#viewbox { display: none; position: absolute; top: 26px; right: 5px; width: 80px; border: solid 1px #555; background: #eee; padding: 2px; }
+#viewbox { display: none; position: absolute; top: 26px; right: 5px; width: 80px; border: solid 1px #555; background: #eee; padding: 2px; z-index: 450; }
 #viewbox.show { display: block; }
 #viewbox a, .SimpleContextMenu a { color: #1f3976; display: block; border-radius: 3px; padding: 1px 2px; -moz-border-radius: 3px;  border: solid 1px #eee; text-decoration: none; }
 #viewbox a:hover, .SimpleContextMenu a:hover { color: #1f3976; border: solid 1px #7da2ce; background: transparent url(images/bar-a-hover.gif) repeat-x left center; text-decoration: none; }

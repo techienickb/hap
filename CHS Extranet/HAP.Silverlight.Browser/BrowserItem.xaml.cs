@@ -221,7 +221,10 @@ namespace HAP.Silverlight.Browser
             string _d = _data.Source.Path.Remove(0, _data.Source.Path.LastIndexOf('\\'));
             _d = _d.Replace(_data.Source.Name, newname);
             _d = _data.Source.Path.Remove(_data.Source.Path.LastIndexOf('\\')) + _d;
-            apiSoapClient soap = new apiSoapClient(new BasicHttpBinding(BasicHttpSecurityMode.Transport), new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
+            BasicHttpBinding b = new BasicHttpBinding(BasicHttpSecurityMode.Transport);
+            b.MaxBufferSize = 2147483647;
+            b.MaxReceivedMessageSize = 2147483647;
+            apiSoapClient soap = new apiSoapClient(b, new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
             soap.SaveCompleted += new EventHandler<SaveCompletedEventArgs>(soap_SaveCompleted);
             soap.SaveAsync((CBFile)_data.Source, _d, false, new BUserState(resort, _d, _data.Name));
 
@@ -302,7 +305,10 @@ namespace HAP.Silverlight.Browser
                 string _d = _data.Source.Path.Remove(0, _data.Source.Path.LastIndexOf('\\'));
                 _d = _d.Replace(_data.Source.Name, newname);
                 _d = _data.Source.Path.Remove(_data.Source.Path.LastIndexOf('\\')) + _d;
-                apiSoapClient soap = new apiSoapClient(new BasicHttpBinding(BasicHttpSecurityMode.Transport), new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
+                BasicHttpBinding b = new BasicHttpBinding(BasicHttpSecurityMode.Transport);
+                b.MaxBufferSize = 2147483647;
+                b.MaxReceivedMessageSize = 2147483647;
+                apiSoapClient soap = new apiSoapClient(b, new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
                 soap.SaveCompleted += new EventHandler<SaveCompletedEventArgs>(soap_SaveCompleted);
                 soap.SaveAsync((CBFile)_data.Source, _d, e == ReplaceResult.Replace, new BUserState(state.Resort, _d, _data.Name));
 
@@ -371,7 +377,10 @@ namespace HAP.Silverlight.Browser
 
         public int Delete()
         {
-            apiSoapClient soap = new apiSoapClient(new BasicHttpBinding(BasicHttpSecurityMode.Transport), new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
+            BasicHttpBinding b = new BasicHttpBinding(BasicHttpSecurityMode.Transport);
+            b.MaxBufferSize = 2147483647;
+            b.MaxReceivedMessageSize = 2147483647;
+            apiSoapClient soap = new apiSoapClient(b, new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
             soap.DeleteCompleted += new EventHandler<System.ComponentModel.AsyncCompletedEventArgs>(soap_DeleteCompleted);
             if (MessageBox.Show("Are you sure you want to delete\n" + _data.Name + "?", "Question", MessageBoxButton.OKCancel) == MessageBoxResult.OK) soap.DeleteAsync(_data.Path);
             return 0;

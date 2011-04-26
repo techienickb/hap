@@ -109,7 +109,6 @@
     <Content Include="App_Data\Announcement.xml" />
     <Content Include="App_Data\Tickets.xml" />
     <Content Include="basestyle.css" />
-    <Content Include="Controls\ChangePassword.ascx" />
     <Content Include="Controls\Delete.ascx" />
     <Content Include="Controls\Rename.ascx" />
     <Content Include="Controls\Unzip.ascx" />
@@ -153,8 +152,12 @@
     <Content Include="images\icons\xaml.png" />
     <Content Include="images\icons\xml.png" />
     <Content Include="images\icons\xps.png" />
+    <Content Include="images\Imageres18.png" />
     <Content Include="images\loading.gif" />
     <Content Include="images\logo.png" />
+    <Content Include="images\progressbar-active.png" />
+    <Content Include="images\progressbar.png" />
+    <Content Include="Scripts\homepagescripts.js" />
     <Content Include="Tracker\api.asmx" />
     <Content Include="Tracker\log.aspx" />
     <Content Include="Tracker\logontracker-small.png" />
@@ -239,17 +242,9 @@
       <DependentUpon>api.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="API\CheckPermissions.cs" />
+    <Compile Include="API\Icon.cs" />
     <Compile Include="API\Thumbs.cs" />
-    <Compile Include="API\Inf.cs" />
-    <Compile Include="API\UnZip.cs" />
-    <Compile Include="API\Zip.cs" />
-    <Compile Include="API\NewFolder.cs" />
-    <Compile Include="API\Delete.cs" />
-    <Compile Include="API\List.cs" />
-    <Compile Include="API\ListDrives.cs" />
     <Compile Include="API\RegisterAPI.cs" />
-    <Compile Include="API\Save.cs" />
     <Compile Include="API\Upload.cs" />
     <Compile Include="API\UploadChecker.cs" />
     <Compile Include="BookingSystem\admin\Default.aspx.cs">
@@ -329,13 +324,6 @@
     </Compile>
     <Compile Include="Controls\Announcement.ascx.designer.cs">
       <DependentUpon>Announcement.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ChangePassword.ascx.cs">
-      <DependentUpon>ChangePassword.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\ChangePassword.ascx.designer.cs">
-      <DependentUpon>ChangePassword.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Delete.ascx.cs">
       <DependentUpon>Delete.ascx</DependentUpon>
@@ -522,10 +510,6 @@
     <ProjectReference Include="..\CHS\HAP.AD.csproj">
       <Project>{36468E14-F8AF-4794-AB76-25571A54682F}</Project>
       <Name>HAP.AD</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HAP.Config\HAP.Config.csproj">
-      <Project>{8E445E7B-246A-446A-B3B2-ED4F51C21768}</Project>
-      <Name>HAP.Config</Name>
     </ProjectReference>
     <ProjectReference Include="..\HAP.Data.SQL\HAP.Data.SQL.csproj">
       <Project>{D7498641-1837-480E-8AA0-4466CDB5FB12}</Project>

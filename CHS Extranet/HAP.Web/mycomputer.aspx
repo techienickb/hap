@@ -51,7 +51,7 @@
 		<div style="position: relative;">
 			<div id="bar">
 				<a href="<%=Request.ApplicationPath %>">Home Access Plus+ Home</a>
-				<a href="<%=Request.ApplicationPath %>/MyComputerSL.aspx" title="Try the enhanced silverlight version of the My School Computer Browser">Enhanced Version</a>
+				<a href="<%=Request.ApplicationPath %>/MyComputerSL.aspx" title="Try the Extended silverlight version of the My School Computer Browser">Extended Version</a>
 				<hap:NewFolder runat="server" ID="newfolderlink" Visible="false" />
 				<hap:Upload runat="server" id="newfileuploadlink" Visible="false" />
 				<a class="right" href="<%=Request.ApplicationPath %>/mycomputer.aspx" onclick="return view();"><span>View</span></a>
@@ -72,9 +72,9 @@
 			<asp:Repeater runat="server" ID="browserrepeater">
 				<ItemTemplate>
 					<a href="<%#Eval("Path") %>"<%#((bool)Eval("RightClick")) ? " class=\"container\"" : ""%>>
-						<img src="<%=Request.ApplicationPath%>/images/icons/<%#Eval("Image") %>" alt="" />
+						<img src="<%=Request.ApplicationPath%>/<%#Eval("Image") %>" alt="" />
 						<%#Eval("Name") %>
-						<i><%#Eval("Description") %></i>
+						<%#Eval("Description") %>
 					</a>
 				</ItemTemplate>
 			</asp:Repeater>

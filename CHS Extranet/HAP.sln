@@ -20,8 +20,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{A881389B-1A3
 		Binaries\AeroWizard.dll = Binaries\AeroWizard.dll
 		Binaries\AeroWizard.xml = Binaries\AeroWizard.xml
 		Binaries\AjaxControlToolkit.dll = Binaries\AjaxControlToolkit.dll
-		C:\Users\Nick\AppData\Local\Temp\Rar$DR02.536\Fluent Ribbon Control Suite 1.3\.NET 4\Assembly\Fluent.dll = C:\Users\Nick\AppData\Local\Temp\Rar$DR02.536\Fluent Ribbon Control Suite 1.3\.NET 4\Assembly\Fluent.dll
-		wpf-notifyicon\NotifyIconWpf\bin\Release\Hardcodet.Wpf.TaskbarNotification.dll = wpf-notifyicon\NotifyIconWpf\bin\Release\Hardcodet.Wpf.TaskbarNotification.dll
 		Binaries\Microsoft.WindowsAPICodePack.dll = Binaries\Microsoft.WindowsAPICodePack.dll
 		Binaries\Microsoft.WindowsAPICodePack.Shell.dll = Binaries\Microsoft.WindowsAPICodePack.Shell.dll
 	EndProjectSection
@@ -191,7 +189,6 @@ Global
 		{5254C771-C9B6-4261-BC11-FED83C526CE0}.Release|x86.ActiveCfg = Release|x86
 		{5254C771-C9B6-4261-BC11-FED83C526CE0}.Release|x86.Build.0 = Release|x86
 		{E10211DD-09C4-4756-AC4D-36C73A73FCEB}.Debug|Any CPU.ActiveCfg = Debug
-		{E10211DD-09C4-4756-AC4D-36C73A73FCEB}.Debug|Any CPU.Build.0 = Debug
 		{E10211DD-09C4-4756-AC4D-36C73A73FCEB}.Debug|Mixed Platforms.ActiveCfg = Debug
 		{E10211DD-09C4-4756-AC4D-36C73A73FCEB}.Debug|x64.ActiveCfg = Debug
 		{E10211DD-09C4-4756-AC4D-36C73A73FCEB}.Debug|x64.Build.0 = Debug
@@ -217,7 +214,6 @@ Global
 		{83C67EA2-D8D6-41E4-9ACF-919088675444}.Release|x86.ActiveCfg = Release|x86
 		{83C67EA2-D8D6-41E4-9ACF-919088675444}.Release|x86.Build.0 = Release|x86
 		{51E919E3-C676-4439-B192-F1F936FB830B}.Debug|Any CPU.ActiveCfg = Debug
-		{51E919E3-C676-4439-B192-F1F936FB830B}.Debug|Any CPU.Build.0 = Debug
 		{51E919E3-C676-4439-B192-F1F936FB830B}.Debug|Mixed Platforms.ActiveCfg = Debug
 		{51E919E3-C676-4439-B192-F1F936FB830B}.Debug|x64.ActiveCfg = Debug
 		{51E919E3-C676-4439-B192-F1F936FB830B}.Debug|x86.ActiveCfg = Debug
@@ -289,7 +285,6 @@ Global
 		{A06C244E-4136-4A30-97AD-F0717974A5D0}.Release|x86.ActiveCfg = Release|x86
 		{A06C244E-4136-4A30-97AD-F0717974A5D0}.Release|x86.Build.0 = Release|x86
 		{93C675DE-3922-47C5-9FD8-1AC25348FC4D}.Debug|Any CPU.ActiveCfg = Debug
-		{93C675DE-3922-47C5-9FD8-1AC25348FC4D}.Debug|Any CPU.Build.0 = Debug
 		{93C675DE-3922-47C5-9FD8-1AC25348FC4D}.Debug|Mixed Platforms.ActiveCfg = Debug
 		{93C675DE-3922-47C5-9FD8-1AC25348FC4D}.Debug|x64.ActiveCfg = Debug
 		{93C675DE-3922-47C5-9FD8-1AC25348FC4D}.Debug|x86.ActiveCfg = Debug

@@ -22,12 +22,18 @@ namespace HAP.Web.Configuration
             set { this["keepxmlclean"] = value; }
         }
 
-
         [ConfigurationProperty("maxdays", DefaultValue = 14, IsRequired = true)]
         public int MaxDays
         {
             get { return (int)this["maxdays"]; }
             set { this["maxdays"] = value.ToString(); }
+        }
+
+        [ConfigurationProperty("admingroups", DefaultValue = "s", IsRequired = false)]
+        public string AdminGroups
+        {
+            get { return (string)this["admingroups"]; }
+            set { this["admingroups"] = value.ToString(); }
         }
 
         [ConfigurationProperty("twoweektimetable", DefaultValue = true, IsRequired = true)]
