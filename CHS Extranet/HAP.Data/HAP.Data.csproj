@@ -41,6 +41,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.DirectoryServices.AccountManagement" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
@@ -58,6 +59,7 @@
     <Compile Include="ComputerBrowser\ComputerBrowserAPIItem.cs" />
     <Compile Include="ComputerBrowser\Converter.cs" />
     <Compile Include="ComputerBrowser\FileCheckResponse.cs" />
+    <Compile Include="ComputerBrowser\IconHelper.cs" />
     <Compile Include="ComputerBrowser\MyComputerItem.cs" />
     <Compile Include="ComputerBrowser\PrimaryResponse.cs" />
     <Compile Include="ComputerBrowser\Quota.cs" />

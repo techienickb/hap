@@ -36,7 +36,17 @@ namespace HAP.Web.BookingSystem
         {
         }
 
-        public bool isAdmin { get; set; }
+        protected bool isAdmin
+        {
+            get
+            {
+                bool vis = false;
+                foreach (string s in hapConfig.Current.BookingSystem.AdminGroups.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
+                    if (!vis) vis = HttpContext.Current.User.IsInRole(s);
+                if (vis) return true;
+                return HttpContext.Current.User.IsInRole("Domain Admins");
+            }
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -56,7 +66,6 @@ namespace HAP.Web.BookingSystem
             Calendar1.SelectedDates.Add(d);
             if (!IsPostBack) Calendar1.DataBind();
             DataBind();
-            isAdmin = User.IsInRole("Domain Admins");
             adminlink.Visible = isAdmin;
         }
 

@@ -26,12 +26,6 @@ namespace HAP.Web.Configuration
             get { return (string)this["studentphotohandler"]; }
             set { this["studentphotohandler"] = value; }
         }
-        [ConfigurationProperty("studentemailformat", DefaultValue = "", IsRequired = false)]
-        public string StudentEmailFormat
-        {
-            get { return (string)this["studentemailformat"]; }
-            set { this["studentemailformat"] = value; }
-        }
         [ConfigurationProperty("adminemailaddress", DefaultValue = "", IsRequired = false)]
         public string AdminEmailAddress
         {

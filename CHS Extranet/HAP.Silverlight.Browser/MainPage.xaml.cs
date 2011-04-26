@@ -46,7 +46,10 @@ namespace HAP.Silverlight.Browser
             sp.Children.Add(tb);
             root.Header = sp;
             treeView1.Items.Add(root);
-            soap = new apiSoapClient(new BasicHttpBinding(BasicHttpSecurityMode.Transport), new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
+            BasicHttpBinding b = new BasicHttpBinding(BasicHttpSecurityMode.Transport);
+            b.MaxBufferSize = 2147483647;
+            b.MaxReceivedMessageSize = 2147483647;
+            soap = new apiSoapClient(b, new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
             soap.ListCompleted += new EventHandler<ListCompletedEventArgs>(soap_ListCompleted);
             soap.ListDrivesCompleted += new EventHandler<ListDrivesCompletedEventArgs>(soap_ListDrivesCompleted);
             soap.NewFolderCompleted += new EventHandler<System.ComponentModel.AsyncCompletedEventArgs>(soap_NewFolderCompleted);
@@ -330,7 +333,10 @@ namespace HAP.Silverlight.Browser
                     Image img = sp.Children[0] as Image;
                     img.Source = new BitmapImage(new Uri("/HAP.Silverlight.Browser;component/folderopen.png", UriKind.Relative));
                 }
-                apiSoapClient asoap = new apiSoapClient(new BasicHttpBinding(BasicHttpSecurityMode.Transport), new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
+                BasicHttpBinding b = new BasicHttpBinding(BasicHttpSecurityMode.Transport);
+                b.MaxBufferSize = 2147483647;
+                b.MaxReceivedMessageSize = 2147483647;
+                apiSoapClient asoap = new apiSoapClient(b, new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
                 asoap.ListCompleted += new EventHandler<ListCompletedEventArgs>(asoap_ListCompleted);
                 asoap.ListAsync(tempnode.Data.Path);
             }

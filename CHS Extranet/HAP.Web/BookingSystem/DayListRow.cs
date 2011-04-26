@@ -45,7 +45,7 @@ namespace HAP.Web.BookingSystem
                     Booking b = bs.getBooking(Room, lesson.OldID.ToString());
                     if (b.Name == "FREE" || lesson.OldID == -1) b = bs.getBooking(Room, lesson.Name);
                     bool bookie = false;
-                    if (Page.User.IsInRole("Domain Admins") || b.Username == Username) bookie = true;
+                    if (isAdmin || b.Username == Username) bookie = true;
                     string lessonname = b.Name;
                     if (lessonname.Length > 17) lessonname = lessonname.Remove(17) + "...";
                     if (lessonname.Length > 16 && b.Static) lessonname = lessonname.Remove(14) + "...";
@@ -66,11 +66,23 @@ namespace HAP.Web.BookingSystem
                     }
                     else if (b.Static)
                     {
-                        if (Page.User.IsInRole("Domain Admins"))
+                        if (isAdmin)
                             writer.Write("<span><a href=\"javascript:book('{0}', '{1}', '{2}');\" class=\"static\"><img src=\"../images/staticb.png\" alt=\"Timetabled Lesson\" />{3}<i>with {4}</i><label>Override</label></a></span>", Room, RoomType, b.Lesson, lessonname, b.User.Notes);
                         else writer.Write("<span><span class=\"static\"><img src=\"../images/staticb.png\" alt=\"Timetabled Lesson\" />{0}<i>with {1}</i></span></span>", lessonname, b.User.Notes);
                     }
                 }
+        }
+
+        protected bool isAdmin
+        {
+            get
+            {
+                bool vis = false;
+                foreach (string s in hapConfig.Current.BookingSystem.AdminGroups.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
+                    if (!vis) vis = Page.User.IsInRole(s);
+                if (vis) return true;
+                return Page.User.IsInRole("Domain Admins");
+            }
         }
 
         private string Username

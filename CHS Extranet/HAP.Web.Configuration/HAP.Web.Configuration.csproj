@@ -54,12 +54,14 @@
     <Compile Include="bookingResource.cs" />
     <Compile Include="bookingResources.cs" />
     <Compile Include="bookingSystem.cs" />
+    <Compile Include="homepagetabs.cs" />
     <Compile Include="hapConfig.cs" />
     <Compile Include="homepagelink.cs" />
     <Compile Include="homepagelinkgroup.cs" />
     <Compile Include="homepagelinkgrouplinks.cs" />
     <Compile Include="homepagelinkgroups.cs" />
-    <Compile Include="homepagelinks.cs" />
+    <Compile Include="homepage.cs" />
+    <Compile Include="homepagetab.cs" />
     <Compile Include="lesson.cs" />
     <Compile Include="lessons.cs" />
     <Compile Include="mycomputer.cs" />

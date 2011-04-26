@@ -104,6 +104,9 @@
             this.FilterEnableFor = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.quotaservers = new System.Windows.Forms.DataGridView();
+            this.quotaexpression = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.quotaserver = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.quotadrive = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.panel3 = new System.Windows.Forms.Panel();
             this.label21 = new System.Windows.Forms.Label();
             this.mycomputer_exext = new System.Windows.Forms.TextBox();
@@ -142,11 +145,11 @@
             this.label19 = new System.Windows.Forms.Label();
             this.bs_maxdays = new System.Windows.Forms.NumericUpDown();
             this.folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
-            this.quotaexpression = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.quotaserver = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.quotadrive = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bs_admingroups = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label30 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.wiz)).BeginInit();
             this.wizardPage1.SuspendLayout();
             this.wizardPage2.SuspendLayout();
@@ -192,7 +195,7 @@
             this.wiz.Pages.Add(this.wizardPage4);
             this.wiz.Pages.Add(this.wizardPage5);
             this.wiz.Pages.Add(this.wizardPage6);
-            this.wiz.Size = new System.Drawing.Size(784, 502);
+            this.wiz.Size = new System.Drawing.Size(794, 512);
             this.wiz.TabIndex = 0;
             this.wiz.Title = "";
             this.wiz.TitleIcon = ((System.Drawing.Icon)(resources.GetObject("wiz.TitleIcon")));
@@ -226,7 +229,7 @@
             this.wizardPage1.Controls.Add(this.groupBox1);
             this.wizardPage1.Name = "wizardPage1";
             this.wizardPage1.NextPage = this.wizardPage2;
-            this.wizardPage1.Size = new System.Drawing.Size(737, 350);
+            this.wizardPage1.Size = new System.Drawing.Size(747, 360);
             this.wizardPage1.TabIndex = 0;
             this.wizardPage1.Text = "Base Settings";
             // 
@@ -437,7 +440,7 @@
             this.wizardPage2.Controls.Add(this.panel4);
             this.wizardPage2.Name = "wizardPage2";
             this.wizardPage2.NextPage = this.wizardPage3;
-            this.wizardPage2.Size = new System.Drawing.Size(737, 350);
+            this.wizardPage2.Size = new System.Drawing.Size(747, 360);
             this.wizardPage2.TabIndex = 1;
             this.wizardPage2.Text = "Active Directory Settings";
             // 
@@ -453,7 +456,7 @@
             this.adous.Location = new System.Drawing.Point(0, 157);
             this.adous.MultiSelect = false;
             this.adous.Name = "adous";
-            this.adous.Size = new System.Drawing.Size(737, 193);
+            this.adous.Size = new System.Drawing.Size(747, 203);
             this.adous.TabIndex = 13;
             // 
             // ouName
@@ -493,7 +496,7 @@
             this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel4.Location = new System.Drawing.Point(0, 0);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(737, 157);
+            this.panel4.Size = new System.Drawing.Size(747, 157);
             this.panel4.TabIndex = 12;
             // 
             // label8
@@ -583,7 +586,7 @@
             this.wizardPage3.Controls.Add(this.label20);
             this.wizardPage3.Name = "wizardPage3";
             this.wizardPage3.NextPage = this.wizardPage7;
-            this.wizardPage3.Size = new System.Drawing.Size(737, 350);
+            this.wizardPage3.Size = new System.Drawing.Size(747, 360);
             this.wizardPage3.TabIndex = 2;
             this.wizardPage3.Text = "Home Page Links";
             // 
@@ -623,7 +626,7 @@
             this.wizardPage7.Controls.Add(this.trackermaxstudent);
             this.wizardPage7.Name = "wizardPage7";
             this.wizardPage7.NextPage = this.wizardPage4;
-            this.wizardPage7.Size = new System.Drawing.Size(737, 350);
+            this.wizardPage7.Size = new System.Drawing.Size(747, 360);
             this.wizardPage7.TabIndex = 6;
             this.wizardPage7.Text = "Logon Tracker";
             // 
@@ -645,7 +648,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tracker_sqlconstring.Location = new System.Drawing.Point(310, 139);
             this.tracker_sqlconstring.Name = "tracker_sqlconstring";
-            this.tracker_sqlconstring.Size = new System.Drawing.Size(407, 23);
+            this.tracker_sqlconstring.Size = new System.Drawing.Size(417, 23);
             this.tracker_sqlconstring.TabIndex = 41;
             this.tracker_sqlconstring.Visible = false;
             // 
@@ -744,7 +747,7 @@
             this.wizardPage4.Controls.Add(this.panel3);
             this.wizardPage4.Name = "wizardPage4";
             this.wizardPage4.NextPage = this.wizardPage5;
-            this.wizardPage4.Size = new System.Drawing.Size(737, 350);
+            this.wizardPage4.Size = new System.Drawing.Size(747, 360);
             this.wizardPage4.TabIndex = 3;
             this.wizardPage4.Text = "My Computer";
             // 
@@ -757,7 +760,7 @@
             this.tabControl3.Location = new System.Drawing.Point(0, 52);
             this.tabControl3.Name = "tabControl3";
             this.tabControl3.SelectedIndex = 0;
-            this.tabControl3.Size = new System.Drawing.Size(737, 298);
+            this.tabControl3.Size = new System.Drawing.Size(747, 308);
             this.tabControl3.TabIndex = 3;
             // 
             // tabPage10
@@ -766,7 +769,7 @@
             this.tabPage10.Location = new System.Drawing.Point(4, 24);
             this.tabPage10.Name = "tabPage10";
             this.tabPage10.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage10.Size = new System.Drawing.Size(729, 270);
+            this.tabPage10.Size = new System.Drawing.Size(739, 280);
             this.tabPage10.TabIndex = 0;
             this.tabPage10.Text = "UNC Paths";
             this.tabPage10.UseVisualStyleBackColor = true;
@@ -785,7 +788,7 @@
             this.uncpaths.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uncpaths.Location = new System.Drawing.Point(3, 3);
             this.uncpaths.Name = "uncpaths";
-            this.uncpaths.Size = new System.Drawing.Size(723, 264);
+            this.uncpaths.Size = new System.Drawing.Size(733, 274);
             this.uncpaths.TabIndex = 0;
             // 
             // Drive
@@ -935,6 +938,53 @@
             this.quotaservers.Size = new System.Drawing.Size(723, 264);
             this.quotaservers.TabIndex = 0;
             // 
+            // quotaexpression
+            // 
+            this.quotaexpression.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.quotaexpression.HeaderText = "Expression";
+            this.quotaexpression.Name = "quotaexpression";
+            // 
+            // quotaserver
+            // 
+            this.quotaserver.FillWeight = 200F;
+            this.quotaserver.HeaderText = "Server";
+            this.quotaserver.Name = "quotaserver";
+            this.quotaserver.Width = 200;
+            // 
+            // quotadrive
+            // 
+            this.quotadrive.HeaderText = "Server Drive";
+            this.quotadrive.Items.AddRange(new object[] {
+            "A:",
+            "B:",
+            "C:",
+            "D:",
+            "E:",
+            "F:",
+            "G:",
+            "H:",
+            "I:",
+            "J:",
+            "K:",
+            "L:",
+            "M:",
+            "N:",
+            "O:",
+            "P:",
+            "Q:",
+            "R:",
+            "S:",
+            "T:",
+            "U:",
+            "V:",
+            "W:",
+            "X:",
+            "Y:",
+            "Z:"});
+            this.quotadrive.Name = "quotadrive";
+            this.quotadrive.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.quotadrive.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
             // panel3
             // 
             this.panel3.Controls.Add(this.label21);
@@ -942,7 +992,7 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(737, 52);
+            this.panel3.Size = new System.Drawing.Size(747, 52);
             this.panel3.TabIndex = 4;
             // 
             // label21
@@ -973,7 +1023,7 @@
             this.wizardPage5.Controls.Add(this.announcementBox_ShowTo);
             this.wizardPage5.Name = "wizardPage5";
             this.wizardPage5.NextPage = this.wizardPage6;
-            this.wizardPage5.Size = new System.Drawing.Size(737, 350);
+            this.wizardPage5.Size = new System.Drawing.Size(747, 360);
             this.wizardPage5.TabIndex = 4;
             this.wizardPage5.Text = "Announcement Box";
             // 
@@ -1052,7 +1102,7 @@
             this.wizardPage6.Controls.Add(this.panel2);
             this.wizardPage6.IsFinishPage = true;
             this.wizardPage6.Name = "wizardPage6";
-            this.wizardPage6.Size = new System.Drawing.Size(737, 350);
+            this.wizardPage6.Size = new System.Drawing.Size(747, 360);
             this.wizardPage6.TabIndex = 5;
             this.wizardPage6.Text = "Booking System";
             // 
@@ -1065,7 +1115,7 @@
             this.bookingsystem_Subjectsd.Location = new System.Drawing.Point(0, 75);
             this.bookingsystem_Subjectsd.Name = "bookingsystem_Subjectsd";
             this.bookingsystem_Subjectsd.SelectedIndex = 0;
-            this.bookingsystem_Subjectsd.Size = new System.Drawing.Size(737, 275);
+            this.bookingsystem_Subjectsd.Size = new System.Drawing.Size(747, 285);
             this.bookingsystem_Subjectsd.TabIndex = 7;
             // 
             // tabPage8
@@ -1074,7 +1124,7 @@
             this.tabPage8.Location = new System.Drawing.Point(4, 24);
             this.tabPage8.Name = "tabPage8";
             this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage8.Size = new System.Drawing.Size(729, 247);
+            this.tabPage8.Size = new System.Drawing.Size(739, 257);
             this.tabPage8.TabIndex = 0;
             this.tabPage8.Text = "Resources";
             this.tabPage8.UseVisualStyleBackColor = true;
@@ -1092,7 +1142,7 @@
             this.Resources.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Resources.Location = new System.Drawing.Point(3, 3);
             this.Resources.Name = "Resources";
-            this.Resources.Size = new System.Drawing.Size(723, 241);
+            this.Resources.Size = new System.Drawing.Size(733, 251);
             this.Resources.TabIndex = 0;
             // 
             // ResName
@@ -1221,6 +1271,9 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.label30);
+            this.panel2.Controls.Add(this.label5);
+            this.panel2.Controls.Add(this.bs_admingroups);
             this.panel2.Controls.Add(this.bs_keepxmlclean);
             this.panel2.Controls.Add(this.label18);
             this.panel2.Controls.Add(this.bs_twoweek);
@@ -1230,14 +1283,14 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(737, 75);
+            this.panel2.Size = new System.Drawing.Size(747, 75);
             this.panel2.TabIndex = 8;
             // 
             // bs_keepxmlclean
             // 
             this.bs_keepxmlclean.AutoSize = true;
             this.bs_keepxmlclean.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.bs_keepxmlclean.Location = new System.Drawing.Point(326, 44);
+            this.bs_keepxmlclean.Location = new System.Drawing.Point(289, 44);
             this.bs_keepxmlclean.Name = "bs_keepxmlclean";
             this.bs_keepxmlclean.Size = new System.Drawing.Size(115, 19);
             this.bs_keepxmlclean.TabIndex = 6;
@@ -1258,11 +1311,11 @@
             // 
             this.bs_twoweek.AutoSize = true;
             this.bs_twoweek.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.bs_twoweek.Location = new System.Drawing.Point(298, 17);
+            this.bs_twoweek.Location = new System.Drawing.Point(264, 17);
             this.bs_twoweek.Name = "bs_twoweek";
-            this.bs_twoweek.Size = new System.Drawing.Size(143, 19);
+            this.bs_twoweek.Size = new System.Drawing.Size(140, 19);
             this.bs_twoweek.TabIndex = 5;
-            this.bs_twoweek.Text = "Two Week Timetable: ";
+            this.bs_twoweek.Text = "Two Week Timetable:";
             this.bs_twoweek.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.bs_twoweek.UseVisualStyleBackColor = true;
             // 
@@ -1300,53 +1353,6 @@
             this.folderBrowser.RootFolder = System.Environment.SpecialFolder.MyComputer;
             this.folderBrowser.ShowNewFolderButton = false;
             // 
-            // quotaexpression
-            // 
-            this.quotaexpression.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.quotaexpression.HeaderText = "Expression";
-            this.quotaexpression.Name = "quotaexpression";
-            // 
-            // quotaserver
-            // 
-            this.quotaserver.FillWeight = 200F;
-            this.quotaserver.HeaderText = "Server";
-            this.quotaserver.Name = "quotaserver";
-            this.quotaserver.Width = 200;
-            // 
-            // quotadrive
-            // 
-            this.quotadrive.HeaderText = "Server Drive";
-            this.quotadrive.Items.AddRange(new object[] {
-            "A:",
-            "B:",
-            "C:",
-            "D:",
-            "E:",
-            "F:",
-            "G:",
-            "H:",
-            "I:",
-            "J:",
-            "K:",
-            "L:",
-            "M:",
-            "N:",
-            "O:",
-            "P:",
-            "Q:",
-            "R:",
-            "S:",
-            "T:",
-            "U:",
-            "V:",
-            "W:",
-            "X:",
-            "Y:",
-            "Z:"});
-            this.quotadrive.Name = "quotadrive";
-            this.quotadrive.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.quotadrive.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1362,16 +1368,44 @@
             this.removeToolStripMenuItem.Text = "Remove";
             this.removeToolStripMenuItem.Click += new System.EventHandler(this.removeToolStripMenuItem_Click);
             // 
+            // bs_admingroups
+            // 
+            this.bs_admingroups.Location = new System.Drawing.Point(523, 15);
+            this.bs_admingroups.Name = "bs_admingroups";
+            this.bs_admingroups.Size = new System.Drawing.Size(207, 23);
+            this.bs_admingroups.TabIndex = 7;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(430, 18);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(87, 15);
+            this.label5.TabIndex = 8;
+            this.label5.Text = "Admin Groups:";
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(494, 45);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(236, 15);
+            this.label30.TabIndex = 9;
+            this.label30.Text = "(\', \' seperated, Domain Admins auto added)";
+            // 
             // FirstRun
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(784, 502);
             this.Controls.Add(this.wiz);
             this.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.MinimumSize = new System.Drawing.Size(645, 460);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(800, 540);
             this.Name = "FirstRun";
             this.Text = "Home Access Plus+ Config Tool";
             this.Load += new System.EventHandler(this.FirstRun_Load);
@@ -1537,5 +1571,8 @@
         private System.Windows.Forms.DataGridViewComboBoxColumn quotadrive;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem removeToolStripMenuItem;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox bs_admingroups;
     }
 }

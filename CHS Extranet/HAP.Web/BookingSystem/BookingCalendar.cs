@@ -21,8 +21,6 @@ namespace HAP.Web.BookingSystem
             // since this control will be used for displaying
             // events, set these properties as a default
             hapConfig config = hapConfig.Current;
-            _isAdmin = HttpContext.Current.User.IsInRole("Domain Admins");
-
             this.SelectionMode = CalendarSelectionMode.DayWeek;
             this.maxday = config.BookingSystem.MaxDays;
             foreach (AdvancedBookingRight right in HAP.Data.BookingSystem.BookingSystem.BookingRights)
@@ -143,8 +141,17 @@ namespace HAP.Web.BookingSystem
         }
 
         #region Login
-        private bool _isAdmin;
-        protected bool isAdmin { get { return _isAdmin; }}
+        protected bool isAdmin
+        {
+            get
+            {
+                bool vis = false;
+                foreach (string s in hapConfig.Current.BookingSystem.AdminGroups.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
+                    if (!vis) vis = Page.User.IsInRole(s);
+                if (vis) return true;
+                return Page.User.IsInRole("Domain Admins");
+            }
+        }
 
         public string Username
         {

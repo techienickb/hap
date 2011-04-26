@@ -20,10 +20,10 @@ namespace HAP.Web.Configuration
             get { return (baseSettings)this["basesettings"]; }
         }
 
-        [ConfigurationProperty("homepagelinks", IsDefaultCollection = false)]
-        public homepagelinks HomePageLinks
+        [ConfigurationProperty("homepage", IsDefaultCollection = false)]
+        public homepage HomePage
         {
-            get { return (homepagelinks)base["homepagelinks"]; }
+            get { return (homepage)base["homepage"]; }
         }
 
         [ConfigurationProperty("tracker")]

@@ -87,9 +87,34 @@ namespace HAP.Web
             List<MyComputerItem> items = new List<MyComputerItem>();
             if (string.IsNullOrEmpty(RoutingDrive))
             {
+                long freeBytesForUser, totalBytes, freeBytes;
                 breadcrumbrepeater.Visible = false;
                 foreach (uncpath path in config.MyComputer.UNCPaths)
-                    if (isAuth(path)) items.Add(new MyComputerItem(path.Name, string.Format("{0} on {1}", path.Name, config.BaseSettings.EstablishmentCode), string.Format("{1}/MyComputer/{0}", path.Drive, Request.ApplicationPath), "netdrive.png", false));
+                    if (isAuth(path)) {
+                        decimal space = -1;
+                        bool showspace = isWriteAuth(path);
+                        if (showspace)
+                        {
+                            if (path.Usage == UsageMode.DriveSpace)
+                            {
+                                if (HAP.Web.api.Win32.GetDiskFreeSpaceEx(string.Format(path.UNC.Replace("%homepath%", up.HomeDirectory), Username), out freeBytesForUser, out totalBytes, out freeBytes))
+                                    space = Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    HAP.Data.Quota.QuotaInfo qi = HAP.Data.ComputerBrowser.Quota.GetQuota(Username, string.Format(path.UNC.Replace("%homepath%", up.HomeDirectory)));
+                                    space = Math.Round((Convert.ToDecimal(qi.Used) / Convert.ToDecimal(qi.Total)) * 100, 2);
+                                    if (qi.Total == -1)
+                                        if (HAP.Web.api.Win32.GetDiskFreeSpaceEx(string.Format(path.UNC.Replace("%homepath%", up.HomeDirectory), Username), out freeBytesForUser, out totalBytes, out freeBytes))
+                                            space = Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
+                                }
+                                catch { }
+                            }
+                        }
+                        items.Add(new MyComputerItem(path.Name, showspace ? "<u><span style=\"width: " + Math.Round(space, 0) + "%;\"></span></u>" : "", string.Format("{1}/MyComputer/{0}", path.Drive, Request.ApplicationPath), "images/icons/netdrive.png", false));
+                    }
             }
             else
             {
@@ -138,7 +163,7 @@ namespace HAP.Web
                 breadcrumbrepeater.DataSource = breadcrumbs.ToArray();
                 breadcrumbrepeater.DataBind();
 
-                if (!string.IsNullOrEmpty(RoutingPath)) items.Add(new MyComputerItem("..", "Up a Directory", Request.ApplicationPath + "/MyComputer/" + (RoutingDrive + "/" + RoutingPath).Remove((RoutingDrive + "/" + RoutingPath).LastIndexOf('/')), "folder.png", false));
+                if (!string.IsNullOrEmpty(RoutingPath)) items.Add(new MyComputerItem("..", "Up a Directory", Request.ApplicationPath + "/MyComputer/" + (RoutingDrive + "/" + RoutingPath).Remove((RoutingDrive + "/" + RoutingPath).LastIndexOf('/')), "images/icons/folder.png", false));
                 //    items.Add(new MyComputerItem("My Computer", "Back to My Computer", "/MyComputer.aspx", "school.png", false));
                 //else 
 
@@ -154,30 +179,32 @@ namespace HAP.Web
                                 string dirpath = subdir.FullName;
                                 dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", u), Username), unc.Drive);
                                 dirpath = dirpath.Replace('\\', '/');
-                                items.Add(new MyComputerItem(subdir.Name, "Last Modified: " + subdir.LastWriteTime.ToString("g"), Request.ApplicationPath + "/MyComputer/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(subdir), allowedit));
+
+                                CBFile cb = new CBFile(subdir, Converter.ToUNCPath(unc), u);
+                                items.Add(new MyComputerItem(cb.Name, "<i>" + cb.Type + "</i>", Request.ApplicationPath + "/MyComputer/" + dirpath.Replace('&', '^'), cb.Icon, allowedit));
                             }
                         }
                         catch { }
 
                     foreach (FileInfo file in dir.GetFiles())
                     {
-                        try
-                        {
+                        //try
+                        //{
                             if (!file.Name.ToLower().Contains("thumbs") && checkext(file.Extension))
                             {
                                 string dirpath = file.FullName;
                                 dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", u), Username), unc.Drive);
                                 dirpath = dirpath.Replace('\\', '/');
-                                if (!string.IsNullOrEmpty(file.Extension))
-                                    items.Add(new MyComputerItem(file.Name.Replace(file.Extension, ""), "Last Modified: " + file.LastWriteTime.ToString("g"), Request.ApplicationPath + "/Download/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(file), allowedit));
-                                else
-                                    items.Add(new MyComputerItem(file.Name, "Last Modified: " + file.LastWriteTime.ToString("g"), Request.ApplicationPath + "/Download/" + dirpath.Replace('&', '^'), MyComputerItem.ParseForImage(file), allowedit));
+
+                                CBFile cb = new CBFile(file, Converter.ToUNCPath(unc), u);
+                                items.Add(new MyComputerItem(cb.Name, "<i>" + cb.Type + "</i>", Request.ApplicationPath + "/Download/" + dirpath.Replace('&', '^'), cb.Icon, allowedit));
                             }
-                        }
-                        catch
-                        {
-                            //Response.Redirect("/unauthorised.aspx?path=" + Server.UrlPathEncode(uae.Message), true);
-                        }
+                        //}
+                        //catch
+                        //{
+                        //    continue;
+                        //    //Response.Redirect("/unauthorised.aspx?path=" + Server.UrlPathEncode(uae.Message), true);
+                        //}
                     }
                 }
                 catch (UnauthorizedAccessException uae)

@@ -16,7 +16,8 @@ namespace HAP.Data.BookingSystem
         public Booking(XmlNode node)
         {
             //nt.Parse(node.Attributes["room"].Value), node.Attributes["bookingfor"].Value, node.Attributes["bookingby"].Value, true)
-            this.Day = int.Parse(node.Attributes["day"].Value);
+            if (node.Attributes["date"] != null) this.Date = DateTime.Parse(node.Attributes["date"].Value);
+            if (node.Attributes["day"] != null) this.Day = int.Parse(node.Attributes["day"].Value);
             this.Lesson = node.Attributes["lesson"].Value;
             this.Room = node.Attributes["room"].Value;
             this.Name = node.Attributes["name"].Value;
@@ -33,6 +34,7 @@ namespace HAP.Data.BookingSystem
         public Booking(XmlNode node, int day)
         {
             //nt.Parse(node.Attributes["room"].Value), node.Attributes["bookingfor"].Value, node.Attributes["bookingby"].Value, true)
+            if (node.Attributes["date"] != null) this.Date = DateTime.Parse(node.Attributes["date"].Value);
             this.Day = day;
             this.Lesson = node.Attributes["lesson"].Value;
             this.Room = node.Attributes["room"].Value;
@@ -68,6 +70,7 @@ namespace HAP.Data.BookingSystem
         public int LTCount { get; set; }
         public bool Static { get; set; }
         public string uid { get; set; }
+        public DateTime Date { get; set; }
         public UserInfo User
         {
             get

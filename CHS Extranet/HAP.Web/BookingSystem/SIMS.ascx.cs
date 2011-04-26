@@ -15,7 +15,19 @@ namespace HAP.Web.BookingSystem
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            this.Visible = Page.User.IsInRole("Domain Admins");
+            this.Visible = isAdmin;
+        }
+
+        protected bool isAdmin
+        {
+            get
+            {
+                bool vis = false;
+                foreach (string s in hapConfig.Current.BookingSystem.AdminGroups.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
+                    if (!vis) vis = Page.User.IsInRole(s);
+                if (vis) return true;
+                return Page.User.IsInRole("Domain Admins");
+            }
         }
 
         List<string> log = new List<string>();
