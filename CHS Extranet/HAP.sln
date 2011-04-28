@@ -96,9 +96,6 @@ Global
 		SccProjectName15 = HAP\u0020Quota\u0020Service\u0020Setup
 		SccLocalPath15 = HAP\u0020Quota\u0020Service\u0020Setup
 	EndGlobalSection
-	GlobalSection(SharpSetup) = preSolution
-		Version = 1.2
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -196,6 +193,7 @@ Global
 		{E10211DD-09C4-4756-AC4D-36C73A73FCEB}.Release|Any CPU.ActiveCfg = Release
 		{E10211DD-09C4-4756-AC4D-36C73A73FCEB}.Release|Any CPU.Build.0 = Release
 		{E10211DD-09C4-4756-AC4D-36C73A73FCEB}.Release|Mixed Platforms.ActiveCfg = Release
+		{E10211DD-09C4-4756-AC4D-36C73A73FCEB}.Release|Mixed Platforms.Build.0 = Release
 		{E10211DD-09C4-4756-AC4D-36C73A73FCEB}.Release|x64.ActiveCfg = Release
 		{E10211DD-09C4-4756-AC4D-36C73A73FCEB}.Release|x64.Build.0 = Release
 		{E10211DD-09C4-4756-AC4D-36C73A73FCEB}.Release|x86.ActiveCfg = Release
@@ -220,6 +218,7 @@ Global
 		{51E919E3-C676-4439-B192-F1F936FB830B}.Release|Any CPU.ActiveCfg = Release
 		{51E919E3-C676-4439-B192-F1F936FB830B}.Release|Any CPU.Build.0 = Release
 		{51E919E3-C676-4439-B192-F1F936FB830B}.Release|Mixed Platforms.ActiveCfg = Release
+		{51E919E3-C676-4439-B192-F1F936FB830B}.Release|Mixed Platforms.Build.0 = Release
 		{51E919E3-C676-4439-B192-F1F936FB830B}.Release|x64.ActiveCfg = Release
 		{51E919E3-C676-4439-B192-F1F936FB830B}.Release|x86.ActiveCfg = Release
 		{D7498641-1837-480E-8AA0-4466CDB5FB12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -291,10 +290,14 @@ Global
 		{93C675DE-3922-47C5-9FD8-1AC25348FC4D}.Release|Any CPU.ActiveCfg = Release
 		{93C675DE-3922-47C5-9FD8-1AC25348FC4D}.Release|Any CPU.Build.0 = Release
 		{93C675DE-3922-47C5-9FD8-1AC25348FC4D}.Release|Mixed Platforms.ActiveCfg = Release
+		{93C675DE-3922-47C5-9FD8-1AC25348FC4D}.Release|Mixed Platforms.Build.0 = Release
 		{93C675DE-3922-47C5-9FD8-1AC25348FC4D}.Release|x64.ActiveCfg = Release
 		{93C675DE-3922-47C5-9FD8-1AC25348FC4D}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(SharpSetup) = preSolution
+		Version = 1.2
 	EndGlobalSection
 EndGlobal
