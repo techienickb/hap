@@ -18,6 +18,7 @@ using System.DirectoryServices;
 using System.Threading;
 using System.IO;
 using System.Windows.Media.Animation;
+using HAP.UserCard.Web;
 
 namespace HAP.UserCard
 {
@@ -38,12 +39,13 @@ namespace HAP.UserCard
             icon.Click += new EventHandler(icon_Click);
             icon.Visible = true;
             Cursor = controlled.Cursor = Cursors.AppStarting;
-            pass.Visibility = helpdesk.Visibility = controlled.Visibility = isStudent ? System.Windows.Visibility.Hidden : System.Windows.Visibility.Visible;
+            pass.Visibility = helpdesk.Visibility = controlled.Visibility = System.Windows.Visibility.Hidden;
             Web.apiSoapClient c = new Web.apiSoapClient();
             c.getInitCompleted += new EventHandler<Web.getInitCompletedEventArgs>(c_getInitCompleted);
-            c.getInitAsync();
+            c.getInitAsync(Environment.UserName);
         }
         public System.Windows.Forms.NotifyIcon icon { get; private set; }
+        public Init Init { get; set; }
         void icon_Click(object sender, EventArgs e)
         {
             Show();
@@ -51,16 +53,11 @@ namespace HAP.UserCard
 
         void tabs_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            if (isStudent) return;
+            if (Init.UserLevel == UserLevel.Student) return;
             if (e.Delta > 0 && tabs.SelectedIndex < 3) tabs.SelectedIndex++;
             else if (tabs.SelectedIndex > 0 && e.Delta < 0) tabs.SelectedIndex--;
 
         }
-
-        string path = "";
-        bool isStudent = true;
-        public UserPrincipal up { get; set; }
-        PrincipalContext pcontext;
 
         #region Go to Bottom Right
 
@@ -164,25 +161,20 @@ namespace HAP.UserCard
         {
             try
             {
-                name.Text = up.DisplayName;
-                email.Text = up.EmailAddress;
-                homedrive.Text = string.Format("{0} ({1})", up.HomeDrive, up.HomeDirectory);
+                name.Text = Init.DisplayName;
+                email.Text = Init.EmailAddress;
+                homedrive.Text = string.Format("{0} ({1})", Init.HomeDrive, Init.HomeDirectory);
             }
             catch { }
-            pass.Visibility = helpdesk.Visibility = controlled.Visibility = isStudent ? System.Windows.Visibility.Hidden : System.Windows.Visibility.Visible;
-            if (!isStudent)
+            pass.Visibility = helpdesk.Visibility = controlled.Visibility = Init.UserLevel == UserLevel.Student ? System.Windows.Visibility.Hidden : System.Windows.Visibility.Visible;
+            if (Init.UserLevel != UserLevel.Student)
             {
                 controlled.Visibility = string.IsNullOrEmpty(Properties.Settings.Default.ControlledOU) ? System.Windows.Visibility.Hidden : controlled.Visibility;
                 helpdesk.Visibility = Properties.Settings.Default.ShowHelpDesk ? controlled.Visibility : System.Windows.Visibility.Hidden;
             }
-            departmenttext.Text = dep;
+            departmenttext.Text = Init.Department;
             Cursor = Cursors.Arrow;
         }
-
-        string dep = "";
-        string adc = "";
-        string sgn = "";
-        string hd = "";
         void doInit(object data)
         {
             try
@@ -193,68 +185,24 @@ namespace HAP.UserCard
                     MessageBox.Show("Error:\n" + e.Error.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     Close();
                 }
-                try
-                {
-                    string ad = e.Result.ADConString;
-                    ad = ad.Remove(0, 7);
-                    ad = ad.Remove(ad.IndexOf('/'));
-                    sgn = e.Result.StudentGroupName;
-                    pcontext = new PrincipalContext(ContextType.Domain, ad);
-                }
-                catch (Exception ex) { MessageBox.Show("Error 1:\n" + ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
-                SearchResult r = null;
-                try
-                {
-                    up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Environment.UserName);
-                    //up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, "rmstaff");
-                    if (!string.IsNullOrEmpty(up.HomeDrive)) hd = up.HomeDirectory;
-                    isStudent = up.IsMemberOf(GroupPrincipal.FindByIdentity(pcontext, e.Result.StudentGroupName));
-                    adc = e.Result.ADConString;
+                Init = e.Result;
+                Dispatcher.BeginInvoke(new Action(UpdateUser));
 
-                    DirectoryEntry usersDE = new DirectoryEntry(adc);
-                    DirectorySearcher ds = new DirectorySearcher(usersDE);
-                    ds.Filter = "(sAMAccountName=" + Environment.UserName + ")";
-                    //ds.Filter = "(sAMAccountName=rmstaff)";
-                    ds.PropertiesToLoad.Add("rmCom2000-UsrMgr-uPN");
-                    ds.PropertiesToLoad.Add("department");
-                    r = ds.FindOne();
-                    try
-                    {
-                        dep = r.Properties["department"][0].ToString();
-                    }
-                    catch { dep = "n/a"; }
-
-                    path = r.Path.Remove(0, r.Path.IndexOf(',') + 1);
-                }
-                catch (Exception ex) { MessageBox.Show("Error 2:\n" + ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
-                try
+                Web.apiSoapClient c = new Web.apiSoapClient();
+                c.GetFreeSpacePercentageCompleted += new EventHandler<Web.GetFreeSpacePercentageCompletedEventArgs>(c_GetFreeSpacePercentageCompleted);
+                if (Init.UserLevel != UserLevel.Student)
                 {
-                    Dispatcher.BeginInvoke(new Action(UpdateUser));
-
-                    Web.apiSoapClient c = new Web.apiSoapClient();
-                    c.GetFreeSpacePercentageCompleted += new EventHandler<Web.GetFreeSpacePercentageCompletedEventArgs>(c_GetFreeSpacePercentageCompleted);
-                    if (!isStudent)
-                    {
-                        ThreadStart ts = new ThreadStart(LoadControlled);
-                        if (!string.IsNullOrEmpty(Properties.Settings.Default.ControlledOU)) new Thread(ts).Start();
-                        c.getMyTicketsCompleted += new EventHandler<Web.getMyTicketsCompletedEventArgs>(c_getMyTicketsCompleted);
-                        c.getMyTicketsAsync(Environment.UserName);
-                    }
-                    else
-                    {
-                        try
-                        {
-                            if (r.Properties["rmCom2000-UsrMgr-uPN"] != null)
-                            {
-                                c.getPhotoCompleted += new EventHandler<Web.getPhotoCompletedEventArgs>(c_getPhotoCompleted);
-                                c.getPhotoAsync(r.Properties["rmCom2000-UsrMgr-uPN"][0].ToString());
-                            }
-                        }
-                        catch { }
-                    }
-                    if (!string.IsNullOrEmpty(up.HomeDrive)) c.GetFreeSpacePercentageAsync(up.Name, up.HomeDirectory);
+                    ThreadStart ts = new ThreadStart(LoadControlled);
+                    if (!string.IsNullOrEmpty(Properties.Settings.Default.ControlledOU)) new Thread(ts).Start();
+                    c.getMyTicketsCompleted += new EventHandler<Web.getMyTicketsCompletedEventArgs>(c_getMyTicketsCompleted);
+                    c.getMyTicketsAsync(Environment.UserName);
                 }
-                catch (Exception ex) { MessageBox.Show("Error 3:\n" + ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                else
+                {
+                    c.getPhotoCompleted += new EventHandler<Web.getPhotoCompletedEventArgs>(c_getPhotoCompleted);
+                    c.getPhotoAsync(Init.EmployeeID);
+                }
+                if (!string.IsNullOrEmpty(Init.HomeDrive)) c.GetFreeSpacePercentageAsync(Environment.UserName, Init.HomeDirectory);
             }
             catch (Exception ex) { MessageBox.Show("Init Error:\n" + ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
@@ -323,7 +271,7 @@ namespace HAP.UserCard
 
                 Web.apiSoapClient c = new Web.apiSoapClient();
                 c.GetFreeSpacePercentageCompleted += new EventHandler<Web.GetFreeSpacePercentageCompletedEventArgs>(c_GetFreeSpacePercentageCompleted);
-                c.GetFreeSpacePercentageAsync(up.Name, up.HomeDirectory);
+                c.GetFreeSpacePercentageAsync(Environment.UserName, Init.HomeDirectory);
             }
         }
 
@@ -339,7 +287,7 @@ namespace HAP.UserCard
                 try
                 {
                     long freeBytesForUser, totalBytes, freeBytes;
-                    if (Win32.GetDiskFreeSpaceEx(hd, out freeBytesForUser, out totalBytes, out freeBytes))
+                    if (Win32.GetDiskFreeSpaceEx(Init.HomeDirectory, out freeBytesForUser, out totalBytes, out freeBytes))
                     {
                         drivespaceprog.Maximum = totalBytes;
                         drivespaceprog.Value = drivespaceprog.Maximum - freeBytes;
@@ -458,14 +406,27 @@ namespace HAP.UserCard
         {
             try
             {
-                UserPrincipal up2 = UserPrincipal.FindByIdentity(pcontext, (string)o);
-                if (!up2.IsMemberOf(GroupPrincipal.FindByIdentity(pcontext, sgn)) && !up.IsMemberOf(GroupPrincipal.FindByIdentity(pcontext, "Domain Admins"))) throw new Exception("You can only reset passwords for Students");
-                up2.SetPassword("password");
-                up2.ExpirePasswordNow();
-                up2.Save();
-                Dispatcher.BeginInvoke(new donereset(DoneReset), up2.DisplayName);
+                Web.apiSoapClient c1 = new Web.apiSoapClient();
+                c1.getInitCompleted += new EventHandler<getInitCompletedEventArgs>(c1_getInitCompleted);
+                c1.ResetPasswordAsync(username.Text);
             }
             catch (Exception ex) { Dispatcher.BeginInvoke(new donereset(ErrorReset), ex.ToString()); }
+        }
+
+        void c1_getInitCompleted(object sender, getInitCompletedEventArgs e)
+        {
+            if (e.Error != null) Dispatcher.BeginInvoke(new Action<string>(ErrorReset), e.Error.ToString());
+            else if (Init.UserLevel == UserLevel.Admin || e.Result.UserLevel == UserLevel.Student)
+            {
+                Web.apiSoapClient c = new Web.apiSoapClient();
+                c.ResetPasswordCompleted += new EventHandler<System.ComponentModel.AsyncCompletedEventArgs>(c_ResetPasswordCompleted);
+            }
+        }
+
+        void c_ResetPasswordCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
+        {
+            if (e.Error != null) Dispatcher.BeginInvoke(new Action<string>(ErrorReset), e.Error.ToString());
+            Dispatcher.BeginInvoke(new donereset(DoneReset), (string)e.UserState);
         }
 
         delegate void donereset(string displayname);

@@ -3,7 +3,11 @@
   <wsdl:types>
     <s:schema elementFormDefault="qualified" targetNamespace="http://hap.codeplex.com/">
       <s:element name="getInit">
-        <s:complexType />
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="username" type="s:string" />
+          </s:sequence>
+        </s:complexType>
       </s:element>
       <s:element name="getInitResponse">
         <s:complexType>
@@ -14,10 +18,23 @@
       </s:element>
       <s:complexType name="Init">
         <s:sequence>
-          <s:element minOccurs="0" maxOccurs="1" name="StudentGroupName" type="s:string" />
-          <s:element minOccurs="0" maxOccurs="1" name="ADConString" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DisplayName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Department" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HomeDirectory" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HomeDrive" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="EmailAddress" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="UserLevel" type="tns:UserLevel" />
+          <s:element minOccurs="0" maxOccurs="1" name="EmployeeID" type="s:string" />
         </s:sequence>
       </s:complexType>
+      <s:simpleType name="UserLevel">
+        <s:restriction base="s:string">
+          <s:enumeration value="Admin" />
+          <s:enumeration value="Teacher" />
+          <s:enumeration value="Student" />
+        </s:restriction>
+      </s:simpleType>
       <s:element name="getPhoto">
         <s:complexType>
           <s:sequence>
@@ -32,6 +49,43 @@
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:element name="ResetPassword">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="username" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ResetPasswordResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="getControlledOUs">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="OuDn" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getControlledOUsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getControlledOUsResult" type="tns:ArrayOfOU" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfOU">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="OU" nillable="true" type="tns:OU" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="OU">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="OUs" type="tns:ArrayOfOU" />
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="OUPath" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Show" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
       <s:element name="Enable">
         <s:complexType>
           <s:sequence>
@@ -154,6 +208,18 @@
   <wsdl:message name="getPhotoSoapOut">
     <wsdl:part name="parameters" element="tns:getPhotoResponse" />
   </wsdl:message>
+  <wsdl:message name="ResetPasswordSoapIn">
+    <wsdl:part name="parameters" element="tns:ResetPassword" />
+  </wsdl:message>
+  <wsdl:message name="ResetPasswordSoapOut">
+    <wsdl:part name="parameters" element="tns:ResetPasswordResponse" />
+  </wsdl:message>
+  <wsdl:message name="getControlledOUsSoapIn">
+    <wsdl:part name="parameters" element="tns:getControlledOUs" />
+  </wsdl:message>
+  <wsdl:message name="getControlledOUsSoapOut">
+    <wsdl:part name="parameters" element="tns:getControlledOUsResponse" />
+  </wsdl:message>
   <wsdl:message name="EnableSoapIn">
     <wsdl:part name="parameters" element="tns:Enable" />
   </wsdl:message>
@@ -193,6 +259,14 @@
       <wsdl:input message="tns:getPhotoSoapIn" />
       <wsdl:output message="tns:getPhotoSoapOut" />
     </wsdl:operation>
+    <wsdl:operation name="ResetPassword">
+      <wsdl:input message="tns:ResetPasswordSoapIn" />
+      <wsdl:output message="tns:ResetPasswordSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getControlledOUs">
+      <wsdl:input message="tns:getControlledOUsSoapIn" />
+      <wsdl:output message="tns:getControlledOUsSoapOut" />
+    </wsdl:operation>
     <wsdl:operation name="Enable">
       <wsdl:input message="tns:EnableSoapIn" />
       <wsdl:output message="tns:EnableSoapOut" />
@@ -227,6 +301,24 @@
     </wsdl:operation>
     <wsdl:operation name="getPhoto">
       <soap:operation soapAction="http://hap.codeplex.com/getPhoto" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ResetPassword">
+      <soap:operation soapAction="http://hap.codeplex.com/ResetPassword" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getControlledOUs">
+      <soap:operation soapAction="http://hap.codeplex.com/getControlledOUs" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -293,6 +385,24 @@
     </wsdl:operation>
     <wsdl:operation name="getPhoto">
       <soap12:operation soapAction="http://hap.codeplex.com/getPhoto" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ResetPassword">
+      <soap12:operation soapAction="http://hap.codeplex.com/ResetPassword" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getControlledOUs">
+      <soap12:operation soapAction="http://hap.codeplex.com/getControlledOUs" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

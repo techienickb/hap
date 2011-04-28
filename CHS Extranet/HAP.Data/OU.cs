@@ -5,16 +5,16 @@ using System.Text;
 
 namespace HAP.Data
 {
-    public class OU : List<OU>
+    public class OU
     {
         public OU() { }
-        public OU(string name, string oupath, bool show) : base()
+        public OU(string name, string oupath, bool show)
         {
             Name = name;
             OUPath = oupath;
             Show = show;
         }
-        public OU(string oupath, bool show) : base()
+        public OU(string oupath, bool show)
         {
             OUPath = oupath;
             Name = oupath.Remove(0, oupath.IndexOf('/') + 1);
@@ -22,6 +22,7 @@ namespace HAP.Data
             Name = Name.Remove(0, Name.IndexOf('=') + 1);
             Show = show;
         }
+        public OU[] OUs { get; set; }
         public string Name { get; set; }
         public string OUPath { get; set; }
         public bool Show { get; set; }

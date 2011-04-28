@@ -23,10 +23,27 @@ namespace HAP.UserCard.Web {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string StudentGroupNameField;
+        private string UsernameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string ADConStringField;
+        private string DisplayNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DepartmentField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string HomeDirectoryField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string HomeDriveField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string EmailAddressField;
+        
+        private HAP.UserCard.Web.UserLevel UserLevelField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string EmployeeIDField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -39,27 +56,211 @@ namespace HAP.UserCard.Web {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
-        public string StudentGroupName {
+        public string Username {
             get {
-                return this.StudentGroupNameField;
+                return this.UsernameField;
             }
             set {
-                if ((object.ReferenceEquals(this.StudentGroupNameField, value) != true)) {
-                    this.StudentGroupNameField = value;
-                    this.RaisePropertyChanged("StudentGroupName");
+                if ((object.ReferenceEquals(this.UsernameField, value) != true)) {
+                    this.UsernameField = value;
+                    this.RaisePropertyChanged("Username");
                 }
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=1)]
-        public string ADConString {
+        public string DisplayName {
             get {
-                return this.ADConStringField;
+                return this.DisplayNameField;
             }
             set {
-                if ((object.ReferenceEquals(this.ADConStringField, value) != true)) {
-                    this.ADConStringField = value;
-                    this.RaisePropertyChanged("ADConString");
+                if ((object.ReferenceEquals(this.DisplayNameField, value) != true)) {
+                    this.DisplayNameField = value;
+                    this.RaisePropertyChanged("DisplayName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
+        public string Department {
+            get {
+                return this.DepartmentField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DepartmentField, value) != true)) {
+                    this.DepartmentField = value;
+                    this.RaisePropertyChanged("Department");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=3)]
+        public string HomeDirectory {
+            get {
+                return this.HomeDirectoryField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.HomeDirectoryField, value) != true)) {
+                    this.HomeDirectoryField = value;
+                    this.RaisePropertyChanged("HomeDirectory");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=4)]
+        public string HomeDrive {
+            get {
+                return this.HomeDriveField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.HomeDriveField, value) != true)) {
+                    this.HomeDriveField = value;
+                    this.RaisePropertyChanged("HomeDrive");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=5)]
+        public string EmailAddress {
+            get {
+                return this.EmailAddressField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.EmailAddressField, value) != true)) {
+                    this.EmailAddressField = value;
+                    this.RaisePropertyChanged("EmailAddress");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=6)]
+        public HAP.UserCard.Web.UserLevel UserLevel {
+            get {
+                return this.UserLevelField;
+            }
+            set {
+                if ((this.UserLevelField.Equals(value) != true)) {
+                    this.UserLevelField = value;
+                    this.RaisePropertyChanged("UserLevel");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=7)]
+        public string EmployeeID {
+            get {
+                return this.EmployeeIDField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.EmployeeIDField, value) != true)) {
+                    this.EmployeeIDField = value;
+                    this.RaisePropertyChanged("EmployeeID");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="UserLevel", Namespace="http://hap.codeplex.com/")]
+    public enum UserLevel : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Admin = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Teacher = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Student = 2,
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="OU", Namespace="http://hap.codeplex.com/")]
+    [System.SerializableAttribute()]
+    public partial class OU : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private HAP.UserCard.Web.OU[] OUsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string OUPathField;
+        
+        private bool ShowField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
+        public HAP.UserCard.Web.OU[] OUs {
+            get {
+                return this.OUsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.OUsField, value) != true)) {
+                    this.OUsField = value;
+                    this.RaisePropertyChanged("OUs");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=1)]
+        public string Name {
+            get {
+                return this.NameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NameField, value) != true)) {
+                    this.NameField = value;
+                    this.RaisePropertyChanged("Name");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
+        public string OUPath {
+            get {
+                return this.OUPathField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.OUPathField, value) != true)) {
+                    this.OUPathField = value;
+                    this.RaisePropertyChanged("OUPath");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=3)]
+        public bool Show {
+            get {
+                return this.ShowField;
+            }
+            set {
+                if ((this.ShowField.Equals(value) != true)) {
+                    this.ShowField = value;
+                    this.RaisePropertyChanged("Show");
                 }
             }
         }
@@ -419,7 +620,7 @@ namespace HAP.UserCard.Web {
     [System.ServiceModel.ServiceContractAttribute(Namespace="http://hap.codeplex.com/", ConfigurationName="Web.apiSoap")]
     public interface apiSoap {
         
-        // CODEGEN: Generating message contract since element name getInitResult from namespace http://hap.codeplex.com/ is not marked nillable
+        // CODEGEN: Generating message contract since element name username from namespace http://hap.codeplex.com/ is not marked nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://hap.codeplex.com/getInit", ReplyAction="*")]
         HAP.UserCard.Web.getInitResponse getInit(HAP.UserCard.Web.getInitRequest request);
         
@@ -436,6 +637,24 @@ namespace HAP.UserCard.Web {
         System.IAsyncResult BegingetPhoto(HAP.UserCard.Web.getPhotoRequest request, System.AsyncCallback callback, object asyncState);
         
         HAP.UserCard.Web.getPhotoResponse EndgetPhoto(System.IAsyncResult result);
+        
+        // CODEGEN: Generating message contract since element name username from namespace http://hap.codeplex.com/ is not marked nillable
+        [System.ServiceModel.OperationContractAttribute(Action="http://hap.codeplex.com/ResetPassword", ReplyAction="*")]
+        HAP.UserCard.Web.ResetPasswordResponse ResetPassword(HAP.UserCard.Web.ResetPasswordRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://hap.codeplex.com/ResetPassword", ReplyAction="*")]
+        System.IAsyncResult BeginResetPassword(HAP.UserCard.Web.ResetPasswordRequest request, System.AsyncCallback callback, object asyncState);
+        
+        HAP.UserCard.Web.ResetPasswordResponse EndResetPassword(System.IAsyncResult result);
+        
+        // CODEGEN: Generating message contract since element name OuDn from namespace http://hap.codeplex.com/ is not marked nillable
+        [System.ServiceModel.OperationContractAttribute(Action="http://hap.codeplex.com/getControlledOUs", ReplyAction="*")]
+        HAP.UserCard.Web.getControlledOUsResponse getControlledOUs(HAP.UserCard.Web.getControlledOUsRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://hap.codeplex.com/getControlledOUs", ReplyAction="*")]
+        System.IAsyncResult BegingetControlledOUs(HAP.UserCard.Web.getControlledOUsRequest request, System.AsyncCallback callback, object asyncState);
+        
+        HAP.UserCard.Web.getControlledOUsResponse EndgetControlledOUs(System.IAsyncResult result);
         
         // CODEGEN: Generating message contract since element name oupaths from namespace http://hap.codeplex.com/ is not marked nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://hap.codeplex.com/Enable", ReplyAction="*")]
@@ -503,10 +722,17 @@ namespace HAP.UserCard.Web {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.Runtime.Serialization.DataContractAttribute()]
+    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://hap.codeplex.com/")]
     public partial class getInitRequestBody {
         
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        public string username;
+        
         public getInitRequestBody() {
+        }
+        
+        public getInitRequestBody(string username) {
+            this.username = username;
         }
     }
     
@@ -609,6 +835,135 @@ namespace HAP.UserCard.Web {
         
         public getPhotoResponseBody(string getPhotoResult) {
             this.getPhotoResult = getPhotoResult;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class ResetPasswordRequest {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="ResetPassword", Namespace="http://hap.codeplex.com/", Order=0)]
+        public HAP.UserCard.Web.ResetPasswordRequestBody Body;
+        
+        public ResetPasswordRequest() {
+        }
+        
+        public ResetPasswordRequest(HAP.UserCard.Web.ResetPasswordRequestBody Body) {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://hap.codeplex.com/")]
+    public partial class ResetPasswordRequestBody {
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        public string username;
+        
+        public ResetPasswordRequestBody() {
+        }
+        
+        public ResetPasswordRequestBody(string username) {
+            this.username = username;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class ResetPasswordResponse {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="ResetPasswordResponse", Namespace="http://hap.codeplex.com/", Order=0)]
+        public HAP.UserCard.Web.ResetPasswordResponseBody Body;
+        
+        public ResetPasswordResponse() {
+        }
+        
+        public ResetPasswordResponse(HAP.UserCard.Web.ResetPasswordResponseBody Body) {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute()]
+    public partial class ResetPasswordResponseBody {
+        
+        public ResetPasswordResponseBody() {
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class getControlledOUsRequest {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="getControlledOUs", Namespace="http://hap.codeplex.com/", Order=0)]
+        public HAP.UserCard.Web.getControlledOUsRequestBody Body;
+        
+        public getControlledOUsRequest() {
+        }
+        
+        public getControlledOUsRequest(HAP.UserCard.Web.getControlledOUsRequestBody Body) {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://hap.codeplex.com/")]
+    public partial class getControlledOUsRequestBody {
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        public string OuDn;
+        
+        public getControlledOUsRequestBody() {
+        }
+        
+        public getControlledOUsRequestBody(string OuDn) {
+            this.OuDn = OuDn;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class getControlledOUsResponse {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="getControlledOUsResponse", Namespace="http://hap.codeplex.com/", Order=0)]
+        public HAP.UserCard.Web.getControlledOUsResponseBody Body;
+        
+        public getControlledOUsResponse() {
+        }
+        
+        public getControlledOUsResponse(HAP.UserCard.Web.getControlledOUsResponseBody Body) {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://hap.codeplex.com/")]
+    public partial class getControlledOUsResponseBody {
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        public HAP.UserCard.Web.OU[] getControlledOUsResult;
+        
+        public getControlledOUsResponseBody() {
+        }
+        
+        public getControlledOUsResponseBody(HAP.UserCard.Web.OU[] getControlledOUsResult) {
+            this.getControlledOUsResult = getControlledOUsResult;
         }
     }
     
@@ -998,6 +1353,25 @@ namespace HAP.UserCard.Web {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public partial class getControlledOUsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        public getControlledOUsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        public HAP.UserCard.Web.OU[] Result {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((HAP.UserCard.Web.OU[])(this.results[0]));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class GetFreeSpacePercentageCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
@@ -1069,6 +1443,18 @@ namespace HAP.UserCard.Web {
         
         private System.Threading.SendOrPostCallback ongetPhotoCompletedDelegate;
         
+        private BeginOperationDelegate onBeginResetPasswordDelegate;
+        
+        private EndOperationDelegate onEndResetPasswordDelegate;
+        
+        private System.Threading.SendOrPostCallback onResetPasswordCompletedDelegate;
+        
+        private BeginOperationDelegate onBegingetControlledOUsDelegate;
+        
+        private EndOperationDelegate onEndgetControlledOUsDelegate;
+        
+        private System.Threading.SendOrPostCallback ongetControlledOUsCompletedDelegate;
+        
         private BeginOperationDelegate onBeginEnableDelegate;
         
         private EndOperationDelegate onEndEnableDelegate;
@@ -1122,6 +1508,10 @@ namespace HAP.UserCard.Web {
         
         public event System.EventHandler<getPhotoCompletedEventArgs> getPhotoCompleted;
         
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> ResetPasswordCompleted;
+        
+        public event System.EventHandler<getControlledOUsCompletedEventArgs> getControlledOUsCompleted;
+        
         public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> EnableCompleted;
         
         public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> DisableCompleted;
@@ -1137,9 +1527,10 @@ namespace HAP.UserCard.Web {
             return base.Channel.getInit(request);
         }
         
-        public HAP.UserCard.Web.Init getInit() {
+        public HAP.UserCard.Web.Init getInit(string username) {
             HAP.UserCard.Web.getInitRequest inValue = new HAP.UserCard.Web.getInitRequest();
             inValue.Body = new HAP.UserCard.Web.getInitRequestBody();
+            inValue.Body.username = username;
             HAP.UserCard.Web.getInitResponse retVal = ((HAP.UserCard.Web.apiSoap)(this)).getInit(inValue);
             return retVal.Body.getInitResult;
         }
@@ -1150,9 +1541,10 @@ namespace HAP.UserCard.Web {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        public System.IAsyncResult BegingetInit(System.AsyncCallback callback, object asyncState) {
+        public System.IAsyncResult BegingetInit(string username, System.AsyncCallback callback, object asyncState) {
             HAP.UserCard.Web.getInitRequest inValue = new HAP.UserCard.Web.getInitRequest();
             inValue.Body = new HAP.UserCard.Web.getInitRequestBody();
+            inValue.Body.username = username;
             return ((HAP.UserCard.Web.apiSoap)(this)).BegingetInit(inValue, callback, asyncState);
         }
         
@@ -1168,7 +1560,8 @@ namespace HAP.UserCard.Web {
         }
         
         private System.IAsyncResult OnBegingetInit(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            return this.BegingetInit(callback, asyncState);
+            string username = ((string)(inValues[0]));
+            return this.BegingetInit(username, callback, asyncState);
         }
         
         private object[] OnEndgetInit(System.IAsyncResult result) {
@@ -1184,11 +1577,11 @@ namespace HAP.UserCard.Web {
             }
         }
         
-        public void getInitAsync() {
-            this.getInitAsync(null);
+        public void getInitAsync(string username) {
+            this.getInitAsync(username, null);
         }
         
-        public void getInitAsync(object userState) {
+        public void getInitAsync(string username, object userState) {
             if ((this.onBegingetInitDelegate == null)) {
                 this.onBegingetInitDelegate = new BeginOperationDelegate(this.OnBegingetInit);
             }
@@ -1198,7 +1591,8 @@ namespace HAP.UserCard.Web {
             if ((this.ongetInitCompletedDelegate == null)) {
                 this.ongetInitCompletedDelegate = new System.Threading.SendOrPostCallback(this.OngetInitCompleted);
             }
-            base.InvokeAsync(this.onBegingetInitDelegate, null, this.onEndgetInitDelegate, this.ongetInitCompletedDelegate, userState);
+            base.InvokeAsync(this.onBegingetInitDelegate, new object[] {
+                        username}, this.onEndgetInitDelegate, this.ongetInitCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -1272,6 +1666,149 @@ namespace HAP.UserCard.Web {
             }
             base.InvokeAsync(this.onBegingetPhotoDelegate, new object[] {
                         upn}, this.onEndgetPhotoDelegate, this.ongetPhotoCompletedDelegate, userState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        HAP.UserCard.Web.ResetPasswordResponse HAP.UserCard.Web.apiSoap.ResetPassword(HAP.UserCard.Web.ResetPasswordRequest request) {
+            return base.Channel.ResetPassword(request);
+        }
+        
+        public void ResetPassword(string username) {
+            HAP.UserCard.Web.ResetPasswordRequest inValue = new HAP.UserCard.Web.ResetPasswordRequest();
+            inValue.Body = new HAP.UserCard.Web.ResetPasswordRequestBody();
+            inValue.Body.username = username;
+            HAP.UserCard.Web.ResetPasswordResponse retVal = ((HAP.UserCard.Web.apiSoap)(this)).ResetPassword(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.IAsyncResult HAP.UserCard.Web.apiSoap.BeginResetPassword(HAP.UserCard.Web.ResetPasswordRequest request, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginResetPassword(request, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public System.IAsyncResult BeginResetPassword(string username, System.AsyncCallback callback, object asyncState) {
+            HAP.UserCard.Web.ResetPasswordRequest inValue = new HAP.UserCard.Web.ResetPasswordRequest();
+            inValue.Body = new HAP.UserCard.Web.ResetPasswordRequestBody();
+            inValue.Body.username = username;
+            return ((HAP.UserCard.Web.apiSoap)(this)).BeginResetPassword(inValue, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        HAP.UserCard.Web.ResetPasswordResponse HAP.UserCard.Web.apiSoap.EndResetPassword(System.IAsyncResult result) {
+            return base.Channel.EndResetPassword(result);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public void EndResetPassword(System.IAsyncResult result) {
+            HAP.UserCard.Web.ResetPasswordResponse retVal = ((HAP.UserCard.Web.apiSoap)(this)).EndResetPassword(result);
+        }
+        
+        private System.IAsyncResult OnBeginResetPassword(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            string username = ((string)(inValues[0]));
+            return this.BeginResetPassword(username, callback, asyncState);
+        }
+        
+        private object[] OnEndResetPassword(System.IAsyncResult result) {
+            this.EndResetPassword(result);
+            return null;
+        }
+        
+        private void OnResetPasswordCompleted(object state) {
+            if ((this.ResetPasswordCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.ResetPasswordCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void ResetPasswordAsync(string username) {
+            this.ResetPasswordAsync(username, null);
+        }
+        
+        public void ResetPasswordAsync(string username, object userState) {
+            if ((this.onBeginResetPasswordDelegate == null)) {
+                this.onBeginResetPasswordDelegate = new BeginOperationDelegate(this.OnBeginResetPassword);
+            }
+            if ((this.onEndResetPasswordDelegate == null)) {
+                this.onEndResetPasswordDelegate = new EndOperationDelegate(this.OnEndResetPassword);
+            }
+            if ((this.onResetPasswordCompletedDelegate == null)) {
+                this.onResetPasswordCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnResetPasswordCompleted);
+            }
+            base.InvokeAsync(this.onBeginResetPasswordDelegate, new object[] {
+                        username}, this.onEndResetPasswordDelegate, this.onResetPasswordCompletedDelegate, userState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        HAP.UserCard.Web.getControlledOUsResponse HAP.UserCard.Web.apiSoap.getControlledOUs(HAP.UserCard.Web.getControlledOUsRequest request) {
+            return base.Channel.getControlledOUs(request);
+        }
+        
+        public HAP.UserCard.Web.OU[] getControlledOUs(string OuDn) {
+            HAP.UserCard.Web.getControlledOUsRequest inValue = new HAP.UserCard.Web.getControlledOUsRequest();
+            inValue.Body = new HAP.UserCard.Web.getControlledOUsRequestBody();
+            inValue.Body.OuDn = OuDn;
+            HAP.UserCard.Web.getControlledOUsResponse retVal = ((HAP.UserCard.Web.apiSoap)(this)).getControlledOUs(inValue);
+            return retVal.Body.getControlledOUsResult;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.IAsyncResult HAP.UserCard.Web.apiSoap.BegingetControlledOUs(HAP.UserCard.Web.getControlledOUsRequest request, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BegingetControlledOUs(request, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public System.IAsyncResult BegingetControlledOUs(string OuDn, System.AsyncCallback callback, object asyncState) {
+            HAP.UserCard.Web.getControlledOUsRequest inValue = new HAP.UserCard.Web.getControlledOUsRequest();
+            inValue.Body = new HAP.UserCard.Web.getControlledOUsRequestBody();
+            inValue.Body.OuDn = OuDn;
+            return ((HAP.UserCard.Web.apiSoap)(this)).BegingetControlledOUs(inValue, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        HAP.UserCard.Web.getControlledOUsResponse HAP.UserCard.Web.apiSoap.EndgetControlledOUs(System.IAsyncResult result) {
+            return base.Channel.EndgetControlledOUs(result);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public HAP.UserCard.Web.OU[] EndgetControlledOUs(System.IAsyncResult result) {
+            HAP.UserCard.Web.getControlledOUsResponse retVal = ((HAP.UserCard.Web.apiSoap)(this)).EndgetControlledOUs(result);
+            return retVal.Body.getControlledOUsResult;
+        }
+        
+        private System.IAsyncResult OnBegingetControlledOUs(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            string OuDn = ((string)(inValues[0]));
+            return this.BegingetControlledOUs(OuDn, callback, asyncState);
+        }
+        
+        private object[] OnEndgetControlledOUs(System.IAsyncResult result) {
+            HAP.UserCard.Web.OU[] retVal = this.EndgetControlledOUs(result);
+            return new object[] {
+                    retVal};
+        }
+        
+        private void OngetControlledOUsCompleted(object state) {
+            if ((this.getControlledOUsCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.getControlledOUsCompleted(this, new getControlledOUsCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void getControlledOUsAsync(string OuDn) {
+            this.getControlledOUsAsync(OuDn, null);
+        }
+        
+        public void getControlledOUsAsync(string OuDn, object userState) {
+            if ((this.onBegingetControlledOUsDelegate == null)) {
+                this.onBegingetControlledOUsDelegate = new BeginOperationDelegate(this.OnBegingetControlledOUs);
+            }
+            if ((this.onEndgetControlledOUsDelegate == null)) {
+                this.onEndgetControlledOUsDelegate = new EndOperationDelegate(this.OnEndgetControlledOUs);
+            }
+            if ((this.ongetControlledOUsCompletedDelegate == null)) {
+                this.ongetControlledOUsCompletedDelegate = new System.Threading.SendOrPostCallback(this.OngetControlledOUsCompleted);
+            }
+            base.InvokeAsync(this.onBegingetControlledOUsDelegate, new object[] {
+                        OuDn}, this.onEndgetControlledOUsDelegate, this.ongetControlledOUsCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]

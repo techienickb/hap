@@ -156,6 +156,9 @@
     <None Include="Service References\Web\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Service References\Web\HAP.UserCard.Web.OU.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\Web\HAP.UserCard.Web.QuotaInfo.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
