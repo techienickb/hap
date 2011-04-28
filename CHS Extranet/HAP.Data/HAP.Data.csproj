@@ -40,6 +40,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
@@ -66,6 +67,7 @@
     <Compile Include="ComputerBrowser\CBFile.cs" />
     <Compile Include="ComputerBrowser\UNCPath.cs" />
     <Compile Include="ComputerBrowser\UploadFilter.cs" />
+    <Compile Include="OU.cs" />
     <Compile Include="Pupils.cs" />
     <Compile Include="Service References\Quota\Reference.cs">
       <AutoGen>True</AutoGen>

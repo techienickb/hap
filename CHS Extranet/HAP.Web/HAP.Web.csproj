@@ -488,7 +488,6 @@
       <DependentUpon>api.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UserCard\Sys.cs" />
     <Compile Include="WordVisualizer\CoreProperties.cs" />
     <Compile Include="WordVisualizer\DisplayModeEnumeration.cs" />
     <Compile Include="WordVisualizer\EmuUnit.cs" />
