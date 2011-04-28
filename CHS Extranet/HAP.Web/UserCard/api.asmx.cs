@@ -41,6 +41,44 @@ namespace HAP.Web.UserCard
         }
 
         [WebMethod]
+        public void Enable(string[] oupaths)
+        {
+            foreach (string s in oupaths)
+            {
+                try
+                {
+                    DirectoryEntry user = new DirectoryEntry("LDAP://" + s, hapConfig.Current.ADSettings.ADUsername, hapConfig.Current.ADSettings.ADPassword);
+                    int val = (int)user.Properties["userAccountControl"].Value;
+                    user.Properties["userAccountControl"].Value = val & ~0x2;
+                    //ADS_UF_NORMAL_ACCOUNT;
+
+                    user.CommitChanges();
+                    user.Close();
+                }
+                catch { continue; }
+            }
+        }
+
+        [WebMethod]
+        public void Disable(string[] oupaths)
+        {
+            foreach (string s in oupaths)
+            {
+                try
+                {
+                    DirectoryEntry user = new DirectoryEntry("LDAP://" + s, hapConfig.Current.ADSettings.ADUsername, hapConfig.Current.ADSettings.ADPassword);
+                    int val = (int)user.Properties["userAccountControl"].Value;
+                    user.Properties["userAccountControl"].Value = val | ~0x2;
+                    //ADS_UF_NORMAL_ACCOUNT;
+
+                    user.CommitChanges();
+                    user.Close();
+                }
+                catch { continue; }
+            }
+        }
+
+        [WebMethod]
         public HAP.Data.Quota.QuotaInfo GetFreeSpacePercentage(string username, string userhome)
         {
             return HAP.Data.ComputerBrowser.Quota.GetQuota(username, userhome);

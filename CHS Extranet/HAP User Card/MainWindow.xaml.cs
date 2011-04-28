@@ -162,9 +162,13 @@ namespace HAP.UserCard
 
         void UpdateUser()
         {
-            name.Text = up.DisplayName;
-            email.Text = up.EmailAddress;
-            homedrive.Text = string.Format("{0} ({1})", up.HomeDrive, up.HomeDirectory);
+            try
+            {
+                name.Text = up.DisplayName;
+                email.Text = up.EmailAddress;
+                homedrive.Text = string.Format("{0} ({1})", up.HomeDrive, up.HomeDirectory);
+            }
+            catch { }
             pass.Visibility = helpdesk.Visibility = controlled.Visibility = isStudent ? System.Windows.Visibility.Hidden : System.Windows.Visibility.Visible;
             if (!isStudent)
             {
@@ -177,70 +181,82 @@ namespace HAP.UserCard
 
         string dep = "";
         string adc = "";
-        string sef = "";
-        string adun = "";
-        string adpw = "";
         string sgn = "";
         string hd = "";
         void doInit(object data)
         {
-            //try
-            //{
+            try
+            {
                 Web.getInitCompletedEventArgs e = data as Web.getInitCompletedEventArgs;
-                string ad = e.Result.ADConString;
-                ad = ad.Remove(0, 7);
-                ad = ad.Remove(ad.IndexOf('/'));
-                sef = e.Result.StudentEmailFormat;
-                adun = e.Result.username;
-                adpw = e.Result.password;
-                sgn = e.Result.StudentGroupName;
-                pcontext = new PrincipalContext(ContextType.Domain, ad, adun, adpw);
-                up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Environment.UserName);
-                //up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, "rmstaff");
-                if (!string.IsNullOrEmpty(up.HomeDrive)) hd = up.HomeDirectory;
-                isStudent = up.IsMemberOf(GroupPrincipal.FindByIdentity(pcontext, e.Result.StudentGroupName));
-                adc = e.Result.ADConString;
-                DirectoryEntry usersDE = new DirectoryEntry(adc, adun, adpw);
-                DirectorySearcher ds = new DirectorySearcher(usersDE);
-                ds.Filter = "(sAMAccountName=" + Environment.UserName + ")";
-                //ds.Filter = "(sAMAccountName=rmstaff)";
-                ds.PropertiesToLoad.Add("rmCom2000-UsrMgr-uPN");
-                ds.PropertiesToLoad.Add("department");
-                SearchResult r = ds.FindOne();
+                if (e.Error != null)
+                {
+                    MessageBox.Show("Error:\n" + e.Error.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Close();
+                }
                 try
                 {
-                    dep = r.Properties["department"][0].ToString();
+                    string ad = e.Result.ADConString;
+                    ad = ad.Remove(0, 7);
+                    ad = ad.Remove(ad.IndexOf('/'));
+                    sgn = e.Result.StudentGroupName;
+                    pcontext = new PrincipalContext(ContextType.Domain, ad);
                 }
-                catch { dep = "n/a"; }
-                
-                path = r.Path.Remove(0, r.Path.IndexOf(',') + 1);
-
-                Dispatcher.BeginInvoke(new Action(UpdateUser));
-
-                Web.apiSoapClient c = new Web.apiSoapClient();
-                c.GetFreeSpacePercentageCompleted += new EventHandler<Web.GetFreeSpacePercentageCompletedEventArgs>(c_GetFreeSpacePercentageCompleted);
-                if (!isStudent)
+                catch (Exception ex) { MessageBox.Show("Error 1:\n" + ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                SearchResult r = null;
+                try
                 {
-                    ThreadStart ts = new ThreadStart(LoadControlled);
-                    if (!string.IsNullOrEmpty(Properties.Settings.Default.ControlledOU)) new Thread(ts).Start();
-                    c.getMyTicketsCompleted += new EventHandler<Web.getMyTicketsCompletedEventArgs>(c_getMyTicketsCompleted);
-                    c.getMyTicketsAsync(Environment.UserName);
-                }
-                else 
-                {
+                    up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Environment.UserName);
+                    //up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, "rmstaff");
+                    if (!string.IsNullOrEmpty(up.HomeDrive)) hd = up.HomeDirectory;
+                    isStudent = up.IsMemberOf(GroupPrincipal.FindByIdentity(pcontext, e.Result.StudentGroupName));
+                    adc = e.Result.ADConString;
+
+                    DirectoryEntry usersDE = new DirectoryEntry(adc);
+                    DirectorySearcher ds = new DirectorySearcher(usersDE);
+                    ds.Filter = "(sAMAccountName=" + Environment.UserName + ")";
+                    //ds.Filter = "(sAMAccountName=rmstaff)";
+                    ds.PropertiesToLoad.Add("rmCom2000-UsrMgr-uPN");
+                    ds.PropertiesToLoad.Add("department");
+                    r = ds.FindOne();
                     try
                     {
-                        if (r.Properties["rmCom2000-UsrMgr-uPN"] != null)
-                        {
-                            c.getPhotoCompleted += new EventHandler<Web.getPhotoCompletedEventArgs>(c_getPhotoCompleted);
-                            c.getPhotoAsync(r.Properties["rmCom2000-UsrMgr-uPN"][0].ToString());
-                        }
+                        dep = r.Properties["department"][0].ToString();
                     }
-                    catch { }
+                    catch { dep = "n/a"; }
+
+                    path = r.Path.Remove(0, r.Path.IndexOf(',') + 1);
                 }
-                if (!string.IsNullOrEmpty(up.HomeDrive)) c.GetFreeSpacePercentageAsync(up.Name, up.HomeDirectory);
-            //}
-            //catch { Close();  }
+                catch (Exception ex) { MessageBox.Show("Error 2:\n" + ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                try
+                {
+                    Dispatcher.BeginInvoke(new Action(UpdateUser));
+
+                    Web.apiSoapClient c = new Web.apiSoapClient();
+                    c.GetFreeSpacePercentageCompleted += new EventHandler<Web.GetFreeSpacePercentageCompletedEventArgs>(c_GetFreeSpacePercentageCompleted);
+                    if (!isStudent)
+                    {
+                        ThreadStart ts = new ThreadStart(LoadControlled);
+                        if (!string.IsNullOrEmpty(Properties.Settings.Default.ControlledOU)) new Thread(ts).Start();
+                        c.getMyTicketsCompleted += new EventHandler<Web.getMyTicketsCompletedEventArgs>(c_getMyTicketsCompleted);
+                        c.getMyTicketsAsync(Environment.UserName);
+                    }
+                    else
+                    {
+                        try
+                        {
+                            if (r.Properties["rmCom2000-UsrMgr-uPN"] != null)
+                            {
+                                c.getPhotoCompleted += new EventHandler<Web.getPhotoCompletedEventArgs>(c_getPhotoCompleted);
+                                c.getPhotoAsync(r.Properties["rmCom2000-UsrMgr-uPN"][0].ToString());
+                            }
+                        }
+                        catch { }
+                    }
+                    if (!string.IsNullOrEmpty(up.HomeDrive)) c.GetFreeSpacePercentageAsync(up.Name, up.HomeDirectory);
+                }
+                catch (Exception ex) { MessageBox.Show("Error 3:\n" + ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+            }
+            catch (Exception ex) { MessageBox.Show("Init Error:\n" + ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
 
         void c_getMyTicketsCompleted(object sender, Web.getMyTicketsCompletedEventArgs e)
@@ -275,12 +291,22 @@ namespace HAP.UserCard
 
         void updatephoto(string photo)
         {
-            MemoryStream stream = new MemoryStream(Base64Encoder.FromBase64(photo));
-            BitmapImage image = new BitmapImage();
-            image.BeginInit();
-            image.StreamSource = stream;
-            image.EndInit();
-            Photo.Source = image;
+            try
+            {
+                MemoryStream stream = new MemoryStream(Base64Encoder.FromBase64(photo));
+                BitmapImage image = new BitmapImage();
+                image.BeginInit();
+                image.StreamSource = stream;
+                image.EndInit();
+                Photo.Source = image;
+            }
+            catch
+            {
+                BitmapImage image = new BitmapImage(new Uri("pack://application:,,,/HAP User Card;component/Images/Imageres18.png"));
+                image.BeginInit();
+                image.EndInit();
+                Photo.Source = image;
+            }
         }
 
         private Thread us = null;
@@ -400,7 +426,7 @@ namespace HAP.UserCard
         private List<OU> EnumerateOU(string OuDn)
         {
             List<OU> alObjects = new List<OU>();
-            DirectoryEntry directoryObject = new DirectoryEntry(string.Format("LDAP://{0}", OuDn), adun, adpw);
+            DirectoryEntry directoryObject = new DirectoryEntry(string.Format("LDAP://{0}", OuDn));
             foreach (DirectoryEntry child in directoryObject.Children)
             {
                 string childPath = child.Path.ToString();
@@ -463,7 +489,23 @@ namespace HAP.UserCard
             enable.IsEnabled = disable.IsEnabled = false;
             enable.Content = "Enabling...";
             OU item = ((TreeViewItem)treeView1.SelectedItem).DataContext as OU;
-            new Thread(new ParameterizedThreadStart(Enable)).Start(item);
+            Web.apiSoapClient c = new Web.apiSoapClient();
+            c.EnableCompleted += new EventHandler<System.ComponentModel.AsyncCompletedEventArgs>(c_EnableCompleted);
+            c.EnableAsync(getPaths(item), item.Name);
+        }
+
+        private Web.ArrayOfString getPaths(OU item)
+        {
+            Web.ArrayOfString s = new Web.ArrayOfString();
+            foreach (OU o in item)
+                s.Add(o.OUPath);
+            return s;
+        }
+
+        void c_EnableCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
+        {
+            if (e.Error == null) Dispatcher.BeginInvoke(new Action<string>(DoneEnabled), (string)e.UserState);
+            else MessageBox.Show(e.Error.ToString());
         }
 
         private void disable_Click(object sender, RoutedEventArgs e)
@@ -471,50 +513,16 @@ namespace HAP.UserCard
             controlled.Cursor = Cursors.AppStarting;
             enable.IsEnabled = disable.IsEnabled = false;
             OU item = ((TreeViewItem)treeView1.SelectedItem).DataContext as OU;
-            new Thread(new ParameterizedThreadStart(Disable)).Start(item);
             disable.Content = "Disabling...";
+            Web.apiSoapClient c = new Web.apiSoapClient();
+            c.DisableCompleted += new EventHandler<System.ComponentModel.AsyncCompletedEventArgs>(c_DisableCompleted);
+            c.EnableAsync(getPaths(item), item.Name);
         }
 
-        private void Enable(object o)
+        void c_DisableCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
         {
-            OU item = o as OU;
-            foreach (OU ou in item)
-            {
-                try
-                {
-                    DirectoryEntry user = new DirectoryEntry("LDAP://" + ou.OUPath, adun, adpw);
-                    int val = (int)user.Properties["userAccountControl"].Value;
-                    user.Properties["userAccountControl"].Value = val & ~0x2;
-                    //ADS_UF_NORMAL_ACCOUNT;
-
-                    user.CommitChanges();
-                    user.Close();
-                }
-                catch { continue; }
-            }
-
-            Dispatcher.BeginInvoke(new Action<string>(DoneEnabled), item.Name);
-        }
-
-        private void Disable(object o)
-        {
-            OU item = o as OU;
-            foreach (OU ou in item)
-            {
-                try
-                {
-                    DirectoryEntry user = new DirectoryEntry("LDAP://" + ou.OUPath, adun, adpw);
-                    int val = (int)user.Properties["userAccountControl"].Value;
-                    user.Properties["userAccountControl"].Value = val | 0x2;
-                    //ADS_UF_ACCOUNTDISABLE;
-
-                    user.CommitChanges();
-                    user.Close();
-                }
-                catch { continue; }
-            }
-
-            Dispatcher.BeginInvoke(new Action<string>(DoneDisabled), item.Name);
+            if (e.Error == null) Dispatcher.BeginInvoke(new Action<string>(DoneDisabled), (string)e.UserState);
+            else MessageBox.Show(e.Error.ToString());
         }
 
         private void tabs_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -16,9 +16,6 @@
         <s:sequence>
           <s:element minOccurs="0" maxOccurs="1" name="StudentGroupName" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="ADConString" type="s:string" />
-          <s:element minOccurs="0" maxOccurs="1" name="StudentEmailFormat" type="s:string" />
-          <s:element minOccurs="0" maxOccurs="1" name="username" type="s:string" />
-          <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
         </s:sequence>
       </s:complexType>
       <s:element name="getPhoto">
@@ -34,6 +31,31 @@
             <s:element minOccurs="0" maxOccurs="1" name="getPhotoResult" type="s:string" />
           </s:sequence>
         </s:complexType>
+      </s:element>
+      <s:element name="Enable">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="oupaths" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="EnableResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="Disable">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="oupaths" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DisableResponse">
+        <s:complexType />
       </s:element>
       <s:element name="GetFreeSpacePercentage">
         <s:complexType>
@@ -132,6 +154,18 @@
   <wsdl:message name="getPhotoSoapOut">
     <wsdl:part name="parameters" element="tns:getPhotoResponse" />
   </wsdl:message>
+  <wsdl:message name="EnableSoapIn">
+    <wsdl:part name="parameters" element="tns:Enable" />
+  </wsdl:message>
+  <wsdl:message name="EnableSoapOut">
+    <wsdl:part name="parameters" element="tns:EnableResponse" />
+  </wsdl:message>
+  <wsdl:message name="DisableSoapIn">
+    <wsdl:part name="parameters" element="tns:Disable" />
+  </wsdl:message>
+  <wsdl:message name="DisableSoapOut">
+    <wsdl:part name="parameters" element="tns:DisableResponse" />
+  </wsdl:message>
   <wsdl:message name="GetFreeSpacePercentageSoapIn">
     <wsdl:part name="parameters" element="tns:GetFreeSpacePercentage" />
   </wsdl:message>
@@ -159,6 +193,14 @@
       <wsdl:input message="tns:getPhotoSoapIn" />
       <wsdl:output message="tns:getPhotoSoapOut" />
     </wsdl:operation>
+    <wsdl:operation name="Enable">
+      <wsdl:input message="tns:EnableSoapIn" />
+      <wsdl:output message="tns:EnableSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Disable">
+      <wsdl:input message="tns:DisableSoapIn" />
+      <wsdl:output message="tns:DisableSoapOut" />
+    </wsdl:operation>
     <wsdl:operation name="GetFreeSpacePercentage">
       <wsdl:input message="tns:GetFreeSpacePercentageSoapIn" />
       <wsdl:output message="tns:GetFreeSpacePercentageSoapOut" />
@@ -185,6 +227,24 @@
     </wsdl:operation>
     <wsdl:operation name="getPhoto">
       <soap:operation soapAction="http://hap.codeplex.com/getPhoto" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Enable">
+      <soap:operation soapAction="http://hap.codeplex.com/Enable" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Disable">
+      <soap:operation soapAction="http://hap.codeplex.com/Disable" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -233,6 +293,24 @@
     </wsdl:operation>
     <wsdl:operation name="getPhoto">
       <soap12:operation soapAction="http://hap.codeplex.com/getPhoto" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Enable">
+      <soap12:operation soapAction="http://hap.codeplex.com/Enable" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Disable">
+      <soap12:operation soapAction="http://hap.codeplex.com/Disable" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
