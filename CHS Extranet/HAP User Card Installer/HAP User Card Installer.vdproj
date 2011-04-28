@@ -202,7 +202,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HAP User Card"
         "ProductCode" = "8:{91018AF1-25F2-4BCD-A87B-9C61E3395FE8}"
-        "PackageCode" = "8:{E82B29EE-D5D7-4FC2-95C7-1A3DFA510076}"
+        "PackageCode" = "8:{1AB253F6-3692-4579-BD86-02ED8BFCA6D5}"
         "UpgradeCode" = "8:{0CF47738-A77D-412C-BBDE-703A91AFCF26}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

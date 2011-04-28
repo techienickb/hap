@@ -41,12 +41,20 @@ namespace HAP.Web.UserCard
         }
 
         [WebMethod]
-        public OU[] getControlledOUs(string root)
+        public void ResetPassword(string username)
         {
-            return EnumerateOU(root).ToArray();
+            string ad = ConfigurationManager.ConnectionStrings[hapConfig.Current.ADSettings.ADConnectionString].ConnectionString;
+            ad = ad.Remove(0, 7);
+            ad = ad.Remove(ad.IndexOf('/'));
+            PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, ad, hapConfig.Current.ADSettings.ADUsername, hapConfig.Current.ADSettings.ADPassword);
+            UserPrincipal up2 = UserPrincipal.FindByIdentity(pcontext, username);
+            up2.SetPassword("password");
+            up2.ExpirePasswordNow();
+            up2.Save();
         }
 
-        private List<OU> EnumerateOU(string OuDn)
+        [WebMethod]
+        public OU[] getControlledOUs(string OuDn)
         {
             List<OU> alObjects = new List<OU>();
             DirectoryEntry directoryObject = new DirectoryEntry(string.Format("LDAP://{0}", OuDn));
@@ -54,7 +62,7 @@ namespace HAP.Web.UserCard
             {
                 string childPath = child.Path.ToString();
                 OU ou = new OU(childPath.Remove(0, 7), !childPath.Contains("CN"));
-                ou.AddRange(EnumerateOU(ou.OUPath));
+                ou.OUs = getControlledOUs(ou.OUPath);
                 alObjects.Add(ou);
                 //remove the LDAP prefix from the path
 
@@ -63,7 +71,7 @@ namespace HAP.Web.UserCard
             }
             directoryObject.Close();
             directoryObject.Dispose();
-            return alObjects;
+            return alObjects.ToArray();
         }
 
         [WebMethod]

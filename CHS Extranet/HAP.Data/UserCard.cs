@@ -30,6 +30,12 @@ namespace HAP.Data.UserCard
             Username = username;
             DisplayName = up.DisplayName;
             EmailAddress = up.EmailAddress;
+            try
+            {
+                HomeDirectory = up.HomeDirectory;
+                HomeDrive = up.HomeDrive;
+            }
+            catch { }
             if (!string.IsNullOrEmpty(up.EmployeeId)) EmployeeID = up.EmployeeId;
             DirectoryEntry usersDE = new DirectoryEntry(ad);
             DirectorySearcher ds = new DirectorySearcher(usersDE);
@@ -49,6 +55,8 @@ namespace HAP.Data.UserCard
         public string Username { get; set; }
         public string DisplayName { get; set; }
         public string Department { get; set; }
+        public string HomeDirectory { get; set; }
+        public string HomeDrive { get; set; }
         public string EmailAddress { get; set; }
         public UserLevel UserLevel { get; set; }
         public string EmployeeID { get; set; }
