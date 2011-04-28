@@ -17,15 +17,19 @@ namespace HAP.Data.UserCard
         }
         public Init(string username)
         {
-            string ad =ConfigurationManager.ConnectionStrings[hapConfig.Current.ADSettings.ADConnectionString].ConnectionString;
-            ad = ad.Remove(0, 7);
-            ad = ad.Remove(ad.IndexOf('/'));
-            PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, ad, hapConfig.Current.ADSettings.ADUsername, hapConfig.Current.ADSettings.ADPassword);
-            UserPrincipal up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Environment.UserName);
-            if (HAP.AD.ActiveDirectoryHelper.IsUserInRole(HAP.AD.ActiveDirectoryHelper.GetDirectoryEntry(hapConfig.Current.ADSettings.ADConnectionString, hapConfig.Current.ADSettings.ADUsername, hapConfig.Current.ADSettings.ADPassword), HAP.AD.ActiveDirectoryHelper.GetDomainName(hapConfig.Current.ADSettings.ADConnectionString), username, "Domain Admins", true))
-                UserLevel = UserCard.UserLevel.Admin;
-            else if (HAP.AD.ActiveDirectoryHelper.IsUserInRole(HAP.AD.ActiveDirectoryHelper.GetDirectoryEntry(hapConfig.Current.ADSettings.ADConnectionString, hapConfig.Current.ADSettings.ADUsername, hapConfig.Current.ADSettings.ADPassword), HAP.AD.ActiveDirectoryHelper.GetDomainName(hapConfig.Current.ADSettings.ADConnectionString), username, hapConfig.Current.ADSettings.StudentsGroupName, true))
-                UserLevel = UserCard.UserLevel.Student;
+            string ConnStringName = ConfigurationManager.ConnectionStrings[hapConfig.Current.ADSettings.ADConnectionString].ConnectionString;
+            DirectoryEntry DirectoryRoot = new DirectoryEntry(ConnStringName, hapConfig.Current.ADSettings.ADUsername, hapConfig.Current.ADSettings.ADPassword);
+            string DomainName = HAP.AD.ActiveDirectoryHelper.GetDomainName(ConnStringName);
+            string _DomainDN = "";
+            if (string.IsNullOrEmpty(ConnStringName))
+                throw new Exception("The connection name 'activeDirectoryConnectionString' was not found in the applications configuration or the connection string is empty.");
+            if (ConnStringName.StartsWith("LDAP://"))
+                _DomainDN = ConnStringName.Remove(0, ConnStringName.IndexOf("DC="));
+            else throw new Exception("The connection string specified in 'activeDirectoryConnectionString' does not appear to be a valid LDAP connection string.");
+            PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, hapConfig.Current.ADSettings.ADUsername, hapConfig.Current.ADSettings.ADPassword);
+            UserPrincipal up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, username);
+            if (HAP.AD.ActiveDirectoryHelper.IsUserInRole(DirectoryRoot, DomainName, username, "Domain Admins", true)) UserLevel = UserCard.UserLevel.Admin;
+            else if (HAP.AD.ActiveDirectoryHelper.IsUserInRole(DirectoryRoot, DomainName, username, hapConfig.Current.ADSettings.StudentsGroupName, true)) UserLevel = UserCard.UserLevel.Student;
             else UserLevel = UserCard.UserLevel.Teacher;
             Username = username;
             DisplayName = up.DisplayName;
@@ -37,9 +41,9 @@ namespace HAP.Data.UserCard
             }
             catch { }
             if (!string.IsNullOrEmpty(up.EmployeeId)) EmployeeID = up.EmployeeId;
-            DirectoryEntry usersDE = new DirectoryEntry(ad);
+            DirectoryEntry usersDE = new DirectoryEntry(ConnStringName, hapConfig.Current.ADSettings.ADUsername, hapConfig.Current.ADSettings.ADPassword);
             DirectorySearcher ds = new DirectorySearcher(usersDE);
-            ds.Filter = "(sAMAccountName=" + Environment.UserName + ")";
+            ds.Filter = "(sAMAccountName=" + username + ")";
             //ds.Filter = "(sAMAccountName=rmstaff)";
             if (UserLevel == UserCard.UserLevel.Student) ds.PropertiesToLoad.Add("rmCom2000-UsrMgr-uPN");
             ds.PropertiesToLoad.Add("department");
