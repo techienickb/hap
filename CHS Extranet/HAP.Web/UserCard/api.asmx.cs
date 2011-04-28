@@ -29,15 +29,41 @@ namespace HAP.Web.UserCard
 
         #region Usercard API
         [WebMethod]
-        public Init getInit()
+        public Init getInit(string username)
         {
-            return new Init();
+            return new Init(username);
         }
 
         [WebMethod]
         public string getPhoto(string upn)
         {
             return Pupils.getPhoto(upn);
+        }
+
+        [WebMethod]
+        public OU[] getControlledOUs(string root)
+        {
+            return EnumerateOU(root).ToArray();
+        }
+
+        private List<OU> EnumerateOU(string OuDn)
+        {
+            List<OU> alObjects = new List<OU>();
+            DirectoryEntry directoryObject = new DirectoryEntry(string.Format("LDAP://{0}", OuDn));
+            foreach (DirectoryEntry child in directoryObject.Children)
+            {
+                string childPath = child.Path.ToString();
+                OU ou = new OU(childPath.Remove(0, 7), !childPath.Contains("CN"));
+                ou.AddRange(EnumerateOU(ou.OUPath));
+                alObjects.Add(ou);
+                //remove the LDAP prefix from the path
+
+                child.Close();
+                child.Dispose();
+            }
+            directoryObject.Close();
+            directoryObject.Dispose();
+            return alObjects;
         }
 
         [WebMethod]
