@@ -76,7 +76,6 @@
     <Compile Include="NewTicket.xaml.cs">
       <DependentUpon>NewTicket.xaml</DependentUpon>
     </Compile>
-    <Compile Include="OU.cs" />
     <Compile Include="Service References\Web\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

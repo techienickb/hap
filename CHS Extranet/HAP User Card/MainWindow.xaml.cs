@@ -192,8 +192,8 @@ namespace HAP.UserCard
                 c.GetFreeSpacePercentageCompleted += new EventHandler<Web.GetFreeSpacePercentageCompletedEventArgs>(c_GetFreeSpacePercentageCompleted);
                 if (Init.UserLevel != UserLevel.Student)
                 {
-                    ThreadStart ts = new ThreadStart(LoadControlled);
-                    if (!string.IsNullOrEmpty(Properties.Settings.Default.ControlledOU)) new Thread(ts).Start();
+                    c.getControlledOUsCompleted += new EventHandler<getControlledOUsCompletedEventArgs>(c_getControlledOUsCompleted);
+                    if (!string.IsNullOrEmpty(Properties.Settings.Default.ControlledOU)) c.getControlledOUsAsync(Properties.Settings.Default.ControlledOU);
                     c.getMyTicketsCompleted += new EventHandler<Web.getMyTicketsCompletedEventArgs>(c_getMyTicketsCompleted);
                     c.getMyTicketsAsync(Environment.UserName);
                 }
@@ -204,7 +204,7 @@ namespace HAP.UserCard
                 }
                 if (!string.IsNullOrEmpty(Init.HomeDrive)) c.GetFreeSpacePercentageAsync(Environment.UserName, Init.HomeDirectory);
             }
-            catch (Exception ex) { MessageBox.Show("Init Error:\n" + ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+            catch (Exception ex) { MessageBox.Show("Init Error:\n" + ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error); Close(); }
         }
 
         void c_getMyTicketsCompleted(object sender, Web.getMyTicketsCompletedEventArgs e)
@@ -340,11 +340,16 @@ namespace HAP.UserCard
             return d.ToString() + " " + s[x];
         }
 
-        private List<OU> OUs;
-        void LoadControlled()
+        private OU[] OUs;
+        
+        void c_getControlledOUsCompleted(object sender, getControlledOUsCompletedEventArgs e)
         {
-            OUs = EnumerateOU(Properties.Settings.Default.ControlledOU);
-            Dispatcher.BeginInvoke(new Action(UpdateTree));
+            if (e.Error != null) MessageBox.Show(e.Error.ToString());
+            else
+            {
+                OUs = e.Result;
+                Dispatcher.BeginInvoke(new Action(UpdateTree));
+            }
         }
 
         void UpdateTree()
@@ -362,7 +367,7 @@ namespace HAP.UserCard
 
         void UpdateTree(TreeViewItem item, OU ou)
         {
-            foreach (OU o in ou)
+            foreach (OU o in ou.OUs)
             {
                 TreeViewItem i = new TreeViewItem();
                 i.Header = o.Name;
@@ -371,46 +376,17 @@ namespace HAP.UserCard
             }
         }
 
-        private List<OU> EnumerateOU(string OuDn)
-        {
-            List<OU> alObjects = new List<OU>();
-            DirectoryEntry directoryObject = new DirectoryEntry(string.Format("LDAP://{0}", OuDn));
-            foreach (DirectoryEntry child in directoryObject.Children)
-            {
-                string childPath = child.Path.ToString();
-                OU ou = new OU(childPath.Remove(0, 7), !childPath.Contains("CN"));
-                ou.AddRange(EnumerateOU(ou.OUPath));
-                alObjects.Add(ou);
-                //remove the LDAP prefix from the path
-
-                child.Close();
-                child.Dispose();
-            }
-            directoryObject.Close();
-            directoryObject.Dispose();
-            return alObjects;
-        }
-
         private void reset_Click(object sender, RoutedEventArgs e)
         {
             reset.Content = "Resetting...";
             reset.IsEnabled = false;
             try
             {
-                new Thread(new ParameterizedThreadStart(doreset)).Start(username.Text);
-            }
-            catch (Exception ex) { MessageBox.Show(ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
-        }
-
-        private void doreset(object o)
-        {
-            try
-            {
                 Web.apiSoapClient c1 = new Web.apiSoapClient();
                 c1.getInitCompleted += new EventHandler<getInitCompletedEventArgs>(c1_getInitCompleted);
-                c1.ResetPasswordAsync(username.Text);
+                c1.getInitAsync(username.Text);
             }
-            catch (Exception ex) { Dispatcher.BeginInvoke(new donereset(ErrorReset), ex.ToString()); }
+            catch (Exception ex) { ErrorReset(ex.ToString()); }
         }
 
         void c1_getInitCompleted(object sender, getInitCompletedEventArgs e)
@@ -420,16 +396,17 @@ namespace HAP.UserCard
             {
                 Web.apiSoapClient c = new Web.apiSoapClient();
                 c.ResetPasswordCompleted += new EventHandler<System.ComponentModel.AsyncCompletedEventArgs>(c_ResetPasswordCompleted);
+                c.ResetPasswordAsync(e.Result.Username, e.Result.DisplayName);
             }
+            else Dispatcher.BeginInvoke(new Action<string>(ErrorReset), "I can't reset this user because they are not a student user");
         }
 
         void c_ResetPasswordCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
         {
             if (e.Error != null) Dispatcher.BeginInvoke(new Action<string>(ErrorReset), e.Error.ToString());
-            Dispatcher.BeginInvoke(new donereset(DoneReset), (string)e.UserState);
+            else Dispatcher.BeginInvoke(new Action<string>(DoneReset), (string)e.UserState);
         }
 
-        delegate void donereset(string displayname);
         private void DoneReset(string displayname)
         {
             Dialog.ShowMessage("I've reset " + displayname + "'s password to 'password'\nThey will be asked to change it when they log on", "Confirmation", DialogIcon.Info);
@@ -458,7 +435,7 @@ namespace HAP.UserCard
         private Web.ArrayOfString getPaths(OU item)
         {
             Web.ArrayOfString s = new Web.ArrayOfString();
-            foreach (OU o in item)
+            foreach (OU o in item.OUs)
                 s.Add(o.OUPath);
             return s;
         }
@@ -477,7 +454,7 @@ namespace HAP.UserCard
             disable.Content = "Disabling...";
             Web.apiSoapClient c = new Web.apiSoapClient();
             c.DisableCompleted += new EventHandler<System.ComponentModel.AsyncCompletedEventArgs>(c_DisableCompleted);
-            c.EnableAsync(getPaths(item), item.Name);
+            c.DisableAsync(getPaths(item), item.Name);
         }
 
         void c_DisableCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
