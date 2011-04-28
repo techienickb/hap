@@ -37,13 +37,8 @@ namespace HAP.Data.UserCard
         {
             StudentGroupName = hapConfig.Current.ADSettings.StudentsGroupName;
             ADConString = ConfigurationManager.ConnectionStrings[hapConfig.Current.ADSettings.ADConnectionString].ConnectionString;
-            username = hapConfig.Current.ADSettings.ADUsername;
-            password = hapConfig.Current.ADSettings.ADPassword;
         }
         public string StudentGroupName { get; set; }
         public string ADConString { get; set; }
-        public string StudentEmailFormat { get; set; }
-        public string username { get; set; }
-        public string password { get; set; }
     }
 }
