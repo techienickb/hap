@@ -28,9 +28,20 @@ namespace HAP.Data.UserCard
             else throw new Exception("The connection string specified in 'activeDirectoryConnectionString' does not appear to be a valid LDAP connection string.");
             PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, hapConfig.Current.ADSettings.ADUsername, hapConfig.Current.ADSettings.ADPassword);
             UserPrincipal up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, username);
-            if (HAP.AD.ActiveDirectoryHelper.IsUserInRole(DirectoryRoot, DomainName, username, "Domain Admins", true)) UserLevel = UserCard.UserLevel.Admin;
-            else if (HAP.AD.ActiveDirectoryHelper.IsUserInRole(DirectoryRoot, DomainName, username, hapConfig.Current.ADSettings.StudentsGroupName, true)) UserLevel = UserCard.UserLevel.Student;
-            else UserLevel = UserCard.UserLevel.Teacher;
+            UserLevel = UserCard.UserLevel.Teacher;
+            try
+            {
+                GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, "Domain Admins");
+                if (up.IsMemberOf(gp)) UserLevel = UserCard.UserLevel.Admin;
+            }
+            catch { }
+            try
+            {
+                GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, hapConfig.Current.ADSettings.StudentsGroupName);
+                if (up.IsMemberOf(gp)) UserLevel = UserCard.UserLevel.Student;
+            }
+            catch { }
+            
             Username = username;
             DisplayName = up.DisplayName;
             EmailAddress = up.EmailAddress;
