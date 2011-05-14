@@ -27,16 +27,6 @@ namespace HAP.Web.BookingSystem
             writer.Write("<{1} onclick=\"location.href='./#{0}';\" title=\"Make a booking on this day ({0})\">", Date.ToShortDateString(), Tag.ToString().ToLower());
         }
 
-        private string Username
-        {
-            get
-            {
-                if (Page.User.Identity.Name.Contains('\\'))
-                    return Page.User.Identity.Name.Remove(0, Page.User.Identity.Name.IndexOf('\\') + 1);
-                else return Page.User.Identity.Name;
-            }
-        }
-
         protected override void RenderContents(HtmlTextWriter writer)
         {
             hapConfig config = hapConfig.Current;

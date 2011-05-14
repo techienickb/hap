@@ -38,5 +38,15 @@ namespace HAP.Web.Configuration
         {
             get { return (ouobjects)base["ouobjects"]; }
         }
+
+        public string DomainName
+        {
+            get
+            {
+                string _ActiveDirectoryConnectionString = ConfigurationManager.ConnectionStrings[this.ADConnectionString].ConnectionString;
+                _ActiveDirectoryConnectionString = _ActiveDirectoryConnectionString.Remove(_ActiveDirectoryConnectionString.LastIndexOf(','));
+                return _ActiveDirectoryConnectionString.Substring(_ActiveDirectoryConnectionString.LastIndexOf(@"/") + 1, _ActiveDirectoryConnectionString.Length - _ActiveDirectoryConnectionString.LastIndexOf(@"/") - 1).Replace("DC=", "");
+            }
+        }
     }
 }

@@ -17,8 +17,6 @@ namespace HAP.Web
 {
     public partial class mycomputer : Page, IMyComputerDisplay
     {
-        private String _DomainDN;
-        private String _ActiveDirectoryConnectionString;
         private PrincipalContext pcontext;
         private UserPrincipal up;
         private hapConfig config;
@@ -53,26 +51,9 @@ namespace HAP.Web
         protected override void OnInitComplete(EventArgs e)
         {
             config = hapConfig.Current;
-            ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
-            if (connObj != null) _ActiveDirectoryConnectionString = connObj.ConnectionString;
-            if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))
-                throw new Exception("The connection name 'activeDirectoryConnectionString' was not found in the applications configuration or the connection string is empty.");
-            if (_ActiveDirectoryConnectionString.StartsWith("LDAP://"))
-                _DomainDN = _ActiveDirectoryConnectionString.Remove(0, _ActiveDirectoryConnectionString.IndexOf("DC="));
-            else throw new Exception("The connection string specified in 'activeDirectoryConnectionString' does not appear to be a valid LDAP connection string.");
-            pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
-            up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Username);
+            pcontext = HAP.AD.ADUtil.PContext;
+            up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, HAP.AD.ADUtil.Username);
             this.Title = string.Format("{0} - Home Access Plus+ - My School Computer", config.BaseSettings.EstablishmentName);
-        }
-
-        public string Username
-        {
-            get
-            {
-                if (User.Identity.Name.Contains('\\'))
-                    return User.Identity.Name.Remove(0, User.Identity.Name.IndexOf('\\') + 1);
-                else return User.Identity.Name;
-            }
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -97,17 +78,17 @@ namespace HAP.Web
                         {
                             if (path.Usage == UsageMode.DriveSpace)
                             {
-                                if (HAP.Web.api.Win32.GetDiskFreeSpaceEx(string.Format(path.UNC.Replace("%homepath%", up.HomeDirectory), Username), out freeBytesForUser, out totalBytes, out freeBytes))
+                                if (HAP.Web.api.Win32.GetDiskFreeSpaceEx(string.Format(path.UNC.Replace("%homepath%", up.HomeDirectory), HAP.AD.ADUtil.Username), out freeBytesForUser, out totalBytes, out freeBytes))
                                     space = Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
                             }
                             else
                             {
                                 try
                                 {
-                                    HAP.Data.Quota.QuotaInfo qi = HAP.Data.ComputerBrowser.Quota.GetQuota(Username, string.Format(path.UNC.Replace("%homepath%", up.HomeDirectory)));
+                                    HAP.Data.Quota.QuotaInfo qi = HAP.Data.ComputerBrowser.Quota.GetQuota(HAP.AD.ADUtil.Username, string.Format(path.UNC.Replace("%homepath%", up.HomeDirectory)));
                                     space = Math.Round((Convert.ToDecimal(qi.Used) / Convert.ToDecimal(qi.Total)) * 100, 2);
                                     if (qi.Total == -1)
-                                        if (HAP.Web.api.Win32.GetDiskFreeSpaceEx(string.Format(path.UNC.Replace("%homepath%", up.HomeDirectory), Username), out freeBytesForUser, out totalBytes, out freeBytes))
+                                        if (HAP.Web.api.Win32.GetDiskFreeSpaceEx(string.Format(path.UNC.Replace("%homepath%", up.HomeDirectory), HAP.AD.ADUtil.Username), out freeBytesForUser, out totalBytes, out freeBytes))
                                             space = Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
                                 }
                                 catch { }
@@ -133,7 +114,7 @@ namespace HAP.Web
                     unc = config.MyComputer.UNCPaths[RoutingDrive];
                     if (unc == null || !isAuth(unc)) Response.Redirect(Request.ApplicationPath + "/unauthorised.aspx", true);
                     else if (unc.UNC.Contains("%homepath%")) path = unc.UNC.Replace("%homepath%", u) + "\\" + RoutingPath;
-                    else path = string.Format(unc.UNC, Username) + "\\" + RoutingPath;
+                    else path = string.Format(unc.UNC, HAP.AD.ADUtil.Username) + "\\" + RoutingPath;
                 //}
                 List<MyComputerItem> breadcrumbs = new List<MyComputerItem>();
 
@@ -142,13 +123,13 @@ namespace HAP.Web
                 newfolderlink.Directory = DeleteBox.Dir = RenameBox.Dir = UnzipBox.Dir = ZipBox.Dir = dir;
                 newfolderlink.DataBind();
                 DirectoryInfo subdir1 = dir;
-                string uncroot = string.Format(unc.UNC.Replace("%homepath%", u), Username);
+                string uncroot = string.Format(unc.UNC.Replace("%homepath%", u), HAP.AD.ADUtil.Username);
                 uncroot = uncroot.TrimEnd(new char[] { '\\' });
                 DirectoryInfo rootdir = new DirectoryInfo(uncroot);
                 while (subdir1.FullName != rootdir.FullName && subdir1 != null)
                 {
                     string sdirpath = subdir1.FullName;
-                    sdirpath = sdirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", u), Username), unc.Drive);
+                    sdirpath = sdirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", u), HAP.AD.ADUtil.Username), unc.Drive);
                     breadcrumbs.Add(new MyComputerItem(subdir1.Name, "", Request.ApplicationPath + "/MyComputer/" + sdirpath.Replace('&', '^').Replace('\\', '/'), "", false));
                     try
                     {
@@ -177,7 +158,7 @@ namespace HAP.Web
                             if (!subdir.Name.ToLower().Contains("recycle"))
                             {
                                 string dirpath = subdir.FullName;
-                                dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", u), Username), unc.Drive);
+                                dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", u), HAP.AD.ADUtil.Username), unc.Drive);
                                 dirpath = dirpath.Replace('\\', '/');
 
                                 CBFile cb = new CBFile(subdir, Converter.ToUNCPath(unc), u);
@@ -193,7 +174,7 @@ namespace HAP.Web
                             if (!file.Name.ToLower().Contains("thumbs") && checkext(file.Extension))
                             {
                                 string dirpath = file.FullName;
-                                dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", u), Username), unc.Drive);
+                                dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", u), HAP.AD.ADUtil.Username), unc.Drive);
                                 dirpath = dirpath.Replace('\\', '/');
 
                                 CBFile cb = new CBFile(file, Converter.ToUNCPath(unc), u);

@@ -41,9 +41,10 @@
                     </LinearGradientBrush>
                 </Grid.Background>
                 <StackPanel Orientation="Horizontal">
-                    <my:BarButton x:Name="home" Margin="4,3,0,4" Text="Home Access Plus+ Home" Click="home_Click" ToolTip="Go back to Home Access Plus+'s Home Page" />
-                    <my:BarButton x:Name="back" Margin="0,3,0,4" Text="Basic Version" ToolTip="Go back to Basic Version of the My Computer Browser" Click="back_Click" />
-                    <my:OrganiseButton x:Name="organiseButton1" SelectAllClick="organiseButton1_SelectAllClick" MouseLeftButtonDown="organiseButton1_MouseLeftButtonDown" />
+                    <!--<my:BarButton x:Name="home" Margin="4,3,0,4" Text="Home Access Plus+ Home" Click="home_Click" ToolTip="Go back to Home Access Plus+'s Home Page" />
+                    <my:BarButton x:Name="back" Margin="0,3,0,4" Text="Basic Version" ToolTip="Go back to Basic Version of the My Computer Browser" Click="back_Click" />-->
+                    <my:OrganiseButton x:Name="organiseButton1" Margin="4,3,0,4" SelectAllClick="organiseButton1_SelectAllClick" MouseLeftButtonDown="organiseButton1_MouseLeftButtonDown" />
+                    <my:BarButton x:Name="search" Text="Search" ToolTip="Search" Click="search_Click" />
                     <my:BarButton x:Name="newfolder" Text="New Folder" Click="newfolder_Click" ToolTip="Create a New Folder in the Current Folder" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Column="1">
@@ -65,6 +66,10 @@
                 <controls:GridSplitter Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1" Background="#FFE7F1FB" />
                 <whistlerBlue:WhistlerBlueTheme Grid.Column="2">
                     <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
                         <toolkit:ContextMenuService.ContextMenu>
                             <toolkit:ContextMenu x:Name="context">
                                 <toolkit:MenuItem Header="New Folder" x:Name="RightClickFolder" Click="newfolder_Click">
@@ -105,7 +110,13 @@
                                 </toolkit:MenuItem>
                             </toolkit:ContextMenu>
                         </toolkit:ContextMenuService.ContextMenu>
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" x:Name="scroller" BorderBrush="Transparent" BorderThickness="0">
+                        <Grid Height="46" Name="search_grid" Visibility="Collapsed">
+                            <TextBlock Text="Search for:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="6,14,0,0" />
+                            <TextBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="75,10,0,0" Width="203" Name="search_text" KeyUp="search_text_KeyUp" />
+                            <Button Content="Search" Height="23" HorizontalAlignment="Left" Margin="284,10,0,0" Name="search_button" VerticalAlignment="Top" Width="75" Click="search_button_Click" />
+                            <TextBlock Text="X" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,6,6,0" Cursor="Hand" Name="search_close" MouseLeftButtonUp="search_close_MouseLeftButtonUp" />
+                        </Grid>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" x:Name="scroller" BorderBrush="Transparent" BorderThickness="0" Grid.Row="1">
                             <toolkit:WrapPanel x:Name="contentPan" Background="White" AllowDrop="False" MouseLeftButtonUp="contentPan_MouseLeftButtonUp" MouseRightButtonDown="contentPan_MouseRightButtonDown" DragEnter="contentPan_DragEnter" DragOver="contentPan_DragOver" DragLeave="contentPan_DragLeave" Drop="contentPan_Drop" KeyUp="contentPan_KeyUp" />
                         </ScrollViewer>
                     </Grid>

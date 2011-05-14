@@ -57,8 +57,8 @@ namespace HAP.Config
             XmlNode constring = doc.SelectSingleNode("/configuration/connectionStrings/add[@name='ADConnectionString']");
 
             constring.Attributes["connectionString"].Value = string.Format("LDAP://{0}/DC={1}", ad_dc.Text, ad_domainname.Text.Replace(".", ",DC="));
-            adsettings.Attributes["adusername"].Value = doc.SelectSingleNode("/configuration/system.web/membership/providers/add").Attributes["connectionUsername"].Value = doc.SelectSingleNode("/configuration/system.web/roleManager/providers/add").Attributes["connectionUsername"].Value = ad_Username.Text;
-            adsettings.Attributes["adpassword"].Value = doc.SelectSingleNode("/configuration/system.web/membership/providers/add").Attributes["connectionPassword"].Value = doc.SelectSingleNode("/configuration/system.web/roleManager/providers/add").Attributes["connectionPassword"].Value = ad_Password.Text;
+            adsettings.Attributes["adusername"].Value = doc.SelectSingleNode("/configuration/system.web/membership/providers/add").Attributes["connectionUsername"].Value = ad_Username.Text;
+            adsettings.Attributes["adpassword"].Value = doc.SelectSingleNode("/configuration/system.web/membership/providers/add").Attributes["connectionPassword"].Value = ad_Password.Text;
             adsettings.Attributes["studentsgroupname"].Value = ad_Student.Text;
             XmlNode ouobs = adsettings.SelectSingleNode("ouobjects");
             ouobs.RemoveAll();
@@ -317,7 +317,7 @@ namespace HAP.Config
                 try
                 {
                     ad_Username.Text = Environment.UserDomainName + "\\Administrator";
-                    DirectoryEntry rootDSE = new DirectoryEntry("LDAP://" + Environment.GetEnvironmentVariable("logonserver").Remove(0, 2) + "/rootDSE", @"CRICKHOWELL\NICK", "airbusa320");
+                    DirectoryEntry rootDSE = new DirectoryEntry("LDAP://" + Environment.GetEnvironmentVariable("logonserver").Remove(0, 2) + "/rootDSE");
                     ad_domainname.Text = rootDSE.Properties["defaultNamingContext"].Value.ToString().Replace("DC=", ".");
                     ad_dc.Text = Environment.GetEnvironmentVariable("logonserver").Remove(0, 2) + "." + ad_domainname.Text;
                 }

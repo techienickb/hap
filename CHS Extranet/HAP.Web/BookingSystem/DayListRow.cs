@@ -45,7 +45,7 @@ namespace HAP.Web.BookingSystem
                     Booking b = bs.getBooking(Room, lesson.OldID.ToString());
                     if (b.Name == "FREE" || lesson.OldID == -1) b = bs.getBooking(Room, lesson.Name);
                     bool bookie = false;
-                    if (isAdmin || b.Username == Username) bookie = true;
+                    if (isAdmin || b.Username == HAP.AD.ADUtil.Username) bookie = true;
                     string lessonname = b.Name;
                     if (lessonname.Length > 17) lessonname = lessonname.Remove(17) + "...";
                     if (lessonname.Length > 16 && b.Static) lessonname = lessonname.Remove(14) + "...";
@@ -82,16 +82,6 @@ namespace HAP.Web.BookingSystem
                     if (!vis) vis = Page.User.IsInRole(s);
                 if (vis) return true;
                 return Page.User.IsInRole("Domain Admins");
-            }
-        }
-
-        private string Username
-        {
-            get
-            {
-                if (Page.User.Identity.Name.Contains('\\'))
-                    return Page.User.Identity.Name.Remove(0, Page.User.Identity.Name.IndexOf('\\') + 1);
-                else return Page.User.Identity.Name;
             }
         }
     }

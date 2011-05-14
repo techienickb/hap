@@ -13,8 +13,6 @@ namespace HAP.Web
 {
     public partial class UploadH : System.Web.UI.Page
     {
-        private String _DomainDN;
-        private String _ActiveDirectoryConnectionString;
         private PrincipalContext pcontext;
         private UserPrincipal up;
         private hapConfig config;
@@ -71,25 +69,8 @@ namespace HAP.Web
         protected override void OnInitComplete(EventArgs e)
         {
             config = hapConfig.Current;
-            ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
-            if (connObj != null) _ActiveDirectoryConnectionString = connObj.ConnectionString;
-            if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))
-                throw new Exception("The connection name 'activeDirectoryConnectionString' was not found in the applications configuration or the connection string is empty.");
-            if (_ActiveDirectoryConnectionString.StartsWith("LDAP://"))
-                _DomainDN = _ActiveDirectoryConnectionString.Remove(0, _ActiveDirectoryConnectionString.IndexOf("DC="));
-            else throw new Exception("The connection string specified in 'activeDirectoryConnectionString' does not appear to be a valid LDAP connection string.");
-            pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
-            up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Username);
-        }
-
-        public string Username
-        {
-            get
-            {
-                if (User.Identity.Name.Contains('\\'))
-                    return User.Identity.Name.Remove(0, User.Identity.Name.IndexOf('\\') + 1);
-                else return User.Identity.Name;
-            }
+            pcontext = HAP.AD.ADUtil.PContext;
+            up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, HAP.AD.ADUtil.Username);
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -103,7 +84,7 @@ namespace HAP.Web
                 uncpath unc = null;
                 unc = config.MyComputer.UNCPaths[p];
                 if (unc == null || !isWriteAuth(unc)) Response.Redirect(Request.ApplicationPath + "/unauthorised.aspx", true);
-                else path = string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username) + path.Replace('/', '\\');
+                else path = string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), HAP.AD.ADUtil.Username) + path.Replace('/', '\\');
             }
         }
 
@@ -117,7 +98,7 @@ namespace HAP.Web
             uncpath unc = null;
             unc = config.MyComputer.UNCPaths[p];
             if (unc == null || !isWriteAuth(unc)) Response.Redirect(Request.ApplicationPath + "/unauthorised.aspx", true);
-            else path = string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username) + path.Replace('/', '\\');
+            else path = string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), HAP.AD.ADUtil.Username) + path.Replace('/', '\\');
             if (FileUpload1.HasFile && isAuth(Path.GetExtension(FileUpload1.FileName))) FileUpload1.SaveAs(Path.Combine(path, FileUpload1.FileName));
             else if (FileUpload1.HasFile) message.Text += "Error: " + FileUpload1.FileName + " is a restricted file type<br/>";
             if (FileUpload2.HasFile && isAuth(Path.GetExtension(FileUpload2.FileName))) FileUpload2.SaveAs(Path.Combine(path, FileUpload2.FileName));

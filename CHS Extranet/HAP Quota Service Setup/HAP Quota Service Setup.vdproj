@@ -339,7 +339,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HAP Quota Service"
         "ProductCode" = "8:{DD7A5DC0-FCC5-4D47-8DE5-AFF146E0E1C2}"
-        "PackageCode" = "8:{49DF87ED-30B6-43E0-8FD0-2D7FEF348618}"
+        "PackageCode" = "8:{6AC698D4-BFDB-4568-B46F-360B1953FAE6}"
         "UpgradeCode" = "8:{55C8129E-4F05-41B8-A23E-1AE6A8DC351D}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

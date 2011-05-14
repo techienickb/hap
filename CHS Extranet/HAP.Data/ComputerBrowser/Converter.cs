@@ -28,18 +28,9 @@ namespace HAP.Data.ComputerBrowser
         public static string DriveToUNC(string RoutingPath, string RoutingDrive, out uncpath unc, out string userhome)
         {
             hapConfig config = hapConfig.Current;
-            string _ActiveDirectoryConnectionString = "";
-            string _DomainDN = "";
             PrincipalContext pcontext; UserPrincipal up;
-            ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
-            if (connObj != null) _ActiveDirectoryConnectionString = connObj.ConnectionString;
-            if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))
-                throw new Exception("The connection name 'activeDirectoryConnectionString' was not found in the applications configuration or the connection string is empty.");
-            if (_ActiveDirectoryConnectionString.StartsWith("LDAP://"))
-                _DomainDN = _ActiveDirectoryConnectionString.Remove(0, _ActiveDirectoryConnectionString.IndexOf("DC="));
-            else throw new Exception("The connection string specified in 'activeDirectoryConnectionString' does not appear to be a valid LDAP connection string.");
-            pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
-            up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Username);
+            pcontext = HAP.AD.ADUtil.PContext;
+            up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, HAP.AD.ADUtil.Username);
 
             userhome = "";
             string u = "";
@@ -50,7 +41,7 @@ namespace HAP.Data.ComputerBrowser
             }
             string path = "";
             unc = config.MyComputer.UNCPaths[RoutingDrive];
-            path = string.Format(unc.UNC.Replace("%homepath%", u), Username) + RoutingPath;
+            path = string.Format(unc.UNC.Replace("%homepath%", u), HAP.AD.ADUtil.Username) + RoutingPath;
 
             path = path.TrimEnd(new char[] { '\\' }).Replace('^', '&').Replace('/', '\\');
             return path;
@@ -89,28 +80,28 @@ namespace HAP.Data.ComputerBrowser
 
         public static string UNCtoDrive(string dirpath, uncpath unc, string userhome)
         {
-            dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", userhome), Username), unc.Drive + ":");
+            dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", userhome), HAP.AD.ADUtil.Username), unc.Drive + ":");
             dirpath = dirpath.Replace("\\\\", "\\");
             return dirpath;
         }
 
         public static string UNCtoDrive(string dirpath, UNCPath unc, string userhome)
         {
-            dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", userhome), Username), unc.Drive + ":");
+            dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", userhome), HAP.AD.ADUtil.Username), unc.Drive + ":");
             dirpath = dirpath.Replace("\\\\", "\\");
             return dirpath;
         }
 
         public static string UNCtoDrive2(string dirpath, uncpath unc, string userhome)
         {
-            dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", userhome), Username), unc.Drive);
+            dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", userhome), HAP.AD.ADUtil.Username), unc.Drive);
             dirpath = dirpath.Replace('\\', '/').Replace("//", "/");
             return dirpath;
         }
 
         public static string UNCtoDrive2(string dirpath, UNCPath unc, string userhome)
         {
-            dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", userhome), Username), unc.Drive);
+            dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homepath%", userhome), HAP.AD.ADUtil.Username), unc.Drive);
             dirpath = dirpath.Replace('\\', '/').Replace("//", "/");
             return dirpath;
         }
@@ -141,16 +132,6 @@ namespace HAP.Data.ComputerBrowser
                 return vis;
             }
             return false;
-        }
-
-        static string Username
-        {
-            get
-            {
-                if (Context.User.Identity.Name.Contains('\\'))
-                    return Context.User.Identity.Name.Remove(0, Context.User.Identity.Name.IndexOf('\\') + 1);
-                else return Context.User.Identity.Name;
-            }
         }
 
         public static string MimeType(string Extension)

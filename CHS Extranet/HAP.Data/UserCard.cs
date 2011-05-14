@@ -19,14 +19,7 @@ namespace HAP.Data.UserCard
         {
             string ConnStringName = ConfigurationManager.ConnectionStrings[hapConfig.Current.ADSettings.ADConnectionString].ConnectionString;
             DirectoryEntry DirectoryRoot = new DirectoryEntry(ConnStringName, hapConfig.Current.ADSettings.ADUsername, hapConfig.Current.ADSettings.ADPassword);
-            string DomainName = HAP.AD.ActiveDirectoryHelper.GetDomainName(ConnStringName);
-            string _DomainDN = "";
-            if (string.IsNullOrEmpty(ConnStringName))
-                throw new Exception("The connection name 'activeDirectoryConnectionString' was not found in the applications configuration or the connection string is empty.");
-            if (ConnStringName.StartsWith("LDAP://"))
-                _DomainDN = ConnStringName.Remove(0, ConnStringName.IndexOf("DC="));
-            else throw new Exception("The connection string specified in 'activeDirectoryConnectionString' does not appear to be a valid LDAP connection string.");
-            PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, hapConfig.Current.ADSettings.ADUsername, hapConfig.Current.ADSettings.ADPassword);
+            PrincipalContext pcontext = HAP.AD.ADUtil.PContext;
             UserPrincipal up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, username);
             UserLevel = UserCard.UserLevel.Teacher;
             try

@@ -47,8 +47,6 @@ namespace HAP.Web.routing
 
         #endregion
 
-        private String _DomainDN;
-        private String _ActiveDirectoryConnectionString;
         private PrincipalContext pcontext;
         private UserPrincipal up;
         private string path;
@@ -81,16 +79,6 @@ namespace HAP.Web.routing
             return false;
         }
 
-        public string Username
-        {
-            get
-            {
-                if (HttpContext.Current.User.Identity.Name.Contains('\\'))
-                    return HttpContext.Current.User.Identity.Name.Remove(0, HttpContext.Current.User.Identity.Name.IndexOf('\\') + 1);
-                else return HttpContext.Current.User.Identity.Name;
-            }
-        }
-
         #region IWordDocumentRenderer Members
 
         /// <summary>
@@ -100,15 +88,8 @@ namespace HAP.Web.routing
         public void ProcessRequest(System.Web.HttpContext context)
         {
             config = hapConfig.Current;
-            ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
-            if (connObj != null) _ActiveDirectoryConnectionString = connObj.ConnectionString;
-            if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))
-                throw new Exception("The connection name 'activeDirectoryConnectionString' was not found in the applications configuration or the connection string is empty.");
-            if (_ActiveDirectoryConnectionString.StartsWith("LDAP://"))
-                _DomainDN = _ActiveDirectoryConnectionString.Remove(0, _ActiveDirectoryConnectionString.IndexOf("DC="));
-            else throw new Exception("The connection string specified in 'activeDirectoryConnectionString' does not appear to be a valid LDAP connection string.");
-            pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
-            up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Username);
+            pcontext = HAP.AD.ADUtil.PContext;
+            up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, HAP.AD.ADUtil.Username);
 
             string userhome = up.HomeDirectory;
             if (!userhome.EndsWith("\\")) userhome += "\\";
@@ -116,7 +97,7 @@ namespace HAP.Web.routing
             uncpath unc = null;
             unc = config.MyComputer.UNCPaths[RoutingDrive];
             if (unc == null || !isWriteAuth(unc)) context.Response.Redirect(context.Request.ApplicationPath + "/unauthorised.aspx", true);
-            else path = Path.Combine(string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username), path.Replace('/', '\\'));
+            else path = Path.Combine(string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), HAP.AD.ADUtil.Username), path.Replace('/', '\\'));
 
             // Open document
             using (WordprocessingDocument document = WordprocessingDocument.Open(path, false))

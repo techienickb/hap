@@ -527,6 +527,11 @@ namespace HAP.Silverlight.Browser.service {
         
         HAP.Silverlight.Browser.service.ListResponse EndList(System.IAsyncResult result);
         
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://hap.codeplex.com/Search", ReplyAction="*")]
+        System.IAsyncResult BeginSearch(HAP.Silverlight.Browser.service.SearchRequest request, System.AsyncCallback callback, object asyncState);
+        
+        HAP.Silverlight.Browser.service.SearchResponse EndSearch(System.IAsyncResult result);
+        
         [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://hap.codeplex.com/Save", ReplyAction="*")]
         System.IAsyncResult BeginSave(HAP.Silverlight.Browser.service.SaveRequest request, System.AsyncCallback callback, object asyncState);
         
@@ -752,6 +757,78 @@ namespace HAP.Silverlight.Browser.service {
         
         public ListResponseBody(System.Collections.ObjectModel.ObservableCollection<HAP.Silverlight.Browser.service.ComputerBrowserAPIItem> ListResult) {
             this.ListResult = ListResult;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class SearchRequest {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="Search", Namespace="http://hap.codeplex.com/", Order=0)]
+        public HAP.Silverlight.Browser.service.SearchRequestBody Body;
+        
+        public SearchRequest() {
+        }
+        
+        public SearchRequest(HAP.Silverlight.Browser.service.SearchRequestBody Body) {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://hap.codeplex.com/")]
+    public partial class SearchRequestBody {
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        public string path;
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=1)]
+        public string searchterm;
+        
+        public SearchRequestBody() {
+        }
+        
+        public SearchRequestBody(string path, string searchterm) {
+            this.path = path;
+            this.searchterm = searchterm;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class SearchResponse {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="SearchResponse", Namespace="http://hap.codeplex.com/", Order=0)]
+        public HAP.Silverlight.Browser.service.SearchResponseBody Body;
+        
+        public SearchResponse() {
+        }
+        
+        public SearchResponse(HAP.Silverlight.Browser.service.SearchResponseBody Body) {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://hap.codeplex.com/")]
+    public partial class SearchResponseBody {
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        public System.Collections.ObjectModel.ObservableCollection<HAP.Silverlight.Browser.service.ComputerBrowserAPIItem> SearchResult;
+        
+        public SearchResponseBody() {
+        }
+        
+        public SearchResponseBody(System.Collections.ObjectModel.ObservableCollection<HAP.Silverlight.Browser.service.ComputerBrowserAPIItem> SearchResult) {
+            this.SearchResult = SearchResult;
         }
     }
     
@@ -1227,6 +1304,25 @@ namespace HAP.Silverlight.Browser.service {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public partial class SearchCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        public SearchCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        public System.Collections.ObjectModel.ObservableCollection<HAP.Silverlight.Browser.service.ComputerBrowserAPIItem> Result {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((System.Collections.ObjectModel.ObservableCollection<HAP.Silverlight.Browser.service.ComputerBrowserAPIItem>)(this.results[0]));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class SaveCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
@@ -1265,6 +1361,12 @@ namespace HAP.Silverlight.Browser.service {
         private EndOperationDelegate onEndListDelegate;
         
         private System.Threading.SendOrPostCallback onListCompletedDelegate;
+        
+        private BeginOperationDelegate onBeginSearchDelegate;
+        
+        private EndOperationDelegate onEndSearchDelegate;
+        
+        private System.Threading.SendOrPostCallback onSearchCompletedDelegate;
         
         private BeginOperationDelegate onBeginSaveDelegate;
         
@@ -1360,6 +1462,8 @@ namespace HAP.Silverlight.Browser.service {
         public event System.EventHandler<ListDrivesCompletedEventArgs> ListDrivesCompleted;
         
         public event System.EventHandler<ListCompletedEventArgs> ListCompleted;
+        
+        public event System.EventHandler<SearchCompletedEventArgs> SearchCompleted;
         
         public event System.EventHandler<SaveCompletedEventArgs> SaveCompleted;
         
@@ -1552,6 +1656,69 @@ namespace HAP.Silverlight.Browser.service {
             }
             base.InvokeAsync(this.onBeginListDelegate, new object[] {
                         path}, this.onEndListDelegate, this.onListCompletedDelegate, userState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.IAsyncResult HAP.Silverlight.Browser.service.apiSoap.BeginSearch(HAP.Silverlight.Browser.service.SearchRequest request, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginSearch(request, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        private System.IAsyncResult BeginSearch(string path, string searchterm, System.AsyncCallback callback, object asyncState) {
+            HAP.Silverlight.Browser.service.SearchRequest inValue = new HAP.Silverlight.Browser.service.SearchRequest();
+            inValue.Body = new HAP.Silverlight.Browser.service.SearchRequestBody();
+            inValue.Body.path = path;
+            inValue.Body.searchterm = searchterm;
+            return ((HAP.Silverlight.Browser.service.apiSoap)(this)).BeginSearch(inValue, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        HAP.Silverlight.Browser.service.SearchResponse HAP.Silverlight.Browser.service.apiSoap.EndSearch(System.IAsyncResult result) {
+            return base.Channel.EndSearch(result);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        private System.Collections.ObjectModel.ObservableCollection<HAP.Silverlight.Browser.service.ComputerBrowserAPIItem> EndSearch(System.IAsyncResult result) {
+            HAP.Silverlight.Browser.service.SearchResponse retVal = ((HAP.Silverlight.Browser.service.apiSoap)(this)).EndSearch(result);
+            return retVal.Body.SearchResult;
+        }
+        
+        private System.IAsyncResult OnBeginSearch(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            string path = ((string)(inValues[0]));
+            string searchterm = ((string)(inValues[1]));
+            return this.BeginSearch(path, searchterm, callback, asyncState);
+        }
+        
+        private object[] OnEndSearch(System.IAsyncResult result) {
+            System.Collections.ObjectModel.ObservableCollection<HAP.Silverlight.Browser.service.ComputerBrowserAPIItem> retVal = this.EndSearch(result);
+            return new object[] {
+                    retVal};
+        }
+        
+        private void OnSearchCompleted(object state) {
+            if ((this.SearchCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.SearchCompleted(this, new SearchCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void SearchAsync(string path, string searchterm) {
+            this.SearchAsync(path, searchterm, null);
+        }
+        
+        public void SearchAsync(string path, string searchterm, object userState) {
+            if ((this.onBeginSearchDelegate == null)) {
+                this.onBeginSearchDelegate = new BeginOperationDelegate(this.OnBeginSearch);
+            }
+            if ((this.onEndSearchDelegate == null)) {
+                this.onEndSearchDelegate = new EndOperationDelegate(this.OnEndSearch);
+            }
+            if ((this.onSearchCompletedDelegate == null)) {
+                this.onSearchCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnSearchCompleted);
+            }
+            base.InvokeAsync(this.onBeginSearchDelegate, new object[] {
+                        path,
+                        searchterm}, this.onEndSearchDelegate, this.onSearchCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -2043,6 +2210,19 @@ namespace HAP.Silverlight.Browser.service {
             public HAP.Silverlight.Browser.service.ListResponse EndList(System.IAsyncResult result) {
                 object[] _args = new object[0];
                 HAP.Silverlight.Browser.service.ListResponse _result = ((HAP.Silverlight.Browser.service.ListResponse)(base.EndInvoke("List", _args, result)));
+                return _result;
+            }
+            
+            public System.IAsyncResult BeginSearch(HAP.Silverlight.Browser.service.SearchRequest request, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[1];
+                _args[0] = request;
+                System.IAsyncResult _result = base.BeginInvoke("Search", _args, callback, asyncState);
+                return _result;
+            }
+            
+            public HAP.Silverlight.Browser.service.SearchResponse EndSearch(System.IAsyncResult result) {
+                object[] _args = new object[0];
+                HAP.Silverlight.Browser.service.SearchResponse _result = ((HAP.Silverlight.Browser.service.SearchResponse)(base.EndInvoke("Search", _args, result)));
                 return _result;
             }
             

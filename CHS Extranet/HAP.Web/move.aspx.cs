@@ -14,8 +14,6 @@ namespace HAP.Web
 {
     public partial class move : System.Web.UI.Page
     {
-        private String _DomainDN;
-        private String _ActiveDirectoryConnectionString;
         private PrincipalContext pcontext;
         private UserPrincipal up;
         private hapConfig config;
@@ -50,25 +48,8 @@ namespace HAP.Web
         protected override void OnInitComplete(EventArgs e)
         {
             config = hapConfig.Current;
-            ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
-            if (connObj != null) _ActiveDirectoryConnectionString = connObj.ConnectionString;
-            if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))
-                throw new Exception("The connection name 'activeDirectoryConnectionString' was not found in the applications configuration or the connection string is empty.");
-            if (_ActiveDirectoryConnectionString.StartsWith("LDAP://"))
-                _DomainDN = _ActiveDirectoryConnectionString.Remove(0, _ActiveDirectoryConnectionString.IndexOf("DC="));
-            else throw new Exception("The connection string specified in 'activeDirectoryConnectionString' does not appear to be a valid LDAP connection string.");
-            pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
-            up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Username);
-        }
-
-        public string Username
-        {
-            get
-            {
-                if (User.Identity.Name.Contains('\\'))
-                    return User.Identity.Name.Remove(0, User.Identity.Name.IndexOf('\\') + 1);
-                else return User.Identity.Name;
-            }
+            pcontext = HAP.AD.ADUtil.PContext;
+            up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, HAP.AD.ADUtil.Username);
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -92,7 +73,7 @@ namespace HAP.Web
                 uncpath unc = null;
                 unc = config.MyComputer.UNCPaths[p];
                 if (unc == null || !isWriteAuth(unc)) Response.Redirect(Request.ApplicationPath + "/unauthorised.aspx", true);
-                else path = string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username) + path.Replace('/', '\\');
+                else path = string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), HAP.AD.ADUtil.Username) + path.Replace('/', '\\');
                 if (Request.QueryString["path"].Substring(0, 1) == "f")
                 {
                     FileInfo file = new FileInfo(path);
@@ -112,7 +93,7 @@ namespace HAP.Web
 
         private void populatetree(DirectoryInfo ignoredir, string p)
         {
-            TreeNode h = new TreeNode(hapConfig.Current.MyComputer.UNCPaths[p].Name, string.Format(config.MyComputer.UNCPaths[p].UNC.Replace("%homepath%", up.HomeDirectory), Username));
+            TreeNode h = new TreeNode(hapConfig.Current.MyComputer.UNCPaths[p].Name, string.Format(config.MyComputer.UNCPaths[p].UNC.Replace("%homepath%", up.HomeDirectory), HAP.AD.ADUtil.Username));
             populatenode(h, ignoredir);
             TreeView1.Nodes.Add(h);
         }
