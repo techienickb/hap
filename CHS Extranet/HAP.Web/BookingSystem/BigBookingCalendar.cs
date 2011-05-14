@@ -24,7 +24,7 @@ namespace HAP.Web.BookingSystem
             this.SelectionMode = CalendarSelectionMode.Day;
             this.maxday = config.BookingSystem.MaxDays;
             foreach (AdvancedBookingRight right in HAP.Data.BookingSystem.BookingSystem.BookingRights)
-                if (right.Username == Username)
+                if (right.Username == HAP.AD.ADUtil.Username)
                     this.maxday = 7 * right.Weeksahead;
 
             Terms terms = new Terms();
@@ -140,17 +140,6 @@ namespace HAP.Web.BookingSystem
                 return Page.User.IsInRole("Domain Admins");
             }
         }
-
-        public string Username
-        {
-            get
-            {
-                if (Page.User.Identity.Name.Contains('\\'))
-                    return Page.User.Identity.Name.Remove(0, Page.User.Identity.Name.IndexOf('\\') + 1);
-                else return Page.User.Identity.Name;
-            }
-        }
-
         #endregion
     }
 }

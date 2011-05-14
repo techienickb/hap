@@ -43,10 +43,7 @@ namespace HAP.Web.UserCard
         [WebMethod]
         public void ResetPassword(string username)
         {
-            string ad = ConfigurationManager.ConnectionStrings[hapConfig.Current.ADSettings.ADConnectionString].ConnectionString;
-            ad = ad.Remove(0, 7);
-            ad = ad.Remove(ad.IndexOf('/'));
-            PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, ad, hapConfig.Current.ADSettings.ADUsername, hapConfig.Current.ADSettings.ADPassword);
+            PrincipalContext pcontext = HAP.AD.ADUtil.PContext;
             UserPrincipal up2 = UserPrincipal.FindByIdentity(pcontext, username);
             up2.SetPassword("password");
             up2.ExpirePasswordNow();
@@ -126,15 +123,7 @@ namespace HAP.Web.UserCard
         {
             hapConfig config = hapConfig.Current;
             ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
-            string _ActiveDirectoryConnectionString = "";
-            string _DomainDN = "";
-            if (connObj != null) _ActiveDirectoryConnectionString = connObj.ConnectionString;
-            if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))
-                throw new Exception("The connection name 'activeDirectoryConnectionString' was not found in the applications configuration or the connection string is empty.");
-            if (_ActiveDirectoryConnectionString.StartsWith("LDAP://"))
-                _DomainDN = _ActiveDirectoryConnectionString.Remove(0, _ActiveDirectoryConnectionString.IndexOf("DC="));
-            else throw new Exception("The connection string specified in 'activeDirectoryConnectionString' does not appear to be a valid LDAP connection string.");
-            PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
+            PrincipalContext pcontext = HAP.AD.ADUtil.PContext;
             UserPrincipal up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, username);
             XmlDocument doc = new XmlDocument();
             doc.Load(Server.MapPath("~/App_Data/Tickets.xml"));
@@ -167,16 +156,7 @@ namespace HAP.Web.UserCard
         public Ticket[] setNewTicket(string subject, string note, [Optional]string room, string username)
         {
             hapConfig config = hapConfig.Current;
-            ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
-            string _ActiveDirectoryConnectionString = "";
-            string _DomainDN = "";
-            if (connObj != null) _ActiveDirectoryConnectionString = connObj.ConnectionString;
-            if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))
-                throw new Exception("The connection name 'activeDirectoryConnectionString' was not found in the applications configuration or the connection string is empty.");
-            if (_ActiveDirectoryConnectionString.StartsWith("LDAP://"))
-                _DomainDN = _ActiveDirectoryConnectionString.Remove(0, _ActiveDirectoryConnectionString.IndexOf("DC="));
-            else throw new Exception("The connection string specified in 'activeDirectoryConnectionString' does not appear to be a valid LDAP connection string.");
-            PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
+            PrincipalContext pcontext = HAP.AD.ADUtil.PContext;
             UserPrincipal up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, username);
             XmlDocument doc = new XmlDocument();
             doc.Load(Server.MapPath("~/App_Data/Tickets.xml"));
@@ -254,10 +234,7 @@ namespace HAP.Web.UserCard
                 Date = DateTime.Parse(node.Attributes["date"].Value + " " + node.Attributes["time"].Value);
             else Date = DateTime.Parse(node.Attributes["datetime"].Value);
             hapConfig config = hapConfig.Current;
-            string _DomainDN = "";
-            if (ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString.StartsWith("LDAP://"))
-                _DomainDN = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString.Remove(0, ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString.IndexOf("DC="));
-            PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
+            PrincipalContext pcontext = HAP.AD.ADUtil.PContext;
             User = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, node.Attributes["username"].Value).DisplayName;
         }
 
@@ -286,10 +263,7 @@ namespace HAP.Web.UserCard
                 Date = DateTime.Parse(node.SelectNodes("Note")[0].Attributes["date"].Value + " " + node.SelectNodes("Note")[0].Attributes["time"].Value);
             Date = DateTime.Parse(node.SelectNodes("Note")[0].Attributes["datetime"].Value);
             hapConfig config = hapConfig.Current;
-            string _DomainDN = "";
-            if (ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString.StartsWith("LDAP://"))
-                _DomainDN = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString.Remove(0, ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString.IndexOf("DC="));
-            PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
+            PrincipalContext pcontext = HAP.AD.ADUtil.PContext;
             User = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, node.SelectNodes("Note")[0].Attributes["username"].Value).DisplayName;
             List<Note> notes = new List<Note>();
             foreach (XmlNode n in node.SelectNodes("Note"))

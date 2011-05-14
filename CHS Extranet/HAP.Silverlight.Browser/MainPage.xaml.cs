@@ -29,7 +29,7 @@ namespace HAP.Silverlight.Browser
             Filter = new List<string>();
             ViewMode = Browser.ViewMode.Tile;
             CurrentItem = new BItem(service.BType.Root, "My School Computer", service.AccessControlActions.None);
-            newfolder.Visibility = System.Windows.Visibility.Collapsed;
+            newfolder.Visibility = search.Visibility = System.Windows.Visibility.Collapsed;
             HAPTreeNode root = new HAPTreeNode();
             root.Data = CurrentItem;
             StackPanel sp = new StackPanel();
@@ -53,6 +53,7 @@ namespace HAP.Silverlight.Browser
             soap.ListCompleted += new EventHandler<ListCompletedEventArgs>(soap_ListCompleted);
             soap.ListDrivesCompleted += new EventHandler<ListDrivesCompletedEventArgs>(soap_ListDrivesCompleted);
             soap.NewFolderCompleted += new EventHandler<System.ComponentModel.AsyncCompletedEventArgs>(soap_NewFolderCompleted);
+            soap.SearchCompleted += new EventHandler<SearchCompletedEventArgs>(soap_SearchCompleted);
         }
 
         public apiSoapClient soap { get; set; }
@@ -108,7 +109,7 @@ namespace HAP.Silverlight.Browser
         private void SetDrop(bool val)
         {
             this.AllowDrop = contentPan.AllowDrop = RightClickFolder.IsEnabled = val;
-            newfolder.Visibility = val ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+            newfolder.Visibility = search.Visibility = val ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
         }
 
         private void AddItem(BrowserItem item)
@@ -303,12 +304,14 @@ namespace HAP.Silverlight.Browser
         private void root_Selected(object sender, RoutedEventArgs e)
         {
             CurrentItem = ((HAPTreeNode)sender).Data;
+            if (treeView1.Items.Count == 2) treeView1.Items.RemoveAt(1);
             soap.ListDrivesAsync();
             HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri, "mycomputersl.aspx#"));
         }
 
         private void HAPTreeNode_Selected(object sender, RoutedEventArgs e)
         {
+            if (treeView1.Items.Count == 2) treeView1.Items.RemoveAt(1);
             reload = true;
             CurrentItem = ((HAPTreeNode)treeView1.SelectedItem).Data;
             ((HAPTreeNode)treeView1.SelectedItem).IsExpanded = true;
@@ -1130,6 +1133,91 @@ namespace HAP.Silverlight.Browser
                 if (s.Contains("*.*")) return true;
                 else if (s.ToLower().Contains(extension.ToLower())) return true;
             return false;
+        }
+
+        private void search_close_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            search_grid.Visibility = System.Windows.Visibility.Collapsed;
+            search_text.Text = "";
+            treeView1.SelectItem(GetTreeNode(CurrentItem.Path, ((HAPTreeNode)treeView1.Items[0]).Items));
+        }
+
+        private void search_Click(object sender, RoutedEventArgs e)
+        {
+            search_grid.Visibility = search_grid.Visibility == System.Windows.Visibility.Visible ? System.Windows.Visibility.Collapsed : System.Windows.Visibility.Visible;
+        }
+
+        void soap_SearchCompleted(object sender, SearchCompletedEventArgs e)
+        {
+            if (e.Error != null) MessageBox.Show(e.Error.ToString(), "Error", MessageBoxButton.OK);
+            if (e.Result.Count == 0) MessageBox.Show("No Items Found");
+            Dispatcher.BeginInvoke(new Action(ClearItems));
+            Dispatcher.BeginInvoke(new SetBool(SetDrop), CurrentItem.AccessControl == service.AccessControlActions.Change);
+            Dispatcher.BeginInvoke(new Action(ClearNode));
+
+            if (e.Error != null) MessageBox.Show(e.Error.ToString());
+            else
+            {
+                foreach (service.ComputerBrowserAPIItem i in e.Result)
+                {
+                    BItem bitem = new BItem(i);
+                    bitem.Changed += new BItemChangeHandler(bitem_Changed);
+                    bitem.Deleted += new BItemChangeHandler(bitem_Delete);
+                    BrowserItem item = new BrowserItem(bitem);
+                    item.Activate += new EventHandler(item_Activate);
+                    item.MouseEnter += new MouseEventHandler(item_MouseEnter);
+                    if (CurrentItem.AccessControl == service.AccessControlActions.Change)
+                    {
+                        item.DragEnter += new DragEventHandler(item_DragEnter);
+                        item.DragLeave += new DragEventHandler(item_DragLeave);
+                        item.MouseLeftButtonDown += new MouseButtonEventHandler(item_MouseLeftButtonDown);
+                        item.KeyUp += new KeyEventHandler(item_KeyUp);
+                    }
+                    item.MouseLeave += new MouseEventHandler(item_MouseLeave);
+                    item.ReSort += new ResortHandler(item_ReSort);
+                    //if (item.Data.BType == BType.Drive) item.DirectoryChange += new ChangeDirectoryHandler(computer_DirectoryChange);
+                    //else 
+                    item.DirectoryChange += new ChangeDirectoryHandler(item_DirectoryChange);
+                    if (item.Data.BType == service.BType.Folder && item.Data.Name != "..") Dispatcher.BeginInvoke(new UpdateTree(UpdateTree), item.Data);
+                    if (RememberActive != null) item.Active = item.Data.Path == RememberActive;
+                    if (item.Data.BType == BType.File) Dispatcher.BeginInvoke(new AddItemHandler(AddItem), item);
+                }
+            }
+            reload = false;
+            RememberActive = null;
+        }
+
+        private void search_button_Click(object sender, RoutedEventArgs e)
+        {
+            if (treeView1.Items.Count == 1)
+            {
+                HAPTreeNode searchresults = new HAPTreeNode();
+                searchresults.Data = new BItem(service.BType.Root, "Search Results", service.AccessControlActions.None);
+                StackPanel sp = new StackPanel();
+                sp.Orientation = Orientation.Horizontal;
+                sp.VerticalAlignment = System.Windows.VerticalAlignment.Center;
+                sp.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+                sp.Cursor = Cursors.Hand;
+                Image img = new Image();
+                img.Margin = new Thickness(0, 0, 4, 0);
+                img.Source = new BitmapImage(new Uri("/HAP.Silverlight.Browser;component/searchresults.png", UriKind.Relative));
+                sp.Children.Add(img);
+                TextBlock tb = new TextBlock();
+                tb.Text = "Search Results";
+                sp.Children.Add(tb);
+                searchresults.Header = sp;
+                treeView1.Items.Add(searchresults);
+                treeView1.SelectItem(searchresults);
+                tempnode = searchresults;
+                candrag = this.AllowDrop = this.contentPan.AllowDrop = false;
+                ClearItems();
+                soap.SearchAsync(CurrentItem.Path, search_text.Text);
+            }
+        }
+
+        private void search_text_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) search_button_Click(this, new RoutedEventArgs());
         }
     }
 }

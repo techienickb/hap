@@ -31,8 +31,8 @@ namespace HAP.Web.HelpDesk
             if (_ActiveDirectoryConnectionString.StartsWith("LDAP://"))
                 _DomainDN = _ActiveDirectoryConnectionString.Remove(0, _ActiveDirectoryConnectionString.IndexOf("DC="));
             else throw new Exception("The connection string specified in 'activeDirectoryConnectionString' does not appear to be a valid LDAP connection string.");
-            pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
-            up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Username);
+            pcontext = HAP.AD.ADUtil.PContext;
+            up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, HAP.AD.ADUtil.Username);
             this.Title = string.Format("{0} - Home Access Plus+ - Help Desk", config.BaseSettings.EstablishmentName);
             loadtickets();
             if (!Page.IsPostBack)
@@ -62,16 +62,6 @@ namespace HAP.Web.HelpDesk
         private UserPrincipal up;
         private hapConfig config;
 
-        public string Username
-        {
-            get
-            {
-                if (User.Identity.Name.Contains('\\'))
-                    return User.Identity.Name.Remove(0, User.Identity.Name.IndexOf('\\') + 1);
-                else return User.Identity.Name;
-            }
-        }
-
         public string isSelected(object o)
         {
             if (o.ToString() == TicketID) return " class=\"Selected\"";
@@ -81,7 +71,7 @@ namespace HAP.Web.HelpDesk
         public string getDisplayName(object o)
         {
             UserPrincipal u = o as UserPrincipal;
-            if (string.IsNullOrEmpty(u.DisplayName)) return Username;
+            if (string.IsNullOrEmpty(u.DisplayName)) return HAP.AD.ADUtil.Username;
             return u.DisplayName;
         }
 
@@ -134,7 +124,7 @@ namespace HAP.Web.HelpDesk
                 newadminsupportticket.Visible = false;
                 List<Ticket> tickets = new List<Ticket>();
                 foreach (XmlNode node in doc.SelectNodes(xpath))
-                    if (node.SelectNodes("Note")[0].Attributes["username"].Value.ToLower() == Username.ToLower())
+                    if (node.SelectNodes("Note")[0].Attributes["username"].Value.ToLower() == HAP.AD.ADUtil.Username.ToLower())
                         tickets.Add(Ticket.Parse(node));
                 ticketsrepeater.DataSource = tickets.ToArray();
                 ticketsrepeater.DataBind();
@@ -162,7 +152,7 @@ namespace HAP.Web.HelpDesk
             ticket.SetAttribute("status", "New");
             XmlElement node = doc.CreateElement("Note");
             node.SetAttribute("datetime", DateTime.Now.ToUniversalTime().ToString("u"));
-            node.SetAttribute("username", Username);
+            node.SetAttribute("username", HAP.AD.ADUtil.Username);
             node.InnerXml = "<![CDATA[Room: " + newticketroom.Text + "<br />\n" + newticketeditor.Content + "]]>";
             ticket.AppendChild(node);
             doc.SelectSingleNode("/Tickets").AppendChild(ticket);
@@ -333,7 +323,7 @@ namespace HAP.Web.HelpDesk
             }
             XmlElement node = doc.CreateElement("Note");
             node.SetAttribute("datetime", DateTime.Now.ToString("u"));
-            node.SetAttribute("username", Username);
+            node.SetAttribute("username", HAP.AD.ADUtil.Username);
             if (string.IsNullOrEmpty(newnote.Content)) node.InnerXml = "<![CDATA[No Note Information Added]]>";
             else node.InnerXml = "<![CDATA[" + newnote.Content + "]]>";
             ticket.AppendChild(node);
@@ -369,11 +359,7 @@ namespace HAP.Web.HelpDesk
             if (node.Attributes["date"] != null && node.Attributes["time"] != null)
                 Date = DateTime.Parse(node.Attributes["date"].Value + " " + node.Attributes["time"].Value);
             else Date = DateTime.Parse(node.Attributes["datetime"].Value);
-            hapConfig config = hapConfig.Current;
-            string _DomainDN = "";
-            if (ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString.StartsWith("LDAP://"))
-                _DomainDN = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString.Remove(0, ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString.IndexOf("DC="));
-            PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
+            PrincipalContext pcontext = HAP.AD.ADUtil.PContext;
             User = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, node.Attributes["username"].Value);
         }
 
@@ -400,11 +386,7 @@ namespace HAP.Web.HelpDesk
             if (node.SelectNodes("Note")[0].Attributes["date"] != null)
                 Date = DateTime.Parse(node.SelectNodes("Note")[0].Attributes["date"].Value + " " + node.SelectNodes("Note")[0].Attributes["time"].Value);
             Date = DateTime.Parse(node.SelectNodes("Note")[0].Attributes["datetime"].Value);
-            hapConfig config = hapConfig.Current;
-            string _DomainDN = "";
-            if (ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString.StartsWith("LDAP://"))
-                _DomainDN = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString.Remove(0, ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString.IndexOf("DC="));
-            PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
+            PrincipalContext pcontext = HAP.AD.ADUtil.PContext;
             User = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, node.SelectNodes("Note")[0].Attributes["username"].Value);
         }
     }

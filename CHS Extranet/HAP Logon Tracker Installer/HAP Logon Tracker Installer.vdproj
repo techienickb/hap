@@ -176,7 +176,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HAP Logon Tracker"
         "ProductCode" = "8:{AC36F8E9-0CE4-4785-90F2-7EA7587C69BC}"
-        "PackageCode" = "8:{A5F9B3A2-1A01-4B00-8FF0-50C177756DED}"
+        "PackageCode" = "8:{C4EB3073-D1C2-4604-A983-555173B10429}"
         "UpgradeCode" = "8:{41BAC840-CB78-47EF-859E-15CC9CA146CD}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

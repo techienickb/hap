@@ -49,6 +49,7 @@ namespace HAP.UserCard
         void icon_Click(object sender, EventArgs e)
         {
             Show();
+            Focus();
         }
 
         void tabs_MouseWheel(object sender, MouseWheelEventArgs e)

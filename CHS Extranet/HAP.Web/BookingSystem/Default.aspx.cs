@@ -16,16 +16,6 @@ namespace HAP.Web.BookingSystem
     {
         private hapConfig config;
 
-        public string Username
-        {
-            get
-            {
-                if (User.Identity.Name.Contains('\\'))
-                    return User.Identity.Name.Remove(0, User.Identity.Name.IndexOf('\\') + 1);
-                else return User.Identity.Name;
-            }
-        }
-
         protected override void OnInitComplete(EventArgs e)
         {
             config = hapConfig.Current;

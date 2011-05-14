@@ -5,6 +5,8 @@ using System.Text;
 using HAP.Web.Configuration;
 using System.DirectoryServices;
 using System.Configuration;
+using System.DirectoryServices.AccountManagement;
+using System.Web;
 
 namespace HAP.AD
 {
@@ -22,6 +24,43 @@ namespace HAP.AD
                             users.Add(info);
             users.Sort();
             return users.ToArray();
+        }
+
+        public static string DomainName
+        {
+            get
+            {
+                config = hapConfig.Current;
+                string _ActiveDirectoryConnectionString = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString;
+                _ActiveDirectoryConnectionString = _ActiveDirectoryConnectionString.Remove(_ActiveDirectoryConnectionString.LastIndexOf(','));
+                return _ActiveDirectoryConnectionString.Substring(_ActiveDirectoryConnectionString.LastIndexOf(@"/") + 1, _ActiveDirectoryConnectionString.Length - _ActiveDirectoryConnectionString.LastIndexOf(@"/") - 1).Replace("DC=", "").Replace(',', '.');
+            }
+        }
+
+        public static PrincipalContext PContext
+        {
+            get
+            {
+                config = hapConfig.Current;
+                string _ActiveDirectoryConnectionString = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString;
+                if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))
+                    throw new Exception("The connection name 'activeDirectoryConnectionString' was not found in the applications configuration or the connection string is empty.");
+                string _DomainDN = "";
+                if (_ActiveDirectoryConnectionString.StartsWith("LDAP://"))
+                    _DomainDN = _ActiveDirectoryConnectionString.Remove(0, _ActiveDirectoryConnectionString.IndexOf("DC="));
+                else throw new Exception("The connection string specified in 'activeDirectoryConnectionString' does not appear to be a valid LDAP connection string.");
+                return new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
+            }
+        }
+
+        public static string Username
+        {
+            get
+            {
+                if (HttpContext.Current.User.Identity.Name.Contains('\\'))
+                    return HttpContext.Current.User.Identity.Name.Remove(0, HttpContext.Current.User.Identity.Name.IndexOf('\\') + 1);
+                else return HttpContext.Current.User.Identity.Name;
+            }
         }
 
         static hapConfig config;

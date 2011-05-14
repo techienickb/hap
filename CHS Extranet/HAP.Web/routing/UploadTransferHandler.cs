@@ -33,22 +33,15 @@ namespace HAP.Web.routing
                 if (context.Request.HttpMethod == "POST")
                 {
                     config = hapConfig.Current;
-                    ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
-                    if (connObj != null) _ActiveDirectoryConnectionString = connObj.ConnectionString;
-                    if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))
-                        throw new Exception("The connection name 'activeDirectoryConnectionString' was not found in the applications configuration or the connection string is empty.");
-                    if (_ActiveDirectoryConnectionString.StartsWith("LDAP://"))
-                        _DomainDN = _ActiveDirectoryConnectionString.Remove(0, _ActiveDirectoryConnectionString.IndexOf("DC="));
-                    else throw new Exception("The connection string specified in 'activeDirectoryConnectionString' does not appear to be a valid LDAP connection string.");
-                    pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
-                    up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Username);
+                    pcontext = HAP.AD.ADUtil.PContext;
+                    up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, HAP.AD.ADUtil.Username);
 
                     string userhome = up.HomeDirectory;
                     if (!userhome.EndsWith("\\")) userhome += "\\";
                     string path = RoutingPath.Replace('^', '&');
                     uncpath unc = null;
                     unc = config.MyComputer.UNCPaths[RoutingDrive];
-                    path = string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username) + '\\' + path.Replace('/', '\\');
+                    path = string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), HAP.AD.ADUtil.Username) + '\\' + path.Replace('/', '\\');
                     UploadProcess fileUpload = new UploadProcess();
                     fileUpload.FileUploadCompleted += new FileUploadCompletedEvent(fileUpload_FileUploadCompleted);
                     fileUpload.ProcessRequest(context, path);
@@ -71,21 +64,10 @@ namespace HAP.Web.routing
             }
         }
 
-        private String _DomainDN;
-        private String _ActiveDirectoryConnectionString;
         private PrincipalContext pcontext;
         private UserPrincipal up;
         private hapConfig config;
 
-        public string Username
-        {
-            get
-            {
-                if (HttpContext.Current.User.Identity.Name.Contains('\\'))
-                    return HttpContext.Current.User.Identity.Name.Remove(0, HttpContext.Current.User.Identity.Name.IndexOf('\\') + 1);
-                else return HttpContext.Current.User.Identity.Name;
-            }
-        }
 
         void fileUpload_FileUploadCompleted(object sender, FileUploadCompletedEventArgs args)
         {

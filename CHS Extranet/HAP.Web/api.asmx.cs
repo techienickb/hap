@@ -45,16 +45,8 @@ namespace HAP.Web
 
             long freeBytesForUser, totalBytes, freeBytes;
             ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
-            string _ActiveDirectoryConnectionString = "";
-            string _DomainDN = "";
-            if (connObj != null) _ActiveDirectoryConnectionString = connObj.ConnectionString;
-            if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))
-                throw new Exception("The connection name 'activeDirectoryConnectionString' was not found in the applications configuration or the connection string is empty.");
-            if (_ActiveDirectoryConnectionString.StartsWith("LDAP://"))
-                _DomainDN = _ActiveDirectoryConnectionString.Remove(0, _ActiveDirectoryConnectionString.IndexOf("DC="));
-            else throw new Exception("The connection string specified in 'activeDirectoryConnectionString' does not appear to be a valid LDAP connection string.");
-            PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
-            UserPrincipal up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Username);
+            PrincipalContext pcontext = HAP.AD.ADUtil.PContext;
+            UserPrincipal up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, HAP.AD.ADUtil.Username);
 
             string userhome = up.HomeDirectory;
             List<ComputerBrowserAPIItem> items = new List<ComputerBrowserAPIItem>();
@@ -74,17 +66,17 @@ namespace HAP.Web
                 {
                     if (path.Usage == UsageMode.DriveSpace)
                     {
-                        if (Win32.GetDiskFreeSpaceEx(string.Format(path.UNC.Replace("%homepath%", userhome), Username), out freeBytesForUser, out totalBytes, out freeBytes))
+                        if (Win32.GetDiskFreeSpaceEx(string.Format(path.UNC.Replace("%homepath%", userhome), HAP.AD.ADUtil.Username), out freeBytesForUser, out totalBytes, out freeBytes))
                             space = Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
                     }
                     else
                     {
                         try
                         {
-                            HAP.Data.Quota.QuotaInfo qi = HAP.Data.ComputerBrowser.Quota.GetQuota(Username, string.Format(path.UNC.Replace("%homepath%", userhome)));
+                            HAP.Data.Quota.QuotaInfo qi = HAP.Data.ComputerBrowser.Quota.GetQuota(HAP.AD.ADUtil.Username, string.Format(path.UNC.Replace("%homepath%", userhome)));
                             space = Math.Round((Convert.ToDecimal(qi.Used) / Convert.ToDecimal(qi.Total)) * 100, 2);
                             if (qi.Total == -1)
-                                if (Win32.GetDiskFreeSpaceEx(string.Format(path.UNC.Replace("%homepath%", userhome), Username), out freeBytesForUser, out totalBytes, out freeBytes))
+                                if (Win32.GetDiskFreeSpaceEx(string.Format(path.UNC.Replace("%homepath%", userhome), HAP.AD.ADUtil.Username), out freeBytesForUser, out totalBytes, out freeBytes))
                                     space = Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
                         }
                         catch { }
@@ -142,6 +134,53 @@ namespace HAP.Web
                 try
                 {
                     if (!file.Name.ToLower().Contains("thumbs") && checkext(file.Extension) && file.Attributes != FileAttributes.Hidden && file.Attributes != FileAttributes.System)
+                    {
+                        string dirpath = Converter.UNCtoDrive2(file.FullName, unc, userhome);
+                        items.Add(new ComputerBrowserAPIItem(file, unc, userhome, allowactions, "Download/" + dirpath.Replace('&', '^')));
+                    }
+                }
+                catch
+                {
+                    //Response.Redirect("unauthorised.aspx?path=" + Server.UrlPathEncode(uae.Message), true);
+                }
+            }
+            return items.ToArray();
+        }
+
+        //method for searching
+        [WebMethod]
+        public ComputerBrowserAPIItem[] Search(string path, string searchterm)
+        {
+            List<ComputerBrowserAPIItem> items = new List<ComputerBrowserAPIItem>();
+            UNCPath unc; string userhome;
+            path = Converter.DriveToUNC(path, out unc, out userhome);
+            AccessControlActions allowactions = isWriteAuth(unc) ? AccessControlActions.Change : AccessControlActions.View;
+            DirectoryInfo dir = new DirectoryInfo(path);
+            foreach (DirectoryInfo subdir in dir.GetDirectories())
+                try
+                {
+                    if (!subdir.Name.ToLower().Contains("recycle") && subdir.Attributes != FileAttributes.Hidden && subdir.Attributes != FileAttributes.System && !subdir.Name.ToLower().Contains("system volume info") && subdir.Name.ToLower().Contains(searchterm.ToLower()))
+                    {
+                        AccessControlActions actions = allowactions;
+                        if (actions == AccessControlActions.Change)
+                        {
+                            try { File.Create(Path.Combine(subdir.FullName, "temp.ini")).Close(); File.Delete(Path.Combine(subdir.FullName, "temp.ini")); }
+                            catch { actions = AccessControlActions.View; }
+                        }
+                        try { subdir.GetDirectories(); }
+                        catch { actions = AccessControlActions.None; }
+
+                        string dirpath = Converter.UNCtoDrive(subdir.FullName, unc, userhome);
+                        items.Add(new ComputerBrowserAPIItem(subdir, unc, userhome, actions));
+                    }
+                }
+                catch { }
+
+            foreach (FileInfo file in dir.GetFiles())
+            {
+                try
+                {
+                    if (!file.Name.ToLower().Contains("thumbs") && checkext(file.Extension) && file.Attributes != FileAttributes.Hidden && file.Attributes != FileAttributes.System && file.Name.ToLower().Contains(searchterm.ToLower()))
                     {
                         string dirpath = Converter.UNCtoDrive2(file.FullName, unc, userhome);
                         items.Add(new ComputerBrowserAPIItem(file, unc, userhome, allowactions, "Download/" + dirpath.Replace('&', '^')));
@@ -333,16 +372,6 @@ namespace HAP.Web
             foreach (string s in exc)
                 if (s.ToLower() == extension.ToLower()) return false;
             return true;
-        }
-
-        private string Username
-        {
-            get
-            {
-                if (Context.User.Identity.Name.Contains('\\'))
-                    return Context.User.Identity.Name.Remove(0, Context.User.Identity.Name.IndexOf('\\') + 1);
-                else return Context.User.Identity.Name;
-            }
         }
 
 #endregion

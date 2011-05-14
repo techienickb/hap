@@ -219,6 +219,9 @@
     <None Include="Service References\service\HAP.Silverlight.Browser.service.SaveResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\service\HAP.Silverlight.Browser.service.SearchResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\service\HAP.Silverlight.Browser.service.UnzipResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -228,6 +231,7 @@
     <None Include="Service References\service\HAP.Silverlight.Browser.service.ZIPResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <Resource Include="searchresults.png" />
     <Content Include="ServiceReferences.ClientConfig" />
   </ItemGroup>
   <ItemGroup>

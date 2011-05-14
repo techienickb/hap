@@ -73,7 +73,7 @@ function changeversion(e) {
 
 var hasSilverlight = Boolean(window.Silverlight);
 var hasSilverlight4 = hasSilverlight && Silverlight.isInstalled('4.0');
-if (!hasSilverlight4) document.getElementById("versionquest").style.display = "none";
+if (!hasSilverlight4) document.getElementById("versionquest").style.display = document.getElementById('mypcsl').style.display =  "none";
 else {
     var version = getCookie('mycompv');
     if (version != null && version != "") {

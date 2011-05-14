@@ -16,33 +16,17 @@ namespace HAP.Web
 {
     public partial class Default : System.Web.UI.Page
     {
-        private String _DomainDN;
         private String _ActiveDirectoryConnectionString;
         private PrincipalContext pcontext;
         protected UserPrincipal up { get; set; }
         private hapConfig config;
 
-        public string Username
-        {
-            get
-            {
-                if (User.Identity.Name.Contains('\\'))
-                    return User.Identity.Name.Remove(0, User.Identity.Name.IndexOf('\\') + 1);
-                else return User.Identity.Name;
-            }
-        }
-
         protected override void OnInitComplete(EventArgs e)
         {
             config = hapConfig.Current;
             _ActiveDirectoryConnectionString = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString;
-            if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))
-                throw new Exception("The connection name 'activeDirectoryConnectionString' was not found in the applications configuration or the connection string is empty.");
-            if (_ActiveDirectoryConnectionString.StartsWith("LDAP://"))
-                _DomainDN = _ActiveDirectoryConnectionString.Remove(0, _ActiveDirectoryConnectionString.IndexOf("DC="));
-            else throw new Exception("The connection string specified in 'activeDirectoryConnectionString' does not appear to be a valid LDAP connection string.");
-            pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
-            up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Username);
+            pcontext = HAP.AD.ADUtil.PContext;
+            up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, HAP.AD.ADUtil.Username);
             this.Title = string.Format("{0} - Home Access Plus+", config.BaseSettings.EstablishmentName);
         }
 
@@ -54,7 +38,8 @@ namespace HAP.Web
         {
             Dictionary<string, homepagetab> tabs = config.HomePage.Tabs.FilteredTabs;
             tabheader_repeater.DataSource = tabs.Values;
-            tabWidth = Math.Round(Convert.ToDecimal(99) / Convert.ToDecimal(config.HomePage.Tabs.FilteredTabs.Count), 2);
+            if (config.HomePage.Tabs.FilteredTabs.Count == 0) tabWidth = 0;
+            else tabWidth = Math.Round(Convert.ToDecimal(98) / Convert.ToDecimal(config.HomePage.Tabs.FilteredTabs.Count), 2);
             tabheader_repeater.DataBind();
             tab_Me.Visible = tabs.ContainsKey("Me");
             if (tab_Me.Visible)
@@ -71,7 +56,7 @@ namespace HAP.Web
                 
                 DirectoryEntry usersDE = new DirectoryEntry(_ActiveDirectoryConnectionString, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
                 DirectorySearcher ds = new DirectorySearcher(usersDE);
-                ds.Filter = "(sAMAccountName=" + Username + ")";
+                ds.Filter = "(sAMAccountName=" + HAP.AD.ADUtil.Username + ")";
                 ds.PropertiesToLoad.Add("rmCom2000-UsrMgr-uPN");
                 ds.PropertiesToLoad.Add("department");
                 SearchResult r = ds.FindOne();
@@ -107,16 +92,16 @@ namespace HAP.Web
                         long freeBytesForUser, totalBytes, freeBytes;
                         if (path.Usage == UsageMode.DriveSpace)
                         {
-                            if (Win32.GetDiskFreeSpaceEx(string.Format(path.UNC.Replace("%homepath%", up.HomeDirectory), Username), out freeBytesForUser, out totalBytes, out freeBytes))
+                            if (Win32.GetDiskFreeSpaceEx(string.Format(path.UNC.Replace("%homepath%", up.HomeDirectory), HAP.AD.ADUtil.Username), out freeBytesForUser, out totalBytes, out freeBytes))
                                 space = Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
                         }
                         else
                         {
 
-                            HAP.Data.Quota.QuotaInfo qi = HAP.Data.ComputerBrowser.Quota.GetQuota(Username, string.Format(path.UNC.Replace("%homepath%", up.HomeDirectory)));
+                            HAP.Data.Quota.QuotaInfo qi = HAP.Data.ComputerBrowser.Quota.GetQuota(HAP.AD.ADUtil.Username, string.Format(path.UNC.Replace("%homepath%", up.HomeDirectory)));
                             space = Math.Round((Convert.ToDecimal(qi.Used) / Convert.ToDecimal(qi.Total)) * 100, 2);
                             if (qi.Total == -1)
-                                if (Win32.GetDiskFreeSpaceEx(string.Format(path.UNC.Replace("%homepath%", up.HomeDirectory), Username), out freeBytesForUser, out totalBytes, out freeBytes))
+                                if (Win32.GetDiskFreeSpaceEx(string.Format(path.UNC.Replace("%homepath%", up.HomeDirectory), HAP.AD.ADUtil.Username), out freeBytesForUser, out totalBytes, out freeBytes))
                                     space = Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
                         }
                     }
@@ -128,7 +113,7 @@ namespace HAP.Web
             {
                 
                 List<HAP.Data.BookingSystem.Booking> mybookings = new List<Data.BookingSystem.Booking>();
-                foreach (XmlNode n in HAP.Data.BookingSystem.BookingSystem.BookingsDoc.SelectNodes("/Bookings/Booking[@username='" + Username + "']"))
+                foreach (XmlNode n in HAP.Data.BookingSystem.BookingSystem.BookingsDoc.SelectNodes("/Bookings/Booking[@username='" + HAP.AD.ADUtil.Username + "']"))
                     mybookings.Add(new HAP.Data.BookingSystem.Booking(n));
                 var list = from element in mybookings orderby element.Date ascending, element.Lesson select element;
                 mybookings = new List<Data.BookingSystem.Booking>();
@@ -159,7 +144,7 @@ namespace HAP.Web
                 {
                     List<Ticket> tickets = new List<Ticket>();
                     foreach (XmlNode node in doc.SelectNodes(xpath))
-                        if (node.SelectNodes("Note")[0].Attributes["username"].Value.ToLower() == Username.ToLower() && x < 4)
+                        if (node.SelectNodes("Note")[0].Attributes["username"].Value.ToLower() == HAP.AD.ADUtil.Username.ToLower() && x < 4)
                         {
                             tickets.Add(Ticket.Parse(node));
                             x++;
@@ -198,7 +183,6 @@ namespace HAP.Web
         {
             [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
             internal static extern bool GetDiskFreeSpaceEx(string drive, out long freeBytesForUser, out long totalBytes, out long freeBytes);
-
         }
 
         protected void editmydetails_Click(object sender, EventArgs e)
@@ -212,7 +196,7 @@ namespace HAP.Web
             // First, get a DE for the user
             DirectoryEntry usersDE = new DirectoryEntry(_ActiveDirectoryConnectionString, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
             DirectorySearcher ds = new DirectorySearcher(usersDE);
-            ds.Filter = "(sAMAccountName=" + Username + ")";
+            ds.Filter = "(sAMAccountName=" + HAP.AD.ADUtil.Username + ")";
             ds.PropertiesToLoad.Add("cn");
             SearchResult r = ds.FindOne();
             DirectoryEntry theUserDE = new DirectoryEntry(r.Path, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
@@ -231,9 +215,9 @@ namespace HAP.Web
             hapConfig config = hapConfig.Current;
             try
             {
-                DirectoryEntry usersDE = new DirectoryEntry(ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString, Username, currentpass.Text);
+                DirectoryEntry usersDE = new DirectoryEntry(ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString, HAP.AD.ADUtil.Username, currentpass.Text);
                 DirectorySearcher ds = new DirectorySearcher(usersDE);
-                ds.Filter = "(sAMAccountName=" + Username + ")";
+                ds.Filter = "(sAMAccountName=" + HAP.AD.ADUtil.Username + ")";
                 SearchResult r = ds.FindOne();
                 DirectoryEntry user = r.GetDirectoryEntry();
                 if (user == null) throw new Exception("I can't find your username");

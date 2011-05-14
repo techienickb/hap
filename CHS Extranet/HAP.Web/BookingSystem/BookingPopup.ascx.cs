@@ -28,7 +28,7 @@ namespace HAP.Web.BookingSystem
                             userlist.Items.Add(new ListItem(user.LoginName, user.LoginName.ToLower()));
                         else
                             userlist.Items.Add(new ListItem(string.Format("{0} - ({1})", user.LoginName, user.Notes), user.LoginName.ToLower()));
-                    userlist.SelectedValue = Username.ToLower();
+                    userlist.SelectedValue = HAP.AD.ADUtil.Username.ToLower();
                     bookingadmin1.Visible = true;
                 }
                 else bookingadmin1.Visible = false;
@@ -53,8 +53,8 @@ namespace HAP.Web.BookingSystem
             else if (config.BookingSystem.Resources[roomstr].ResourceType == ResourceType.Equipment)
                 node.SetAttribute("equiproom", equiproom.Text);
             node.SetAttribute("room", roomstr);
-            node.SetAttribute("uid", ((isAdmin) ? userlist.SelectedValue : Username) + DateTime.Now.ToString(iCalGenerator.DateFormat));
-            node.SetAttribute("username", (isAdmin) ? userlist.SelectedValue : Username);
+            node.SetAttribute("uid", ((isAdmin) ? userlist.SelectedValue : HAP.AD.ADUtil.Username) + DateTime.Now.ToString(iCalGenerator.DateFormat));
+            node.SetAttribute("username", (isAdmin) ? userlist.SelectedValue : HAP.AD.ADUtil.Username);
             string year = "Year " + BookYear.SelectedItem.Text + " ";
             if (BookYear.SelectedValue == "") year = "";
             node.SetAttribute("name", year + BookLesson.Text);
@@ -154,11 +154,11 @@ namespace HAP.Web.BookingSystem
                 XmlDocument doc = HAP.Data.BookingSystem.BookingSystem.BookingsDoc;
                 int max = hapConfig.Current.BookingSystem.MaxBookingsPerWeek;
                 foreach (AdvancedBookingRight right in HAP.Data.BookingSystem.BookingSystem.BookingRights)
-                    if (right.Username == Username)
+                    if (right.Username == HAP.AD.ADUtil.Username)
                         max = right.Numperweek;
                 int x = 0;
                 foreach (DateTime d in getWeekDates())
-                    x += doc.SelectNodes("/Bookings/Booking[@date='" + d.ToShortDateString() + "' and @username='" + Username + "']").Count;
+                    x += doc.SelectNodes("/Bookings/Booking[@date='" + d.ToShortDateString() + "' and @username='" + HAP.AD.ADUtil.Username + "']").Count;
                 if (x > max) { manybookings.Visible = true; bookingform.Visible = book.Visible = false; }
                 else { manybookings.Visible = false; bookingform.Visible = book.Visible = true; }
             }
@@ -183,17 +183,6 @@ namespace HAP.Web.BookingSystem
                 return HttpContext.Current.User.IsInRole("Domain Admins");
             }
         }
-
-        public string Username
-        {
-            get
-            {
-                if (HttpContext.Current.User.Identity.Name.Contains('\\'))
-                    return HttpContext.Current.User.Identity.Name.Remove(0, HttpContext.Current.User.Identity.Name.IndexOf('\\') + 1);
-                else return HttpContext.Current.User.Identity.Name;
-            }
-        }
-
         #endregion
     }
 }

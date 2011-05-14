@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Configuration.Provider;
 using System.DirectoryServices;
 using System.Web.Security;
+using HAP.Web.Configuration;
 
 namespace HAP.AD
 {
@@ -31,17 +32,10 @@ namespace HAP.AD
 			}
 			base.Initialize(name, config);
 
-			if (string.IsNullOrEmpty(config["connectionUsername"]))
-				throw new ProviderException(ActiveDirectoryHelper.ERROR_CONNSTR_NOT_FOUND);
-			ConnUsername = config["connectionUsername"];
-
-			if (string.IsNullOrEmpty(config["connectionPassword"]))
-				throw new ProviderException(ActiveDirectoryHelper.ERROR_CONNSTR_NOT_FOUND);
-			ConnPassword = config["connectionPassword"];
-
-			if (string.IsNullOrEmpty(config["connectionStringName"]))
-				throw new ProviderException(ActiveDirectoryHelper.ERROR_CONNSTR_NOT_FOUND);
-			ConnStringName = ConfigurationManager.ConnectionStrings[config["connectionStringName"]].ConnectionString;
+			hapConfig c = hapConfig.Current;
+			ConnUsername = c.ADSettings.ADUsername;
+			ConnPassword = c.ADSettings.ADPassword;
+			ConnStringName = ConfigurationManager.ConnectionStrings[c.ADSettings.ADConnectionString].ConnectionString;
 
 			DirectoryRoot = new DirectoryEntry(ConnStringName, ConnUsername, ConnPassword, AuthenticationTypes.ServerBind);
 			DomainName = ActiveDirectoryHelper.GetDomainName(ConnStringName);

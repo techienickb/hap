@@ -18,16 +18,6 @@ namespace HAP.Web.Controls
             if (!Page.IsPostBack) foldername.Text = string.Empty;
         }
 
-        public string Username
-        {
-            get
-            {
-                if (Page.User.Identity.Name.Contains('\\'))
-                    return Page.User.Identity.Name.Remove(0, Page.User.Identity.Name.IndexOf('\\') + 1);
-                else return Page.User.Identity.Name;
-            }
-        }
-
         public DirectoryInfo Directory { get; set; }
 
         protected void yes_Click(object sender, EventArgs e)
