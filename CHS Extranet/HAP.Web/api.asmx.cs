@@ -207,6 +207,7 @@ namespace HAP.Web
                 FileInfo file = new FileInfo(path);
                 string fname = file.Name;
                 if (fname.EndsWith(file.Extension) && !string.IsNullOrWhiteSpace(file.Extension)) fname = fname.Remove(fname.IndexOf(file.Extension));
+                if (!newpath.EndsWith(file.Extension)) newpath += file.Extension;
                 if (!overwrite)
                 {
                     if (File.Exists(newpath)) return new CBFile[] { new CBFile(new FileInfo(newpath), unc, userhome) };

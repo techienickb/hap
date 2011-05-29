@@ -32,30 +32,38 @@ namespace HAP.Web.BookingSystem
             DateTime endDate = new DateTime(date.Year, date.Month, date.Day, int.Parse(config.BookingSystem.Lessons[booking.Lesson].EndTime.Substring(0, config.BookingSystem.Lessons[booking.Lesson].EndTime.IndexOf(':'))), int.Parse(config.BookingSystem.Lessons[booking.Lesson].EndTime.Substring(config.BookingSystem.Lessons[booking.Lesson].EndTime.IndexOf(':') + 1, 2)), 0);
             string location = "";
             bookingResource resource = config.BookingSystem.Resources[booking.Room];
+
+            Templates t = new Templates();
+            Template template = t["general"];
+            if (t.ContainsKey(resource.Name)) template = t[resource.Name];
+            string ltcount = "";
             if (resource.ResourceType == ResourceType.ITRoom) location = booking.Room;
-            else if (resource.ResourceType == ResourceType.Laptops) location = booking.LTRoom;
-            string summary = booking.Name + " in " + location;
-            string description = booking.Name + " in " + location + " during " + booking.Lesson + " on Day " + booking.Day;
-            if (resource.ResourceType == ResourceType.Laptops)
-            {
-                summary += " with the " + booking.Room + " [" + booking.LTCount.ToString() + "]";
-                description += " with the " + booking.Room + " [" + booking.LTCount.ToString() + "]";
-            }
+            else if (resource.ResourceType == ResourceType.Laptops) { location = booking.LTRoom; ltcount = booking.LTCount.ToString(); }
+            else if (resource.ResourceType == ResourceType.Equipment) location = booking.EquipRoom;
+            
+            string summary = string.Format(template.Subject, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, ltcount);
+            string description = string.Format(template.Content, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, ltcount);
 
             sb.AppendLine("BEGIN:VCALENDAR");
             sb.AppendLine("VERSION:2.0");
             sb.AppendLine("PRODID:-//chsit/CalendarAppointment");
             sb.AppendLine("CALSCALE:GREGORIAN");
-            sb.AppendLine("METHOD:PUBLISH");
+            sb.AppendLine("METHOD:REQUEST");
             sb.AppendLine("BEGIN:VEVENT");
             sb.AppendLine("DTSTART:" + startDate.ToUniversalTime().ToString(DateFormat));
             sb.AppendLine("DTEND:" + endDate.ToUniversalTime().ToString(DateFormat));
-            sb.AppendLine("ORGANIZER:MAILTO:" + booking.User.EmailAddress);
+            sb.AppendLine("ATTENDEE;ROLE=REQ-PARTICIPANT;CN=" + booking.User.DisplayName + ":MAILTO:" + booking.User.EmailAddress);
+            sb.AppendLine("ORGANIZER;CN=" + booking.User.DisplayName + ":MAILTO:" + booking.User.EmailAddress);
             sb.AppendLine("LOCATION:" + location);
             sb.AppendLine("UID:" + booking.uid);
             sb.AppendLine("DTSTAMP:" + DateTime.Now.ToString(DateFormat));
             sb.AppendLine("SUMMARY:" + summary);
             sb.AppendLine("DESCRIPTION:" + description);
+            sb.AppendLine("BEGIN:VALARM");
+            sb.AppendLine("ACTION:DISPLAY");
+            sb.AppendLine("DESCRIPTION:" + description);
+            sb.AppendLine("TRIGGER:-PT5M");
+            sb.AppendLine("END:VALARM");
             sb.AppendLine("END:VEVENT");
             sb.AppendLine("END:VCALENDAR");
 
@@ -99,30 +107,48 @@ namespace HAP.Web.BookingSystem
             DateTime endDate = new DateTime(date.Year, date.Month, date.Day, int.Parse(config.BookingSystem.Lessons[booking.Lesson].EndTime.Substring(0, config.BookingSystem.Lessons[booking.Lesson].EndTime.IndexOf(':'))), int.Parse(config.BookingSystem.Lessons[booking.Lesson].EndTime.Substring(config.BookingSystem.Lessons[booking.Lesson].EndTime.IndexOf(':') + 1, 2)), 0);
             string location = "";
             bookingResource resource = config.BookingSystem.Resources[booking.Room];
+            Templates t = new Templates();
+            Template template = t["generaladmin"];
+            if (t.ContainsKey(resource.Name)) template = t[resource.Name + "admin"];
+            string ltcount = "";
             if (resource.ResourceType == ResourceType.ITRoom) location = booking.Room;
-            else if (resource.ResourceType == ResourceType.Laptops) location = booking.LTRoom;
-            string summary = booking.Name + " in " + location;
-            string description = booking.Name + " in " + location + " during " + booking.Lesson + " on Day " + booking.Day;
-            if (resource.ResourceType == ResourceType.Laptops)
-            {
-                summary += " with the " + booking.Room + " [" + booking.LTCount.ToString() + "]";
-                description += " with the " + booking.Room + " [" + booking.LTCount.ToString() + "]";
-            }
+            else if (resource.ResourceType == ResourceType.Laptops) { location = booking.LTRoom; ltcount = booking.LTCount.ToString(); }
+            else if (resource.ResourceType == ResourceType.Equipment) location = booking.EquipRoom;
+            
+            string summary = string.Format(template.Subject, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, ltcount);
+            string description = string.Format(template.Content, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, ltcount);
+
+            List<UserPrincipal> ups = new List<UserPrincipal>();
+
+            ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
+            string _DomainDN = connObj.ConnectionString.Remove(0, connObj.ConnectionString.IndexOf("DC="));
+            PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
+            foreach (string user in resource.Admins.Split(new string[] { ", "}, StringSplitOptions.RemoveEmptyEntries))
+                if (user == "Inherit") ups.Add(UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, username));
+                else ups.Add(UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, user));
 
             sb.AppendLine("BEGIN:VCALENDAR");
             sb.AppendLine("VERSION:2.0");
             sb.AppendLine("PRODID:-//chsit/CalendarAppointment");
             sb.AppendLine("CALSCALE:GREGORIAN");
-            sb.AppendLine("METHOD:PUBLISH");
+            sb.AppendLine("METHOD:REQUEST");
             sb.AppendLine("BEGIN:VEVENT");
             sb.AppendLine("DTSTART:" + startDate.ToUniversalTime().ToString(DateFormat));
             sb.AppendLine("DTEND:" + endDate.ToUniversalTime().ToString(DateFormat));
-            sb.AppendLine("ORGANIZER:MAILTO:" + booking.User.EmailAddress);
+            sb.AppendLine("ORGANIZER;CN=" + booking.User.DisplayName + ":MAILTO:" + booking.User.EmailAddress);
+            sb.AppendLine("ATTENDEE;ROLE=REQ-PARTICIPANT;CN=" + booking.User.DisplayName + ":MAILTO:" + booking.User.EmailAddress);
+            foreach (UserPrincipal up in ups)
+                sb.AppendLine("ATTENDEE;ROLE=REQ-PARTICIPANT;CN=" + up.DisplayName + ":MAILTO:" + up.EmailAddress);
             sb.AppendLine("LOCATION:" + location);
             sb.AppendLine("UID:" + booking.uid);
             sb.AppendLine("DTSTAMP:" + DateTime.Now.ToString(DateFormat));
             sb.AppendLine("SUMMARY:" + summary);
             sb.AppendLine("DESCRIPTION:" + description);
+            sb.AppendLine("BEGIN:VALARM");
+            sb.AppendLine("ACTION:DISPLAY");
+            sb.AppendLine("DESCRIPTION:" + summary);
+            sb.AppendLine("TRIGGER:-PT5M");
+            sb.AppendLine("END:VALARM");
             sb.AppendLine("END:VEVENT");
             sb.AppendLine("END:VCALENDAR");
 
@@ -139,13 +165,8 @@ namespace HAP.Web.BookingSystem
             mes.Subject = summary;
             mes.From = mes.Sender = new MailAddress(config.BaseSettings.AdminEmailAddress, "ICT Department");
             mes.ReplyToList.Add(mes.From);
-
-            ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
-            string _DomainDN = connObj.ConnectionString.Remove(0, connObj.ConnectionString.IndexOf("DC="));
-            PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
-            UserPrincipal up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, username);
-
-            mes.To.Add(new MailAddress(up.EmailAddress, up.DisplayName));
+            foreach (UserPrincipal up in ups)
+                mes.To.Add(new MailAddress(up.EmailAddress, up.DisplayName));
 
             mes.Body = description;
 
@@ -174,8 +195,9 @@ namespace HAP.Web.BookingSystem
             bookingResource resource = config.BookingSystem.Resources[booking.Room];
             if (resource.ResourceType == ResourceType.ITRoom) location = booking.Room;
             else if (resource.ResourceType == ResourceType.Laptops) location = booking.LTRoom;
+            else if (resource.ResourceType == ResourceType.Equipment) location = booking.EquipRoom;
             string summary = "Cancellation of " + booking.Name + " in " + location;
-            string description = "Cancellation of " + booking.Name + " in " + location + " during " + booking.Lesson + " on Day " + booking.Day;
+            string description = "Cancellation of " + booking.Name + " in " + location + " during " + booking.Lesson + " on " + booking.Date.ToShortDateString();
             if (resource.ResourceType == ResourceType.Laptops)
             {
                 summary += " with the " + booking.Room + " [" + booking.LTCount.ToString() + "]";
@@ -242,8 +264,9 @@ namespace HAP.Web.BookingSystem
             bookingResource resource = config.BookingSystem.Resources[booking.Room];
             if (resource.ResourceType == ResourceType.ITRoom) location = booking.Room;
             else if (resource.ResourceType == ResourceType.Laptops) location = booking.LTRoom;
+            else if (resource.ResourceType == ResourceType.Equipment) location = booking.EquipRoom;
             string summary = "Cancellation of " + booking.Name + " in " + location;
-            string description = "Cancellation of " + booking.Name + " in " + location + " during " + booking.Lesson + " on Day " + booking.Day;
+            string description = "Cancellation of " + booking.Name + " in " + location + " during " + booking.Lesson + " on " + booking.Date.ToShortDateString();
             if (resource.ResourceType == ResourceType.Laptops)
             {
                 summary += " with the " + booking.Room + " [" + booking.LTCount.ToString() + "]";
@@ -282,12 +305,17 @@ namespace HAP.Web.BookingSystem
             mes.From = mes.Sender = new MailAddress(config.BaseSettings.AdminEmailAddress, "ICT Department");
             mes.ReplyToList.Add(mes.From);
 
+            List<UserPrincipal> ups = new List<UserPrincipal>();
+
             ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
             string _DomainDN = connObj.ConnectionString.Remove(0, connObj.ConnectionString.IndexOf("DC="));
             PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
-            UserPrincipal up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, username);
+            foreach (string user in resource.Admins.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
+                if (user == "Inherit") ups.Add(UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, username));
+                else ups.Add(UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, user));
 
-            mes.To.Add(new MailAddress(up.EmailAddress, up.DisplayName));
+            foreach (UserPrincipal up in ups)
+                mes.To.Add(new MailAddress(up.EmailAddress, up.DisplayName));
 
             mes.Body = description;
 

@@ -97,7 +97,6 @@ namespace HAP.Web.BookingSystem
                 }
             }
             #endregion
-
             HAP.Data.BookingSystem.BookingSystem.BookingsDoc = doc;
             Booking booking = new HAP.Data.BookingSystem.BookingSystem(Date).getBooking(roomstr, lessonint);
             iCalGenerator.Generate(booking, Date);

@@ -123,11 +123,6 @@
             this.bookingsystem_Subjectsd = new System.Windows.Forms.TabControl();
             this.tabPage8 = new System.Windows.Forms.TabPage();
             this.Resources = new System.Windows.Forms.DataGridView();
-            this.ResName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.type = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.EmailAdmin = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.Charging = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.ResEnable = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.tabPage9 = new System.Windows.Forms.TabPage();
             this.lessons = new System.Windows.Forms.DataGridView();
             this.LessonName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -138,6 +133,9 @@
             this.bssubjects = new System.Windows.Forms.DataGridView();
             this.Subject = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.label30 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.bs_admingroups = new System.Windows.Forms.TextBox();
             this.bs_keepxmlclean = new System.Windows.Forms.CheckBox();
             this.label18 = new System.Windows.Forms.Label();
             this.bs_twoweek = new System.Windows.Forms.CheckBox();
@@ -147,9 +145,12 @@
             this.folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.bs_admingroups = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label30 = new System.Windows.Forms.Label();
+            this.ResName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.type = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.BSRAdmins = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.EmailAdmin = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Charging = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.ResEnable = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.wiz)).BeginInit();
             this.wizardPage1.SuspendLayout();
             this.wizardPage2.SuspendLayout();
@@ -875,7 +876,7 @@
             this.tabPage11.Location = new System.Drawing.Point(4, 24);
             this.tabPage11.Name = "tabPage11";
             this.tabPage11.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage11.Size = new System.Drawing.Size(729, 270);
+            this.tabPage11.Size = new System.Drawing.Size(739, 280);
             this.tabPage11.TabIndex = 1;
             this.tabPage11.Text = "Upload Filters";
             this.tabPage11.UseVisualStyleBackColor = true;
@@ -891,7 +892,7 @@
             this.uploadfilters.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uploadfilters.Location = new System.Drawing.Point(3, 3);
             this.uploadfilters.Name = "uploadfilters";
-            this.uploadfilters.Size = new System.Drawing.Size(723, 264);
+            this.uploadfilters.Size = new System.Drawing.Size(733, 274);
             this.uploadfilters.TabIndex = 1;
             // 
             // FilterName
@@ -920,7 +921,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 24);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(729, 270);
+            this.tabPage1.Size = new System.Drawing.Size(739, 280);
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "Quota Servers";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -935,7 +936,7 @@
             this.quotaservers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.quotaservers.Location = new System.Drawing.Point(3, 3);
             this.quotaservers.Name = "quotaservers";
-            this.quotaservers.Size = new System.Drawing.Size(723, 264);
+            this.quotaservers.Size = new System.Drawing.Size(733, 274);
             this.quotaservers.TabIndex = 0;
             // 
             // quotaexpression
@@ -1136,6 +1137,7 @@
             this.Resources.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ResName,
             this.type,
+            this.BSRAdmins,
             this.EmailAdmin,
             this.Charging,
             this.ResEnable});
@@ -1145,52 +1147,13 @@
             this.Resources.Size = new System.Drawing.Size(733, 251);
             this.Resources.TabIndex = 0;
             // 
-            // ResName
-            // 
-            this.ResName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ResName.HeaderText = "Name";
-            this.ResName.Name = "ResName";
-            // 
-            // type
-            // 
-            this.type.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.type.HeaderText = "Type";
-            this.type.Items.AddRange(new object[] {
-            "ITRoom",
-            "Laptops",
-            "Equipment",
-            "Other"});
-            this.type.Name = "type";
-            this.type.Width = 39;
-            // 
-            // EmailAdmin
-            // 
-            this.EmailAdmin.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-            this.EmailAdmin.HeaderText = "Email Admin";
-            this.EmailAdmin.Name = "EmailAdmin";
-            this.EmailAdmin.Width = 81;
-            // 
-            // Charging
-            // 
-            this.Charging.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-            this.Charging.HeaderText = "Charging";
-            this.Charging.Name = "Charging";
-            this.Charging.Width = 62;
-            // 
-            // ResEnable
-            // 
-            this.ResEnable.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-            this.ResEnable.HeaderText = "Enable";
-            this.ResEnable.Name = "ResEnable";
-            this.ResEnable.Width = 48;
-            // 
             // tabPage9
             // 
             this.tabPage9.Controls.Add(this.lessons);
             this.tabPage9.Location = new System.Drawing.Point(4, 24);
             this.tabPage9.Name = "tabPage9";
             this.tabPage9.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage9.Size = new System.Drawing.Size(729, 247);
+            this.tabPage9.Size = new System.Drawing.Size(739, 257);
             this.tabPage9.TabIndex = 1;
             this.tabPage9.Text = "Lessons";
             this.tabPage9.UseVisualStyleBackColor = true;
@@ -1207,7 +1170,7 @@
             this.lessons.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lessons.Location = new System.Drawing.Point(3, 3);
             this.lessons.Name = "lessons";
-            this.lessons.Size = new System.Drawing.Size(723, 241);
+            this.lessons.Size = new System.Drawing.Size(733, 251);
             this.lessons.TabIndex = 0;
             // 
             // LessonName
@@ -1247,7 +1210,7 @@
             this.bs_subjects.Location = new System.Drawing.Point(4, 24);
             this.bs_subjects.Name = "bs_subjects";
             this.bs_subjects.Padding = new System.Windows.Forms.Padding(3);
-            this.bs_subjects.Size = new System.Drawing.Size(729, 247);
+            this.bs_subjects.Size = new System.Drawing.Size(739, 257);
             this.bs_subjects.TabIndex = 2;
             this.bs_subjects.Text = "Subjects";
             this.bs_subjects.UseVisualStyleBackColor = true;
@@ -1261,7 +1224,7 @@
             this.bssubjects.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bssubjects.Location = new System.Drawing.Point(3, 3);
             this.bssubjects.Name = "bssubjects";
-            this.bssubjects.Size = new System.Drawing.Size(723, 241);
+            this.bssubjects.Size = new System.Drawing.Size(733, 251);
             this.bssubjects.TabIndex = 0;
             // 
             // Subject
@@ -1285,6 +1248,31 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(747, 75);
             this.panel2.TabIndex = 8;
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(494, 45);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(236, 15);
+            this.label30.TabIndex = 9;
+            this.label30.Text = "(\', \' seperated, Domain Admins auto added)";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(430, 18);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(87, 15);
+            this.label5.TabIndex = 8;
+            this.label5.Text = "Admin Groups:";
+            // 
+            // bs_admingroups
+            // 
+            this.bs_admingroups.Location = new System.Drawing.Point(523, 15);
+            this.bs_admingroups.Name = "bs_admingroups";
+            this.bs_admingroups.Size = new System.Drawing.Size(207, 23);
+            this.bs_admingroups.TabIndex = 7;
             // 
             // bs_keepxmlclean
             // 
@@ -1368,36 +1356,57 @@
             this.removeToolStripMenuItem.Text = "Remove";
             this.removeToolStripMenuItem.Click += new System.EventHandler(this.removeToolStripMenuItem_Click);
             // 
-            // bs_admingroups
+            // ResName
             // 
-            this.bs_admingroups.Location = new System.Drawing.Point(523, 15);
-            this.bs_admingroups.Name = "bs_admingroups";
-            this.bs_admingroups.Size = new System.Drawing.Size(207, 23);
-            this.bs_admingroups.TabIndex = 7;
+            this.ResName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ResName.HeaderText = "Name";
+            this.ResName.Name = "ResName";
             // 
-            // label5
+            // type
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(430, 18);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(87, 15);
-            this.label5.TabIndex = 8;
-            this.label5.Text = "Admin Groups:";
+            this.type.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.type.HeaderText = "Type";
+            this.type.Items.AddRange(new object[] {
+            "ITRoom",
+            "Laptops",
+            "Equipment",
+            "Other"});
+            this.type.Name = "type";
+            this.type.Width = 39;
             // 
-            // label30
+            // BSRAdmins
             // 
-            this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(494, 45);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(236, 15);
-            this.label30.TabIndex = 9;
-            this.label30.Text = "(\', \' seperated, Domain Admins auto added)";
+            this.BSRAdmins.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.BSRAdmins.HeaderText = "Admins";
+            this.BSRAdmins.Name = "BSRAdmins";
+            this.BSRAdmins.Width = 200;
+            // 
+            // EmailAdmin
+            // 
+            this.EmailAdmin.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+            this.EmailAdmin.HeaderText = "Email Admin";
+            this.EmailAdmin.Name = "EmailAdmin";
+            this.EmailAdmin.Width = 81;
+            // 
+            // Charging
+            // 
+            this.Charging.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+            this.Charging.HeaderText = "Charging";
+            this.Charging.Name = "Charging";
+            this.Charging.Width = 62;
+            // 
+            // ResEnable
+            // 
+            this.ResEnable.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+            this.ResEnable.HeaderText = "Enable";
+            this.ResEnable.Name = "ResEnable";
+            this.ResEnable.Width = 48;
             // 
             // FirstRun
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(784, 502);
+            this.ClientSize = new System.Drawing.Size(794, 512);
             this.Controls.Add(this.wiz);
             this.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -1529,11 +1538,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ouName;
         private System.Windows.Forms.DataGridViewTextBoxColumn oupath;
         private System.Windows.Forms.DataGridViewCheckBoxColumn OUIgnore;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ResName;
-        private System.Windows.Forms.DataGridViewComboBoxColumn type;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn EmailAdmin;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn Charging;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn ResEnable;
         private System.Windows.Forms.DataGridViewTextBoxColumn LessonName;
         private System.Windows.Forms.DataGridViewComboBoxColumn LessonType;
         private System.Windows.Forms.DataGridViewTextBoxColumn StartTime;
@@ -1574,5 +1578,11 @@
         private System.Windows.Forms.Label label30;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox bs_admingroups;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ResName;
+        private System.Windows.Forms.DataGridViewComboBoxColumn type;
+        private System.Windows.Forms.DataGridViewTextBoxColumn BSRAdmins;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn EmailAdmin;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn Charging;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn ResEnable;
     }
 }

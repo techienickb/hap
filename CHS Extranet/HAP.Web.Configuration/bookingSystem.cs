@@ -29,7 +29,7 @@ namespace HAP.Web.Configuration
             set { this["maxdays"] = value.ToString(); }
         }
 
-        [ConfigurationProperty("admingroups", DefaultValue = "s", IsRequired = false)]
+        [ConfigurationProperty("admingroups", DefaultValue = "", IsRequired = false)]
         public string AdminGroups
         {
             get { return (string)this["admingroups"]; }

@@ -1,6 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/chs.master" AutoEventWireup="true"
     CodeBehind="Default.aspx.cs" Inherits="HAP.Web.BookingSystem.admin.Default" %>
-
 <%@ Import Namespace="HAP.Web.BookingSystem" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
@@ -31,8 +30,7 @@
                         </tr>
                         <tr>
                             <td class="CommonFormFieldName" style="width: 350px;">
-                                <strong>
-                                    <asp:Label ID="Label1" AssociatedControlID="termname" runat="server">Term Name: </asp:Label>
+                                <strong><asp:Label AssociatedControlID="termname" runat="server">Term Name: </asp:Label></strong>
                             </td>
                             <td class="CommonFormField">
                                 <asp:TextBox runat="server" ID="termname" Text='<%#Eval("Name") %>' />
@@ -40,29 +38,25 @@
                         </tr>
                         <tr>
                             <td class="CommonFormFieldName" style="width: 350px;">
-                                <strong>
-                                    <asp:Label ID="Label2" AssociatedControlID="termstartdate" runat="server">Term Starts: </asp:Label>
+                                <strong><asp:Label AssociatedControlID="termstartdate" runat="server">Term Starts: </asp:Label></strong>
                             </td>
                             <td class="CommonFormField">
-                                <asp:TextBox runat="server" ID="termstartdate" Text='<%#((DateTime)Eval("StartDate")).ToString("dd/MM/yyyy") %>' />
-                                <asp:CalendarExtender ID="CalendarExtender1" Animated="true" TargetControlID="termstartdate"
-                                    Format="dd/MM/yyyy" runat="server" />
+                                <asp:TextBox runat="server" ID="termstartdate" Text='<%#((DateTime)Eval("StartDate")).ToString("dd/MM/yyyy") %>' Width="100px" />
+                                <asp:CalendarExtender Animated="true" TargetControlID="termstartdate" Format="dd/MM/yyyy" runat="server" />
                             </td>
                         </tr>
                         <tr>
                             <td class="CommonFormFieldName" style="width: 350px;">
-                                <strong>
-                                    <asp:Label ID="Label3" AssociatedControlID="termenddate" runat="server">Term Ends: </asp:Label>
+                                <strong><asp:Label AssociatedControlID="termenddate" runat="server">Term Ends: </asp:Label></strong>
                             </td>
                             <td class="CommonFormField">
-                                <asp:TextBox runat="server" ID="termenddate" Text='<%#((DateTime)Eval("EndDate")).ToString("dd/MM/yyyy") %>' />
-                                <asp:CalendarExtender ID="CalendarExtender2" Animated="true" TargetControlID="termenddate"
-                                    Format="dd/MM/yyyy" runat="server" />
+                                <asp:TextBox runat="server" ID="termenddate" Text='<%#((DateTime)Eval("EndDate")).ToString("dd/MM/yyyy") %>' Width="100px" />
+                                <asp:CalendarExtender Animated="true" TargetControlID="termenddate" Format="dd/MM/yyyy" runat="server" />
                             </td>
                         </tr>
                         <tr>
                             <td class="CommonFormFieldName" style="width: 350px;">
-                                <strong>Term Starts with Week Number:
+                                <strong>Term Starts with Week Number:</strong>
                             </td>
                             <td class="CommonFormField">
                                 <asp:RadioButton runat="server" ID="week1" Text="Week 1" Checked='<%#((int)Eval("StartWeekNum")) == 1 %>'
@@ -73,17 +67,15 @@
                         </tr>
                         <tr>
                             <td class="CommonFormFieldName" style="width: 350px;">
-                                <strong>Half Term Dates: </asp:Label>
+                                <strong><asp:Label AssociatedControlID="halftermstart" runat="server">Talf Term Dates:</asp:Label></strong>
                             </td>
                             <td class="CommonFormField">
                                 From:
-                                <asp:TextBox runat="server" ID="halftermstart" Text='<%#((DateTime)Eval("HalfTerm.StartDate")).ToString("dd/MM/yyyy") %>' />
-                                <asp:CalendarExtender ID="CalendarExtender3" Animated="true" TargetControlID="halftermstart"
-                                    Format="dd/MM/yyyy" runat="server" />
+                                <asp:TextBox runat="server" ID="halftermstart" Text='<%#((DateTime)Eval("HalfTerm.StartDate")).ToString("dd/MM/yyyy") %>' Width="100px" />
+                                <asp:CalendarExtender Animated="true" TargetControlID="halftermstart" Format="dd/MM/yyyy" runat="server" />
                                 To:
-                                <asp:TextBox runat="server" ID="halftermend" Text='<%#((DateTime)Eval("HalfTerm.EndDate")).ToString("dd/MM/yyyy") %>' />
-                                <asp:CalendarExtender ID="CalendarExtender4" Animated="true" TargetControlID="halftermend"
-                                    Format="dd/MM/yyyy" runat="server" />
+                                <asp:TextBox runat="server" ID="halftermend" Text='<%#((DateTime)Eval("HalfTerm.EndDate")).ToString("dd/MM/yyyy") %>' Width="100px" />
+                                <asp:CalendarExtender Animated="true" TargetControlID="halftermend" Format="dd/MM/yyyy" runat="server" />
                             </td>
                         </tr>
                     </ItemTemplate>
@@ -98,11 +90,9 @@
             </ContentTemplate>
         </asp:TabPanel>
         <asp:TabPanel ID="TabPanel2" runat="server">
-            <HeaderTemplate>
-                Static Bookings</HeaderTemplate>
+            <HeaderTemplate>Static Bookings</HeaderTemplate>
             <ContentTemplate>
-                <h2>
-                    Static Bookings</h2>
+                <h2>Static Bookings</h2>
                 <div style="margin: 2px;">
                     <asp:UpdatePanel ID="UpdatePanel1" runat="server" ChildrenAsTriggers="true" RenderMode="Block">
                         <ContentTemplate>
@@ -172,11 +162,9 @@
             </ContentTemplate>
         </asp:TabPanel>
         <asp:TabPanel ID="TabPanel3" runat="server">
-            <HeaderTemplate>
-                Advanced Booking Rights</HeaderTemplate>
+            <HeaderTemplate>Advanced Booking Rights</HeaderTemplate>
             <ContentTemplate>
-                <h2>
-                    Advanced Booking Rights</h2>
+                <h2>Advanced Booking Rights</h2>
                 <asp:UpdatePanel ID="UpdatePanel2" runat="server" ChildrenAsTriggers="true" RenderMode="Block">
                     <ContentTemplate>
                         <asp:ListView ID="ABR" runat="server" DataSourceID="ABRDS" EnableModelValidation="True"
@@ -188,8 +176,7 @@
                                             <asp:Button ID="UpdateButton" runat="server" CommandName="Update" Text="Update" />
                                             <asp:Button ID="DeleteButton" runat="server" CommandName="Delete" Text="Delete" />
                                             <asp:Button ID="CancelButton" runat="server" CommandName="Cancel" Text="Cancel" />
-                                            <div style="float: left;">
-                                                EDIT MODE</div>
+                                            <div style="float: left;">EDIT MODE</div>
                                         </div>
                                     </td>
                                 </tr>
@@ -312,6 +299,41 @@
                             UpdateMethod="updateBookingRights" DeleteMethod="deleteBookingRights" />
                     </ContentTemplate>
                 </asp:UpdatePanel>
+            </ContentTemplate>
+        </asp:TabPanel>
+        <asp:TabPanel runat="server" ID="TabPanel4">
+            <HeaderTemplate>Email Templates</HeaderTemplate>
+            <ContentTemplate>
+                <h2>Email Templates</h2>
+                <p>{0} = Username, {1} = Display Name, {2} = Room, {3} = Booking Name, {4} = Date, {5} = Day, {6} = Lesson, {7} = LTRoom or EquipRoom, {8} = LTCount</p>
+                <asp:Repeater ID="etemplates" runat="server" onitemcommand="etemplates_ItemCommand" DataSourceID="etemplatesds">
+                    <ItemTemplate>
+                        <div>
+                            Template: <%#Eval("ID") %>
+                            <a href="./" onclick="return showEditor(this);">Edit</a>
+                            <div style="display: none;">
+                                <asp:Label runat="server" AssociatedControlID="esubject" Text="Subject: " /><asp:TextBox runat="server" Text='<%#Eval("Subject") %>' Width="400px" ID="esubject" /><br />
+                                <asp:TextBox runat="server" TextMode="MultiLine" Width="99%" Height="100px" ID="eeditor" Text='<%#Eval("Content") %>' />
+                                <asp:Button runat="server" Text="Save Template" CommandName="save" CommandArgument='<%#Eval("ID") %>' />
+                            </div>
+                        </div>
+                    </ItemTemplate>
+                </asp:Repeater>
+                <asp:ObjectDataSource ID="etemplatesds" runat="server" SelectMethod="getTemplates" TypeName="HAP.Web.BookingSystem.admin.Default" />
+                <script type="text/javascript">
+                    function showEditor(id) {
+                        if (id.innerHTML == "Edit") {
+                            id.parentNode.getElementsByTagName("div")[0].style.display = "block";
+                            id.innerHTML = "Close";
+                        }
+                        else {
+
+                            id.parentNode.getElementsByTagName("div")[0].style.display = "none";
+                            id.innerHTML = "Edit";
+                        }
+                        return false;
+                    }
+                </script>
             </ContentTemplate>
         </asp:TabPanel>
     </asp:TabContainer>

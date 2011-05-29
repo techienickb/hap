@@ -18,7 +18,7 @@ namespace HAP.Web.API
             string path = requestContext.RouteData.Values["path"] as string;
             string drive = path.Substring(0, 1);
             path = path.Remove(0, 1);
-            return new UploadChecker(path, drive);
+            return new UploadChecker(path.Replace('^', '&'), drive);
         }
     }
 

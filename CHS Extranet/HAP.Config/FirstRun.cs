@@ -197,12 +197,13 @@ namespace HAP.Config
                     XmlElement el = doc.CreateElement("add");
                     el.SetAttribute("name", row.Cells[0].Value.ToString());
                     el.SetAttribute("type", row.Cells[1].Value.ToString());
-                    if (bool.Parse(row.Cells[2].Value.ToString()))
-                        el.SetAttribute("emailadmin", row.Cells[2].Value.ToString());
+                    if (!string.IsNullOrWhiteSpace(row.Cells[2].Value.ToString()) && row.Cells[2].Value.ToString() != "Inherit") el.SetAttribute("admins", row.Cells[2].Value.ToString());
                     if (bool.Parse(row.Cells[3].Value.ToString()))
-                        el.SetAttribute("enablecharging", row.Cells[3].Value.ToString());
-                    if (!bool.Parse(row.Cells[4].Value.ToString()))
-                        el.SetAttribute("enable", row.Cells[4].Value.ToString());
+                        el.SetAttribute("emailadmin", row.Cells[3].Value.ToString());
+                    if (bool.Parse(row.Cells[4].Value.ToString()))
+                        el.SetAttribute("enablecharging", row.Cells[4].Value.ToString());
+                    if (!bool.Parse(row.Cells[5].Value.ToString()))
+                        el.SetAttribute("enable", row.Cells[5].Value.ToString());
                     res.AppendChild(el);
                 }
             }
@@ -394,7 +395,7 @@ namespace HAP.Config
             else bs_keepxmlclean.Checked = true;
             foreach (XmlNode node in bs.SelectNodes("resources/add"))
             {
-                DataGridViewRow row = Resources.Rows[Resources.Rows.Add(node.Attributes["name"].Value, node.Attributes["type"].Value, node.Attributes["emailadmin"] != null ? bool.Parse(node.Attributes["emailadmin"].Value) : false, node.Attributes["enablecharging"] != null ? bool.Parse(node.Attributes["enablecharging"].Value) : false, node.Attributes["enable"] != null ? bool.Parse(node.Attributes["enable"].Value) : true)];
+                DataGridViewRow row = Resources.Rows[Resources.Rows.Add(node.Attributes["name"].Value, node.Attributes["type"].Value, node.Attributes["admins"] == null ? "Inherit": node.Attributes["admins"].Value, node.Attributes["emailadmin"] != null ? bool.Parse(node.Attributes["emailadmin"].Value) : false, node.Attributes["enablecharging"] != null ? bool.Parse(node.Attributes["enablecharging"].Value) : false, node.Attributes["enable"] != null ? bool.Parse(node.Attributes["enable"].Value) : true)];
                 row.ContextMenuStrip = contextMenuStrip1;
             }
                 
