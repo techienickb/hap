@@ -37,6 +37,13 @@ namespace HAP.Web.Configuration
             set { this["emailadmin"] = value; }
         }
 
+        [ConfigurationProperty("admins", DefaultValue="Inherit")]
+        public string Admins
+        {
+            get { return (string)this["admins"]; }
+            set { this["admins"] = value; }
+        }
+
         [ConfigurationProperty("enablecharging", DefaultValue = false)]
         public bool EnableCharging
         {

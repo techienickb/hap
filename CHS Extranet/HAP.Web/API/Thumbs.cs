@@ -17,6 +17,7 @@ using Microsoft.Win32;
 using System.Drawing;
 using System.Drawing.Imaging;
 using HAP.Data.ComputerBrowser;
+using System.Drawing.Drawing2D;
 
 namespace HAP.Web.API
 {
@@ -48,11 +49,15 @@ namespace HAP.Web.API
             Context = context;
             config = hapConfig.Current;
             uncpath unc; string userhome;
-            string path = Converter.DriveToUNC(RoutingPath, RoutingDrive, out unc, out userhome);
+            string path = Converter.DriveToUNC(RoutingPath.Replace('^', '&'), RoutingDrive, out unc, out userhome);
             FileInfo file = new FileInfo(path);
-
-            Image image = Image.FromFile(file.FullName);
-            Image thumb = image.GetThumbnailImage(64, 64, new Image.GetThumbnailImageAbort(ThumbnailCallback), IntPtr.Zero);
+            FileStream fs = file.OpenRead();
+            Image image = Image.FromStream(fs);
+            Image thumb = FixedSize(image, 64, 64);
+            image.Dispose();
+            fs.Close();
+            fs.Dispose();
+            
             MemoryStream memstr = new MemoryStream();
             thumb.Save(memstr, ImageFormat.Png);
             context.Response.Clear();
@@ -64,13 +69,56 @@ namespace HAP.Web.API
             context.Response.Clear();
             memstr.WriteTo(context.Response.OutputStream);
             context.Response.Flush();
-            context.Response.Close();
-            context.Response.End();
+            file = null;
         }
 
-        public bool ThumbnailCallback()
+        private Image FixedSize(Image imgPhoto, int Width, int Height)
         {
-            return true;
+            int sourceWidth = imgPhoto.Width;
+            int sourceHeight = imgPhoto.Height;
+            int sourceX = 0;
+            int sourceY = 0;
+            int destX = 0;
+            int destY = 0;
+
+            float nPercent = 0;
+            float nPercentW = 0;
+            float nPercentH = 0;
+
+            nPercentW = ((float)Width / (float)sourceWidth);
+            nPercentH = ((float)Height / (float)sourceHeight);
+            if (nPercentH < nPercentW)
+            {
+                nPercent = nPercentH;
+                destX = System.Convert.ToInt16((Width -
+                              (sourceWidth * nPercent)) / 2);
+            }
+            else
+            {
+                nPercent = nPercentW;
+                destY = System.Convert.ToInt16((Height -
+                              (sourceHeight * nPercent)) / 2);
+            }
+
+            int destWidth = (int)(sourceWidth * nPercent);
+            int destHeight = (int)(sourceHeight * nPercent);
+
+            Bitmap bmPhoto = new Bitmap(Width, Height,
+                              PixelFormat.Format32bppArgb);
+            bmPhoto.SetResolution(imgPhoto.HorizontalResolution,
+                             imgPhoto.VerticalResolution);
+
+            Graphics grPhoto = Graphics.FromImage(bmPhoto);
+            grPhoto.Clear(Color.Transparent);
+            grPhoto.InterpolationMode = InterpolationMode.HighQualityBicubic;
+
+            grPhoto.DrawImage(imgPhoto,
+                new Rectangle(destX, destY, destWidth, destHeight),
+                new Rectangle(sourceX, sourceY, sourceWidth, sourceHeight),
+                GraphicsUnit.Pixel);
+
+            grPhoto.Dispose();
+            return bmPhoto;
         }
 
         private hapConfig config;

@@ -38,8 +38,12 @@ namespace HAP.Web
         {
             Dictionary<string, homepagetab> tabs = config.HomePage.Tabs.FilteredTabs;
             tabheader_repeater.DataSource = tabs.Values;
-            if (config.HomePage.Tabs.FilteredTabs.Count == 0) tabWidth = 0;
-            else tabWidth = Math.Round(Convert.ToDecimal(98) / Convert.ToDecimal(config.HomePage.Tabs.FilteredTabs.Count), 2);
+            try
+            {
+                if (config.HomePage.Tabs.FilteredTabs.Count == 0) tabWidth = 0;
+                else tabWidth = Math.Round(Convert.ToDecimal(98) / Convert.ToDecimal(config.HomePage.Tabs.FilteredTabs.Count), 2);
+            }
+            catch { tabWidth = 0; }
             tabheader_repeater.DataBind();
             tab_Me.Visible = tabs.ContainsKey("Me");
             if (tab_Me.Visible)
@@ -89,21 +93,25 @@ namespace HAP.Web
                     space = -1;
                     if (path != null)
                     {
-                        long freeBytesForUser, totalBytes, freeBytes;
-                        if (path.Usage == UsageMode.DriveSpace)
+                        try
                         {
-                            if (Win32.GetDiskFreeSpaceEx(string.Format(path.UNC.Replace("%homepath%", up.HomeDirectory), HAP.AD.ADUtil.Username), out freeBytesForUser, out totalBytes, out freeBytes))
-                                space = Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
-                        }
-                        else
-                        {
-
-                            HAP.Data.Quota.QuotaInfo qi = HAP.Data.ComputerBrowser.Quota.GetQuota(HAP.AD.ADUtil.Username, string.Format(path.UNC.Replace("%homepath%", up.HomeDirectory)));
-                            space = Math.Round((Convert.ToDecimal(qi.Used) / Convert.ToDecimal(qi.Total)) * 100, 2);
-                            if (qi.Total == -1)
+                            long freeBytesForUser, totalBytes, freeBytes;
+                            if (path.Usage == UsageMode.DriveSpace)
+                            {
                                 if (Win32.GetDiskFreeSpaceEx(string.Format(path.UNC.Replace("%homepath%", up.HomeDirectory), HAP.AD.ADUtil.Username), out freeBytesForUser, out totalBytes, out freeBytes))
                                     space = Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
+                            }
+                            else
+                            {
+
+                                HAP.Data.Quota.QuotaInfo qi = HAP.Data.ComputerBrowser.Quota.GetQuota(HAP.AD.ADUtil.Username, string.Format(path.UNC.Replace("%homepath%", up.HomeDirectory)));
+                                space = Math.Round((Convert.ToDecimal(qi.Used) / Convert.ToDecimal(qi.Total)) * 100, 2);
+                                if (qi.Total == -1)
+                                    if (Win32.GetDiskFreeSpaceEx(string.Format(path.UNC.Replace("%homepath%", up.HomeDirectory), HAP.AD.ADUtil.Username), out freeBytesForUser, out totalBytes, out freeBytes))
+                                        space = Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
+                            }
                         }
+                        catch { }
                     }
                 }
             }

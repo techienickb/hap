@@ -75,7 +75,7 @@ namespace HAP.Web.BookingSystem
             if (!string.IsNullOrEmpty(b.uid))
             {
                 iCalGenerator.GenerateCancel(b, Calendar1.SelectedDate);
-                if (config.BookingSystem.Resources[room].EmailAdmin) iCalGenerator.Generate(b, Calendar1.SelectedDate, config.BaseSettings.AdminEmailUser);
+                if (config.BookingSystem.Resources[room].EmailAdmin) iCalGenerator.GenerateCancel(b, Calendar1.SelectedDate, config.BaseSettings.AdminEmailUser);
             }
             XmlDocument doc = HAP.Data.BookingSystem.BookingSystem.BookingsDoc;
             doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + Calendar1.SelectedDate.ToShortDateString() + "' and @lesson='" + lesson.ToString() + "' and @room='" + room + "']"));

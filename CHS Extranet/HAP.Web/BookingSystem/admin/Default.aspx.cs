@@ -124,6 +124,50 @@ namespace HAP.Web.BookingSystem.admin
         {
             new HAP.Data.BookingSystem.BookingSystem().deleteStaticBooking1(e.Values[1].ToString(), e.Values[2].ToString(), int.Parse(e.Values[0].ToString()));
         }
+
+
+        public Template[] getTemplates()
+        {
+            List<Template> ts = new List<Template>();
+            Templates t = new Templates();
+            foreach (bookingResource resource in hapConfig.Current.BookingSystem.Resources)
+            {
+                Template t1 = new Template();
+                t1.ID = resource.Name;
+                if (t.ContainsKey(resource.Name))
+                    t1 = (t[resource.Name]);
+                else
+                {
+                    t1.Subject = t["general"].Subject;
+                    t1.Content = t["general"].Content;
+                }
+                ts.Add(t1);
+                Template t2 = new Template();
+                t2.ID = resource.Name + "admin";
+                if (t.ContainsKey(resource.Name + "admin"))
+                    t2 = t[resource.Name + "admin"];
+                else
+                {
+                    t2.Subject = t["generaladmin"].Subject;
+                    t2.Content = t["generaladmin"].Content;
+                }
+                ts.Add(t2);
+            }
+            return ts.ToArray();
+        }
+
+        protected void etemplates_ItemCommand(object source, RepeaterCommandEventArgs e)
+        {
+            Templates t = new Templates();
+            if (t.ContainsKey((string)e.CommandArgument)) t.Remove((string)e.CommandArgument);
+            Template t1 = new Template();
+            t1.Content = ((TextBox)e.Item.FindControl("eeditor")).Text;
+            t1.ID = (string)e.CommandArgument;
+            t1.Subject = ((TextBox)e.Item.FindControl("esubject")).Text;
+            t.Add(t1.ID, t1);
+            t.Save();
+            etemplates.DataBind();
+        }
     }
 
     public class Day

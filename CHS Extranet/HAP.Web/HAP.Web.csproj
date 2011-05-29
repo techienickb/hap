@@ -86,6 +86,7 @@
     <Content Include="api.asmx" />
     <Content Include="App_Data\abr.xml" />
     <Content Include="App_Data\Bookings.xml" />
+    <Content Include="App_Data\BookingTemplates.xml" />
     <Content Include="App_Data\StaticBookings.xml" />
     <Content Include="App_Data\TermDates.xml" />
     <Content Include="App_Data\tracker.xml">
