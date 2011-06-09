@@ -67,7 +67,7 @@ namespace HAP.Web.BookingSystem
             sb.AppendLine("END:VEVENT");
             sb.AppendLine("END:VCALENDAR");
 
-            FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath("~/BookingSystem/ITBooking.ics"));
+            FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath("~/App_Data/ITBooking.ics"));
             if (file.Exists) file.Delete();
             StreamWriter sr = file.CreateText();
             sr.Write(sb.ToString());
@@ -152,7 +152,7 @@ namespace HAP.Web.BookingSystem
             sb.AppendLine("END:VEVENT");
             sb.AppendLine("END:VCALENDAR");
 
-            FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath("~/BookingSystem/ITBooking.ics"));
+            FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath("~/App_Data/ITBooking.ics"));
             if (file.Exists) file.Delete();
             StreamWriter sr = file.CreateText();
             sr.Write(sb.ToString());
@@ -222,7 +222,7 @@ namespace HAP.Web.BookingSystem
             sb.AppendLine("END:VEVENT");
             sb.AppendLine("END:VCALENDAR");
 
-            FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath("~/BookingSystem/ITBooking.ics"));
+            FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath("~/App_Data/ITBooking.ics"));
             if (file.Exists) file.Delete();
             StreamWriter sr = file.CreateText();
             sr.Write(sb.ToString());
@@ -291,7 +291,7 @@ namespace HAP.Web.BookingSystem
             sb.AppendLine("END:VEVENT");
             sb.AppendLine("END:VCALENDAR");
 
-            FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath("~/BookingSystem/ITBooking.ics"));
+            FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath("~/App_Data/ITBooking.ics"));
             if (file.Exists) file.Delete();
             StreamWriter sr = file.CreateText();
             sr.Write(sb.ToString());
