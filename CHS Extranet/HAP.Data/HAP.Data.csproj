@@ -62,6 +62,7 @@
     <Compile Include="ComputerBrowser\ComputerBrowserAPIItem.cs" />
     <Compile Include="ComputerBrowser\Converter.cs" />
     <Compile Include="ComputerBrowser\FileCheckResponse.cs" />
+    <Compile Include="ComputerBrowser\FileIcon.cs" />
     <Compile Include="ComputerBrowser\IconHelper.cs" />
     <Compile Include="ComputerBrowser\MyComputerItem.cs" />
     <Compile Include="ComputerBrowser\PrimaryResponse.cs" />

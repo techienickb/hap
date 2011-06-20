@@ -11,6 +11,8 @@ using HAP.Web.Configuration;
 using System.Configuration;
 using System.IO;
 using Microsoft.Win32;
+using HAP.Data.ComputerBrowser;
+using System.Text;
 
 namespace HAP.Web.routing
 {
@@ -86,17 +88,35 @@ namespace HAP.Web.routing
             unc = config.MyComputer.UNCPaths[RoutingDrive];
             if (unc == null || !isAuth(unc)) context.Response.Redirect(context.Request.ApplicationPath + "/unauthorised.aspx", true);
             else path = string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), HAP.AD.ADUtil.Username) + '\\' + path.Replace('/', '\\');
+            long startBytes = 0;
+
             FileInfo file = new FileInfo(path);
+
+            string lastUpdateTimeStamp = file.LastWriteTimeUtc.ToString("r");
+            string _EncodedData = HttpUtility.UrlEncode(file.Name, Encoding.UTF8) + lastUpdateTimeStamp;
+
+            BinaryReader _BinaryReader = new BinaryReader(file.OpenRead());
             context.Response.ContentType = MimeType(file.Extension);
-            context.Response.Buffer = true;
+            context.Response.Buffer = false;
+            context.Response.AddHeader("Accept-Ranges", "bytes");
+            context.Response.AppendHeader("ETag", "\"" + _EncodedData + "\"");
+            context.Response.AppendHeader("Last-Modified", lastUpdateTimeStamp);
+            context.Response.AddHeader("Content-Length", (file.Length - startBytes).ToString());
+            context.Response.AddHeader("Connection", "Keep-Alive");
             if (string.IsNullOrEmpty(context.Request.QueryString["inline"]))
                 context.Response.AppendHeader("Content-Disposition", "attachment; filename=\"" + file.Name + "\"");
             else context.Response.AppendHeader("Content-Disposition", "inline; filename=\"" + file.Name + "\"");
-            context.Response.Clear();
-            context.Response.TransmitFile(file.FullName);
-            context.Response.Flush();
-            context.Response.Close();
+            context.Response.ContentEncoding = Encoding.UTF8;
+            _BinaryReader.BaseStream.Seek(startBytes, SeekOrigin.Begin);
+            int maxCount = (int)Math.Ceiling((file.Length - startBytes + 0.0) / 1024);
+            int i;
+            for (i = 0; i < maxCount && context.Response.IsClientConnected; i++)
+            {
+                context.Response.BinaryWrite(_BinaryReader.ReadBytes(1024));
+                context.Response.Flush();
+            }
             context.Response.End();
+            _BinaryReader.Close();
         }
 
         public static string MimeType(string Extension)
@@ -105,9 +125,15 @@ namespace HAP.Web.routing
             if (string.IsNullOrEmpty(Extension))
                 return mime;
             string ext = Extension.ToLower();
-            RegistryKey rk = Registry.ClassesRoot.OpenSubKey(ext);
-            if (rk != null && rk.GetValue("Content Type") != null)
-                mime = rk.GetValue("Content Type").ToString();
+            FileIcon fi;
+            if (FileIcon.TryGet(ext, out fi)) mime = fi.ContentType;
+            if (mime == "application/octetstream")
+            {
+                RegistryKey rk = Registry.ClassesRoot.OpenSubKey(ext);
+                if (rk != null && rk.GetValue("Content Type") != null)
+                    mime = rk.GetValue("Content Type").ToString();
+            }
+            if (mime.Length == 0) mime = "application/octetstream";
             return mime;
 
         }

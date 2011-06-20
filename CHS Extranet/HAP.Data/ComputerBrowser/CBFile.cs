@@ -28,14 +28,23 @@ namespace HAP.Data.ComputerBrowser
             Extension = file.Extension;
             Type = "File";
             Name = file.Name + (file.Name.Contains(file.Extension) ? "" : file.Extension);
-            try
+            FileIcon fi;
+            if (FileIcon.TryGet(Extension, out fi))
             {
-                RegistryKey rkRoot = Registry.ClassesRoot;
-                string keyref = rkRoot.OpenSubKey(file.Extension).GetValue("").ToString();
-                Type = rkRoot.OpenSubKey(keyref).GetValue("").ToString();
+                Type = fi.Type;
                 Name = Name.Remove(Name.LastIndexOf(file.Extension));
             }
-            catch { Type = "File"; }
+            if (Type == "File")
+            {
+                try
+                {
+                    RegistryKey rkRoot = Registry.ClassesRoot;
+                    string keyref = rkRoot.OpenSubKey(file.Extension).GetValue("").ToString();
+                    Type = rkRoot.OpenSubKey(keyref).GetValue("").ToString();
+                    Name = Name.Remove(Name.LastIndexOf(file.Extension));
+                }
+                catch { Type = "File"; }
+            }
             if (Type != "File")
             {
                 Icon = "images/icons/" + ParseForImage(file);
