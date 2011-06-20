@@ -34,8 +34,8 @@ namespace HAP.Web.BookingSystem
 
         protected void import_Click(object sender, EventArgs e)
         {
-            if (File.Exists(Server.MapPath("~/BookingSystem/import.log"))) File.Delete(Server.MapPath("~/BookingSystem/import.log"));
-            FileInfo file = new FileInfo(Server.MapPath("~/BookingSystem/import.log"));
+            if (File.Exists(Server.MapPath("~/App_Data/import.log"))) File.Delete(Server.MapPath("~/App_Data/import.log"));
+            FileInfo file = new FileInfo(Server.MapPath("~/App_Data/import.log"));
             StreamWriter sw = file.CreateText();
             try
             {

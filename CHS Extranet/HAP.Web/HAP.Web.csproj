@@ -560,6 +560,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BookingSystem\api.ashx" />
+    <Content Include="images\icons\knownicons.xml" />
     <None Include="MyComputerSLSplash.xaml">
       <SubType>Designer</SubType>
     </None>

@@ -38,17 +38,8 @@
 		}
 		function OnSourceDownloadProgressChanged(sender, args) {
 			sender.findName("ProgressText").Text = "Loading... " + Math.round((args.progress * 1000)) / 10 + "%";
-        }
-        function setbasic() {
-            setCookie('mycompv', 'html', 30);
-            return false;
-        }
+		}
 
-        function setCookie(c_name, value, expiredays) {
-            var exdate = new Date();
-            exdate.setDate(exdate.getDate() + expiredays);
-            document.cookie = c_name + "=" + escape(value) + ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString() + ";path=/");
-        }
 	</script>
 	<style type="text/css">
 		#silverlightControlHost { height: 640px; border: solid 1px #A0AFC3; }
@@ -57,8 +48,20 @@
 	</style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
+	<script type="text/javascript">
+		function setCookie(c_name, value, expiredays) {
+			var exdate = new Date();
+			exdate.setDate(exdate.getDate() + expiredays);
+			document.cookie = c_name + "=" + escape(value) + ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString() + ";path=/");
+		}
+		function changeversion(e) {
+			setCookie('mycompv', e, 30);
+			if (e == "html") window.location.href = "mycomputer.aspx";
+			return false;
+		}
+	</script>
 	<h1>My School Computer - Extended Version</h1>
-    <a href="./">Home Access Plus+ Home</a>, <a href="mycomputer.aspx" onclick="return setbasic();">Basic Version</a>
+	<a href="./">Home Access Plus+ Home</a>, <a href="mycomputer.aspx" onclick="return changeversion('html');">Basic Version</a>
 	<div id="silverlightControlHost">
 		<object data="data:application/x-silverlight-2," type="application/x-silverlight-2" width="100%" height="100%">
 		  <param name="source" value="clientbin/HAP.Silverlight.Browser.xap"/>
