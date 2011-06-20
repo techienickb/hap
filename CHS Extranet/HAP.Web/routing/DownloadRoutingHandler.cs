@@ -92,7 +92,6 @@ namespace HAP.Web.routing
             if (string.IsNullOrEmpty(context.Request.QueryString["inline"]))
                 context.Response.AppendHeader("Content-Disposition", "attachment; filename=\"" + file.Name + "\"");
             else context.Response.AppendHeader("Content-Disposition", "inline; filename=\"" + file.Name + "\"");
-            context.Response.AddHeader("Content-Length", file.Length.ToString());
             context.Response.Clear();
             context.Response.TransmitFile(file.FullName);
             context.Response.Flush();

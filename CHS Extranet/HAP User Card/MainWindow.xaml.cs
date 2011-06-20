@@ -50,6 +50,7 @@ namespace HAP.UserCard
         {
             Show();
             Focus();
+            tabs.Focus();
         }
 
         void tabs_MouseWheel(object sender, MouseWheelEventArgs e)
