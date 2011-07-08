@@ -59,7 +59,8 @@ namespace HAP.Web.UserCard
             {
                 string childPath = child.Path.ToString();
                 OU ou = new OU(childPath.Remove(0, 7), !childPath.Contains("CN"));
-                ou.OUs = getControlledOUs(ou.OUPath);
+                if (child.SchemaClassName == "organizationalUnit") ou.OUs = getControlledOUs(ou.OUPath);
+                else ou.OUPath = ou.Name;
                 alObjects.Add(ou);
                 //remove the LDAP prefix from the path
 
@@ -74,38 +75,24 @@ namespace HAP.Web.UserCard
         [WebMethod]
         public void Enable(string[] oupaths)
         {
+            PrincipalContext pcontext = HAP.AD.ADUtil.PContext;
             foreach (string s in oupaths)
             {
-                try
-                {
-                    DirectoryEntry user = new DirectoryEntry("LDAP://" + s, hapConfig.Current.ADSettings.ADUsername, hapConfig.Current.ADSettings.ADPassword);
-                    int val = (int)user.Properties["userAccountControl"].Value;
-                    user.Properties["userAccountControl"].Value = val & ~0x2;
-                    //ADS_UF_NORMAL_ACCOUNT;
-
-                    user.CommitChanges();
-                    user.Close();
-                }
-                catch { continue; }
+                UserPrincipal user = UserPrincipal.FindByIdentity(pcontext, s);
+                user.Enabled = true;
+                user.Save(pcontext);
             }
         }
 
         [WebMethod]
         public void Disable(string[] oupaths)
         {
+            PrincipalContext pcontext = HAP.AD.ADUtil.PContext;
             foreach (string s in oupaths)
             {
-                try
-                {
-                    DirectoryEntry user = new DirectoryEntry("LDAP://" + s, hapConfig.Current.ADSettings.ADUsername, hapConfig.Current.ADSettings.ADPassword);
-                    int val = (int)user.Properties["userAccountControl"].Value;
-                    user.Properties["userAccountControl"].Value = val | ~0x2;
-                    //ADS_UF_NORMAL_ACCOUNT;
-
-                    user.CommitChanges();
-                    user.Close();
-                }
-                catch { continue; }
+                UserPrincipal user = UserPrincipal.FindByIdentity(pcontext, s);
+                user.Enabled = false;
+                user.Save();
             }
         }
 
