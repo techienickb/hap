@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using System.Web;
 
 namespace HAP.Web.Configuration
 {
@@ -19,6 +20,23 @@ namespace HAP.Web.Configuration
             this.Name = Name;
             this.ShowTo = node.Attributes["showto"].Value;
             foreach (XmlNode n in node.ChildNodes) base.Add(new Link(n));
+        }
+        public Link[] FilteredLinks
+        {
+            get
+            {
+                List<Link> Links = new List<Link>();
+                foreach (Link l in this)
+                    if (l.ShowTo == "All") Links.Add(l);
+                    else if (l.ShowTo != "None")
+                    {
+                        bool vis = false;
+                        foreach (string s in l.ShowTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
+                            if (!vis) vis = HttpContext.Current.User.IsInRole(s);
+                        if (vis) Links.Add(l);
+                    }
+                return Links.ToArray();
+            }
         }
         public void Add(string Name, string ShowTo, string Description, string Url, string Icon, string Target)
         {

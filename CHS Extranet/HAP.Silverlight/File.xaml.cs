@@ -69,7 +69,7 @@ namespace HAP.Silverlight
         {
             WebClient client = new WebClient();
             client.DownloadStringCompleted += new DownloadStringCompletedEventHandler(client_DownloadStringCompleted);
-            client.DownloadStringAsync(new Uri(BaseUri.ToString() + "check/" + path.TrimEnd(new char[] { '/' }) + "/" + Fileinfo.Name.Replace('&', '^')));            
+            client.DownloadStringAsync(new Uri(BaseUri.ToString() + "check/" + (path.TrimEnd(new char[] { '/' }) + "/" + Fileinfo.Name).Replace('&', '^')));            
         }
 
         void client_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
@@ -99,9 +99,9 @@ namespace HAP.Silverlight
         {
             long temp = Fileinfo.Length - BytesUploaded;
 
-            UriBuilder ub = new UriBuilder(BaseUri + "transfer/" + path.TrimEnd(new char[] { '/' }));
+            UriBuilder ub = new UriBuilder(BaseUri + "transfer/" + path.TrimEnd(new char[] { '/' }).Replace('&', '^'));
             bool complete = temp <= 20480;
-            ub.Query = string.Format("{3}filename={0}&StartByte={1}&Complete={2}", Fileinfo.Name, BytesUploaded, complete, string.IsNullOrEmpty(ub.Query) ? "" : ub.Query.Remove(0, 1) + "&");
+            ub.Query = string.Format("{3}filename={0}&StartByte={1}&Complete={2}", Fileinfo.Name.Replace('&', '^'), BytesUploaded, complete, string.IsNullOrEmpty(ub.Query) ? "" : ub.Query.Remove(0, 1) + "&");
             HttpWebRequest webrequest = (HttpWebRequest)WebRequest.Create(ub.Uri);
             webrequest.Method = "POST";
             webrequest.BeginGetRequestStream(new AsyncCallback(WriteCallback), webrequest);
