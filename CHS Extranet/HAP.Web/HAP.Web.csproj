@@ -84,6 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="api.asmx" />
+    <Content Include="API\Setup.asmx" />
     <Content Include="App_Data\abr.xml" />
     <Content Include="App_Data\Bookings.xml" />
     <Content Include="App_Data\BookingTemplates.xml" />
@@ -109,7 +110,44 @@
     <Content Include="Controls\Announcement.ascx" />
     <Content Include="App_Data\Announcement.xml" />
     <Content Include="App_Data\Tickets.xml" />
-    <Content Include="basestyle.css" />
+    <Content Include="images\arrow-collapse.png" />
+    <Content Include="images\arrow-collapseover.png" />
+    <Content Include="images\arrow-expand.png" />
+    <Content Include="images\arrow-expandover.png" />
+    <Content Include="images\h2bg.gif" />
+    <Content Include="images\h2bgover.gif" />
+    <Content Include="images\icons.gif" />
+    <Content Include="images\setup\1.png" />
+    <Content Include="images\setup\2.png" />
+    <Content Include="images\setup\266.png" />
+    <Content Include="images\setup\267.png" />
+    <Content Include="images\setup\78.png" />
+    <Content Include="images\ui-bg_diagonals-thick_18_b81900_40x40.png" />
+    <Content Include="images\ui-bg_diagonals-thick_20_666666_40x40.png" />
+    <Content Include="images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="images\ui-bg_flat_10_000000_40x100.png" />
+    <Content Include="images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="images\ui-bg_glass_100_f6f6f6_1x400.png" />
+    <Content Include="images\ui-bg_glass_100_fdf5ce_1x400.png" />
+    <Content Include="images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="images\ui-bg_gloss-wave_35_f6a828_500x100.png" />
+    <Content Include="images\ui-bg_highlight-soft_100_eeeeee_1x100.png" />
+    <Content Include="images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="images\ui-bg_highlight-soft_75_ffe45c_1x100.png" />
+    <Content Include="images\ui-icons_222222_256x240.png" />
+    <Content Include="images\ui-icons_228ef1_256x240.png" />
+    <Content Include="images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="images\ui-icons_454545_256x240.png" />
+    <Content Include="images\ui-icons_888888_256x240.png" />
+    <Content Include="images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="images\ui-icons_ef8c08_256x240.png" />
+    <Content Include="images\ui-icons_ffd27a_256x240.png" />
+    <Content Include="images\ui-icons_ffffff_256x240.png" />
+    <Content Include="style\basestyle.css" />
     <Content Include="Controls\Delete.ascx" />
     <Content Include="Controls\Rename.ascx" />
     <Content Include="Controls\Unzip.ascx" />
@@ -155,10 +193,17 @@
     <Content Include="images\icons\xps.png" />
     <Content Include="images\Imageres18.png" />
     <Content Include="images\loading.gif" />
-    <Content Include="images\logo.png" />
     <Content Include="images\progressbar-active.png" />
     <Content Include="images\progressbar.png" />
+    <Content Include="Scripts\jquery-1.6.2.min.js" />
+    <Content Include="Scripts\jquery-Gtimepicker.js" />
+    <Content Include="Scripts\jquery-ui-1.8.14.custom.min.js" />
+    <Content Include="Scripts\jquery.dynatree.js" />
     <Content Include="Scripts\homepagescripts.js" />
+    <Content Include="Setup.aspx" />
+    <Content Include="style\jquery-ui.css" />
+    <Content Include="style\setup.css" />
+    <Content Include="style\ui.dynatree.css" />
     <Content Include="Tracker\api.asmx" />
     <Content Include="Tracker\log.aspx" />
     <Content Include="Tracker\logontracker-small.png" />
@@ -213,7 +258,7 @@
     <Content Include="images\icons\exe.png" />
     <Content Include="images\icons\zip.png" />
     <Content Include="mycomputer.aspx" />
-    <Content Include="mycomputer.css" />
+    <Content Include="style\mycomputer.css" />
     <Content Include="MyComputerSL.aspx" />
     <Content Include="Scripts\rightclick.js" />
     <Content Include="Scripts\viewmode.js" />
@@ -230,12 +275,6 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
     <Content Include="xls.aspx" />
   </ItemGroup>
   <ItemGroup>
@@ -243,7 +282,12 @@
       <DependentUpon>api.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="API\ADOU.cs" />
     <Compile Include="API\Icon.cs" />
+    <Compile Include="API\Setup.asmx.cs">
+      <DependentUpon>Setup.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="API\Thumbs.cs" />
     <Compile Include="API\RegisterAPI.cs" />
     <Compile Include="API\Upload.cs" />
@@ -334,6 +378,9 @@
       <DependentUpon>Delete.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\HAPTag.cs" />
+    <Compile Include="Controls\Page.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Controls\Rename.ascx.cs">
       <DependentUpon>Rename.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -431,6 +478,13 @@
     <Compile Include="routing\UploadHandler.cs" />
     <Compile Include="routing\UploadProcess.cs" />
     <Compile Include="routing\UploadTransferHandler.cs" />
+    <Compile Include="Setup.aspx.cs">
+      <DependentUpon>Setup.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Setup.aspx.designer.cs">
+      <DependentUpon>Setup.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Tracker\api.asmx.cs">
       <DependentUpon>api.asmx</DependentUpon>
       <SubType>Component</SubType>
@@ -519,8 +573,8 @@
       <Project>{66768D2F-2190-4B13-BB6C-7195A342DB9A}</Project>
       <Name>HAP.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\HAP.Web.Configuration\HAP.Web.Configuration.csproj">
-      <Project>{472C6692-1464-44ED-A2DB-5A8EE3E698C0}</Project>
+    <ProjectReference Include="..\HAP.Web.Config\HAP.Web.Configuration.csproj">
+      <Project>{1F2CFBBF-1C06-4CAC-BB4B-5551BF6A398C}</Project>
       <Name>HAP.Web.Configuration</Name>
     </ProjectReference>
   </ItemGroup>
@@ -564,10 +618,10 @@
     <None Include="MyComputerSLSplash.xaml">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="style\Web.config" />
     <None Include="Thanks.rtf" />
     <Content Include="Tracker\Web.config" />
     <Content Include="UserCard\Web.config" />
-    <Content Include="Tracker\api.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\temp\" />

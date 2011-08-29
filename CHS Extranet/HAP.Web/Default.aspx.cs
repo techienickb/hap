@@ -14,9 +14,8 @@ using HAP.Web.UserCard;
 
 namespace HAP.Web
 {
-    public partial class Default : System.Web.UI.Page
+    public partial class Default : HAP.Web.Controls.Page
     {
-        private String _ActiveDirectoryConnectionString;
         private PrincipalContext pcontext;
         protected UserPrincipal up { get; set; }
         private hapConfig config;
@@ -24,43 +23,34 @@ namespace HAP.Web
         protected override void OnInitComplete(EventArgs e)
         {
             config = hapConfig.Current;
-            _ActiveDirectoryConnectionString = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString;
-            pcontext = HAP.AD.ADUtil.PContext;
-            up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, HAP.AD.ADUtil.Username);
-            this.Title = string.Format("{0} - Home Access Plus+", config.BaseSettings.EstablishmentName);
+            if (config.FirstRun) Response.Redirect("~/Setup.aspx", true);
+            this.Title = string.Format("{0} - Home Access Plus+", config.School.Name);
         }
 
         protected string Department { get; set; }
         protected decimal space { get; set; }
-        protected decimal tabWidth { get; set; }
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            Dictionary<string, homepagetab> tabs = config.HomePage.Tabs.FilteredTabs;
-            tabheader_repeater.DataSource = tabs.Values;
-            try
-            {
-                if (config.HomePage.Tabs.FilteredTabs.Count == 0) tabWidth = 0;
-                else tabWidth = Math.Round(Convert.ToDecimal(98) / Convert.ToDecimal(config.HomePage.Tabs.FilteredTabs.Count), 2);
-            }
-            catch { tabWidth = 0; }
+            Dictionary<TabType, Tab> tabs = config.Homepage.Tabs.FilteredTabs;
+            tabheader_repeater.DataSource = config.Homepage.Tabs;
             tabheader_repeater.DataBind();
-            tab_Me.Visible = tabs.ContainsKey("Me");
+            tab_Me.Visible = tabs.ContainsKey(TabType.Me);
             if (tab_Me.Visible)
             {
                 updatemydetails.Visible = false;
-                if (tabs["Me"].AllowUpdateTo == "All") updatemydetails.Visible = true;
-                else if (tabs["Me"].ShowTo != "None")
+                if (tabs[TabType.Me].AllowUpdateTo == "All") updatemydetails.Visible = true;
+                else if (tabs[TabType.Me].ShowTo != "None")
                 {
                     bool vis = false;
-                    foreach (string s in tabs["Me"].AllowUpdateTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
+                    foreach (string s in tabs[TabType.Me].AllowUpdateTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
                         if (!vis) vis = User.IsInRole(s);
                     if (vis) updatemydetails.Visible = true;
                 }
                 
-                DirectoryEntry usersDE = new DirectoryEntry(_ActiveDirectoryConnectionString, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
+                DirectoryEntry usersDE = new DirectoryEntry(AD.ADUtils.FriendlyDomainToLdapDomain(config.AD.UPN), config.AD.User, config.AD.Password);
                 DirectorySearcher ds = new DirectorySearcher(usersDE);
-                ds.Filter = "(sAMAccountName=" + HAP.AD.ADUtil.Username + ")";
+                ds.Filter = "(sAMAccountName=" + ADUser.UserName + ")";
                 ds.PropertiesToLoad.Add("rmCom2000-UsrMgr-uPN");
                 ds.PropertiesToLoad.Add("department");
                 SearchResult r = ds.FindOne();
@@ -71,7 +61,7 @@ namespace HAP.Web
                 catch { Department = "n/a"; }
                 //rmCom2000-UsrMgr-uPN
 
-                if (string.IsNullOrEmpty(config.BaseSettings.StudentPhotoHandler))
+                if (string.IsNullOrEmpty(config.School.PhotoHandler))
                     userimage.Visible = false;
                 else
                 {
@@ -79,35 +69,35 @@ namespace HAP.Web
                     {
                         try
                         {
-                            userimage.ImageUrl = string.Format("{0}?UPN={1}", config.BaseSettings.StudentPhotoHandler, r.Properties["rmCom2000-UsrMgr-uPN"][0].ToString());
+                            userimage.ImageUrl = string.Format("{0}?UPN={1}", config.School.PhotoHandler, r.Properties["rmCom2000-UsrMgr-uPN"][0].ToString());
                         }
                         catch { }
                     }
-                    else userimage.ImageUrl = string.Format("{0}?UPN={1}", config.BaseSettings.StudentPhotoHandler, up.EmployeeId);
+                    else userimage.ImageUrl = string.Format("{0}?UPN={1}", config.School.PhotoHandler, up.EmployeeId);
                 }
-                if (tabs["Me"].ShowSpace)
+                if (tabs[TabType.Me].ShowSpace.Value)
                 {
-                    uncpath path = null;
-                    foreach (uncpath p in config.MyComputer.UNCPaths)
-                        if (p.UNC.Contains("%homepath%")) path = p;
+                    DriveMapping mapping = null;
+                    foreach (DriveMapping m in config.MySchoolComputerBrowser.Mappings.Values)
+                        if (m.UNC.Contains("%homepath%")) mapping = m;
                     space = -1;
-                    if (path != null)
+                    if (mapping != null)
                     {
                         try
                         {
                             long freeBytesForUser, totalBytes, freeBytes;
-                            if (path.Usage == UsageMode.DriveSpace)
+                            if (mapping.UsageMode == MappingUsageMode.DriveSpace)
                             {
-                                if (Win32.GetDiskFreeSpaceEx(string.Format(path.UNC.Replace("%homepath%", up.HomeDirectory), HAP.AD.ADUtil.Username), out freeBytesForUser, out totalBytes, out freeBytes))
+                                if (Win32.GetDiskFreeSpaceEx(string.Format(mapping.UNC.Replace("%homepath%", up.HomeDirectory), ADUser.UserName), out freeBytesForUser, out totalBytes, out freeBytes))
                                     space = Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
                             }
                             else
                             {
 
-                                HAP.Data.Quota.QuotaInfo qi = HAP.Data.ComputerBrowser.Quota.GetQuota(HAP.AD.ADUtil.Username, string.Format(path.UNC.Replace("%homepath%", up.HomeDirectory)));
+                                HAP.Data.Quota.QuotaInfo qi = HAP.Data.ComputerBrowser.Quota.GetQuota(ADUser.UserName, string.Format(mapping.UNC.Replace("%homepath%", up.HomeDirectory)));
                                 space = Math.Round((Convert.ToDecimal(qi.Used) / Convert.ToDecimal(qi.Total)) * 100, 2);
                                 if (qi.Total == -1)
-                                    if (Win32.GetDiskFreeSpaceEx(string.Format(path.UNC.Replace("%homepath%", up.HomeDirectory), HAP.AD.ADUtil.Username), out freeBytesForUser, out totalBytes, out freeBytes))
+                                    if (Win32.GetDiskFreeSpaceEx(string.Format(mapping.UNC.Replace("%homepath%", up.HomeDirectory), ADUser.UserName), out freeBytesForUser, out totalBytes, out freeBytes))
                                         space = Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
                             }
                         }
@@ -115,13 +105,13 @@ namespace HAP.Web
                     }
                 }
             }
-            tab_Password.Visible = tabs.ContainsKey("Password");
-            tab_Bookings.Visible = tabs.ContainsKey("Bookings");
+            tab_Password.Visible = tabs.ContainsKey(TabType.Password);
+            tab_Bookings.Visible = tabs.ContainsKey(TabType.Bookings);
             if (tab_Bookings.Visible)
             {
                 
                 List<HAP.Data.BookingSystem.Booking> mybookings = new List<Data.BookingSystem.Booking>();
-                foreach (XmlNode n in HAP.Data.BookingSystem.BookingSystem.BookingsDoc.SelectNodes("/Bookings/Booking[@username='" + HAP.AD.ADUtil.Username + "']"))
+                foreach (XmlNode n in HAP.Data.BookingSystem.BookingSystem.BookingsDoc.SelectNodes("/Bookings/Booking[@username='" + ADUser.UserName.ToLower() + "']"))
                     mybookings.Add(new HAP.Data.BookingSystem.Booking(n));
                 var list = from element in mybookings orderby element.Date ascending, element.Lesson select element;
                 mybookings = new List<Data.BookingSystem.Booking>();
@@ -130,7 +120,7 @@ namespace HAP.Web
                 bookingslist.DataSource = mybookings.ToArray();
                 bookingslist.DataBind();
             }
-            tab_Tickets.Visible = tabs.ContainsKey("Tickets");
+            tab_Tickets.Visible = tabs.ContainsKey(TabType.Tickets);
             if (tab_Tickets.Visible)
             {
                 XmlDocument doc = new XmlDocument();
@@ -152,7 +142,7 @@ namespace HAP.Web
                 {
                     List<Ticket> tickets = new List<Ticket>();
                     foreach (XmlNode node in doc.SelectNodes(xpath))
-                        if (node.SelectNodes("Note")[0].Attributes["username"].Value.ToLower() == HAP.AD.ADUtil.Username.ToLower() && x < 4)
+                        if (node.SelectNodes("Note")[0].Attributes["username"].Value.ToLower() == ADUser.UserName.ToLower() && x < 4)
                         {
                             tickets.Add(Ticket.Parse(node));
                             x++;
@@ -161,8 +151,8 @@ namespace HAP.Web
                 }
                 ticketslist.DataBind();
             }
-            List<homepagelinkgroup> groups = new List<homepagelinkgroup>();
-            foreach (homepagelinkgroup group in config.HomePage.Groups)
+            List<LinkGroup> groups = new List<LinkGroup>();
+            foreach (LinkGroup group in config.Homepage.Groups)
                 if (group.ShowTo == "All") groups.Add(group);
                 else if (group.ShowTo != "None")
                 {
@@ -180,7 +170,7 @@ namespace HAP.Web
                     txtform.Text = Department;
                 }
                 catch { txtform.Text = ""; }
-                if (User.IsInRole(config.ADSettings.StudentsGroupName)) formlabel.Text = "<b>Form: </b>";
+                if (User.IsInRole(config.AD.StudentsGroup)) formlabel.Text = "<b>Form: </b>";
                 else formlabel.Text = "<b>Department: </b>";
             }
             homepagelinks.DataSource = groups.ToArray();
@@ -202,12 +192,12 @@ namespace HAP.Web
             up.Save();
 
             // First, get a DE for the user
-            DirectoryEntry usersDE = new DirectoryEntry(_ActiveDirectoryConnectionString, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
+            DirectoryEntry usersDE = new DirectoryEntry(AD.ADUtils.FriendlyDomainToLdapDomain(config.AD.UPN), config.AD.User, config.AD.Password);
             DirectorySearcher ds = new DirectorySearcher(usersDE);
-            ds.Filter = "(sAMAccountName=" + HAP.AD.ADUtil.Username + ")";
+            ds.Filter = "(sAMAccountName=" + ADUser.UserName + ")";
             ds.PropertiesToLoad.Add("cn");
             SearchResult r = ds.FindOne();
-            DirectoryEntry theUserDE = new DirectoryEntry(r.Path, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
+            DirectoryEntry theUserDE = new DirectoryEntry(r.Path, config.AD.User, config.AD.Password);
 
             // Now update the property setting
             if (theUserDE.Properties["Department"].Count == 0)
@@ -223,9 +213,9 @@ namespace HAP.Web
             hapConfig config = hapConfig.Current;
             try
             {
-                DirectoryEntry usersDE = new DirectoryEntry(ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString, HAP.AD.ADUtil.Username, currentpass.Text);
+                DirectoryEntry usersDE = new DirectoryEntry(AD.ADUtils.FriendlyDomainToLdapDomain(config.AD.UPN), ADUser.UserName, currentpass.Text);
                 DirectorySearcher ds = new DirectorySearcher(usersDE);
-                ds.Filter = "(sAMAccountName=" + HAP.AD.ADUtil.Username + ")";
+                ds.Filter = "(sAMAccountName=" + ADUser.UserName + ")";
                 SearchResult r = ds.FindOne();
                 DirectoryEntry user = r.GetDirectoryEntry();
                 if (user == null) throw new Exception("I can't find your username");

@@ -4,21 +4,19 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 
 <asp:Content runat="server" ContentPlaceHolderID="head">
-    <link href="mycomputer.css" rel="stylesheet" type="text/css" />
-    <style type="text/css">
-        #tabheaders a { width: <%=tabWidth%>%; }
-    </style>
+    <link href="style/mycomputer.css" rel="stylesheet" type="text/css" />
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
+    
     <div id="maincol">
         <hap:announcement runat="server" />
         <hap:version runat="server" />
-        <a href="http://hap.codeplex.com" target="_blank" style="text-align: center; display: block;"><img src="<%=Request.ApplicationPath%>/images/haplogo.png" alt="Home Access Plus+ Logo" /></a>
+        <a href="http://hap.codeplex.com" target="_blank" style="text-align: center; display: block;"><img src="<%=ResolveClientUrl("~/images/haplogo.png") %>" alt="Home Access Plus+ Logo" /></a>
 
         <div id="hometabs">
             <div id="tabheaders">
-                <asp:Repeater runat="server" ID="tabheader_repeater"><ItemTemplate><a href="./" onclick="showtab('<%#Eval("Name") %>', this); return false;"><%#Eval("Name") %></a></ItemTemplate></asp:Repeater>
+                <asp:Repeater runat="server" ID="tabheader_repeater"><ItemTemplate><a href="#<%#Eval("Type") %>_tab"><%#Eval("Name") %></a></ItemTemplate></asp:Repeater>
             </div>
             <div id="tabs">
                 <asp:PlaceHolder runat="server" ID="tab_Me" Visible="false">

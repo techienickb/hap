@@ -49,16 +49,15 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActiveDirectoryHelper.cs" />
-    <Compile Include="ActiveDirectoryMembershipProvider.cs" />
-    <Compile Include="ActiveDirectoryRoleProvider.cs" />
-    <Compile Include="ADUtil.cs" />
+    <Compile Include="ADUtils.cs" />
+    <Compile Include="MembershipProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserInfo.cs" />
+    <Compile Include="RoleProvider.cs" />
+    <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HAP.Web.Configuration\HAP.Web.Configuration.csproj">
-      <Project>{472C6692-1464-44ED-A2DB-5A8EE3E698C0}</Project>
+    <ProjectReference Include="..\HAP.Web.Config\HAP.Web.Configuration.csproj">
+      <Project>{1F2CFBBF-1C06-4CAC-BB4B-5551BF6A398C}</Project>
       <Name>HAP.Web.Configuration</Name>
     </ProjectReference>
   </ItemGroup>

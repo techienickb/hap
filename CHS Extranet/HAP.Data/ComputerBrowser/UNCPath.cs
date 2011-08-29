@@ -14,6 +14,6 @@ namespace HAP.Data.ComputerBrowser
         public string Name { get; set; }
         public string UNC { get; set; }
         public bool EnableMove { get; set; }
-        public UsageMode Usage { get; set; }
+        public MappingUsageMode Usage { get; set; }
     }
 }

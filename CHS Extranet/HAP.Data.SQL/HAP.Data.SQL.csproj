@@ -65,10 +65,6 @@
       <Project>{66768D2F-2190-4B13-BB6C-7195A342DB9A}</Project>
       <Name>HAP.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\HAP.Web.Configuration\HAP.Web.Configuration.csproj">
-      <Project>{472C6692-1464-44ED-A2DB-5A8EE3E698C0}</Project>
-      <Name>HAP.Web.Configuration</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="sql2linq.dbml">
