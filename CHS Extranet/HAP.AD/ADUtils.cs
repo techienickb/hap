@@ -1,15 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration.Provider;
-using System.DirectoryServices;
-using System.DirectoryServices.AccountManagement;
-using System.Security.Principal;
+using System.Linq;
 using System.Web;
+using System.DirectoryServices;
+using System.DirectoryServices.ActiveDirectory;
+using System.Runtime.InteropServices;
+using System.DirectoryServices.AccountManagement;
+using System.Configuration.Provider;
+using System.Security.Principal;
 
 namespace HAP.AD
 {
-	public static class ActiveDirectoryHelper
+	/// <summary>
+	/// Summary description for ADUtils
+	/// </summary>
+	public class ADUtils
 	{
+
+		public static string FriendlyDomainToLdapDomain(string friendlyDomainName)
+		{
+			string ldapPath = null;
+			DirectoryContext objContext = new DirectoryContext(DirectoryContextType.Domain, friendlyDomainName);
+			Domain objDomain = Domain.GetDomain(objContext);
+			ldapPath = objDomain.Name;
+			return string.Format("LDAP://DC={0}", ldapPath.Replace(".", ",DC="));
+		}
+
+		public static DirectoryEntry GetDirectoryRoot()
+		{
+			return GetDirectoryEntry(FriendlyDomainToLdapDomain(HAP.Web.Configuration.hapConfig.Current.AD.UPN), HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
+		}
+
+		public static PrincipalContext GetPContext()
+		{
+			return new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
+		}
+
+		[DllImport("advapi32.dll")]
+		public static extern int LogonUserA(String lpszUserName,
+			String lpszDomain,
+			String lpszPassword,
+			int dwLogonType,
+			int dwLogonProvider,
+			ref IntPtr phToken);
+		[DllImport("advapi32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+		public static extern int DuplicateToken(IntPtr hToken,
+			int impersonationLevel,
+			ref IntPtr hNewToken);
+
+		[DllImport("advapi32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+		public static extern bool RevertToSelf();
+
+		[DllImport("kernel32.dll", CharSet = CharSet.Auto)]
+		public static extern bool CloseHandle(IntPtr handle);
+
+		#region Role Provider Helpers
 		public const string ERROR_ACTIVEDIRECTORY_QUERY = "AD Query Error";
 		public const string ERROR_ROLE_NOT_FOUND = "Role Not Found";
 		public const string ERROR_CONFIG_NOT_FOUND = "Config Not Found";
@@ -21,7 +66,7 @@ namespace HAP.AD
 		public const string SEARCH_GROUPS = "(&(objectClass=group)(cn={0}))";
 		public const string SEARCH_USERS = "(&(objectClass=user)(sAMAccountName={0}))";
 
-		static ActiveDirectoryHelper() { }
+		static ADUtils() { }
 
 		private static IdentityReferenceCollection ExpandTokenGroups(DirectoryEntry user)
 		{
@@ -302,7 +347,6 @@ namespace HAP.AD
 			return results.ToArray();
 		}
 
-
-
+		#endregion
 	}
 }

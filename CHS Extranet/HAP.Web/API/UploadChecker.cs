@@ -37,7 +37,7 @@ namespace HAP.Web.API
 
         public void ProcessRequest(HttpContext context)
         {
-            FileInfo file = new FileInfo(Converter.DriveToUNC(RoutingPath, RoutingDrive));
+            FileInfo file = new FileInfo(Converter.DriveToUNC(RoutingPath.Replace('^', '&'), RoutingDrive));
             context.Response.Clear();
             context.Response.ExpiresAbsolute = DateTime.Now;
             context.Response.ContentType = "text/plain";

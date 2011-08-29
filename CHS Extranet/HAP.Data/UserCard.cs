@@ -17,9 +17,8 @@ namespace HAP.Data.UserCard
         }
         public Init(string username)
         {
-            string ConnStringName = ConfigurationManager.ConnectionStrings[hapConfig.Current.ADSettings.ADConnectionString].ConnectionString;
-            DirectoryEntry DirectoryRoot = new DirectoryEntry(ConnStringName, hapConfig.Current.ADSettings.ADUsername, hapConfig.Current.ADSettings.ADPassword);
-            PrincipalContext pcontext = HAP.AD.ADUtil.PContext;
+            DirectoryEntry DirectoryRoot = HAP.AD.ADUtils.GetDirectoryRoot();
+            PrincipalContext pcontext = HAP.AD.ADUtils.GetPContext();
             UserPrincipal up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, username);
             UserLevel = UserCard.UserLevel.Teacher;
             try
@@ -30,7 +29,7 @@ namespace HAP.Data.UserCard
             catch { }
             try
             {
-                GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, hapConfig.Current.ADSettings.StudentsGroupName);
+                GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, hapConfig.Current.AD.StudentsGroup);
                 if (up.IsMemberOf(gp)) UserLevel = UserCard.UserLevel.Student;
             }
             catch { }
@@ -45,7 +44,7 @@ namespace HAP.Data.UserCard
             }
             catch { }
             if (!string.IsNullOrEmpty(up.EmployeeId)) EmployeeID = up.EmployeeId;
-            DirectoryEntry usersDE = new DirectoryEntry(ConnStringName, hapConfig.Current.ADSettings.ADUsername, hapConfig.Current.ADSettings.ADPassword);
+            DirectoryEntry usersDE = DirectoryRoot;
             DirectorySearcher ds = new DirectorySearcher(usersDE);
             ds.Filter = "(sAMAccountName=" + username + ")";
             //ds.Filter = "(sAMAccountName=rmstaff)";

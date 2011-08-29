@@ -83,8 +83,6 @@
                 function changeDate() {
                     if ($get('Cal').style.display == "") {
                         $get('Cal').style.display = "block";
-                        $get('Cal').style.top = (getPositionY($get('daylist')) + 30) + "px";
-                        $get('Cal').style.left = getPositionX($get('daylist')) + "px";
                         showcal = true;
                     }
                 }

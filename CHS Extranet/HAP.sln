@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Web", "HAP.Web\HAP.Web.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Silverlight", "HAP.Silverlight\HAP.Silverlight.csproj", "{9DCDBB22-ECEB-4220-A0FE-E786189F0B08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Config", "HAP.Config\HAP.Config.csproj", "{8E445E7B-246A-446A-B3B2-ED4F51C21768}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Silverlight.Browser", "HAP.Silverlight.Browser\HAP.Silverlight.Browser.csproj", "{E1C14EF8-AD23-48F5-9EFF-9A2F4A07CCC9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{A881389B-1A30-4196-A10B-ACA9C7A96292}"
@@ -34,8 +32,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Data.SQL", "HAP.Data.SQ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Data", "HAP.Data\HAP.Data.csproj", "{66768D2F-2190-4B13-BB6C-7195A342DB9A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Web.Configuration", "HAP.Web.Configuration\HAP.Web.Configuration.csproj", "{472C6692-1464-44ED-A2DB-5A8EE3E698C0}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Data.Quota", "HAP.Data.Quota\HAP.Data.Quota.csproj", "{335B9841-60EA-49CD-A32B-5866902330F5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP Quota Service", "HAP.Data.Quota.Service\HAP Quota Service.csproj", "{A06C244E-4136-4A30-97AD-F0717974A5D0}"
@@ -44,9 +40,11 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HAP Quota Service Setup", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.AD", "HAP.AD\HAP.AD.csproj", "{36468E14-F8AF-4794-AB76-25571A54682F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Web.Configuration", "HAP.Web.Config\HAP.Web.Configuration.csproj", "{1F2CFBBF-1C06-4CAC-BB4B-5551BF6A398C}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 16
+		SccNumberOfProjects = 15
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs08
 		SccLocalPath0 = .
@@ -56,45 +54,42 @@ Global
 		SccProjectUniqueName2 = HAP.Web\\HAP.Web.csproj
 		SccProjectName2 = HAP.Web
 		SccLocalPath2 = HAP.Web
-		SccProjectUniqueName3 = HAP.Config\\HAP.Config.csproj
-		SccProjectName3 = HAP.Config
-		SccLocalPath3 = HAP.Config
-		SccProjectUniqueName4 = HAP.Silverlight.Browser\\HAP.Silverlight.Browser.csproj
-		SccProjectName4 = HAP.Silverlight.Browser
-		SccLocalPath4 = HAP.Silverlight.Browser
-		SccProjectUniqueName5 = HAP\u0020Logon\u0020Tracker\\HAP\u0020Logon\u0020Tracker.csproj
-		SccProjectName5 = HAP\u0020Logon\u0020Tracker
-		SccLocalPath5 = HAP\u0020Logon\u0020Tracker
-		SccProjectUniqueName6 = HAP\u0020Logon\u0020Tracker\u0020Installer\\HAP\u0020Logon\u0020Tracker\u0020Installer.vdproj
-		SccProjectName6 = HAP\u0020Logon\u0020Tracker\u0020Installer
-		SccLocalPath6 = HAP\u0020Logon\u0020Tracker\u0020Installer
-		SccProjectUniqueName7 = HAP\u0020User\u0020Card\\HAP\u0020User\u0020Card.csproj
-		SccProjectName7 = HAP\u0020User\u0020Card
-		SccLocalPath7 = HAP\u0020User\u0020Card
-		SccProjectUniqueName8 = HAP\u0020User\u0020Card\u0020Installer\\HAP\u0020User\u0020Card\u0020Installer.vdproj
-		SccProjectName8 = HAP\u0020User\u0020Card\u0020Installer
-		SccLocalPath8 = HAP\u0020User\u0020Card\u0020Installer
-		SccProjectUniqueName9 = HAP.Data.SQL\\HAP.Data.SQL.csproj
-		SccProjectName9 = HAP.Data.SQL
-		SccLocalPath9 = HAP.Data.SQL
-		SccProjectUniqueName10 = HAP.Data\\HAP.Data.csproj
-		SccProjectName10 = HAP.Data
-		SccLocalPath10 = HAP.Data
-		SccProjectUniqueName11 = HAP.Web.Configuration\\HAP.Web.Configuration.csproj
-		SccProjectName11 = HAP.Web.Configuration
-		SccLocalPath11 = HAP.Web.Configuration
-		SccProjectUniqueName12 = HAP.Data.Quota\\HAP.Data.Quota.csproj
-		SccProjectName12 = HAP.Data.Quota
-		SccLocalPath12 = HAP.Data.Quota
-		SccProjectUniqueName13 = HAP.Data.Quota.Service\\HAP\u0020Quota\u0020Service.csproj
-		SccProjectName13 = HAP.Data.Quota.Service
-		SccLocalPath13 = HAP.Data.Quota.Service
-		SccProjectUniqueName14 = HAP\u0020Quota\u0020Service\u0020Setup\\HAP\u0020Quota\u0020Service\u0020Setup.vdproj
-		SccProjectName14 = HAP\u0020Quota\u0020Service\u0020Setup
-		SccLocalPath14 = HAP\u0020Quota\u0020Service\u0020Setup
-		SccProjectUniqueName15 = HAP.AD\\HAP.AD.csproj
-		SccProjectName15 = HAP.AD
-		SccLocalPath15 = HAP.AD
+		SccProjectUniqueName3 = HAP.Silverlight.Browser\\HAP.Silverlight.Browser.csproj
+		SccProjectName3 = HAP.Silverlight.Browser
+		SccLocalPath3 = HAP.Silverlight.Browser
+		SccProjectUniqueName4 = HAP\u0020Logon\u0020Tracker\\HAP\u0020Logon\u0020Tracker.csproj
+		SccProjectName4 = HAP\u0020Logon\u0020Tracker
+		SccLocalPath4 = HAP\u0020Logon\u0020Tracker
+		SccProjectUniqueName5 = HAP\u0020Logon\u0020Tracker\u0020Installer\\HAP\u0020Logon\u0020Tracker\u0020Installer.vdproj
+		SccProjectName5 = HAP\u0020Logon\u0020Tracker\u0020Installer
+		SccLocalPath5 = HAP\u0020Logon\u0020Tracker\u0020Installer
+		SccProjectUniqueName6 = HAP\u0020User\u0020Card\\HAP\u0020User\u0020Card.csproj
+		SccProjectName6 = HAP\u0020User\u0020Card
+		SccLocalPath6 = HAP\u0020User\u0020Card
+		SccProjectUniqueName7 = HAP\u0020User\u0020Card\u0020Installer\\HAP\u0020User\u0020Card\u0020Installer.vdproj
+		SccProjectName7 = HAP\u0020User\u0020Card\u0020Installer
+		SccLocalPath7 = HAP\u0020User\u0020Card\u0020Installer
+		SccProjectUniqueName8 = HAP.Data.SQL\\HAP.Data.SQL.csproj
+		SccProjectName8 = HAP.Data.SQL
+		SccLocalPath8 = HAP.Data.SQL
+		SccProjectUniqueName9 = HAP.Data\\HAP.Data.csproj
+		SccProjectName9 = HAP.Data
+		SccLocalPath9 = HAP.Data
+		SccProjectUniqueName10 = HAP.Data.Quota\\HAP.Data.Quota.csproj
+		SccProjectName10 = HAP.Data.Quota
+		SccLocalPath10 = HAP.Data.Quota
+		SccProjectUniqueName11 = HAP.Data.Quota.Service\\HAP\u0020Quota\u0020Service.csproj
+		SccProjectName11 = HAP.Data.Quota.Service
+		SccLocalPath11 = HAP.Data.Quota.Service
+		SccProjectUniqueName12 = HAP\u0020Quota\u0020Service\u0020Setup\\HAP\u0020Quota\u0020Service\u0020Setup.vdproj
+		SccProjectName12 = HAP\u0020Quota\u0020Service\u0020Setup
+		SccLocalPath12 = HAP\u0020Quota\u0020Service\u0020Setup
+		SccProjectUniqueName13 = HAP.AD\\HAP.AD.csproj
+		SccProjectName13 = HAP.AD
+		SccLocalPath13 = HAP.AD
+		SccProjectUniqueName14 = HAP.Web.Config\\HAP.Web.Configuration.csproj
+		SccProjectName14 = HAP.Web.Config
+		SccLocalPath14 = HAP.Web.Config
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -131,20 +126,6 @@ Global
 		{9DCDBB22-ECEB-4220-A0FE-E786189F0B08}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{9DCDBB22-ECEB-4220-A0FE-E786189F0B08}.Release|x64.ActiveCfg = Release|Any CPU
 		{9DCDBB22-ECEB-4220-A0FE-E786189F0B08}.Release|x86.ActiveCfg = Release|Any CPU
-		{8E445E7B-246A-446A-B3B2-ED4F51C21768}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{8E445E7B-246A-446A-B3B2-ED4F51C21768}.Debug|Any CPU.Build.0 = Debug|x86
-		{8E445E7B-246A-446A-B3B2-ED4F51C21768}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{8E445E7B-246A-446A-B3B2-ED4F51C21768}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{8E445E7B-246A-446A-B3B2-ED4F51C21768}.Debug|x64.ActiveCfg = Debug|x86
-		{8E445E7B-246A-446A-B3B2-ED4F51C21768}.Debug|x86.ActiveCfg = Debug|x86
-		{8E445E7B-246A-446A-B3B2-ED4F51C21768}.Debug|x86.Build.0 = Debug|x86
-		{8E445E7B-246A-446A-B3B2-ED4F51C21768}.Release|Any CPU.ActiveCfg = Release|x86
-		{8E445E7B-246A-446A-B3B2-ED4F51C21768}.Release|Any CPU.Build.0 = Release|x86
-		{8E445E7B-246A-446A-B3B2-ED4F51C21768}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{8E445E7B-246A-446A-B3B2-ED4F51C21768}.Release|Mixed Platforms.Build.0 = Release|x86
-		{8E445E7B-246A-446A-B3B2-ED4F51C21768}.Release|x64.ActiveCfg = Release|x86
-		{8E445E7B-246A-446A-B3B2-ED4F51C21768}.Release|x86.ActiveCfg = Release|x86
-		{8E445E7B-246A-446A-B3B2-ED4F51C21768}.Release|x86.Build.0 = Release|x86
 		{E1C14EF8-AD23-48F5-9EFF-9A2F4A07CCC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E1C14EF8-AD23-48F5-9EFF-9A2F4A07CCC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1C14EF8-AD23-48F5-9EFF-9A2F4A07CCC9}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -233,18 +214,6 @@ Global
 		{66768D2F-2190-4B13-BB6C-7195A342DB9A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{66768D2F-2190-4B13-BB6C-7195A342DB9A}.Release|x64.ActiveCfg = Release|Any CPU
 		{66768D2F-2190-4B13-BB6C-7195A342DB9A}.Release|x86.ActiveCfg = Release|Any CPU
-		{472C6692-1464-44ED-A2DB-5A8EE3E698C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{472C6692-1464-44ED-A2DB-5A8EE3E698C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{472C6692-1464-44ED-A2DB-5A8EE3E698C0}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{472C6692-1464-44ED-A2DB-5A8EE3E698C0}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{472C6692-1464-44ED-A2DB-5A8EE3E698C0}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{472C6692-1464-44ED-A2DB-5A8EE3E698C0}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{472C6692-1464-44ED-A2DB-5A8EE3E698C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{472C6692-1464-44ED-A2DB-5A8EE3E698C0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{472C6692-1464-44ED-A2DB-5A8EE3E698C0}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{472C6692-1464-44ED-A2DB-5A8EE3E698C0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{472C6692-1464-44ED-A2DB-5A8EE3E698C0}.Release|x64.ActiveCfg = Release|Any CPU
-		{472C6692-1464-44ED-A2DB-5A8EE3E698C0}.Release|x86.ActiveCfg = Release|Any CPU
 		{335B9841-60EA-49CD-A32B-5866902330F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{335B9841-60EA-49CD-A32B-5866902330F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{335B9841-60EA-49CD-A32B-5866902330F5}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -293,6 +262,18 @@ Global
 		{36468E14-F8AF-4794-AB76-25571A54682F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{36468E14-F8AF-4794-AB76-25571A54682F}.Release|x64.ActiveCfg = Release|Any CPU
 		{36468E14-F8AF-4794-AB76-25571A54682F}.Release|x86.ActiveCfg = Release|Any CPU
+		{1F2CFBBF-1C06-4CAC-BB4B-5551BF6A398C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F2CFBBF-1C06-4CAC-BB4B-5551BF6A398C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F2CFBBF-1C06-4CAC-BB4B-5551BF6A398C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1F2CFBBF-1C06-4CAC-BB4B-5551BF6A398C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1F2CFBBF-1C06-4CAC-BB4B-5551BF6A398C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1F2CFBBF-1C06-4CAC-BB4B-5551BF6A398C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1F2CFBBF-1C06-4CAC-BB4B-5551BF6A398C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F2CFBBF-1C06-4CAC-BB4B-5551BF6A398C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F2CFBBF-1C06-4CAC-BB4B-5551BF6A398C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{1F2CFBBF-1C06-4CAC-BB4B-5551BF6A398C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{1F2CFBBF-1C06-4CAC-BB4B-5551BF6A398C}.Release|x64.ActiveCfg = Release|Any CPU
+		{1F2CFBBF-1C06-4CAC-BB4B-5551BF6A398C}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
