@@ -124,7 +124,9 @@ namespace HAP.Silverlight.Browser
             soap = new apiSoapClient(new BasicHttpBinding(BasicHttpSecurityMode.Transport), new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
             soap.UploadFileCompleted += new EventHandler<System.ComponentModel.AsyncCompletedEventArgs>(soap_UploadFileCompleted);
             long temp = File.Length - BytesUploaded;
-            byte[] buffer = new Byte[4096];
+            int buffersize = 4096;
+            if (temp < 4096) buffersize = Convert.ToInt32(temp) + 1;
+            byte[] buffer = new Byte[buffersize];
             Stream fileStream = File.OpenRead();
             fileStream.Position = BytesUploaded;
             int a = buffer.Length;

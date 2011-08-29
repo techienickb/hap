@@ -152,7 +152,7 @@ namespace HAP.Web
                 ticketslist.DataBind();
             }
             List<LinkGroup> groups = new List<LinkGroup>();
-            foreach (LinkGroup group in config.Homepage.Groups)
+            foreach (LinkGroup group in config.Homepage.Groups.Values)
                 if (group.ShowTo == "All") groups.Add(group);
                 else if (group.ShowTo != "None")
                 {
