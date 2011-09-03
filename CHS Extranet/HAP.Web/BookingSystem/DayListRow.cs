@@ -36,16 +36,15 @@ namespace HAP.Web.BookingSystem
         {
             hapConfig config = hapConfig.Current;
 
-            ResourceType RoomType = config.BookingSystem.Resources[Room].ResourceType;
+            ResourceType RoomType = config.BookingSystem.Resources[Room].Type;
 
             HAP.Data.BookingSystem.BookingSystem bs = new HAP.Data.BookingSystem.BookingSystem(Date);
-            foreach (lesson lesson in config.BookingSystem.Lessons)
+            foreach (Lesson lesson in config.BookingSystem.Lessons)
                 if (Show == "All" || Show == lesson.Name)
                 {
-                    Booking b = bs.getBooking(Room, lesson.OldID.ToString());
-                    if (b.Name == "FREE" || lesson.OldID == -1) b = bs.getBooking(Room, lesson.Name);
+                    Booking b = bs.getBooking(Room, lesson.Name);
                     bool bookie = false;
-                    if (isAdmin || b.Username == HAP.AD.ADUtil.Username) bookie = true;
+                    if (isAdmin || b.Username == Page.User.Identity.Name) bookie = true;
                     string lessonname = b.Name;
                     if (lessonname.Length > 17) lessonname = lessonname.Remove(17) + "...";
                     if (lessonname.Length > 16 && b.Static) lessonname = lessonname.Remove(14) + "...";
@@ -78,7 +77,7 @@ namespace HAP.Web.BookingSystem
             get
             {
                 bool vis = false;
-                foreach (string s in hapConfig.Current.BookingSystem.AdminGroups.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
+                foreach (string s in hapConfig.Current.BookingSystem.Admins.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
                     if (!vis) vis = Page.User.IsInRole(s);
                 if (vis) return true;
                 return Page.User.IsInRole("Domain Admins");

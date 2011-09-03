@@ -28,18 +28,18 @@ namespace HAP.Web.BookingSystem
             StringBuilder sb = new StringBuilder();
             StringWriter sw = new StringWriter(sb);
 
-            DateTime startDate = new DateTime(date.Year, date.Month, date.Day, int.Parse(config.BookingSystem.Lessons[booking.Lesson].StartTime.Substring(0, config.BookingSystem.Lessons[booking.Lesson].StartTime.IndexOf(':'))), int.Parse(config.BookingSystem.Lessons[booking.Lesson].StartTime.Substring(config.BookingSystem.Lessons[booking.Lesson].StartTime.IndexOf(':') + 1, 2)), 0);
-            DateTime endDate = new DateTime(date.Year, date.Month, date.Day, int.Parse(config.BookingSystem.Lessons[booking.Lesson].EndTime.Substring(0, config.BookingSystem.Lessons[booking.Lesson].EndTime.IndexOf(':'))), int.Parse(config.BookingSystem.Lessons[booking.Lesson].EndTime.Substring(config.BookingSystem.Lessons[booking.Lesson].EndTime.IndexOf(':') + 1, 2)), 0);
+            DateTime startDate = new DateTime(date.Year, date.Month, date.Day, config.BookingSystem.Lessons.Get(booking.Lesson).StartTime.Hour, config.BookingSystem.Lessons.Get(booking.Lesson).StartTime.Minute, 0);
+            DateTime endDate = new DateTime(date.Year, date.Month, date.Day, config.BookingSystem.Lessons.Get(booking.Lesson).EndTime.Hour, config.BookingSystem.Lessons.Get(booking.Lesson).EndTime.Minute, 0);
             string location = "";
-            bookingResource resource = config.BookingSystem.Resources[booking.Room];
+            Resource resource = config.BookingSystem.Resources[booking.Room];
 
             Templates t = new Templates();
             Template template = t["general"];
             if (t.ContainsKey(resource.Name)) template = t[resource.Name];
             string ltcount = "";
-            if (resource.ResourceType == ResourceType.ITRoom) location = booking.Room;
-            else if (resource.ResourceType == ResourceType.Laptops) { location = booking.LTRoom; ltcount = booking.LTCount.ToString(); }
-            else if (resource.ResourceType == ResourceType.Equipment) location = booking.EquipRoom;
+            if (resource.Type == ResourceType.Room) location = booking.Room;
+            else if (resource.Type == ResourceType.Laptops) { location = booking.LTRoom; ltcount = booking.LTCount.ToString(); }
+            else if (resource.Type == ResourceType.Equipment) location = booking.EquipRoom;
             
             string summary = string.Format(template.Subject, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, ltcount);
             string description = string.Format(template.Content, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, ltcount);
@@ -52,8 +52,8 @@ namespace HAP.Web.BookingSystem
             sb.AppendLine("BEGIN:VEVENT");
             sb.AppendLine("DTSTART:" + startDate.ToUniversalTime().ToString(DateFormat));
             sb.AppendLine("DTEND:" + endDate.ToUniversalTime().ToString(DateFormat));
-            sb.AppendLine("ATTENDEE;ROLE=REQ-PARTICIPANT;CN=" + booking.User.DisplayName + ":MAILTO:" + booking.User.EmailAddress);
-            sb.AppendLine("ORGANIZER;CN=" + booking.User.DisplayName + ":MAILTO:" + booking.User.EmailAddress);
+            sb.AppendLine("ATTENDEE;ROLE=REQ-PARTICIPANT;CN=" + booking.User.DisplayName + ":MAILTO:" + booking.User.Email);
+            sb.AppendLine("ORGANIZER;CN=" + booking.User.DisplayName + ":MAILTO:" + booking.User.Email);
             sb.AppendLine("LOCATION:" + location);
             sb.AppendLine("UID:" + booking.uid);
             sb.AppendLine("DTSTAMP:" + DateTime.Now.ToString(DateFormat));
@@ -78,9 +78,9 @@ namespace HAP.Web.BookingSystem
             MailMessage mes = new MailMessage();
             IFormatProvider culture = new CultureInfo("en-gb");
             mes.Subject = summary;
-            mes.From = mes.Sender = new MailAddress(config.BaseSettings.AdminEmailAddress, "ICT Department");
+            mes.From = mes.Sender = new MailAddress(config.SMTP.FromEmail, config.SMTP.FromUser);
             mes.ReplyToList.Add(mes.From);
-            mes.To.Add(new MailAddress(booking.User.EmailAddress, booking.User.DisplayName));
+            mes.To.Add(new MailAddress(booking.User.Email, booking.User.DisplayName));
 
             mes.Body = description;
 
@@ -89,43 +89,35 @@ namespace HAP.Web.BookingSystem
             mes.AlternateViews.Add(av);
 
             //mes.Attachments.Add(new Attachment(file.FullName, "text/calendar; method=REQUEST; name=ITBooking.ics"));
-            SmtpClient client = new SmtpClient(config.BaseSettings.SMTPServer);
-            if (!string.IsNullOrEmpty(config.BaseSettings.SMTPServerUsername))
-                client.Credentials = new NetworkCredential(config.BaseSettings.SMTPServerUsername, config.BaseSettings.SMTPServerPassword);
-            client.EnableSsl = config.BaseSettings.SMTPServerSSL;
-            client.Port = config.BaseSettings.SMTPServerPort;
+            SmtpClient client = new SmtpClient(config.SMTP.Server);
+            if (!string.IsNullOrEmpty(config.SMTP.User))
+                client.Credentials = new NetworkCredential(config.SMTP.User, config.SMTP.Password);
+            client.EnableSsl = config.SMTP.SSL;
+            client.Port = config.SMTP.Port;
             client.Send(mes);
         }
 
-        public static void Generate(Booking booking, DateTime date, string username)
+        public static void Generate(Booking booking, DateTime date, bool emailadmins)
         {
             hapConfig config = hapConfig.Current;
             StringBuilder sb = new StringBuilder();
             StringWriter sw = new StringWriter(sb);
 
-            DateTime startDate = new DateTime(date.Year, date.Month, date.Day, int.Parse(config.BookingSystem.Lessons[booking.Lesson].StartTime.Substring(0, config.BookingSystem.Lessons[booking.Lesson].StartTime.IndexOf(':'))), int.Parse(config.BookingSystem.Lessons[booking.Lesson].StartTime.Substring(config.BookingSystem.Lessons[booking.Lesson].StartTime.IndexOf(':') + 1, 2)), 0);
-            DateTime endDate = new DateTime(date.Year, date.Month, date.Day, int.Parse(config.BookingSystem.Lessons[booking.Lesson].EndTime.Substring(0, config.BookingSystem.Lessons[booking.Lesson].EndTime.IndexOf(':'))), int.Parse(config.BookingSystem.Lessons[booking.Lesson].EndTime.Substring(config.BookingSystem.Lessons[booking.Lesson].EndTime.IndexOf(':') + 1, 2)), 0);
+            DateTime startDate = new DateTime(date.Year, date.Month, date.Day, config.BookingSystem.Lessons.Get(booking.Lesson).StartTime.Hour, config.BookingSystem.Lessons.Get(booking.Lesson).StartTime.Minute, 0);
+            DateTime endDate = new DateTime(date.Year, date.Month, date.Day, config.BookingSystem.Lessons.Get(booking.Lesson).EndTime.Hour, config.BookingSystem.Lessons.Get(booking.Lesson).EndTime.Minute, 0);
             string location = "";
-            bookingResource resource = config.BookingSystem.Resources[booking.Room];
+            Resource resource = config.BookingSystem.Resources[booking.Room];
             Templates t = new Templates();
             Template template = t["generaladmin"];
             if (t.ContainsKey(resource.Name)) template = t[resource.Name + "admin"];
             string ltcount = "";
-            if (resource.ResourceType == ResourceType.ITRoom) location = booking.Room;
-            else if (resource.ResourceType == ResourceType.Laptops) { location = booking.LTRoom; ltcount = booking.LTCount.ToString(); }
-            else if (resource.ResourceType == ResourceType.Equipment) location = booking.EquipRoom;
+            if (resource.Type == ResourceType.Room) location = booking.Room;
+            else if (resource.Type == ResourceType.Laptops) { location = booking.LTRoom; ltcount = booking.LTCount.ToString(); }
+            else if (resource.Type == ResourceType.Equipment) location = booking.EquipRoom;
             
             string summary = string.Format(template.Subject, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, ltcount);
             string description = string.Format(template.Content, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, ltcount);
 
-            List<UserPrincipal> ups = new List<UserPrincipal>();
-
-            ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
-            string _DomainDN = connObj.ConnectionString.Remove(0, connObj.ConnectionString.IndexOf("DC="));
-            PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
-            foreach (string user in resource.Admins.Split(new string[] { ", "}, StringSplitOptions.RemoveEmptyEntries))
-                if (user == "Inherit") ups.Add(UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, username));
-                else ups.Add(UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, user));
 
             sb.AppendLine("BEGIN:VCALENDAR");
             sb.AppendLine("VERSION:2.0");
@@ -135,10 +127,11 @@ namespace HAP.Web.BookingSystem
             sb.AppendLine("BEGIN:VEVENT");
             sb.AppendLine("DTSTART:" + startDate.ToUniversalTime().ToString(DateFormat));
             sb.AppendLine("DTEND:" + endDate.ToUniversalTime().ToString(DateFormat));
-            sb.AppendLine("ORGANIZER;CN=" + booking.User.DisplayName + ":MAILTO:" + booking.User.EmailAddress);
-            sb.AppendLine("ATTENDEE;ROLE=REQ-PARTICIPANT;CN=" + booking.User.DisplayName + ":MAILTO:" + booking.User.EmailAddress);
-            foreach (UserPrincipal up in ups)
-                sb.AppendLine("ATTENDEE;ROLE=REQ-PARTICIPANT;CN=" + up.DisplayName + ":MAILTO:" + up.EmailAddress);
+            sb.AppendLine("ORGANIZER;CN=" + booking.User.DisplayName + ":MAILTO:" + booking.User.Email);
+            sb.AppendLine("ATTENDEE;ROLE=REQ-PARTICIPANT;CN=" + booking.User.DisplayName + ":MAILTO:" + booking.User.Email);
+            foreach (string s in hapConfig.Current.BookingSystem.Resources[booking.Room].Admins.Split(new char[] { ',' }))
+                foreach (HAP.AD.User u in HAP.AD.ADUtils.FindUsers(s.Trim()))
+                    sb.AppendLine("ATTENDEE;ROLE=REQ-PARTICIPANT;CN=" + u.DisplayName + ":MAILTO:" + u.Email);
             sb.AppendLine("LOCATION:" + location);
             sb.AppendLine("UID:" + booking.uid);
             sb.AppendLine("DTSTAMP:" + DateTime.Now.ToString(DateFormat));
@@ -163,10 +156,11 @@ namespace HAP.Web.BookingSystem
             MailMessage mes = new MailMessage();
             IFormatProvider culture = new CultureInfo("en-gb");
             mes.Subject = summary;
-            mes.From = mes.Sender = new MailAddress(config.BaseSettings.AdminEmailAddress, "ICT Department");
+            mes.From = mes.Sender = new MailAddress(config.SMTP.FromEmail, config.SMTP.FromUser);
             mes.ReplyToList.Add(mes.From);
-            foreach (UserPrincipal up in ups)
-                mes.To.Add(new MailAddress(up.EmailAddress, up.DisplayName));
+            foreach (string s in hapConfig.Current.BookingSystem.Resources[booking.Room].Admins.Split(new char[] { ',' }))
+                foreach (HAP.AD.User u in HAP.AD.ADUtils.FindUsers(s.Trim()))
+                    mes.To.Add(new MailAddress(u.Email, u.DisplayName));
 
             mes.Body = description;
 
@@ -175,11 +169,11 @@ namespace HAP.Web.BookingSystem
             mes.AlternateViews.Add(av);
 
             //mes.Attachments.Add(new Attachment(file.FullName, "text/calendar; method=REQUEST; name=ITBooking.ics"));
-            SmtpClient client = new SmtpClient(config.BaseSettings.SMTPServer);
-            if (!string.IsNullOrEmpty(config.BaseSettings.SMTPServerUsername))
-                client.Credentials = new NetworkCredential(config.BaseSettings.SMTPServerUsername, config.BaseSettings.SMTPServerPassword);
-            client.EnableSsl = config.BaseSettings.SMTPServerSSL;
-            client.Port = config.BaseSettings.SMTPServerPort;
+            SmtpClient client = new SmtpClient(config.SMTP.Server);
+            if (!string.IsNullOrEmpty(config.SMTP.User))
+                client.Credentials = new NetworkCredential(config.SMTP.User, config.SMTP.Password);
+            client.EnableSsl = config.SMTP.SSL;
+            client.Port = config.SMTP.Port;
             client.Send(mes);
         }
 
@@ -189,16 +183,16 @@ namespace HAP.Web.BookingSystem
             StringBuilder sb = new StringBuilder();
             StringWriter sw = new StringWriter(sb);
 
-            DateTime startDate = new DateTime(date.Year, date.Month, date.Day, int.Parse(config.BookingSystem.Lessons[booking.Lesson].StartTime.Substring(0, config.BookingSystem.Lessons[booking.Lesson].StartTime.IndexOf(':'))), int.Parse(config.BookingSystem.Lessons[booking.Lesson].StartTime.Substring(config.BookingSystem.Lessons[booking.Lesson].StartTime.IndexOf(':') + 1, 2)), 0);
-            DateTime endDate = new DateTime(date.Year, date.Month, date.Day, int.Parse(config.BookingSystem.Lessons[booking.Lesson].EndTime.Substring(0, config.BookingSystem.Lessons[booking.Lesson].EndTime.IndexOf(':'))), int.Parse(config.BookingSystem.Lessons[booking.Lesson].EndTime.Substring(config.BookingSystem.Lessons[booking.Lesson].EndTime.IndexOf(':') + 1, 2)), 0);
+            DateTime startDate = new DateTime(date.Year, date.Month, date.Day, config.BookingSystem.Lessons.Get(booking.Lesson).StartTime.Hour, config.BookingSystem.Lessons.Get(booking.Lesson).StartTime.Minute, 0);
+            DateTime endDate = new DateTime(date.Year, date.Month, date.Day, config.BookingSystem.Lessons.Get(booking.Lesson).EndTime.Hour, config.BookingSystem.Lessons.Get(booking.Lesson).EndTime.Minute, 0);
             string location = "";
-            bookingResource resource = config.BookingSystem.Resources[booking.Room];
-            if (resource.ResourceType == ResourceType.ITRoom) location = booking.Room;
-            else if (resource.ResourceType == ResourceType.Laptops) location = booking.LTRoom;
-            else if (resource.ResourceType == ResourceType.Equipment) location = booking.EquipRoom;
+            Resource resource = config.BookingSystem.Resources[booking.Room];
+            if (resource.Type == ResourceType.Room) location = booking.Room;
+            else if (resource.Type == ResourceType.Laptops) location = booking.LTRoom;
+            else if (resource.Type == ResourceType.Equipment) location = booking.EquipRoom;
             string summary = "Cancellation of " + booking.Name + " in " + location;
             string description = "Cancellation of " + booking.Name + " in " + location + " during " + booking.Lesson + " on " + booking.Date.ToShortDateString();
-            if (resource.ResourceType == ResourceType.Laptops)
+            if (resource.Type == ResourceType.Laptops)
             {
                 summary += " with the " + booking.Room + " [" + booking.LTCount.ToString() + "]";
                 description += " with the " + booking.Room + " [" + booking.LTCount.ToString() + "]";
@@ -212,7 +206,7 @@ namespace HAP.Web.BookingSystem
             sb.AppendLine("BEGIN:VEVENT");
             sb.AppendLine("DTSTART:" + startDate.ToUniversalTime().ToString(DateFormat));
             sb.AppendLine("DTEND:" + endDate.ToUniversalTime().ToString(DateFormat));
-            sb.AppendLine("ORGANIZER:MAILTO:" + booking.User.EmailAddress);
+            sb.AppendLine("ORGANIZER:MAILTO:" + booking.User.Email);
             sb.AppendLine("LOCATION:" + location);
             sb.AppendLine("UID:" + booking.uid);
             sb.AppendLine("DTSTAMP:" + DateTime.Now.ToString(DateFormat));
@@ -233,9 +227,9 @@ namespace HAP.Web.BookingSystem
             MailMessage mes = new MailMessage();
             IFormatProvider culture = new CultureInfo("en-gb");
             mes.Subject = summary;
-            mes.From = mes.Sender = new MailAddress(config.BaseSettings.AdminEmailAddress, "ICT Department");
+            mes.From = mes.Sender = new MailAddress(config.SMTP.FromEmail, config.SMTP.FromUser);
             mes.ReplyToList.Add(mes.From);
-            mes.To.Add(new MailAddress(booking.User.EmailAddress, booking.User.DisplayName));
+            mes.To.Add(new MailAddress(booking.User.Email, booking.User.DisplayName));
 
             mes.Body = description;
 
@@ -244,30 +238,30 @@ namespace HAP.Web.BookingSystem
             mes.AlternateViews.Add(av);
 
             //mes.Attachments.Add(new Attachment(file.FullName, "text/calendar; method=REQUEST; name=ITBooking.ics"));
-            SmtpClient client = new SmtpClient(config.BaseSettings.SMTPServer);
-            if (!string.IsNullOrEmpty(config.BaseSettings.SMTPServerUsername))
-                client.Credentials = new NetworkCredential(config.BaseSettings.SMTPServerUsername, config.BaseSettings.SMTPServerPassword);
-            client.EnableSsl = config.BaseSettings.SMTPServerSSL;
-            client.Port = config.BaseSettings.SMTPServerPort;
+            SmtpClient client = new SmtpClient(config.SMTP.Server);
+            if (!string.IsNullOrEmpty(config.SMTP.User))
+                client.Credentials = new NetworkCredential(config.SMTP.User, config.SMTP.Password);
+            client.EnableSsl = config.SMTP.SSL;
+            client.Port = config.SMTP.Port;
             client.Send(mes);
         }
 
-        public static void GenerateCancel(Booking booking, DateTime date, string username)
+        public static void GenerateCancel(Booking booking, DateTime date, bool emailadmins)
         {
             hapConfig config = hapConfig.Current;
             StringBuilder sb = new StringBuilder();
             StringWriter sw = new StringWriter(sb);
 
-            DateTime startDate = new DateTime(date.Year, date.Month, date.Day, int.Parse(config.BookingSystem.Lessons[booking.Lesson].StartTime.Substring(0, config.BookingSystem.Lessons[booking.Lesson].StartTime.IndexOf(':'))), int.Parse(config.BookingSystem.Lessons[booking.Lesson].StartTime.Substring(config.BookingSystem.Lessons[booking.Lesson].StartTime.IndexOf(':') + 1, 2)), 0);
-            DateTime endDate = new DateTime(date.Year, date.Month, date.Day, int.Parse(config.BookingSystem.Lessons[booking.Lesson].EndTime.Substring(0, config.BookingSystem.Lessons[booking.Lesson].EndTime.IndexOf(':'))), int.Parse(config.BookingSystem.Lessons[booking.Lesson].EndTime.Substring(config.BookingSystem.Lessons[booking.Lesson].EndTime.IndexOf(':') + 1, 2)), 0);
+            DateTime startDate = new DateTime(date.Year, date.Month, date.Day, config.BookingSystem.Lessons.Get(booking.Lesson).StartTime.Hour, config.BookingSystem.Lessons.Get(booking.Lesson).StartTime.Minute, 0);
+            DateTime endDate = new DateTime(date.Year, date.Month, date.Day, config.BookingSystem.Lessons.Get(booking.Lesson).EndTime.Hour, config.BookingSystem.Lessons.Get(booking.Lesson).EndTime.Minute, 0);
             string location = "";
-            bookingResource resource = config.BookingSystem.Resources[booking.Room];
-            if (resource.ResourceType == ResourceType.ITRoom) location = booking.Room;
-            else if (resource.ResourceType == ResourceType.Laptops) location = booking.LTRoom;
-            else if (resource.ResourceType == ResourceType.Equipment) location = booking.EquipRoom;
+            Resource resource = config.BookingSystem.Resources[booking.Room];
+            if (resource.Type == ResourceType.Room) location = booking.Room;
+            else if (resource.Type == ResourceType.Laptops) location = booking.LTRoom;
+            else if (resource.Type == ResourceType.Equipment) location = booking.EquipRoom;
             string summary = "Cancellation of " + booking.Name + " in " + location;
             string description = "Cancellation of " + booking.Name + " in " + location + " during " + booking.Lesson + " on " + booking.Date.ToShortDateString();
-            if (resource.ResourceType == ResourceType.Laptops)
+            if (resource.Type == ResourceType.Laptops)
             {
                 summary += " with the " + booking.Room + " [" + booking.LTCount.ToString() + "]";
                 description += " with the " + booking.Room + " [" + booking.LTCount.ToString() + "]";
@@ -281,7 +275,7 @@ namespace HAP.Web.BookingSystem
             sb.AppendLine("BEGIN:VEVENT");
             sb.AppendLine("DTSTART:" + startDate.ToUniversalTime().ToString(DateFormat));
             sb.AppendLine("DTEND:" + endDate.ToUniversalTime().ToString(DateFormat));
-            sb.AppendLine("ORGANIZER:MAILTO:" + booking.User.EmailAddress);
+            sb.AppendLine("ORGANIZER:MAILTO:" + booking.User.Email);
             sb.AppendLine("LOCATION:" + location);
             sb.AppendLine("UID:" + booking.uid);
             sb.AppendLine("DTSTAMP:" + DateTime.Now.ToString(DateFormat));
@@ -302,20 +296,13 @@ namespace HAP.Web.BookingSystem
             MailMessage mes = new MailMessage();
             IFormatProvider culture = new CultureInfo("en-gb");
             mes.Subject = summary;
-            mes.From = mes.Sender = new MailAddress(config.BaseSettings.AdminEmailAddress, "ICT Department");
+            mes.From = mes.Sender = new MailAddress(config.SMTP.FromEmail, config.SMTP.FromUser);
             mes.ReplyToList.Add(mes.From);
 
-            List<UserPrincipal> ups = new List<UserPrincipal>();
 
-            ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
-            string _DomainDN = connObj.ConnectionString.Remove(0, connObj.ConnectionString.IndexOf("DC="));
-            PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
-            foreach (string user in resource.Admins.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                if (user == "Inherit") ups.Add(UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, username));
-                else ups.Add(UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, user));
-
-            foreach (UserPrincipal up in ups)
-                mes.To.Add(new MailAddress(up.EmailAddress, up.DisplayName));
+            foreach (string s in hapConfig.Current.BookingSystem.Resources[booking.Room].Admins.Split(new char[] { ',' }))
+                foreach (HAP.AD.User u in HAP.AD.ADUtils.FindUsers(s.Trim()))
+                    mes.To.Add(new MailAddress(u.Email, u.DisplayName));
 
             mes.Body = description;
 
@@ -324,11 +311,11 @@ namespace HAP.Web.BookingSystem
             mes.AlternateViews.Add(av);
 
             //mes.Attachments.Add(new Attachment(file.FullName, "text/calendar; method=REQUEST; name=ITBooking.ics"));
-            SmtpClient client = new SmtpClient(config.BaseSettings.SMTPServer);
-            if (!string.IsNullOrEmpty(config.BaseSettings.SMTPServerUsername))
-                client.Credentials = new NetworkCredential(config.BaseSettings.SMTPServerUsername, config.BaseSettings.SMTPServerPassword);
-            client.EnableSsl = config.BaseSettings.SMTPServerSSL;
-            client.Port = config.BaseSettings.SMTPServerPort;
+            SmtpClient client = new SmtpClient(config.SMTP.Server);
+            if (!string.IsNullOrEmpty(config.SMTP.User))
+                client.Credentials = new NetworkCredential(config.SMTP.User, config.SMTP.Password);
+            client.EnableSsl = config.SMTP.SSL;
+            client.Port = config.SMTP.Port;
             client.Send(mes);
         }
     }

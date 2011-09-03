@@ -27,10 +27,9 @@ namespace HAP.Web.BookingSystem
                     {
                         Repeater r = room.FindControl(s) as Repeater;
                         List<Booking> bookings = new List<Booking>();
-                        foreach (lesson lesson in config.BookingSystem.Lessons)
+                        foreach (Lesson lesson in config.BookingSystem.Lessons)
                         {
-                            Booking b = bs.getBooking(s, lesson.OldID.ToString());
-                            if (b.Name == "FREE" || lesson.OldID == -1) b = bs.getBooking(s, lesson.Name);
+                            Booking b = bs.getBooking(s, lesson.Name);
                             bookings.Add(b);
                         }
                         r.DataSource = bookings.ToArray();
@@ -43,10 +42,9 @@ namespace HAP.Web.BookingSystem
                         {
                             Repeater r = c as Repeater;
                             List<Booking> bookings = new List<Booking>();
-                            foreach (lesson lesson in config.BookingSystem.Lessons)
+                            foreach (Lesson lesson in config.BookingSystem.Lessons)
                             {
-                                Booking b = bs.getBooking(Room, lesson.OldID.ToString());
-                                if (b.Name == "FREE" || lesson.OldID == -1) b = bs.getBooking(Room, lesson.Name);
+                                Booking b = bs.getBooking(Room, lesson.Name);
                                 bookings.Add(b);
                             }
                             r.DataSource = bookings.ToArray();
@@ -64,10 +62,9 @@ namespace HAP.Web.BookingSystem
                     {
                         Repeater r = c as Repeater;
                         List<Booking> bookings = new List<Booking>();
-                        foreach (lesson lesson in config.BookingSystem.Lessons)
+                        foreach (Lesson lesson in config.BookingSystem.Lessons)
                         {
-                            Booking b = bs.getBooking(Room, lesson.OldID.ToString());
-                            if (b.Name == "FREE" || lesson.OldID == -1) b = bs.getBooking(Room, lesson.Name);
+                            Booking b = bs.getBooking(Room, lesson.Name);
                             bookings.Add(b);
                         }
                         r.DataSource = bookings.ToArray();
@@ -90,12 +87,10 @@ namespace HAP.Web.BookingSystem
             get
             {
                 hapConfig config = hapConfig.Current;
-                foreach (lesson lesson in config.BookingSystem.Lessons)
+                foreach (Lesson lesson in config.BookingSystem.Lessons)
                 {
-                    string[] s1 = lesson.StartTime.Trim().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-                    string[] s2 = lesson.EndTime.Trim().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-                    DateTime starttime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, int.Parse(s1[0]), int.Parse(s1[1]), 0);
-                    DateTime endtime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, int.Parse(s2[0]), int.Parse(s2[1]), 0);
+                    DateTime starttime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, lesson.StartTime.Hour, lesson.StartTime.Minute, 0);
+                    DateTime endtime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, lesson.EndTime.Hour, lesson.EndTime.Minute, 0);
                     if (DateTime.Now >= starttime && DateTime.Now < endtime) return lesson.Name;
                 }
                 return "N/A";

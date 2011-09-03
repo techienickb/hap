@@ -17,7 +17,7 @@
                     Term Dates</h2>
                 <asp:Repeater ID="termdates" runat="server" DataSourceID="termdatesDataSource">
                     <HeaderTemplate>
-                        <table width="100%">
+                        <table style="width: 100%">
                     </HeaderTemplate>
                     <ItemTemplate>
                         <tr>

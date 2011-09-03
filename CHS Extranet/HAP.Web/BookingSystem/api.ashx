@@ -1,1 +1,1 @@
-﻿<%@ WebHandler Language="C#" CodeBehind="api.ashx.cs" Class="HAP.Web.BookingSystem.api1" %>
+﻿<%@ WebHandler Language="C#" CodeBehind="api.ashx.cs" Class="HAP.Web.BookingSystem.api" %>

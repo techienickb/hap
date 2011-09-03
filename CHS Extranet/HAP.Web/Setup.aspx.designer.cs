@@ -229,6 +229,24 @@ namespace HAP.Web {
         protected global::System.Web.UI.WebControls.CheckBox smtpssl;
         
         /// <summary>
+        /// smtpuser control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox smtpuser;
+        
+        /// <summary>
+        /// smtppassword control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox smtppassword;
+        
+        /// <summary>
         /// smtpfromname control.
         /// </summary>
         /// <remarks>
@@ -371,6 +389,15 @@ namespace HAP.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox bsclean;
+        
+        /// <summary>
+        /// bsadmins control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox bsadmins;
         
         /// <summary>
         /// bslessons control.

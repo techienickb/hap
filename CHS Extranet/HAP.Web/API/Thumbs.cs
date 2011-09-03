@@ -48,7 +48,7 @@ namespace HAP.Web.API
         {
             Context = context;
             config = hapConfig.Current;
-            uncpath unc; string userhome;
+            DriveMapping unc; string userhome;
             string path = Converter.DriveToUNC(RoutingPath.Replace('^', '&'), RoutingDrive, out unc, out userhome);
             FileInfo file = new FileInfo(path);
             FileStream fs = file.OpenRead();

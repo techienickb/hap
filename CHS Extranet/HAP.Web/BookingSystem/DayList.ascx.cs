@@ -17,7 +17,7 @@ namespace HAP.Web.BookingSystem
         {
             if (!IsPostBack)
             {
-                foreach (lesson lesson in hapConfig.Current.BookingSystem.Lessons)
+                foreach (Lesson lesson in hapConfig.Current.BookingSystem.Lessons)
                     lessonsel.Items.Add(lesson.Name);
             }
         }
@@ -46,17 +46,17 @@ namespace HAP.Web.BookingSystem
                 dl.Visible = true; noday.Text = string.Empty;
 
                 List<string> s = new List<string>();
-                List<lesson> lessons = new List<lesson>();
-                foreach (lesson lesson in config.BookingSystem.Lessons)
+                List<Lesson> lessons = new List<Lesson>();
+                foreach (Lesson lesson in config.BookingSystem.Lessons)
                     if (lessonsel.SelectedValue == "All" || lesson.Name == lessonsel.SelectedValue) lessons.Add(lesson);
                 headrepeater.DataSource = lessons.ToArray();
                 headrepeater.DataBind();
-                List<bookingResource> res = new List<bookingResource>();
-                foreach (bookingResource r in config.BookingSystem.Resources)
-                    if (r.Enable)
+                List<Resource> res = new List<Resource>();
+                foreach (Resource r in config.BookingSystem.Resources.Values)
+                    if (r.Enabled)
                     {
                         if (resourcetype.SelectedValue == "All") res.Add(r);
-                        else if (r.ResourceType == (ResourceType)Enum.Parse(typeof(ResourceType), resourcetype.SelectedValue, true))
+                        else if (r.Type == (ResourceType)Enum.Parse(typeof(ResourceType), resourcetype.SelectedValue, true))
                             res.Add(r);
                     }
                 dl.DataSource = res.ToArray();

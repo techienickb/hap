@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Security;
 using System.DirectoryServices.AccountManagement;
 using System.Security.Principal;
+using System.DirectoryServices;
 
 
 namespace HAP.AD
@@ -138,6 +139,27 @@ namespace HAP.AD
         public string MiddleNames { get; set; }
         public string HomeDirectory { get; private set; }
         public string EmployeeID { get; private set; }
+        public string Notes
+        {
+            get
+            {
+                DirectoryEntry usersDE = ADUtils.getUser(ADUtils.GetDirectoryRoot(), this.UserName);
+                DirectorySearcher ds = new DirectorySearcher(usersDE);
+                ds.Filter = "(&(objectClass=user)(mail=*)(sAMAccountName=*))";
+                ds.PropertiesToLoad.Add("info");
+                try
+                {
+                    SearchResultCollection sr = ds.FindAll();
+                    if (sr[0].Properties["info"].Count == 0)
+                        return "";
+                    else if (sr[0].Properties["info"] != null)
+                        return sr[0].Properties["info"][0].ToString();
+                    else
+                        return "";
+                }
+                catch { return ""; }
+            }
+        }
 
         public override bool ChangePassword(string oldPassword, string newPassword)
         {

@@ -19,21 +19,12 @@ using HAP.AD;
 
 namespace HAP.Web.HelpDesk
 {
-    public partial class Default : System.Web.UI.Page, ITicketDisplay
+    public partial class Default : HAP.Web.Controls.Page, ITicketDisplay
     {
         protected void Page_Load(object sender, EventArgs e)
         {
             config = hapConfig.Current;
-            ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
-            if (connObj != null) _ActiveDirectoryConnectionString = connObj.ConnectionString;
-            if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))
-                throw new Exception("The connection name 'activeDirectoryConnectionString' was not found in the applications configuration or the connection string is empty.");
-            if (_ActiveDirectoryConnectionString.StartsWith("LDAP://"))
-                _DomainDN = _ActiveDirectoryConnectionString.Remove(0, _ActiveDirectoryConnectionString.IndexOf("DC="));
-            else throw new Exception("The connection string specified in 'activeDirectoryConnectionString' does not appear to be a valid LDAP connection string.");
-            pcontext = HAP.AD.ADUtil.PContext;
-            up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, HAP.AD.ADUtil.Username);
-            this.Title = string.Format("{0} - Home Access Plus+ - Help Desk", config.BaseSettings.EstablishmentName);
+            this.Title = string.Format("{0} - Home Access Plus+ - Help Desk", config.School.Name);
             loadtickets();
             if (!Page.IsPostBack)
             {
@@ -48,18 +39,14 @@ namespace HAP.Web.HelpDesk
                         {
                             newadminsupportticket.Attributes.Add("class", "Selected");
                             userlist.Items.Clear();
-                            foreach (UserInfo user in ADUtil.FindUsers())
-                                userlist.Items.Add(new ListItem(string.Format("{0} - ({1})", user.LoginName, user.DisplayName), user.LoginName));
+                            foreach (User user in ADUtils.FindUsers())
+                                userlist.Items.Add(new ListItem(string.Format("{0} - ({1})", user.UserName, user.DisplayName), user.UserName));
                         }
                     }
                 }
             }
         }
 
-        private String _DomainDN;
-        private String _ActiveDirectoryConnectionString;
-        private PrincipalContext pcontext;
-        private UserPrincipal up;
         private hapConfig config;
 
         public string isSelected(object o)
@@ -70,8 +57,8 @@ namespace HAP.Web.HelpDesk
 
         public string getDisplayName(object o)
         {
-            UserPrincipal u = o as UserPrincipal;
-            if (string.IsNullOrEmpty(u.DisplayName)) return HAP.AD.ADUtil.Username;
+            User u = o as User;
+            if (string.IsNullOrEmpty(u.DisplayName)) return u.UserName;
             return u.DisplayName;
         }
 
@@ -124,7 +111,7 @@ namespace HAP.Web.HelpDesk
                 newadminsupportticket.Visible = false;
                 List<Ticket> tickets = new List<Ticket>();
                 foreach (XmlNode node in doc.SelectNodes(xpath))
-                    if (node.SelectNodes("Note")[0].Attributes["username"].Value.ToLower() == HAP.AD.ADUtil.Username.ToLower())
+                    if (node.SelectNodes("Note")[0].Attributes["username"].Value.ToLower() == ADUser.UserName.ToLower())
                         tickets.Add(Ticket.Parse(node));
                 ticketsrepeater.DataSource = tickets.ToArray();
                 ticketsrepeater.DataBind();
@@ -152,7 +139,7 @@ namespace HAP.Web.HelpDesk
             ticket.SetAttribute("status", "New");
             XmlElement node = doc.CreateElement("Note");
             node.SetAttribute("datetime", DateTime.Now.ToUniversalTime().ToString("u"));
-            node.SetAttribute("username", HAP.AD.ADUtil.Username);
+            node.SetAttribute("username", ADUser.UserName);
             node.InnerXml = "<![CDATA[Room: " + newticketroom.Text + "<br />\n" + newticketeditor.Content + "]]>";
             ticket.AppendChild(node);
             doc.SelectSingleNode("/Tickets").AppendChild(ticket);
@@ -173,7 +160,7 @@ namespace HAP.Web.HelpDesk
             mes.Sender = mes.From;
             mes.ReplyToList.Add(mes.From);
 
-            mes.To.Add(new MailAddress(config.BaseSettings.AdminEmailAddress, "IT Department"));
+            mes.To.Add(new MailAddress(config.SMTP.FromEmail, config.SMTP.FromUser));
 
             mes.IsBodyHtml = true;
             FileInfo template = new FileInfo(Server.MapPath("~/HelpDesk/newuserticket.htm"));
@@ -182,14 +169,13 @@ namespace HAP.Web.HelpDesk
                 newticketsubject.Text).Replace("{2}",
                 newticketeditor.Content).Replace("{3}",
                 newticketroom.Text).Replace("{4}",
-                up.DisplayName).Replace("{5}",
+                ADUser.DisplayName).Replace("{5}",
                 Request.Url.Host + Request.ApplicationPath);
 
-            SmtpClient smtp = new SmtpClient(config.BaseSettings.SMTPServer);
-            if (!string.IsNullOrEmpty(config.BaseSettings.SMTPServerUsername))
-                smtp.Credentials = new NetworkCredential(config.BaseSettings.SMTPServerUsername, config.BaseSettings.SMTPServerPassword);
-            smtp.EnableSsl = config.BaseSettings.SMTPServerSSL;
-            smtp.Port = config.BaseSettings.SMTPServerPort;
+            SmtpClient smtp = new SmtpClient(config.SMTP.Server, config.SMTP.Port);
+            if (!string.IsNullOrEmpty(config.SMTP.User))
+                smtp.Credentials = new NetworkCredential(config.SMTP.User, config.SMTP.Password);
+            smtp.EnableSsl = config.SMTP.SSL;
             smtp.Send(mes);
 
             loadtickets();
@@ -228,12 +214,12 @@ namespace HAP.Web.HelpDesk
             MailMessage mes = new MailMessage();
 
             mes.Subject = "A Support Ticket (#" + x + ") has been Logged";
-            UserPrincipal user = UserPrincipal.FindByIdentity(pcontext, userlist.SelectedValue);
+            User user = new User(userlist.SelectedValue);
 
-            mes.From = mes.Sender = new MailAddress(up.EmailAddress, "IT Department");
+            mes.From = mes.Sender = new MailAddress(ADUser.UserName, ADUser.DisplayName);
             mes.ReplyToList.Add(mes.From);
 
-            mes.To.Add(new MailAddress(user.EmailAddress, user.DisplayName));
+            mes.To.Add(new MailAddress(user.Email, user.DisplayName));
 
             mes.IsBodyHtml = true;
 
@@ -244,12 +230,11 @@ namespace HAP.Web.HelpDesk
                 newadminticketeditor.Content).Replace("{3}", 
                 user.DisplayName).Replace("{4}", 
                 Request.Url.Host + Request.ApplicationPath);
-            
-            SmtpClient smtp = new SmtpClient(config.BaseSettings.SMTPServer);
-            if (!string.IsNullOrEmpty(config.BaseSettings.SMTPServerUsername))
-                smtp.Credentials = new NetworkCredential(config.BaseSettings.SMTPServerUsername, config.BaseSettings.SMTPServerPassword);
-            smtp.EnableSsl = config.BaseSettings.SMTPServerSSL;
-            smtp.Port = config.BaseSettings.SMTPServerPort;
+
+            SmtpClient smtp = new SmtpClient(config.SMTP.Server, config.SMTP.Port);
+            if (!string.IsNullOrEmpty(config.SMTP.User))
+                smtp.Credentials = new NetworkCredential(config.SMTP.User, config.SMTP.Password);
+            smtp.EnableSsl = config.SMTP.SSL;
             smtp.Send(mes);
 
             loadtickets();
@@ -269,11 +254,11 @@ namespace HAP.Web.HelpDesk
 
                 MailMessage mes = new MailMessage();
                 mes.Subject = "Your Ticket (#" + TicketID + ") has been " + (CheckFixed.Checked ? "Closed" : "Updated");
-                mes.From = mes.Sender = new MailAddress(up.EmailAddress, "IT Department");
+                mes.From = mes.Sender = new MailAddress(ADUser.Email, ADUser.DisplayName);
                 mes.ReplyToList.Add(mes.From);
-                UserPrincipal user = UserPrincipal.FindByIdentity(pcontext, ticket.SelectNodes("Note")[0].Attributes["username"].Value);
+                User user = new User(ticket.SelectNodes("Note")[0].Attributes["username"].Value);
 
-                mes.To.Add(new MailAddress(user.EmailAddress, user.DisplayName));
+                mes.To.Add(new MailAddress(user.Email, user.DisplayName));
 
                 mes.IsBodyHtml = true;
 
@@ -286,11 +271,10 @@ namespace HAP.Web.HelpDesk
                     (CheckFixed.Checked ? "reopen" : "update")).Replace("{4}",
                     Request.Url.Host + Request.ApplicationPath);
 
-                SmtpClient smtp = new SmtpClient(config.BaseSettings.SMTPServer);
-                if (!string.IsNullOrEmpty(config.BaseSettings.SMTPServerUsername))
-                    smtp.Credentials = new NetworkCredential(config.BaseSettings.SMTPServerUsername, config.BaseSettings.SMTPServerPassword);
-                smtp.EnableSsl = config.BaseSettings.SMTPServerSSL;
-                smtp.Port = config.BaseSettings.SMTPServerPort;
+                SmtpClient smtp = new SmtpClient(config.SMTP.Server, config.SMTP.Port);
+                if (!string.IsNullOrEmpty(config.SMTP.User))
+                    smtp.Credentials = new NetworkCredential(config.SMTP.User, config.SMTP.Password);
+                smtp.EnableSsl = config.SMTP.SSL;
                 smtp.Send(mes);
             }
             else
@@ -300,9 +284,9 @@ namespace HAP.Web.HelpDesk
                 MailMessage mes = new MailMessage();
 
                 mes.Subject = "Ticket (#" + TicketID + ") has been Updated";
-                mes.From = mes.Sender = new MailAddress(up.EmailAddress, up.DisplayName);
+                mes.From = mes.Sender = new MailAddress(ADUser.Email, ADUser.DisplayName);
                 mes.ReplyToList.Add(mes.From);
-                mes.To.Add(new MailAddress(config.BaseSettings.AdminEmailAddress, "IT Department"));
+                mes.To.Add(new MailAddress(config.SMTP.FromEmail, config.SMTP.FromUser));
 
                 mes.IsBodyHtml = true;
 
@@ -311,19 +295,18 @@ namespace HAP.Web.HelpDesk
 
                 mes.Body = fs.ReadToEnd().Replace("{0}", TicketID).Replace("{1}",
                     newnote.Content).Replace("{2}",
-                    up.DisplayName).Replace("{3}",
+                    ADUser.DisplayName).Replace("{3}",
                     Request.Url.Host + Request.ApplicationPath);
 
-                SmtpClient smtp = new SmtpClient(config.BaseSettings.SMTPServer);
-                if (!string.IsNullOrEmpty(config.BaseSettings.SMTPServerUsername))
-                    smtp.Credentials = new NetworkCredential(config.BaseSettings.SMTPServerUsername, config.BaseSettings.SMTPServerPassword);
-                smtp.EnableSsl = config.BaseSettings.SMTPServerSSL;
-                smtp.Port = config.BaseSettings.SMTPServerPort;
+                SmtpClient smtp = new SmtpClient(config.SMTP.Server, config.SMTP.Port);
+                if (!string.IsNullOrEmpty(config.SMTP.User))
+                    smtp.Credentials = new NetworkCredential(config.SMTP.User, config.SMTP.Password);
+                smtp.EnableSsl = config.SMTP.SSL;
                 smtp.Send(mes);
             }
             XmlElement node = doc.CreateElement("Note");
             node.SetAttribute("datetime", DateTime.Now.ToString("u"));
-            node.SetAttribute("username", HAP.AD.ADUtil.Username);
+            node.SetAttribute("username", ADUser.UserName);
             if (string.IsNullOrEmpty(newnote.Content)) node.InnerXml = "<![CDATA[No Note Information Added]]>";
             else node.InnerXml = "<![CDATA[" + newnote.Content + "]]>";
             ticket.AppendChild(node);
@@ -350,7 +333,7 @@ namespace HAP.Web.HelpDesk
     {
         public Note() { }
         public DateTime Date { get; set; }
-        public UserPrincipal User { get; set; }
+        public User User { get; set; }
         public string NoteText { get; set; }
 
         public Note(XmlNode node)
@@ -359,8 +342,7 @@ namespace HAP.Web.HelpDesk
             if (node.Attributes["date"] != null && node.Attributes["time"] != null)
                 Date = DateTime.Parse(node.Attributes["date"].Value + " " + node.Attributes["time"].Value);
             else Date = DateTime.Parse(node.Attributes["datetime"].Value);
-            PrincipalContext pcontext = HAP.AD.ADUtil.PContext;
-            User = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, node.Attributes["username"].Value);
+            User = new User(node.Attributes["username"].Value);
         }
 
         public static Note Parse(XmlNode node) { return new Note(node); }
@@ -374,7 +356,7 @@ namespace HAP.Web.HelpDesk
         public string Subject { get; set; }
         public string Priority { get; set; }
         public string Status { get; set; }
-        public UserPrincipal User { get; set; }
+        public User User { get; set; }
         public DateTime Date { get; set; }
 
         public Ticket(XmlNode node)
@@ -386,8 +368,7 @@ namespace HAP.Web.HelpDesk
             if (node.SelectNodes("Note")[0].Attributes["date"] != null)
                 Date = DateTime.Parse(node.SelectNodes("Note")[0].Attributes["date"].Value + " " + node.SelectNodes("Note")[0].Attributes["time"].Value);
             Date = DateTime.Parse(node.SelectNodes("Note")[0].Attributes["datetime"].Value);
-            PrincipalContext pcontext = HAP.AD.ADUtil.PContext;
-            User = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, node.SelectNodes("Note")[0].Attributes["username"].Value);
+            User = new User(node.SelectNodes("Note")[0].Attributes["username"].Value);
         }
     }
 

@@ -23,12 +23,12 @@ namespace HAP.Web.BookingSystem
                 if (isAdmin)
                 {
                     userlist.Items.Clear();
-                    foreach (UserInfo user in ADUtil.FindUsers())
+                    foreach (User user in ADUtils.FindUsers())
                         if (string.IsNullOrEmpty(user.Notes))
-                            userlist.Items.Add(new ListItem(user.LoginName, user.LoginName.ToLower()));
+                            userlist.Items.Add(new ListItem(user.UserName, user.UserName.ToLower()));
                         else
-                            userlist.Items.Add(new ListItem(string.Format("{0} - ({1})", user.LoginName, user.Notes), user.LoginName.ToLower()));
-                    userlist.SelectedValue = HAP.AD.ADUtil.Username.ToLower();
+                            userlist.Items.Add(new ListItem(string.Format("{0} - ({1})", user.UserName, user.Notes), user.UserName.ToLower()));
+                    userlist.SelectedValue = Page.User.Identity.Name.ToLower();
                     bookingadmin1.Visible = true;
                 }
                 else bookingadmin1.Visible = false;
@@ -44,17 +44,17 @@ namespace HAP.Web.BookingSystem
             node.SetAttribute("lesson", lessonint);
             string roomstr = bookingvars.Value.Split(new char[] { '@' }, StringSplitOptions.RemoveEmptyEntries)[0];
             hapConfig config = hapConfig.Current;
-            if (config.BookingSystem.Resources[roomstr].ResourceType == ResourceType.Laptops)
+            if (config.BookingSystem.Resources[roomstr].Type == ResourceType.Laptops)
             {
                 node.SetAttribute("ltroom", BookLTRoom.Text);
                 node.SetAttribute("ltcount", lt16.Checked ? "16" : "32");
                 node.SetAttribute("ltheadphones", headphones.Checked.ToString());
             }
-            else if (config.BookingSystem.Resources[roomstr].ResourceType == ResourceType.Equipment)
+            else if (config.BookingSystem.Resources[roomstr].Type == ResourceType.Equipment)
                 node.SetAttribute("equiproom", equiproom.Text);
             node.SetAttribute("room", roomstr);
-            node.SetAttribute("uid", ((isAdmin) ? userlist.SelectedValue : HAP.AD.ADUtil.Username) + DateTime.Now.ToString(iCalGenerator.DateFormat));
-            node.SetAttribute("username", (isAdmin) ? userlist.SelectedValue : HAP.AD.ADUtil.Username);
+            node.SetAttribute("uid", ((isAdmin) ? userlist.SelectedValue : Page.User.Identity.Name) + DateTime.Now.ToString(iCalGenerator.DateFormat));
+            node.SetAttribute("username", (isAdmin) ? userlist.SelectedValue : Page.User.Identity.Name);
             string year = "Year " + BookYear.SelectedItem.Text + " ";
             if (BookYear.SelectedValue == "") year = "";
             node.SetAttribute("name", year + BookLesson.Text);
@@ -63,7 +63,7 @@ namespace HAP.Web.BookingSystem
             if (config.BookingSystem.Resources[roomstr].EnableCharging)
             {
                 HAP.Data.BookingSystem.BookingSystem bs = new HAP.Data.BookingSystem.BookingSystem(Date);
-                int index = config.BookingSystem.Lessons.IndexOf(config.BookingSystem.Lessons[lessonint]);
+                int index = config.BookingSystem.Lessons.IndexOf(config.BookingSystem.Lessons.Get(lessonint));
                 if (index > 0 && bs.islessonFree(roomstr, config.BookingSystem.Lessons[index - 1].Name))
                 {
                     node = doc.CreateElement("Booking");
@@ -100,7 +100,7 @@ namespace HAP.Web.BookingSystem
             HAP.Data.BookingSystem.BookingSystem.BookingsDoc = doc;
             Booking booking = new HAP.Data.BookingSystem.BookingSystem(Date).getBooking(roomstr, lessonint);
             iCalGenerator.Generate(booking, Date);
-            if (config.BookingSystem.Resources[roomstr].EmailAdmin) iCalGenerator.Generate(booking, Date, config.BaseSettings.AdminEmailUser);
+            if (config.BookingSystem.Resources[roomstr].EmailAdmins) iCalGenerator.Generate(booking, Date, true);
             BookYear.SelectedIndex = 0;
             BookLesson.Text = BookLTRoom.Text = "";
             Page.DataBind();
@@ -153,19 +153,16 @@ namespace HAP.Web.BookingSystem
                 XmlDocument doc = HAP.Data.BookingSystem.BookingSystem.BookingsDoc;
                 int max = hapConfig.Current.BookingSystem.MaxBookingsPerWeek;
                 foreach (AdvancedBookingRight right in HAP.Data.BookingSystem.BookingSystem.BookingRights)
-                    if (right.Username == HAP.AD.ADUtil.Username)
+                    if (right.Username == Page.User.Identity.Name)
                         max = right.Numperweek;
                 int x = 0;
                 foreach (DateTime d in getWeekDates())
-                    x += doc.SelectNodes("/Bookings/Booking[@date='" + d.ToShortDateString() + "' and @username='" + HAP.AD.ADUtil.Username + "']").Count;
+                    x += doc.SelectNodes("/Bookings/Booking[@date='" + d.ToShortDateString() + "' and @username='" + Page.User.Identity.Name + "']").Count;
                 if (x > max) { manybookings.Visible = true; bookingform.Visible = book.Visible = false; }
                 else { manybookings.Visible = false; bookingform.Visible = book.Visible = true; }
             }
-            List<subject> subjectsds = new List<subject>();
-            foreach (subject s in hapConfig.Current.BookingSystem.Subjects)
-                subjectsds.Add(s);
-            subjectsds.Sort();
-            subjects.DataSource = subjectsds.ToArray();
+            hapConfig.Current.BookingSystem.Subjects.Sort();
+            subjects.DataSource = hapConfig.Current.BookingSystem.Subjects.ToArray();
             subjects.DataBind();
         }
 
@@ -176,7 +173,7 @@ namespace HAP.Web.BookingSystem
             get
             {
                 bool vis = false;
-                foreach (string s in hapConfig.Current.BookingSystem.AdminGroups.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
+                foreach (string s in hapConfig.Current.BookingSystem.Admins.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
                     if (!vis) vis = HttpContext.Current.User.IsInRole(s);
                 if (vis) return true;
                 return HttpContext.Current.User.IsInRole("Domain Admins");

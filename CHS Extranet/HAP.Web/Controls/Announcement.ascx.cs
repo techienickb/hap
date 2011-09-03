@@ -13,16 +13,11 @@ namespace HAP.Web.Controls
 {
     public partial class Announcement : System.Web.UI.UserControl
     {
-        private PrincipalContext pcontext;
-        private UserPrincipal up;
         private hapConfig config;
-
 
         protected void Page_Load(object sender, EventArgs e)
         {
             config = hapConfig.Current;
-            pcontext = HAP.AD.ADUtil.PContext;
-            up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, HAP.AD.ADUtil.Username);
             EditAnnouncement.Visible = isEdit();
             AnnouncementText.Visible = isShowTo();
             if (!Page.IsPostBack)
@@ -40,12 +35,12 @@ namespace HAP.Web.Controls
 
         private bool isShowTo()
         {
-            if (config.AnnouncementBox.ShowTo == "All") return true;
-            else if (config.AnnouncementBox.ShowTo != "None")
+            if (config.Homepage.AnnouncementBox.ShowTo == "All") return true;
+            else if (config.Homepage.AnnouncementBox.ShowTo != "None")
             {
                 bool vis = false;
-                foreach (string s in config.AnnouncementBox.ShowTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                    if (!vis) vis = Page.User.IsInRole(s);
+                foreach (string s in config.Homepage.AnnouncementBox.ShowTo.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
+                    if (!vis) vis = Page.User.IsInRole(s.Trim());
                 return vis;
             }
             return false;
@@ -53,12 +48,12 @@ namespace HAP.Web.Controls
 
         private bool isEdit()
         {
-            if (config.AnnouncementBox.EnableEditTo == "All") return true;
-            else if (config.AnnouncementBox.EnableEditTo != "None")
+            if (config.Homepage.AnnouncementBox.EnableEditTo == "All") return true;
+            else if (config.Homepage.AnnouncementBox.EnableEditTo != "None")
             {
                 bool vis = false;
-                foreach (string s in config.AnnouncementBox.EnableEditTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                    if (!vis) vis = Page.User.IsInRole(s);
+                foreach (string s in config.Homepage.AnnouncementBox.EnableEditTo.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
+                    if (!vis) vis = Page.User.IsInRole(s.Trim());
                 return vis;
             }
             return false;
