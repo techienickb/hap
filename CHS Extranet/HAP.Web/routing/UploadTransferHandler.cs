@@ -6,6 +6,8 @@ using HAP.Web.Configuration;
 using System.DirectoryServices.AccountManagement;
 using System.Configuration;
 using System.IO;
+using HAP.Data.ComputerBrowser;
+using System.Web.Security;
 
 namespace HAP.Web.routing
 {
@@ -33,18 +35,17 @@ namespace HAP.Web.routing
                 if (context.Request.HttpMethod == "POST")
                 {
                     config = hapConfig.Current;
-                    pcontext = HAP.AD.ADUtil.PContext;
-                    up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, HAP.AD.ADUtil.Username);
-
-                    string userhome = up.HomeDirectory;
+                    ADUser.Impersonate();
+                    string userhome = ADUser.HomeDirectory;
                     if (!userhome.EndsWith("\\")) userhome += "\\";
                     string path = RoutingPath.Replace('^', '&');
-                    uncpath unc = null;
-                    unc = config.MyComputer.UNCPaths[RoutingDrive];
-                    path = string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), HAP.AD.ADUtil.Username) + '\\' + path.Replace('/', '\\');
+                    DriveMapping unc = null;
+                    unc = config.MySchoolComputerBrowser.Mappings[RoutingDrive.ToCharArray()[0]];
+                    path = Converter.FormatMapping(unc.UNC, ADUser) + '\\' + path.Replace('/', '\\');
                     UploadProcess fileUpload = new UploadProcess();
                     fileUpload.FileUploadCompleted += new FileUploadCompletedEvent(fileUpload_FileUploadCompleted);
                     fileUpload.ProcessRequest(context, path);
+                    ADUser.EndImpersonate();
                 }
                 else
                 {
@@ -56,16 +57,28 @@ namespace HAP.Web.routing
             }
             catch (Exception e)
             {
+                ADUser.EndImpersonate();
                 FileInfo file = new FileInfo(context.Server.MapPath("~/App_Data/log.log"));
                 if (!file.Exists) file.Create();
                 StreamWriter sw = file.AppendText();
                 sw.WriteLine(e.Message);
                 sw.Close();
             }
+            finally
+            {
+                ADUser.EndImpersonate();
+            }
+        }
+        private HAP.AD.User _ADUser = null;
+        public HAP.AD.User ADUser
+        {
+            get
+            {
+                if (_ADUser == null) _ADUser = ((HAP.AD.User)Membership.GetUser());
+                return _ADUser;
+            }
         }
 
-        private PrincipalContext pcontext;
-        private UserPrincipal up;
         private hapConfig config;
 
 

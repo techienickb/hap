@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/chs.master" AutoEventWireup="true"
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true"
     CodeBehind="Default.aspx.cs" Inherits="HAP.Web.BookingSystem.admin.Default" %>
 <%@ Import Namespace="HAP.Web.BookingSystem" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>

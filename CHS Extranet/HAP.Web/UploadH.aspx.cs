@@ -8,16 +8,17 @@ using System.IO;
 using System.DirectoryServices.AccountManagement;
 using System.Configuration;
 using HAP.Web.Configuration;
+using HAP.Data.ComputerBrowser;
 
 namespace HAP.Web
 {
-    public partial class UploadH : System.Web.UI.Page
+    public partial class UploadH : HAP.Web.Controls.Page
     {
-        private PrincipalContext pcontext;
-        private UserPrincipal up;
-        private hapConfig config;
-
-        private bool isAuth(uncpath path)
+        public UploadH()
+        {
+            this.SectionTitle = "My School Computer Browser - Upload HTML";
+        }
+        private bool isAuth(DriveMapping path)
         {
             if (path.EnableReadTo == "All") return true;
             else if (path.EnableReadTo != "None")
@@ -33,72 +34,68 @@ namespace HAP.Web
 
         private bool isAuth(string extension)
         {
-            foreach (uploadfilter filter in config.MyComputer.UploadFilters)
-                if (filter.Filter.Contains(extension)) return true;
-            return isAuth(config.MyComputer.UploadFilters["All Files"]);
+            foreach (Filter filter in config.MySchoolComputerBrowser.Filters)
+                if (filter.Expression.Contains(extension)) return true;
+            return isAuth(config.MySchoolComputerBrowser.Filters.Single(fil => fil.Name == "All Files"));
         }
 
-        private bool isAuth(uploadfilter filter)
+        private bool isAuth(Filter filter)
         {
             if (filter.EnableFor == "All") return true;
             else if (filter.EnableFor != "None")
             {
                 bool vis = false;
-                foreach (string s in filter.EnableFor.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                    if (!vis) vis = User.IsInRole(s);
+                foreach (string s in filter.EnableFor.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
+                    if (!vis) vis = User.IsInRole(s.Trim());
                 return vis;
             }
             return false;
         }
 
 
-        private bool isWriteAuth(uncpath path)
+        private bool isWriteAuth(DriveMapping path)
         {
             if (path == null) return true;
             if (path.EnableWriteTo == "All") return true;
             else if (path.EnableWriteTo != "None")
             {
                 bool vis = false;
-                foreach (string s in path.EnableWriteTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                    if (!vis) vis = User.IsInRole(s);
+                foreach (string s in path.EnableWriteTo.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
+                    if (!vis) vis = User.IsInRole(s.Trim());
                 return vis;
             }
             return false;
-        }
-
-        protected override void OnInitComplete(EventArgs e)
-        {
-            config = hapConfig.Current;
-            pcontext = HAP.AD.ADUtil.PContext;
-            up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, HAP.AD.ADUtil.Username);
         }
 
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack && !IsCallback && !IsAsync)
             {
-                string userhome = up.HomeDirectory;
+                ADUser.Impersonate();
+                string userhome = ADUser.HomeDirectory;
                 if (!userhome.EndsWith("\\")) userhome += "\\";
                 string path = Request.QueryString["path"].Remove(0, 1).Replace('^', '&');
                 string p = Request.QueryString["path"].Substring(0, 1);
-                uncpath unc = null;
-                unc = config.MyComputer.UNCPaths[p];
+                DriveMapping unc = null;
+                unc = config.MySchoolComputerBrowser.Mappings[p.ToCharArray()[0]];
                 if (unc == null || !isWriteAuth(unc)) Response.Redirect(Request.ApplicationPath + "/unauthorised.aspx", true);
-                else path = string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), HAP.AD.ADUtil.Username) + path.Replace('/', '\\');
+                else path = Converter.FormatMapping(unc.UNC, ADUser) + path.Replace('/', '\\');
+                ADUser.EndImpersonate();
             }
         }
 
         protected void uploadbtn_Click(object sender, EventArgs e)
         {
+            ADUser.Impersonate();
             message.Text = "";
-            string userhome = up.HomeDirectory;
+            string userhome = ADUser.HomeDirectory;
             if (!userhome.EndsWith("\\")) userhome += "\\";
             string path = Request.QueryString["path"].Remove(0, 1);
             string p = Request.QueryString["path"].Substring(0, 1);
-            uncpath unc = null;
-            unc = config.MyComputer.UNCPaths[p];
+            DriveMapping unc = null;
+            unc = config.MySchoolComputerBrowser.Mappings[p.ToCharArray()[0]];
             if (unc == null || !isWriteAuth(unc)) Response.Redirect(Request.ApplicationPath + "/unauthorised.aspx", true);
-            else path = string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), HAP.AD.ADUtil.Username) + path.Replace('/', '\\');
+            else path = Converter.FormatMapping(unc.UNC, ADUser) + path.Replace('/', '\\');
             if (FileUpload1.HasFile && isAuth(Path.GetExtension(FileUpload1.FileName))) FileUpload1.SaveAs(Path.Combine(path, FileUpload1.FileName));
             else if (FileUpload1.HasFile) message.Text += "Error: " + FileUpload1.FileName + " is a restricted file type<br/>";
             if (FileUpload2.HasFile && isAuth(Path.GetExtension(FileUpload2.FileName))) FileUpload2.SaveAs(Path.Combine(path, FileUpload2.FileName));
@@ -111,7 +108,7 @@ namespace HAP.Web
             else if (FileUpload5.HasFile) message.Text += "Error: " + FileUpload5.FileName + " is a restricted file type<br/>";
             if (!string.IsNullOrEmpty(message.Text)) message.Text = "<div style=\"padding: 4px; color: red;\">" + message.Text + "</div>";
             closeb.Visible = (((Button)sender).ID == "uploadbtnClose");
-
+            ADUser.EndImpersonate();
         }
 
     }

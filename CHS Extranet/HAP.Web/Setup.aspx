@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Home Access Plus+ - Setup" Language="C#" MasterPageFile="~/chs.Master" AutoEventWireup="true" CodeBehind="Setup.aspx.cs" Inherits="HAP.Web.Setup" %>
+﻿<%@ Page Title="Home Access Plus+ - Setup" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true" CodeBehind="Setup.aspx.cs" Inherits="HAP.Web.Setup" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <script src="Scripts/jquery-1.6.2.min.js" type="text/javascript"></script>

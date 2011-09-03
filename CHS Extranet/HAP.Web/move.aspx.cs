@@ -9,29 +9,31 @@ using System.Configuration;
 using System.Security.Authentication;
 using System.IO;
 using HAP.Web.Configuration;
+using HAP.Data.ComputerBrowser;
 
 namespace HAP.Web
 {
-    public partial class move : System.Web.UI.Page
+    public partial class move : HAP.Web.Controls.Page
     {
-        private PrincipalContext pcontext;
-        private UserPrincipal up;
-        private hapConfig config;
+        public move()
+        {
+            this.SectionTitle = "My School Computer - Move";
+        }
 
-        private bool isAuth(uncpath path)
+        private bool isAuth(DriveMapping path)
         {
             if (path.EnableReadTo == "All") return true;
             else if (path.EnableReadTo != "None")
             {
                 bool vis = false;
-                foreach (string s in path.EnableReadTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                    if (!vis) vis = User.IsInRole(s);
+                foreach (string s in path.EnableReadTo.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
+                    if (!vis) vis = User.IsInRole(s.Trim());
                 return vis;
             }
             return false;
         }
 
-        private bool isWriteAuth(uncpath path)
+        private bool isWriteAuth(DriveMapping path)
         {
             if (path == null) return true;
             if (path.EnableWriteTo == "All") return true;
@@ -39,24 +41,18 @@ namespace HAP.Web
             {
                 bool vis = false;
                 foreach (string s in path.EnableWriteTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                    if (!vis) vis = User.IsInRole(s);
+                    if (!vis) vis = User.IsInRole(s.Trim());
                 return vis;
             }
             return false;
-        }
-
-        protected override void OnInitComplete(EventArgs e)
-        {
-            config = hapConfig.Current;
-            pcontext = HAP.AD.ADUtil.PContext;
-            up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, HAP.AD.ADUtil.Username);
         }
 
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!Page.IsPostBack)
             {
-                string userhome = up.HomeDirectory;
+                ADUser.Impersonate();
+                string userhome = ADUser.HomeDirectory;
                 if (!userhome.EndsWith("\\")) userhome += "\\";
                 string path, p;
                 if (Request.QueryString["path"].Substring(0, 1) == "f")
@@ -70,10 +66,10 @@ namespace HAP.Web
                     p = Request.QueryString["path"].Substring(0, 1);
                 }
 
-                uncpath unc = null;
-                unc = config.MyComputer.UNCPaths[p];
+                DriveMapping unc = null;
+                unc = config.MySchoolComputerBrowser.Mappings[p.ToCharArray()[0]];
                 if (unc == null || !isWriteAuth(unc)) Response.Redirect(Request.ApplicationPath + "/unauthorised.aspx", true);
-                else path = string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), HAP.AD.ADUtil.Username) + path.Replace('/', '\\');
+                else path = Converter.FormatMapping(unc.UNC, ADUser) + path.Replace('/', '\\');
                 if (Request.QueryString["path"].Substring(0, 1) == "f")
                 {
                     FileInfo file = new FileInfo(path);
@@ -88,14 +84,17 @@ namespace HAP.Web
                     fullname.Value = dir.FullName;
                     populatetree(dir, p);
                 }
+                ADUser.EndImpersonate();
             }
         }
 
         private void populatetree(DirectoryInfo ignoredir, string p)
         {
-            TreeNode h = new TreeNode(hapConfig.Current.MyComputer.UNCPaths[p].Name, string.Format(config.MyComputer.UNCPaths[p].UNC.Replace("%homepath%", up.HomeDirectory), HAP.AD.ADUtil.Username));
+            ADUser.Impersonate();
+            TreeNode h = new TreeNode(hapConfig.Current.MySchoolComputerBrowser.Mappings[p.ToCharArray()[0]].Name, Converter.FormatMapping(hapConfig.Current.MySchoolComputerBrowser.Mappings[p.ToCharArray()[0]].UNC, ADUser));
             populatenode(h, ignoredir);
             TreeView1.Nodes.Add(h);
+            ADUser.EndImpersonate();
         }
 
         private void populatenode(TreeNode node, DirectoryInfo ignoredir)
@@ -111,6 +110,7 @@ namespace HAP.Web
 
         protected void ok_Click(object sender, EventArgs e)
         {
+            ADUser.Impersonate();
             if (!string.IsNullOrEmpty(TreeView1.SelectedValue))
             {
                 if (Request.QueryString["path"].Substring(0, 1) == "f")
@@ -125,7 +125,7 @@ namespace HAP.Web
                 }
                 closeandrefresh.Visible = true;
             }
-
+            ADUser.EndImpersonate();
         }
 
         protected void TreeView1_SelectedNodeChanged(object sender, EventArgs e)

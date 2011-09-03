@@ -11,8 +11,12 @@ using HAP.Data.Tracker;
 
 namespace HAP.Web.Tracker
 {
-    public partial class logs : System.Web.UI.Page
+    public partial class logs : HAP.Web.Controls.Page
     {
+        public logs()
+        {
+            SectionTitle = "Logon Tracker - Historic Logs";
+        }
         protected void Page_Load(object sender, EventArgs e)
         {
             archive.Visible = hapConfig.Current.Tracker.Provider == "XML";
@@ -24,11 +28,6 @@ namespace HAP.Web.Tracker
             }
             dates.DataSource = d.ToArray();
             dates.DataBind();
-        }
-
-        protected override void OnInitComplete(EventArgs e)
-        {
-            this.Title = string.Format("{0} - Home Access Plus+ - Logon Tracker - Historic Logs", hapConfig.Current.BaseSettings.EstablishmentName);
         }
 
         protected void archivelogsb_Click(object sender, EventArgs e)

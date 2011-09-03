@@ -8,16 +8,10 @@ using HAP.Web.Configuration;
 
 namespace HAP.Web
 {
-    public partial class MyComputerSL : System.Web.UI.Page
+    public partial class MyComputerSL : HAP.Web.Controls.Page
     {
-        protected void Page_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        protected override void OnInitComplete(EventArgs e)
-        {
-            this.Title = string.Format("{0} - Home Access Plus+ - My School Computer", hapConfig.Current.BaseSettings.EstablishmentName);
+        public MyComputerSL() {
+            this.SectionTitle = "My School Computer Browser";
         }
     }
 }

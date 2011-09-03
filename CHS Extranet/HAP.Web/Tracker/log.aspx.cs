@@ -14,12 +14,16 @@ using HAP.Data.Tracker;
 namespace HAP.Web.Tracker
 {
     public enum mode { month, day, pc }
-    public partial class log : System.Web.UI.Page
+    public partial class log : HAP.Web.Controls.Page
     {
+        public log()
+        {
+            this.SectionTitle = "Logon Tracker - Historic Logs";
+        }
         private mode Mode;
         protected void Page_Load(object sender, EventArgs e)
         {
-            
+            this.Mode = RouteData.Values["day"] != null ? mode.day : RouteData.Values["computer"] != null ? mode.pc : mode.month;
             if (!IsPostBack)
             {
                 computerfilter.Items.Add("All");
@@ -138,13 +142,6 @@ namespace HAP.Web.Tracker
         }
         private trackerlog tlog;
         protected string showtable = " style=\"display: none;\"";
-        hapConfig config;
-        protected override void OnInitComplete(EventArgs e)
-        {
-            Mode = RouteData.Values["day"] != null ? mode.day : RouteData.Values["computer"] != null ? mode.pc : mode.month;
-            config = hapConfig.Current;
-            this.Title = string.Format("{0} - Home Access Plus+ - Logon Tracker - Historic Logs", config.BaseSettings.EstablishmentName);
-        }
 
         protected void showdata_Click(object sender, EventArgs e)
         {

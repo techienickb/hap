@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web;
 using System.Web.Security;
+using HAP.Web.Configuration;
 
 
 namespace HAP.Web.Controls
@@ -19,6 +20,13 @@ namespace HAP.Web.Controls
                 if (_ADUser == null) _ADUser =((HAP.AD.User)Membership.GetUser());
                 return _ADUser;
             }
+        }
+        public string SectionTitle { get; set; }
+        public hapConfig config;
+        protected override void OnInitComplete(EventArgs e)
+        {
+            config = hapConfig.Current;
+            this.Title = string.Format("{0} - Home Access Plus+ - {1}", config.School.Name, SectionTitle);
         }
     }
 }

@@ -12,6 +12,7 @@ using System.Configuration;
 using System.DirectoryServices.AccountManagement;
 using Microsoft.Win32;
 using ICSharpCode.SharpZipLib.Zip;
+using System.Web.Security;
 
 namespace HAP.Web
 {
@@ -29,14 +30,18 @@ namespace HAP.Web
         [WebMethod]
         public FileCheckResponse CheckFile(string FileName)
         {
+            ((HAP.AD.User)Membership.GetUser()).Impersonate();
             string home; UNCPath unc; string path = Converter.DriveToUNC(FileName, out unc, out home);
-            return new FileCheckResponse(path, unc, home);
+            FileCheckResponse fcr = new FileCheckResponse(path, unc, home);
+            ((HAP.AD.User)Membership.GetUser()).EndImpersonate();
+            return fcr;
         }
 
         //method for listing
         [WebMethod]
         public PrimaryResponse ListDrives()
         {
+            ((HAP.AD.User)Membership.GetUser()).Impersonate();
             PrimaryResponse res = new PrimaryResponse();
             res.HAPVerion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             res.HAPName = Assembly.GetExecutingAssembly().GetName().Name;
@@ -44,39 +49,37 @@ namespace HAP.Web
             hapConfig config = hapConfig.Current; 
 
             long freeBytesForUser, totalBytes, freeBytes;
-            ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
-            PrincipalContext pcontext = HAP.AD.ADUtil.PContext;
-            UserPrincipal up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, HAP.AD.ADUtil.Username);
+            HAP.AD.User up = ((HAP.AD.User)Membership.GetUser());
 
             string userhome = up.HomeDirectory;
             List<ComputerBrowserAPIItem> items = new List<ComputerBrowserAPIItem>();
-            foreach (uncpath p in config.MyComputer.UNCPaths)
+            foreach (DriveMapping p in config.MySchoolComputerBrowser.Mappings.Values)
             {
                 UNCPath path = new UNCPath();
-                path.Drive = p.Drive;
+                path.Drive = p.Drive.ToString();
                 path.EnableMove = p.EnableMove;
                 path.EnableReadTo = p.EnableReadTo;
                 path.EnableWriteTo = p.EnableWriteTo;
                 path.Name = p.Name;
                 path.UNC = p.UNC;
-                path.Usage = p.Usage;
+                path.Usage = p.UsageMode;
                 decimal space = -1;
                 bool showspace = isWriteAuth(path);
                 if (showspace)
                 {
-                    if (path.Usage == UsageMode.DriveSpace)
+                    if (path.Usage == MappingUsageMode.DriveSpace)
                     {
-                        if (Win32.GetDiskFreeSpaceEx(string.Format(path.UNC.Replace("%homepath%", userhome), HAP.AD.ADUtil.Username), out freeBytesForUser, out totalBytes, out freeBytes))
+                        if (Win32.GetDiskFreeSpaceEx(Converter.FormatMapping(path.UNC, up), out freeBytesForUser, out totalBytes, out freeBytes))
                             space = Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
                     }
                     else
                     {
                         try
                         {
-                            HAP.Data.Quota.QuotaInfo qi = HAP.Data.ComputerBrowser.Quota.GetQuota(HAP.AD.ADUtil.Username, string.Format(path.UNC.Replace("%homepath%", userhome)));
+                            HAP.Data.Quota.QuotaInfo qi = HAP.Data.ComputerBrowser.Quota.GetQuota(up.UserName, Converter.FormatMapping(path.UNC, up));
                             space = Math.Round((Convert.ToDecimal(qi.Used) / Convert.ToDecimal(qi.Total)) * 100, 2);
                             if (qi.Total == -1)
-                                if (Win32.GetDiskFreeSpaceEx(string.Format(path.UNC.Replace("%homepath%", userhome), HAP.AD.ADUtil.Username), out freeBytesForUser, out totalBytes, out freeBytes))
+                                if (Win32.GetDiskFreeSpaceEx(Converter.FormatMapping(path.UNC, up), out freeBytesForUser, out totalBytes, out freeBytes))
                                     space = Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
                         }
                         catch { }
@@ -85,13 +88,14 @@ namespace HAP.Web
                 if (isAuth(path)) items.Add(new ComputerBrowserAPIItem(path.Name, "images/icons/netdrive.png", space.ToString(), "Drive", BType.Drive, path.Drive + ":", isWriteAuth(path) ? AccessControlActions.Change : AccessControlActions.View));
             }
             res.Items = items.ToArray();
+            ((HAP.AD.User)Membership.GetUser()).EndImpersonate();
             List<UploadFilter> filters = new List<UploadFilter>();
-            foreach (uploadfilter filter in config.MyComputer.UploadFilters)
+            foreach (Filter filter in config.MySchoolComputerBrowser.Filters)
                 if (isAuth(filter))
                 {
                     UploadFilter u = new UploadFilter();
                     u.EnableFor = filter.EnableFor;
-                    u.Filter = filter.Filter;
+                    u.Filter = filter.Expression;
                     u.Name = filter.Name;
                     filters.Add(u);
                 }
@@ -104,6 +108,7 @@ namespace HAP.Web
         [WebMethod]
         public ComputerBrowserAPIItem[] List(string path)
         {
+            ((HAP.AD.User)Membership.GetUser()).Impersonate();
             List<ComputerBrowserAPIItem> items = new List<ComputerBrowserAPIItem>();
             UNCPath unc; string userhome;
             path = Converter.DriveToUNC(path, out unc, out userhome);
@@ -144,6 +149,7 @@ namespace HAP.Web
                     //Response.Redirect("unauthorised.aspx?path=" + Server.UrlPathEncode(uae.Message), true);
                 }
             }
+            ((HAP.AD.User)Membership.GetUser()).EndImpersonate();
             return items.ToArray();
         }
 
@@ -151,6 +157,7 @@ namespace HAP.Web
         [WebMethod]
         public ComputerBrowserAPIItem[] Search(string path, string searchterm)
         {
+            ((HAP.AD.User)Membership.GetUser()).Impersonate();
             List<ComputerBrowserAPIItem> items = new List<ComputerBrowserAPIItem>();
             UNCPath unc; string userhome;
             path = Converter.DriveToUNC(path, out unc, out userhome);
@@ -191,6 +198,7 @@ namespace HAP.Web
                     //Response.Redirect("unauthorised.aspx?path=" + Server.UrlPathEncode(uae.Message), true);
                 }
             }
+            ((HAP.AD.User)Membership.GetUser()).EndImpersonate();
             return items.ToArray();
         }
 
@@ -198,6 +206,7 @@ namespace HAP.Web
         [WebMethod]
         public CBFile[] Save(CBFile Current, string newpath, bool overwrite)
         {
+            ((HAP.AD.User)Membership.GetUser()).Impersonate();
             UNCPath unc; string userhome;
             string path = Converter.DriveToUNC(Current.Path, out unc, out userhome);
             newpath = Converter.DriveToUNC(newpath, out unc, out userhome);
@@ -223,6 +232,7 @@ namespace HAP.Web
                 else if (Directory.Exists(newpath)) Directory.Delete(newpath);
                 file.MoveTo(newpath);
             }
+            ((HAP.AD.User)Membership.GetUser()).EndImpersonate();
             return new CBFile[] { };
         }
 
@@ -230,25 +240,30 @@ namespace HAP.Web
         [WebMethod]
         public void Delete(string path)
         {
+            ((HAP.AD.User)Membership.GetUser()).Impersonate();
             UNCPath unc; string userhome;
             path = Converter.DriveToUNC(path, out unc, out userhome);
             if (File.Exists(path)) File.Delete(path);
             else Directory.Delete(path, true);
+            ((HAP.AD.User)Membership.GetUser()).EndImpersonate();
         }
 
         //method for Creating a New Folder
         [WebMethod]
         public void NewFolder(string basepath, string foldername)
         {
+            ((HAP.AD.User)Membership.GetUser()).Impersonate();
             UNCPath unc; string userhome;
             basepath = Converter.DriveToUNC(basepath, out unc, out userhome);
             Directory.CreateDirectory(Path.Combine(basepath, foldername));
+            ((HAP.AD.User)Membership.GetUser()).EndImpersonate();
         }
 
         //method for ZIPPING
         [WebMethod]
         public void ZIP(string basepath, string filename, params string[] filepaths)
         {
+            ((HAP.AD.User)Membership.GetUser()).Impersonate();
             UNCPath unc; string userhome;
             basepath = Converter.DriveToUNC(basepath, out unc, out userhome);
             string path = Path.Combine(basepath, filename);
@@ -267,25 +282,29 @@ namespace HAP.Web
             }
             zf.CommitUpdate();
             zf.Close();
+            ((HAP.AD.User)Membership.GetUser()).EndImpersonate();
         }
 
         //method for Unzipping
         [WebMethod]
         public void Unzip(string zipfile, string extractfolder)
         {
+            ((HAP.AD.User)Membership.GetUser()).Impersonate();
             UNCPath unc; string userhome;
             string path = Converter.DriveToUNC(zipfile, out unc, out userhome);
             string c = Converter.DriveToUNC(extractfolder, out unc, out userhome);
             if (!Directory.Exists(c)) Directory.CreateDirectory(c);
             FastZip fastZip = new FastZip();
             fastZip.ExtractZip(path, c, "");
+            ((HAP.AD.User)Membership.GetUser()).EndImpersonate();
         }
 
         //method for upload the files. This will be called from Silverlight code behind.
         [WebMethod]
         public void UploadFile(string FileName, long StartByte, byte[] Data, bool Complete)
         {
-            string home; uncpath unc; string path = Converter.DriveToUNC(FileName, out unc, out home);
+            ((HAP.AD.User)Membership.GetUser()).Impersonate();
+            string home; DriveMapping unc; string path = Converter.DriveToUNC(FileName, out unc, out home);
             FileStream fs = (StartByte > 0 && File.Exists(path)) ? File.Open(path, FileMode.Append) : File.Create(path);
             using (fs)
             {
@@ -293,6 +312,7 @@ namespace HAP.Web
                 fs.Close();
                 fs.Dispose();
             }
+            ((HAP.AD.User)Membership.GetUser()).EndImpersonate();
         }
 
         #region Private Stuff
@@ -300,27 +320,23 @@ namespace HAP.Web
         {
             [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
             internal static extern bool GetDiskFreeSpaceEx(string drive, out long freeBytesForUser, out long totalBytes, out long freeBytes);
-
         }
 
         private void SaveFile(Stream stream, FileStream fs)
         {
-            byte[] buffer = new byte[4096];
-            int bytesRead;
-            while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) != 0)
-            {
-                fs.Write(buffer, 0, bytesRead);
-            }
+            ((HAP.AD.User)Membership.GetUser()).Impersonate();
+            stream.CopyTo(fs);
+            ((HAP.AD.User)Membership.GetUser()).EndImpersonate();
         }
 
-        private bool isAuth(uploadfilter filter)
+        private bool isAuth(Filter filter)
         {
             if (filter.EnableFor == "All") return true;
             else if (filter.EnableFor != "None")
             {
                 bool vis = false;
-                foreach (string s in filter.EnableFor.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                    if (!vis) vis = Context.User.IsInRole(s);
+                foreach (string s in filter.EnableFor.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
+                    if (!vis) vis = Context.User.IsInRole(s.Trim());
                 return vis;
             }
             return false;
@@ -332,8 +348,8 @@ namespace HAP.Web
             else if (path.EnableReadTo != "None")
             {
                 bool vis = false;
-                foreach (string s in path.EnableReadTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                    if (!vis) vis = Context.User.IsInRole(s);
+                foreach (string s in path.EnableReadTo.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
+                    if (!vis) vis = Context.User.IsInRole(s.Trim());
                 return vis;
             }
             return false;
@@ -346,8 +362,8 @@ namespace HAP.Web
             else if (path.EnableWriteTo != "None")
             {
                 bool vis = false;
-                foreach (string s in path.EnableWriteTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                    if (!vis) vis = Context.User.IsInRole(s);
+                foreach (string s in path.EnableWriteTo.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
+                    if (!vis) vis = Context.User.IsInRole(s.Trim());
                 return vis;
             }
             return false;
@@ -369,9 +385,9 @@ namespace HAP.Web
 
         public bool checkext(string extension)
         {
-            string[] exc = hapConfig.Current.MyComputer.HideExtensions.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+            string[] exc = hapConfig.Current.MySchoolComputerBrowser.HideExtensions.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string s in exc)
-                if (s.ToLower() == extension.ToLower()) return false;
+                if (s.Trim().ToLower() == extension.ToLower()) return false;
             return true;
         }
 

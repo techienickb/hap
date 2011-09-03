@@ -11,20 +11,15 @@ using HAP.Web.Configuration;
 using System.Xml;
 using System.Runtime.InteropServices;
 using HAP.Web.UserCard;
+using HAP.Data.ComputerBrowser;
 
 namespace HAP.Web
 {
     public partial class Default : HAP.Web.Controls.Page
     {
-        private PrincipalContext pcontext;
-        protected UserPrincipal up { get; set; }
-        private hapConfig config;
-
-        protected override void OnInitComplete(EventArgs e)
+        public Default()
         {
-            config = hapConfig.Current;
-            if (config.FirstRun) Response.Redirect("~/Setup.aspx", true);
-            this.Title = string.Format("{0} - Home Access Plus+", config.School.Name);
+            this.SectionTitle = "Home";
         }
 
         protected string Department { get; set; }
@@ -65,7 +60,7 @@ namespace HAP.Web
                     userimage.Visible = false;
                 else
                 {
-                    if (string.IsNullOrWhiteSpace(up.EmployeeId))
+                    if (string.IsNullOrWhiteSpace(ADUser.EmployeeID))
                     {
                         try
                         {
@@ -73,7 +68,7 @@ namespace HAP.Web
                         }
                         catch { }
                     }
-                    else userimage.ImageUrl = string.Format("{0}?UPN={1}", config.School.PhotoHandler, up.EmployeeId);
+                    else userimage.ImageUrl = string.Format("{0}?UPN={1}", config.School.PhotoHandler, ADUser.EmployeeID);
                 }
                 if (tabs[TabType.Me].ShowSpace.Value)
                 {
@@ -88,16 +83,16 @@ namespace HAP.Web
                             long freeBytesForUser, totalBytes, freeBytes;
                             if (mapping.UsageMode == MappingUsageMode.DriveSpace)
                             {
-                                if (Win32.GetDiskFreeSpaceEx(string.Format(mapping.UNC.Replace("%homepath%", up.HomeDirectory), ADUser.UserName), out freeBytesForUser, out totalBytes, out freeBytes))
+                                if (Win32.GetDiskFreeSpaceEx(Converter.FormatMapping(mapping.UNC, ADUser), out freeBytesForUser, out totalBytes, out freeBytes))
                                     space = Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
                             }
                             else
                             {
 
-                                HAP.Data.Quota.QuotaInfo qi = HAP.Data.ComputerBrowser.Quota.GetQuota(ADUser.UserName, string.Format(mapping.UNC.Replace("%homepath%", up.HomeDirectory)));
+                                HAP.Data.Quota.QuotaInfo qi = HAP.Data.ComputerBrowser.Quota.GetQuota(ADUser.UserName, string.Format(mapping.UNC.Replace("%homepath%", ADUser.HomeDirectory)));
                                 space = Math.Round((Convert.ToDecimal(qi.Used) / Convert.ToDecimal(qi.Total)) * 100, 2);
                                 if (qi.Total == -1)
-                                    if (Win32.GetDiskFreeSpaceEx(string.Format(mapping.UNC.Replace("%homepath%", up.HomeDirectory), ADUser.UserName), out freeBytesForUser, out totalBytes, out freeBytes))
+                                    if (Win32.GetDiskFreeSpaceEx(Converter.FormatMapping(mapping.UNC, ADUser), out freeBytesForUser, out totalBytes, out freeBytes))
                                         space = Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
                             }
                         }
@@ -163,8 +158,8 @@ namespace HAP.Web
                 }
             if (!Page.IsPostBack)
             {
-                txtfname.Text = up.GivenName;
-                txtlname.Text = up.Surname;
+                txtfname.Text = ADUser.FirstName;
+                txtlname.Text = ADUser.LastName;
                 try
                 {
                     txtform.Text = Department;
@@ -185,42 +180,20 @@ namespace HAP.Web
 
         protected void editmydetails_Click(object sender, EventArgs e)
         {
-            up.Surname = txtlname.Text;
-            up.GivenName = txtfname.Text;
-            up.Description = string.Format("{0} {1} in {2}", txtfname.Text, txtlname.Text, txtform.Text);
-            up.DisplayName = string.Format("{0} {1}", txtfname.Text, txtlname.Text);
-            up.Save();
-
-            // First, get a DE for the user
-            DirectoryEntry usersDE = new DirectoryEntry(AD.ADUtils.FriendlyDomainToLdapDomain(config.AD.UPN), config.AD.User, config.AD.Password);
-            DirectorySearcher ds = new DirectorySearcher(usersDE);
-            ds.Filter = "(sAMAccountName=" + ADUser.UserName + ")";
-            ds.PropertiesToLoad.Add("cn");
-            SearchResult r = ds.FindOne();
-            DirectoryEntry theUserDE = new DirectoryEntry(r.Path, config.AD.User, config.AD.Password);
-
-            // Now update the property setting
-            if (theUserDE.Properties["Department"].Count == 0)
-                theUserDE.Properties["Department"].Add(txtform.Text);
-            else
-                theUserDE.Properties["Department"][0] = txtform.Text;
-            theUserDE.CommitChanges();
+            ADUser.LastName = txtlname.Text;
+            ADUser.FirstName = txtfname.Text;
+            ADUser.Comment = string.Format("{0} {1} in {2}", txtfname.Text, txtlname.Text, txtform.Text);
+            ADUser.DisplayName = string.Format("{0} {1}", txtfname.Text, txtlname.Text);
+            ADUser.Save();
             Response.Redirect("./");
         }
 
         protected void ChangePass_Click(object sender, EventArgs e)
         {
-            hapConfig config = hapConfig.Current;
             try
             {
-                DirectoryEntry usersDE = new DirectoryEntry(AD.ADUtils.FriendlyDomainToLdapDomain(config.AD.UPN), ADUser.UserName, currentpass.Text);
-                DirectorySearcher ds = new DirectorySearcher(usersDE);
-                ds.Filter = "(sAMAccountName=" + ADUser.UserName + ")";
-                SearchResult r = ds.FindOne();
-                DirectoryEntry user = r.GetDirectoryEntry();
-                if (user == null) throw new Exception("I can't find your username");
-                user.Invoke("ChangePassword", currentpass.Text, newpass.Text);
-                user.CommitChanges();
+                ADUser.ChangePassword(currentpass.Text, newpass.Text);
+                hapConfig config = hapConfig.Current;
                 errormess.Text = "Password Changed";
             }
             catch (Exception ex) { errormess.Text = ex.Message; }

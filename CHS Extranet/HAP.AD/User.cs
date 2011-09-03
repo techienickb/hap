@@ -90,9 +90,12 @@ namespace HAP.AD
             }
         }
 
+        public bool IsMemberOf(GroupPrincipal gp)
+        {
+            return UserPa.IsMemberOf(gp);
+        }
+
         #region Obsolete Properties
-        [Obsolete("Not Implemented", true)]
-        public override bool UnlockUser() { throw new NotImplementedException(); }
         [Obsolete("Not Implemented", true)]
         public override bool ChangePasswordQuestionAndAnswer(string password, string newPasswordQuestion, string newPasswordAnswer) { throw new NotImplementedException(); }
         [Obsolete("Not Implemented", true)]
@@ -101,10 +104,6 @@ namespace HAP.AD
         public override string GetPassword(string passwordAnswer) { throw new NotImplementedException(); }
         [Obsolete("Not Implemented", true)]
         public override bool IsOnline { get { throw new NotImplementedException(); } }
-        [Obsolete("Not Implemented", true)]
-        public override string ResetPassword() { throw new NotImplementedException(); }
-        [Obsolete("Not Implemented", true)]
-        public override string ResetPassword(string passwordAnswer) { throw new NotImplementedException(); }
         [Obsolete("Not Implemented", true)]
         public override string ProviderName { get { throw new NotImplementedException(); } }
         [Obsolete("Not Implemented", true)]
@@ -117,6 +116,10 @@ namespace HAP.AD
         public override DateTime LastPasswordChangedDate { get { throw new NotImplementedException(); } }
         #endregion
 
+        public override string ResetPassword() { return ResetPassword("password"); }
+        public override string ResetPassword(string passwordAnswer) { UserPa.SetPassword(passwordAnswer); UserPa.ExpirePasswordNow(); UserPa.Save(); return passwordAnswer; }
+        public override bool UnlockUser() { UserPa.UnlockAccount(); return true; }
+
         private WindowsImpersonationContext impersonationContext;
         public string Password { private get; set; }
         private const int LOGON32_LOGON_INTERACTIVE = 2;
@@ -127,13 +130,13 @@ namespace HAP.AD
         /// <summary>
         /// Booking System Notes
         /// </summary>
-        public new string Comment { get; private set;}
+        public new string Comment { get; set;}
         public new DateTime CreationDate { get; private set; }
         public new bool IsApproved { get; private set; }
         public new bool IsLockedOut { get; private set; }
         public string DomainName { get; private set; }
-        public new DateTime LastLoginDate { get; private set; }
         public string DisplayName { get; set; }
+        public new DateTime LastLoginDate { get; private set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string MiddleNames { get; set; }
@@ -163,6 +166,8 @@ namespace HAP.AD
 
         public override bool ChangePassword(string oldPassword, string newPassword)
         {
+            UserPa.ChangePassword(oldPassword, newPassword);
+            UserPa.Save();
             return true;
         }
 
