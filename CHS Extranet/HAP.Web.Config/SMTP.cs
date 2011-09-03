@@ -47,6 +47,16 @@ namespace HAP.Web.Configuration
             get { return bool.Parse(el.GetAttribute("ssl")); }
             set { el.SetAttribute("ssl", value.ToString()); }
         }
+        public string User
+        {
+            get { return el.GetAttribute("user"); }
+            set { el.SetAttribute("user", value); }
+        }
+        public string Password
+        {
+            get { return el.GetAttribute("password"); }
+            set { el.SetAttribute("password", value); }
+        }
         public string FromUser
         {
             get { return el.GetAttribute("from"); }

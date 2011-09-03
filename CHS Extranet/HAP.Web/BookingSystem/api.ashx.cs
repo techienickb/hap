@@ -8,9 +8,9 @@ using HAP.Data.BookingSystem;
 namespace HAP.Web.BookingSystem
 {
     /// <summary>
-    /// Summary description for api1
+    /// Summary description for api
     /// </summary>
-    public class api1 : IHttpHandler
+    public class api : IHttpHandler
     {
 
         public void ProcessRequest(HttpContext context)
@@ -24,8 +24,8 @@ namespace HAP.Web.BookingSystem
                 string format = "{0}:{1}:{2}:{3}";
 
                 List<string> bookings = new List<string>();
-                foreach (bookingResource br in config.BookingSystem.Resources)
-                    foreach (lesson l in config.BookingSystem.Lessons)
+                foreach (Resource br in config.BookingSystem.Resources.Values)
+                    foreach (Lesson l in config.BookingSystem.Lessons)
                     {
                         Booking b = bs.getBooking(br.Name, l.Name);
                         bookings.Add(string.Format(format, b.Lesson, b.Name, b.Room, b.Username == "Not Booked" ? "" : b.User.Notes));
@@ -34,7 +34,7 @@ namespace HAP.Web.BookingSystem
             }
             else if (context.Request.QueryString["op"] == "getTimes")
             {
-                foreach (lesson l in config.BookingSystem.Lessons)
+                foreach (Lesson l in config.BookingSystem.Lessons)
                     context.Response.Write(string.Format("{0},{1},{2}\n", l.Name, l.StartTime, l.EndTime));
             }
         }

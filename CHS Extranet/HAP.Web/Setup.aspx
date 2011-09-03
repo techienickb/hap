@@ -127,6 +127,14 @@
             <asp:CheckBox Text="SSL: " id="smtpssl" TextAlign="Left" runat="server" />
         </div>
         <div>
+            <asp:Label runat="server" Text="SMTP User: " AssociatedControlID="smtpuser" />
+            <asp:TextBox runat="server" ID="smtpuser" Text="" />
+        </div>
+        <div>
+            <asp:Label runat="server" Text="SMTP Password: " AssociatedControlID="smtppassword" />
+            <asp:TextBox runat="server" ID="smtppassword" TextMode="Password" Text="" />
+        </div>
+        <div>
             <asp:Label runat="server" Text="From (Name): " AssociatedControlID="smtpfromname" />
             <asp:TextBox runat="server" ID="smtpfromname" Text="" onkeypress="checksmtp();" onchange="checksmtp();" />
         </div>
@@ -233,6 +241,10 @@
         <div>
             <asp:Label runat="server" Text="Keep XML Clear: " AssociatedControlID="bsclean" />
             <asp:CheckBox runat="server" ID="bsclean" ToolTip="Keep the XML Database Clear of Old Bookings?" />
+        </div>
+        <div>
+            <asp:Label runat="server" Text="Admin Groups: " AssociatedControlID="bsadmins" />
+            <asp:TextBox runat="server" ID="bsadmins" Text="" /> (domain admins are already allocated)
         </div>
         <div>
             <h3>Lessons <button onclick="return addlesson();" class="addbutton">Add</button></h3>

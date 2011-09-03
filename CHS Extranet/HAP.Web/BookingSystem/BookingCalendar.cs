@@ -24,7 +24,7 @@ namespace HAP.Web.BookingSystem
             this.SelectionMode = CalendarSelectionMode.DayWeek;
             this.maxday = config.BookingSystem.MaxDays;
             foreach (AdvancedBookingRight right in HAP.Data.BookingSystem.BookingSystem.BookingRights)
-                if (right.Username == HAP.AD.ADUtil.Username)
+                if (right.Username == Page.User.Identity.Name)
                     this.maxday = 7 * right.Weeksahead;
 
 
@@ -146,7 +146,7 @@ namespace HAP.Web.BookingSystem
             get
             {
                 bool vis = false;
-                foreach (string s in hapConfig.Current.BookingSystem.AdminGroups.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
+                foreach (string s in hapConfig.Current.BookingSystem.Admins.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
                     if (!vis) vis = Page.User.IsInRole(s);
                 if (vis) return true;
                 return Page.User.IsInRole("Domain Admins");

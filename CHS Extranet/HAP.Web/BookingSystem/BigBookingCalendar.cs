@@ -24,7 +24,7 @@ namespace HAP.Web.BookingSystem
             this.SelectionMode = CalendarSelectionMode.Day;
             this.maxday = config.BookingSystem.MaxDays;
             foreach (AdvancedBookingRight right in HAP.Data.BookingSystem.BookingSystem.BookingRights)
-                if (right.Username == HAP.AD.ADUtil.Username)
+                if (right.Username == Page.User.Identity.Name)
                     this.maxday = 7 * right.Weeksahead;
 
             Terms terms = new Terms();
@@ -114,11 +114,11 @@ namespace HAP.Web.BookingSystem
                     HAP.Data.BookingSystem.BookingSystem bs = new HAP.Data.BookingSystem.BookingSystem(day.Date.Date);
                     cell.CssClass += " " + s;
                     LiteralControl lc = new LiteralControl("<div class=\"QuickView\">");
-                    foreach (bookingResource resource in config.BookingSystem.Resources)
-                        if (resource.Enable)
+                    foreach (Resource resource in config.BookingSystem.Resources.Values)
+                        if (resource.Enabled)
                         {
                             lc.Text += "<div>";
-                            foreach (lesson lesson in config.BookingSystem.Lessons)
+                            foreach (Lesson lesson in config.BookingSystem.Lessons)
                                 lc.Text += string.Format("<span class=\"{0}\" title=\"{1} {2}: {0}\"></span>", (!bs.isStatic(resource.Name, lesson.Name) && bs.islessonFree(resource.Name, lesson.Name)) ? "free" : "booked", lesson.Name, resource.Name);
                             lc.Text += "</div>";
                         }
@@ -134,7 +134,7 @@ namespace HAP.Web.BookingSystem
             get
             {
                 bool vis = false;
-                foreach (string s in hapConfig.Current.BookingSystem.AdminGroups.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
+                foreach (string s in hapConfig.Current.BookingSystem.Admins.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
                     if (!vis) vis = Page.User.IsInRole(s);
                 if (vis) return true;
                 return Page.User.IsInRole("Domain Admins");

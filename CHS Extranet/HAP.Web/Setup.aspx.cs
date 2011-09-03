@@ -36,6 +36,8 @@ namespace HAP.Web
                 smtpenabled.Checked = Config.SMTP.Enabled;
                 smtpfromemail.Text = Config.SMTP.FromEmail;
                 smtpfromname.Text = Config.SMTP.FromUser;
+                smtpuser.Text = Config.SMTP.User;
+                smtppassword.Text = Config.SMTP.Password;
                 smtpport.Text = Config.SMTP.Port.ToString();
                 smtpssl.Checked = Config.SMTP.SSL;
                 trackercode.Text = Config.Tracker.OverrideCode;
@@ -54,7 +56,8 @@ namespace HAP.Web
                 bsdays.Text = Config.BookingSystem.MaxDays.ToString();
                 bssubjects.DataSource = Config.BookingSystem.Subjects;
                 bssubjects.DataBind();
-                bslessons.DataSource = Config.BookingSystem.Lessons.Values;
+                bsadmins.Text = Config.BookingSystem.Admins;
+                bslessons.DataSource = Config.BookingSystem.Lessons;
                 bslessons.DataBind();
                 bsresources.DataSource = Config.BookingSystem.Resources.Values;
                 bsresources.DataBind();
@@ -125,6 +128,9 @@ namespace HAP.Web
             Config.ProxyServer.Enabled = proxyenabled.Checked;
             Config.ProxyServer.Port = int.Parse(proxyport.Text);
             Config.BookingSystem.KeepXmlClean = bsclean.Checked;
+            Config.BookingSystem.Admins = bsadmins.Text;
+            Config.SMTP.User = smtpuser.Text;
+            Config.SMTP.Password = smtppassword.Text;
             Config.BookingSystem.MaxDays =  int.Parse(bsdays.Text);
             Config.BookingSystem.MaxBookingsPerWeek = int.Parse(bsmax.Text);
             Config.BookingSystem.TwoWeekTimetable = bstwoweek.Checked;

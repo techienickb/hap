@@ -20,20 +20,20 @@ namespace HAP.Web.BookingSystem.admin
             staticbookingsgrid.RowDeleting += new GridViewDeleteEventHandler(staticbookingsgrid_RowDeleting);
             ABR.ItemDeleting += new EventHandler<ListViewDeleteEventArgs>(ABR_ItemDeleting);
             hapConfig config = hapConfig.Current;
-            this.Title = string.Format("{0} - Home Access Plus+ - IT Booking System - Admin", config.BaseSettings.EstablishmentName);
+            this.Title = string.Format("{0} - Home Access Plus+ - IT Booking System - Admin", config.School.Name);
         }
 
-        public bookingResource[] getResources()
+        public Resource[] getResources()
         {
-            List<bookingResource> resources = new List<bookingResource>();
-            foreach (bookingResource br in hapConfig.Current.BookingSystem.Resources)
+            List<Resource> resources = new List<Resource>();
+            foreach (Resource br in hapConfig.Current.BookingSystem.Resources.Values)
                 resources.Add(br);
             return resources.ToArray();
         }
-        public lesson[] getLessons()
+        public Lesson[] getLessons()
         {
-            List<lesson> Lessons = new List<lesson>();
-            foreach (lesson les in hapConfig.Current.BookingSystem.Lessons)
+            List<Lesson> Lessons = new List<Lesson>();
+            foreach (Lesson les in hapConfig.Current.BookingSystem.Lessons.Values)
                 Lessons.Add(les);
             return Lessons.ToArray();
         }
@@ -45,9 +45,9 @@ namespace HAP.Web.BookingSystem.admin
             else
             {
                 cache = new List<CustomDataType>();
-                foreach (UserInfo user in ADUtil.FindUsers())
-                    if (string.IsNullOrEmpty(user.Notes)) cache.Add(new CustomDataType(user.LoginName, user.LoginName.ToLower()));
-                    else cache.Add(new CustomDataType(string.Format("{0} - ({1})", user.LoginName, user.Notes), user.LoginName.ToLower()));
+                foreach (User user in ADUtils.FindUsers())
+                    if (string.IsNullOrEmpty(user.Notes)) cache.Add(new CustomDataType(user.UserName, user.UserName.ToLower()));
+                    else cache.Add(new CustomDataType(string.Format("{0} - ({1})", user.UserName, user.Notes), user.UserName.ToLower()));
                 HttpContext.Current.Cache.Insert("userddlcache", cache, new System.Web.Caching.CacheDependency(new string[] { }, new string[] { }), DateTime.Now.AddHours(1), TimeSpan.Zero);
             }
             return cache.ToArray();
@@ -130,7 +130,7 @@ namespace HAP.Web.BookingSystem.admin
         {
             List<Template> ts = new List<Template>();
             Templates t = new Templates();
-            foreach (bookingResource resource in hapConfig.Current.BookingSystem.Resources)
+            foreach (Resource resource in hapConfig.Current.BookingSystem.Resources.Values)
             {
                 Template t1 = new Template();
                 t1.ID = resource.Name;

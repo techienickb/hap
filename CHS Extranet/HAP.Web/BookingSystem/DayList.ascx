@@ -23,7 +23,7 @@
                     </h1>
                     <asp:Repeater runat="server" ID="dl">
                         <ItemTemplate>
-                            <div class="<%#Eval("Name") %> <%#Eval("ResourceType") %>">
+                            <div class="<%#Eval("Name") %> <%#Eval("Type") %>">
                                 <span class="room"><%#Eval("Name") %></span>
                                 <hap:DayListRow ID="DayListRow1" runat="server" Show='<%#lessonsel.SelectedValue %>' Date='<%#Date %>' Room='<%#Eval("Name") %>' />
                             </div>

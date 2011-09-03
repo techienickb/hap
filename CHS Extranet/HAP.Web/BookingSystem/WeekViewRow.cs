@@ -36,7 +36,7 @@ namespace HAP.Web.BookingSystem
             writer.Write("Lesson");
             writer.WriteLine("</h2>");
             bool alt = false;
-            foreach (lesson les in config.BookingSystem.Lessons)
+            foreach (Lesson les in config.BookingSystem.Lessons)
             {
                 writer.Write("<div{0}>", alt ? " class=\"alt\"" : "");
                 writer.Write(les.Name);
@@ -45,14 +45,14 @@ namespace HAP.Web.BookingSystem
             }
             writer.WriteLine("</div>");
             alt = false;
-            foreach (bookingResource res in config.BookingSystem.Resources)
+            foreach (Resource res in config.BookingSystem.Resources.Values)
             {
                 string Room = res.Name;
                 writer.WriteLine("<div class=\"lessoncol\">");
                 writer.Write("<h2>");
                 writer.Write(res.Name);
                 writer.WriteLine("</h2>");
-                foreach (lesson lesson in config.BookingSystem.Lessons)
+                foreach (Lesson lesson in config.BookingSystem.Lessons)
                 {
                     Booking b = bs.getBooking(Room, lesson.Name);
                     string lessonname = b.Name;

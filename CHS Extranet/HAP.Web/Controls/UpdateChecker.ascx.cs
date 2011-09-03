@@ -20,8 +20,8 @@ namespace HAP.Web.Controls
             if (this.Visible)
             {
                 WebClient client = new WebClient();
-                if (!string.IsNullOrEmpty(hapConfig.Current.AnnouncementBox.ProxyAddress))
-                    client.Proxy = new WebProxy(hapConfig.Current.AnnouncementBox.ProxyAddress, hapConfig.Current.AnnouncementBox.ProxyPort);
+                if (!string.IsNullOrEmpty(hapConfig.Current.ProxyServer.Address) && hapConfig.Current.ProxyServer.Enabled)
+                    client.Proxy = new WebProxy(hapConfig.Current.ProxyServer.Address, hapConfig.Current.ProxyServer.Port);
                 XmlDocument xmldoc = new XmlDocument();
                 try
                 {

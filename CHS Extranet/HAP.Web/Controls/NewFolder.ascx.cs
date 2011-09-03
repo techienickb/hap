@@ -8,6 +8,7 @@ using System.Configuration;
 using HAP.Web.Configuration;
 using System.IO;
 using System.DirectoryServices.AccountManagement;
+using System.Web.Security;
 
 namespace HAP.Web.Controls
 {
@@ -22,8 +23,10 @@ namespace HAP.Web.Controls
 
         protected void yes_Click(object sender, EventArgs e)
         {
+            ((HAP.AD.User)Membership.GetUser()).Impersonate();
             Directory.CreateSubdirectory(foldername.Text);
             Page.DataBind();
+            ((HAP.AD.User)Membership.GetUser()).EndImpersonate();
         }
     }
 }

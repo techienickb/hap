@@ -31,7 +31,7 @@ namespace HAP.Web.BookingSystem
         protected override void OnInitComplete(EventArgs e)
         {
             config = hapConfig.Current;
-            this.Title = string.Format("{0} - Home Access Plus+ - IT Booking System", config.BaseSettings.EstablishmentName);
+            this.Title = string.Format("{0} - Home Access Plus+ - IT Booking System", config.School.Name);
         }
     }
 }

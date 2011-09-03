@@ -13,7 +13,7 @@ namespace HAP.Web.Controls
     {
         private hapConfig config;
 
-        private bool isAuth(uploadfilter filter)
+        private bool isAuth(Filter filter)
         {
             if (filter.EnableFor == "All") return true;
             else if (filter.EnableFor != "None")
@@ -28,9 +28,9 @@ namespace HAP.Web.Controls
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            config = hapConfig.Current;
+            hapConfig config = hapConfig.Current;
             List<string> filters = new List<string>();
-            foreach (uploadfilter f in config.MyComputer.UploadFilters)
+            foreach (Filter f in config.MySchoolComputerBrowser.Filters)
                 if (isAuth(f)) filters.Add(f.ToString());
             string fs = string.Join("|", filters.ToArray());
             InitParams.Attributes.Add("value", string.Format("Path={0}/{1},Filters={2}", ((IMyComputerDisplay)Page).RoutingDrive, ((IMyComputerDisplay)Page).RoutingPath, fs));

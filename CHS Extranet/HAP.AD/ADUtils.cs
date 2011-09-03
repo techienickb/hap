@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.DirectoryServices.AccountManagement;
 using System.Configuration.Provider;
 using System.Security.Principal;
+using HAP.Web.Configuration;
 
 namespace HAP.AD
 {
@@ -16,6 +17,53 @@ namespace HAP.AD
 	/// </summary>
 	public class ADUtils
 	{
+
+		public static User[] FindUsers(string Group)
+		{
+			GroupPrincipal gp = GroupPrincipal.FindByIdentity(ADUtils.GetPContext(), Group);
+			List<User> users = new List<User>();
+			foreach (Principal p in gp.GetMembers(true))
+				try { users.Add(new User(p.SamAccountName)); }
+				catch { }
+			return users.ToArray();
+		}
+
+		public static User[] FindUsers()
+		{
+			hapConfig config = hapConfig.Current;
+			System.Collections.Generic.List<User> users = new List<User>();
+			foreach (ou ob in hapConfig.Current.AD.OUs.Values)
+				if (!ob.Ignore)
+					foreach (User info in FindUsers(ob, ""))
+						if (!users.Contains(info))
+							users.Add(info);
+			users.Sort();
+			return users.ToArray();
+		}
+
+		public static User[] FindUsers(ou ou, string subou)
+		{
+			hapConfig config = hapConfig.Current;
+			List<User> results = new List<User>();
+
+			string cs = string.Format(ou.Path, subou);
+			DirectoryEntry usersDE = new DirectoryEntry(cs, config.AD.User, config.AD.Password);
+			//throw new Exception(usersDE1.Path);
+			//DirectoryEntry usersDE = new DirectoryEntry(ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
+			DirectorySearcher ds = new DirectorySearcher(usersDE);
+			ds.Filter = "(&(objectClass=user)(mail=*)(sAMAccountName=*))";
+			ds.PropertiesToLoad.Add("sAMAccountName");
+
+			try
+			{
+				SearchResultCollection sr = ds.FindAll();
+
+				for (int i = 0; i < sr.Count; i++) results.Add(new User(sr[i].Properties["sAMAccountName"][0].ToString()));
+			}
+			catch (Exception e) { throw new Exception(usersDE.Path, e); }
+			results.Sort();
+			return results.ToArray();
+		}
 
 		public static string FriendlyDomainToLdapDomain(string friendlyDomainName)
 		{
