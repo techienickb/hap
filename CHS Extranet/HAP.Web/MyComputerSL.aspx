@@ -1,6 +1,6 @@
-﻿<%@ Page Title="Crickhowell High School - Home Access Plus+ - My Computer Extended Edition" Language="C#" MasterPageFile="~/chs.master" AutoEventWireup="true" CodeBehind="MyComputerSL.aspx.cs" Inherits="HAP.Web.MyComputerSL" %>
+﻿<%@ Page Title="Crickhowell High School - Home Access Plus+ - My Computer Extended Edition" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true" CodeBehind="MyComputerSL.aspx.cs" Inherits="HAP.Web.MyComputerSL" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-	<link href="mycomputer.css" rel="stylesheet" type="text/css" />
+	<link href="style/mycomputer.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript">
 		function onSilverlightError(sender, args) {
 			var appSource = "";

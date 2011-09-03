@@ -11,6 +11,7 @@ using System.Web.UI;
 using System.IO;
 using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
+using HAP.Data;
 
 namespace HAP.Web.API
 {
@@ -169,7 +170,7 @@ namespace HAP.Web.API
         public int EditLesson(string origname, string name, string type, string start, string end)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
-            Lesson l = Config.BookingSystem.Lessons[origname];
+            Lesson l = Config.BookingSystem.Lessons.Get(origname);
             l.Name = name;
             l.Type = (LessonType)Enum.Parse(typeof(LessonType), type);
             int h = int.Parse(start.Substring(0, 2)) + (start.Contains("PM") ? 12 : 0);

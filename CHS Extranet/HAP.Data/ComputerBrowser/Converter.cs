@@ -13,6 +13,11 @@ namespace HAP.Data.ComputerBrowser
 {
     public class Converter
     {
+        public static string FormatMapping(string mapping, User user)
+        {
+            return mapping.Replace("%homepath%", user.HomeDirectory).Replace("%username%", user.UserName);
+        }
+
         static HttpContext Context { get { return HttpContext.Current; } }
 
         public static string DriveToUNC(string RoutingPath, string RoutingDrive)

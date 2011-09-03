@@ -1,8 +1,8 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/chs.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="HAP.Web.HelpDesk.Default" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="HAP.Web.HelpDesk.Default" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit.HTMLEditor" TagPrefix="asp" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <link href="<%=Request.ApplicationPath%>/HelpDesk/helpdesksheet.css" rel="stylesheet" type="text/css" />
+    <link href="<%=ResolveClientUrl("~/HelpDesk/helpdesksheet.css") %>" rel="stylesheet" type="text/css" />
     <%if (!string.IsNullOrEmpty(TicketID)) { %>
     <style type="text/css">
         #ticketlist #tickets a#ticket-<%=TicketID%> { border: solid 1px #7da2ce; }
@@ -18,26 +18,26 @@
                 </asp:DropDownList>
             </h1>
             <div id="tickets">
-                <a href="<%=Request.ApplicationPath%>/">
-                    <img src="<%=Request.ApplicationPath%>/images/icons/school.png" alt="" />
+                <a href="<%=ResolveClientUrl("~/")%>">
+                    <img src="<%=ResolveClientUrl("~/images/icons/school.png")%>" alt="" />
                     Home Access Plus+ Home
                     <i>Go back to Home Access Plus+ Home</i>
                 </a>
-                <a href="<%=Request.ApplicationPath%>/HelpDesk/ticket/-1" id="ticket--1">
-                    <img src="<%=Request.ApplicationPath%>/Images/StatusIcons/newticket.png" alt="" />
+                <a href="<%=ResolveClientUrl("~/HelpDesk/ticket/-1")%>" id="ticket--1">
+                    <img src="<%=ResolveClientUrl("~/Images/StatusIcons/newticket.png")%>" alt="" />
                     New Support Ticket
                     <i>Open a New Support Ticket</i>
                 </a>
                 <a href="~/HelpDesk/ticket/-2" runat="server" id="newadminsupportticket">
-                    <img src="<%=Request.ApplicationPath%>/Images/StatusIcons/newadmin.png" alt="" />
+                    <img src="<%=ResolveClientUrl("~/Images/StatusIcons/newadmin.png")%>" alt="" />
                     New Admin Support Ticket
                     <i>Open a New Admin Support Ticket</i>
                 </a>
             <asp:Repeater runat="server" ID="ticketsrepeater">
                 <ItemTemplate>
-                    <a href="<%#string.Format(Request.ApplicationPath + "/HelpDesk/ticket/{0}", Eval("Id")) %>" id="ticket-<%#Eval("Id")%>">
-                        <img src="<%#string.Format(Request.ApplicationPath + "/Images/StatusIcons/{0}.png", Eval("Status")) %>" alt="<%#Eval("Status")%>" />
-                        <img src="<%#string.Format(Request.ApplicationPath + "/Images/StatusIcons/priority_{0}.png", Eval("Priority")) %>" alt="" class="Priority" />
+                    <a href="<%=ResolveClientUrl(string.Format(~/HelpDesk/ticket/{0}", Eval("Id"))) %>" id="ticket-<%#Eval("Id")%>">
+                        <img src="<%=ResolveClientUrl(string.Format("~/Images/StatusIcons/{0}.png", Eval("Status"))) %>" alt="<%#Eval("Status")%>" />
+                        <img src="<%=ResolveClientUrl(string.Format("~/Images/StatusIcons/priority_{0}.png", Eval("Priority"))) %>" alt="" class="Priority" />
                         <%# Eval("Subject") %>
                         <i><%# ((DateTime)Eval("Date")).ToString("dd/MM/yy hh:mm")%> by <%# getDisplayName(Eval("User")) %></i>
                     </a>
@@ -48,7 +48,7 @@
         <div id="ticket">
             <asp:PlaceHolder runat="server" ID="NewTicketFiled" Visible="false">
                 <h1>Your New ticket has been filed with IT support</h1>
-                <div>You can access your support ticket via <%=string.Format("<a href=\"" + Request.ApplicationPath + "/helpdesk/ticket/{3}\">{0}://{1}{2}/helpdesk/ticket/{3}</a>", Request.Url.Scheme, Request.Url.Host + (Request.Url.Port != 80 && Request.Url.Port != 443 ? ":" + Request.Url.Port.ToString() : ""), Request.ApplicationPath, _id)%></div>
+                <div>You can access your support ticket via <%=ResolveClientUrl(string.Format("<a href=\"~/helpdesk/ticket/{3}\">{0}://{1}{2}/helpdesk/ticket/{3}</a>", Request.Url.Scheme, Request.Url.Host + (Request.Url.Port != 80 && Request.Url.Port != 443 ? ":" + Request.Url.Port.ToString() : ""), Request.ApplicationPath, _id))%></div>
             </asp:PlaceHolder>
             <asp:PlaceHolder runat="server" ID="noCurrentTicket">
                 <h1><< Select a Ticket or <a href="?view=-1">File for Support</a></h1>
@@ -103,7 +103,7 @@
             <div class="panel">
                 <asp:Repeater runat="server" ID="currentticket">
                     <ItemTemplate>
-                        <h1><span style="float: right;"><%#Eval("Status") %></span><a href="<%=Request.ApplicationPath %>/helpdesk/ticket/<%#Eval("Id") %>">#<%#Eval("Id") %></a> - <b><%#Eval("Subject") %> - Priority: <%#Eval("Priority")%></b></h1>
+                        <h1><span style="float: right;"><%#Eval("Status") %></span><a href="<%=ResolveClientUrl("~/helpdesk/ticket/" + Eval("Id").ToString()) %>">#<%#Eval("Id") %></a> - <b><%#Eval("Subject") %> - Priority: <%#Eval("Priority")%></b></h1>
                         <div style="border-bottom: solid 1px #7da2ce; padding: 4px;">Filed on <%#Eval("Date")%> by <%#((HAP.Web.HelpDesk.Ticket)Container.DataItem).User.DisplayName %></div>
                     </ItemTemplate>
                 </asp:Repeater>

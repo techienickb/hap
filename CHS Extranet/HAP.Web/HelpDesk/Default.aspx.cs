@@ -156,7 +156,7 @@ namespace HAP.Web.HelpDesk
             MailMessage mes = new MailMessage();
 
             mes.Subject = "A Ticket (#" + x + ") has been Created";
-            mes.From = new MailAddress(up.EmailAddress, up.DisplayName);
+            mes.From = new MailAddress(ADUser.Email, ADUser.DisplayName);
             mes.Sender = mes.From;
             mes.ReplyToList.Add(mes.From);
 

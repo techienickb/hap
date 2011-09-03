@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Crickhowell High School - IT - Extranet - My Computer" Language="C#" MasterPageFile="~/chs.master" AutoEventWireup="true" CodeBehind="mycomputer.aspx.cs" Inherits="HAP.Web.mycomputer" %>
+﻿<%@ Page Title="Crickhowell High School - IT - Extranet - My Computer" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true" CodeBehind="mycomputer.aspx.cs" Inherits="HAP.Web.mycomputer" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <%@ Register Src="~/Controls/NewFolder.ascx" TagName="NewFolder" TagPrefix="hap" %>
 <%@ Register Src="~/Controls/Delete.ascx" TagName="Delete" TagPrefix="hap" %>
@@ -8,8 +8,8 @@
 <%@ Register Src="~/Controls/Upload.ascx" TagName="Upload" TagPrefix="hap" %>
 
 <asp:Content runat="server" ContentPlaceHolderID="head">
-	<link href="<%=Request.ApplicationPath %>/mycomputer.css" rel="stylesheet" type="text/css" />
-	<script type="text/javascript" src="<%=Request.ApplicationPath %>/Scripts/rightclick.js"></script>
+	<link href="<%=ResolveClientUrl("~/mycomputer.css")%>" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="<%=ResolveClientUrl("~/Scripts/rightclick.js")%>"></script>
 	<script type="text/javascript">
 		SimpleContextMenu.setup({ 'preventDefault': true, 'preventForms': false });
 		SimpleContextMenu.attach('container', 'CM1');
@@ -27,8 +27,8 @@
 <asp:Content ContentPlaceHolderID="body" runat="server">
 	<div id="maincol">
 		<h1>My Computer</h1>
-        <a href="<%=Request.ApplicationPath %>">Home Access Plus+ Home</a>, <a href="<%=Request.ApplicationPath %>/MyComputerSL.aspx" onclick="return changeversion('sl');" id="mypcsl" title="Try the Extended silverlight version of the My School Computer Browser">Extended Version</a>
-		<script type="text/javascript" src="<%=Request.ApplicationPath %>/Scripts/Silverlight.js"></script>
+		<a href="<%=ResolveClientUrl("~")%>">Home Access Plus+ Home</a>, <a href="<%=ResolveClientUrl("~/MyComputerSL.aspx")%>" onclick="return changeversion('sl');" id="mypcsl" title="Try the Extended silverlight version of the My School Computer Browser">Extended Version</a>
+		<script type="text/javascript" src="<%=ResolveClientUrl("~/Scripts/Silverlight.js")%>"></script>
 		<div id="versionquest" style="display: none;">
 			<div class="modalBackground" style="width: 100%; height: 100%; position: absolute; position: fixed; z-index: 2000; top: 0; left: 0; right: 0; bottom: 0;">
 			</div>
@@ -40,8 +40,8 @@
 								<h1>My Computer Version:</h1>
 								Please select a version to use:
 								<div id="HomeButtons">
-									<a href="<%=Request.ApplicationPath %>/MyComputerSL.aspx" onclick="return changeversion('sl');">Extended Version<i>Contains drag and drop features</i></a>
-									<a href="<%=Request.ApplicationPath %>/mycomputer.aspx" onclick="return changeversion('html');">Basic Version<i>Basic HTML icons</i></a>
+									<a href="<%=ResolveClientUrl("~/MyComputerSL.aspx")%>" onclick="return changeversion('sl');">Extended Version<i>Contains drag and drop features</i></a>
+									<a href="<%=ResolveClientUrl("~/mycomputer.aspx")%>" onclick="return changeversion('html');">Basic Version<i>Basic HTML icons</i></a>
 								</div>
 							</div>
 						</td>
@@ -53,7 +53,7 @@
 			<div id="bar">
 				<hap:NewFolder runat="server" ID="newfolderlink" Visible="false" />
 				<hap:Upload runat="server" id="newfileuploadlink" Visible="false" />
-				<a class="right" href="<%=Request.ApplicationPath %>/mycomputer.aspx" onclick="return view();"><span>View</span></a>
+				<a class="right" href="<%=ResolveClientUrl("~/mycomputer.aspx")%>" onclick="return view();"><span>View</span></a>
 			</div>
 			<div id="viewbox">
 				<a href="#" onclick="return changeview('Icons');">Icons</a>
@@ -71,7 +71,7 @@
 			<asp:Repeater runat="server" ID="browserrepeater">
 				<ItemTemplate>
 					<a href="<%#Eval("Path") %>"<%#((bool)Eval("RightClick")) ? " class=\"container\"" : ""%>>
-						<img src="<%=Request.ApplicationPath%>/<%#Eval("Image") %>" alt="" />
+						<img src="<%#ResolveClientUrl("~/" + Eval("Image").ToString()) %>" alt="" />
 						<%#Eval("Name") %>
 						<%#Eval("Description") %>
 					</a>

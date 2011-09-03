@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Collections.ObjectModel;
 
-namespace HAP.Web.API
+namespace HAP.Data
 {
     [Serializable]
     public class ADOU

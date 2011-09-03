@@ -46,6 +46,7 @@ namespace HAP.Web.API
 
         public void ProcessRequest(HttpContext context)
         {
+            ((HAP.AD.User)Membership.GetUser()).Impersonate();
             Context = context;
             config = hapConfig.Current;
             DriveMapping unc; string userhome;
@@ -70,6 +71,7 @@ namespace HAP.Web.API
             memstr.WriteTo(context.Response.OutputStream);
             context.Response.Flush();
             file = null;
+            ((HAP.AD.User)Membership.GetUser()).EndImpersonate();
         }
 
         private Image FixedSize(Image imgPhoto, int Width, int Height)

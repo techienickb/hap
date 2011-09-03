@@ -1,8 +1,8 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/chs.master" AutoEventWireup="true" CodeBehind="log.aspx.cs" Inherits="HAP.Web.Tracker.log" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true" CodeBehind="log.aspx.cs" Inherits="HAP.Web.Tracker.log" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <%@ Register Assembly="System.Web.DataVisualization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Namespace="System.Web.UI.DataVisualization.Charting" TagPrefix="asp" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <link href="<%=Request.ApplicationPath %>/tracker/tracker.css" rel="stylesheet" type="text/css" />
+    <link href="<%=ResolveClientUrl("~/tracker/tracker.css")%>" rel="stylesheet" type="text/css" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server"> 
     <div style="text-align: center;" id="logheader">Historic <asp:Hyperlink runat="server" ImageUrl="~/tracker/logontracker-small.png" Text="Logon Tracker" NavigateUrl="~/tracker/" /></div>
@@ -96,11 +96,11 @@
             <asp:Repeater ID="ListView1" runat="server">
                 <ItemTemplate>
                     <tr style="">
-                        <td><a href="<%=Request.ApplicationPath %>/tracker/<%# ((DateTime)Eval("LogOnDateTime")).ToString("yyyy/M") %>/c/<%# Eval("ComputerName") %>/"><%# Eval("ComputerName") %></a> (<%# Eval("IP") %>)</td>
+                        <td><a href="<%#ResolveClientUrl("~/tracker/" + ((DateTime)Eval("LogOnDateTime")).ToString("yyyy/M") + "/c/" + Eval("ComputerName").ToString() + "/")%>"><%# Eval("ComputerName") %></a> (<%# Eval("IP") %>)</td>
                         <td><%# Eval("UserName") %></td>
                         <td><%# Eval("DomainName") %></td>
                         <td><%# Eval("LogonServer") %></td>
-                        <td style="width: 160px"><a href="<%=Request.ApplicationPath %>/tracker/<%# ((DateTime)Eval("LogOnDateTime")).ToString("yyyy/M") %>/d/<%# ((DateTime)Eval("LogOnDateTime")).Day %>/"><%# ((DateTime)Eval("LogOnDateTime")).ToString("dd MMMM yyyy") %></a> <%# ((DateTime)Eval("LogOnDateTime")).ToString("HH:mm") %></td>
+                        <td style="width: 160px"><a href="<%#ResolveClientUrl("~/tracker/" + ((DateTime)Eval("LogOnDateTime")).ToString("yyyy/M") + "/d/" + ((DateTime)Eval("LogOnDateTime")).Day + "/")%>"><%# ((DateTime)Eval("LogOnDateTime")).ToString("dd MMMM yyyy") %></a> <%# ((DateTime)Eval("LogOnDateTime")).ToString("HH:mm") %></td>
                         <td style="width: 160px"><%# (Eval("LogOffDateTime") == null) ? "" : ((DateTime)Eval("LogOffDateTime")).ToString("f")%></td>
                     </tr>
                 </ItemTemplate>

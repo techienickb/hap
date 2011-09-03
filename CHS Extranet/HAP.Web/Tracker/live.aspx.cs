@@ -11,8 +11,9 @@ using HAP.Data.Tracker;
 
 namespace HAP.Web.Tracker
 {
-    public partial class live : System.Web.UI.Page
+    public partial class live : HAP.Web.Controls.Page
     {
+        public live() { this.SectionTitle = "Logon Tracker - Live"; }
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!Page.IsPostBack)
@@ -20,13 +21,6 @@ namespace HAP.Web.Tracker
                 ListView1.DataSource = trackerlog.Current;
                 ListView1.DataBind();
             }
-        }
-
-        hapConfig config;
-        protected override void OnInitComplete(EventArgs e)
-        {
-            config = hapConfig.Current;
-            this.Title = string.Format("{0} - Home Access Plus+ - Logon Tracker - Live Tracker", config.BaseSettings.EstablishmentName);
         }
 
         protected void refreshtimer_Tick(object sender, EventArgs e)
@@ -42,8 +36,8 @@ namespace HAP.Web.Tracker
             try
             {
                 ConnectionOptions connoptions = new ConnectionOptions();
-                connoptions.Username = hapConfig.Current.ADSettings.ADUsername;
-                connoptions.Password = hapConfig.Current.ADSettings.ADPassword;
+                connoptions.Username = hapConfig.Current.AD.User;
+                connoptions.Password = hapConfig.Current.AD.Password;
                 ManagementScope scope = new ManagementScope(string.Format(@"\\{0}\ROOT\CIMV2", Computer), connoptions);
                 scope.Connect();
                 ObjectQuery oq = new ObjectQuery("Select Name From Win32_OperatingSystem");
@@ -65,8 +59,8 @@ namespace HAP.Web.Tracker
                 try
                 {
                     ConnectionOptions connoptions = new ConnectionOptions();
-                    connoptions.Username = hapConfig.Current.ADSettings.ADUsername;
-                    connoptions.Password = hapConfig.Current.ADSettings.ADPassword;
+                    connoptions.Username = hapConfig.Current.AD.User;
+                    connoptions.Password = hapConfig.Current.AD.Password;
                     ManagementScope scope = new ManagementScope(string.Format(@"\\{0}\ROOT\CIMV2", entry.ComputerName), connoptions);
                     scope.Connect();
                     ObjectQuery oq = new ObjectQuery("Select Name From Win32_OperatingSystem");

@@ -42,33 +42,39 @@ namespace HAP.Web.routing
 
     public class Downloader : IMyComputerDisplay, IHttpHandler
     {
-
-        private PrincipalContext pcontext;
-        private UserPrincipal up;
+        private HAP.AD.User _ADUser = null;
+        public HAP.AD.User ADUser
+        {
+            get
+            {
+                if (_ADUser == null) _ADUser = ((HAP.AD.User)Membership.GetUser());
+                return _ADUser;
+            }
+        }
         private hapConfig config;
 
-        private bool isAuth(uncpath path)
+        private bool isAuth(DriveMapping path)
         {
             if (path.EnableReadTo == "All") return true;
             else if (path.EnableReadTo != "None")
             {
                 bool vis = false;
-                foreach (string s in path.EnableReadTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                    if (!vis) vis = HttpContext.Current.User.IsInRole(s);
+                foreach (string s in path.EnableReadTo.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
+                    if (!vis) vis = HttpContext.Current.User.IsInRole(s.Trim());
                 return vis;
             }
             return false;
         }
 
-        private bool isWriteAuth(uncpath path)
+        private bool isWriteAuth(DriveMapping path)
         {
             if (path == null) return true;
             if (path.EnableWriteTo == "All") return true;
             else if (path.EnableWriteTo != "None")
             {
                 bool vis = false;
-                foreach (string s in path.EnableWriteTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                    if (!vis) vis = HttpContext.Current.User.IsInRole(s);
+                foreach (string s in path.EnableWriteTo.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
+                    if (!vis) vis = HttpContext.Current.User.IsInRole(s.Trim());
                 return vis;
             }
             return false;
@@ -78,16 +84,14 @@ namespace HAP.Web.routing
         public void ProcessRequest(HttpContext context)
         {
             config = hapConfig.Current;
-            pcontext = HAP.AD.ADUtil.PContext;
-            up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, HAP.AD.ADUtil.Username);
-
-            string userhome = up.HomeDirectory;
+            ADUser.Impersonate();
+            string userhome = ADUser.HomeDirectory;
             if (!userhome.EndsWith("\\")) userhome += "\\";
             string path = RoutingPath.Replace('^', '&').Replace("%20", " ");
-            uncpath unc = null;
-            unc = config.MyComputer.UNCPaths[RoutingDrive];
+            DriveMapping unc = null;
+            unc = config.MySchoolComputerBrowser.Mappings[RoutingDrive.ToCharArray()[0]];
             if (unc == null || !isAuth(unc)) context.Response.Redirect(context.Request.ApplicationPath + "/unauthorised.aspx", true);
-            else path = string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), HAP.AD.ADUtil.Username) + '\\' + path.Replace('/', '\\');
+            else path = Converter.FormatMapping(unc.UNC, ADUser) + '\\' + path.Replace('/', '\\');
             long startBytes = 0;
 
             FileInfo file = new FileInfo(path);
@@ -117,6 +121,7 @@ namespace HAP.Web.routing
             }
             context.Response.End();
             _BinaryReader.Close();
+            ADUser.EndImpersonate();
         }
 
         public static string MimeType(string Extension)

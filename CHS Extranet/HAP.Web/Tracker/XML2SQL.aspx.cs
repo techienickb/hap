@@ -7,11 +7,16 @@ using System.Web.UI.WebControls;
 
 namespace HAP.Web.Tracker
 {
-    public partial class XML2SQL : System.Web.UI.Page
+    public partial class XML2SQL : HAP.Web.Controls.Page
     {
+        public XML2SQL()
+        {
+            this.SectionTitle = "Logon Tracker - XML 2 SQL Converter";
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            cantupgrade.Visible = HAP.Web.Configuration.hapConfig.Current.Tracker.Provider == "XML";
+            cantupgrade.Visible = config.Tracker.Provider == "XML";
             canupgrade.Visible = !cantupgrade.Visible;
         }
 

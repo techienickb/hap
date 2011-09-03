@@ -43,11 +43,8 @@ namespace HAP.Web.UserCard
         [WebMethod]
         public void ResetPassword(string username)
         {
-            PrincipalContext pcontext = HAP.AD.ADUtil.PContext;
-            UserPrincipal up2 = UserPrincipal.FindByIdentity(pcontext, username);
-            up2.SetPassword("password");
-            up2.ExpirePasswordNow();
-            up2.Save();
+            User u = new AD.User(username);
+            u.ResetPassword();
         }
 
         [WebMethod]
@@ -75,7 +72,7 @@ namespace HAP.Web.UserCard
         [WebMethod]
         public void Enable(string[] oupaths)
         {
-            PrincipalContext pcontext = HAP.AD.ADUtil.PContext;
+            PrincipalContext pcontext = HAP.AD.ADUtils.GetPContext();
             foreach (string s in oupaths)
             {
                 UserPrincipal user = UserPrincipal.FindByIdentity(pcontext, s);
@@ -87,7 +84,7 @@ namespace HAP.Web.UserCard
         [WebMethod]
         public void Disable(string[] oupaths)
         {
-            PrincipalContext pcontext = HAP.AD.ADUtil.PContext;
+            PrincipalContext pcontext = HAP.AD.ADUtils.GetPContext();
             foreach (string s in oupaths)
             {
                 UserPrincipal user = UserPrincipal.FindByIdentity(pcontext, s);
@@ -109,17 +106,14 @@ namespace HAP.Web.UserCard
         public Ticket[] getMyTickets(string username)
         {
             hapConfig config = hapConfig.Current;
-            ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
-            PrincipalContext pcontext = HAP.AD.ADUtil.PContext;
-            UserPrincipal up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, username);
             XmlDocument doc = new XmlDocument();
             doc.Load(Server.MapPath("~/App_Data/Tickets.xml"));
             string xpath = string.Format("/Tickets/Ticket[@status!='Fixed']");
-            GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, "Domain Admins");
+            GroupPrincipal gp = GroupPrincipal.FindByIdentity(HAP.AD.ADUtils.GetPContext(), "Domain Admins");
             bool ia = false;
             try
             {
-                ia = up.IsMemberOf(gp);
+                ia = new User(username).IsMemberOf(gp);
             }
             catch { }
             if (ia)
@@ -143,9 +137,8 @@ namespace HAP.Web.UserCard
         public Ticket[] setNewTicket(string subject, string note, [Optional]string room, string username)
         {
             hapConfig config = hapConfig.Current;
-            PrincipalContext pcontext = HAP.AD.ADUtil.PContext;
-            UserPrincipal up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, username);
             XmlDocument doc = new XmlDocument();
+            User u = new AD.User(username);
             doc.Load(Server.MapPath("~/App_Data/Tickets.xml"));
             int x;
             if (doc.SelectSingleNode("/Tickets").ChildNodes.Count > 0)
@@ -179,11 +172,11 @@ namespace HAP.Web.UserCard
             MailMessage mes = new MailMessage();
 
             mes.Subject = "A Ticket (#" + x + ") has been Created";
-            mes.From = new MailAddress(up.EmailAddress, up.DisplayName);
+            mes.From = new MailAddress(u.Email, u.DisplayName);
             mes.Sender = mes.From;
             mes.ReplyToList.Add(mes.From);
 
-            mes.To.Add(new MailAddress(config.BaseSettings.AdminEmailAddress, "IT Department"));
+            mes.To.Add(new MailAddress(config.SMTP.FromEmail, config.SMTP.FromUser));
 
             mes.IsBodyHtml = true;
             FileInfo template = new FileInfo(Server.MapPath("~/HelpDesk/newuserticket.htm"));
@@ -192,14 +185,13 @@ namespace HAP.Web.UserCard
                 subject).Replace("{2}",
                 note).Replace("{3}",
                 room).Replace("{4}",
-                up.DisplayName).Replace("{5}",
+                u.DisplayName).Replace("{5}",
                 HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath);
 
-            SmtpClient smtp = new SmtpClient(config.BaseSettings.SMTPServer);
-            if (!string.IsNullOrEmpty(config.BaseSettings.SMTPServerUsername))
-                smtp.Credentials = new NetworkCredential(config.BaseSettings.SMTPServerUsername, config.BaseSettings.SMTPServerPassword);
-            smtp.EnableSsl = config.BaseSettings.SMTPServerSSL;
-            smtp.Port = config.BaseSettings.SMTPServerPort;
+            SmtpClient smtp = new SmtpClient(config.SMTP.Server, config.SMTP.Port);
+            if (!string.IsNullOrEmpty(config.SMTP.User))
+                smtp.Credentials = new NetworkCredential(config.SMTP.User, config.SMTP.Password);
+            smtp.EnableSsl = config.SMTP.SSL;
             smtp.Send(mes);
             return getMyTickets(username);
         }
@@ -221,8 +213,7 @@ namespace HAP.Web.UserCard
                 Date = DateTime.Parse(node.Attributes["date"].Value + " " + node.Attributes["time"].Value);
             else Date = DateTime.Parse(node.Attributes["datetime"].Value);
             hapConfig config = hapConfig.Current;
-            PrincipalContext pcontext = HAP.AD.ADUtil.PContext;
-            User = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, node.Attributes["username"].Value).DisplayName;
+            User = new User(node.Attributes["username"].Value).DisplayName;
         }
 
         public static Note Parse(XmlNode node) { return new Note(node); }
@@ -250,8 +241,7 @@ namespace HAP.Web.UserCard
                 Date = DateTime.Parse(node.SelectNodes("Note")[0].Attributes["date"].Value + " " + node.SelectNodes("Note")[0].Attributes["time"].Value);
             Date = DateTime.Parse(node.SelectNodes("Note")[0].Attributes["datetime"].Value);
             hapConfig config = hapConfig.Current;
-            PrincipalContext pcontext = HAP.AD.ADUtil.PContext;
-            User = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, node.SelectNodes("Note")[0].Attributes["username"].Value).DisplayName;
+            User = new User(node.SelectNodes("Note")[0].Attributes["username"].Value).DisplayName;
             List<Note> notes = new List<Note>();
             foreach (XmlNode n in node.SelectNodes("Note"))
                 notes.Add(new Note(n));

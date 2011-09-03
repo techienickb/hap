@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/chs.master" AutoEventWireup="true" CodeBehind="live.aspx.cs" Inherits="HAP.Web.Tracker.live" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true" CodeBehind="live.aspx.cs" Inherits="HAP.Web.Tracker.live" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="tracker.css" rel="stylesheet" type="text/css" />
 </asp:Content>

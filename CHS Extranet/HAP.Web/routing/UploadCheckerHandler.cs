@@ -7,6 +7,7 @@ using System.Configuration;
 using System.DirectoryServices.AccountManagement;
 using System.IO;
 using HAP.Data.ComputerBrowser;
+using System.Web.Security;
 
 namespace HAP.Web.routing
 {
@@ -23,47 +24,36 @@ namespace HAP.Web.routing
 
         public bool IsReusable { get { return true; } }
 
+        private HAP.AD.User _ADUser = null;
+        public HAP.AD.User ADUser
+        {
+            get
+            {
+                if (_ADUser == null) _ADUser = ((HAP.AD.User)Membership.GetUser());
+                return _ADUser;
+            }
+        }
+
         public void ProcessRequest(HttpContext context)
         {
             config = hapConfig.Current;
-            ConnectionStringSettings connObj = ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString];
-            if (connObj != null) _ActiveDirectoryConnectionString = connObj.ConnectionString;
-            if (string.IsNullOrEmpty(_ActiveDirectoryConnectionString))
-                throw new Exception("The connection name 'activeDirectoryConnectionString' was not found in the applications configuration or the connection string is empty.");
-            if (_ActiveDirectoryConnectionString.StartsWith("LDAP://"))
-                _DomainDN = _ActiveDirectoryConnectionString.Remove(0, _ActiveDirectoryConnectionString.IndexOf("DC="));
-            else throw new Exception("The connection string specified in 'activeDirectoryConnectionString' does not appear to be a valid LDAP connection string.");
-            pcontext = new PrincipalContext(ContextType.Domain, null, _DomainDN, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
-            up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, Username);
-
-            string userhome = up.HomeDirectory;
+            ADUser.Impersonate();
+            string userhome = ADUser.HomeDirectory;
             if (!userhome.EndsWith("\\")) userhome += "\\";
             string path = RoutingPath.Replace('^', '&');
-            uncpath unc = null;
-            unc = config.MyComputer.UNCPaths[RoutingDrive];
-            path = string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), Username) + '\\' + path.Replace('/', '\\');
+            DriveMapping unc = null;
+            unc = config.MySchoolComputerBrowser.Mappings[RoutingDrive.ToCharArray()[0]];
+            path = Converter.FormatMapping(unc.UNC, ADUser) + '\\' + path.Replace('/', '\\');
             FileInfo file = new FileInfo(path);
             context.Response.Clear();
             context.Response.ContentType = "text/plain";
             context.Response.Write(file.Exists.ToString());
             context.Response.Write(",");
             context.Response.Write(MyComputerItem.ParseForImage(file));
+            ADUser.EndImpersonate();
         }
 
-        private String _DomainDN;
-        private String _ActiveDirectoryConnectionString;
-        private PrincipalContext pcontext;
-        private UserPrincipal up;
         private hapConfig config;
 
-        public string Username
-        {
-            get
-            {
-                if (HttpContext.Current.User.Identity.Name.Contains('\\'))
-                    return HttpContext.Current.User.Identity.Name.Remove(0, HttpContext.Current.User.Identity.Name.IndexOf('\\') + 1);
-                else return HttpContext.Current.User.Identity.Name;
-            }
-        }
     }
 }

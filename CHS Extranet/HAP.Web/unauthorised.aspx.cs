@@ -9,11 +9,11 @@ using HAP.Web.Configuration;
 
 namespace HAP.Web
 {
-    public partial class unauthorised : System.Web.UI.Page
+    public partial class unauthorised : HAP.Web.Controls.Page
     {
-        protected void Page_Load(object sender, EventArgs e)
+        public unauthorised()
         {
-            this.Title = string.Format("{0} - Home Access Plus+ - Unauthorised", hapConfig.Current.BaseSettings.EstablishmentName);
+            SectionTitle = "Unauthorised";
         }
     }
 }

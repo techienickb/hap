@@ -52,6 +52,7 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ADOU.cs" />
     <Compile Include="Base64.cs" />
     <Compile Include="BookingSystem\AdvancedBookingRight.cs" />
     <Compile Include="BookingSystem\Booking.cs" />

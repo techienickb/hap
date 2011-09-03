@@ -33,7 +33,7 @@ namespace HAP.Web.BookingSystem.admin
         public Lesson[] getLessons()
         {
             List<Lesson> Lessons = new List<Lesson>();
-            foreach (Lesson les in hapConfig.Current.BookingSystem.Lessons.Values)
+            foreach (Lesson les in hapConfig.Current.BookingSystem.Lessons)
                 Lessons.Add(les);
             return Lessons.ToArray();
         }

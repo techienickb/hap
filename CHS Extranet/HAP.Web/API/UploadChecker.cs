@@ -8,6 +8,7 @@ using System.DirectoryServices.AccountManagement;
 using System.IO;
 using System.Web.Routing;
 using HAP.Data.ComputerBrowser;
+using System.Web.Security;
 
 namespace HAP.Web.API
 {
@@ -37,6 +38,7 @@ namespace HAP.Web.API
 
         public void ProcessRequest(HttpContext context)
         {
+            ((HAP.AD.User)Membership.GetUser()).Impersonate();
             FileInfo file = new FileInfo(Converter.DriveToUNC(RoutingPath.Replace('^', '&'), RoutingDrive));
             context.Response.Clear();
             context.Response.ExpiresAbsolute = DateTime.Now;
@@ -44,6 +46,7 @@ namespace HAP.Web.API
             context.Response.Write(file.Exists ? "EXISTS" : "OK");
             context.Response.Write("\n");
             context.Response.Write("images/icons/" + MyComputerItem.ParseForImage(file));
+            ((HAP.AD.User)Membership.GetUser()).EndImpersonate();
         }
     }
 }

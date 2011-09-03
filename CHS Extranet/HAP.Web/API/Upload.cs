@@ -9,6 +9,7 @@ using HAP.Web.routing;
 using System.IO;
 using System.Configuration;
 using HAP.Data.ComputerBrowser;
+using System.Web.Security;
 
 namespace HAP.Web.API
 {
@@ -41,6 +42,7 @@ namespace HAP.Web.API
 
         public void ProcessRequest(HttpContext context)
         {
+            ((HAP.AD.User)Membership.GetUser()).Impersonate();
             context.Response.ExpiresAbsolute = DateTime.Now;
             try
             {
@@ -66,6 +68,7 @@ namespace HAP.Web.API
                 sw.WriteLine(e.Message);
                 sw.Close();
             }
+            ((HAP.AD.User)Membership.GetUser()).EndImpersonate();
         }
 
         void fileUpload_FileUploadCompleted(object sender, FileUploadCompletedEventArgs args)

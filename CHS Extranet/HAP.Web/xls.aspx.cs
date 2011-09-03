@@ -11,16 +11,17 @@ using System.IO;
 using Excel;
 using HAP.Web.Configuration;
 using HAP.Web.routing;
+using HAP.Data.ComputerBrowser;
 
 namespace HAP.Web
 {
-    public partial class xls : Page, IMyComputerDisplay
+    public partial class xls : HAP.Web.Controls.Page, IMyComputerDisplay
     {
-        private PrincipalContext pcontext;
-        private UserPrincipal up;
-        private hapConfig config;
-
-        private bool isAuth(uncpath path)
+        public xls()
+        {
+            this.SectionTitle = "My School Computer Browser - Excel Viewer";
+        }
+        private bool isAuth(DriveMapping path)
         {
             if (path.EnableReadTo == "All") return true;
             else if (path.EnableReadTo != "None")
@@ -33,7 +34,7 @@ namespace HAP.Web
             return false;
         }
 
-        private bool isWriteAuth(uncpath path)
+        private bool isWriteAuth(DriveMapping path)
         {
             if (path == null) return true;
             if (path.EnableWriteTo == "All") return true;
@@ -47,22 +48,16 @@ namespace HAP.Web
             return false;
         }
 
-        protected override void OnInitComplete(EventArgs e)
-        {
-            config = hapConfig.Current;
-            pcontext = HAP.AD.ADUtil.PContext;
-            up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, HAP.AD.ADUtil.Username);
-        }
-
         protected void Page_Load(object sender, EventArgs e)
         {
-            string userhome = up.HomeDirectory;
+            ADUser.Impersonate();
+            string userhome = ADUser.HomeDirectory;
             if (!userhome.EndsWith("\\")) userhome += "\\";
             string path = RoutingPath.Replace('^', '&');
-            uncpath unc = null;
-                unc = config.MyComputer.UNCPaths[RoutingDrive];
-                if (unc == null || !isWriteAuth(unc)) Response.Redirect(Request.ApplicationPath + "/unauthorised.aspx", true);
-                else path = Path.Combine(string.Format(unc.UNC.Replace("%homepath%", up.HomeDirectory), HAP.AD.ADUtil.Username), path.Replace('/', '\\'));
+            DriveMapping unc = null;
+            unc = config.MySchoolComputerBrowser.Mappings[RoutingDrive.ToCharArray()[0]];
+            if (unc == null || !isWriteAuth(unc)) Response.Redirect(Request.ApplicationPath + "/unauthorised.aspx", true);
+            else path = Path.Combine(Converter.FormatMapping(unc.UNC, ADUser), path.Replace('/', '\\'));
 
             FileInfo file = new FileInfo(path);
 
@@ -73,6 +68,7 @@ namespace HAP.Web
             excelReader.IsFirstRowAsColumnNames = false;
             GridView1.DataSource = excelReader.AsDataSet();
             GridView1.DataBind();
+            ADUser.EndImpersonate();
         }
 
         public string RoutingPath { get; set; }

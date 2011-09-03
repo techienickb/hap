@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/chs.master" AutoEventWireup="true" CodeBehind="WeekView.aspx.cs" Inherits="HAP.Web.BookingSystem.WeekView" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true" CodeBehind="WeekView.aspx.cs" Inherits="HAP.Web.BookingSystem.WeekView" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <%@ Register Namespace="HAP.Web.BookingSystem" Assembly="HAP.Web" TagPrefix="hap" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">

@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Crickhowell High School - IT - Home Access Plus+" Language="C#" MasterPageFile="~/chs.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="HAP.Web.Default" %>
+﻿<%@ Page Title="Crickhowell High School - IT - Home Access Plus+" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="HAP.Web.Default" %>
 <%@ Register TagName="announcement" TagPrefix="hap" Src="~/Controls/Announcement.ascx" %>
 <%@ Register TagName="version" TagPrefix="hap" Src="~/Controls/UpdateChecker.ascx" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
@@ -21,7 +21,7 @@
             <asp:PlaceHolder runat="server" ID="tab_Me" Visible="false">
                 <div id="Me_tab" class="tab">
                     <asp:Image runat="server" ID="userimage" ImageUrl="~/images/imageres18.png" style="margin: 10px 40px 30px 0; float: left" />
-                    <div><%=string.IsNullOrEmpty(up.GivenName) ? up.DisplayName : up.GivenName + " " + up.Surname %></div>
+                    <div><%=string.IsNullOrEmpty(ADUser.FirstName) ? ADUser.DisplayName : ADUser.FirstName + " " + ADUser.LastName %></div>
                     <div><%=Department %></div>
                     <div><%=up.EmailAddress %></div>
                     <asp:Button runat="server" Text="Update My Details" ID="updatemydetails" />
@@ -143,6 +143,7 @@
         <script type="text/javascript">
             $(function () {
                 $('#hometabs').tabs();
+                $('input[type=submit]').button();
             }
         </script>
     </div>
