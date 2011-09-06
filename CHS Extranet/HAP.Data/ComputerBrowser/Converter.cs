@@ -15,7 +15,13 @@ namespace HAP.Data.ComputerBrowser
     {
         public static string FormatMapping(string mapping, User user)
         {
-            return mapping.Replace("%homepath%", user.HomeDirectory).Replace("%username%", user.UserName);
+            string u = "";
+            if (!string.IsNullOrEmpty(user.HomeDirectory))
+            {
+                u = user.HomeDirectory;
+                if (u.EndsWith("\\")) u = u.Remove(u.LastIndexOf('\\'));
+            }
+            return mapping.Replace("%homedir%", u).Replace("%username%", user.UserName);
         }
 
         static HttpContext Context { get { return HttpContext.Current; } }
@@ -28,34 +34,37 @@ namespace HAP.Data.ComputerBrowser
 
         public static string DriveToUNC(string RoutingPath, string RoutingDrive, out DriveMapping unc)
         {
-            string userhome;
-            return DriveToUNC(RoutingPath, RoutingDrive, out unc, out userhome);
+            return DriveToUNC(RoutingPath, RoutingDrive, out unc);
         }
 
-        public static string DriveToUNC(string RoutingPath, string RoutingDrive, out DriveMapping unc, out string userhome)
+        public static string DriveToUNC(string RoutingPath, string RoutingDrive, out DriveMapping unc, User user)
         {
             hapConfig config = hapConfig.Current;
-            User user = (User)Membership.GetUser();
 
-            userhome = "";
-            string u = "";
-            if (!string.IsNullOrEmpty(user.HomeDirectory))
-            {
-                u = userhome = user.HomeDirectory;
-                if (userhome.EndsWith("\\")) userhome = userhome.Remove(userhome.LastIndexOf('\\'));
-            }
-            string path = "";
             unc = config.MySchoolComputerBrowser.Mappings[RoutingDrive.ToCharArray()[0]];
-            path = string.Format(unc.UNC.Replace("%homedir%", u), user.UserName) + RoutingPath;
-
-            path = path.TrimEnd(new char[] { '\\' }).Replace('^', '&').Replace('/', '\\');
-            return path;
+            return (Converter.FormatMapping(unc.UNC, user) + RoutingPath).TrimEnd(new char[] { '\\' }).Replace('^', '&').Replace('/', '\\');
         }
 
-        public static string DriveToUNC(string RoutingPath, string RoutingDrive, out UNCPath unc, out string userhome)
+        public static string DriveToUNC(string RoutingPath, string RoutingDrive, out UNCPath unc, User user)
         {
             DriveMapping u;
-            string s = DriveToUNC(RoutingPath, RoutingDrive, out u, out userhome);
+            string s = DriveToUNC(RoutingPath, RoutingDrive, out u, user);
+            UNCPath u1 = new UNCPath();
+            u1.Drive = u.Drive.ToString();
+            u1.EnableMove = u.EnableMove;
+            u1.EnableReadTo = u.EnableReadTo;
+            u1.EnableWriteTo = u.EnableWriteTo;
+            u1.Name = u.Name;
+            u1.UNC = u.UNC;
+            u1.Usage = u.UsageMode;
+            unc = u1;
+            return s;
+        }
+
+        public static string DriveToUNC(string RoutingPath, string RoutingDrive, out UNCPath unc)
+        {
+            DriveMapping u;
+            string s = DriveToUNC(RoutingPath, RoutingDrive, out u);
             UNCPath u1 = new UNCPath();
             u1.Drive = u.Drive.ToString();
             u1.EnableMove = u.EnableMove;
@@ -73,42 +82,66 @@ namespace HAP.Data.ComputerBrowser
             return DriveToUNC(Path.Remove(0, 1), Path.Substring(0, 1));
         }
 
-        public static string DriveToUNC(string Path, out DriveMapping unc, out string userhome)
+        public static string DriveToUNC(string Path, out DriveMapping unc)
         {
-            return DriveToUNC(Path.Remove(0, 2), Path.Substring(0, 1), out unc, out userhome);
+            return DriveToUNC(Path.Remove(0, 2), Path.Substring(0, 1), out unc);
         }
 
-        public static string DriveToUNC(string Path, out UNCPath unc, out string userhome)
+        public static string DriveToUNC(string Path, out UNCPath unc)
         {
-            return DriveToUNC(Path.Remove(0, 2), Path.Substring(0, 1), out unc, out userhome);
+            return DriveToUNC(Path.Remove(0, 2), Path.Substring(0, 1), out unc);
         }
 
-        public static string UNCtoDrive(string dirpath, DriveMapping unc, string userhome)
+        public static string DriveToUNC(string Path, out UNCPath unc, User user)
         {
-            dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homedir%", userhome), ((User)Membership.GetUser()).UserName), unc.Drive + ":");
+            return DriveToUNC(Path.Remove(0, 2), Path.Substring(0, 1), out unc, user);
+        }
+
+        public static string UNCtoDrive(string dirpath, DriveMapping unc, User user)
+        {
+            dirpath = dirpath.Replace(Converter.FormatMapping(unc.UNC, user), unc.Drive + ":");
             dirpath = dirpath.Replace("\\\\", "\\");
             return dirpath;
         }
 
-        public static string UNCtoDrive(string dirpath, UNCPath unc, string userhome)
+        public static string UNCtoDrive(string dirpath, DriveMapping unc)
         {
-            dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homedir%", userhome), ((User)Membership.GetUser()).UserName), unc.Drive + ":");
+            return UNCtoDrive(dirpath, unc, (User)Membership.GetUser());
+        }
+
+        public static string UNCtoDrive(string dirpath, UNCPath unc)
+        {
+            return UNCtoDrive(dirpath, unc, (User)Membership.GetUser());
+        }
+        public static string UNCtoDrive(string dirpath, UNCPath unc, User user)
+        {
+            dirpath = dirpath.Replace(Converter.FormatMapping(unc.UNC, user), unc.Drive + ":");
             dirpath = dirpath.Replace("\\\\", "\\");
             return dirpath;
         }
 
-        public static string UNCtoDrive2(string dirpath, DriveMapping unc, string userhome)
+        public static string UNCtoDrive2(string dirpath, DriveMapping unc, User user)
         {
-            dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homedir%", userhome), ((User)Membership.GetUser()).UserName), unc.Drive.ToString());
+            dirpath = dirpath.Replace(Converter.FormatMapping(unc.UNC, user), unc.Drive.ToString());
             dirpath = dirpath.Replace('\\', '/').Replace("//", "/");
             return dirpath;
         }
 
-        public static string UNCtoDrive2(string dirpath, UNCPath unc, string userhome)
+        public static string UNCtoDrive2(string dirpath, DriveMapping unc)
         {
-            dirpath = dirpath.Replace(string.Format(unc.UNC.Replace("%homedir%", userhome), ((User)Membership.GetUser()).UserName), unc.Drive.ToString());
+            return UNCtoDrive2(dirpath, unc, (User)Membership.GetUser());
+        }
+
+        public static string UNCtoDrive2(string dirpath, UNCPath unc, User user)
+        {
+            dirpath = dirpath.Replace(Converter.FormatMapping(unc.UNC, user), unc.Drive.ToString());
             dirpath = dirpath.Replace('\\', '/').Replace("//", "/");
             return dirpath;
+        }
+
+        public static string UNCtoDrive2(string dirpath, UNCPath unc)
+        {
+            return UNCtoDrive2(dirpath, unc, ((User)Membership.GetUser()));
         }
 
         static bool isWriteAuth(DriveMapping path)
@@ -118,8 +151,22 @@ namespace HAP.Data.ComputerBrowser
             else if (path.EnableWriteTo != "None")
             {
                 bool vis = false;
-                foreach (string s in path.EnableWriteTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                    if (!vis) vis = Context.User.IsInRole(s);
+                foreach (string s in path.EnableWriteTo.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
+                    if (!vis) vis = Context.User.IsInRole(s.Trim());
+                return vis;
+            }
+            return false;
+        }
+
+        static bool isWriteAuth(DriveMapping path, User user)
+        {
+            if (path == null) return true;
+            if (path.EnableWriteTo == "All") return true;
+            else if (path.EnableWriteTo != "None")
+            {
+                bool vis = false;
+                foreach (string s in path.EnableWriteTo.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
+                    if (!vis) vis = user.IsMemberOf(GroupPrincipal.FindByIdentity(ADUtils.GetPContext(), s.Trim()));
                 return vis;
             }
             return false;
@@ -132,8 +179,22 @@ namespace HAP.Data.ComputerBrowser
             else if (path.EnableWriteTo != "None")
             {
                 bool vis = false;
-                foreach (string s in path.EnableWriteTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                    if (!vis) vis = Context.User.IsInRole(s);
+                foreach (string s in path.EnableWriteTo.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
+                    if (!vis) vis = Context.User.IsInRole(s.Trim());
+                return vis;
+            }
+            return false;
+        }
+
+        static bool isWriteAuth(UNCPath path, User user)
+        {
+            if (path == null) return true;
+            if (path.EnableWriteTo == "All") return true;
+            else if (path.EnableWriteTo != "None")
+            {
+                bool vis = false;
+                foreach (string s in path.EnableWriteTo.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
+                    if (!vis) vis = user.IsMemberOf(GroupPrincipal.FindByIdentity(ADUtils.GetPContext(), s.Trim()));
                 return vis;
             }
             return false;

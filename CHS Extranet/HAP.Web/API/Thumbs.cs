@@ -18,6 +18,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using HAP.Data.ComputerBrowser;
 using System.Drawing.Drawing2D;
+using System.Web.SessionState;
 
 namespace HAP.Web.API
 {
@@ -32,7 +33,7 @@ namespace HAP.Web.API
         }
     }
 
-    public class Thumbs : IHttpHandler
+    public class Thumbs : IHttpHandler, IRequiresSessionState
     {
         public bool IsReusable { get { return true; } }
 
@@ -49,8 +50,8 @@ namespace HAP.Web.API
             ((HAP.AD.User)Membership.GetUser()).Impersonate();
             Context = context;
             config = hapConfig.Current;
-            DriveMapping unc; string userhome;
-            string path = Converter.DriveToUNC(RoutingPath.Replace('^', '&'), RoutingDrive, out unc, out userhome);
+            DriveMapping unc;
+            string path = Converter.DriveToUNC(RoutingPath.Replace('^', '&'), RoutingDrive, out unc, ((HAP.AD.User)Membership.GetUser()));
             FileInfo file = new FileInfo(path);
             FileStream fs = file.OpenRead();
             Image image = Image.FromStream(fs);

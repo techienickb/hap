@@ -8,7 +8,7 @@
 <%@ Register Src="~/Controls/Upload.ascx" TagName="Upload" TagPrefix="hap" %>
 
 <asp:Content runat="server" ContentPlaceHolderID="head">
-	<link href="<%=ResolveClientUrl("~/mycomputer.css")%>" rel="stylesheet" type="text/css" />
+	<link href="<%=ResolveClientUrl("~/style/mycomputer.css")%>" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="<%=ResolveClientUrl("~/Scripts/rightclick.js")%>"></script>
 	<script type="text/javascript">
 		SimpleContextMenu.setup({ 'preventDefault': true, 'preventForms': false });

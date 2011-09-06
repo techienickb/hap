@@ -71,17 +71,17 @@ namespace HAP.Data.BookingSystem
         public bool Static { get; set; }
         public string uid { get; set; }
         public DateTime Date { get; set; }
-        public User User
+        public UserInfo User
         {
             get
             {
-                Dictionary<string, User> cache;
+                Dictionary<string, UserInfo> cache;
                 if (HttpContext.Current.Cache["userdetailcache"] != null)
-                    cache = HttpContext.Current.Cache["userdetailcache"] as Dictionary<string, User>;
-                else cache = new Dictionary<string, User>();
+                    cache = HttpContext.Current.Cache["userdetailcache"] as Dictionary<string, UserInfo>;
+                else cache = new Dictionary<string, UserInfo>();
                 if (!cache.ContainsKey(this.Username))
                 {
-                    cache.Add(this.Username, new User(this.Username));
+                    cache.Add(this.Username, AD.ADUtils.FindUserInfos(this.Username)[0]);
                     if (HttpContext.Current.Cache["userdetailcache"] != null) HttpContext.Current.Cache.Remove("userdetailcache");
                     HttpContext.Current.Cache.Insert("userdetailcache", cache, new System.Web.Caching.CacheDependency(new string[] { }, new string[] { }), DateTime.Now.AddHours(1), TimeSpan.Zero);
                 }

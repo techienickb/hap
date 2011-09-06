@@ -13,6 +13,9 @@ using System.DirectoryServices.AccountManagement;
 using Microsoft.Win32;
 using ICSharpCode.SharpZipLib.Zip;
 using System.Web.Security;
+using System.Web.SessionState;
+using HAP.AD;
+using HAP.Data;
 
 namespace HAP.Web
 {
@@ -28,20 +31,24 @@ namespace HAP.Web
     {
         //method for checking the upload the file is ok. This will be called from Silverlight code behind.
         [WebMethod]
-        public FileCheckResponse CheckFile(string FileName)
+        public FileCheckResponse CheckFile(string FileName, string token)
         {
-            ((HAP.AD.User)Membership.GetUser()).Impersonate();
-            string home; UNCPath unc; string path = Converter.DriveToUNC(FileName, out unc, out home);
-            FileCheckResponse fcr = new FileCheckResponse(path, unc, home);
-            ((HAP.AD.User)Membership.GetUser()).EndImpersonate();
+            User user = new User();
+            user.Authenticate(TokenGenerator.ConvertToPlain(token).Split(new char[] { '@' })[0], TokenGenerator.ConvertToPlain(token).Split(new char[] { '@' })[1]);
+            user.ImpersonateContained();
+            UNCPath unc; string path = Converter.DriveToUNC(FileName, out unc);
+            FileCheckResponse fcr = new FileCheckResponse(path, unc, user);
+            user.EndContainedImpersonate();
             return fcr;
         }
 
         //method for listing
         [WebMethod]
-        public PrimaryResponse ListDrives()
+        public PrimaryResponse ListDrives(string token)
         {
-            ((HAP.AD.User)Membership.GetUser()).Impersonate();
+            User user = new User();
+            user.Authenticate(TokenGenerator.ConvertToPlain(token).Split(new char[] { '@' })[0], TokenGenerator.ConvertToPlain(token).Split(new char[] { '@' })[1]);
+            user.ImpersonateContained();
             PrimaryResponse res = new PrimaryResponse();
             res.HAPVerion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             res.HAPName = Assembly.GetExecutingAssembly().GetName().Name;
@@ -49,9 +56,8 @@ namespace HAP.Web
             hapConfig config = hapConfig.Current; 
 
             long freeBytesForUser, totalBytes, freeBytes;
-            HAP.AD.User up = ((HAP.AD.User)Membership.GetUser());
 
-            string userhome = up.HomeDirectory;
+            string userhome = user.HomeDirectory;
             List<ComputerBrowserAPIItem> items = new List<ComputerBrowserAPIItem>();
             foreach (DriveMapping p in config.MySchoolComputerBrowser.Mappings.Values)
             {
@@ -69,17 +75,17 @@ namespace HAP.Web
                 {
                     if (path.Usage == MappingUsageMode.DriveSpace)
                     {
-                        if (Win32.GetDiskFreeSpaceEx(Converter.FormatMapping(path.UNC, up), out freeBytesForUser, out totalBytes, out freeBytes))
+                        if (Win32.GetDiskFreeSpaceEx(Converter.FormatMapping(path.UNC, user), out freeBytesForUser, out totalBytes, out freeBytes))
                             space = Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
                     }
                     else
                     {
                         try
                         {
-                            HAP.Data.Quota.QuotaInfo qi = HAP.Data.ComputerBrowser.Quota.GetQuota(up.UserName, Converter.FormatMapping(path.UNC, up));
+                            HAP.Data.Quota.QuotaInfo qi = HAP.Data.ComputerBrowser.Quota.GetQuota(user.UserName, Converter.FormatMapping(path.UNC, user));
                             space = Math.Round((Convert.ToDecimal(qi.Used) / Convert.ToDecimal(qi.Total)) * 100, 2);
                             if (qi.Total == -1)
-                                if (Win32.GetDiskFreeSpaceEx(Converter.FormatMapping(path.UNC, up), out freeBytesForUser, out totalBytes, out freeBytes))
+                                if (Win32.GetDiskFreeSpaceEx(Converter.FormatMapping(path.UNC, user), out freeBytesForUser, out totalBytes, out freeBytes))
                                     space = Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
                         }
                         catch { }
@@ -88,7 +94,7 @@ namespace HAP.Web
                 if (isAuth(path)) items.Add(new ComputerBrowserAPIItem(path.Name, "images/icons/netdrive.png", space.ToString(), "Drive", BType.Drive, path.Drive + ":", isWriteAuth(path) ? AccessControlActions.Change : AccessControlActions.View));
             }
             res.Items = items.ToArray();
-            ((HAP.AD.User)Membership.GetUser()).EndImpersonate();
+            user.EndContainedImpersonate();
             List<UploadFilter> filters = new List<UploadFilter>();
             foreach (Filter filter in config.MySchoolComputerBrowser.Filters)
                 if (isAuth(filter))
@@ -106,12 +112,14 @@ namespace HAP.Web
 
         //method for listing
         [WebMethod]
-        public ComputerBrowserAPIItem[] List(string path)
+        public ComputerBrowserAPIItem[] List(string path, string token)
         {
-            ((HAP.AD.User)Membership.GetUser()).Impersonate();
+            User user = new User();
+            user.Authenticate(TokenGenerator.ConvertToPlain(token).Split(new char[] { '@' })[0], TokenGenerator.ConvertToPlain(token).Split(new char[] { '@' })[1]);
+            user.ImpersonateContained();
             List<ComputerBrowserAPIItem> items = new List<ComputerBrowserAPIItem>();
-            UNCPath unc; string userhome;
-            path = Converter.DriveToUNC(path, out unc, out userhome);
+            UNCPath unc;
+            path = Converter.DriveToUNC(path, out unc, user);
             AccessControlActions allowactions = isWriteAuth(unc) ? AccessControlActions.Change : AccessControlActions.View;
             DirectoryInfo dir = new DirectoryInfo(path);
             foreach (DirectoryInfo subdir in dir.GetDirectories())
@@ -128,8 +136,8 @@ namespace HAP.Web
                         try { subdir.GetDirectories(); }
                         catch { actions = AccessControlActions.None; }
 
-                        string dirpath = Converter.UNCtoDrive(subdir.FullName, unc, userhome);
-                        items.Add(new ComputerBrowserAPIItem(subdir, unc, userhome, actions));
+                        string dirpath = Converter.UNCtoDrive(subdir.FullName, unc, user);
+                        items.Add(new ComputerBrowserAPIItem(subdir, unc, user, actions));
                     }
                 }
                 catch { }
@@ -140,8 +148,8 @@ namespace HAP.Web
                 {
                     if (!file.Name.ToLower().Contains("thumbs") && checkext(file.Extension) && file.Attributes != FileAttributes.Hidden && file.Attributes != FileAttributes.System)
                     {
-                        string dirpath = Converter.UNCtoDrive2(file.FullName, unc, userhome);
-                        items.Add(new ComputerBrowserAPIItem(file, unc, userhome, allowactions, "Download/" + dirpath.Replace('&', '^')));
+                        string dirpath = Converter.UNCtoDrive2(file.FullName, unc, user);
+                        items.Add(new ComputerBrowserAPIItem(file, unc, user, allowactions, "Download/" + dirpath.Replace('&', '^')));
                     }
                 }
                 catch
@@ -149,18 +157,20 @@ namespace HAP.Web
                     //Response.Redirect("unauthorised.aspx?path=" + Server.UrlPathEncode(uae.Message), true);
                 }
             }
-            ((HAP.AD.User)Membership.GetUser()).EndImpersonate();
+            user.EndContainedImpersonate();
             return items.ToArray();
         }
 
         //method for searching
         [WebMethod]
-        public ComputerBrowserAPIItem[] Search(string path, string searchterm)
+        public ComputerBrowserAPIItem[] Search(string path, string searchterm, string token)
         {
-            ((HAP.AD.User)Membership.GetUser()).Impersonate();
+            User user = new User();
+            user.Authenticate(TokenGenerator.ConvertToPlain(token).Split(new char[] { '@' })[0], TokenGenerator.ConvertToPlain(token).Split(new char[] { '@' })[1]);
+            user.ImpersonateContained();
             List<ComputerBrowserAPIItem> items = new List<ComputerBrowserAPIItem>();
-            UNCPath unc; string userhome;
-            path = Converter.DriveToUNC(path, out unc, out userhome);
+            UNCPath unc;
+            path = Converter.DriveToUNC(path, out unc);
             AccessControlActions allowactions = isWriteAuth(unc) ? AccessControlActions.Change : AccessControlActions.View;
             DirectoryInfo dir = new DirectoryInfo(path);
             foreach (DirectoryInfo subdir in dir.GetDirectories())
@@ -177,8 +187,8 @@ namespace HAP.Web
                         try { subdir.GetDirectories(); }
                         catch { actions = AccessControlActions.None; }
 
-                        string dirpath = Converter.UNCtoDrive(subdir.FullName, unc, userhome);
-                        items.Add(new ComputerBrowserAPIItem(subdir, unc, userhome, actions));
+                        string dirpath = Converter.UNCtoDrive(subdir.FullName, unc, user);
+                        items.Add(new ComputerBrowserAPIItem(subdir, unc, user, actions));
                     }
                 }
                 catch { }
@@ -189,8 +199,8 @@ namespace HAP.Web
                 {
                     if (!file.Name.ToLower().Contains("thumbs") && checkext(file.Extension) && file.Attributes != FileAttributes.Hidden && file.Attributes != FileAttributes.System && file.Name.ToLower().Contains(searchterm.ToLower()))
                     {
-                        string dirpath = Converter.UNCtoDrive2(file.FullName, unc, userhome);
-                        items.Add(new ComputerBrowserAPIItem(file, unc, userhome, allowactions, "Download/" + dirpath.Replace('&', '^')));
+                        string dirpath = Converter.UNCtoDrive2(file.FullName, unc, user);
+                        items.Add(new ComputerBrowserAPIItem(file, unc, user, allowactions, "Download/" + dirpath.Replace('&', '^')));
                     }
                 }
                 catch
@@ -198,18 +208,20 @@ namespace HAP.Web
                     //Response.Redirect("unauthorised.aspx?path=" + Server.UrlPathEncode(uae.Message), true);
                 }
             }
-            ((HAP.AD.User)Membership.GetUser()).EndImpersonate();
+            user.EndContainedImpersonate();
             return items.ToArray();
         }
 
         //method for renaming/saving
         [WebMethod]
-        public CBFile[] Save(CBFile Current, string newpath, bool overwrite)
+        public CBFile[] Save(CBFile Current, string newpath, bool overwrite, string token)
         {
-            ((HAP.AD.User)Membership.GetUser()).Impersonate();
-            UNCPath unc; string userhome;
-            string path = Converter.DriveToUNC(Current.Path, out unc, out userhome);
-            newpath = Converter.DriveToUNC(newpath, out unc, out userhome);
+            User user = new User();
+            user.Authenticate(TokenGenerator.ConvertToPlain(token).Split(new char[] { '@' })[0], TokenGenerator.ConvertToPlain(token).Split(new char[] { '@' })[1]);
+            user.ImpersonateContained();
+            UNCPath unc;
+            string path = Converter.DriveToUNC(Current.Path, out unc, user);
+            newpath = Converter.DriveToUNC(newpath, out unc, user);
 
             if (File.Exists(path))
             {
@@ -219,7 +231,7 @@ namespace HAP.Web
                 if (!newpath.EndsWith(file.Extension)) newpath += file.Extension;
                 if (!overwrite)
                 {
-                    if (File.Exists(newpath)) return new CBFile[] { new CBFile(new FileInfo(newpath), unc, userhome) };
+                    if (File.Exists(newpath)) return new CBFile[] { new CBFile(new FileInfo(newpath), unc, user) };
                 }
                 else File.Delete(newpath);
                 file.MoveTo(newpath);
@@ -228,44 +240,50 @@ namespace HAP.Web
             {
                 DirectoryInfo file = new DirectoryInfo(path);
 
-                if (!overwrite && Directory.Exists(newpath)) return new CBFile[] { new CBFile( new DirectoryInfo(newpath), unc, userhome) };
+                if (!overwrite && Directory.Exists(newpath)) return new CBFile[] { new CBFile(new DirectoryInfo(newpath), unc, user) };
                 else if (Directory.Exists(newpath)) Directory.Delete(newpath);
                 file.MoveTo(newpath);
             }
-            ((HAP.AD.User)Membership.GetUser()).EndImpersonate();
+            user.EndContainedImpersonate();
             return new CBFile[] { };
         }
 
         //method for deleting
         [WebMethod]
-        public void Delete(string path)
+        public void Delete(string path, string token)
         {
-            ((HAP.AD.User)Membership.GetUser()).Impersonate();
-            UNCPath unc; string userhome;
-            path = Converter.DriveToUNC(path, out unc, out userhome);
+            User user = new User();
+            user.Authenticate(TokenGenerator.ConvertToPlain(token).Split(new char[] { '@' })[0], TokenGenerator.ConvertToPlain(token).Split(new char[] { '@' })[1]);
+            user.ImpersonateContained();
+            UNCPath unc;
+            path = Converter.DriveToUNC(path, out unc, user);
             if (File.Exists(path)) File.Delete(path);
             else Directory.Delete(path, true);
-            ((HAP.AD.User)Membership.GetUser()).EndImpersonate();
+            user.EndContainedImpersonate();
         }
 
         //method for Creating a New Folder
         [WebMethod]
-        public void NewFolder(string basepath, string foldername)
+        public void NewFolder(string basepath, string foldername, string token)
         {
-            ((HAP.AD.User)Membership.GetUser()).Impersonate();
-            UNCPath unc; string userhome;
-            basepath = Converter.DriveToUNC(basepath, out unc, out userhome);
+            User user = new User();
+            user.Authenticate(TokenGenerator.ConvertToPlain(token).Split(new char[] { '@' })[0], TokenGenerator.ConvertToPlain(token).Split(new char[] { '@' })[1]);
+            user.ImpersonateContained();
+            UNCPath unc;
+            basepath = Converter.DriveToUNC(basepath, out unc, user);
             Directory.CreateDirectory(Path.Combine(basepath, foldername));
-            ((HAP.AD.User)Membership.GetUser()).EndImpersonate();
+            user.EndContainedImpersonate();
         }
 
         //method for ZIPPING
         [WebMethod]
-        public void ZIP(string basepath, string filename, params string[] filepaths)
+        public void ZIP(string basepath, string filename, string[] filepaths, string token)
         {
-            ((HAP.AD.User)Membership.GetUser()).Impersonate();
-            UNCPath unc; string userhome;
-            basepath = Converter.DriveToUNC(basepath, out unc, out userhome);
+            User user = new User();
+            user.Authenticate(TokenGenerator.ConvertToPlain(token).Split(new char[] { '@' })[0], TokenGenerator.ConvertToPlain(token).Split(new char[] { '@' })[1]);
+            user.ImpersonateContained();
+            UNCPath unc;
+            basepath = Converter.DriveToUNC(basepath, out unc, user);
             string path = Path.Combine(basepath, filename);
             ZipFile zf;
             if (File.Exists(Path.Combine(basepath, filename)))
@@ -274,7 +292,7 @@ namespace HAP.Web
             zf.BeginUpdate();
             foreach (string s in filepaths)
             {
-                string p = Converter.DriveToUNC(s, out unc, out userhome);
+                string p = Converter.DriveToUNC(s, out unc, user);
                 if (File.Exists(p))
                     zf.Add(p);
                 else if (Directory.Exists(p))
@@ -282,29 +300,34 @@ namespace HAP.Web
             }
             zf.CommitUpdate();
             zf.Close();
-            ((HAP.AD.User)Membership.GetUser()).EndImpersonate();
+            user.EndContainedImpersonate();
         }
 
         //method for Unzipping
         [WebMethod]
-        public void Unzip(string zipfile, string extractfolder)
+        public void Unzip(string zipfile, string extractfolder, string token)
         {
-            ((HAP.AD.User)Membership.GetUser()).Impersonate();
-            UNCPath unc; string userhome;
-            string path = Converter.DriveToUNC(zipfile, out unc, out userhome);
-            string c = Converter.DriveToUNC(extractfolder, out unc, out userhome);
+            User user = new User();
+            user.Authenticate(TokenGenerator.ConvertToPlain(token).Split(new char[] { '@' })[0], TokenGenerator.ConvertToPlain(token).Split(new char[] { '@' })[1]);
+            user.ImpersonateContained();
+            UNCPath unc;
+            string path = Converter.DriveToUNC(zipfile, out unc, user);
+            string c = Converter.DriveToUNC(extractfolder, out unc, user);
             if (!Directory.Exists(c)) Directory.CreateDirectory(c);
             FastZip fastZip = new FastZip();
             fastZip.ExtractZip(path, c, "");
-            ((HAP.AD.User)Membership.GetUser()).EndImpersonate();
+            user.EndContainedImpersonate();
         }
 
         //method for upload the files. This will be called from Silverlight code behind.
         [WebMethod]
-        public void UploadFile(string FileName, long StartByte, byte[] Data, bool Complete)
+        public void UploadFile(string FileName, long StartByte, byte[] Data, bool Complete, string token)
         {
-            ((HAP.AD.User)Membership.GetUser()).Impersonate();
-            string home; DriveMapping unc; string path = Converter.DriveToUNC(FileName, out unc, out home);
+            User user = new User();
+            user.Authenticate(TokenGenerator.ConvertToPlain(token).Split(new char[] { '@' })[0], TokenGenerator.ConvertToPlain(token).Split(new char[] { '@' })[1]);
+            user.ImpersonateContained();
+            UNCPath unc;
+            string path = Converter.DriveToUNC(FileName, out unc, user);
             FileStream fs = (StartByte > 0 && File.Exists(path)) ? File.Open(path, FileMode.Append) : File.Create(path);
             using (fs)
             {
@@ -312,7 +335,7 @@ namespace HAP.Web
                 fs.Close();
                 fs.Dispose();
             }
-            ((HAP.AD.User)Membership.GetUser()).EndImpersonate();
+            user.EndContainedImpersonate();
         }
 
         #region Private Stuff
@@ -324,9 +347,7 @@ namespace HAP.Web
 
         private void SaveFile(Stream stream, FileStream fs)
         {
-            ((HAP.AD.User)Membership.GetUser()).Impersonate();
             stream.CopyTo(fs);
-            ((HAP.AD.User)Membership.GetUser()).EndImpersonate();
         }
 
         private bool isAuth(Filter filter)

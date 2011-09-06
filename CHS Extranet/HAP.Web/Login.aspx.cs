@@ -19,7 +19,7 @@ namespace HAP.Web
         protected override void OnPreInit(EventArgs e)
         {
             base.OnPreInit(e);
-            if (hapConfig.Current.FirstRun) Response.Redirect("setup.aspx", true);
+            if (hapConfig.Current.FirstRun) Response.Redirect("setup.aspx");
             Title = string.Format(Title, HAP.Web.Configuration.hapConfig.Current.School.Name);
         }
 

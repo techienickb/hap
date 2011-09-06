@@ -98,12 +98,12 @@ namespace HAP.Web
         {
             if (Config == null) Config = Cache["tempConfig"] as hapConfig;
             Config.AD.OUs.Add(ouname.Text, oupath.Text, ouignore.Checked);
-            ouname.Text = oupath.Text = "";
-            ouignore.Checked = false;
-            adorgs.DataSource = Config.AD.OUs.Values;
-            adorgs.DataBind();
             Cache.Remove("tempConfig");
             Cache.Insert("tempConfig", Config, null, DateTime.MaxValue, TimeSpan.FromMinutes(4));
+            adorgs.DataSource = Config.AD.OUs.Values;
+            adorgs.DataBind();
+            ouname.Text = oupath.Text = "";
+            ouignore.Checked = false;
         }
 
         protected void Save_Click(object sender, EventArgs e)

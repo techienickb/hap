@@ -28,7 +28,7 @@ namespace HAP.Web
         protected void Page_Load(object sender, EventArgs e)
         {
             Dictionary<TabType, Tab> tabs = config.Homepage.Tabs.FilteredTabs;
-            tabheader_repeater.DataSource = config.Homepage.Tabs;
+            tabheader_repeater.DataSource = config.Homepage.Tabs.Values;
             tabheader_repeater.DataBind();
             tab_Me.Visible = tabs.ContainsKey(TabType.Me);
             if (tab_Me.Visible)
@@ -74,10 +74,11 @@ namespace HAP.Web
                 {
                     DriveMapping mapping = null;
                     foreach (DriveMapping m in config.MySchoolComputerBrowser.Mappings.Values)
-                        if (m.UNC.Contains("%homepath%")) mapping = m;
+                        if (m.UNC.Contains("%homedir%")) mapping = m;
                     space = -1;
                     if (mapping != null)
                     {
+                        ADUser.Impersonate();
                         try
                         {
                             long freeBytesForUser, totalBytes, freeBytes;
@@ -89,14 +90,15 @@ namespace HAP.Web
                             else
                             {
 
-                                HAP.Data.Quota.QuotaInfo qi = HAP.Data.ComputerBrowser.Quota.GetQuota(ADUser.UserName, string.Format(mapping.UNC.Replace("%homepath%", ADUser.HomeDirectory)));
+                                HAP.Data.Quota.QuotaInfo qi = HAP.Data.ComputerBrowser.Quota.GetQuota(ADUser.UserName, Converter.FormatMapping(mapping.UNC, ADUser));
                                 space = Math.Round((Convert.ToDecimal(qi.Used) / Convert.ToDecimal(qi.Total)) * 100, 2);
                                 if (qi.Total == -1)
                                     if (Win32.GetDiskFreeSpaceEx(Converter.FormatMapping(mapping.UNC, ADUser), out freeBytesForUser, out totalBytes, out freeBytes))
                                         space = Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
                             }
                         }
-                        catch { }
+                        catch { space = -2; }
+                        ADUser.EndImpersonate();
                     }
                 }
             }

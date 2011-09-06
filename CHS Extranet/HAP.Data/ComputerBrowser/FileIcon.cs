@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Web;
+using System.Web.Security;
+using HAP.Web.Configuration;
 
 namespace HAP.Data.ComputerBrowser
 {
@@ -17,16 +19,7 @@ namespace HAP.Data.ComputerBrowser
         {
             if (extension.StartsWith(".")) extension = extension.Remove(0, 1);
             extension = extension.ToLower();
-            XmlDocument doc;
-            if (HttpContext.Current.Cache["knownicons"] == null)
-            {
-                doc = new XmlDocument();
-                doc.Load(HttpContext.Current.Server.MapPath("~/Images/Icons/knownicons.xml"));
-
-                HttpContext.Current.Cache.Insert("knownicons", doc, new System.Web.Caching.CacheDependency(HttpContext.Current.Server.MapPath("~/Images/Icons/knownicons.xml")));
-
-            }
-            else doc = HttpContext.Current.Cache["knownicons"] as XmlDocument;
+            XmlDocument doc = hapConfig.Current.MySchoolComputerBrowser.KnownIcons;
             icon = null;
             if (doc.SelectSingleNode("/Icons/Icon[@extension='" + extension + "']") == null) return false;
             else

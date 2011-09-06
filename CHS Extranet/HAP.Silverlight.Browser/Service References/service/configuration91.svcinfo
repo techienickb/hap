@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="y2MdBEZxWw71R5I+rHfk1ikH3ss=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="xj2ji8hrFrU+3AyDSxEF/XPrjLQ=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="basicHttpBinding" name="apiSoap">
       <properties>
@@ -112,10 +112,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="apiSoap" contract="service.apiSoap" bindingType="basicHttpBinding" address="https://folders.crickhowell-hs.powys.sch.uk/extranet/api.asmx" bindingConfiguration="apiSoap">
+    <endpoint name="apiSoap" contract="service.apiSoap" bindingType="basicHttpBinding" address="https://folders.crickhowell-hs.powys.sch.uk/hap/api.asmx" bindingConfiguration="apiSoap">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>https://folders.crickhowell-hs.powys.sch.uk/extranet/api.asmx</serializedValue>
+          <serializedValue>https://folders.crickhowell-hs.powys.sch.uk/hap/api.asmx</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

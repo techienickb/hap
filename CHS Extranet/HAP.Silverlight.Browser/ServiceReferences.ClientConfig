@@ -8,7 +8,7 @@
             </basicHttpBinding>
         </bindings>
         <client>
-            <endpoint address="https://folders.crickhowell-hs.powys.sch.uk/extranet/api.asmx"
+            <endpoint address="https://folders.crickhowell-hs.powys.sch.uk/hap/api.asmx"
                 binding="basicHttpBinding" bindingConfiguration="apiSoap"
                 contract="service.apiSoap" name="apiSoap" />
         </client>

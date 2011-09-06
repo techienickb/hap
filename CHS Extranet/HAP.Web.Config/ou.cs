@@ -12,7 +12,7 @@ namespace HAP.Web.Configuration
         {
             Name = node.Attributes["name"].Value;
             Path = node.Attributes["path"].Value;
-            Ignore = node.Attributes["Ignore"] == null ? false : bool.Parse(node.Attributes["Ignore"].Value);
+            Ignore = bool.Parse(node.Attributes["ignore"].Value);
         }
 
         public string Name { get; private set; }

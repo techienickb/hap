@@ -84,7 +84,7 @@ namespace HAP.Silverlight.Browser
             soap = new apiSoapClient(new BasicHttpBinding(BasicHttpSecurityMode.Transport), new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
             soap.UploadFileCompleted += new EventHandler<System.ComponentModel.AsyncCompletedEventArgs>(soap_UploadFileCompleted);
             soap.CheckFileCompleted += new EventHandler<CheckFileCompletedEventArgs>(soap_CheckFileCompleted);
-            soap.CheckFileAsync(ParentData.Path + '\\' + File.Name);
+            soap.CheckFileAsync(ParentData.Path + '\\' + File.Name, App.Current.Resources["token"].ToString());
         }
 
         void soap_CheckFileCompleted(object sender, CheckFileCompletedEventArgs e)

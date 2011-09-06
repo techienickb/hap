@@ -60,7 +60,10 @@ namespace HAP.Web.Configuration
         public BookingSystem BookingSystem { get; private set; }
         public MySchoolComputerBrowser MySchoolComputerBrowser { get; private set; }
 
-        private void doUpgrade(Version version) { }
+        private void doUpgrade(Version version) {
+            doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            doc.Save(ConfigPath);
+        }
 
         public void Save()
         {

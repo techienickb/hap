@@ -8,10 +8,11 @@ using System.Configuration;
 using System.IO;
 using HAP.Data.ComputerBrowser;
 using System.Web.Security;
+using System.Web.SessionState;
 
 namespace HAP.Web.routing
 {
-    public class UploadTransferHander : IHttpHandler, IMyComputerDisplay
+    public class UploadTransferHander : IHttpHandler, IMyComputerDisplay, IRequiresSessionState
     {
         public UploadTransferHander(string path)
         {

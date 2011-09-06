@@ -21,8 +21,6 @@ namespace HAP.Web
         {
             this.SectionTitle = "My School Computer Browser";
         }
-        
-        private hapConfig config;
 
         private bool isAuth(DriveMapping path)
         {
@@ -30,8 +28,8 @@ namespace HAP.Web
             else if (path.EnableReadTo != "None")
             {
                 bool vis = false;
-                foreach (string s in path.EnableReadTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                    if (!vis) vis = User.IsInRole(s);
+                foreach (string s in path.EnableReadTo.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
+                    if (!vis) vis = User.IsInRole(s.Trim());
                 return vis;
             }
             return false;
@@ -44,8 +42,8 @@ namespace HAP.Web
             else if (path.EnableWriteTo != "None")
             {
                 bool vis = false;
-                foreach (string s in path.EnableWriteTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                    if (!vis) vis = User.IsInRole(s);
+                foreach (string s in path.EnableWriteTo.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
+                    if (!vis) vis = User.IsInRole(s.Trim());
                 return vis;
             }
             return false;
@@ -60,6 +58,7 @@ namespace HAP.Web
         public override void DataBind()
         {
             base.DataBind();
+            ADUser.Impersonate();
             List<MyComputerItem> items = new List<MyComputerItem>();
             if (string.IsNullOrEmpty(RoutingDrive))
             {
@@ -80,7 +79,7 @@ namespace HAP.Web
                             {
                                 try
                                 {
-                                    HAP.Data.Quota.QuotaInfo qi = HAP.Data.ComputerBrowser.Quota.GetQuota(ADUser.UserName, string.Format(path.UNC.Replace("%homepath%", ADUser.HomeDirectory)));
+                                    HAP.Data.Quota.QuotaInfo qi = HAP.Data.ComputerBrowser.Quota.GetQuota(ADUser.UserName, Converter.FormatMapping(path.UNC, ADUser));
                                     space = Math.Round((Convert.ToDecimal(qi.Used) / Convert.ToDecimal(qi.Total)) * 100, 2);
                                     if (qi.Total == -1)
                                         if (HAP.Web.api.Win32.GetDiskFreeSpaceEx(Converter.FormatMapping(path.UNC, ADUser), out freeBytesForUser, out totalBytes, out freeBytes))
@@ -111,7 +110,6 @@ namespace HAP.Web
                     path = Converter.FormatMapping(unc.UNC, ADUser) + "\\" + RoutingPath;
                 //}
                 List<MyComputerItem> breadcrumbs = new List<MyComputerItem>();
-
                 path = path.TrimEnd(new char[] { '\\' }).Replace('^', '&').Replace('/', '\\');
                 DirectoryInfo dir = new DirectoryInfo(path);
                 newfolderlink.Directory = DeleteBox.Dir = RenameBox.Dir = UnzipBox.Dir = ZipBox.Dir = dir;
@@ -155,38 +153,39 @@ namespace HAP.Web
                                 dirpath = dirpath.Replace(Converter.FormatMapping(unc.UNC, ADUser), unc.Drive.ToString());
                                 dirpath = dirpath.Replace('\\', '/');
 
-                                CBFile cb = new CBFile(subdir, Converter.ToUNCPath(unc), u);
+                                CBFile cb = new CBFile(subdir, Converter.ToUNCPath(unc), ADUser);
                                 items.Add(new MyComputerItem(cb.Name, "<i>" + cb.Type + "</i>", ResolveClientUrl("~/MyComputer/" + dirpath.Replace('&', '^')), cb.Icon, allowedit));
                             }
                         }
                         catch { }
-
                     foreach (FileInfo file in dir.GetFiles())
                     {
-                        //try
-                        //{
-                            if (!file.Name.ToLower().Contains("thumbs") && checkext(file.Extension))
+                        try
+                        {
+                            if (!file.Name.ToLower().Contains("thumbs") && checkext(file.Extension) && (file.Attributes != FileAttributes.Hidden || file.Attributes != FileAttributes.System))
                             {
                                 string dirpath = file.FullName;
                                 dirpath = dirpath.Replace(Converter.FormatMapping(unc.UNC, ADUser), unc.Drive.ToString());
                                 dirpath = dirpath.Replace('\\', '/');
 
-                                CBFile cb = new CBFile(file, Converter.ToUNCPath(unc), u);
+                                CBFile cb = new CBFile(file, Converter.ToUNCPath(unc), ADUser);
                                 items.Add(new MyComputerItem(cb.Name, "<i>" + cb.Type + "</i>", ResolveClientUrl("~/Download/" + dirpath.Replace('&', '^')), cb.Icon, allowedit));
                             }
-                        //}
-                        //catch
-                        //{
-                        //    continue;
-                        //    //Response.Redirect("/unauthorised.aspx?path=" + Server.UrlPathEncode(uae.Message), true);
-                        //}
+                        }
+                        catch
+                        {
+                            continue;
+                            //Response.Redirect("/unauthorised.aspx?path=" + Server.UrlPathEncode(uae.Message), true);
+                        }
                     }
                 }
                 catch (UnauthorizedAccessException uae)
                 {
-                    Response.Redirect(ResolveClientUrl("/unauthorised.aspx?path=" + Server.UrlPathEncode(uae.Message)), true);
+                    ADUser.EndImpersonate();
+                    Response.Redirect(ResolveClientUrl("~/unauthorised.aspx?path=" + Server.UrlPathEncode(uae.Message)), true);
                 }
             }
+            ADUser.EndImpersonate();
             browserrepeater.DataSource = items.ToArray();
             browserrepeater.DataBind();
         }

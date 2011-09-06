@@ -6,6 +6,8 @@ using System.IO;
 using Microsoft.Win32;
 using HAP.Web.Configuration;
 using System.Web;
+using System.Web.Security;
+using HAP.AD;
 
 namespace HAP.Data.ComputerBrowser
 {
@@ -23,11 +25,50 @@ namespace HAP.Data.ComputerBrowser
 
         public CBFile() { }
 
-        public CBFile(FileInfo file, UNCPath unc, string userhome)
+        public CBFile(FileInfo file, UNCPath unc)
         {
             Extension = file.Extension;
             Type = "File";
             Name = file.Name + (file.Name.Contains(file.Extension) ? "" : file.Extension);
+
+            FileIcon fi;
+            if (FileIcon.TryGet(Extension, out fi))
+            {
+                Type = fi.Type;
+                Name = Name.Remove(Name.LastIndexOf(file.Extension));
+            }
+            if (Type == "File")
+            {
+                try
+                {
+                    RegistryKey rkRoot = Registry.ClassesRoot;
+                    string keyref = rkRoot.OpenSubKey(file.Extension).GetValue("").ToString();
+                    Type = rkRoot.OpenSubKey(keyref).GetValue("").ToString();
+                    Name = Name.Remove(Name.LastIndexOf(file.Extension));
+                }
+                catch { Type = "File"; }
+            }
+            if (Type != "File")
+            {
+                Icon = "images/icons/" + ParseForImage(file);
+                if (Icon.EndsWith(".ico")) Icon = "api/mycomputer/" + ParseForImage(file);
+            }
+            else Icon = "images/icons/file.png";
+            if (file.Extension.ToLower().Equals(".png") || file.Extension.ToLower().Equals(".jpg") || file.Extension.ToLower().Equals(".jpeg") || file.Extension.ToLower().Equals(".gif") || file.Extension.ToLower().Equals(".bmp") || file.Extension.ToLower().Equals(".wmf"))
+                Icon = "api/mycomputer/thumb/" + Converter.UNCtoDrive2(file.FullName, unc).Replace('&', '^');
+            BType = ComputerBrowser.BType.File;
+            CreatedTime = file.CreationTime;
+            ModifiedTime = file.LastWriteTime;
+            Size = parseLength(file.Length);
+            Path = Converter.UNCtoDrive(file.FullName, unc);
+        }
+
+        public CBFile(FileInfo file, UNCPath unc, User user)
+        {
+            Extension = file.Extension;
+            Type = "File";
+            Name = file.Name + (file.Name.Contains(file.Extension) ? "" : file.Extension);
+            
             FileIcon fi;
             if (FileIcon.TryGet(Extension, out fi))
             {
@@ -51,12 +92,12 @@ namespace HAP.Data.ComputerBrowser
                 if (Icon.EndsWith(".ico")) Icon = "api/mycomputer/" + ParseForImage(file);
             } else Icon = "images/icons/file.png";
             if (file.Extension.ToLower().Equals(".png") || file.Extension.ToLower().Equals(".jpg") || file.Extension.ToLower().Equals(".jpeg") || file.Extension.ToLower().Equals(".gif") || file.Extension.ToLower().Equals(".bmp") || file.Extension.ToLower().Equals(".wmf"))
-                Icon = "api/mycomputer/thumb/" + Converter.UNCtoDrive2(file.FullName, unc, userhome).Replace('&', '^');
+                Icon = "api/mycomputer/thumb/" + Converter.UNCtoDrive2(file.FullName, unc, user).Replace('&', '^');
             BType = ComputerBrowser.BType.File;
             CreatedTime = file.CreationTime;
             ModifiedTime = file.LastWriteTime;
             Size = parseLength(file.Length);
-            Path = Converter.UNCtoDrive(file.FullName, unc, userhome);
+            Path = Converter.UNCtoDrive(file.FullName, unc, user);
         }
 
         public static string ParseForImage(object ExtentionOrName)
@@ -143,7 +184,7 @@ namespace HAP.Data.ComputerBrowser
             }
         }
 
-        public CBFile(DirectoryInfo dir, UNCPath unc, string userhome)
+        public CBFile(DirectoryInfo dir, UNCPath unc, User user)
         {
             Extension = dir.Extension;
             Type = "File Folder";
@@ -152,7 +193,7 @@ namespace HAP.Data.ComputerBrowser
             BType = ComputerBrowser.BType.Folder;
             CreatedTime = dir.CreationTime;
             ModifiedTime = dir.LastWriteTime;
-            Path = Converter.UNCtoDrive(dir.FullName, unc, userhome);
+            Path = Converter.UNCtoDrive(dir.FullName, unc, user);
         }
 
         public static string parseLength(object size)

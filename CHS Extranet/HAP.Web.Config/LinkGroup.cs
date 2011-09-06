@@ -27,12 +27,12 @@ namespace HAP.Web.Configuration
             {
                 List<Link> Links = new List<Link>();
                 foreach (Link l in this)
-                    if (l.ShowTo == "All") Links.Add(l);
+                    if (l.ShowTo == "All"|| l.ShowTo == "Inherit") Links.Add(l);
                     else if (l.ShowTo != "None")
                     {
                         bool vis = false;
-                        foreach (string s in l.ShowTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                            if (!vis) vis = HttpContext.Current.User.IsInRole(s);
+                        foreach (string s in l.ShowTo.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
+                            if (!vis) vis = HttpContext.Current.User.IsInRole(s.Trim());
                         if (vis) Links.Add(l);
                     }
                 return Links.ToArray();

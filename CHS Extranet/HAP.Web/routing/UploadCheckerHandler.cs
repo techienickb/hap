@@ -8,10 +8,11 @@ using System.DirectoryServices.AccountManagement;
 using System.IO;
 using HAP.Data.ComputerBrowser;
 using System.Web.Security;
+using System.Web.SessionState;
 
 namespace HAP.Web.routing
 {
-    public class UploadCheckerHander : IHttpHandler, IMyComputerDisplay
+    public class UploadCheckerHander : IHttpHandler, IMyComputerDisplay, IRequiresSessionState
     {
         public UploadCheckerHander(string path, string drive)
         {

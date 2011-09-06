@@ -9,6 +9,7 @@ using System.IO;
 using System.Web.Routing;
 using HAP.Data.ComputerBrowser;
 using System.Web.Security;
+using System.Web.SessionState;
 
 namespace HAP.Web.API
 {
@@ -23,7 +24,7 @@ namespace HAP.Web.API
         }
     }
 
-    public class UploadChecker : IHttpHandler
+    public class UploadChecker : IHttpHandler, IRequiresSessionState
     {
         public UploadChecker(string path, string drive)
         {

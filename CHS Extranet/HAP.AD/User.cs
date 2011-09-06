@@ -13,7 +13,7 @@ namespace HAP.AD
     /// <summary>
     /// Summary description for HAP
     /// </summary>
-    public class User : ActiveDirectoryMembershipUser
+    public class User : ActiveDirectoryMembershipUser, IComparable
     {
         public User()
         {
@@ -29,7 +29,7 @@ namespace HAP.AD
             this.DisplayName = userp.DisplayName;
             this.EmployeeID = userp.EmployeeId;
             this.Email = userp.EmailAddress;
-            this.LastLoginDate = userp.LastLogon.HasValue ? userp.LastLogon.Value : new DateTime(0, 0, 1);
+            this.LastLoginDate = userp.LastLogon.HasValue ? userp.LastLogon.Value : DateTime.Now;
             this.IsLockedOut = userp.IsAccountLockedOut();
             this.IsApproved = userp.Enabled.HasValue ? userp.Enabled.Value : false;
             this.HomeDirectory = userp.HomeDirectory;
@@ -49,7 +49,7 @@ namespace HAP.AD
             this.DisplayName = userp.DisplayName;
             this.EmployeeID = userp.EmployeeId;
             this.Email = userp.EmailAddress;
-            this.LastLoginDate = userp.LastLogon.HasValue ? userp.LastLogon.Value : new DateTime(0, 0, 1);
+            this.LastLoginDate = userp.LastLogon.HasValue ? userp.LastLogon.Value : DateTime.Now;
             this.IsLockedOut = userp.IsAccountLockedOut();
             this.IsApproved = userp.Enabled.HasValue ? userp.Enabled.Value : false;
             this.HomeDirectory = userp.HomeDirectory;
@@ -120,7 +120,19 @@ namespace HAP.AD
         public override string ResetPassword(string passwordAnswer) { UserPa.SetPassword(passwordAnswer); UserPa.ExpirePasswordNow(); UserPa.Save(); return passwordAnswer; }
         public override bool UnlockUser() { UserPa.UnlockAccount(); return true; }
 
-        private WindowsImpersonationContext impersonationContext;
+        private WindowsImpersonationContext impersonationContext
+        {
+            get
+            {
+                if (HttpContext.Current.Session["impersonationContext"] != null) return HttpContext.Current.Session["impersonationContext"] as WindowsImpersonationContext;
+                return null;
+            }
+            set
+            {
+                if (HttpContext.Current.Session["impersonationContext"] != null) HttpContext.Current.Session.Remove("impersonationContext");
+                if (value != null) HttpContext.Current.Session.Add("impersonationContext", value);
+            }
+        }
         public string Password { private get; set; }
         private const int LOGON32_LOGON_INTERACTIVE = 2;
         private const int LOGON32_PROVIDER_DEFAULT = 0;
@@ -146,9 +158,8 @@ namespace HAP.AD
         {
             get
             {
-                DirectoryEntry usersDE = ADUtils.getUser(ADUtils.GetDirectoryRoot(), this.UserName);
-                DirectorySearcher ds = new DirectorySearcher(usersDE);
-                ds.Filter = "(&(objectClass=user)(mail=*)(sAMAccountName=*))";
+                DirectorySearcher ds = new DirectorySearcher(ADUtils.DirectoryRoot);
+                ds.Filter = "(&(objectClass=user)(sAMAccountName=*" + this.UserName + "*))";
                 ds.PropertiesToLoad.Add("info");
                 try
                 {
@@ -179,7 +190,11 @@ namespace HAP.AD
 
             if (ADUtils.RevertToSelf())
             {
-                if (HttpContext.Current.Session["password"] == null) { FormsAuthentication.SignOut(); FormsAuthentication.RedirectToLoginPage("error=timeout"); }
+                if (string.IsNullOrEmpty(this.Password) && HttpContext.Current.Session["password"] == null)
+                { 
+                    FormsAuthentication.SignOut(); 
+                    FormsAuthentication.RedirectToLoginPage("error=timeout"); 
+                }
                 else
                 {
                     if (string.IsNullOrEmpty(this.Password)) this.Password = HttpContext.Current.Session["password"].ToString();
@@ -207,8 +222,52 @@ namespace HAP.AD
             return false;
         }
 
+        public bool ImpersonateContained()
+        {
+            WindowsIdentity tempWindowsIdentity;
+            IntPtr token = IntPtr.Zero;
+            IntPtr tokenDuplicate = IntPtr.Zero;
+
+            if (ADUtils.RevertToSelf())
+            {
+                if (ADUtils.LogonUserA(this.UserName, this.DomainName, this.Password, LOGON32_LOGON_INTERACTIVE, LOGON32_PROVIDER_DEFAULT, ref token) != 0)
+                {
+                    if (ADUtils.DuplicateToken(token, 2, ref tokenDuplicate) != 0)
+                    {
+                        tempWindowsIdentity = new WindowsIdentity(tokenDuplicate);
+                        ContainedImpersonationContext = tempWindowsIdentity.Impersonate();
+                        if (ContainedImpersonationContext != null)
+                        {
+                            ADUtils.CloseHandle(token);
+                            ADUtils.CloseHandle(tokenDuplicate);
+                            return true;
+                        }
+                    }
+                }
+                else throw new Exception("Something is wrong");
+            }
+            if (token != IntPtr.Zero)
+                ADUtils.CloseHandle(token);
+            if (tokenDuplicate != IntPtr.Zero)
+                ADUtils.CloseHandle(tokenDuplicate);
+            return false;
+        }
+
+        private WindowsImpersonationContext ContainedImpersonationContext;
+
+        public void EndContainedImpersonate()
+        {
+            if (ContainedImpersonationContext != null) ContainedImpersonationContext.Undo();
+        }
+
         public void EndImpersonate()
         {
             if (impersonationContext != null) impersonationContext.Undo();
-        }}
+        }
+
+        public int CompareTo(object obj)
+        {
+            return this.UserName.CompareTo(((User)obj).UserName);
+        }
+    }
 }

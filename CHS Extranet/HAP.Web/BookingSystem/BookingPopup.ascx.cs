@@ -23,8 +23,8 @@ namespace HAP.Web.BookingSystem
                 if (isAdmin)
                 {
                     userlist.Items.Clear();
-                    foreach (User user in ADUtils.FindUsers())
-                        if (string.IsNullOrEmpty(user.Notes))
+                    foreach (UserInfo user in ADUtils.FindUsers())
+                        if (user.Notes == user.UserName)
                             userlist.Items.Add(new ListItem(user.UserName, user.UserName.ToLower()));
                         else
                             userlist.Items.Add(new ListItem(string.Format("{0} - ({1})", user.UserName, user.Notes), user.UserName.ToLower()));

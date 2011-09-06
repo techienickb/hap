@@ -5,6 +5,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.IO;
 using HAP.Web.Configuration;
+using HAP.AD;
 
 namespace HAP.Data.ComputerBrowser
 {
@@ -17,13 +18,13 @@ namespace HAP.Data.ComputerBrowser
         {
         }
 
-        public ComputerBrowserAPIItem(FileInfo file, UNCPath unc, string userhome, AccessControlActions access, [Optional, DefaultParameterValue("")] string download) : base(file, unc, userhome)
+        public ComputerBrowserAPIItem(FileInfo file, UNCPath unc, User user, AccessControlActions access, [Optional, DefaultParameterValue("")] string download) : base(file, unc, user)
         {
             AccessControl = access;
             Download = download;
         }
 
-        public ComputerBrowserAPIItem(DirectoryInfo dir, UNCPath unc, string userhome, AccessControlActions access, [Optional, DefaultParameterValue("")] string download) : base(dir, unc, userhome)
+        public ComputerBrowserAPIItem(DirectoryInfo dir, UNCPath unc, User user, AccessControlActions access, [Optional, DefaultParameterValue("")] string download) : base(dir, unc, user)
         {
             AccessControl = access;
             Download = download;
