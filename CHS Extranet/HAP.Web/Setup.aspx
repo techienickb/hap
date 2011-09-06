@@ -8,7 +8,7 @@
     <link href="style/setup.css" rel="stylesheet" type="text/css" />
     <link href="style/ui.dynatree.css" rel="stylesheet" type="text/css" />
 </asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+<asp:Content ContentPlaceHolderID="body" runat="server">
     <script type="text/javascript">
         function toggleGroup(e) {
             e.className = e.className == "" ? "collapsed" : "";
@@ -27,7 +27,6 @@
         var obj = null;
         var obj2 = null;
     </script>
-    <asp:ScriptManager runat="server" />
     <div id="adbrowserwrapper" title="Active Directory Browser"><div id="treeprogress"></div><div id="treecontainer"><ul id="tree"></ul></div></div>
     <p class="ui-state-highlight ui-corner-all" style=" padding: 5px 10px"><span class="ui-icon ui-icon-info" style="float: left; margin-right: 5px;"></span>If you do not want to use a feature, you don't need to complete the section</p>
     <h2><span><span><b><i onclick="toggleGroup(this)"></i>General <asp:Image ID="generalstate" runat="server" ImageUrl="~/images/setup/266.png" /></b></span></span></h2>
@@ -483,7 +482,7 @@
             <input type="radio" id="adgroups-mode-custom" name="adgroups-m" value="Custom" /><label for="adgroups-mode-custom">Custom</label>
         </div>
         <div id="adgroup-custom" style="display: none;">
-            <input type="text" id="customgroup" /><button onclick="showadbrowser($('#customgroup'), 'group'); return false;" class="searchbutton" title="Search for an AD Object">...</button>
+            <input type="text" id="customgroup" /><button onclick="showadbrowser(document.getElementById('customgroup'), 'group'); return false;" class="searchbutton" title="Search for an AD Object">...</button>
             <div style="display: inline;" class="cbuttonset">
             <button class="addbutton" onclick="add();">Add</button><button class="minusbutton" onclick="$('#adgroups-custom option:selected').remove(); return false;">Remove</button>
             </div>
@@ -1465,6 +1464,26 @@
                 }
                 if (inherit) $("#adgroups-mode-inherit-label").show();
                 else $("#adgroups-mode-inherit-label").hide();
+                $('#adgroups-custom option').remove();
+                if ($(obj2).val() == "All") {
+                    $("#adgroups-mode-custom").removeAttr("checked");
+                    $("#adgroups-mode-all").attr("checked", "checked");
+                    $("#adgroups-mode-inherit").removeAttr("checked");
+                }
+                else if ($(obj2).val() == "Inherit") {
+                    $("#adgroups-mode-custom").removeAttr("checked");
+                    $("#adgroups-mode-all").removeAttr("checked");
+                    $("#adgroups-mode-inherit").attr("checked", "checked");
+                }
+                else {
+                    $("#adgroups-mode-custom").attr("checked", "checked");
+                    $("#adgroups-mode-all").removeAttr("checked");
+                    $("#adgroups-mode-inherit").removeAttr("checked");
+                    document.getElementById("adgroup-custom").style.display = "block";
+                    for (var x = 0; x < $(obj2).val().split(', ').length; x++) {
+                        $("#adgroups-custom").append('<option value="' + $(obj2).val().split(', ')[x] + '">' + $(obj2).val().split(', ')[x] + '</option>');
+                    }
+                }
                 $("#adgroups").dialog({
                     autoOpen: true, width: 400, buttons: {
                         "OK": function () {

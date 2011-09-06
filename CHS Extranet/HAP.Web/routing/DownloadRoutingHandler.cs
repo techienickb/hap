@@ -13,6 +13,7 @@ using System.IO;
 using Microsoft.Win32;
 using HAP.Data.ComputerBrowser;
 using System.Text;
+using System.Web.SessionState;
 
 namespace HAP.Web.routing
 {
@@ -40,7 +41,7 @@ namespace HAP.Web.routing
         }
     }
 
-    public class Downloader : IMyComputerDisplay, IHttpHandler
+    public class Downloader : IMyComputerDisplay, IHttpHandler, IRequiresSessionState
     {
         private HAP.AD.User _ADUser = null;
         public HAP.AD.User ADUser

@@ -30,10 +30,14 @@ namespace HAP.AD
 
         public override string[] GetRolesForUser(string username)
         {
-            PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
-            UserPrincipal userp = UserPrincipal.FindByIdentity(pcontext, username);
             List<string> roles = new List<string>();
-            foreach (Principal p in userp.GetGroups()) roles.Add(p.SamAccountName);
+            try
+            {
+                PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
+                UserPrincipal userp = UserPrincipal.FindByIdentity(pcontext, username);
+                foreach (Principal p in userp.GetGroups()) roles.Add(p.SamAccountName);
+            }
+            catch { }
             return roles.ToArray();
         }
 

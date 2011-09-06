@@ -33,8 +33,8 @@ namespace HAP.Web.Configuration
             Groups.Add("Resources", "All");
             Groups["Resources"].Add("Browse My School Computer", "Inherit", "Access your School My Documents", "~/mycomputer.aspx", "~/images/icons/net.png", "");
             Groups["Resources"].Add("Access a School Computer", "Inherit", "Run School Applications at Home", "/rdweb/", "~/images/icons/remotedesktop.png", "");
-            Groups["Resources"].Add("Access My Webmail", "Inherit", "Access Student Mail", "https://schoolmail.crickhowell-hs.powys.sch.uk/webmail/", "~/images/icons/email.png", "");
-            Groups["Resources"].Add("Access My Emails", "Inherit", "Access Outlook Web App", "https://schoolmail.crickhowell-hs.powys.sch.uk/owa/", "~/images/icons/email.png", "");
+            Groups["Resources"].Add("Access My Webmail", "Domain Admins, CHS Teaching Staff, CHS Non-Teach Staff", "Access Student Mail", "https://schoolmail.crickhowell-hs.powys.sch.uk/webmail/", "~/images/icons/email.png", "");
+            Groups["Resources"].Add("Access My Emails", "CHS Students", "Access Outlook Web App", "https://schoolmail.crickhowell-hs.powys.sch.uk/owa/", "~/images/icons/email.png", "");
             Groups.Add("Management", "CHS Teaching Staff, CHS Non-Teach Staff, Domain Admins");
             Groups["Management"].Add("Help Desk", "Inherit", "Log/View a Support Ticket", "~/helpdesk/", "~/images/icons/helpdesk.png", "");
             Groups["Management"].Add("Booking System", "Inherit", "Book an IT Resource", "~/bookingsystem/", "~/images/icons/bookingsystem.png", "");

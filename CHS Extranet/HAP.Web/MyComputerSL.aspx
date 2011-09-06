@@ -70,6 +70,7 @@
 		  <param name="onError" value="onSilverlightError" />
 		  <param name="background" value="white" />
 		  <param name="minRuntimeVersion" value="4.0.50401.0" />
+		  <param name="InitParams" runat="server" id="InitParams" />
 		  <param name="autoUpgrade" value="true" />
 		  <a href="http://www.microsoft.com/getsilverlight/" target="_blank" style="text-decoration: none;"><img src="images/Silverlight-Prompt.png" alt="Get Microsoft Silverlight" /></a>
 		</object>

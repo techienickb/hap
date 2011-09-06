@@ -15,6 +15,7 @@ using System.Net;
 using System.IO;
 using HAP.AD;
 using System.DirectoryServices;
+using System.Web.SessionState;
 
 namespace HAP.Web.UserCard
 {
@@ -24,7 +25,7 @@ namespace HAP.Web.UserCard
     [WebService(Namespace = "http://hap.codeplex.com/")]
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
     [System.ComponentModel.ToolboxItem(false)]
-    public class api : System.Web.Services.WebService
+    public class api : System.Web.Services.WebService, IRequiresSessionState
     {
 
         #region Usercard API

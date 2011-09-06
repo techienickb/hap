@@ -16,13 +16,14 @@ using WordVisualizer.Core.Util;
 using HAP.Web.Configuration;
 using System.Web.Security;
 using HAP.Data.ComputerBrowser;
+using System.Web.SessionState;
 
 namespace HAP.Web.routing
 {
     /// <summary>
     /// Summary description for docx
     /// </summary>
-    public class DocXPreviewHandler : IHttpHandler, IMyComputerDisplay
+    public class DocXPreviewHandler : IHttpHandler, IMyComputerDisplay, IRequiresSessionState
     {
 
         #region Constants

@@ -5,7 +5,6 @@
 
 <asp:Content runat="server" ContentPlaceHolderID="head">
     <link href="style/mycomputer.css" rel="stylesheet" type="text/css" />
-    <script src="Scripts/jquery-ui-1.8.14.custom.min.js" type="text/javascript"></script>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
@@ -15,15 +14,15 @@
         <hap:version runat="server" />
         <a href="http://hap.codeplex.com" target="_blank" style="text-align: center; display: block;"><img src="<%=ResolveClientUrl("~/images/haplogo.png") %>" alt="Home Access Plus+ Logo" /></a>
         <div id="hometabs">
-            <ul id="tabheaders">
+            <ul>
                 <asp:Repeater runat="server" ID="tabheader_repeater"><ItemTemplate><li id="id_<%# Eval("Type") %>"><a href="#<%#Eval("Type") %>_tab"><%#Eval("Name") %></a></li></ItemTemplate></asp:Repeater>
             </ul>
             <asp:PlaceHolder runat="server" ID="tab_Me" Visible="false">
-                <div id="Me_tab" class="tab">
+                <div id="Me_tab">
                     <asp:Image runat="server" ID="userimage" ImageUrl="~/images/imageres18.png" style="margin: 10px 40px 30px 0; float: left" />
                     <div><%=string.IsNullOrEmpty(ADUser.FirstName) ? ADUser.DisplayName : ADUser.FirstName + " " + ADUser.LastName %></div>
                     <div><%=Department %></div>
-                    <div><%=up.EmailAddress %></div>
+                    <div><%=ADUser.Email %></div>
                     <asp:Button runat="server" Text="Update My Details" ID="updatemydetails" />
                     <div>
                         <div id="tab_me_progress"><div style="width: <%=Math.Round(space, 0)%>%;"></div><label><%=space %>%</label></div>
@@ -31,7 +30,7 @@
                 </div>
             </asp:PlaceHolder>
             <asp:PlaceHolder runat="server" ID="tab_Password" Visible="false">
-                <div id="Password_tab" class="tab">
+                <div id="Password_tab">
                     <asp:Label runat="server" AssociatedControlID="currentpass">Current Password: </asp:Label>
                     <asp:TextBox runat="server" TextMode="Password" ID="currentpass" ValidationGroup="changepass" />
                     <asp:RequiredFieldValidator runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="currentpass" ValidationGroup="changepass" />
@@ -49,7 +48,7 @@
                 </div>
             </asp:PlaceHolder>
             <asp:PlaceHolder runat="server" ID="tab_Bookings" Visible="false">
-                <div id="Bookings_tab" class="tab">
+                <div id="Bookings_tab">
                     <asp:ListView runat="server" ID="bookingslist">
                         <EmptyDataTemplate>No Bookings Available</EmptyDataTemplate>
                         <ItemTemplate>
@@ -79,7 +78,7 @@
                 </div>
             </asp:PlaceHolder>
             <asp:PlaceHolder runat="server" ID="tab_Tickets" Visible="false">
-                <div id="Tickets_tab" class="tab">
+                <div id="Tickets_tab">
                     <asp:ListView runat="server" ID="ticketslist">
                         <EmptyDataTemplate>No Open Tickets Available</EmptyDataTemplate>
                         <ItemTemplate>
@@ -141,10 +140,10 @@
             </div>
         </asp:Panel>
         <script type="text/javascript">
-            $(function () {
+            $(document).ready(function () {
                 $('#hometabs').tabs();
                 $('input[type=submit]').button();
-            }
+            });
         </script>
     </div>
 </asp:Content>

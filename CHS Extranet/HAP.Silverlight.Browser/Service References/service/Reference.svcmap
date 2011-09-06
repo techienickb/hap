@@ -20,11 +20,11 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="https://folders.crickhowell-hs.powys.sch.uk/extranet/api.asmx" Protocol="http" SourceId="1" />
+    <MetadataSource Address="https://folders.crickhowell-hs.powys.sch.uk/hap/api.asmx" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="api.disco" MetadataType="Disco" ID="f62809f4-2c2d-46a4-b611-f6146f5294a3" SourceId="1" SourceUrl="https://folders.crickhowell-hs.powys.sch.uk/extranet/api.asmx?disco" />
-    <MetadataFile FileName="api.wsdl" MetadataType="Wsdl" ID="b9761458-20e1-4a3f-98b6-0f27635e6ad4" SourceId="1" SourceUrl="https://folders.crickhowell-hs.powys.sch.uk/extranet/api.asmx?wsdl" />
+    <MetadataFile FileName="api1.disco" MetadataType="Disco" ID="3ad97473-3dd5-48c5-a028-9acb1b38f1da" SourceId="1" SourceUrl="https://folders.crickhowell-hs.powys.sch.uk/hap/api.asmx?disco" />
+    <MetadataFile FileName="api1.wsdl" MetadataType="Wsdl" ID="380cf587-6e44-4863-9050-a697cfef80f3" SourceId="1" SourceUrl="https://folders.crickhowell-hs.powys.sch.uk/hap/api.asmx?wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

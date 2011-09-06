@@ -17,7 +17,7 @@ namespace HAP.Data.UserCard
         }
         public Init(string username)
         {
-            DirectoryEntry DirectoryRoot = HAP.AD.ADUtils.GetDirectoryRoot();
+            DirectoryEntry DirectoryRoot = HAP.AD.ADUtils.DirectoryRoot;
             PrincipalContext pcontext = HAP.AD.ADUtils.GetPContext();
             UserPrincipal up = UserPrincipal.FindByIdentity(pcontext, IdentityType.SamAccountName, username);
             UserLevel = UserCard.UserLevel.Teacher;

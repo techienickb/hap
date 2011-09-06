@@ -26,6 +26,7 @@ namespace HAP.Silverlight.Browser
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            this.Resources.Add("token", e.InitParams["token"]);
             this.RootVisual = new MainPage();
         }
 

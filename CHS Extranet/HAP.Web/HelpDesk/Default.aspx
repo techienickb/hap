@@ -35,7 +35,7 @@
                 </a>
             <asp:Repeater runat="server" ID="ticketsrepeater">
                 <ItemTemplate>
-                    <a href="<%=ResolveClientUrl(string.Format(~/HelpDesk/ticket/{0}", Eval("Id"))) %>" id="ticket-<%#Eval("Id")%>">
+                    <a href="<%=ResolveClientUrl(string.Format("~/HelpDesk/ticket/{0}", Eval("Id"))) %>" id="ticket-<%#Eval("Id")%>">
                         <img src="<%=ResolveClientUrl(string.Format("~/Images/StatusIcons/{0}.png", Eval("Status"))) %>" alt="<%#Eval("Status")%>" />
                         <img src="<%=ResolveClientUrl(string.Format("~/Images/StatusIcons/priority_{0}.png", Eval("Priority"))) %>" alt="" class="Priority" />
                         <%# Eval("Subject") %>

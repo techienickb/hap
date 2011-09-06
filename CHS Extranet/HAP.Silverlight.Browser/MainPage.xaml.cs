@@ -77,7 +77,7 @@ namespace HAP.Silverlight.Browser
                 this.AllowDrop = false;
             }
             catch { }
-            soap.ListDrivesAsync();
+            soap.ListDrivesAsync(App.Current.Resources["token"].ToString());
         }
 
         #region Variables
@@ -305,7 +305,7 @@ namespace HAP.Silverlight.Browser
         {
             CurrentItem = ((HAPTreeNode)sender).Data;
             if (treeView1.Items.Count == 2) treeView1.Items.RemoveAt(1);
-            soap.ListDrivesAsync();
+            soap.ListDrivesAsync(App.Current.Resources["token"].ToString());
             HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri, "mycomputersl.aspx#"));
         }
 

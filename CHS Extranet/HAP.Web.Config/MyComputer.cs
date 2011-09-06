@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using System.Web;
 
 namespace HAP.Web.Configuration
 {
@@ -13,11 +14,14 @@ namespace HAP.Web.Configuration
         {
             this.doc = doc;
             if (doc.SelectSingleNode("/hapConfig/mscb") == null) Initialize();
+            KnownIcons = new XmlDocument();
+            KnownIcons.Load(HttpContext.Current.Server.MapPath("~/Images/Icons/KnownIcons.xml"));
         }
 
         public Filters Filters { get { return new Filters(ref doc); } }
         public DriveMappings Mappings { get { return new DriveMappings(ref doc); } }
         public QuotaServers QuotaServers { get { return new QuotaServers(ref doc); } }
+        public XmlDocument KnownIcons { get; private set; }
         public string HideExtensions 
         { 
             get { return doc.SelectSingleNode("/hapConfig/mscb").Attributes["hideextensions"].Value; } 

@@ -39,8 +39,13 @@ namespace HAP.Web.HelpDesk
                         {
                             newadminsupportticket.Attributes.Add("class", "Selected");
                             userlist.Items.Clear();
-                            foreach (User user in ADUtils.FindUsers())
-                                userlist.Items.Add(new ListItem(string.Format("{0} - ({1})", user.UserName, user.DisplayName), user.UserName));
+                            foreach (UserInfo user in ADUtils.FindUsers())
+                                if (string.IsNullOrEmpty(user.DisplayName))
+                                    userlist.Items.Add(new ListItem(user.UserName, user.UserName.ToLower()));
+                                else if (string.IsNullOrEmpty(user.Notes) && !string.IsNullOrEmpty(user.DisplayName))
+                                    userlist.Items.Add(new ListItem(string.Format("{0} - ({1})", user.UserName, user.DisplayName), user.UserName.ToLower()));
+                                else
+                                    userlist.Items.Add(new ListItem(string.Format("{0} - ({1})", user.UserName, user.Notes), user.UserName.ToLower()));
                         }
                     }
                 }

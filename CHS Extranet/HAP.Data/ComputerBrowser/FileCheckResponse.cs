@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using HAP.Web.Configuration;
+using HAP.AD;
 
 namespace HAP.Data.ComputerBrowser
 {
     public class FileCheckResponse
     {
         public FileCheckResponse() { Code = FileCheckResponseCode.Deny; FileSize = "-1"; }
-        public FileCheckResponse(FileInfo file, UNCPath unc, string userhome)
+        public FileCheckResponse(FileInfo file, UNCPath unc, User user)
         {
             Thumb = "images/icons/" + MyComputerItem.ParseForImage(file);
             if (file.Exists)
@@ -18,7 +19,7 @@ namespace HAP.Data.ComputerBrowser
                 Code = FileCheckResponseCode.Exists;
                 FileName = file.Name;
                 Extension = file.Extension;
-                FilePath = Converter.UNCtoDrive(file.FullName, unc, userhome);
+                FilePath = Converter.UNCtoDrive(file.FullName, unc, user);
                 FileSize = Converter.parseLength(file.Length);
                 DateModified = file.LastWriteTime;
                 DateCreated = file.CreationTime;
@@ -26,8 +27,8 @@ namespace HAP.Data.ComputerBrowser
             else Code = FileCheckResponseCode.OK;
         }
 
-        public FileCheckResponse(string path, UNCPath unc, string userhome)
-            : this(new FileInfo(path), unc, userhome)
+        public FileCheckResponse(string path, UNCPath unc, User user)
+            : this(new FileInfo(path), unc, user)
         {
         }
 

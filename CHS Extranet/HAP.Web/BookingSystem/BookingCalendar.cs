@@ -24,7 +24,7 @@ namespace HAP.Web.BookingSystem
             this.SelectionMode = CalendarSelectionMode.DayWeek;
             this.maxday = config.BookingSystem.MaxDays;
             foreach (AdvancedBookingRight right in HAP.Data.BookingSystem.BookingSystem.BookingRights)
-                if (right.Username == Page.User.Identity.Name)
+                if (right.Username == HttpContext.Current.User.Identity.Name)
                     this.maxday = 7 * right.Weeksahead;
 
 

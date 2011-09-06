@@ -16,7 +16,7 @@
                                 Subject: 
                                 <select id="subjectsddl" onchange="subjectchance(this)" style="width: 100px;">
                                     <option value="" selected="selected">- Subject -</option>
-                                    <asp:Repeater runat="server" ID="subjects"><ItemTemplate><option value="<%#Eval("Name") %>"><%#Eval("Name") %></option></ItemTemplate></asp:Repeater>
+                                    <asp:Repeater runat="server" ID="subjects"><ItemTemplate><option value="<%#Container.DataItem %>"><%#Container.DataItem %></option></ItemTemplate></asp:Repeater>
                                     <option value="CUSTOM">Custom</option>
                                 </select>
                                 <asp:TextBox ID="BookLesson" style="display: none;" Width="100px" runat="server" /><asp:RequiredFieldValidator ControlToValidate="BookLesson" runat="server" ErrorMessage="*" />

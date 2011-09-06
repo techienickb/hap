@@ -10,6 +10,7 @@ using System.IO;
 using System.Configuration;
 using HAP.Data.ComputerBrowser;
 using System.Web.Security;
+using System.Web.SessionState;
 
 namespace HAP.Web.API
 {
@@ -24,7 +25,7 @@ namespace HAP.Web.API
         }
     }
 
-    public class Upload : IHttpHandler
+    public class Upload : IHttpHandler, IRequiresSessionState 
     {
 
         public Upload(string path, string drive)

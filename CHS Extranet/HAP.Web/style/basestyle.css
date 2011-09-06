@@ -1,26 +1,55 @@
-﻿html { font-family: Calibri, Tahoma; font-size: medium; }
+﻿html {font-family: Segoe UI, Tahoma; font-size: 12px; }
+body { padding: 20px; }
 a img { border: 0; }
-#Download { float: right; position: absolute; right: 5px; border-radius: 3px; -moz-border-radius: 3px; top: 0; border: solid 1px #7da2ce; padding: 2px 5px; border-top: 0; background: url(images/bar-a-hover.gif) repeat-x left center; }
+#Download { float: right; position: absolute; right: 5px; border-radius: 3px; -moz-border-radius: 3px; top: 0; border: solid 1px #7da2ce; padding: 2px 5px; border-top: 0; background: url(../images/bar-a-hover.gif) repeat-x left center; }
 #CoreProperties h1 { margin: 0; padding: 0; font-weight: normal; font-size: 18px; }
 #CoreProperties table { width: 100%; border: solid 1px #d9d9d9; border-collapse: collapse; font-size: 12px; }
 #CoreProperties table td { text-align: center; }
 #Document { position: absolute; top: 105px; bottom: 0; left: 0; right: 0; width: 100%; overflow: auto; }
 #useroutter { overflow: hidden; }
-#user { float: right; right: 10px; top: 0; background: #4ba4e7; border: solid 1px #2b8ad4; border-radius: 0 0 5px 5px; -moz-border-radius: 0 0 5px 5px; color: #fff; padding: 2px 10px; font-size: small; }
-#user a { color: #fff; }
 
-#hometabs { height: 250px; }
-#tabheaders a { float: left; height: 25px; line-height: 25px; margin: 6px 1px 0 1px; text-decoration: none; font-family: Segoe UI; text-align: center; border-bottom: solid 1px #dedede;  }
-#tabheaders a:hover { border: solid 1px #dedede; border-radius: 5px 5px 0 0; margin: 5px 0 0 0; }
-#tabheaders a.active { color: #000; border: solid 1px #dedede; border-bottom: 0; margin: 0; height: 30px; line-height: 30px;  border-radius: 5px 5px 0 0; }
-#tabs { overflow: hidden; clear: both; }
-.tab { display: none; margin: 10px 50px; }
-.tab div { margin-bottom: 5px; }
-#tab_me_progress { width: 400px; height: 18px; border: solid 1px gray; border-radius: 3px; background: transparent url(images/progressbar.png) repeat-x top left; position: relative; overflow: hidden; margin: 5px 0 0 0; }
-#tab_me_progress div { height: 18px; background: transparent url(images/progressbar-active.png) repeat-x top left; }
+#usertop { position: absolute; top: 20px; right: 20px; padding: 2px 10px; border: solid 1px gray; border-radius: 3px; box-shadow: 5px 5px 5px #dedede; background: #fff; }
+
+#tab_me_progress { width: 400px; height: 18px; border: solid 1px gray; border-radius: 3px; background: transparent url(../images/progressbar.png) repeat-x top left; position: relative; overflow: hidden; margin: 5px 0 0 0; }
+#tab_me_progress div { height: 18px; background: transparent url(../images/progressbar-active.png) repeat-x top left; }
 #tab_me_progress label { position: absolute; top: 0; left: 0; right: 0; bottom: 0; text-align: center; font-size: 14px; }
 
 .bookingtable { border: solid 1px #a0a0a0; border-collapse: collapse; padding: 0; margin: 0; background: #fff; width: 100%; position: relative; }
-.bookingtable th { border-bottom: solid 1px #a0a0a0; border-top: 0; line-height: 20px; height: 20px; background: #f3f4f6 url(images/table-head-bg.gif) repeat-x top left; font-weight: normal; padding: 0; margin: 0; }
+.bookingtable th { border-bottom: solid 1px #a0a0a0; border-top: 0; line-height: 20px; height: 20px; background: #f3f4f6 url(../images/table-head-bg.gif) repeat-x top left; font-weight: normal; padding: 0; margin: 0; }
 .bookingtable td { font-size: 84%; padding: 0 2px; }
 .bookingtable.tickets td { font-size: 94%; text-align: center; }
+
+#loginform { width: 485px; margin: 40px auto; padding: 20px; border: solid 1px gray; border-radius: 10px; box-shadow: 5px 5px 5px #dedede }
+#loginform img { margin-bottom: 60px; }
+#loginform div { padding: 5px 0; }
+#loginform input { font-size: 150%; }
+#loginform label { float: left; width: 120px; font-size: 130%; text-align: right; padding: 2px 10px; }
+.submit { text-align: center; }
+#loginform .submit { padding-top: 30px; }
+#loginform .base { padding-top: 60px; padding-left: 60px; padding-bottom: 0; }
+#loginform .copyright { padding-left: 60px; font-size: 11px; }
+
+#timetable { list-style-type: none; margin: 10px auto; padding: 0; border: solid 1px gray; border-radius: 10px; box-shadow: 5px 5px 5px #dedede; overflow: auto; width: 870px; }
+#timetable li { display: block; border-bottom: solid 1px gray; padding: 5px; clear: both; height: 50px; overflow: hidden; }
+#timetable li span.day { float: left; height: 45px; line-height: 45px; width: 20px; border-radius: solid 1px #dedede; font-size: 140%; }
+#timetable ul { list-style-type: none; margin: 0; padding: 0; }
+#timetable ul li { float: left; border-right: solid 1px #dedede; height: 40px; width: 109px; overflow: hidden; clear: none; border-bottom: 0; }
+#timetable ul li span { display: block; font-size: 11px; }
+#timetable ul li span.period { float: left; height: 40px; padding-right: 5px; line-height: 40px; }
+#timetable li:last-child { border: 0; }
+
+#HomeButtons, #HomeButtons div div { padding-bottom: 1px; overflow: hidden; }
+#HomeButtons div { margin: 12px 0 0 0; padding: 10px 0 0 0; border-top: solid 1px #7da2ce; position: relative; }
+#HomeButtons div div { margin: 0; padding: 0; border-top: 0; position: static; }
+#HomeButtons h1 { position: absolute; top: -22px; left: 0; font-size: 100%; background: #fff; padding: 1px 4px; font-size: 14px; }
+
+h1.Announcement { background: #fceb80; font-family: Segoe Print, Comic Sans MS; font-size: 12px; color: Red; border: solid 1px #fff; border-radius: 8px; -moz-border-radius: 8px; padding: 4px 10px; }
+h1.Announcement b { font-size: 16px; }
+#EditAnn { position: relative; }
+#EditAnn a.EditAnnLink { position: absolute; right: 0; top: 30px; }
+#EditAnn a.EditAnnLink img { vertical-align: middle; text-decoration: none; height: 48px; }
+
+#HomeButtons a { float: left; margin: 3px; border: solid 0px #fff; border-radius: 3px; -moz-border-radius: 3px; color: #000; padding: 5px; width: 280px; height: 40px; line-height: 20px; display: block; overflow: hidden; text-decoration: none; font-size: 13px; }
+#HomeButtons a i { font-style: normal; color: #999; display: block; font-size: 11px; }
+#HomeButtons a:hover { border: solid 1px #7da2ce; margin: 2px; background: #f9fbfd url(../images/browser-a-hover.gif) repeat-x; text-decoration: none; }
+#HomeButtons a img { float: left; margin: 0 4px 0 0; height: 40px; border: 0; }
