@@ -40,6 +40,7 @@ namespace HAP.Web.Configuration
             Groups["Management"].Add("Booking System", "Inherit", "Book an IT Resource", "~/bookingsystem/", "~/images/icons/bookingsystem.png", "");
             Groups["Management"].Add("RM Management Console", "Domain Admins", "RM Management Console", "/authorise/", "~/images/icons/rm.png", "");
             Groups["Management"].Add("Logon Tracker", "Domain Admins", "View the Logon History", "~/tracker/", "~/images/icons/tracker.png", "");
+            Groups["Management"].Add("HAP+ Config", "Domain Admins", "Home Access Plus+ Config", "~/setup.aspx", "~/images/icons/setup.png", "");
         }
     }
 }
