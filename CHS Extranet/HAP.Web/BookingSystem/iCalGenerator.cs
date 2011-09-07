@@ -12,6 +12,7 @@ using System.Net.Mime;
 using System.Net;
 using System.DirectoryServices.AccountManagement;
 using HAP.Data.BookingSystem;
+using HAP.AD;
 
 namespace HAP.Web.BookingSystem
 {
@@ -118,6 +119,7 @@ namespace HAP.Web.BookingSystem
             string summary = string.Format(template.Subject, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, ltcount);
             string description = string.Format(template.Content, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, ltcount);
 
+            List<UserInfo> uis = new List<UserInfo>();
 
             sb.AppendLine("BEGIN:VCALENDAR");
             sb.AppendLine("VERSION:2.0");
@@ -130,8 +132,11 @@ namespace HAP.Web.BookingSystem
             sb.AppendLine("ORGANIZER;CN=" + booking.User.DisplayName + ":MAILTO:" + booking.User.Email);
             sb.AppendLine("ATTENDEE;ROLE=REQ-PARTICIPANT;CN=" + booking.User.DisplayName + ":MAILTO:" + booking.User.Email);
             foreach (string s in hapConfig.Current.BookingSystem.Resources[booking.Room].Admins.Split(new char[] { ',' }))
-                foreach (HAP.AD.User u in HAP.AD.ADUtils.FindUsers(s.Trim()))
-                    sb.AppendLine("ATTENDEE;ROLE=REQ-PARTICIPANT;CN=" + u.DisplayName + ":MAILTO:" + u.Email);
+            {
+                UserInfo ui = ADUtils.FindUserInfos(s)[0];
+                uis.Add(ui);
+                sb.AppendLine("ATTENDEE;ROLE=REQ-PARTICIPANT;CN=" + ui.DisplayName + ":MAILTO:" + ui.Email);
+            }
             sb.AppendLine("LOCATION:" + location);
             sb.AppendLine("UID:" + booking.uid);
             sb.AppendLine("DTSTAMP:" + DateTime.Now.ToString(DateFormat));
@@ -158,9 +163,8 @@ namespace HAP.Web.BookingSystem
             mes.Subject = summary;
             mes.From = mes.Sender = new MailAddress(config.SMTP.FromEmail, config.SMTP.FromUser);
             mes.ReplyToList.Add(mes.From);
-            foreach (string s in hapConfig.Current.BookingSystem.Resources[booking.Room].Admins.Split(new char[] { ',' }))
-                foreach (HAP.AD.User u in HAP.AD.ADUtils.FindUsers(s.Trim()))
-                    mes.To.Add(new MailAddress(u.Email, u.DisplayName));
+            foreach (UserInfo u1 in uis)
+                mes.To.Add(new MailAddress(u1.Email, u1.DisplayName));
 
             mes.Body = description;
 
@@ -299,10 +303,11 @@ namespace HAP.Web.BookingSystem
             mes.From = mes.Sender = new MailAddress(config.SMTP.FromEmail, config.SMTP.FromUser);
             mes.ReplyToList.Add(mes.From);
 
-
             foreach (string s in hapConfig.Current.BookingSystem.Resources[booking.Room].Admins.Split(new char[] { ',' }))
-                foreach (HAP.AD.User u in HAP.AD.ADUtils.FindUsers(s.Trim()))
-                    mes.To.Add(new MailAddress(u.Email, u.DisplayName));
+            {
+                UserInfo ui = ADUtils.FindUserInfos(s)[0];
+                mes.To.Add(new MailAddress(ui.Email, ui.DisplayName));
+            }
 
             mes.Body = description;
 

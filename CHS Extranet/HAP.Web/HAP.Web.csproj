@@ -119,6 +119,7 @@
     <Content Include="images\h2bg.gif" />
     <Content Include="images\h2bgover.gif" />
     <Content Include="images\icons.gif" />
+    <Content Include="images\icons\setup.png" />
     <Content Include="images\setup\1.png" />
     <Content Include="images\setup\2.png" />
     <Content Include="images\setup\266.png" />

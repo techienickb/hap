@@ -1,9 +1,9 @@
-﻿.trackertable { border: solid 1px #a0a0a0; border-collapse: collapse; padding: 0; margin: 0; background: #fff; width: 100%; position: relative; }
+﻿.trackertable { border: solid 1px #a0a0a0; border-collapse: collapse; padding: 0; margin: 0 auto; background: #fff; position: relative; }
 .trackertable th { border-bottom: solid 1px #a0a0a0; border-top: 0; vertical-align: top; }
 .trackertable th div { position: relative; font-weight: normal; background: #e4e5e6;  }
 .trackertable th div label { border-right: solid 1px #fcfcfd; margin-right: 1px; line-height: 21px; height: 21px; background: #f3f4f6 url(../images/table-head-bg.gif) repeat-x top left; display: block; }
-.trackertable td { font-size: 84%; padding: 0 2px; }
-.trackertable th div div { display: none; background: #fff; font-size: 84%; }
+.trackertable td { font-size: 100%; padding: 0 2px; }
+.trackertable th div div { display: none; background: #fff; font-size: 100%; }
 .trackertable th div div input, .trackertable th div div select { font-size: 84%; }
 .trackertable tr:hover th div div { display: block; }
 

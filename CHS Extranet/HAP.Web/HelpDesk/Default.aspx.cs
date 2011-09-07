@@ -62,7 +62,7 @@ namespace HAP.Web.HelpDesk
 
         public string getDisplayName(object o)
         {
-            User u = o as User;
+            UserInfo u = o as UserInfo;
             if (string.IsNullOrEmpty(u.DisplayName)) return u.UserName;
             return u.DisplayName;
         }
@@ -361,7 +361,7 @@ namespace HAP.Web.HelpDesk
         public string Subject { get; set; }
         public string Priority { get; set; }
         public string Status { get; set; }
-        public User User { get; set; }
+        public UserInfo User { get; set; }
         public DateTime Date { get; set; }
 
         public Ticket(XmlNode node)
@@ -373,7 +373,7 @@ namespace HAP.Web.HelpDesk
             if (node.SelectNodes("Note")[0].Attributes["date"] != null)
                 Date = DateTime.Parse(node.SelectNodes("Note")[0].Attributes["date"].Value + " " + node.SelectNodes("Note")[0].Attributes["time"].Value);
             Date = DateTime.Parse(node.SelectNodes("Note")[0].Attributes["datetime"].Value);
-            User = new User(node.SelectNodes("Note")[0].Attributes["username"].Value);
+            User = ADUtils.FindUserInfos(node.SelectNodes("Note")[0].Attributes["username"].Value)[0];
         }
     }
 

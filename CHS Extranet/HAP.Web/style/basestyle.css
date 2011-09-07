@@ -1,4 +1,4 @@
-﻿html {font-family: Segoe UI, Tahoma; font-size: 12px; }
+﻿html {font-family: Segoe UI, Tahoma; font-size: 13px; }
 body { padding: 20px; }
 a img { border: 0; }
 #Download { float: right; position: absolute; right: 5px; border-radius: 3px; -moz-border-radius: 3px; top: 0; border: solid 1px #7da2ce; padding: 2px 5px; border-top: 0; background: url(../images/bar-a-hover.gif) repeat-x left center; }
@@ -15,8 +15,8 @@ a img { border: 0; }
 #tab_me_progress label { position: absolute; top: 0; left: 0; right: 0; bottom: 0; text-align: center; font-size: 14px; }
 
 .bookingtable { border: solid 1px #a0a0a0; border-collapse: collapse; padding: 0; margin: 0; background: #fff; width: 100%; position: relative; }
-.bookingtable th { border-bottom: solid 1px #a0a0a0; border-top: 0; line-height: 20px; height: 20px; background: #f3f4f6 url(../images/table-head-bg.gif) repeat-x top left; font-weight: normal; padding: 0; margin: 0; }
-.bookingtable td { font-size: 84%; padding: 0 2px; }
+.bookingtable th { border-bottom: solid 1px #a0a0a0; border-top: 0; line-height: 20px; height: 20px; background: #f3f4f6 url(../images/table-head-bg.gif) repeat-x top left; font-weight: normal; padding: 0; margin: 0; font-size: 15px; }
+.bookingtable td { font-size: 100%; padding: 0 2px; }
 .bookingtable.tickets td { font-size: 94%; text-align: center; }
 
 #loginform { width: 485px; margin: 40px auto; padding: 20px; border: solid 1px gray; border-radius: 10px; box-shadow: 5px 5px 5px #dedede }
