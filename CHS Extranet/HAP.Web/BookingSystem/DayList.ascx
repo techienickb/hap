@@ -4,7 +4,7 @@
                 <b>Resource Type: </b>
                 <asp:DropDownList ID="resourcetype" AutoPostBack="true" runat="server" onselectedindexchanged="resourcetype_SelectedIndexChanged">
                     <asp:ListItem Selected="True">All</asp:ListItem>
-                    <asp:ListItem Value="ITRoom">Rooms</asp:ListItem>
+                    <asp:ListItem Value="Room">Rooms</asp:ListItem>
                     <asp:ListItem>Laptops</asp:ListItem>
                     <asp:ListItem>Equipment</asp:ListItem>
                     <asp:ListItem>Other</asp:ListItem>

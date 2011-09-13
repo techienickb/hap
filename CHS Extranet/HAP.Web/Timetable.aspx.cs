@@ -34,6 +34,15 @@ namespace HAP.Web
             tt.DataBind();
         }
 
+        private User _ADUser = null;
+        public User ADUser
+        {
+            get
+            {
+                if (_ADUser == null) _ADUser = ((User)Membership.GetUser());
+                return _ADUser;
+            }
+        }
         protected void convert_Click(object sender, EventArgs e)
         {
             XmlDocument xdoc = new XmlDocument();
@@ -73,7 +82,8 @@ namespace HAP.Web
 
         protected void impersonate_Click(object sender, EventArgs e)
         {
-            RenderTimetable(upn.Text);
+            if (upn.Text.Length == 0) RenderTimetable(new User(un.Text).EmployeeID);
+            else RenderTimetable(upn.Text);
             tt.Visible = true;
         }
     }

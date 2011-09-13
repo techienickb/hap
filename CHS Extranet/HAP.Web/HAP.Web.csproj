@@ -207,6 +207,7 @@
     <Content Include="Setup.aspx" />
     <Content Include="style\jquery-ui.css" />
     <Content Include="style\setup.css" />
+    <Content Include="style\timetable.css" />
     <Content Include="style\ui.dynatree.css" />
     <Content Include="Timetable.aspx" />
     <Content Include="Tracker\api.asmx" />
@@ -374,6 +375,7 @@
     <Compile Include="Controls\Announcement.ascx.designer.cs">
       <DependentUpon>Announcement.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\jquery.cs" />
     <Compile Include="Controls\Delete.ascx.cs">
       <DependentUpon>Delete.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

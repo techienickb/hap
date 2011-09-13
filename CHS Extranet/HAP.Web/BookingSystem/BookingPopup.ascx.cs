@@ -63,7 +63,7 @@ namespace HAP.Web.BookingSystem
             if (config.BookingSystem.Resources[roomstr].EnableCharging)
             {
                 HAP.Data.BookingSystem.BookingSystem bs = new HAP.Data.BookingSystem.BookingSystem(Date);
-                int index = config.BookingSystem.Lessons.IndexOf(config.BookingSystem.Lessons.Get(lessonint));
+                int index = config.BookingSystem.Lessons.FindIndex(l => l.Name == lessonint);
                 if (index > 0 && bs.islessonFree(roomstr, config.BookingSystem.Lessons[index - 1].Name))
                 {
                     node = doc.CreateElement("Booking");

@@ -9,6 +9,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.IO;
 using HAP.Data;
+using System.Web.Security;
 
 namespace HAP.Web
 {
@@ -22,9 +23,11 @@ namespace HAP.Web
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
-
-            InitParams.Attributes["value"] = string.Format("token={0}", TokenGenerator.ConvertToToken(ADUser.UserName + "@" + Session["password"].ToString()));
+            if (Session["password"] == null)
+            { 
+                FormsAuthentication.SignOut(); 
+                FormsAuthentication.RedirectToLoginPage("error=timeout");
+            } else InitParams.Attributes["value"] = string.Format("token={0}", TokenGenerator.ConvertToToken(ADUser.UserName + "@" + Session["password"].ToString()));
         }
     }
 }

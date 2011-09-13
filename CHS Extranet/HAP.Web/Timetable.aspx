@@ -1,14 +1,16 @@
 ﻿<%@ Page Title="Crickhowell High School - Home Access Plus+ - Timetable" Language="C#" MasterPageFile="~/Masterpage.master" AutoEventWireup="true" CodeBehind="Timetable.aspx.cs" Inherits="HAP.Web.Timetable" %>
+<asp:Content runat="server" ContentPlaceHolderID="head">
+    <link href="style/timetable.css" rel="stylesheet" type="text/css" />
+</asp:Content>
 <asp:Content ContentPlaceHolderID="body" runat="server">
     <asp:PlaceHolder runat="server" ID="adminconverter">
         <div>
-            <asp:Button runat="server" Text="Convert SIMS.net Export" ID="convert" 
-            onclick="convert_Click" /> (Export needs to be saved into the App_Data Folder as timetableexport.xml)
+            <asp:Button runat="server" Text="Convert SIMS.net Export" ID="convert" onclick="convert_Click" /> (Export needs to be saved into the App_Data Folder as timetableexport.xml)
         </div>
         <div>
-            <asp:Label ID="Label1" runat="server" AssociatedControlID="upn" Text="UPN: " /><asp:TextBox runat="server" ID="upn" />
-            <asp:Button runat="server" ID="impersonate" Text="Impersonate Student" 
-                onclick="impersonate_Click" />
+            <asp:Label runat="server" AssociatedControlID="upn" Text="UPN: " /><asp:TextBox runat="server" ID="upn" /> or
+            <asp:Label runat="server" AssociatedControlID="un" Text="Username: " /><asp:TextBox runat="server" ID="un" />
+            <asp:Button runat="server" ID="impersonate" Text="Impersonate Student" onclick="impersonate_Click" />
         </div>
     </asp:PlaceHolder>
     <asp:Literal runat="server" ID="message" />
@@ -18,7 +20,7 @@
             <li>
                 <span class="day"><%#Eval("Day") %></span>
                 <ul>
-            <asp:Repeater runat="server" DataSource='<%#Eval("Lessons") %>'>
+            <asp:Repeater ID="Repeater1" runat="server" DataSource='<%#Eval("Lessons") %>'>
                 <ItemTemplate>
                     <li>
                         <span class="period"><%#Eval("Period").ToString().Split(new char[] { ':' })[1] %></span>

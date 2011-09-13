@@ -96,7 +96,7 @@ namespace HAP.Logon.Tracker
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
-            e.Cancel = KeepOpen;
+            e.Cancel = this.KeepOpen;
         }
 
         private void Main_KeyDown(object sender, KeyEventArgs e)

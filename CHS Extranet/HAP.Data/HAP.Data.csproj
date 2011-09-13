@@ -79,6 +79,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Timetables\TimetableDay.cs" />
+    <Compile Include="Timetables\TimetableRecord.cs" />
+    <Compile Include="Timetables\Timetables.cs" />
     <Compile Include="TokenGenerator.cs" />
     <Compile Include="Tracker\Logons.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

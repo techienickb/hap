@@ -114,9 +114,14 @@ namespace HAP.Web.BookingSystem
 
         private int maxday;
 
+
         protected override void OnDayRender(TableCell cell, CalendarDay day)
         {
-            if (!day.IsWeekend) base.OnDayRender(cell, day);
+            if (!day.IsWeekend)
+            {
+                cell.Controls.Clear();
+                cell.Controls.Add(new LiteralControl(string.Format("<a href=\"#" + day.Date.ToShortDateString() + "\" id=\"" + day.Date.ToShortDateString().Replace('/', '-') + "\">" + day.DayNumberText + "</a>")));
+            }
             int dotw = 0;
             switch (DateTime.Now.DayOfWeek)
             {
@@ -146,8 +151,8 @@ namespace HAP.Web.BookingSystem
             get
             {
                 bool vis = false;
-                foreach (string s in hapConfig.Current.BookingSystem.Admins.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                    if (!vis) vis = Page.User.IsInRole(s);
+                foreach (string s in hapConfig.Current.BookingSystem.Admins.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
+                    if (!vis) vis = Page.User.IsInRole(s.Trim());
                 if (vis) return true;
                 return Page.User.IsInRole("Domain Admins");
             }
