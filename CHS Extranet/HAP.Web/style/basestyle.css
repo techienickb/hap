@@ -1,5 +1,4 @@
-﻿html {font-family: Segoe UI, Tahoma; font-size: 13px; }
-body { padding: 20px; }
+﻿html, #hapContent {font-family: Segoe UI, Tahoma; font-size: 13px; }
 a img { border: 0; }
 #Download { float: right; position: absolute; right: 5px; border-radius: 3px; -moz-border-radius: 3px; top: 0; border: solid 1px #7da2ce; padding: 2px 5px; border-top: 0; background: url(../images/bar-a-hover.gif) repeat-x left center; }
 #CoreProperties h1 { margin: 0; padding: 0; font-weight: normal; font-size: 18px; }
@@ -28,15 +27,6 @@ a img { border: 0; }
 #loginform .submit { padding-top: 30px; }
 #loginform .base { padding-top: 60px; padding-left: 60px; padding-bottom: 0; }
 #loginform .copyright { padding-left: 60px; font-size: 11px; }
-
-#timetable { list-style-type: none; margin: 10px auto; padding: 0; border: solid 1px gray; border-radius: 10px; box-shadow: 5px 5px 5px #dedede; overflow: auto; width: 870px; }
-#timetable li { display: block; border-bottom: solid 1px gray; padding: 5px; clear: both; height: 50px; overflow: hidden; }
-#timetable li span.day { float: left; height: 45px; line-height: 45px; width: 20px; border-radius: solid 1px #dedede; font-size: 140%; }
-#timetable ul { list-style-type: none; margin: 0; padding: 0; }
-#timetable ul li { float: left; border-right: solid 1px #dedede; height: 40px; width: 109px; overflow: hidden; clear: none; border-bottom: 0; }
-#timetable ul li span { display: block; font-size: 11px; }
-#timetable ul li span.period { float: left; height: 40px; padding-right: 5px; line-height: 40px; }
-#timetable li:last-child { border: 0; }
 
 #HomeButtons, #HomeButtons div div { padding-bottom: 1px; overflow: hidden; }
 #HomeButtons div { margin: 12px 0 0 0; padding: 10px 0 0 0; border-top: solid 1px #7da2ce; position: relative; }

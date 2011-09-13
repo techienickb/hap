@@ -55,7 +55,7 @@ namespace HAP.Silverlight.Browser
         {
             busyindicator.IsBusy = true;
             string _d = Common.GetPath(ParentItem) + "/" + foldername.Text;
-            soap.UnzipAsync(Item.Path, _d);
+            soap.UnzipAsync(Item.Path, _d, App.Current.Resources["token"].ToString());
         }
 
         void soap_UnzipCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
@@ -77,7 +77,7 @@ namespace HAP.Silverlight.Browser
         private void CurrentFolder_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             string _d = Common.GetPath(ParentItem);
-            soap.UnzipAsync(Item.Path, _d);
+            soap.UnzipAsync(Item.Path, _d, App.Current.Resources["token"].ToString());
             this.DialogResult = true;
         }
 

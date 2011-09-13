@@ -226,7 +226,7 @@ namespace HAP.Silverlight.Browser
             b.MaxReceivedMessageSize = 2147483647;
             apiSoapClient soap = new apiSoapClient(b, new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
             soap.SaveCompleted += new EventHandler<SaveCompletedEventArgs>(soap_SaveCompleted);
-            soap.SaveAsync((CBFile)_data.Source, _d, false, new BUserState(resort, _d, _data.Name));
+            soap.SaveAsync((CBFile)_data.Source, _d, false, App.Current.Resources["token"].ToString(), new BUserState(resort, _d, _data.Name));
 
             _data.Name = name1.Text = name2.Text = name3.Text = name4.Text = name5.Text = textBox2.Text = textBox3.Text = textBox4.Text = textBox5.Text = textBox1.Text = newname;
             if (_data.Icon.Contains("NewFolder")) { _data.Icon.Replace("NewFolder", "folder"); Data = _data; }
@@ -310,7 +310,7 @@ namespace HAP.Silverlight.Browser
                 b.MaxReceivedMessageSize = 2147483647;
                 apiSoapClient soap = new apiSoapClient(b, new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
                 soap.SaveCompleted += new EventHandler<SaveCompletedEventArgs>(soap_SaveCompleted);
-                soap.SaveAsync((CBFile)_data.Source, _d, e == ReplaceResult.Replace, new BUserState(state.Resort, _d, _data.Name));
+                soap.SaveAsync((CBFile)_data.Source, _d, e == ReplaceResult.Replace, App.Current.Resources["token"].ToString(), new BUserState(state.Resort, _d, _data.Name));
 
                 _data.Name = name1.Text = name2.Text = name3.Text = name4.Text = name5.Text = textBox2.Text = textBox3.Text = textBox4.Text = textBox5.Text = textBox1.Text = newname;
             }
@@ -320,7 +320,7 @@ namespace HAP.Silverlight.Browser
         {
             apiSoapClient soap1 = new apiSoapClient(new BasicHttpBinding(BasicHttpSecurityMode.Transport), new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
             soap1.SaveCompleted += new EventHandler<SaveCompletedEventArgs>(soap1_SaveCompleted);
-            soap1.SaveAsync(this._data.Source, folder + "\\" + _data.Name, false, new BUserState(resort, folder + "\\" + _data.Name, _data.Name));
+            soap1.SaveAsync(this._data.Source, folder + "\\" + _data.Name, false, App.Current.Resources["token"].ToString(), new BUserState(resort, folder + "\\" + _data.Name, _data.Name));
             return 0;
         }
 
@@ -371,7 +371,7 @@ namespace HAP.Silverlight.Browser
                 //_data.Name = name1.Text = name2.Text = name3.Text = name4.Text = name5.Text = textBox2.Text = textBox3.Text = textBox4.Text = textBox5.Text = textBox1.Text = newname;
                 apiSoapClient soap1 = new apiSoapClient(new BasicHttpBinding(BasicHttpSecurityMode.Transport), new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
                 soap1.SaveCompleted += new EventHandler<SaveCompletedEventArgs>(soap1_SaveCompleted);
-                soap1.SaveAsync(this._data.Source, _d, e == ReplaceResult.Replace, new BUserState(state.Resort, _d, _data.Name));
+                soap1.SaveAsync(this._data.Source, _d, e == ReplaceResult.Replace, App.Current.Resources["token"].ToString(), new BUserState(state.Resort, _d, _data.Name));
             }
         }
 
@@ -382,7 +382,7 @@ namespace HAP.Silverlight.Browser
             b.MaxReceivedMessageSize = 2147483647;
             apiSoapClient soap = new apiSoapClient(b, new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
             soap.DeleteCompleted += new EventHandler<System.ComponentModel.AsyncCompletedEventArgs>(soap_DeleteCompleted);
-            if (MessageBox.Show("Are you sure you want to delete\n" + _data.Name + "?", "Question", MessageBoxButton.OKCancel) == MessageBoxResult.OK) soap.DeleteAsync(_data.Path);
+            if (MessageBox.Show("Are you sure you want to delete\n" + _data.Name + "?", "Question", MessageBoxButton.OKCancel) == MessageBoxResult.OK) soap.DeleteAsync(_data.Path, App.Current.Resources["token"].ToString());
             return 0;
         }
 

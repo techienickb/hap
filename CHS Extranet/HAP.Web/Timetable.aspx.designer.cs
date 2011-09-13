@@ -31,15 +31,6 @@ namespace HAP.Web {
         protected global::System.Web.UI.WebControls.Button convert;
         
         /// <summary>
-        /// Label1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label1;
-        
-        /// <summary>
         /// upn control.
         /// </summary>
         /// <remarks>
@@ -47,6 +38,15 @@ namespace HAP.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox upn;
+        
+        /// <summary>
+        /// un control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox un;
         
         /// <summary>
         /// impersonate control.

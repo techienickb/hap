@@ -729,11 +729,15 @@ namespace HAP.Silverlight.Browser.service {
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
         public string path;
         
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=1)]
+        public string token;
+        
         public ListRequestBody() {
         }
         
-        public ListRequestBody(string path) {
+        public ListRequestBody(string path, string token) {
             this.path = path;
+            this.token = token;
         }
     }
     
@@ -800,12 +804,16 @@ namespace HAP.Silverlight.Browser.service {
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=1)]
         public string searchterm;
         
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
+        public string token;
+        
         public SearchRequestBody() {
         }
         
-        public SearchRequestBody(string path, string searchterm) {
+        public SearchRequestBody(string path, string searchterm, string token) {
             this.path = path;
             this.searchterm = searchterm;
+            this.token = token;
         }
     }
     
@@ -875,13 +883,17 @@ namespace HAP.Silverlight.Browser.service {
         [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
         public bool overwrite;
         
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=3)]
+        public string token;
+        
         public SaveRequestBody() {
         }
         
-        public SaveRequestBody(HAP.Silverlight.Browser.service.CBFile Current, string newpath, bool overwrite) {
+        public SaveRequestBody(HAP.Silverlight.Browser.service.CBFile Current, string newpath, bool overwrite, string token) {
             this.Current = Current;
             this.newpath = newpath;
             this.overwrite = overwrite;
+            this.token = token;
         }
     }
     
@@ -945,11 +957,15 @@ namespace HAP.Silverlight.Browser.service {
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
         public string path;
         
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=1)]
+        public string token;
+        
         public DeleteRequestBody() {
         }
         
-        public DeleteRequestBody(string path) {
+        public DeleteRequestBody(string path, string token) {
             this.path = path;
+            this.token = token;
         }
     }
     
@@ -1009,12 +1025,16 @@ namespace HAP.Silverlight.Browser.service {
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=1)]
         public string foldername;
         
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
+        public string token;
+        
         public NewFolderRequestBody() {
         }
         
-        public NewFolderRequestBody(string basepath, string foldername) {
+        public NewFolderRequestBody(string basepath, string foldername, string token) {
             this.basepath = basepath;
             this.foldername = foldername;
+            this.token = token;
         }
     }
     
@@ -1077,13 +1097,17 @@ namespace HAP.Silverlight.Browser.service {
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
         public HAP.Silverlight.Browser.service.ArrayOfString filepaths;
         
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=3)]
+        public string token;
+        
         public ZIPRequestBody() {
         }
         
-        public ZIPRequestBody(string basepath, string filename, HAP.Silverlight.Browser.service.ArrayOfString filepaths) {
+        public ZIPRequestBody(string basepath, string filename, HAP.Silverlight.Browser.service.ArrayOfString filepaths, string token) {
             this.basepath = basepath;
             this.filename = filename;
             this.filepaths = filepaths;
+            this.token = token;
         }
     }
     
@@ -1143,12 +1167,16 @@ namespace HAP.Silverlight.Browser.service {
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=1)]
         public string extractfolder;
         
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
+        public string token;
+        
         public UnzipRequestBody() {
         }
         
-        public UnzipRequestBody(string zipfile, string extractfolder) {
+        public UnzipRequestBody(string zipfile, string extractfolder, string token) {
             this.zipfile = zipfile;
             this.extractfolder = extractfolder;
+            this.token = token;
         }
     }
     
@@ -1214,14 +1242,18 @@ namespace HAP.Silverlight.Browser.service {
         [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
         public bool Complete;
         
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=4)]
+        public string token;
+        
         public UploadFileRequestBody() {
         }
         
-        public UploadFileRequestBody(string FileName, long StartByte, byte[] Data, bool Complete) {
+        public UploadFileRequestBody(string FileName, long StartByte, byte[] Data, bool Complete, string token) {
             this.FileName = FileName;
             this.StartByte = StartByte;
             this.Data = Data;
             this.Complete = Complete;
+            this.token = token;
         }
     }
     
@@ -1621,10 +1653,11 @@ namespace HAP.Silverlight.Browser.service {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        private System.IAsyncResult BeginList(string path, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult BeginList(string path, string token, System.AsyncCallback callback, object asyncState) {
             HAP.Silverlight.Browser.service.ListRequest inValue = new HAP.Silverlight.Browser.service.ListRequest();
             inValue.Body = new HAP.Silverlight.Browser.service.ListRequestBody();
             inValue.Body.path = path;
+            inValue.Body.token = token;
             return ((HAP.Silverlight.Browser.service.apiSoap)(this)).BeginList(inValue, callback, asyncState);
         }
         
@@ -1641,7 +1674,8 @@ namespace HAP.Silverlight.Browser.service {
         
         private System.IAsyncResult OnBeginList(object[] inValues, System.AsyncCallback callback, object asyncState) {
             string path = ((string)(inValues[0]));
-            return this.BeginList(path, callback, asyncState);
+            string token = ((string)(inValues[1]));
+            return this.BeginList(path, token, callback, asyncState);
         }
         
         private object[] OnEndList(System.IAsyncResult result) {
@@ -1657,11 +1691,11 @@ namespace HAP.Silverlight.Browser.service {
             }
         }
         
-        public void ListAsync(string path) {
-            this.ListAsync(path, null);
+        public void ListAsync(string path, string token) {
+            this.ListAsync(path, token, null);
         }
         
-        public void ListAsync(string path, object userState) {
+        public void ListAsync(string path, string token, object userState) {
             if ((this.onBeginListDelegate == null)) {
                 this.onBeginListDelegate = new BeginOperationDelegate(this.OnBeginList);
             }
@@ -1672,7 +1706,8 @@ namespace HAP.Silverlight.Browser.service {
                 this.onListCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnListCompleted);
             }
             base.InvokeAsync(this.onBeginListDelegate, new object[] {
-                        path}, this.onEndListDelegate, this.onListCompletedDelegate, userState);
+                        path,
+                        token}, this.onEndListDelegate, this.onListCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -1681,11 +1716,12 @@ namespace HAP.Silverlight.Browser.service {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        private System.IAsyncResult BeginSearch(string path, string searchterm, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult BeginSearch(string path, string searchterm, string token, System.AsyncCallback callback, object asyncState) {
             HAP.Silverlight.Browser.service.SearchRequest inValue = new HAP.Silverlight.Browser.service.SearchRequest();
             inValue.Body = new HAP.Silverlight.Browser.service.SearchRequestBody();
             inValue.Body.path = path;
             inValue.Body.searchterm = searchterm;
+            inValue.Body.token = token;
             return ((HAP.Silverlight.Browser.service.apiSoap)(this)).BeginSearch(inValue, callback, asyncState);
         }
         
@@ -1703,7 +1739,8 @@ namespace HAP.Silverlight.Browser.service {
         private System.IAsyncResult OnBeginSearch(object[] inValues, System.AsyncCallback callback, object asyncState) {
             string path = ((string)(inValues[0]));
             string searchterm = ((string)(inValues[1]));
-            return this.BeginSearch(path, searchterm, callback, asyncState);
+            string token = ((string)(inValues[2]));
+            return this.BeginSearch(path, searchterm, token, callback, asyncState);
         }
         
         private object[] OnEndSearch(System.IAsyncResult result) {
@@ -1719,11 +1756,11 @@ namespace HAP.Silverlight.Browser.service {
             }
         }
         
-        public void SearchAsync(string path, string searchterm) {
-            this.SearchAsync(path, searchterm, null);
+        public void SearchAsync(string path, string searchterm, string token) {
+            this.SearchAsync(path, searchterm, token, null);
         }
         
-        public void SearchAsync(string path, string searchterm, object userState) {
+        public void SearchAsync(string path, string searchterm, string token, object userState) {
             if ((this.onBeginSearchDelegate == null)) {
                 this.onBeginSearchDelegate = new BeginOperationDelegate(this.OnBeginSearch);
             }
@@ -1735,7 +1772,8 @@ namespace HAP.Silverlight.Browser.service {
             }
             base.InvokeAsync(this.onBeginSearchDelegate, new object[] {
                         path,
-                        searchterm}, this.onEndSearchDelegate, this.onSearchCompletedDelegate, userState);
+                        searchterm,
+                        token}, this.onEndSearchDelegate, this.onSearchCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -1744,12 +1782,13 @@ namespace HAP.Silverlight.Browser.service {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        private System.IAsyncResult BeginSave(HAP.Silverlight.Browser.service.CBFile Current, string newpath, bool overwrite, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult BeginSave(HAP.Silverlight.Browser.service.CBFile Current, string newpath, bool overwrite, string token, System.AsyncCallback callback, object asyncState) {
             HAP.Silverlight.Browser.service.SaveRequest inValue = new HAP.Silverlight.Browser.service.SaveRequest();
             inValue.Body = new HAP.Silverlight.Browser.service.SaveRequestBody();
             inValue.Body.Current = Current;
             inValue.Body.newpath = newpath;
             inValue.Body.overwrite = overwrite;
+            inValue.Body.token = token;
             return ((HAP.Silverlight.Browser.service.apiSoap)(this)).BeginSave(inValue, callback, asyncState);
         }
         
@@ -1768,7 +1807,8 @@ namespace HAP.Silverlight.Browser.service {
             HAP.Silverlight.Browser.service.CBFile Current = ((HAP.Silverlight.Browser.service.CBFile)(inValues[0]));
             string newpath = ((string)(inValues[1]));
             bool overwrite = ((bool)(inValues[2]));
-            return this.BeginSave(Current, newpath, overwrite, callback, asyncState);
+            string token = ((string)(inValues[3]));
+            return this.BeginSave(Current, newpath, overwrite, token, callback, asyncState);
         }
         
         private object[] OnEndSave(System.IAsyncResult result) {
@@ -1784,11 +1824,11 @@ namespace HAP.Silverlight.Browser.service {
             }
         }
         
-        public void SaveAsync(HAP.Silverlight.Browser.service.CBFile Current, string newpath, bool overwrite) {
-            this.SaveAsync(Current, newpath, overwrite, null);
+        public void SaveAsync(HAP.Silverlight.Browser.service.CBFile Current, string newpath, bool overwrite, string token) {
+            this.SaveAsync(Current, newpath, overwrite, token, null);
         }
         
-        public void SaveAsync(HAP.Silverlight.Browser.service.CBFile Current, string newpath, bool overwrite, object userState) {
+        public void SaveAsync(HAP.Silverlight.Browser.service.CBFile Current, string newpath, bool overwrite, string token, object userState) {
             if ((this.onBeginSaveDelegate == null)) {
                 this.onBeginSaveDelegate = new BeginOperationDelegate(this.OnBeginSave);
             }
@@ -1801,7 +1841,8 @@ namespace HAP.Silverlight.Browser.service {
             base.InvokeAsync(this.onBeginSaveDelegate, new object[] {
                         Current,
                         newpath,
-                        overwrite}, this.onEndSaveDelegate, this.onSaveCompletedDelegate, userState);
+                        overwrite,
+                        token}, this.onEndSaveDelegate, this.onSaveCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -1810,10 +1851,11 @@ namespace HAP.Silverlight.Browser.service {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        private System.IAsyncResult BeginDelete(string path, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult BeginDelete(string path, string token, System.AsyncCallback callback, object asyncState) {
             HAP.Silverlight.Browser.service.DeleteRequest inValue = new HAP.Silverlight.Browser.service.DeleteRequest();
             inValue.Body = new HAP.Silverlight.Browser.service.DeleteRequestBody();
             inValue.Body.path = path;
+            inValue.Body.token = token;
             return ((HAP.Silverlight.Browser.service.apiSoap)(this)).BeginDelete(inValue, callback, asyncState);
         }
         
@@ -1829,7 +1871,8 @@ namespace HAP.Silverlight.Browser.service {
         
         private System.IAsyncResult OnBeginDelete(object[] inValues, System.AsyncCallback callback, object asyncState) {
             string path = ((string)(inValues[0]));
-            return this.BeginDelete(path, callback, asyncState);
+            string token = ((string)(inValues[1]));
+            return this.BeginDelete(path, token, callback, asyncState);
         }
         
         private object[] OnEndDelete(System.IAsyncResult result) {
@@ -1844,11 +1887,11 @@ namespace HAP.Silverlight.Browser.service {
             }
         }
         
-        public void DeleteAsync(string path) {
-            this.DeleteAsync(path, null);
+        public void DeleteAsync(string path, string token) {
+            this.DeleteAsync(path, token, null);
         }
         
-        public void DeleteAsync(string path, object userState) {
+        public void DeleteAsync(string path, string token, object userState) {
             if ((this.onBeginDeleteDelegate == null)) {
                 this.onBeginDeleteDelegate = new BeginOperationDelegate(this.OnBeginDelete);
             }
@@ -1859,7 +1902,8 @@ namespace HAP.Silverlight.Browser.service {
                 this.onDeleteCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnDeleteCompleted);
             }
             base.InvokeAsync(this.onBeginDeleteDelegate, new object[] {
-                        path}, this.onEndDeleteDelegate, this.onDeleteCompletedDelegate, userState);
+                        path,
+                        token}, this.onEndDeleteDelegate, this.onDeleteCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -1868,11 +1912,12 @@ namespace HAP.Silverlight.Browser.service {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        private System.IAsyncResult BeginNewFolder(string basepath, string foldername, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult BeginNewFolder(string basepath, string foldername, string token, System.AsyncCallback callback, object asyncState) {
             HAP.Silverlight.Browser.service.NewFolderRequest inValue = new HAP.Silverlight.Browser.service.NewFolderRequest();
             inValue.Body = new HAP.Silverlight.Browser.service.NewFolderRequestBody();
             inValue.Body.basepath = basepath;
             inValue.Body.foldername = foldername;
+            inValue.Body.token = token;
             return ((HAP.Silverlight.Browser.service.apiSoap)(this)).BeginNewFolder(inValue, callback, asyncState);
         }
         
@@ -1889,7 +1934,8 @@ namespace HAP.Silverlight.Browser.service {
         private System.IAsyncResult OnBeginNewFolder(object[] inValues, System.AsyncCallback callback, object asyncState) {
             string basepath = ((string)(inValues[0]));
             string foldername = ((string)(inValues[1]));
-            return this.BeginNewFolder(basepath, foldername, callback, asyncState);
+            string token = ((string)(inValues[2]));
+            return this.BeginNewFolder(basepath, foldername, token, callback, asyncState);
         }
         
         private object[] OnEndNewFolder(System.IAsyncResult result) {
@@ -1904,11 +1950,11 @@ namespace HAP.Silverlight.Browser.service {
             }
         }
         
-        public void NewFolderAsync(string basepath, string foldername) {
-            this.NewFolderAsync(basepath, foldername, null);
+        public void NewFolderAsync(string basepath, string foldername, string token) {
+            this.NewFolderAsync(basepath, foldername, token, null);
         }
         
-        public void NewFolderAsync(string basepath, string foldername, object userState) {
+        public void NewFolderAsync(string basepath, string foldername, string token, object userState) {
             if ((this.onBeginNewFolderDelegate == null)) {
                 this.onBeginNewFolderDelegate = new BeginOperationDelegate(this.OnBeginNewFolder);
             }
@@ -1920,7 +1966,8 @@ namespace HAP.Silverlight.Browser.service {
             }
             base.InvokeAsync(this.onBeginNewFolderDelegate, new object[] {
                         basepath,
-                        foldername}, this.onEndNewFolderDelegate, this.onNewFolderCompletedDelegate, userState);
+                        foldername,
+                        token}, this.onEndNewFolderDelegate, this.onNewFolderCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -1929,12 +1976,13 @@ namespace HAP.Silverlight.Browser.service {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        private System.IAsyncResult BeginZIP(string basepath, string filename, HAP.Silverlight.Browser.service.ArrayOfString filepaths, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult BeginZIP(string basepath, string filename, HAP.Silverlight.Browser.service.ArrayOfString filepaths, string token, System.AsyncCallback callback, object asyncState) {
             HAP.Silverlight.Browser.service.ZIPRequest inValue = new HAP.Silverlight.Browser.service.ZIPRequest();
             inValue.Body = new HAP.Silverlight.Browser.service.ZIPRequestBody();
             inValue.Body.basepath = basepath;
             inValue.Body.filename = filename;
             inValue.Body.filepaths = filepaths;
+            inValue.Body.token = token;
             return ((HAP.Silverlight.Browser.service.apiSoap)(this)).BeginZIP(inValue, callback, asyncState);
         }
         
@@ -1952,7 +2000,8 @@ namespace HAP.Silverlight.Browser.service {
             string basepath = ((string)(inValues[0]));
             string filename = ((string)(inValues[1]));
             HAP.Silverlight.Browser.service.ArrayOfString filepaths = ((HAP.Silverlight.Browser.service.ArrayOfString)(inValues[2]));
-            return this.BeginZIP(basepath, filename, filepaths, callback, asyncState);
+            string token = ((string)(inValues[3]));
+            return this.BeginZIP(basepath, filename, filepaths, token, callback, asyncState);
         }
         
         private object[] OnEndZIP(System.IAsyncResult result) {
@@ -1967,11 +2016,11 @@ namespace HAP.Silverlight.Browser.service {
             }
         }
         
-        public void ZIPAsync(string basepath, string filename, HAP.Silverlight.Browser.service.ArrayOfString filepaths) {
-            this.ZIPAsync(basepath, filename, filepaths, null);
+        public void ZIPAsync(string basepath, string filename, HAP.Silverlight.Browser.service.ArrayOfString filepaths, string token) {
+            this.ZIPAsync(basepath, filename, filepaths, token, null);
         }
         
-        public void ZIPAsync(string basepath, string filename, HAP.Silverlight.Browser.service.ArrayOfString filepaths, object userState) {
+        public void ZIPAsync(string basepath, string filename, HAP.Silverlight.Browser.service.ArrayOfString filepaths, string token, object userState) {
             if ((this.onBeginZIPDelegate == null)) {
                 this.onBeginZIPDelegate = new BeginOperationDelegate(this.OnBeginZIP);
             }
@@ -1984,7 +2033,8 @@ namespace HAP.Silverlight.Browser.service {
             base.InvokeAsync(this.onBeginZIPDelegate, new object[] {
                         basepath,
                         filename,
-                        filepaths}, this.onEndZIPDelegate, this.onZIPCompletedDelegate, userState);
+                        filepaths,
+                        token}, this.onEndZIPDelegate, this.onZIPCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -1993,11 +2043,12 @@ namespace HAP.Silverlight.Browser.service {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        private System.IAsyncResult BeginUnzip(string zipfile, string extractfolder, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult BeginUnzip(string zipfile, string extractfolder, string token, System.AsyncCallback callback, object asyncState) {
             HAP.Silverlight.Browser.service.UnzipRequest inValue = new HAP.Silverlight.Browser.service.UnzipRequest();
             inValue.Body = new HAP.Silverlight.Browser.service.UnzipRequestBody();
             inValue.Body.zipfile = zipfile;
             inValue.Body.extractfolder = extractfolder;
+            inValue.Body.token = token;
             return ((HAP.Silverlight.Browser.service.apiSoap)(this)).BeginUnzip(inValue, callback, asyncState);
         }
         
@@ -2014,7 +2065,8 @@ namespace HAP.Silverlight.Browser.service {
         private System.IAsyncResult OnBeginUnzip(object[] inValues, System.AsyncCallback callback, object asyncState) {
             string zipfile = ((string)(inValues[0]));
             string extractfolder = ((string)(inValues[1]));
-            return this.BeginUnzip(zipfile, extractfolder, callback, asyncState);
+            string token = ((string)(inValues[2]));
+            return this.BeginUnzip(zipfile, extractfolder, token, callback, asyncState);
         }
         
         private object[] OnEndUnzip(System.IAsyncResult result) {
@@ -2029,11 +2081,11 @@ namespace HAP.Silverlight.Browser.service {
             }
         }
         
-        public void UnzipAsync(string zipfile, string extractfolder) {
-            this.UnzipAsync(zipfile, extractfolder, null);
+        public void UnzipAsync(string zipfile, string extractfolder, string token) {
+            this.UnzipAsync(zipfile, extractfolder, token, null);
         }
         
-        public void UnzipAsync(string zipfile, string extractfolder, object userState) {
+        public void UnzipAsync(string zipfile, string extractfolder, string token, object userState) {
             if ((this.onBeginUnzipDelegate == null)) {
                 this.onBeginUnzipDelegate = new BeginOperationDelegate(this.OnBeginUnzip);
             }
@@ -2045,7 +2097,8 @@ namespace HAP.Silverlight.Browser.service {
             }
             base.InvokeAsync(this.onBeginUnzipDelegate, new object[] {
                         zipfile,
-                        extractfolder}, this.onEndUnzipDelegate, this.onUnzipCompletedDelegate, userState);
+                        extractfolder,
+                        token}, this.onEndUnzipDelegate, this.onUnzipCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -2054,13 +2107,14 @@ namespace HAP.Silverlight.Browser.service {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        private System.IAsyncResult BeginUploadFile(string FileName, long StartByte, byte[] Data, bool Complete, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult BeginUploadFile(string FileName, long StartByte, byte[] Data, bool Complete, string token, System.AsyncCallback callback, object asyncState) {
             HAP.Silverlight.Browser.service.UploadFileRequest inValue = new HAP.Silverlight.Browser.service.UploadFileRequest();
             inValue.Body = new HAP.Silverlight.Browser.service.UploadFileRequestBody();
             inValue.Body.FileName = FileName;
             inValue.Body.StartByte = StartByte;
             inValue.Body.Data = Data;
             inValue.Body.Complete = Complete;
+            inValue.Body.token = token;
             return ((HAP.Silverlight.Browser.service.apiSoap)(this)).BeginUploadFile(inValue, callback, asyncState);
         }
         
@@ -2079,7 +2133,8 @@ namespace HAP.Silverlight.Browser.service {
             long StartByte = ((long)(inValues[1]));
             byte[] Data = ((byte[])(inValues[2]));
             bool Complete = ((bool)(inValues[3]));
-            return this.BeginUploadFile(FileName, StartByte, Data, Complete, callback, asyncState);
+            string token = ((string)(inValues[4]));
+            return this.BeginUploadFile(FileName, StartByte, Data, Complete, token, callback, asyncState);
         }
         
         private object[] OnEndUploadFile(System.IAsyncResult result) {
@@ -2094,11 +2149,11 @@ namespace HAP.Silverlight.Browser.service {
             }
         }
         
-        public void UploadFileAsync(string FileName, long StartByte, byte[] Data, bool Complete) {
-            this.UploadFileAsync(FileName, StartByte, Data, Complete, null);
+        public void UploadFileAsync(string FileName, long StartByte, byte[] Data, bool Complete, string token) {
+            this.UploadFileAsync(FileName, StartByte, Data, Complete, token, null);
         }
         
-        public void UploadFileAsync(string FileName, long StartByte, byte[] Data, bool Complete, object userState) {
+        public void UploadFileAsync(string FileName, long StartByte, byte[] Data, bool Complete, string token, object userState) {
             if ((this.onBeginUploadFileDelegate == null)) {
                 this.onBeginUploadFileDelegate = new BeginOperationDelegate(this.OnBeginUploadFile);
             }
@@ -2112,7 +2167,8 @@ namespace HAP.Silverlight.Browser.service {
                         FileName,
                         StartByte,
                         Data,
-                        Complete}, this.onEndUploadFileDelegate, this.onUploadFileCompletedDelegate, userState);
+                        Complete,
+                        token}, this.onEndUploadFileDelegate, this.onUploadFileCompletedDelegate, userState);
         }
         
         private System.IAsyncResult OnBeginOpen(object[] inValues, System.AsyncCallback callback, object asyncState) {

@@ -1,4 +1,13 @@
-﻿.trackertable { border: solid 1px #a0a0a0; border-collapse: collapse; padding: 0; margin: 0 auto; background: #fff; position: relative; }
+﻿#access { display: none; }
+#container {
+	float: none;
+	margin: 0;
+	width: 100%;
+}
+#content {
+	margin: 0; position: relative;
+}
+.trackertable { border: solid 1px #a0a0a0; border-collapse: collapse; padding: 0; margin: 0 auto; background: #fff; position: relative; }
 .trackertable th { border-bottom: solid 1px #a0a0a0; border-top: 0; vertical-align: top; }
 .trackertable th div { position: relative; font-weight: normal; background: #e4e5e6;  }
 .trackertable th div label { border-right: solid 1px #fcfcfd; margin-right: 1px; line-height: 21px; height: 21px; background: #f3f4f6 url(../images/table-head-bg.gif) repeat-x top left; display: block; }

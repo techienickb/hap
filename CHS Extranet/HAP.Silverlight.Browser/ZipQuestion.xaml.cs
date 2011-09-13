@@ -39,7 +39,7 @@ namespace HAP.Silverlight.Browser
                 aos.Add(Common.GetPath(item));
             apiSoapClient soap = new apiSoapClient(new BasicHttpBinding(BasicHttpSecurityMode.Transport), new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
             soap.ZIPCompleted += new EventHandler<System.ComponentModel.AsyncCompletedEventArgs>(soap_ZIPCompleted);
-            soap.ZIPAsync(Common.GetPath(ParentItem), namebox.Text, aos);
+            soap.ZIPAsync(Common.GetPath(ParentItem), namebox.Text, aos, App.Current.Resources["token"].ToString());
         }
 
         void soap_ZIPCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)

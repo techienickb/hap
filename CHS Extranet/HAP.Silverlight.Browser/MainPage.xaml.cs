@@ -321,7 +321,7 @@ namespace HAP.Silverlight.Browser
                 Image img = sp.Children[0] as Image;
                 img.Source = new BitmapImage(new Uri("/HAP.Silverlight.Browser;component/folderopen.png", UriKind.Relative));
             }
-            soap.ListAsync(CurrentItem.Path);
+            soap.ListAsync(CurrentItem.Path, App.Current.Resources["token"].ToString());
             HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri, "mycomputersl.aspx#" + CurrentItem.Path));
         }
 
@@ -341,7 +341,7 @@ namespace HAP.Silverlight.Browser
                 b.MaxReceivedMessageSize = 2147483647;
                 apiSoapClient asoap = new apiSoapClient(b, new EndpointAddress(new Uri(HtmlPage.Document.DocumentUri, "api.asmx").ToString()));
                 asoap.ListCompleted += new EventHandler<ListCompletedEventArgs>(asoap_ListCompleted);
-                asoap.ListAsync(tempnode.Data.Path);
+                asoap.ListAsync(tempnode.Data.Path, App.Current.Resources["token"].ToString());
             }
         }
 
@@ -590,7 +590,7 @@ namespace HAP.Silverlight.Browser
             foreach (BrowserItem i in contentPan.Children.Where(I => ((BrowserItem)I).Data.BType == service.BType.Folder))
                 if (i.Data.Name.StartsWith("New Folder")) count++;
             RememberActive = CurrentItem.Path + "\\New Folder" + (count == 0 ? "" : " " + (count + 1));
-            soap.NewFolderAsync(CurrentItem.Path, "New Folder" + (count == 0 ? "" : " " + (count + 1)));
+            soap.NewFolderAsync(CurrentItem.Path, "New Folder" + (count == 0 ? "" : " " + (count + 1)), App.Current.Resources["token"].ToString());
         }
 
         void soap_NewFolderCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
@@ -610,7 +610,7 @@ namespace HAP.Silverlight.Browser
             {
                 reload = true;
                 ((HAPTreeNode)treeView1.SelectedItem).IsExpanded = true;
-                soap.ListAsync(CurrentItem.Path);
+                soap.ListAsync(CurrentItem.Path, App.Current.Resources["token"].ToString());
             }
         }
 
@@ -925,7 +925,7 @@ namespace HAP.Silverlight.Browser
 
         private void zipcompletedhandler2(object sender, RoutedEventArgs e)
         {
-            soap.ListAsync(CurrentItem.Path);
+            soap.ListAsync(CurrentItem.Path, App.Current.Resources["token"].ToString());
             HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri, "mycomputersl.aspx#" + CurrentItem.Path));
         }
 
@@ -1109,7 +1109,7 @@ namespace HAP.Silverlight.Browser
             if (CurrentItem == item.ParentData)
             {
                 reload = true;
-                soap.ListAsync(CurrentItem.Path);
+                soap.ListAsync(CurrentItem.Path, App.Current.Resources["token"].ToString());
                 HtmlPage.Window.Navigate(new Uri(HtmlPage.Document.DocumentUri, "mycomputersl.aspx#" + CurrentItem.Path));
             }
             UploadQueue.Children.Remove(item);
@@ -1211,7 +1211,7 @@ namespace HAP.Silverlight.Browser
                 tempnode = searchresults;
                 candrag = this.AllowDrop = this.contentPan.AllowDrop = false;
                 ClearItems();
-                soap.SearchAsync(CurrentItem.Path, search_text.Text);
+                soap.SearchAsync(CurrentItem.Path, search_text.Text, App.Current.Resources["token"].ToString());
             }
         }
 

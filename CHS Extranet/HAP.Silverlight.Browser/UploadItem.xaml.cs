@@ -132,7 +132,7 @@ namespace HAP.Silverlight.Browser
             int a = buffer.Length;
             if (temp < a) a = Convert.ToInt32(temp);
             int bytesRead = fileStream.Read(buffer, 0, a);
-            soap.UploadFileAsync(ParentData.Path + '\\' + File.Name, BytesUploaded, buffer, false);
+            soap.UploadFileAsync(ParentData.Path + '\\' + File.Name, BytesUploaded, buffer, false, App.Current.Resources["token"].ToString());
             BytesUploaded += bytesRead;
             Value1 = (((double)BytesUploaded / (double)File.Length) * 100);
             fileStream.Close();

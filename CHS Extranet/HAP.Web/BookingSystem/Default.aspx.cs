@@ -15,16 +15,15 @@ namespace HAP.Web.BookingSystem
 {
     public partial class Default : HAP.Web.Controls.Page
     {
-        private hapConfig config;
 
-        protected override void OnInitComplete(EventArgs e)
+        public Default()
         {
-            config = hapConfig.Current;
-            this.Title = string.Format("{0} - Home Access Plus+ - IT Booking System", config.School.Name);
+            this.SectionTitle = "IT Booking System";
         }
 
         protected void sub1_Click(object sender, EventArgs e)
         {
+            DataBind();
         }
 
         protected bool isAdmin
@@ -32,8 +31,8 @@ namespace HAP.Web.BookingSystem
             get
             {
                 bool vis = false;
-                foreach (string s in hapConfig.Current.BookingSystem.Admins.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                    if (!vis) vis = HttpContext.Current.User.IsInRole(s);
+                foreach (string s in hapConfig.Current.BookingSystem.Admins.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
+                    if (!vis) vis = HttpContext.Current.User.IsInRole(s.Trim());
                 if (vis) return true;
                 return HttpContext.Current.User.IsInRole("Domain Admins");
             }
@@ -49,55 +48,52 @@ namespace HAP.Web.BookingSystem
                     d = d.AddDays(2);
                 else if (DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
                     d = d.AddDays(1);
+                datestamp.Value = d.ToShortDateString();
             }
-            else d = Calendar1.SelectedDates[0];
-            if (!string.IsNullOrWhiteSpace(datestamp.Value)) d = DateTime.Parse(datestamp.Value);
-            datestamp.Value = string.Empty;
-            Calendar1.SelectedDates.Clear();
-            Calendar1.SelectedDates.Add(d);
-            if (!IsPostBack) Calendar1.DataBind();
+            else d = DateTime.Parse(datestamp.Value);
+            Calendar1.VisibleDate = DateTime.Parse(datestamp.Value);
             DataBind();
             adminlink.Visible = isAdmin;
         }
 
         public override void DataBind()
         {
-            daylist.Date = bookingpopup.Date = Calendar1.SelectedDates[0];
+            daylist.Date = bookingpopup.Date = DateTime.Parse(datestamp.Value);
             daylist.DataBind(); bookingpopup.DataBind();
-            weeknum.Text = new HAP.Data.BookingSystem.BookingSystem(Calendar1.SelectedDates[0]).WeekNumber.ToString();
+            weeknum.Text = new HAP.Data.BookingSystem.BookingSystem(DateTime.Parse(datestamp.Value)).WeekNumber.ToString();
         }
 
         protected void remove_Click(object sender, EventArgs e)
         {
             string room = removevars.Value.Split(new char[] { '@' }, StringSplitOptions.RemoveEmptyEntries)[0];
             string lesson = removevars.Value.Split(new char[] { '@' }, StringSplitOptions.RemoveEmptyEntries)[1];
-            HAP.Data.BookingSystem.BookingSystem bs = new HAP.Data.BookingSystem.BookingSystem(Calendar1.SelectedDate);
+            HAP.Data.BookingSystem.BookingSystem bs = new HAP.Data.BookingSystem.BookingSystem(DateTime.Parse(datestamp.Value));
             Booking b = bs.getBooking(room, lesson);
             if (!string.IsNullOrEmpty(b.uid))
             {
-                iCalGenerator.GenerateCancel(b, Calendar1.SelectedDate);
-                if (config.BookingSystem.Resources[room].EmailAdmins) iCalGenerator.GenerateCancel(b, Calendar1.SelectedDate, true);
+                iCalGenerator.GenerateCancel(b, DateTime.Parse(datestamp.Value));
+                if (config.BookingSystem.Resources[room].EmailAdmins) iCalGenerator.GenerateCancel(b, DateTime.Parse(datestamp.Value), true);
             }
             XmlDocument doc = HAP.Data.BookingSystem.BookingSystem.BookingsDoc;
-            doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + Calendar1.SelectedDate.ToShortDateString() + "' and @lesson='" + lesson.ToString() + "' and @room='" + room + "']"));
-            if (config.BookingSystem.Resources[room].Type == ResourceType.Laptops)
+            doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + DateTime.Parse(datestamp.Value).ToShortDateString() + "' and @lesson='" + lesson.ToString() + "' and @room='" + room + "']"));
+            if (config.BookingSystem.Resources[room].EnableCharging)
             {
                 if (lesson.Length == 1)
                     foreach (Lesson l in config.BookingSystem.Lessons)
                         lesson = l.Name;
-                int index = config.BookingSystem.Lessons.IndexOf(config.BookingSystem.Lessons.Get(lesson)) + 1;
+                int index = config.BookingSystem.Lessons.FindIndex(l1 => l1.Name == lesson) + 1;
                 if (index >= config.BookingSystem.Lessons.Count) index--;
                 Lesson nextlesson = config.BookingSystem.Lessons[index];
 
                 if (nextlesson.Type != LessonType.Lesson) nextlesson = config.BookingSystem.Lessons[config.BookingSystem.Lessons.IndexOf(nextlesson) + 1];
-                if (doc.SelectSingleNode("/Bookings/Booking[@date='" + Calendar1.SelectedDate.ToShortDateString() + "' and @lesson='" + nextlesson.Name + "' and @room='" + room.ToString() + "']") != null)
-                    doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + Calendar1.SelectedDate.ToShortDateString() + "' and @lesson='" + nextlesson.Name + "' and @room='" + room.ToString() + "']"));
+                if (doc.SelectSingleNode("/Bookings/Booking[@date='" + DateTime.Parse(datestamp.Value).ToShortDateString() + "' and @lesson='" + nextlesson.Name + "' and @room='" + room.ToString() + "']") != null)
+                    doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + DateTime.Parse(datestamp.Value).ToShortDateString() + "' and @lesson='" + nextlesson.Name + "' and @room='" + room.ToString() + "']"));
 
-                index = config.BookingSystem.Lessons.IndexOf(config.BookingSystem.Lessons.Get(lesson)) - 1;
+                index = config.BookingSystem.Lessons.FindIndex(l1 => l1.Name == lesson) - 1;
                 if (index < 0) index++;
                 Lesson previouslesson = config.BookingSystem.Lessons[index];
-                if (doc.SelectSingleNode("/Bookings/Booking[@date='" + Calendar1.SelectedDate.ToShortDateString() + "' and @lesson='" + previouslesson.Name + "' and @room='" + room.ToString() + "' and @name='UNAVAILABLE']") != null)
-                    doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + Calendar1.SelectedDate.ToShortDateString() + "' and @lesson='" + previouslesson.Name + "' and @room='" + room.ToString() + "' and @name='UNAVAILABLE']"));
+                if (doc.SelectSingleNode("/Bookings/Booking[@date='" + DateTime.Parse(datestamp.Value).ToShortDateString() + "' and @lesson='" + previouslesson.Name + "' and @room='" + room.ToString() + "' and @name='UNAVAILABLE']") != null)
+                    doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + DateTime.Parse(datestamp.Value).ToShortDateString() + "' and @lesson='" + previouslesson.Name + "' and @room='" + room.ToString() + "' and @name='UNAVAILABLE']"));
             }
             HAP.Data.BookingSystem.BookingSystem.BookingsDoc = doc;
             DataBind();

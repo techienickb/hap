@@ -116,6 +116,7 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="0" maxOccurs="1" name="path" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="token" type="s:string" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -131,6 +132,7 @@
           <s:sequence>
             <s:element minOccurs="0" maxOccurs="1" name="path" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="searchterm" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="token" type="s:string" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -147,6 +149,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Current" type="tns:CBFile" />
             <s:element minOccurs="0" maxOccurs="1" name="newpath" type="s:string" />
             <s:element minOccurs="1" maxOccurs="1" name="overwrite" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="token" type="s:string" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -166,6 +169,7 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="0" maxOccurs="1" name="path" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="token" type="s:string" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -177,6 +181,7 @@
           <s:sequence>
             <s:element minOccurs="0" maxOccurs="1" name="basepath" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="foldername" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="token" type="s:string" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -189,6 +194,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="basepath" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="filename" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="filepaths" type="tns:ArrayOfString" />
+            <s:element minOccurs="0" maxOccurs="1" name="token" type="s:string" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -205,6 +211,7 @@
           <s:sequence>
             <s:element minOccurs="0" maxOccurs="1" name="zipfile" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="extractfolder" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="token" type="s:string" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -218,6 +225,7 @@
             <s:element minOccurs="1" maxOccurs="1" name="StartByte" type="s:long" />
             <s:element minOccurs="0" maxOccurs="1" name="Data" type="s:base64Binary" />
             <s:element minOccurs="1" maxOccurs="1" name="Complete" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="token" type="s:string" />
           </s:sequence>
         </s:complexType>
       </s:element>

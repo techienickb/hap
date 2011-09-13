@@ -5,44 +5,51 @@
 <%@ Register TagPrefix="hap" TagName="Overview" Src="~/BookingSystem/OverviewCalendar.ascx" %>
 <%@ Register TagPrefix="hap" TagName="SIMS" Src="~/BookingSystem/SIMS.ascx" %>
 <%@ Register Namespace="HAP.Web.BookingSystem" Assembly="HAP.Web" TagPrefix="hap" %>
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+<asp:Content ContentPlaceHolderID="head" runat="server">
     <link href="bookingsystem.css" rel="stylesheet" type="text/css" />
 </asp:Content>
-<asp:Content ID="Content2" runat="server" ContentPlaceHolderID="body">
+<asp:Content runat="server" ContentPlaceHolderID="body">
             <div>
-                <asp:UpdatePanel ID="UpdatePanel1" runat="server"><ContentTemplate>
-                    <div onclick="hideCal();">
-                        <asp:HyperLink runat="server" style="float: right;" NavigateUrl="admin/" ID="adminlink" Visible="false">Booking System Admin</asp:HyperLink>
-                        <hap:SIMS runat="server" />
-                        <a href="javascript:showOverview()" style="float: right;">Overview</a>
-                        <a href="<%=Request.ApplicationPath %>" style="float: right; padding: 0 5px;">Home Access Plus+ Home</a>
-                        <h1>IT Booking System</h1>
-                        <p>Click on a Free period to book a room, or click on a booking to remove it.  Click on <%=Calendar1.SelectedDate.DayOfWeek.ToString() %> to change the day. Week: <asp:Label runat="server" ID="weeknum" /></p>
-                        <hap:DayList runat="server" id="daylist" ItemWidth="152" />
-                        <hap:Overview runat="server" id="overview" />
-                        <hap:BookingPopup runat="server" ID="bookingpopup" />
-                        <asp:Button ID="remove" style="display: none;" OnClick="remove_Click" CausesValidation="false" runat="server" Text="Remove" />
-                        <asp:HiddenField ID="removevars" runat="server" />
-                    </div>
-                    <div id="Cal">
-                        <hap:BookingCalendar ID="Calendar1" runat="server" FirstDayOfWeek="Monday" CssClass="Calendar"
-                            NextPrevFormat="ShortMonth" BackColor="Transparent" OnVisibleMonthChanged="Calendar1_VisibleMonthChanged"
-                            BorderColor="#d9d9d9" BorderWidth="0" CellPadding="4" DayNameFormat="Short"
-                            Font-Size="9pt" Width="100%" onselectionchanged="Calendar1_SelectionChanged">
-                            <SelectedDayStyle BackColor="#6d051f" CssClass="Day SelDay" Font-Bold="True" ForeColor="White" />
-                            <DayStyle CssClass="Day" />
-                            <SelectorStyle CssClass="Selector" />
-                            <WeekendDayStyle BackColor="#FFFFCC" />
-                            <TodayDayStyle BackColor="#CCCCCC" ForeColor="Black" />
-                            <OtherMonthDayStyle ForeColor="Black" />
-                            <NextPrevStyle VerticalAlign="Middle" ForeColor="Black" CssClass="PreNextMonth" />
-                            <DayHeaderStyle BackColor="White" ForeColor="#646464" CssClass="dayhead" Font-Bold="True" Font-Size="8pt" />
-                            <TitleStyle CssClass="calhead" BackColor="Transparent" />
-                        </hap:BookingCalendar>
-                    </div>
-                    <asp:HiddenField runat="server" id="datestamp" value="" />
-                    <asp:Button runat="server" id="sub1" style="display: none;" Click="sub1_Click" />
-                </ContentTemplate></asp:UpdatePanel>
+                <div onclick="hideCal();">
+                    <asp:UpdatePanel ChildrenAsTriggers="true" runat="server">
+                    <Triggers>
+                        <asp:AsyncPostBackTrigger ControlID="Calendar1" EventName="SelectionChanged" />
+                        <asp:AsyncPostBackTrigger ControlID="sub1" EventName="Click" />
+                    </Triggers>
+                    <ContentTemplate>
+                    <asp:HyperLink runat="server" style="float: right;" NavigateUrl="admin/" ID="adminlink" Visible="false">Booking System Admin</asp:HyperLink>
+                    <hap:SIMS runat="server" />
+                    <a href="javascript:showOverview()" style="float: right;">Overview</a>
+                    <a href="<%=Request.ApplicationPath %>" style="float: right; padding: 0 5px;">Home Access Plus+ Home</a>
+                    <h1>IT Booking System</h1>
+                    <p>Click on a Free period to book a room, or click on a booking to remove it.  Click on <%=Calendar1.SelectedDate.DayOfWeek.ToString() %> to change the day. Week: <asp:Label runat="server" ID="weeknum" /></p>
+                    <hap:DayList runat="server" id="daylist" ItemWidth="152" />
+                    <hap:Overview runat="server" id="overview" />
+                    <hap:BookingPopup runat="server" ID="bookingpopup" />
+                    <asp:Button ID="remove" style="display: none;" OnClick="remove_Click" CausesValidation="false" runat="server" Text="Remove" />
+                    <asp:HiddenField ID="removevars" runat="server" />
+                    </ContentTemplate></asp:UpdatePanel>
+                </div>
+                <div id="Cal">
+                    <asp:UpdatePanel ChildrenAsTriggers="true" runat="server"><ContentTemplate>
+                    <hap:BookingCalendar ID="Calendar1" runat="server" FirstDayOfWeek="Monday" CssClass="Calendar"
+                        NextPrevFormat="ShortMonth" BackColor="Transparent" OnVisibleMonthChanged="Calendar1_VisibleMonthChanged"
+                        BorderColor="#d9d9d9" BorderWidth="0" CellPadding="4" DayNameFormat="Short" OnSelectionChanged="Calendar1_SelectionChanged"
+                        Font-Size="9pt" Width="100%">
+                        <SelectedDayStyle CssClass="Day SelDay" Font-Bold="True" ForeColor="White" />
+                        <DayStyle CssClass="Day" />
+                        <SelectorStyle CssClass="Selector" />
+                        <WeekendDayStyle BackColor="#FFFFCC" />
+                        <TodayDayStyle BackColor="#CCCCCC" ForeColor="Black" />
+                        <OtherMonthDayStyle ForeColor="Black" />
+                        <NextPrevStyle VerticalAlign="Middle" ForeColor="Black" CssClass="PreNextMonth" />
+                        <DayHeaderStyle BackColor="White" ForeColor="#646464" CssClass="dayhead" Font-Bold="True" Font-Size="8pt" />
+                        <TitleStyle CssClass="calhead" BackColor="Transparent" />
+                    </hap:BookingCalendar>
+                    </ContentTemplate></asp:UpdatePanel>
+                </div>
+                <asp:HiddenField runat="server" id="datestamp" value="" />
+                <asp:Button runat="server" id="sub1" OnClick="sub1_Click" style="display: none;" CausesValidation="false" />
                 <div id="loadingPopup" style="display: none;">
                     <div class="popupContent" style="width: 220px">
                         <h1>Loading</h1>
@@ -80,12 +87,14 @@
                     }
                 }
                 var showcal = false;
-                function changeDate() {
-                    if ($get('Cal').style.display == "") {
-                        $get('Cal').style.display = "block";
-                        $get('Cal').style.top = getPositionY($get('daylist')) + "px";
-                        $get('Cal').style.left = getPositionX($get('daylist')) + "px";
-                        showcal = true;
+                function changeDate(e) {
+                    if (e == null) {
+                        if ($get('Cal').style.display == "") {
+                            $get('Cal').style.display = "block";
+                            $get('Cal').style.top = getPositionY($get('daylist')) + "px";
+                            $get('Cal').style.left = getPositionX($get('daylist')) + "px";
+                            showcal = true;
+                        }
                     }
                 }
                 function hideCal() {
@@ -105,6 +114,8 @@
                     setIDs();
                     if (showcal) changeDate();
                     $get('loadingPopup').style.display = "none";
+                    var s = $("#<%=datestamp.ClientID %>").val().replace(/\//g, "-");
+                    $("#" + s).parent().addClass("SelDay");
                 }
                 function endRequestHandler(sender, args) {
                     $get('loadingPopup').style.display = "none";
@@ -144,5 +155,11 @@
                         $get('<%=sub1.ClientID%>').click();
                     }
                 } catch (ex) { alert(ex); }
+                $(window).bind('hashchange', function () {
+                    if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) {
+                        $get('<%=datestamp.ClientID %>').value = window.location.href.split('#')[1];
+                        $get('<%=sub1.ClientID%>').click();
+                    }
+                });
             </script>
 </asp:Content>
