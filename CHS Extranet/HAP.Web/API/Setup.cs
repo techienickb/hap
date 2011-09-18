@@ -1,31 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Services;
-using System.Collections.ObjectModel;
-using HAP.Web.Configuration;
-using System.Web.UI.WebControls;
+using System.Runtime.Serialization;
+using System.ServiceModel;
+using System.ServiceModel.Activation;
+using System.ServiceModel.Web;
 using System.Text;
-using System.Web.UI;
-using System.IO;
-using System.DirectoryServices;
-using System.DirectoryServices.AccountManagement;
+using HAP.Web.Configuration;
+using System.Web;
 using HAP.Data;
+using System.DirectoryServices.AccountManagement;
+using System.DirectoryServices;
 
 namespace HAP.Web.API
 {
-    /// <summary>
-    /// Summary description for Sortable
-    /// </summary>
-    [WebService(Namespace = "http://hap.codeplex.com/")]
-    [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
-    [System.ComponentModel.ToolboxItem(false)]
-    // To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line. 
-    [System.Web.Script.Services.ScriptService]
-    public class Setup : System.Web.Services.WebService
+    [ServiceContract(Namespace = "HAP.Web.API")]
+    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
+    public class setup
     {
-        [WebMethod]
+        // To use HTTP GET, add [WebGet] attribute. (Default ResponseFormat is WebMessageFormat.Json)
+        // To create an operation that returns XML,
+        //     add [WebGet(ResponseFormat=WebMessageFormat.Xml)],
+        //     and include the following line in the operation body:
+        //         WebOperationContext.Current.OutgoingResponse.ContentType = "text/xml";
+        [OperationContract]
+        [WebInvoke(Method="POST", RequestFormat=WebMessageFormat.Json, ResponseFormat=WebMessageFormat.Json, UriTemplate="/AddMapping", BodyStyle=WebMessageBodyStyle.Wrapped)]
         public int AddMapping(string drive, string name, string unc, string enablereadto, string enablewriteto, bool enablemove, string usagemode)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
@@ -34,7 +33,8 @@ namespace HAP.Web.API
             return 0;
         }
 
-        [WebMethod]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/RemoveMapping", BodyStyle = WebMessageBodyStyle.Wrapped)]
+        [OperationContract]
         public int RemoveMapping(string drive)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
@@ -42,7 +42,8 @@ namespace HAP.Web.API
             return 0;
         }
 
-        [WebMethod]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/UpdateMapping", BodyStyle = WebMessageBodyStyle.Wrapped)]
+        [OperationContract]
         public int UpdateMapping(string origdrive, string drive, string name, string unc, string enablereadto, string enablewriteto, bool enablemove, string usagemode)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
@@ -58,7 +59,8 @@ namespace HAP.Web.API
             return 0;
         }
 
-        [WebMethod]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/AddFilter", BodyStyle = WebMessageBodyStyle.Wrapped)]
+        [OperationContract]
         public int AddFilter(string name, string expression, string enablefor)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
@@ -66,7 +68,8 @@ namespace HAP.Web.API
             return 0;
         }
 
-        [WebMethod]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/RemoveFilter", BodyStyle = WebMessageBodyStyle.Wrapped)]
+        [OperationContract]
         public int RemoveFilter(string name, string expression)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
@@ -74,7 +77,8 @@ namespace HAP.Web.API
             return 0;
         }
 
-        [WebMethod]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/UpdateFilter", BodyStyle = WebMessageBodyStyle.Wrapped)]
+        [OperationContract]
         public int UpdateFilter(string origname, string origexpression, string name, string expression, string enablefor)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
@@ -86,7 +90,8 @@ namespace HAP.Web.API
             return 0;
         }
 
-        [WebMethod]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/AddQServer", BodyStyle = WebMessageBodyStyle.Wrapped)]
+        [OperationContract]
         public int AddQServer(string server, string expression, string drive)
         {
             expression = expression.Replace('/', '\\');
@@ -95,7 +100,8 @@ namespace HAP.Web.API
             return 0;
         }
 
-        [WebMethod]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/RemoveQServer", BodyStyle = WebMessageBodyStyle.Wrapped)]
+        [OperationContract]
         public int RemoveQServer(string server, string expression)
         {
             expression = expression.Replace('/', '\\');
@@ -104,7 +110,8 @@ namespace HAP.Web.API
             return 0;
         }
 
-        [WebMethod]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/UpdateQServer", BodyStyle = WebMessageBodyStyle.Wrapped)]
+        [OperationContract]
         public int UpdateQServer(string origserver, string origexpression, string server, string expression, string drive)
         {
             origexpression = origexpression.Replace('/', '\\');
@@ -118,7 +125,8 @@ namespace HAP.Web.API
             return 0;
         }
 
-        [WebMethod]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/AddResource", BodyStyle = WebMessageBodyStyle.Wrapped)]
+        [OperationContract]
         public int AddResource(string name, string type, bool enabled, bool charging, string admins, bool emailadmins)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
@@ -126,7 +134,8 @@ namespace HAP.Web.API
             return 0;
         }
 
-        [WebMethod]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/UpdateResource", BodyStyle = WebMessageBodyStyle.Wrapped)]
+        [OperationContract]
         public int UpdateResource(string origname, string name, string type, bool enabled, bool charging, string admins, bool emailadmins)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
@@ -135,13 +144,14 @@ namespace HAP.Web.API
             r.Type = (ResourceType)Enum.Parse(typeof(ResourceType), type);
             r.Admins = admins;
             r.Enabled = enabled;
-            r.EmailAdmins =emailadmins;
+            r.EmailAdmins = emailadmins;
             r.EnableCharging = charging;
             Config.BookingSystem.Resources.Update(origname, r);
             return 0;
         }
 
-        [WebMethod]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/RemoveResource", BodyStyle = WebMessageBodyStyle.Wrapped)]
+        [OperationContract]
         public int RemoveResource(string name)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
@@ -149,7 +159,8 @@ namespace HAP.Web.API
             return 0;
         }
 
-        [WebMethod]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/AddLesson", BodyStyle = WebMessageBodyStyle.Wrapped)]
+        [OperationContract]
         public int AddLesson(string name, string type, string start, string end)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
@@ -159,14 +170,15 @@ namespace HAP.Web.API
             int h2 = int.Parse(end.Substring(0, 2)) + (end.Contains("PM") ? 12 : 0);
             if (h2 == 12) h2 = 0;
             else if (h2 == 24) h2 = 12;
-            Config.BookingSystem.Lessons.Add(name, 
-                (LessonType)Enum.Parse(typeof(LessonType), type), 
-                new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, h, int.Parse(start.Substring(3, 2)), 00), 
+            Config.BookingSystem.Lessons.Add(name,
+                (LessonType)Enum.Parse(typeof(LessonType), type),
+                new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, h, int.Parse(start.Substring(3, 2)), 00),
                 new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, h2, int.Parse(end.Substring(3, 2)), 00));
             return 0;
         }
 
-        [WebMethod]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/EditLesson", BodyStyle = WebMessageBodyStyle.Wrapped)]
+        [OperationContract]
         public int EditLesson(string origname, string name, string type, string start, string end)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
@@ -185,7 +197,8 @@ namespace HAP.Web.API
             return 0;
         }
 
-        [WebMethod]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/RemoveLesson", BodyStyle = WebMessageBodyStyle.Wrapped)]
+        [OperationContract]
         public int RemoveLesson(string name)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
@@ -193,7 +206,8 @@ namespace HAP.Web.API
             return 0;
         }
 
-        [WebMethod]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/AddSubject", BodyStyle = WebMessageBodyStyle.Wrapped)]
+        [OperationContract]
         public int AddSubject(string subject)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
@@ -201,7 +215,8 @@ namespace HAP.Web.API
             return 0;
         }
 
-        [WebMethod]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/RemoveSubject", BodyStyle = WebMessageBodyStyle.Wrapped)]
+        [OperationContract]
         public int RemoveSubject(string subject)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
@@ -209,7 +224,8 @@ namespace HAP.Web.API
             return 0;
         }
 
-        [WebMethod]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/UpdateSubject", BodyStyle = WebMessageBodyStyle.Wrapped)]
+        [OperationContract]
         public int UpdateSubject(string origsubject, string subject)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
@@ -217,7 +233,8 @@ namespace HAP.Web.API
             return 0;
         }
 
-        [WebMethod]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/UpdateTabOrder", BodyStyle = WebMessageBodyStyle.Wrapped)]
+        [OperationContract]
         public int UpdateTabOrder(string tabs)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
@@ -225,7 +242,8 @@ namespace HAP.Web.API
             return 0;
         }
 
-        [WebMethod]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/UpdateLinkGroup", BodyStyle = WebMessageBodyStyle.Wrapped)]
+        [OperationContract]
         public int UpdateLinkGroup(string origname, string name, string showto)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
@@ -236,7 +254,8 @@ namespace HAP.Web.API
             return 0;
         }
 
-        [WebMethod]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/AddLinkGroup", BodyStyle = WebMessageBodyStyle.Wrapped)]
+        [OperationContract]
         public int AddLinkGroup(string name, string showto)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
@@ -244,7 +263,8 @@ namespace HAP.Web.API
             return 0;
         }
 
-        [WebMethod]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/RemoveLinkGroup", BodyStyle = WebMessageBodyStyle.Wrapped)]
+        [OperationContract]
         public int RemoveLinkGroup(string name)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
@@ -252,7 +272,8 @@ namespace HAP.Web.API
             return 0;
         }
 
-        [WebMethod]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/UpdateLinkGroupOrder", BodyStyle = WebMessageBodyStyle.Wrapped)]
+        [OperationContract]
         public int UpdateLinkGroupOrder(string groups)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
@@ -260,7 +281,8 @@ namespace HAP.Web.API
             return 0;
         }
 
-        [WebMethod]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/UpdateLink", BodyStyle = WebMessageBodyStyle.Wrapped)]
+        [OperationContract]
         public int UpdateLink(string group, string origname, string name, string desc, string icon, string url, string target, string showto)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
@@ -275,7 +297,8 @@ namespace HAP.Web.API
             return 0;
         }
 
-        [WebMethod]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/AddLink", BodyStyle = WebMessageBodyStyle.Wrapped)]
+        [OperationContract]
         public int AddLink(string group, string name, string desc, string icon, string url, string target, string showto)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
@@ -283,7 +306,8 @@ namespace HAP.Web.API
             return 0;
         }
 
-        [WebMethod]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/RemoveLink", BodyStyle = WebMessageBodyStyle.Wrapped)]
+        [OperationContract]
         public int RemoveLink(string group, string name)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
@@ -291,8 +315,8 @@ namespace HAP.Web.API
             return 0;
         }
 
-
-        [WebMethod]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/UpdateLinkOrder", BodyStyle = WebMessageBodyStyle.Wrapped)]
+        [OperationContract]
         public int UpdateLinkOrder(string group, string links)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
@@ -300,7 +324,8 @@ namespace HAP.Web.API
             return 0;
         }
 
-        [WebMethod]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/UpdateTab", BodyStyle = WebMessageBodyStyle.Wrapped)]
+        [OperationContract]
         public int UpdateTab(string tab)
         {
             string[] t = tab.Split(new char[] { '@' }, StringSplitOptions.RemoveEmptyEntries);
@@ -322,7 +347,8 @@ namespace HAP.Web.API
             else return 1;
         }
 
-        [WebMethod]
+        [WebInvoke(RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/GetADTree", BodyStyle=WebMessageBodyStyle.Wrapped)]
+        [OperationContract]
         public ADOU GetADTree(string username, string password, string domain)
         {
             if (username.Length < 2 && password.Length < 2 && domain.Length < 2) throw new Exception("Invailid Domain/Credentials");
