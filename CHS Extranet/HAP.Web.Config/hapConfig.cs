@@ -34,7 +34,7 @@ namespace HAP.Web.Configuration
             }
             doc = new XmlDocument();
             doc.Load(ConfigPath);
-            if (!FirstRun && Assembly.GetExecutingAssembly().GetName().Version.CompareTo(Version.Parse(doc.SelectSingleNode("/hapConfig").Attributes["version"].Value)) < 0) doUpgrade(Version.Parse(doc.SelectSingleNode("/hapConfig").Attributes["version"].Value));
+            if (!FirstRun && Assembly.GetExecutingAssembly().GetName().Version.CompareTo(Version.Parse(doc.SelectSingleNode("/hapConfig").Attributes["version"].Value)) == -1) doUpgrade(Version.Parse(doc.SelectSingleNode("/hapConfig").Attributes["version"].Value));
             AD = new AD(ref doc);
             Homepage = new Homepage(ref doc);
             ProxyServer = new ProxyServer(ref doc);
