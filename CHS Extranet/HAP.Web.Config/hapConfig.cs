@@ -34,7 +34,7 @@ namespace HAP.Web.Configuration
             }
             doc = new XmlDocument();
             doc.Load(ConfigPath);
-            if (!FirstRun && Assembly.GetExecutingAssembly().GetName().Version.CompareTo(Version.Parse(doc.SelectSingleNode("/hapConfig").Attributes["version"].Value)) == -1) doUpgrade(Version.Parse(doc.SelectSingleNode("/hapConfig").Attributes["version"].Value));
+            if (Version.Parse(doc.SelectSingleNode("/hapConfig").Attributes["version"].Value).CompareTo(Assembly.GetExecutingAssembly().GetName().Version) == -1) doUpgrade(Version.Parse(doc.SelectSingleNode("/hapConfig").Attributes["version"].Value));
             AD = new AD(ref doc);
             Homepage = new Homepage(ref doc);
             ProxyServer = new ProxyServer(ref doc);
@@ -61,6 +61,10 @@ namespace HAP.Web.Configuration
         public MySchoolComputerBrowser MySchoolComputerBrowser { get; private set; }
 
         private void doUpgrade(Version version) {
+            if (version.CompareTo(Version.Parse("7.1")) == -1)
+            {//Perform v7.0 to v7.1 upgrade
+                doc.SelectSingleNode("/hapConfig/mscb").Attributes["hideextensions"].Value = doc.SelectSingleNode("/hapConfig/mscb").Attributes["hideextensions"].Value.Replace(';', ',');
+            }
             doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             doc.Save(ConfigPath);
         }

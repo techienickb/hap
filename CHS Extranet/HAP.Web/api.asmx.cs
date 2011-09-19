@@ -36,7 +36,7 @@ namespace HAP.Web
             User user = new User();
             user.Authenticate(TokenGenerator.ConvertToPlain(token).Split(new char[] { '@' })[0], TokenGenerator.ConvertToPlain(token).Split(new char[] { '@' })[1]);
             user.ImpersonateContained();
-            UNCPath unc; string path = Converter.DriveToUNC(FileName, out unc);
+            UNCPath unc; string path = Converter.DriveToUNC(FileName, out unc, user);
             FileCheckResponse fcr = new FileCheckResponse(path, unc, user);
             user.EndContainedImpersonate();
             return fcr;

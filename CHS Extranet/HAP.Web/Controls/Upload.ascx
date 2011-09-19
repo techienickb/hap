@@ -5,13 +5,13 @@
 		<h1>Upload File</h1>
 		<object type="application/x-silverlight-2" data="data:application/x-silverlight-2," style="height: 315px; width: 100%;">
 			<param name="MinRuntimeVersion" value="4.0.50401.0" />
-			<param name="source" value="<%=Request.ApplicationPath%>/ClientBin/HAP.Silverlight.xap" />
+			<param name="source" value="<%=ResolveClientUrl("~/ClientBin/HAP.Silverlight.xap")%>" />
 			<param name="InitParams" runat="server" id="InitParams" />
 			<param name="autoUpgrade" value="true" />
 			<param name="onLoad" value="onSilverlightLoaded" />
 			<param name="onerror" value="onSilverlightError" />
 			<param name="minRuntimeVersion" value="4.0.50303.0" />
-			<a href="http://www.microsoft.com/getsilverlight/" target="_blank" style="text-decoration: none;"><img src="<%=Request.ApplicationPath%>/images/Silverlight-Prompt.png" alt="Get Microsoft Silverlight" /></a>
+			<a href="http://www.microsoft.com/getsilverlight/" target="_blank" style="text-decoration: none;"><img src="<%=ResolveClientUrl("~/images/Silverlight-Prompt.png")%>" alt="Get Microsoft Silverlight" /></a>
 			<p>Using the Silverlight for Uploading allows for: (compared to standard HTML uploading)</p>
 			<ul>
 				<li>Faster Uploads</li>
@@ -25,7 +25,7 @@
 		</object>
 		
 		<div class="modalButtons">
-			<input type="button" value="Switch to HTML Uploader" onclick="window.open('<%=Request.ApplicationPath%>/uploadh.aspx?path=<%=((HAP.Web.routing.IMyComputerDisplay)Page).RoutingDrive %>/<%=((HAP.Web.routing.IMyComputerDisplay)Page).RoutingPath %>', 'HAPUpload', 'toolbar=0,status=0,statusbar=0,menubar=0,menu=0,address=0,addressbar=0,width=600,height=400', true);" />
+			<input type="button" value="Switch to HTML Uploader" onclick="window.open('<%=ResolveClientUrl("~/uploadh.aspx?path=" + ((HAP.Web.routing.IMyComputerDisplay)Page).RoutingDrive + "/" + ((HAP.Web.routing.IMyComputerDisplay)Page).RoutingPath) %>', 'HAPUpload', 'toolbar=0,status=0,statusbar=0,menubar=0,menu=0,address=0,addressbar=0,width=600,height=400', true);" />
 			<asp:Button runat="server" ID="cancel" Text="Close" />
 		</div>
 	</asp:Panel>

@@ -20,5 +20,10 @@ namespace HAP.Web.Configuration
         public string Name { get; set; }
         public string Expression { get; set; }
         public string EnableFor { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0} ({2})|{1}", this.Name, this.Expression, this.Expression.Replace(",", "\\ "));
+        }
     }
 }

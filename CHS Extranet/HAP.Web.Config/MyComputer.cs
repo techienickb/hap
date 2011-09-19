@@ -31,7 +31,7 @@ namespace HAP.Web.Configuration
         public void Initialize()
         {
             XmlElement e = doc.CreateElement("mscb");
-            e.SetAttribute("hideextensions", ".lnk;.ini");
+            e.SetAttribute("hideextensions", ".lnk,.ini");
             e.AppendChild(doc.CreateElement("mappings"));
             e.AppendChild(doc.CreateElement("filters"));
             e.AppendChild(doc.CreateElement("quotaservers"));
