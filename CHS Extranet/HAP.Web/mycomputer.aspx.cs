@@ -147,7 +147,9 @@ namespace HAP.Web
                     foreach (DirectoryInfo subdir in dir.GetDirectories())
                         try
                         {
-                            if (!subdir.Name.ToLower().Contains("recycle"))
+                            bool isHidden = (subdir.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden;
+                            bool isSystem = (subdir.Attributes & FileAttributes.System) == FileAttributes.System;
+                            if (!subdir.Name.ToLower().Contains("recycle") && !isSystem && !isHidden && !subdir.Name.ToLower().Contains("system volume info"))
                             {
                                 string dirpath = subdir.FullName;
                                 dirpath = dirpath.Replace(Converter.FormatMapping(unc.UNC, ADUser), unc.Drive.ToString());

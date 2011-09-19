@@ -125,7 +125,9 @@ namespace HAP.Web
             foreach (DirectoryInfo subdir in dir.GetDirectories())
                 try
                 {
-                    if (!subdir.Name.ToLower().Contains("recycle") && subdir.Attributes != FileAttributes.Hidden && subdir.Attributes != FileAttributes.System && !subdir.Name.ToLower().Contains("system volume info"))
+                    bool isHidden = (subdir.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden;
+                    bool isSystem = (subdir.Attributes & FileAttributes.System) == FileAttributes.System;
+                    if (!subdir.Name.ToLower().Contains("recycle") && !isSystem && !isHidden && !subdir.Name.ToLower().Contains("system volume info"))
                     {
                         AccessControlActions actions = allowactions;
                         if (actions == AccessControlActions.Change)
@@ -146,7 +148,9 @@ namespace HAP.Web
             {
                 try
                 {
-                    if (!file.Name.ToLower().Contains("thumbs") && checkext(file.Extension) && file.Attributes != FileAttributes.Hidden && file.Attributes != FileAttributes.System)
+                    bool isHidden = (file.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden;
+                    bool isSystem = (file.Attributes & FileAttributes.System) == FileAttributes.System;
+                    if (!file.Name.ToLower().Contains("thumbs") && checkext(file.Extension) && !isHidden && !isSystem)
                     {
                         string dirpath = Converter.UNCtoDrive2(file.FullName, unc, user);
                         items.Add(new ComputerBrowserAPIItem(file, unc, user, allowactions, "Download/" + dirpath.Replace('&', '^')));
