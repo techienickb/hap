@@ -12,11 +12,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Silverlight.Browser", "HAP.Silverlight.Browser\HAP.Silverlight.Browser.csproj", "{E1C14EF8-AD23-48F5-9EFF-9A2F4A07CCC9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{A881389B-1A30-4196-A10B-ACA9C7A96292}"
-	ProjectSection(SolutionItems) = preProject
-		Binaries\AjaxControlToolkit.dll = Binaries\AjaxControlToolkit.dll
-		Binaries\Microsoft.WindowsAPICodePack.dll = Binaries\Microsoft.WindowsAPICodePack.dll
-		Binaries\Microsoft.WindowsAPICodePack.Shell.dll = Binaries\Microsoft.WindowsAPICodePack.Shell.dll
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP Logon Tracker", "HAP Logon Tracker\HAP Logon Tracker.csproj", "{5254C771-C9B6-4261-BC11-FED83C526CE0}"
 EndProject
