@@ -28,7 +28,7 @@ namespace HAP.Web
         protected void Page_Load(object sender, EventArgs e)
         {
             Dictionary<TabType, Tab> tabs = config.Homepage.Tabs.FilteredTabs;
-            tabheader_repeater.DataSource = config.Homepage.Tabs.Values;
+            tabheader_repeater.DataSource = config.Homepage.Tabs.FilteredTabs.Values;
             tabheader_repeater.DataBind();
             tab_Me.Visible = tabs.ContainsKey(TabType.Me);
             if (tab_Me.Visible)
@@ -38,8 +38,8 @@ namespace HAP.Web
                 else if (tabs[TabType.Me].ShowTo != "None")
                 {
                     bool vis = false;
-                    foreach (string s in tabs[TabType.Me].AllowUpdateTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                        if (!vis) vis = User.IsInRole(s);
+                    foreach (string s in tabs[TabType.Me].AllowUpdateTo.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
+                        if (!vis) vis = User.IsInRole(s.Trim());
                     if (vis) updatemydetails.Visible = true;
                 }
                 
