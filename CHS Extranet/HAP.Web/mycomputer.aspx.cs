@@ -162,7 +162,9 @@ namespace HAP.Web
                     {
                         try
                         {
-                            if (!file.Name.ToLower().Contains("thumbs") && checkext(file.Extension) && (file.Attributes != FileAttributes.Hidden || file.Attributes != FileAttributes.System))
+                            bool isHidden = (file.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden;
+                            bool isSystem = (file.Attributes & FileAttributes.System) == FileAttributes.System;
+                            if (!file.Name.ToLower().Contains("thumbs") && checkext(file.Extension) && !isHidden && !isSystem)
                             {
                                 string dirpath = file.FullName;
                                 dirpath = dirpath.Replace(Converter.FormatMapping(unc.UNC, ADUser), unc.Drive.ToString());

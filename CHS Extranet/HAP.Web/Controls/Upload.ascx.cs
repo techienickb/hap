@@ -19,8 +19,8 @@ namespace HAP.Web.Controls
             else if (filter.EnableFor != "None")
             {
                 bool vis = false;
-                foreach (string s in filter.EnableFor.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                    if (!vis) vis = Page.User.IsInRole(s);
+                foreach (string s in filter.EnableFor.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
+                    if (!vis) vis = Page.User.IsInRole(s.Trim());
                 return vis;
             }
             return false;
