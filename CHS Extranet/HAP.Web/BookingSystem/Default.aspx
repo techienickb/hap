@@ -7,6 +7,7 @@
 <%@ Register Namespace="HAP.Web.BookingSystem" Assembly="HAP.Web" TagPrefix="hap" %>
 <asp:Content ContentPlaceHolderID="head" runat="server">
     <link href="bookingsystem.css" rel="stylesheet" type="text/css" />
+    <script src="../Scripts/jquery.ba-hashchange.min.js" type="text/javascript"></script>
 </asp:Content>
 <asp:Content runat="server" ContentPlaceHolderID="body">
             <div>
@@ -91,8 +92,8 @@
                     if (e == null) {
                         if ($get('Cal').style.display == "") {
                             $get('Cal').style.display = "block";
-                            $get('Cal').style.top = getPositionY($get('daylist')) + "px";
-                            $get('Cal').style.left = getPositionX($get('daylist')) + "px";
+                            $get('Cal').style.top = $("#daylist").position().top + "px";
+                            $get('Cal').style.left = $("#daylist").position().left + "px";
                             showcal = true;
                         }
                     }
@@ -129,22 +130,6 @@
                     $get('modalBackground').style.display = "block";
                     $get('loadingPopup').style.display = "block";
                 }
-                function getPositionY(obj) {
-                    var topValue = 0;
-                    while (obj) {
-                        topValue += obj.offsetTop;
-                        obj = obj.offsetParent;
-                    }
-                    return topValue;
-                }
-                function getPositionX(obj) {
-                    var topValue = 0;
-                    while (obj) {
-                        topValue += obj.offsetLeft;
-                        obj = obj.offsetParent;
-                    }
-                    return topValue;
-                }
                 Sys.Application.add_load(resetCal);
                 Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(beginRequestHandler);
                 Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandler);
@@ -155,7 +140,7 @@
                         $get('<%=sub1.ClientID%>').click();
                     }
                 } catch (ex) { alert(ex); }
-                $(window).bind('hashchange', function () {
+                $(window).hashchange(function () {
                     if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) {
                         $get('<%=datestamp.ClientID %>').value = window.location.href.split('#')[1];
                         $get('<%=sub1.ClientID%>').click();
