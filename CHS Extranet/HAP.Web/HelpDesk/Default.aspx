@@ -35,9 +35,9 @@
                 </a>
             <asp:Repeater runat="server" ID="ticketsrepeater">
                 <ItemTemplate>
-                    <a href="<%=ResolveClientUrl(string.Format("~/HelpDesk/ticket/{0}", Eval("Id"))) %>" id="ticket-<%#Eval("Id")%>">
-                        <img src="<%=ResolveClientUrl(string.Format("~/Images/StatusIcons/{0}.png", Eval("Status"))) %>" alt="<%#Eval("Status")%>" />
-                        <img src="<%=ResolveClientUrl(string.Format("~/Images/StatusIcons/priority_{0}.png", Eval("Priority"))) %>" alt="" class="Priority" />
+                    <a href="<%#ResolveClientUrl(string.Format("~/HelpDesk/ticket/{0}", Eval("Id"))) %>" id="ticket-<%#Eval("Id")%>">
+                        <img src="<%#ResolveClientUrl(string.Format("~/Images/StatusIcons/{0}.png", Eval("Status"))) %>" alt="<%#Eval("Status")%>" />
+                        <img src="<%#ResolveClientUrl(string.Format("~/Images/StatusIcons/priority_{0}.png", Eval("Priority"))) %>" alt="" class="Priority" />
                         <%# Eval("Subject") %>
                         <i><%# ((DateTime)Eval("Date")).ToString("dd/MM/yy hh:mm")%> by <%# getDisplayName(Eval("User")) %></i>
                     </a>
@@ -48,7 +48,7 @@
         <div id="ticket">
             <asp:PlaceHolder runat="server" ID="NewTicketFiled" Visible="false">
                 <h1>Your New ticket has been filed with IT support</h1>
-                <div>You can access your support ticket via <%=ResolveClientUrl(string.Format("<a href=\"~/helpdesk/ticket/{3}\">{0}://{1}{2}/helpdesk/ticket/{3}</a>", Request.Url.Scheme, Request.Url.Host + (Request.Url.Port != 80 && Request.Url.Port != 443 ? ":" + Request.Url.Port.ToString() : ""), Request.ApplicationPath, _id))%></div>
+                <div>You can access your support ticket via <%=string.Format("<a href=\"" + ResolveClientUrl("~/helpdesk/ticket/") + "{3}\">{0}://{1}/{2}helpdesk/ticket/{3}</a>", Request.Url.Scheme, Request.Url.Host + (Request.Url.Port != 80 && Request.Url.Port != 443 ? ":" + Request.Url.Port.ToString() : ""), Request.ApplicationPath, _id)%></div>
             </asp:PlaceHolder>
             <asp:PlaceHolder runat="server" ID="noCurrentTicket">
                 <h1><< Select a Ticket or <a href="?view=-1">File for Support</a></h1>

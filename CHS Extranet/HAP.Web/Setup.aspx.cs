@@ -23,7 +23,7 @@ namespace HAP.Web
                 schoolurl.Text = Config.School.WebSite;
                 upn.Text = Config.AD.UPN;
                 un.Text = Config.AD.User;
-                up.Text = Config.AD.Password;
+                up.Text = "";
                 sg.Text = Config.AD.StudentsGroup;
                 if (sg.Text.Length > 0) adbasestate.ImageUrl = "~/images/setup/267.png";
                 else adstate.ImageUrl = "~/images/setup/266.png";
@@ -113,7 +113,7 @@ namespace HAP.Web
             Config.School.WebSite = schoolurl.Text;
             Config.AD.UPN = upn.Text;
             Config.AD.User = un.Text;
-            Config.AD.Password = up.Text;
+            if (up.Text.Length > 0) Config.AD.Password = up.Text;
             Config.AD.StudentsGroup = sg.Text;
             Config.SMTP.Server=smtpaddress.Text;
             Config.SMTP.Enabled = smtpenabled.Checked;
