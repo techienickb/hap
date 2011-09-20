@@ -233,7 +233,7 @@
 									<label for="homepagetabs-<%#Eval("Type") %>-Name">Name: </label>
 									<input type="text" id="homepagetabs-<%#Eval("Type") %>-Name" value="<%#Eval("Name") %>" onchange="updatetab('<%#Eval("Type") %>');" />
 									<br />
-									<label for="homepagetabs-<%#Eval("Type") %>-Show To">Show To: </label>
+									<label for="homepagetabs-<%#Eval("Type") %>-ShowTo">Show To: </label>
 									<input type="text" id="homepagetabs-<%#Eval("Type") %>-ShowTo" value="<%#Eval("ShowTo") %>" onclick="showadbuilder(this, false);"  onchange="updatetab('<%#Eval("Type") %>');" />
 									<%#((HAP.Web.Configuration.TabType)Eval("Type")) == HAP.Web.Configuration.TabType.Me ? "<br /><label for=\"homepagetabs-" + Eval("Type").ToString() + "-allowupdateto\">Allow Update To: </label><input type=\"text\" id=\"homepagetabs-" + Eval("Type").ToString() + "-allowupdateto\" value=\"" + Eval("AllowUpdateTo").ToString() + "\" onclick=\"showadbuilder(this, false);\" onchange=\"updatetab('" + Eval("Type").ToString() + "');\" /><br />" : "" %>
 									<%#((HAP.Web.Configuration.TabType)Eval("Type")) == HAP.Web.Configuration.TabType.Me ? "<label for=\"homepagetabs-" + Eval("Type").ToString() + "-showspace\">Show Space: </label><input type=\"checkbox\" id=\"homepagetabs-" + Eval("Type").ToString() + "-showspace\"" + (((Nullable<bool>)Eval("ShowSpace")).Value ? " checked=\"checked\"" : "") + " onchange=\"updatetab('" + Eval("Type").ToString() + "');\" />" : ""%>
@@ -587,11 +587,11 @@
 							$("#mappingDrive").val(tempe.children("a").children("b").html());
 							$("#mappingName").val(tempe.children("a").children(".name").html());
 							$("#mappingUNC").val(tempe.children("a").children("i").html());
-							if (tempe.children("a").children(".em").html() == "true")
+							if (tempe.children("a").children(".em").html() == "True")
 								$("#mappingEnableMove").attr("checked", "checked");
 							else $("#mappingEnableMove").removeAttr("checked");
-							$("#mappingEnableReadTo").val(tempe.children("a").children(".ert").html());
-							$("#mappingEnableWriteTo").val(tempe.children("a").children(".ewt").html());
+							$("#mappingEnableReadTo").val($.trim(tempe.children("a").children(".ert").html()));
+							$("#mappingEnableWriteTo").val($.trim(tempe.children("a").children(".ewt").html()));
 							if (tempe.children("a").children("dd").html() == "DriveSpace") {
 								$("#mappingUsageModeDriveSpace").attr("checked", "checked");
 								$("#mappingUsageModeQuotaServer").removeAttr("checked");
@@ -631,8 +631,8 @@
 									tempe.children("a").children("b").html($("#mappingDrive").val());
 									tempe.children("a").children("i").html($("#mappingUNC").val());
 									tempe.children("a").children(".name").html($("#mappingName").val());
-									if ($("#mappingEnableMove").attr("checked") == "checked") tempe.children("a").children(".em").html() == "true";
-									else tempe.children("a").children(".em").html() == "false"
+									if ($("#mappingEnableMove").attr("checked") == "checked") tempe.children("a").children(".em").html() == "True";
+									else tempe.children("a").children(".em").html() == "False"
 									tempe.children("a").children(".ert").html($("#mappingEnableReadTo").val());
 									tempe.children("a").children(".ewt").html($("#mappingEnableWriteTo").val());
 									if ($("#mappingUsageModeDriveSpace").attr("checked") == "checked") tempe.children("a").children("dd").html("DriveSpace");
@@ -1410,6 +1410,7 @@
 						function updatetab(e) {
 							var d = e + "@" + $("#homepagetabs-" + e + "-Name").val() + "@" + $("#homepagetabs-" + e + "-ShowTo").val();
 							if (e == "Me") d += "@" + $("#homepagetabs-" + e + "-allowupdateto").val() + "@" + (($("#homepagetabs-" + e + "-showspace").attr("checked") && $("#homepagetabs-" + e + "-showspace").attr("checked") == "checked") ? "true" : "false");
+							console.info(d);
 							$.ajax({
 								type: 'POST',
 								url: 'API/Setup/UpdateTab',

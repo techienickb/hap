@@ -16,6 +16,7 @@ namespace HAP.Web.Configuration
             this.doc = doc;
             this.node = doc.SelectSingleNode("/hapConfig/bookingsystem/subjects");
             foreach (XmlNode n in node.ChildNodes) base.Add(n.Attributes["name"].Value);
+            Sort();
         }
         public new void Add(string Subject)
         {
@@ -23,6 +24,7 @@ namespace HAP.Web.Configuration
             e.SetAttribute("name", Subject);
             doc.SelectSingleNode("/hapConfig/bookingsystem/subjects").AppendChild(e);
             base.Add(Subject);
+            Sort();
         }
         public void Delete(string name)
         {
@@ -31,10 +33,10 @@ namespace HAP.Web.Configuration
         }
         public void Update(string name, string subject)
         {
-            int index = IndexOf(name);
             base.Remove(name);
             doc.SelectSingleNode("/hapConfig/bookingsystem/subjects/subject[@name='" + name + "']").Attributes["name"].Value = subject;
-            base.Insert(index, subject);
+            base.Add(subject);
+            Sort();
         }
     }
 }
