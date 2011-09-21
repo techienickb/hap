@@ -29,3 +29,5 @@ label { float: left; width: 200px; text-align: right; padding: 2px 10px; }
 #lessons div { overflow: hidden; }
 .lesson { float: left; }
 .lesson b { font-weight: normal; }
+#subjects span { float: left; width: 300px; }
+#subjects button span { float: none; width: auto; }
