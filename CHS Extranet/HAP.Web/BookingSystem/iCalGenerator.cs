@@ -25,6 +25,7 @@ namespace HAP.Web.BookingSystem
 
         public static void Generate(Booking booking, DateTime date)
         {
+            if (string.IsNullOrEmpty(booking.User.Email)) return;
             hapConfig config = hapConfig.Current;
             StringBuilder sb = new StringBuilder();
             StringWriter sw = new StringWriter(sb);
@@ -135,7 +136,8 @@ namespace HAP.Web.BookingSystem
             {
                 UserInfo ui = ADUtils.FindUserInfos(s)[0];
                 uis.Add(ui);
-                sb.AppendLine("ATTENDEE;ROLE=REQ-PARTICIPANT;CN=" + ui.DisplayName + ":MAILTO:" + ui.Email);
+                if (!string.IsNullOrEmpty(ui.Email))
+                    sb.AppendLine("ATTENDEE;ROLE=REQ-PARTICIPANT;CN=" + ui.DisplayName + ":MAILTO:" + ui.Email);
             }
             sb.AppendLine("LOCATION:" + location);
             sb.AppendLine("UID:" + booking.uid);
@@ -163,7 +165,7 @@ namespace HAP.Web.BookingSystem
             mes.Subject = summary;
             mes.From = mes.Sender = new MailAddress(config.SMTP.FromEmail, config.SMTP.FromUser);
             mes.ReplyToList.Add(mes.From);
-            foreach (UserInfo u1 in uis)
+            foreach (UserInfo u1 in uis.Where(u => !string.IsNullOrEmpty(u.Email)))
                 mes.To.Add(new MailAddress(u1.Email, u1.DisplayName));
 
             mes.Body = description;
@@ -183,6 +185,7 @@ namespace HAP.Web.BookingSystem
 
         public static void GenerateCancel(Booking booking, DateTime date)
         {
+            if (string.IsNullOrEmpty(booking.User.Email)) return;
             hapConfig config = hapConfig.Current;
             StringBuilder sb = new StringBuilder();
             StringWriter sw = new StringWriter(sb);
@@ -306,7 +309,7 @@ namespace HAP.Web.BookingSystem
             foreach (string s in hapConfig.Current.BookingSystem.Resources[booking.Room].Admins.Split(new char[] { ',' }))
             {
                 UserInfo ui = ADUtils.FindUserInfos(s)[0];
-                mes.To.Add(new MailAddress(ui.Email, ui.DisplayName));
+                if (!string.IsNullOrEmpty(ui.Email)) mes.To.Add(new MailAddress(ui.Email, ui.DisplayName));
             }
 
             mes.Body = description;

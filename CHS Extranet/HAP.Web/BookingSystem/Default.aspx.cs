@@ -69,7 +69,7 @@ namespace HAP.Web.BookingSystem
             string lesson = removevars.Value.Split(new char[] { '@' }, StringSplitOptions.RemoveEmptyEntries)[1];
             HAP.Data.BookingSystem.BookingSystem bs = new HAP.Data.BookingSystem.BookingSystem(DateTime.Parse(datestamp.Value));
             Booking b = bs.getBooking(room, lesson);
-            if (!string.IsNullOrEmpty(b.uid))
+            if (!string.IsNullOrEmpty(b.uid) && config.SMTP.Enabled)
             {
                 iCalGenerator.GenerateCancel(b, DateTime.Parse(datestamp.Value));
                 if (config.BookingSystem.Resources[room].EmailAdmins) iCalGenerator.GenerateCancel(b, DateTime.Parse(datestamp.Value), true);
