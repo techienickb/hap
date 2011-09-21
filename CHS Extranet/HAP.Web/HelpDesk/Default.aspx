@@ -103,7 +103,7 @@
             <div class="panel">
                 <asp:Repeater runat="server" ID="currentticket">
                     <ItemTemplate>
-                        <h1><span style="float: right;"><%#Eval("Status") %></span><a href="<%=ResolveClientUrl("~/helpdesk/ticket/" + Eval("Id").ToString()) %>">#<%#Eval("Id") %></a> - <b><%#Eval("Subject") %> - Priority: <%#Eval("Priority")%></b></h1>
+                        <h1><span style="float: right;"><%#Eval("Status") %></span><a href="<%#ResolveClientUrl("~/helpdesk/ticket/" + Eval("Id").ToString()) %>">#<%#Eval("Id") %></a> - <b><%#Eval("Subject") %> - Priority: <%#Eval("Priority")%></b></h1>
                         <div style="border-bottom: solid 1px #7da2ce; padding: 4px;">Filed on <%#Eval("Date")%> by <%#((HAP.Web.HelpDesk.Ticket)Container.DataItem).User.DisplayName %></div>
                     </ItemTemplate>
                 </asp:Repeater>
