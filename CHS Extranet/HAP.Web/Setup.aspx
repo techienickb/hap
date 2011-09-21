@@ -90,7 +90,6 @@
 					<h2><span><span><b><i onclick="toggleGroup(this)"></i>Active Directory Connection <asp:Image ID="adstate" runat="server" ImageUrl="~/images/setup/266.png" /></b></span></span></h2>
 					<div class="group">
 						<div class="error"><asp:Literal runat="server" ID="adresponse" /></div>
-						<button id="test" style="float: right; margin-top: 20px; margin-right: 300px;">Test</button>
 						<div>
 							<asp:Label runat="server" Text="Domain UPN: " AssociatedControlID="upn" />
 							<asp:TextBox runat="server" ID="upn" Text="" onchange="checkad();" />
@@ -290,7 +289,7 @@
 						</div>
 						<div>
 							<asp:Label runat="server" Text="Admin Groups: " AssociatedControlID="bsadmins" />
-							<asp:TextBox runat="server" ID="bsadmins" Text="" /> (domain admins are already allocated)
+							<asp:TextBox runat="server" ID="bsadmins" Text="" onclick="showadbuilder(this, false, false);" /> (domain admins are already allocated)
 						</div>
 						<div>
 							<h3>Lessons <button onclick="return addlesson();" class="addbutton">Add</button></h3>
@@ -556,7 +555,7 @@
 										$.ajax({
 											type: 'POST',
 											url: 'API/Setup/AddMapping',
-											data: '{ "drive": "' + $("#mappingDrive").val() + '", "name": "' + $("#mappingName").val() + '", "unc": "' + $("#mappingUNC").val().replace(/\\/g, "/") + '", "enablemove": ' + ($("#mappingEnableMove").attr("checked") == "checked" ? "true" : "false") + ', "enablereadto": "' + $("#mappingEnableReadTo").val() + '", "enablewriteto": "' + $("#mappingEnableWriteTo").val() + '", "usagemode": "' + ($("mappingUsageModeDriveSpace").attr("checked") == "checked" ? "DriveSpace" : "Quota") + '" }',
+											data: '{ "drive": "' + $("#mappingDrive").val() + '", "name": "' + $("#mappingName").val() + '", "unc": "' + $("#mappingUNC").val().replace(/\\/g, "/") + '", "enablemove": ' + ($("#mappingEnableMove").attr("checked") ? "true" : "false") + ', "enablereadto": "' + $("#mappingEnableReadTo").val() + '", "enablewriteto": "' + $("#mappingEnableWriteTo").val() + '", "usagemode": "' + ($("mappingUsageModeDriveSpace").attr("checked") ? "DriveSpace" : "Quota") + '" }',
 											contentType: 'application/json; charset=utf-8',
 											dataType: 'json',
 											success: OnMappingAddSuccess,
@@ -574,10 +573,10 @@
 						}
 						function OnMappingAddSuccess(response) {
 							if (response != null && response.GetAddMappingResult != null) {
-								var data = response.GetAddMappingResult;
+								var data = response.AddMappingResult;
 								if (data != 0) alert(data);
 								else {
-									$("#mappings").append('<div class="homepagelink"><button title="Remove" onclick="return removemapping(this);">X</button><a href="#mapping" class="mapping" title="Edit" onclick="return editmapping(this);"><img src="<%#ResolveUrl("~/images/icons/netdrive.png") %>" alt="" /><b>' + $("#mappingDrive").val() + '</b><i>' + $("#mappingUNC").val() + '</i><span class="name">' + $("#mappingName").val() + '</span><span class="ert">' + $("#mappingEnableReadTo").val() + '</span><span class="ewt">' + $("#mappingEnableWriteTo").val() + '</span><span class="em">' + ($("mappingEnableMove").attr("checked") == "checked" ? "true" : "false") + '</span><dd>' + ($("mappingUsageModeDriveSpace").attr("checked") == "checked" ? "DriveSpace" : "Quota") + '</dd></a></div>');
+									$("#mappings").append('<div class="homepagelink"><button title="Remove" onclick="return removemapping(this);">X</button><a href="#mapping" class="mapping" title="Edit" onclick="return editmapping(this);"><img src="<%#ResolveUrl("~/images/icons/netdrive.png") %>" alt="" /><b>' + $("#mappingDrive").val() + '</b><i>' + $("#mappingUNC").val() + '</i><span class="name">' + $("#mappingName").val() + '</span><span class="ert">' + $("#mappingEnableReadTo").val() + '</span><span class="ewt">' + $("#mappingEnableWriteTo").val() + '</span><span class="em">' + ($("mappingEnableMove").attr("checked") ? "true" : "false") + '</span><dd>' + ($("mappingUsageModeDriveSpace").attr("checked") ? "DriveSpace" : "Quota") + '</dd></a></div>');
 									resetButtons();
 								}
 							}
@@ -607,7 +606,7 @@
 										$.ajax({
 											type: 'POST',
 											url: 'API/Setup/UpdateMapping',
-											data: '{ "origdrive": "' + tempe.children("a").children("b").html() + '", "drive": "' + $("#mappingDrive").val() + '", "name": "' + $("#mappingName").val() + '", "unc": "' + $("#mappingUNC").val().replace(/\\/g, "/") + '", "enablemove": ' + ($("#mappingEnableMove").attr("checked") == "checked" ? "true" : "false") + ', "enablereadto": "' + $("#mappingEnableReadTo").val() + '", "enablewriteto": "' + $("#mappingEnableWriteTo").val() + '", "usagemode": "' + ($("mappingUsageModeDriveSpace").attr("checked") == "checked" ? "DriveSpace" : "Quota") + '" }',
+											data: '{ "origdrive": "' + tempe.children("a").children("b").html() + '", "drive": "' + $("#mappingDrive").val() + '", "name": "' + $("#mappingName").val() + '", "unc": "' + $("#mappingUNC").val().replace(/\\/g, "/") + '", "enablemove": ' + ($("#mappingEnableMove").attr("checked") ? "true" : "false") + ', "enablereadto": "' + $("#mappingEnableReadTo").val() + '", "enablewriteto": "' + $("#mappingEnableWriteTo").val() + '", "usagemode": "' + ($("mappingUsageModeDriveSpace").attr("checked") ? "DriveSpace" : "Quota") + '" }',
 											contentType: 'application/json; charset=utf-8',
 											dataType: 'json',
 											success: OnMappingUpdateSuccess,
@@ -625,17 +624,17 @@
 						}
 						function OnMappingUpdateSuccess(response) {
 							if (response != null && response.GetUpdateMappingResult != null) {
-								var data = response.GetUpdateMappingResult;
+								var data = response.UpdateMappingResult;
 								if (data != 0) alert(data);
 								else {
 									tempe.children("a").children("b").html($("#mappingDrive").val());
 									tempe.children("a").children("i").html($("#mappingUNC").val());
 									tempe.children("a").children(".name").html($("#mappingName").val());
-									if ($("#mappingEnableMove").attr("checked") == "checked") tempe.children("a").children(".em").html() == "True";
+									if ($("#mappingEnableMove").attr("checked")) tempe.children("a").children(".em").html() == "True";
 									else tempe.children("a").children(".em").html() == "False"
 									tempe.children("a").children(".ert").html($("#mappingEnableReadTo").val());
 									tempe.children("a").children(".ewt").html($("#mappingEnableWriteTo").val());
-									if ($("#mappingUsageModeDriveSpace").attr("checked") == "checked") tempe.children("a").children("dd").html("DriveSpace");
+									if ($("#mappingUsageModeDriveSpace").attr("checked")) tempe.children("a").children("dd").html("DriveSpace");
 									else tempe.children("a").children("dd").html("Quota");
 									tempe = null;
 								}
@@ -656,7 +655,7 @@
 						}
 						function OnFilterRemoveSuccess(response) {
 							if (response != null && response.GetRemoveMappingResult != null) {
-								var data = response.GetRemoveMappingResult;
+								var data = response.RemoveMappingResult;
 								if (data != 0) alert(data);
 								else { tempe.remove(); tempe = null; }
 							}
@@ -673,7 +672,7 @@
 									"Save": function () {
 										$.ajax({
 											type: 'POST',
-											url: 'API/Setup.asmx/UpdateFilter',
+											url: 'API/Setup/UpdateFilter',
 											data: '{ "origname": "' + tempe.children("a").children("b").html() + '", "origexpression": "' + tempe.children("a").children("i").html() + '", "name": "' + $("#filterName").val() + '", "expression": "' + $("#filterExpression").val() + '", "enablefor": "' + $("#filterEnableFor").val() + '" }',
 											contentType: 'application/json; charset=utf-8',
 											dataType: 'json',
@@ -692,7 +691,7 @@
 						}
 						function OnFilterUpdateSuccess(response) {
 							if (response != null && response.GetUpdateFilterResult != null) {
-								var data = response.GetUpdateFilterResult;
+								var data = response.UpdateFilterResult;
 								if (data != 0) alert(data);
 								else {
 									tempe.children("a").children("b").html($("#filterName").val());
@@ -706,8 +705,8 @@
 							tempe = $(e).parent();
 							$.ajax({
 								type: 'POST',
-								url: 'API/Setup.asmx/RemoveFilter',
-								data: '{ name: "' + tempe.children("a").children("b").html() + '", expression: "' + tempe.children("a").children("i").html() + '" }',
+								url: 'API/Setup/RemoveFilter',
+								data: '{ "name": "' + tempe.children("a").children("b").html() + '", "expression": "' + tempe.children("a").children("i").html() + '" }',
 								contentType: 'application/json; charset=utf-8',
 								dataType: 'json',
 								success: OnFilterRemoveSuccess,
@@ -716,8 +715,8 @@
 							return false;
 						}
 						function OnFilterRemoveSuccess(response) {
-							if (response != null && response.d != null) {
-								var data = response.d;
+							if (response != null && response.RemoveFilterResult != null) {
+							    var data = response.RemoveFilterResult;
 								if (data != 0) alert(data);
 								else { tempe.remove(); tempe = null; }
 							}
@@ -733,7 +732,7 @@
 									"Add": function () {
 										$.ajax({
 											type: 'POST',
-											url: 'API/Setup/AddQServer',
+											url: 'API/Setup/AddFilter',
 											data: '{ "name": "' + $("#filterName").val() + '", "expression": "' + $("#filterExpression").val() + '", "enablefor": "' + $("#filterEnableFor").val() + '" }',
 											contentType: 'application/json; charset=utf-8',
 											dataType: 'json',
@@ -751,8 +750,8 @@
 							return false;
 						}
 						function OnFilterAddSuccess(response) {
-							if (response != null && response.GetAddFilterResult != null) {
-								var data = response.GetAddFilterResult;
+						    if (response != null && response.AddFilterResult != null) {
+								var data = response.AddFilterResult;
 								if (data != 0) alert(data);
 								else {
 									$("#filters").append('<div class="homepagelink"><button title="Remove" onclick="return removefilter(this);">X</button><a href="#filter" class="filter" title="Edit" onclick="return editfilter(this);"><i>' + $("#filterName").val() + '</i><b>' + $("#filterExpression").val() + '</b><span>' + $("#filterEnableFor").val() + '</a></div>');
@@ -790,8 +789,8 @@
 							return false;
 						}
 						function OnQServerUpdateSuccess(response) {
-							if (response != null && response.GetUpdateQServerResult != null) {
-								var data = response.GetUpdateQServerResult;
+							if (response != null && response.UpdateQServerResult != null) {
+								var data = response.UpdateQServerResult;
 								if (data != 0) alert(data);
 								else {
 									tempe.children("a").children("b").html($("#qserver").val());
@@ -815,8 +814,8 @@
 							return false;
 						}
 						function OnQServerRemoveSuccess(response) {
-							if (response != null && response.GetRemoveQServerResult != null) {
-								var data = response.GetRemoveQServerResult;
+							if (response != null && response.RemoveQServerResult != null) {
+								var data = response.RemoveQServerResult;
 								if (data != 0) alert(data);
 								else { tempe.remove(); tempe = null; }
 							}
@@ -849,8 +848,8 @@
 							return false;
 						}
 						function OnQServerAddSuccess(response) {
-							if (response != null && response.GetAddQServerResult != null) {
-								var data = response.GetAddQServerResult;
+							if (response != null && response.AddQServerResult != null) {
+								var data = response.AddQServerResult;
 								if (data != 0) alert(data);
 								else {
 									$("#qservers").append('<div class="homepagelink"><button title="Remove" onclick="return removeqserver(this);">X</button><a href="#qserver" class="qserver" title="Edit" onclick="return editqserver(this);"><i>' + $("#qexpression").val() + '</i><b>' + $("#qserver").val() + '</b><span>' + $("#qdrive").val() + '</span></a></div>');
@@ -890,8 +889,8 @@
 							return false;
 						}
 						function OnResourceAddSuccess(response) {
-							if (response != null && response.GetAddResourceResult != null) {
-								var data = response.GetAddResourceResult;
+							if (response != null && response.AddResourceResult != null) {
+								var data = response.AddResourceResult;
 								if (data != 0) alert(data);
 								else {
 									$("#resources").append('<div><div class="resource" style="float: left;"><span>' + $("#resName").val() + '</span> (<i>' + $("#resType").val() + '</i>) [<b class="enabled">' + ($("#resEnabled").attr("checked") ? "Enabled" : "Disabled") + '</b>|<b class="charging">' + ($("#resCharging").attr("checked") ? "Charging" : "N") + '</b>|<b class="email">' + ($("#resEmail").attr("checked") ? "Email Admins" : "N") + '</b>]<br />Admins: <b class="admins">' + $("#resAdmins").val() + '</b></div><div class="cbuttonset"><button onclick="return editres(this);" title="Edit">Edit</button><button onclick="return removeres(this);" title="Delete">Delete</button></div></div>');
@@ -935,8 +934,8 @@
 							return false;
 						}
 						function OnResourceUpdateSuccess(response) {
-							if (response != null && response.GetUpdateResourceResult != null) {
-								var data = response.GetUpdateResourceResult;
+							if (response != null && response.UpdateResourceResult != null) {
+								var data = response.UpdateResourceResult;
 								if (data != 0) alert(data);
 								else {
 									$(tempe).children(".resource").replaceWith('<div class="resource" style="float: left;"><span>' + $("#resName").val() + '</span> (<i>' + $("#resType").val() + '</i>) [<b class="enabled">' + ($("#resEnabled").attr("checked") ? "Enabled" : "Disabled") + '</b>|<b class="charging">' + ($("#resCharging").attr("checked") ? "Charging" : "N") + '</b>|<b class="email">' + ($("#resEmail").attr("checked") ? "Email Admins" : "N") + '</b>]<br />Admins: <b class="admins">' + $("#resAdmins").val() + '</b></div>');
@@ -958,8 +957,8 @@
 							return false;
 						}
 						function OnResourceRemoveSuccess(response) {
-							if (response != null && response.GetRemoveResourceResult != null) {
-								var data = response.GetRemoveResourceResult;
+							if (response != null && response.RemoveResourceResult != null) {
+								var data = response.RemoveResourceResult;
 								if (data != 0) alert(data);
 								else {
 									tempe.remove();
@@ -997,8 +996,8 @@
 							return false;
 						}
 						function OnLessonAddSuccess(response) {
-							if (response != null && response.GetAddLessonResult != null) {
-								var data = response.GetAddLessonResult;
+							if (response != null && response.AddLessonResult != null) {
+								var data = response.AddLessonResult;
 								if (data != 0) alert(data);
 								else {
 									$("#lessons").append('<div><div class="lesson"><span>' + $("#lessonName").val() + '</span> (<i>' + $("#lessonType").val() + '</i>)<br /><b class="starttime">' + $("#lessonStart").val() + '</b> - <b class="endtime">' + $("#lessonEnd").val() + '</b></div><div class="cbuttonset"><button onclick="return editlesson(this);" title="Edit">Edit</button><button onclick="return removelesson(this);" title="Delete">Delete</button></div></div>');
@@ -1037,8 +1036,8 @@
 							return false;
 						}
 						function OnLessonEditSuccess(response) {
-							if (response != null && response.GetEditLessonResult != null) {
-								var data = response.GetEditLessonResult;
+							if (response != null && response.EditLessonResult != null) {
+								var data = response.EditLessonResult;
 								if (data != 0) alert(data);
 								else {
 									$(tempe).parent().parent().children(".lesson").children("span").html($("#lessonName").val());
@@ -1064,8 +1063,8 @@
 							return false;
 						}
 						function OnLessonRemoveSuccess(response) {
-							if (response != null && response.GetRemoveLessonResult != null) {
-								var data = response.GetRemoveLessonResult;
+							if (response != null && response.RemoveLessonResult != null) {
+								var data = response.RemoveLessonResult;
 								if (data != 0) alert(data);
 								else {
 									$(tempe).parent().parent().remove();
@@ -1100,8 +1099,8 @@
 							return false;
 						}
 						function OnSubjectAddSuccess(response) {
-							if (response != null && response.GetAddSubjectResult != null) {
-								var data = response.GetAddSubjectResult;
+							if (response != null && response.AddSubjectResult != null) {
+								var data = response.AddSubjectResult;
 								if (data != 0) alert(data);
 								else {
 									$("#subjects").append('<div style="overflow: hidden;"><span style="float: left;">' + $("#subject").val() + '</span><div class="cbuttonset"><button onclick="return editsubject(this);" title="Edit">Edit</button><button onclick="return removesubject(this);" title="Delete">Delete</button></div></div>');
@@ -1119,7 +1118,7 @@
 									"Update": function () {
 										$.ajax({
 											type: 'POST',
-											url: 'API/Setup./UpdateSubject',
+											url: 'API/Setup/UpdateSubject',
 											data: '{ "origsubject": "' + $(tempe).parent().parent().children("span").html() + '", "subject": "' + $("#subject").val() + '"   }',
 											contentType: 'application/json; charset=utf-8',
 											dataType: 'json',
@@ -1137,8 +1136,8 @@
 							return false;
 						}
 						function OnSubjectEditSuccess(response) {
-							if (response != null && response.GetUpdateSubjectResult != null) {
-								var data = response.GetUpdateSubjectResult;
+							if (response != null && response.UpdateSubjectResult != null) {
+								var data = response.UpdateSubjectResult;
 								if (data != 0) alert(data);
 								else {
 									$(tempe).parent().parent().children("span").html($("#subject").val());
@@ -1160,8 +1159,8 @@
 							return false;
 						}
 						function OnRemoveSubjectSuccess(response) {
-							if (response != null && response.GetRemoveSubjectResult != null) {
-								var data = response.GetRemoveSubjectResult;
+							if (response != null && response.RemoveSubjectResult != null) {
+								var data = response.RemoveSubjectResult;
 								if (data != 0) alert(data);
 								else {
 									$(tempe).parent().parent().remove();
@@ -1183,8 +1182,8 @@
 							return false;
 						}
 						function OnLinkDeleteSuccess(response) {
-							if (response != null && response.GetRemoveLinkResult != null) {
-								var data = response.GetRemoveLinkResult;
+							if (response != null && response.RemoveLinkResult != null) {
+								var data = response.RemoveLinkResult;
 								if (data != 0) alert(data);
 								else {
 									$(tempe).parent().remove();
@@ -1225,8 +1224,8 @@
 							return false;
 						}
 						function OnLinkAddSuccess(response) {
-							if (response != null && response.GetAddLinkResult != null) {
-								var data = response.GetAddLinkResult;
+							if (response != null && response.AddLinkResult != null) {
+								var data = response.AddLinkResult;
 								if (data != 0) alert(data);
 								else {
 									$("#" + tempe + " > .sortable").append('<div class="homepagelink" id="link' + $("#linkName").val().replace(' ', '-') + '"><button title="Remove" onclick="return removelink(this);">X</button><a href="#link" title="Edit" onclick="return editlink(\'link' + $("#linkName").val().replace(' ', '-') + '\');"><img src="' + $("#linkIcon").val().replace("~/", root) + '" alt="" /><b>' + $("#linkName").val() + '</b><i>' + $("#linkDesc").val() + '</i><span>' + $("#linkTarget").val() + '</span><u>' + $("#linkUrl").val() + '</u><dd>' + $("#linkShowTo").val() + '</dd></a></div>');
@@ -1268,8 +1267,8 @@
 							return false;
 						}
 						function OnLinkUpdateSuccess(response) {
-							if (response != null && response.GetUpdateLinkResult != null) {
-								var data = response.GetUpdateLinkResult;
+							if (response != null && response.UpdateLinkResult != null) {
+								var data = response.UpdateLinkResult;
 								if (data != 0) alert(data);
 								else {
 									$(tempe).children("b").html($("#linkName").val());
@@ -1297,8 +1296,8 @@
 							return false;
 						}
 						function OnLinkGroupDeleteSuccess(response) {
-							if (response != null && response.GetRemoveLinkGroupResult != null) {
-								var data = response.GetRemoveLinkGroupResult;
+							if (response != null && response.RemoveLinkGroupResult != null) {
+								var data = response.RemoveLinkGroupResult;
 								if (data != 0) alert(data);
 								else {
 									$("#" + tempe).remove();
@@ -1335,8 +1334,8 @@
 							return false;
 						}
 						function OnLinkGroupUpdateSuccess(response) {
-							if (response != null && response.GetUpdateLinkGroupResult != null) {
-								var data = response.GetUpdateLinkGroupResult;
+							if (response != null && response.UpdateLinkGroupResult != null) {
+								var data = response.UpdateLinkGroupResult;
 								if (data != 0) alert(data);
 								else {
 									$("#linkgroup" + tempe + " > h4 > .lgName").html($("#groupName").val());
@@ -1373,8 +1372,8 @@
 							return false;
 						}
 						function OnLinkGroupAddSuccess(response) {
-							if (response != null && response.GetAddLinkGroupResult != null) {
-								var data = response.GetAddLinkGroupResult;
+							if (response != null && response.AddLinkGroupResult != null) {
+								var data = response.AddLinkGroupResult;
 								if (data != 0) alert(data);
 								else {
 									$(".sortablegroup").append('<div id="linkgroup' + $("#groupName").val().replace(' ', '_') + '" class="linkgroup"><h4><span class="lgName">' + $("#groupName").val() + '</span> (<span class="lgST">' + $("#groupShowTo").val() + '</span>) <div class="cbuttonset" style="display: inline;"><button class="edit" onclick="return editgroup(\'' + $("#groupName").val().replace(' ', '_') + '\');">Edit</button><button class="minusbutton" onclick="return removegroup(\'linkgroup' + $("#groupName").val().replace(' ', '_') + '\');">Delete</button><button class="addbutton" onclick="return addlink(\'linkgroup' + $("#groupName").val().replace(' ', '_') + '\');">Add Link</button></div></h4><div class="sortable"></div></div>');
@@ -1402,7 +1401,7 @@
 						}
 						function checkweb() {
 							if ($("#<%=proxyenabled.ClientID %>").attr("checked")) {
-								if ($("#<%=proxyenabled.ClientID %>").attr("checked") == "checked" && $("#<%=proxyaddress.ClientID %>").val().length > 2 && $("#<%=proxyport.ClientID%>").val().length > 2)
+								if ($("#<%=proxyenabled.ClientID %>").attr("checked") == "checked" && $("#<%=proxyaddress.ClientID %>").val().length > 2 && $("#<%=proxyport.ClientID%>").val().length > 1)
 									$("#<%=proxystate.ClientID %>").attr("src", root + "images/setup/267.png");
 								else $("#<%=proxystate.ClientID %>").attr("src", root + "images/setup/266.png");
 							} else $("#<%=proxystate.ClientID %>").attr("src", root + "images/setup/267.png");
@@ -1410,7 +1409,6 @@
 						function updatetab(e) {
 							var d = e + "@" + $("#homepagetabs-" + e + "-Name").val() + "@" + $("#homepagetabs-" + e + "-ShowTo").val();
 							if (e == "Me") d += "@" + $("#homepagetabs-" + e + "-allowupdateto").val() + "@" + (($("#homepagetabs-" + e + "-showspace").attr("checked") && $("#homepagetabs-" + e + "-showspace").attr("checked") == "checked") ? "true" : "false");
-							console.info(d);
 							$.ajax({
 								type: 'POST',
 								url: 'API/Setup/UpdateTab',
@@ -1422,18 +1420,18 @@
 							});
 						}
 						function OnTabUpdateSuccess(response) {
-							if (response != null && response.GetUpdateTabResult != null) {
-								var data = response.GetUpdateTabResult;
+							if (response != null && response.UpdateTabResult != null) {
+								var data = response.UpdateTabResult;
 								if (data != 0) alert(data);
 							}
 						}
 						function OnGroupOrderUpdateSuccess(response) {
 							if (response != null) {
-								if (response.GetUpdateLinkGroupOrderResult != null) {
-									var data = response.GetUpdateLinkGroupOrderResult;
+								if (response.UpdateLinkGroupOrderResult != null) {
+									var data = response.UpdateLinkGroupOrderResult;
 									if (data != 0) alert(data);
-								} else if (response.GetUpdateLinkOrderResult != null) {
-									var data = response.GetUpdateLinkOrderResult;
+								} else if (response.UpdateLinkOrderResult != null) {
+									var data = response.UpdateLinkOrderResult;
 									if (data != 0) alert(data);
 								}
 							}
