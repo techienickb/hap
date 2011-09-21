@@ -99,8 +99,11 @@ namespace HAP.Web.BookingSystem
             #endregion
             HAP.Data.BookingSystem.BookingSystem.BookingsDoc = doc;
             Booking booking = new HAP.Data.BookingSystem.BookingSystem(Date).getBooking(roomstr, lessonint);
-            iCalGenerator.Generate(booking, Date);
-            if (config.BookingSystem.Resources[roomstr].EmailAdmins) iCalGenerator.Generate(booking, Date, true);
+            if (config.SMTP.Enabled)
+            {
+                iCalGenerator.Generate(booking, Date);
+                if (config.BookingSystem.Resources[roomstr].EmailAdmins) iCalGenerator.Generate(booking, Date, true);
+            }
             BookYear.SelectedIndex = 0;
             BookLesson.Text = BookLTRoom.Text = "";
             Page.DataBind();
