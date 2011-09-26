@@ -13,7 +13,7 @@ body.bookingdisplay, body.bookingdisplay form { padding: 0; margin: 0; width: 10
 .bookingdisplay #defaultview div { position: absolute; top: 50px; bottom: -1px; left: 0; right: 0; width: 100%; margin: 0; padding: 0; }
 .bookingdisplay table { height: 100%; position: relative; z-index: 100; }
 .bookingdisplay table td, .bookingdisplay table tr { vertical-align: middle; }
-.bookingdisplay table tr { font-size: 16px }
+.bookingdisplay table tr { font-size: 20px }
 .bookingdisplay table td.lesson { padding-left: 100px; width: 50px; font-size: 26px; }
 .bookingdisplay table td span { font-size: 140%; display: block; }
 .bookingdisplay #statebar { position: absolute; top: 50px; height: 0; left: 0; right: 0; background: #dedede; z-index: 99; }
