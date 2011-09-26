@@ -65,6 +65,15 @@ namespace HAP.Web.Configuration
             {//Perform v7.0 to v7.1 upgrade
                 doc.SelectSingleNode("/hapConfig/mscb").Attributes["hideextensions"].Value = doc.SelectSingleNode("/hapConfig/mscb").Attributes["hideextensions"].Value.Replace(';', ',');
             }
+            if (version.CompareTo(Version.Parse("7.3")) == -1)
+            {//Perform v7.3 upgrade
+                if (doc.SelectSingleNode("/hapConfig/Homepage/Links/Group/Link[@name='Browse My School Computer']") != null)
+                    doc.SelectSingleNode("/hapConfig/Homepage/Links/Group/Link[@name='Browse My School Computer']").Attributes["name"].Value = "My School Files";
+                if (doc.SelectSingleNode("/hapConfig/Homepage/Links/Group/Link[@name='Access a School Computer']") != null)
+                    doc.SelectSingleNode("/hapConfig/Homepage/Links/Group/Link[@name='Access a School Computer']").Attributes["name"].Value = "Remote Apps";
+                if (doc.SelectSingleNode("/hapConfig/Homepage/Links/Group/Link[@name='RM Management Console']") != null)
+                    doc.SelectSingleNode("/hapConfig/Homepage/Links/Group/Link[@name='RM Management Console']").Attributes["name"].Value = "RM Console";
+            }
             doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             doc.Save(ConfigPath);
         }
