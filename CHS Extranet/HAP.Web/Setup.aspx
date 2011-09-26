@@ -1536,17 +1536,18 @@
 								}
 							}
 							$("#adgroups").dialog({
-								autoOpen: true, width: 400, buttons: {
-									"OK": function () {
-										if ($("#adgroups-mode-all").attr("checked")) obj2.value = "All";
-										else if ($("#adgroups-mode-inherit").attr("checked")) obj2.value = "Inherit";
-										else { var a = []; for (var x = 0; x < document.getElementById("adgroups-custom").childNodes.length; x++) if (document.getElementById("adgroups-custom").childNodes[x].tagName) a.push(document.getElementById("adgroups-custom").childNodes[x].value); obj2.value = a.join(", "); }
-										$(this).dialog("close");
-									},
-									"Cancel": function () {
-										$(this).dialog("close");
-									}
-								}
+							    autoOpen: true, width: 400, buttons: {
+							        "OK": function () {
+							            if ($("#adgroups-mode-all").attr("checked")) obj2.value = "All";
+							            else if ($("#adgroups-mode-inherit").attr("checked")) obj2.value = "Inherit";
+							            else { var a = []; for (var x = 0; x < document.getElementById("adgroups-custom").childNodes.length; x++) if (document.getElementById("adgroups-custom").childNodes[x].tagName) a.push(document.getElementById("adgroups-custom").childNodes[x].value); obj2.value = a.join(", "); }
+							            $(obj2).trigger('change');
+							            $(this).dialog("close");
+							        },
+							        "Cancel": function () {
+							            $(this).dialog("close");
+							        }
+							    }
 							});
 						}
 						Sys.Application.add_load(resetButtons);

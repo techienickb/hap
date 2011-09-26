@@ -197,6 +197,7 @@ namespace HAP.Web
                 ADUser.ChangePassword(currentpass.Text, newpass.Text);
                 hapConfig config = hapConfig.Current;
                 errormess.Text = "Password Changed";
+                Session["password"] = newpass.Text;
             }
             catch (Exception ex) { errormess.Text = ex.Message; }
             savepass.Enabled = true;
