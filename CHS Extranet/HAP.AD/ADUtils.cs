@@ -51,7 +51,7 @@ namespace HAP.AD
             //throw new Exception(usersDE1.Path);
             //DirectoryEntry usersDE = new DirectoryEntry(ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
             DirectorySearcher ds = new DirectorySearcher(usersDE);
-            ds.Filter = "(&(objectClass=user)(mail=*)(sAMAccountName=*))";
+            ds.Filter = "(&(objectClass=user)(sAMAccountName=*))";
             ds.PropertiesToLoad.Add("sAMAccountName");
             ds.PropertiesToLoad.Add("info");
             ds.PropertiesToLoad.Add("mail");
@@ -81,7 +81,7 @@ namespace HAP.AD
             //throw new Exception(usersDE1.Path);
             //DirectoryEntry usersDE = new DirectoryEntry(ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
             DirectorySearcher ds = new DirectorySearcher(DirectoryRoot);
-            ds.Filter = "(&(objectClass=user)(mail=*)(sAMAccountName=" + query + "))";
+            ds.Filter = "(&(objectClass=user)(sAMAccountName=" + query + "))";
             ds.PropertiesToLoad.Add("sAMAccountName");
             ds.PropertiesToLoad.Add("info");
             ds.PropertiesToLoad.Add("mail");
@@ -94,8 +94,8 @@ namespace HAP.AD
                     results.Add(new UserInfo(
                         sr[i].Properties["sAMAccountName"][0].ToString(),
                         sr[i].Properties["info"] != null ? sr[i].Properties["info"].Count > 0 ? sr[i].Properties["info"][0].ToString() : "" : "",
-                        sr[i].Properties["displayName"] != null ? sr[i].Properties["info"].Count > 0 ? sr[i].Properties["displayName"][0].ToString() : "" : "",
-                        sr[i].Properties["mail"] != null ? sr[i].Properties["info"].Count > 0 ? sr[i].Properties["mail"][0].ToString() : "" : ""
+                        sr[i].Properties["displayName"] != null ? sr[i].Properties["displayName"].Count > 0 ? sr[i].Properties["displayName"][0].ToString() : "" : "",
+                        sr[i].Properties["mail"] != null ? sr[i].Properties["mail"].Count > 0 ? sr[i].Properties["mail"][0].ToString() : "" : ""
                     ));
             }
             catch (Exception e) { throw new Exception(ds.Filter, e); }
