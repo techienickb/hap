@@ -1,0 +1,24 @@
+﻿#access { display: none; }
+#container {
+	float: none;
+	margin: 0;
+	width: 100%;
+}
+#content {
+	margin: 0; position: relative; padding: 0;
+}
+
+.bookingdisplay table { position: absolute; top: 0; bottom: 0; left: 0; width: 100%; margin-top: 50px; z-index: 100; }
+.bookingdisplay table td, .bookingdisplay table tr { vertical-align: middle; }
+.bookingdisplay table tr { font-size: 16px }
+.bookingdisplay table td.lesson { padding-left: 100px; width: 50px; font-size: 26px; }
+.bookingdisplay table td span { font-size: 140%; display: block; }
+.bookingdisplay #statebar { position: absolute; top: 50px; height: 0; left: 0; right: 0; background: #dedede; z-index: 99; }
+.bookingdisplay { overflow: hidden; }
+
+#bookingday { border: solid 1px #7da2ce; overflow-y: hidden; overflow-x: auto;  }
+#bookingday .head { height: 30px; line-height: 30px; background: url(../images/bar.gif) repeat-x; color: #1f3976; margin: 0; padding: 0; }
+#bookingday .head h1 { float: left; width: 156px; text-align: center; font-size: 120%; font-weight: normal; margin: 0; padding: 0; }
+#bookingday .head #picker { border: 0; border-radius: 0; width: 100%; height: 28px; line-height: 28px; font-size: 110%; }
+#bookingday .body .col { float: left; width: 150px; }
+#bookingday .body .col div { text-align: center; height: 60px; line-height: 60px; }

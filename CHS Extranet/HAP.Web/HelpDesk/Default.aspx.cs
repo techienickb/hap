@@ -40,10 +40,8 @@ namespace HAP.Web.HelpDesk
                             newadminsupportticket.Attributes.Add("class", "Selected");
                             userlist.Items.Clear();
                             foreach (UserInfo user in ADUtils.FindUsers())
-                                if (string.IsNullOrEmpty(user.DisplayName))
+                                if (user.DisplayName == user.UserName)
                                     userlist.Items.Add(new ListItem(user.UserName, user.UserName.ToLower()));
-                                else if (string.IsNullOrEmpty(user.Notes) && !string.IsNullOrEmpty(user.DisplayName))
-                                    userlist.Items.Add(new ListItem(string.Format("{0} - ({1})", user.UserName, user.DisplayName), user.UserName.ToLower()));
                                 else
                                     userlist.Items.Add(new ListItem(string.Format("{0} - ({1})", user.UserName, user.Notes), user.UserName.ToLower()));
                         }
@@ -158,31 +156,34 @@ namespace HAP.Web.HelpDesk
             writer.Flush();
             writer.Close();
 
-            MailMessage mes = new MailMessage();
+            if (config.SMTP.Enabled)
+            {
+                MailMessage mes = new MailMessage();
 
-            mes.Subject = "A Ticket (#" + x + ") has been Created";
-            mes.From = new MailAddress(ADUser.Email, ADUser.DisplayName);
-            mes.Sender = mes.From;
-            mes.ReplyToList.Add(mes.From);
+                mes.Subject = "A Ticket (#" + x + ") has been Created";
+                mes.From = new MailAddress(ADUser.Email, ADUser.DisplayName);
+                mes.Sender = mes.From;
+                mes.ReplyToList.Add(mes.From);
 
-            mes.To.Add(new MailAddress(config.SMTP.FromEmail, config.SMTP.FromUser));
+                mes.To.Add(new MailAddress(config.SMTP.FromEmail, config.SMTP.FromUser));
 
-            mes.IsBodyHtml = true;
-            FileInfo template = new FileInfo(Server.MapPath("~/HelpDesk/newuserticket.htm"));
-            StreamReader fs = template.OpenText();
-            mes.Body = fs.ReadToEnd().Replace("{0}", x.ToString()).Replace("{1}",
-                newticketsubject.Text).Replace("{2}",
-                newticketeditor.Content).Replace("{3}",
-                newticketroom.Text).Replace("{4}",
-                ADUser.DisplayName).Replace("{5}",
-                Request.Url.Host + Request.ApplicationPath);
+                mes.IsBodyHtml = true;
+                FileInfo template = new FileInfo(Server.MapPath("~/HelpDesk/newuserticket.htm"));
+                StreamReader fs = template.OpenText();
+                mes.Body = fs.ReadToEnd().Replace("{0}", x.ToString()).Replace("{1}",
+                    newticketsubject.Text).Replace("{2}",
+                    newticketeditor.Content).Replace("{3}",
+                    newticketroom.Text).Replace("{4}",
+                    ADUser.DisplayName).Replace("{5}",
+                    Request.Url.Host + Request.ApplicationPath);
 
-            SmtpClient smtp = new SmtpClient(config.SMTP.Server, config.SMTP.Port);
-            if (!string.IsNullOrEmpty(config.SMTP.User))
-                smtp.Credentials = new NetworkCredential(config.SMTP.User, config.SMTP.Password);
-            smtp.EnableSsl = config.SMTP.SSL;
-            smtp.Send(mes);
+                SmtpClient smtp = new SmtpClient(config.SMTP.Server, config.SMTP.Port);
+                if (!string.IsNullOrEmpty(config.SMTP.User))
+                    smtp.Credentials = new NetworkCredential(config.SMTP.User, config.SMTP.Password);
+                smtp.EnableSsl = config.SMTP.SSL;
+                smtp.Send(mes);
 
+            }
             loadtickets();
             newticket.Visible = false;
             NewTicketFiled.Visible = true;
@@ -193,7 +194,13 @@ namespace HAP.Web.HelpDesk
             XmlDocument doc = new XmlDocument();
             doc.Load(Server.MapPath("~/App_Data/Tickets.xml"));
             XmlNodeList tickets = doc.SelectNodes("/Tickets/Ticket");
-            int x = int.Parse(tickets[tickets.Count - 1].Attributes["id"].Value) + 1;
+            int x;
+            if (doc.SelectSingleNode("/Tickets").ChildNodes.Count > 0)
+            {
+                XmlNodeList t1 = doc.SelectNodes("/Tickets/Ticket");
+                x = int.Parse(t1[t1.Count - 1].Attributes["id"].Value) + 1;
+            }
+            else x = 1;
             _id = x.ToString();
             XmlElement ticket = doc.CreateElement("Ticket");
             ticket.SetAttribute("id", x.ToString());
@@ -216,32 +223,34 @@ namespace HAP.Web.HelpDesk
             writer.Flush();
             writer.Close();
 
-            MailMessage mes = new MailMessage();
-
-            mes.Subject = "A Support Ticket (#" + x + ") has been Logged";
             User user = new User(userlist.SelectedValue);
+            if (config.SMTP.Enabled && !string.IsNullOrEmpty(user.Email))
+            {
+                MailMessage mes = new MailMessage();
 
-            mes.From = mes.Sender = new MailAddress(ADUser.UserName, ADUser.DisplayName);
-            mes.ReplyToList.Add(mes.From);
+                mes.Subject = "A Support Ticket (#" + x + ") has been Logged";
 
-            mes.To.Add(new MailAddress(user.Email, user.DisplayName));
+                mes.From = mes.Sender = new MailAddress(ADUser.Email, ADUser.DisplayName);
+                mes.ReplyToList.Add(mes.From);
 
-            mes.IsBodyHtml = true;
+                mes.To.Add(new MailAddress(user.Email, user.DisplayName));
 
-            FileInfo template = new FileInfo(Server.MapPath("~/HelpDesk/newadminticket.htm"));
-            StreamReader fs = template.OpenText();
-            mes.Body = fs.ReadToEnd().Replace("{0}", x.ToString()).Replace("{1}", 
-                newadminticketsubject.Text).Replace("{2}", 
-                newadminticketeditor.Content).Replace("{3}", 
-                user.DisplayName).Replace("{4}", 
-                Request.Url.Host + Request.ApplicationPath);
+                mes.IsBodyHtml = true;
 
-            SmtpClient smtp = new SmtpClient(config.SMTP.Server, config.SMTP.Port);
-            if (!string.IsNullOrEmpty(config.SMTP.User))
-                smtp.Credentials = new NetworkCredential(config.SMTP.User, config.SMTP.Password);
-            smtp.EnableSsl = config.SMTP.SSL;
-            smtp.Send(mes);
+                FileInfo template = new FileInfo(Server.MapPath("~/HelpDesk/newadminticket.htm"));
+                StreamReader fs = template.OpenText();
+                mes.Body = fs.ReadToEnd().Replace("{0}", x.ToString()).Replace("{1}",
+                    newadminticketsubject.Text).Replace("{2}",
+                    newadminticketeditor.Content).Replace("{3}",
+                    user.DisplayName).Replace("{4}",
+                    Request.Url.Host + Request.ApplicationPath);
 
+                SmtpClient smtp = new SmtpClient(config.SMTP.Server, config.SMTP.Port);
+                if (!string.IsNullOrEmpty(config.SMTP.User))
+                    smtp.Credentials = new NetworkCredential(config.SMTP.User, config.SMTP.Password);
+                smtp.EnableSsl = config.SMTP.SSL;
+                smtp.Send(mes);
+            }
             loadtickets();
             NewTicketFiled.Visible = true;
             newadminticket.Visible = false;
@@ -256,58 +265,62 @@ namespace HAP.Web.HelpDesk
             {
                 ticket.Attributes["status"].Value = (CheckFixed.Checked ? "Fixed" : "WithIT");
                 ticket.Attributes["priority"].Value = PriorityList.SelectedValue;
-
-                MailMessage mes = new MailMessage();
-                mes.Subject = "Your Ticket (#" + TicketID + ") has been " + (CheckFixed.Checked ? "Closed" : "Updated");
-                mes.From = mes.Sender = new MailAddress(ADUser.Email, ADUser.DisplayName);
-                mes.ReplyToList.Add(mes.From);
                 User user = new User(ticket.SelectNodes("Note")[0].Attributes["username"].Value);
+                if (config.SMTP.Enabled && !string.IsNullOrEmpty(user.Email))
+                {
+                    MailMessage mes = new MailMessage();
+                    mes.Subject = "Your Ticket (#" + TicketID + ") has been " + (CheckFixed.Checked ? "Closed" : "Updated");
+                    mes.From = mes.Sender = new MailAddress(ADUser.Email, ADUser.DisplayName);
+                    mes.ReplyToList.Add(mes.From);
 
-                mes.To.Add(new MailAddress(user.Email, user.DisplayName));
+                    mes.To.Add(new MailAddress(user.Email, user.DisplayName));
 
-                mes.IsBodyHtml = true;
+                    mes.IsBodyHtml = true;
 
-                FileInfo template = new FileInfo(Server.MapPath("~/HelpDesk/newadminnote.htm"));
-                StreamReader fs = template.OpenText();
+                    FileInfo template = new FileInfo(Server.MapPath("~/HelpDesk/newadminnote.htm"));
+                    StreamReader fs = template.OpenText();
 
-                mes.Body = fs.ReadToEnd().Replace("{0}", TicketID).Replace("{1}",
-                    (CheckFixed.Checked ? "Closed" : "Updated")).Replace("{2}",
-                    newnote.Content).Replace("{3}",
-                    (CheckFixed.Checked ? "reopen" : "update")).Replace("{4}",
-                    Request.Url.Host + Request.ApplicationPath);
+                    mes.Body = fs.ReadToEnd().Replace("{0}", TicketID).Replace("{1}",
+                        (CheckFixed.Checked ? "Closed" : "Updated")).Replace("{2}",
+                        newnote.Content).Replace("{3}",
+                        (CheckFixed.Checked ? "reopen" : "update")).Replace("{4}",
+                        Request.Url.Host + Request.ApplicationPath);
 
-                SmtpClient smtp = new SmtpClient(config.SMTP.Server, config.SMTP.Port);
-                if (!string.IsNullOrEmpty(config.SMTP.User))
-                    smtp.Credentials = new NetworkCredential(config.SMTP.User, config.SMTP.Password);
-                smtp.EnableSsl = config.SMTP.SSL;
-                smtp.Send(mes);
+                    SmtpClient smtp = new SmtpClient(config.SMTP.Server, config.SMTP.Port);
+                    if (!string.IsNullOrEmpty(config.SMTP.User))
+                        smtp.Credentials = new NetworkCredential(config.SMTP.User, config.SMTP.Password);
+                    smtp.EnableSsl = config.SMTP.SSL;
+                    smtp.Send(mes);
+                }
             }
             else
             {
                 ticket.Attributes["status"].Value = "New";
+                if (config.SMTP.Enabled)
+                {
+                    MailMessage mes = new MailMessage();
 
-                MailMessage mes = new MailMessage();
+                    mes.Subject = "Ticket (#" + TicketID + ") has been Updated";
+                    mes.From = mes.Sender = new MailAddress(ADUser.Email, ADUser.DisplayName);
+                    mes.ReplyToList.Add(mes.From);
+                    mes.To.Add(new MailAddress(config.SMTP.FromEmail, config.SMTP.FromUser));
 
-                mes.Subject = "Ticket (#" + TicketID + ") has been Updated";
-                mes.From = mes.Sender = new MailAddress(ADUser.Email, ADUser.DisplayName);
-                mes.ReplyToList.Add(mes.From);
-                mes.To.Add(new MailAddress(config.SMTP.FromEmail, config.SMTP.FromUser));
+                    mes.IsBodyHtml = true;
 
-                mes.IsBodyHtml = true;
+                    FileInfo template = new FileInfo(Server.MapPath("~/HelpDesk/newusernote.htm"));
+                    StreamReader fs = template.OpenText();
 
-                FileInfo template = new FileInfo(Server.MapPath("~/HelpDesk/newusernote.htm"));
-                StreamReader fs = template.OpenText();
+                    mes.Body = fs.ReadToEnd().Replace("{0}", TicketID).Replace("{1}",
+                        newnote.Content).Replace("{2}",
+                        ADUser.DisplayName).Replace("{3}",
+                        Request.Url.Host + Request.ApplicationPath);
 
-                mes.Body = fs.ReadToEnd().Replace("{0}", TicketID).Replace("{1}",
-                    newnote.Content).Replace("{2}",
-                    ADUser.DisplayName).Replace("{3}",
-                    Request.Url.Host + Request.ApplicationPath);
-
-                SmtpClient smtp = new SmtpClient(config.SMTP.Server, config.SMTP.Port);
-                if (!string.IsNullOrEmpty(config.SMTP.User))
-                    smtp.Credentials = new NetworkCredential(config.SMTP.User, config.SMTP.Password);
-                smtp.EnableSsl = config.SMTP.SSL;
-                smtp.Send(mes);
+                    SmtpClient smtp = new SmtpClient(config.SMTP.Server, config.SMTP.Port);
+                    if (!string.IsNullOrEmpty(config.SMTP.User))
+                        smtp.Credentials = new NetworkCredential(config.SMTP.User, config.SMTP.Password);
+                    smtp.EnableSsl = config.SMTP.SSL;
+                    smtp.Send(mes);
+                }
             }
             XmlElement node = doc.CreateElement("Note");
             node.SetAttribute("datetime", DateTime.Now.ToString("u"));

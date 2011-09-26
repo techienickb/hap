@@ -77,8 +77,8 @@ namespace HAP.Web.BookingSystem
             get
             {
                 bool vis = false;
-                foreach (string s in hapConfig.Current.BookingSystem.Admins.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                    if (!vis) vis = Page.User.IsInRole(s);
+                foreach (string s in hapConfig.Current.BookingSystem.Admins.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
+                    if (!vis) vis = Page.User.IsInRole(s.Trim());
                 if (vis) return true;
                 return Page.User.IsInRole("Domain Admins");
             }

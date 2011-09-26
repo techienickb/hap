@@ -5,74 +5,93 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Display Board System</title>
-    <link href="~/style/base.css" rel="stylesheet" type="text/css" media="screen" />
-    <style type="text/css">
-        .Outter { width: 340px; float: left; overflow: hidden; }
-        #header { width: 985px; margin: 0 auto; background-color: #fff; height: 170px;  }
-        body { margin: 0; background: transparent; width: auto; }
-        .Content { padding: 2px 0 0px 0; overflow: hidden; }
-        .Content div { padding: 11px 0 11px 20px; }
-        .Current { background: #ffb900; }
-        #Right { float: right; text-align: right; border-right: 0; }
-        #Right .Content div { padding: 11px 20px 11px 0; }
-        h1, h2 { margin: 0; font-weight: normal; }
-        h2 { color: Gray; }
-        h1.Head { text-align: center; padding: 6px 0; margin: 0; height: 30px; }
-        h1.Head span { float: left; width: 340px; font-size: 30px; text-align: center; font-weight: bold;}
-        h1.Head span.s { float: right; border-right: 0; }
-    </style>
+    <link href="../style/basestyle.css" rel="stylesheet" type="text/css" />
+    <script src="<%=ResolveClientUrl("~/Scripts/jquery-1.6.2.min.js")%>" type="text/javascript"></script>
+    <script src="../Scripts/jquery-1.6.2.min.js" type="text/javascript"></script>
+    <link href="../style/bookingsystem.css" rel="stylesheet" type="text/css" />
 </head>
-<body>
+<body class="bookingdisplay">
     <form id="form1" runat="server">
-        <asp:Panel runat="server" ID="ICT1_ICT2" Visible="false">
-        <div id="header">
-            <a href="index.htm" id="logo"><span>Home</span></a>
-        </div>
-        <div class="Outter">
-            <div class="Content">
-                <h1 style="text-align: center;">ICT2</h1>
-                <asp:Repeater runat="server" ID="ICT1">
-                    <ItemTemplate>
-                        <div<%#currentLesson == Eval("Lesson").ToString() ? " class=\"Current\"" : ""%>>
-                            <h1><b><%#Eval("Lesson").ToString().Replace("Lesson ", "").Trim()%>:</b> <%#Eval("Name")%></h1>
-                            <h2><%#getName(Container.DataItem) %></h2>
-                        </div>
-                    </ItemTemplate>
-                </asp:Repeater>
-            </div>
-        </div>
-        <div id="Right" class="Outter">
-            <div class="Content">
-                <h1 style="text-align: center;">ICT2</h1>
-                <asp:Repeater runat="server" ID="ICT2">
-                    <ItemTemplate>
-                        <div<%#currentLesson == Eval("Lesson").ToString() ? " class=\"Current\"" : ""%>>
-                            <h1><%#Eval("Name")%> <b><%#Eval("Lesson").ToString().Replace("Lesson ", "").Trim()%>:</b></h1>
-                            <h2><%#getName(Container.DataItem) %></h2>
-                        </div>
-                    </ItemTemplate>
-                </asp:Repeater>
-            </div>
-        </div>
-        <h1 style="padding: 60px 0; text-align: center;">Food & Drink are not to be taken into any ICT ROOM!</h1>
-        <h1 style="padding: 60px 0; text-align: center;">Bags are not to be left in the ICT Rooms!</h1>
-        </asp:Panel>
+        <asp:Panel runat="server" ID="ICT1_ICT2" Visible="false"></asp:Panel>
         <asp:Panel runat="server" ID="defaultview" Visible="false">
-            <style type="text/css">body { background: #fff; }</style>
-            <h1 style="text-align: center;"><asp:Label runat="server" ID="roomlabel" Visible="false" /></h1>
-            <div class="Outter">
-                <div class="Content">
-                    <asp:Repeater runat="server">
-                        <ItemTemplate>
-                            <div<%#currentLesson == Eval("Lesson").ToString() ? " class=\"Current\"" : ""%>>
-                                <h1><b><%#Eval("Lesson").ToString().Replace("Lesson ", "").Trim() %>:</b> <%#Eval("Name")%></h1>
-                                <h2><%#getName(Container.DataItem) %></h2>
-                            </div>
-                        </ItemTemplate>
-                    </asp:Repeater>
-                </div>
-            </div>
+        <div id="content">
+            <h1 style="text-align: center;"><asp:Literal runat="server" ID="roomlabel" /></h1>
+            <table><asp:Repeater runat="server"><ItemTemplate><tr id="<%#Eval("Lesson").ToString().Replace(" ", "").ToLower().Trim() %>"><td class="lesson"><%#Eval("Lesson").ToString().Replace("Lesson ", "").Trim() %></td><td><span><%#Eval("Name")%></span><%#getName(Container.DataItem) %></td></tr></ItemTemplate></asp:Repeater></table>
+            <button style="position: absolute; bottom: 0; right: 0; z-index: 1001" onclick="doRefresh(); return false;">Refresh</button>
+        </div>
         </asp:Panel>
+        <div id="statebar"></div>
+        <script type="text/javascript">
+        var timings = [<%=getJSTimings() %>];
+        var lesson = null;
+        var curdate = new Date();
+        function findLesson() {
+            for (var i = 0; i < timings.length; i++)
+            {
+                var d1 = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), timings[i].StartTime.Hour, timings[i].StartTime.Minute, 0, 0);
+                var d2 = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), timings[i].EndTime.Hour, timings[i].EndTime.Minute, 0, 0);
+                if (curdate >= d1 && curdate < d2) return timings[i];
+            }
+            return null;
+        }
+        function doMove() {
+            var newlesson = findLesson();
+            if (newlesson == null && lesson == null) {
+            }
+            else if (newlesson == null && lesson != null) {
+                $("#" + lesson.ID).animate({ "font-size": "16px" }, 100);
+                if ($("#statebar").position().top == 100)
+                    $("#statebar").css("height", "0");
+                else {
+                    $("#statebar").animate({ top: $("#statebar").position().top + $("#statebar").height(), height: 0 }, 1000);
+                }
+                lesson = newlesson;
+            } else if (newlesson != null && lesson != null && lesson != newlesson) {
+                $("#" + lesson.ID).animate({ "font-size": "16px" }, 100, 'linear', function() { continueMove(); });
+                lesson = newlesson;
+            } else { lesson = newlesson; continueMove(); }
+        }
+        function continueMove() {
+            if (lesson == null) return;
+            $("#" + lesson.ID).animate({ "font-size": "30px" }, 1000, 'linear', function() { 
+                if (lesson == null) return;
+                $("#statebar").animate({ height: $("#" + lesson.ID).height(), top: $("#" + lesson.ID).position().top + 50 }, { queue: false, duration: 1000 })
+            });
+        }
+        function reset() {
+            if (lesson != null) $("#statebar").height($("#" + lesson.ID).height());
+            else $("#statebar").height(0)
+            doMove();
+        }
+        function doRefresh() {
+            curdate = new Date();
+            $.ajax({
+                type: 'GET',
+                url: '<%=ResolveUrl("~/api/BookingSystem/LoadRoom/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/<%=Room%>',
+                dataType: 'json',
+                success: OnSuccess,
+                error: OnError
+            });
+        }
+        function OnSuccess(response) {
+            if (response != null) {
+                var x = '';
+                var i = 0;
+                for (var i = 0; i < response.length; i++)
+                    x += '<tr id="' + $.trim(response[i].Lesson.toLowerCase().replace(/ /g, "")) + '"><td class="lesson">' + $.trim(response[i].Lesson.replace(/Lesson /g, "")) + '</td><td><span>' + response[i].Name + '</span>' + response[i].DisplayName + '</td></tr>';
+                $("table").html(x);
+            } else console.log(response);
+        }
+        function BuildTR(o) {
+        }
+        function OnError(xhr, ajaxOptions, thrownError) {
+            console.log(thrownError);
+        }
+        $(window).resize(function() { reset(); });
+        reset();
+        setInterval("doMove();", 5000);
+        setInterval("doRefresh();", 300000);
+        </script>
     </form>
 </body>
 </html>

@@ -111,6 +111,8 @@ namespace HAP.Web.BookingSystem
                 }
                 else
                 {
+                    cell.Controls.Clear();
+                    cell.Controls.Add(new LiteralControl(string.Format("<a target=\"_top\" href=\"./#" + day.Date.ToShortDateString() + "\" id=\"" + day.Date.ToShortDateString().Replace('/', '-') + "\">" + day.DayNumberText + "</a>")));
                     HAP.Data.BookingSystem.BookingSystem bs = new HAP.Data.BookingSystem.BookingSystem(day.Date.Date);
                     cell.CssClass += " " + s;
                     LiteralControl lc = new LiteralControl("<div class=\"QuickView\">");
