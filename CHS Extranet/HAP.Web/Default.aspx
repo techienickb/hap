@@ -13,98 +13,115 @@
         <hap:announcement runat="server" />
         <hap:version runat="server" />
         <a href="http://hap.codeplex.com" target="_blank" style="text-align: center; display: block;"><img src="<%=ResolveClientUrl("~/images/haplogo.png") %>" alt="Home Access Plus+ Logo" /></a>
-        <div id="hometabs">
-            <ul>
-                <asp:Repeater runat="server" ID="tabheader_repeater"><ItemTemplate><li id="id_<%# Eval("Type") %>"><a href="#<%#Eval("Type") %>_tab"><%#Eval("Name") %></a></li></ItemTemplate></asp:Repeater>
-            </ul>
-            <asp:PlaceHolder runat="server" ID="tab_Me" Visible="false">
-                <div id="Me_tab">
-                    <asp:Image runat="server" ID="userimage" ImageUrl="~/images/imageres18.png" style="margin: 10px 40px 30px 0; float: left" />
-                    <div><%=string.IsNullOrEmpty(ADUser.FirstName) ? ADUser.DisplayName : ADUser.FirstName + " " + ADUser.LastName %></div>
-                    <div><%=Department %></div>
-                    <div><%=ADUser.Email %></div>
-                    <asp:Button runat="server" Text="Update My Details" ID="updatemydetails" />
+        <div style="overflow: hidden;">
+            <div id="homepageiwt">
+                <h1>I want to...</h1>
+                <div id="iwt1">
+                    <a href="#iwt1" class="togglelink">Get some files from school</a>
                     <div>
-                        <div id="tab_me_progress"><div style="width: <%=Math.Round(space, 0)%>%;"></div><label><%=space %>%</label></div>
+                        <img src="images/icons/net.png" alt="" />
+                        <h2>Access my Files</h2>
+                        <p>Transfer files between your home and school without emailing and USB Keys</p>
+                        <asp:HyperLink runat="server" NavigateUrl="~/mycomputer.aspx">Browse for files</asp:HyperLink>
                     </div>
                 </div>
-            </asp:PlaceHolder>
-            <asp:PlaceHolder runat="server" ID="tab_Password" Visible="false">
-                <div id="Password_tab">
-                    <asp:Label runat="server" AssociatedControlID="currentpass">Current Password: </asp:Label>
-                    <asp:TextBox runat="server" TextMode="Password" ID="currentpass" ValidationGroup="changepass" />
-                    <asp:RequiredFieldValidator runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="currentpass" ValidationGroup="changepass" />
-                    <br />
-                    <asp:Label runat="server" AssociatedControlID="newpass">New Password: </asp:Label>
-                    <asp:TextBox runat="server" TextMode="Password" ID="newpass" ValidationGroup="changepass" />
-                    <asp:RequiredFieldValidator runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="newpass" ValidationGroup="changepass" />
-                    <br />
-                    <asp:Label runat="server" AssociatedControlID="confpass">Confirm Password: </asp:Label>
-                    <asp:TextBox runat="server" TextMode="Password" ID="confpass" ValidationGroup="changepass" />
-                    <asp:CompareValidator runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="confpass" ControlToCompare="newpass" ValidationGroup="changepass" />
-                    <br />
-                    <asp:Label runat="server" ForeColor="Red" ID="errormess" />
-                    <asp:Button runat="server" Text="Change Password" style="margin-top: 5px;" onclick="ChangePass_Click" ID="savepass" ValidationGroup="changepass" />
+                <div id="iwt2">
+                    <a href="#iwt2" class="togglelink">Protect my PC</a>
                 </div>
-            </asp:PlaceHolder>
-            <asp:PlaceHolder runat="server" ID="tab_Bookings" Visible="false">
-                <div id="Bookings_tab">
-                    <asp:ListView runat="server" ID="bookingslist">
-                        <EmptyDataTemplate>No Bookings Available</EmptyDataTemplate>
-                        <ItemTemplate>
-                            <tr style="">
-                                <td><%# ((DateTime)Eval("Date")).ToLongDateString() %></td>
-                                <td><%# Eval("Lesson") %></td>
-                                <td><%# Eval("Name") %></td>
-                                <td><%# Eval("Room") %></td>
-                            </tr>
-                        </ItemTemplate>
-                        <LayoutTemplate>
-                            <table ID="itemPlaceholderContainer" runat="server" border="0" style="" class="bookingtable">
-                                <tr runat="server">
-                                    <th runat="server">Date</th>
-                                    <th runat="server">Lesson</th>
-                                    <th runat="server">Name</th>
-                                    <th runat="server">Room</th>
-                                </tr>
-                                <tr ID="itemPlaceholder" runat="server">
-                                </tr>
-                            </table>
-                        </LayoutTemplate>
-                    </asp:ListView>
-                    <div style="margin: 10px 0 0 0;">
-                        <a href="bookingsystem/">Go to the Booking System</a>
+            </div>
+            <div id="hometabs">
+                <ul>
+                    <asp:Repeater runat="server" ID="tabheader_repeater"><ItemTemplate><li id="id_<%# Eval("Type") %>"><a href="#<%#Eval("Type") %>_tab"><%#Eval("Name") %></a></li></ItemTemplate></asp:Repeater>
+                </ul>
+                <asp:PlaceHolder runat="server" ID="tab_Me" Visible="false">
+                    <div id="Me_tab">
+                        <asp:Image runat="server" ID="userimage" ImageUrl="~/images/imageres18.png" style="margin: 10px 40px 30px 0; float: left" />
+                        <div><%=string.IsNullOrEmpty(ADUser.FirstName) ? ADUser.DisplayName : ADUser.FirstName + " " + ADUser.LastName %></div>
+                        <div><%=Department %></div>
+                        <div><%=ADUser.Email %></div>
+                        <asp:Button runat="server" Text="Update My Details" ID="updatemydetails" />
+                        <div>
+                            <div id="tab_me_progress"><div style="width: <%=Math.Round(space, 0)%>%;"></div><label><%=space %>%</label></div>
+                        </div>
                     </div>
-                </div>
-            </asp:PlaceHolder>
-            <asp:PlaceHolder runat="server" ID="tab_Tickets" Visible="false">
-                <div id="Tickets_tab">
-                    <asp:ListView runat="server" ID="ticketslist">
-                        <EmptyDataTemplate>No Open Tickets Available</EmptyDataTemplate>
-                        <ItemTemplate>
-                            <tr style="">
-                                <td><img width="32px" src="images/statusicons/<%# Eval("Status")%>.png" alt="<%# Eval("Status")%>" /></td>
-                                <td><img width="32px" src="images/statusicons/priority_<%# Eval("Priority")%>.png" alt="<%# Eval("Priority")%>" /></td>
-                                <td><a href="helpdesk/ticket/<%#Eval("Id") %>"><%# Eval("Subject") %></a></td>
-                            </tr>
-                        </ItemTemplate>
-                        <LayoutTemplate>
-                            <table ID="itemPlaceholderContainer" runat="server" border="0" style="" class="bookingtable tickets">
-                                <tr id="Tr1" runat="server">
-                                    <th runat="server" style="width: 60px">Status</th>
-                                    <th runat="server" style="width: 60px">Priority</th>
-                                    <th runat="server">Subject</th>
-                                </tr>
-                                <tr ID="itemPlaceholder" runat="server">
-                                </tr>
-                            </table>
-                        </LayoutTemplate>
-                    </asp:ListView>
-                    <div style="margin: 10px 0 0 0;">
-                        <a href="helpdesk/">Go to the Help Desk</a>
+                </asp:PlaceHolder>
+                <asp:PlaceHolder runat="server" ID="tab_Password" Visible="false">
+                    <div id="Password_tab">
+                        <asp:Label runat="server" AssociatedControlID="currentpass">Current Password: </asp:Label>
+                        <asp:TextBox runat="server" TextMode="Password" ID="currentpass" ValidationGroup="changepass" />
+                        <asp:RequiredFieldValidator runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="currentpass" ValidationGroup="changepass" />
+                        <br />
+                        <asp:Label runat="server" AssociatedControlID="newpass">New Password: </asp:Label>
+                        <asp:TextBox runat="server" TextMode="Password" ID="newpass" ValidationGroup="changepass" />
+                        <asp:RequiredFieldValidator runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="newpass" ValidationGroup="changepass" />
+                        <br />
+                        <asp:Label runat="server" AssociatedControlID="confpass">Confirm Password: </asp:Label>
+                        <asp:TextBox runat="server" TextMode="Password" ID="confpass" ValidationGroup="changepass" />
+                        <asp:CompareValidator runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="confpass" ControlToCompare="newpass" ValidationGroup="changepass" />
+                        <br />
+                        <asp:Label runat="server" ForeColor="Red" ID="errormess" />
+                        <asp:Button runat="server" Text="Change Password" style="margin-top: 5px;" onclick="ChangePass_Click" ID="savepass" ValidationGroup="changepass" />
                     </div>
-                </div>
-            </asp:PlaceHolder>
+                </asp:PlaceHolder>
+                <asp:PlaceHolder runat="server" ID="tab_Bookings" Visible="false">
+                    <div id="Bookings_tab">
+                        <asp:ListView runat="server" ID="bookingslist">
+                            <EmptyDataTemplate>No Bookings Available</EmptyDataTemplate>
+                            <ItemTemplate>
+                                <tr style="">
+                                    <td><%# ((DateTime)Eval("Date")).ToLongDateString() %></td>
+                                    <td><%# Eval("Lesson") %></td>
+                                    <td><%# Eval("Name") %></td>
+                                    <td><%# Eval("Room") %></td>
+                                </tr>
+                            </ItemTemplate>
+                            <LayoutTemplate>
+                                <table ID="itemPlaceholderContainer" runat="server" border="0" style="" class="bookingtable">
+                                    <tr runat="server">
+                                        <th runat="server">Date</th>
+                                        <th runat="server">Lesson</th>
+                                        <th runat="server">Name</th>
+                                        <th runat="server">Room</th>
+                                    </tr>
+                                    <tr ID="itemPlaceholder" runat="server">
+                                    </tr>
+                                </table>
+                            </LayoutTemplate>
+                        </asp:ListView>
+                        <div style="margin: 10px 0 0 0;">
+                            <a href="bookingsystem/">Go to the Booking System</a>
+                        </div>
+                    </div>
+                </asp:PlaceHolder>
+                <asp:PlaceHolder runat="server" ID="tab_Tickets" Visible="false">
+                    <div id="Tickets_tab">
+                        <asp:ListView runat="server" ID="ticketslist">
+                            <EmptyDataTemplate>No Open Tickets Available</EmptyDataTemplate>
+                            <ItemTemplate>
+                                <tr style="">
+                                    <td><img width="32px" src="images/statusicons/<%# Eval("Status")%>.png" alt="<%# Eval("Status")%>" /></td>
+                                    <td><img width="32px" src="images/statusicons/priority_<%# Eval("Priority")%>.png" alt="<%# Eval("Priority")%>" /></td>
+                                    <td><a href="helpdesk/ticket/<%#Eval("Id") %>"><%# Eval("Subject") %></a></td>
+                                </tr>
+                            </ItemTemplate>
+                            <LayoutTemplate>
+                                <table ID="itemPlaceholderContainer" runat="server" border="0" style="" class="bookingtable tickets">
+                                    <tr id="Tr1" runat="server">
+                                        <th runat="server" style="width: 60px">Status</th>
+                                        <th runat="server" style="width: 60px">Priority</th>
+                                        <th runat="server">Subject</th>
+                                    </tr>
+                                    <tr ID="itemPlaceholder" runat="server">
+                                    </tr>
+                                </table>
+                            </LayoutTemplate>
+                        </asp:ListView>
+                        <div style="margin: 10px 0 0 0;">
+                            <a href="helpdesk/">Go to the Help Desk</a>
+                        </div>
+                    </div>
+                </asp:PlaceHolder>
+            </div>
         </div>
         <div id="HomeButtons">
             <asp:Repeater ID="homepagelinks" runat="server">
@@ -114,10 +131,9 @@
                         <div>
                             <asp:Repeater runat="server" DataSource='<%#((HAP.Web.Configuration.LinkGroup)Container.DataItem).FilteredLinks %>'>
                                 <ItemTemplate> 
-                                    <asp:HyperLink runat="server" ID="mycomputer" NavigateUrl='<%#Eval("Url")%>' Target='<%#Eval("Target") %>'>
-                                        <asp:Image runat="server" ImageUrl='<%#Eval("Icon")%>' AlternateText="" />
+                                    <asp:HyperLink runat="server" ID="mycomputer" NavigateUrl='<%#Eval("Url")%>' Target='<%#Eval("Target") %>' ToolTip='<%#Eval("Description") %>'>
+                                        <span><asp:Image runat="server" ImageUrl='<%#Eval("Icon")%>' AlternateText="" /></span>
                                         <%#Eval("Name") %>
-                                        <i><%#Eval("Description") %></i>
                                     </asp:HyperLink>
                                 </ItemTemplate>
                             </asp:Repeater>
