@@ -85,9 +85,9 @@
                     <div class="content">
                         <div style="padding: 0 4px;">
                             <asp:Label runat="server" AssociatedControlID="newticketsubject">Subject: </asp:Label>
-                            <asp:TextBox ID="newticketsubject" runat="server" Width="50%" />
+                            <asp:TextBox ID="newticketsubject" runat="server" Width="48%" />
                             <asp:Label runat="server" AssociatedControlID="newticketroom">Room: </asp:Label>
-                            <asp:TextBox ID="newticketroom" runat="server" />
+                            <asp:TextBox ID="newticketroom" runat="server" Width="18%" />
                         </div>
                         <asp:Label runat="server" AssociatedControlID="newticketeditor">Problem: </asp:Label>
                         <div style="position: relative;">

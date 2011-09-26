@@ -17,6 +17,7 @@ namespace HAP.Web.API
             RouteTable.Routes.Add(new Route("api/mycomputer/upload/{*path}", new UploadHandler()));
             WebServiceHostFactory factory = new WebServiceHostFactory();
             RouteTable.Routes.Add(new ServiceRoute("api/setup", factory, typeof(setup)));
+            RouteTable.Routes.Add(new ServiceRoute("api/bookingsystem", factory, typeof(BookingSystem)));
         }
     }
 }

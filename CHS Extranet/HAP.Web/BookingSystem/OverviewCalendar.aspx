@@ -6,14 +6,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head runat="server">
         <title>Overview Calendar</title>
-        <link href="~/style/basestyle.css" rel="stylesheet" type="text/css" />
+        <link href="<%=ResolveClientUrl("~/style/basestyle.css")%>" rel="stylesheet" type="text/css" />
         <link href="bookingsystem.css" rel="stylesheet" type="text/css" />
     </head>
     <body>
         <form id="form1" runat="server">
             <div>
                 <asp:ToolKitScriptManager runat="server" />
-                <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                <asp:UpdatePanel runat="server">
                     <ContentTemplate>
                         <hap:BigBookingCalendar ID="OverviewCal" CssClass="OverviewCal" runat="server" FirstDayOfWeek="Monday" NextPrevFormat="ShortMonth" BackColor="Transparent" BorderColor="#d9d9d9" BorderWidth="0" CellPadding="4" DayNameFormat="Short" Font-Size="10pt" Width="100%" SelectionMode="None">
                             <SelectedDayStyle BackColor="#6d051f" CssClass="Day SelDay" Font-Bold="True" ForeColor="White" />

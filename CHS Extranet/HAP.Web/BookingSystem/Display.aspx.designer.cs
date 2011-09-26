@@ -31,24 +31,6 @@ namespace HAP.Web.BookingSystem {
         protected global::System.Web.UI.WebControls.Panel ICT1_ICT2;
         
         /// <summary>
-        /// ICT1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater ICT1;
-        
-        /// <summary>
-        /// ICT2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater ICT2;
-        
-        /// <summary>
         /// defaultview control.
         /// </summary>
         /// <remarks>
@@ -64,6 +46,6 @@ namespace HAP.Web.BookingSystem {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label roomlabel;
+        protected global::System.Web.UI.WebControls.Literal roomlabel;
     }
 }

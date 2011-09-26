@@ -90,4 +90,38 @@ namespace HAP.Data.BookingSystem
             }
         }
     }
+
+    public class JSONBooking
+    {
+        public JSONBooking() {}
+        public JSONBooking(Booking b)
+        {
+            this.Room = b.Room;
+            this.Lesson = b.Lesson;
+            this.Name = b.Name;
+            try
+            {
+                this.DisplayName = b.User.Notes;
+            }
+            catch { this.DisplayName = b.Username; }
+            this.Static = b.Static;
+            try
+            {
+                this.LTCount = b.LTCount;
+                this.LTHeadPhones = b.LTHeadPhones;
+                this.LTRoom = b.LTRoom;
+                this.EquipRoom = b.EquipRoom;
+            }
+            catch { }
+        }
+        public string Room { get; set; }
+        public string Lesson { get; set; }
+        public string Name { get; set; }
+        public string DisplayName { get; set; }
+        public bool LTHeadPhones { get; set; }
+        public string LTRoom { get; set; }
+        public string EquipRoom { get; set; }
+        public int LTCount { get; set; }
+        public bool Static { get; set; }
+    }
 }

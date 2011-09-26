@@ -64,8 +64,8 @@ namespace HAP.AD
                     results.Add(new UserInfo(
                         sr[i].Properties["sAMAccountName"][0].ToString(),
                         sr[i].Properties["info"] != null ? sr[i].Properties["info"].Count > 0 ? sr[i].Properties["info"][0].ToString() : "" : "",
-                        sr[i].Properties["displayName"] != null ? sr[i].Properties["info"].Count > 0 ? sr[i].Properties["displayName"][0].ToString() : "" : "",
-                        sr[i].Properties["mail"] != null ? sr[i].Properties["info"].Count > 0 ? sr[i].Properties["mail"][0].ToString() : "" : ""
+                        sr[i].Properties["displayName"] != null ? sr[i].Properties["displayName"].Count > 0 ? sr[i].Properties["displayName"][0].ToString() : "" : "",
+                        sr[i].Properties["mail"] != null ? sr[i].Properties["mail"].Count > 0 ? sr[i].Properties["mail"][0].ToString() : "" : ""
                     ));
             }
             catch (Exception e) { throw new Exception(usersDE.Path, e); }

@@ -13,12 +13,13 @@ namespace HAP.Web.BookingSystem
 {
     public partial class Display : System.Web.UI.Page, IBookingSystemDisplay
     {
+        protected hapConfig config;
         protected void Page_Load(object sender, EventArgs e)
         {
             Response.ExpiresAbsolute = DateTime.Now;
             bs = new HAP.Data.BookingSystem.BookingSystem();
-            hapConfig config = hapConfig.Current;
-            if (Page.FindControl(Room) != null)
+            config = hapConfig.Current;
+            if (Page.FindControl(Room) != null && Page.FindControl(Room) is Panel)
             {
                 Panel room = Page.FindControl(Room) as Panel;
                 room.Visible = true;
@@ -82,19 +83,16 @@ namespace HAP.Web.BookingSystem
             else return b.User.Notes;
         }
 
-        protected string currentLesson
+        protected string getJSTimings()
         {
-            get
-            {
-                hapConfig config = hapConfig.Current;
-                foreach (Lesson lesson in config.BookingSystem.Lessons)
-                {
-                    DateTime starttime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, lesson.StartTime.Hour, lesson.StartTime.Minute, 0);
-                    DateTime endtime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, lesson.EndTime.Hour, lesson.EndTime.Minute, 0);
-                    if (DateTime.Now >= starttime && DateTime.Now < endtime) return lesson.Name;
-                }
-                return "N/A";
-            }
+            List<string> s = new List<string>();
+            foreach (HAP.Web.Configuration.Lesson l in config.BookingSystem.Lessons)
+                s.Add("{ ID: \"" + l.Name.ToLower().Replace(" ", "").Trim() + "\", Name: \"" + l.Name + "\", StartTime: { Hour: " + 
+                    l.StartTime.Hour + ", Minute: " + 
+                    l.StartTime.Minute + "}, EndTime: { Hour: " + 
+                    l.EndTime.Hour + ", Minute: " + 
+                    l.EndTime.Minute + " } }");
+            return string.Join(", ", s.ToArray());
         }
 
         public string Room { get; set; }

@@ -20,8 +20,8 @@ namespace HAP.AD
             this.Notes = notes;
             this.DisplayName = displayname;
             this.Email = email;
-            if (string.IsNullOrEmpty(this.DisplayName)) this.DisplayName = this.UserName;
-            if (string.IsNullOrEmpty(this.Notes)) this.Notes = this.DisplayName;
+            if (string.IsNullOrEmpty(displayname)) this.DisplayName = this.UserName;
+            if (string.IsNullOrEmpty(notes)) this.Notes = this.DisplayName;
         }
 
         public int CompareTo(object obj)

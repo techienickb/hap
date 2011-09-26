@@ -24,7 +24,7 @@ namespace HAP.Web.BookingSystem
                 {
                     userlist.Items.Clear();
                     foreach (UserInfo user in ADUtils.FindUsers())
-                        if (user.Notes == user.UserName)
+                        if (user.DisplayName == user.UserName)
                             userlist.Items.Add(new ListItem(user.UserName, user.UserName.ToLower()));
                         else
                             userlist.Items.Add(new ListItem(string.Format("{0} - ({1})", user.UserName, user.Notes), user.UserName.ToLower()));

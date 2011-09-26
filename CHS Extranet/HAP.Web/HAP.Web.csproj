@@ -105,6 +105,7 @@
     <Content Include="BookingSystem\Default.aspx" />
     <Content Include="BookingSystem\Display.aspx" />
     <Content Include="BookingSystem\loading.gif" />
+    <Content Include="BookingSystem\new.aspx" />
     <Content Include="BookingSystem\OverviewCalendar.ascx" />
     <Content Include="BookingSystem\OverviewCalendar.aspx" />
     <Content Include="BookingSystem\SIMS.ascx" />
@@ -208,6 +209,7 @@
     <Content Include="Scripts\jquery.dynatree.js" />
     <Content Include="Scripts\homepagescripts.js" />
     <Content Include="Setup.aspx" />
+    <Content Include="style\bookingsystem.css" />
     <Content Include="style\jquery-ui.css" />
     <Content Include="style\setup.css" />
     <Content Include="style\timetable.css" />
@@ -291,6 +293,7 @@
       <DependentUpon>api.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="API\BookingSystem.cs" />
     <Compile Include="API\Icon.cs" />
     <Compile Include="API\Setup.cs" />
     <Compile Include="API\Thumbs.cs" />
@@ -339,6 +342,13 @@
       <DependentUpon>Display.aspx</DependentUpon>
     </Compile>
     <Compile Include="BookingSystem\iCalGenerator.cs" />
+    <Compile Include="BookingSystem\new.aspx.cs">
+      <DependentUpon>new.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BookingSystem\new.aspx.designer.cs">
+      <DependentUpon>new.aspx</DependentUpon>
+    </Compile>
     <Compile Include="BookingSystem\OverviewCalendar.ascx.cs">
       <DependentUpon>OverviewCalendar.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

@@ -52,7 +52,7 @@ namespace HAP.Web.API
             m.EnableMove = enablemove;
             m.UsageMode = (MappingUsageMode)Enum.Parse(typeof(MappingUsageMode), usagemode);
             m.Name = name;
-            m.UNC = unc;
+            m.UNC = unc.Replace('/', '\\');
             m.EnableReadTo = enablereadto;
             m.EnableWriteTo = enablewriteto;
             Config.MySchoolComputerBrowser.Mappings.Update(origdrive.ToCharArray()[0], m);
