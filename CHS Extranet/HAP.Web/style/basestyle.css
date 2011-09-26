@@ -1,6 +1,6 @@
 ﻿html, #hapContent {font-family: Segoe UI, Tahoma; font-size: 13px; }
 a img { border: 0; }
-#baseContent { padding-top: 20px; }
+#hapContent { padding-top: 20px; }
 #Download { float: right; position: absolute; right: 5px; border-radius: 3px; -moz-border-radius: 3px; top: 0; border: solid 1px #7da2ce; padding: 2px 5px; border-top: 0; background: url(../images/bar-a-hover.gif) repeat-x left center; }
 #CoreProperties h1 { margin: 0; padding: 0; font-weight: normal; font-size: 18px; }
 #CoreProperties table { width: 100%; border: solid 1px #d9d9d9; border-collapse: collapse; font-size: 12px; }
@@ -37,7 +37,7 @@ a img { border: 0; }
 h1.Announcement { background: #fceb80; font-family: Segoe Print, Comic Sans MS; font-size: 12px; color: Red; border: solid 1px #fff; border-radius: 8px; -moz-border-radius: 8px; padding: 4px 10px; }
 h1.Announcement b { font-size: 16px; }
 #EditAnn { position: relative; }
-#EditAnn a.EditAnnLink { position: absolute; right: 0; top: 30px; }
+#EditAnn a.EditAnnLink { position: absolute; right: 0; top: 0; }
 #EditAnn a.EditAnnLink img { vertical-align: middle; text-decoration: none; height: 48px; }
 
 #HomeButtons a { float: left; margin: 3px; border: solid 0px #fff; border-radius: 3px; -moz-border-radius: 3px; color: #000; padding: 5px; width: 280px; height: 40px; line-height: 20px; display: block; overflow: hidden; text-decoration: none; font-size: 13px; }

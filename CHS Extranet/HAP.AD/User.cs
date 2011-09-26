@@ -212,7 +212,7 @@ namespace HAP.AD
                             }
                         }
                     }
-                    else throw new Exception("Something is wrong");
+                    else throw new Exception("I cannot impersonate " + this.UserName + " due to an issue logging onto the domain " + this.DomainName + " using an Interactive Login");
                 }
             }
             if (token != IntPtr.Zero)
