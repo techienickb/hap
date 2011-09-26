@@ -80,12 +80,12 @@
                 for (var i = 0; i < response.length; i++)
                     x += '<tr id="' + $.trim(response[i].Lesson.toLowerCase().replace(/ /g, "")) + '"><td class="lesson">' + $.trim(response[i].Lesson.replace(/Lesson /g, "")) + '</td><td><span>' + response[i].Name + '</span>' + response[i].DisplayName + '</td></tr>';
                 $("table").html(x);
-            } else console.log(response);
+            }
         }
         function BuildTR(o) {
         }
         function OnError(xhr, ajaxOptions, thrownError) {
-            console.log(thrownError);
+            
         }
         $(window).resize(function() { reset(); });
         reset();
