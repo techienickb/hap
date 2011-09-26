@@ -2,7 +2,7 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" style="padding: 0; margin: 0; height: 100%;">
 <head runat="server">
     <title>Display Board System</title>
     <link href="../style/basestyle.css" rel="stylesheet" type="text/css" />
@@ -14,11 +14,11 @@
     <form id="form1" runat="server">
         <asp:Panel runat="server" ID="ICT1_ICT2" Visible="false"></asp:Panel>
         <asp:Panel runat="server" ID="defaultview" Visible="false">
-        <div id="content">
             <h1 style="text-align: center;"><asp:Literal runat="server" ID="roomlabel" /></h1>
-            <table><asp:Repeater runat="server"><ItemTemplate><tr id="<%#Eval("Lesson").ToString().Replace(" ", "").ToLower().Trim() %>"><td class="lesson"><%#Eval("Lesson").ToString().Replace("Lesson ", "").Trim() %></td><td><span><%#Eval("Name")%></span><%#getName(Container.DataItem) %></td></tr></ItemTemplate></asp:Repeater></table>
+            <div>
+                <table><asp:Repeater runat="server"><ItemTemplate><tr id="<%#Eval("Lesson").ToString().Replace(" ", "").ToLower().Trim() %>"><td class="lesson"><%#Eval("Lesson").ToString().Replace("Lesson ", "").Trim() %></td><td><span><%#Eval("Name")%></span><%#getName(Container.DataItem) %></td></tr></ItemTemplate></asp:Repeater></table>
+            </div>
             <button style="position: absolute; bottom: 0; right: 0; z-index: 1001" onclick="doRefresh(); return false;">Refresh</button>
-        </div>
         </asp:Panel>
         <div id="statebar"></div>
         <script type="text/javascript">
