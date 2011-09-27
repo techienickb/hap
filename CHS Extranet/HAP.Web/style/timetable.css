@@ -1,11 +1,6 @@
-﻿#container {
-	float: none;
-	margin: 0;
-	width: 100%;
-}
-#content {
-	margin: 0; position: relative;
-}
+﻿#container { float: none; margin: 0; width: 100%; }
+#content { margin: 0; position: relative; padding: 0; }
+#access { display: none; }
 
 #timetable { list-style-type: none; margin: 10px auto; padding: 0; border: solid 1px gray; border-radius: 10px; box-shadow: 5px 5px 5px #dedede; overflow: auto; width: 870px; line-height: normal; }
 #timetable li { display: block; border-bottom: solid 1px gray; padding: 5px; clear: both; height: 50px; overflow: hidden; }
