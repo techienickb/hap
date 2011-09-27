@@ -244,22 +244,23 @@ namespace HAP.Web.API
 
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/UpdateLinkGroup", BodyStyle = WebMessageBodyStyle.Wrapped)]
         [OperationContract]
-        public int UpdateLinkGroup(string origname, string name, string showto)
+        public int UpdateLinkGroup(string origname, string name, string showto, string subtitle)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
             LinkGroup g = Config.Homepage.Groups[origname];
             g.ShowTo = showto;
             g.Name = name;
+            g.SubTitle = subtitle;
             Config.Homepage.Groups.UpdateGroup(origname, g);
             return 0;
         }
 
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/AddLinkGroup", BodyStyle = WebMessageBodyStyle.Wrapped)]
         [OperationContract]
-        public int AddLinkGroup(string name, string showto)
+        public int AddLinkGroup(string name, string showto, string subtitle)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
-            Config.Homepage.Groups.Add(name, showto);
+            Config.Homepage.Groups.Add(name, showto, subtitle);
             return 0;
         }
 

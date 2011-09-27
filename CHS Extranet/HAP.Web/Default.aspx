@@ -14,7 +14,7 @@
         <hap:version runat="server" />
         <a href="http://hap.codeplex.com" target="_blank" style="text-align: center; display: block;"><img src="<%=ResolveClientUrl("~/images/haplogo.png") %>" alt="Home Access Plus+ Logo" /></a>
         <div style="overflow: hidden;">
-            <div id="homepageiwt">
+            <div id="homepageiwt" class="tile-color">
                 <h1>I want to...</h1>
                 <div id="iwt1">
                     <a href="#iwt1" class="togglelink">Get some files from school</a>
@@ -29,8 +29,8 @@
                     <a href="#iwt2" class="togglelink">Protect my PC</a>
                 </div>
             </div>
-            <div id="hometabs">
-                <ul>
+            <div id="hometabs" class="tile-border-color">
+                <ul class="tile-color">
                     <asp:Repeater runat="server" ID="tabheader_repeater"><ItemTemplate><li id="id_<%# Eval("Type") %>"><a href="#<%#Eval("Type") %>_tab"><%#Eval("Name") %></a></li></ItemTemplate></asp:Repeater>
                 </ul>
                 <asp:PlaceHolder runat="server" ID="tab_Me" Visible="false">
@@ -123,11 +123,12 @@
                 </asp:PlaceHolder>
             </div>
         </div>
-        <div id="HomeButtons">
+        <div id="HomeButtons" class="tiles">
             <asp:Repeater ID="homepagelinks" runat="server">
                 <ItemTemplate>
                     <div>
                         <h1><%#Eval("Name") %></h1>
+                        <%#Eval("SubTitle") %>
                         <div>
                             <asp:Repeater runat="server" DataSource='<%#((HAP.Web.Configuration.LinkGroup)Container.DataItem).FilteredLinks %>'>
                                 <ItemTemplate> 

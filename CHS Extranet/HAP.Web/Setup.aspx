@@ -246,6 +246,7 @@
 							<asp:Repeater runat="server" ID="homepageLinkGroups">
 								<ItemTemplate>
 									<div id="linkgroup<%#Eval("Name").ToString().Replace(' ', '_') %>" class="linkgroup"><h4><span class="lgName"><%#Eval("Name") %></span> (<span class="lgST"><%#Eval("ShowTo") %></span>) <div class="cbuttonset" style="display: inline;"><button class="edit" onclick="return editgroup('<%#Eval("Name").ToString().Replace(' ', '_') %>');">Edit</button><button class="minusbutton" onclick="return removegroup('linkgroup<%#Eval("Name").ToString().Replace(' ', '_') %>');">Delete</button><button class="addbutton" onclick="return addlink('linkgroup<%#Eval("Name").ToString().Replace(' ', '_') %>');">Add Link</button></div></h4>
+									<p><%#Eval("SubTitle") %></p>
 									<div class="sortable">
 									<asp:Repeater ID="Repeater1" runat="server" DataSource='<%#Container.DataItem %>'>
 										<ItemTemplate>
@@ -447,6 +448,9 @@
 						</div>
 						<div>
 							<label for="groupShowTo" style="width: 100px;">Show To: </label><input type="text" id="groupShowTo" onclick="showadbuilder(this, false);" />
+						</div>
+						<div>
+							<label for="groupSubTitle" style="width: 100px;">SubTitle: </label><input type="text" id="groupSubTitle" />
 						</div>
 					</div>
 					<div id="linkEditor" title="Link Editor">
@@ -716,7 +720,7 @@
 						}
 						function OnFilterRemoveSuccess(response) {
 							if (response != null && response.RemoveFilterResult != null) {
-							    var data = response.RemoveFilterResult;
+								var data = response.RemoveFilterResult;
 								if (data != 0) alert(data);
 								else { tempe.remove(); tempe = null; }
 							}
@@ -750,7 +754,7 @@
 							return false;
 						}
 						function OnFilterAddSuccess(response) {
-						    if (response != null && response.AddFilterResult != null) {
+							if (response != null && response.AddFilterResult != null) {
 								var data = response.AddFilterResult;
 								if (data != 0) alert(data);
 								else {
@@ -1308,6 +1312,7 @@
 						function editgroup(e) {
 							$("#groupName").val($("#linkgroup" + e + " > h4 > .lgName").html());
 							$("#groupShowTo").val($("#linkgroup" + e + " > h4 > .lgST").html());
+							$("#groupSubTitle").valueOf($("#linkgroup" + e + " > p").html());
 							tempe = e;
 							$("#linkgroupEditor").dialog({
 								autoOpen: true,
@@ -1317,7 +1322,7 @@
 										$.ajax({
 											type: 'POST',
 											url: 'API/Setup/UpdateLinkGroup',
-											data: '{ "origname": "' + $("#linkgroup" + tempe + " > h4 > .lgName").html() + '", "name": "' + $("#groupName").val() + '", "showto": "' + $("#groupShowTo").val() + '" }',
+											data: '{ "origname": "' + $("#linkgroup" + tempe + " > h4 > .lgName").html() + '", "name": "' + $("#groupName").val() + '", "showto": "' + $("#groupShowTo").val() + '", "subtitle": "' + $("#groupSubTitle").val() + '" }',
 											contentType: 'application/json; charset=utf-8',
 											dataType: 'json',
 											success: OnLinkGroupUpdateSuccess,
@@ -1340,6 +1345,7 @@
 								else {
 									$("#linkgroup" + tempe + " > h4 > .lgName").html($("#groupName").val());
 									$("#linkgroup" + tempe + " > h4 > .lgST").html($("#groupShowTo").val());
+									$("#linkgroup" + tempe + " > p").html($("#groupSubTitle").val());
 									$("#linkgroup" + tempe).attr("id", "linkgroup" + $("#groupName").val().replace(' ', '_'));
 									tempe = null;
 								}
@@ -1348,6 +1354,7 @@
 						function addgroup() {
 							$("#groupName").val("");
 							$("#groupShowTo").val("");
+							$("#groupSubTitle").val("");
 							$("#linkgroupEditor").dialog({
 								autoOpen: true,
 								width: 350,
@@ -1356,7 +1363,7 @@
 										$.ajax({
 											type: 'POST',
 											url: 'API/Setup/AddLinkGroup',
-											data: '{ "name": "' + $("#groupName").val() + '", "showto": "' + $("#groupShowTo").val() + '" }',
+											data: '{ "name": "' + $("#groupName").val() + '", "showto": "' + $("#groupShowTo").val() + '", "subtitle": "' + $("#groupSubTitle").val() + '" }',
 											contentType: 'application/json; charset=utf-8',
 											dataType: 'json',
 											success: OnLinkGroupAddSuccess,
@@ -1376,7 +1383,7 @@
 								var data = response.AddLinkGroupResult;
 								if (data != 0) alert(data);
 								else {
-									$(".sortablegroup").append('<div id="linkgroup' + $("#groupName").val().replace(' ', '_') + '" class="linkgroup"><h4><span class="lgName">' + $("#groupName").val() + '</span> (<span class="lgST">' + $("#groupShowTo").val() + '</span>) <div class="cbuttonset" style="display: inline;"><button class="edit" onclick="return editgroup(\'' + $("#groupName").val().replace(' ', '_') + '\');">Edit</button><button class="minusbutton" onclick="return removegroup(\'linkgroup' + $("#groupName").val().replace(' ', '_') + '\');">Delete</button><button class="addbutton" onclick="return addlink(\'linkgroup' + $("#groupName").val().replace(' ', '_') + '\');">Add Link</button></div></h4><div class="sortable"></div></div>');
+									$(".sortablegroup").append('<div id="linkgroup' + $("#groupName").val().replace(' ', '_') + '" class="linkgroup"><h4><span class="lgName">' + $("#groupName").val() + '</span> (<span class="lgST">' + $("#groupShowTo").val() + '</span>) <div class="cbuttonset" style="display: inline;"><button class="edit" onclick="return editgroup(\'' + $("#groupName").val().replace(' ', '_') + '\');">Edit</button><button class="minusbutton" onclick="return removegroup(\'linkgroup' + $("#groupName").val().replace(' ', '_') + '\');">Delete</button><button class="addbutton" onclick="return addlink(\'linkgroup' + $("#groupName").val().replace(' ', '_') + '\');">Add Link</button></div></h4><p>' + $("#groupSubTitle").val() + '</p><div class="sortable"></div></div>');
 									resetButtons();
 								}
 							}
@@ -1536,18 +1543,18 @@
 								}
 							}
 							$("#adgroups").dialog({
-							    autoOpen: true, width: 400, buttons: {
-							        "OK": function () {
-							            if ($("#adgroups-mode-all").attr("checked")) obj2.value = "All";
-							            else if ($("#adgroups-mode-inherit").attr("checked")) obj2.value = "Inherit";
-							            else { var a = []; for (var x = 0; x < document.getElementById("adgroups-custom").childNodes.length; x++) if (document.getElementById("adgroups-custom").childNodes[x].tagName) a.push(document.getElementById("adgroups-custom").childNodes[x].value); obj2.value = a.join(", "); }
-							            $(obj2).trigger('change');
-							            $(this).dialog("close");
-							        },
-							        "Cancel": function () {
-							            $(this).dialog("close");
-							        }
-							    }
+								autoOpen: true, width: 400, buttons: {
+									"OK": function () {
+										if ($("#adgroups-mode-all").attr("checked")) obj2.value = "All";
+										else if ($("#adgroups-mode-inherit").attr("checked")) obj2.value = "Inherit";
+										else { var a = []; for (var x = 0; x < document.getElementById("adgroups-custom").childNodes.length; x++) if (document.getElementById("adgroups-custom").childNodes[x].tagName) a.push(document.getElementById("adgroups-custom").childNodes[x].value); obj2.value = a.join(", "); }
+										$(obj2).trigger('change');
+										$(this).dialog("close");
+									},
+									"Cancel": function () {
+										$(this).dialog("close");
+									}
+								}
 							});
 						}
 						Sys.Application.add_load(resetButtons);

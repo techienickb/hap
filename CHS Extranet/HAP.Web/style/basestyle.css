@@ -1,4 +1,11 @@
-﻿html, #hapContent {font-family: Segoe UI, Tahoma; font-size: 13px; }
+﻿.tile-color { background: #0060a6; border-color: #0060a6; }
+.tile-border-color { border-color: #0060a6; }
+.tile-color-font, #hometabs .ui-tabs-nav li.ui-state-active a, #hometabs .ui-tabs-nav li.ui-state-active a:hover { color: #0060a6; }
+.tiles a { background-color: #0060a6; color: #fff; }
+.tiles a:hover { background-color: #3286C1; }
+.tiles a:active { background-color: #004577; }
+
+html, #hapContent {font-family: Segoe UI, Tahoma; font-size: 13px; }
 a img { border: 0; }
 #hapContent { padding-top: 20px; }
 #Download { float: right; position: absolute; right: 5px; border-radius: 3px; -moz-border-radius: 3px; top: 0; border: solid 1px #7da2ce; padding: 2px 5px; border-top: 0; background: url(../images/bar-a-hover.gif) repeat-x left center; }
@@ -41,25 +48,22 @@ h1.Announcement b { font-size: 16px; }
 #EditAnn a.EditAnnLink { position: absolute; right: 0; top: 0; }
 #EditAnn a.EditAnnLink img { vertical-align: middle; text-decoration: none; height: 48px; }
 
-#HomeButtons a { float: left; margin: 3px 3px 0 0; padding: 8px; height: 108px; width: 108px; background: #ccc; font-size: 11px; color: #555; text-decoration: none; }
+#HomeButtons a { float: left; margin: 3px 3px 0 0; padding: 8px; height: 108px; width: 108px; font-size: 11px; text-decoration: none; }
 #HomeButtons a span { display: table-cell; text-align: center; width: 108px; height: 90px; line-height: 74px; vertical-align: middle; }
-#HomeButtons a:hover { background: #e9e9e9; text-decoration: none; }
-#HomeButtons a:active { background: #ddd; }
+#HomeButtons a:hover { text-decoration: none; }
 
-#hometabs { height: 180px; border-radius: 0; border-color: #0060a6; }
-#hometabs .ui-tabs-nav { background: #0060a6; } 
-#hometabs .ui-tabs-nav li { border-color: #0060a6; border-radius: 0; background: transparent; color: #fff; }
+#hometabs { height: 180px; border-radius: 0; }
+#hometabs .ui-tabs-nav li { border-radius: 0; background: transparent; border: 0; color: #fff; }
 #hometabs .ui-tabs-nav li a { color: #ddd; }
 #hometabs .ui-tabs-nav li a:hover { color: #fff; }
 #hometabs .ui-tabs-nav li.ui-state-active { background: #fff; }
-#hometabs .ui-tabs-nav li.ui-state-active a { color: #0060a6; }
-#homepageiwt { float: right; margin-left: 6px; background: #0060a6; padding: 0; height: 182px; width: 264px; overflow: hidden; }
-#homepageiwt h1, #homepageiwt h2 { line-height: none; padding: 0; margin: 0; }
+#homepageiwt { float: right; margin-left: 6px; padding: 0; height: 182px; width: 264px; overflow: hidden; }
+#homepageiwt h1, #homepageiwt h2 { line-height: normal; padding: 0; margin: 0; }
 #homepageiwt h1 { font-weight: lighter; color: #fff; padding: 0 6px; font-size: 22px; line-height: 26px; }
 #homepageiwt h2 { font-size: 13px; font-weight: bold; }
 #homepageiwt a.togglelink { color: #fff; text-decoration: none; display: block; height: 24px; line-height: 24px; padding: 0 6px 0 24px; }
 #homepageiwt div { padding: 1px; }
 #homepageiwt div div { padding: 4px; background: #fff; font-size: 11px; overflow: hidden; }
-#homepageiwt div div a { float: left; height: 19px; line-height: 19px; padding: 0 26px 0 5px; border: 1px solid #ccc; color: #0060a6; text-decoration: none; }
+#homepageiwt div div a { float: left; height: 19px; line-height: 19px; padding: 0 26px 0 5px; border: 1px solid #ccc; text-decoration: none; }
 #homepageiwt div div a:hover { background: #dbe4f4; }
 #homepageiwt img { float: left; margin: 4px 12px 12px 4px; }

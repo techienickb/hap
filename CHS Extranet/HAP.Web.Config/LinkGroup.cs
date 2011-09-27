@@ -13,11 +13,13 @@ namespace HAP.Web.Configuration
         private XmlNode node;
         public string Name { get; set; }
         public string ShowTo { get; set; }
+        public string SubTitle { get; set; }
         public LinkGroup(ref XmlDocument doc, string Name) : base()
         {
             this.doc = doc;
             this.node = doc.SelectSingleNode("/hapConfig/Homepage/Links/Group[@name='" + Name + "']");
             this.Name = Name;
+            this.SubTitle = node.Attributes["subtitle"].Value;
             this.ShowTo = node.Attributes["showto"].Value;
             foreach (XmlNode n in node.ChildNodes) base.Add(new Link(n));
         }

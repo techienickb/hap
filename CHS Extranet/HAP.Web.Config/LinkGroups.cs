@@ -16,11 +16,12 @@ namespace HAP.Web.Configuration
             this.node = doc.SelectSingleNode("/hapConfig/Homepage/Links");
             foreach (XmlNode n in node.SelectNodes("Group")) base.Add(n.Attributes["name"].Value, new LinkGroup(ref doc, n.Attributes["name"].Value));
         }
-        public void Add(string Name, string ShowTo)
+        public void Add(string Name, string ShowTo, string SubTitle)
         {
             XmlElement e = doc.CreateElement("Group");
             e.SetAttribute("name", Name);
             e.SetAttribute("showto", ShowTo);
+            e.SetAttribute("subtitle", SubTitle);
             doc.SelectSingleNode("/hapConfig/Homepage/Links").AppendChild(e);
             base.Add(Name, new LinkGroup(ref doc, Name));
         }
@@ -35,6 +36,7 @@ namespace HAP.Web.Configuration
             XmlNode e = doc.SelectSingleNode("/hapConfig/Homepage/Links/Group[@name='" + Name + "']");
             e.Attributes["name"].Value = group.Name;
             e.Attributes["showto"].Value = group.ShowTo;
+            e.Attributes["subtitle"].Value = group.SubTitle;
             //doc.SelectSingleNode("/hapConfig/Homepage/Links").ReplaceChild(e, doc.SelectSingleNode("/hapConfig/Homepage/Links/Group[@name='" + Name + "']"));
             base.Add(group.Name, new LinkGroup(ref doc, group.Name));
         }

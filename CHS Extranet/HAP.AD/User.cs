@@ -135,6 +135,7 @@ namespace HAP.AD
         }
         public string Password { private get; set; }
         private const int LOGON32_LOGON_INTERACTIVE = 2;
+        private const int LOGON32_LOGON_NETWORK = 3;
         private const int LOGON32_PROVIDER_DEFAULT = 0;
 
         public new string UserName { get; private set; }
@@ -212,7 +213,20 @@ namespace HAP.AD
                             }
                         }
                     }
-                    else throw new Exception("I cannot impersonate " + this.UserName + " due to an issue logging onto the domain " + this.DomainName + " using an Interactive Login");
+                    else if (ADUtils.LogonUserA(this.UserName, this.DomainName, this.Password, LOGON32_LOGON_NETWORK, LOGON32_PROVIDER_DEFAULT, ref token) != 0)
+                    {
+                        if (ADUtils.DuplicateToken(token, 2, ref tokenDuplicate) != 0)
+                        {
+                            tempWindowsIdentity = new WindowsIdentity(tokenDuplicate);
+                            impersonationContext = tempWindowsIdentity.Impersonate();
+                            if (impersonationContext != null)
+                            {
+                                ADUtils.CloseHandle(token);
+                                ADUtils.CloseHandle(tokenDuplicate);
+                                return true;
+                            }
+                        }
+                    } else throw new Exception("I cannot impersonate " + this.UserName + " due to an issue logging onto the domain " + this.DomainName + " using an Either Interactive or Network Login");
                 }
             }
             if (token != IntPtr.Zero)
