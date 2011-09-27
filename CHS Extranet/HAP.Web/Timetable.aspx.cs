@@ -18,13 +18,20 @@ namespace HAP.Web
         }
         protected void Page_Load(object sender, EventArgs e)
         {
-            adminconverter.Visible = User.IsInRole("Domain Admins");
-            Response.Cache.SetCacheability(HttpCacheability.NoCache);
-            if (User.IsInRole(HAP.Web.Configuration.hapConfig.Current.AD.StudentsGroup)) RenderTimetable(ADUser.EmployeeID);
-            else
+            if (!Page.IsPostBack)
             {
-                message.Text = "You are a staff user, you will not get a timetable on this system, please use SIMS";
-                tt.Visible = false;
+                adminconverter.Visible = User.IsInRole("Domain Admins");
+                Response.Cache.SetCacheability(HttpCacheability.NoCache);
+                if (User.IsInRole(HAP.Web.Configuration.hapConfig.Current.AD.StudentsGroup))
+                {
+                    RenderTimetable(ADUser.EmployeeID);
+                    tt.Visible = true;
+                }
+                else
+                {
+                    message.Text = "You are a staff user, you will not get a timetable on this system, please use SIMS";
+                    tt.Visible = false;
+                }
             }
         }
 
@@ -34,15 +41,6 @@ namespace HAP.Web
             tt.DataBind();
         }
 
-        private User _ADUser = null;
-        public User ADUser
-        {
-            get
-            {
-                if (_ADUser == null) _ADUser = ((User)Membership.GetUser());
-                return _ADUser;
-            }
-        }
         protected void convert_Click(object sender, EventArgs e)
         {
             XmlDocument xdoc = new XmlDocument();

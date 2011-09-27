@@ -35,14 +35,17 @@
                 </ul>
                 <asp:PlaceHolder runat="server" ID="tab_Me" Visible="false">
                     <div id="Me_tab">
-                        <asp:Image runat="server" ID="userimage" ImageUrl="~/images/imageres18.png" style="margin: 10px 40px 30px 0; float: left" />
+                        <asp:Image runat="server" ID="userimage" ImageUrl="~/images/imageres18.png" />
                         <div><%=string.IsNullOrEmpty(ADUser.FirstName) ? ADUser.DisplayName : ADUser.FirstName + " " + ADUser.LastName %></div>
                         <div><%=Department %></div>
                         <div><%=ADUser.Email %></div>
                         <asp:Button runat="server" Text="Update My Details" ID="updatemydetails" />
+                        <asp:PlaceHolder runat="server" ID="hds">
                         <div>
+                            <div>Home Drive Space</div>
                             <div id="tab_me_progress"><div style="width: <%=Math.Round(space, 0)%>%;"></div><label><%=space %>%</label></div>
                         </div>
+                        </asp:PlaceHolder>
                     </div>
                 </asp:PlaceHolder>
                 <asp:PlaceHolder runat="server" ID="tab_Password" Visible="false">

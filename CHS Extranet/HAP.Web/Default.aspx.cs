@@ -97,9 +97,10 @@ namespace HAP.Web
                                         space = Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
                             }
                         }
-                        catch { space = -2; }
+                        catch { space = -2; hds.Visible = false; }
                         ADUser.EndImpersonate();
                     }
+                    else hds.Visible = false;
                 }
             }
             tab_Password.Visible = tabs.ContainsKey(TabType.Password);
