@@ -67,7 +67,7 @@
                         </tr>
                         <tr>
                             <td class="CommonFormFieldName" style="width: 350px;">
-                                <strong><asp:Label AssociatedControlID="halftermstart" runat="server">Talf Term Dates:</asp:Label></strong>
+                                <strong><asp:Label AssociatedControlID="halftermstart" runat="server">Half Term Dates:</asp:Label></strong>
                             </td>
                             <td class="CommonFormField">
                                 From:

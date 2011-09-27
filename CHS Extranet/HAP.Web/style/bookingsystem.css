@@ -9,8 +9,8 @@ body.bookingdisplay, body.bookingdisplay form { padding: 0; margin: 0; width: 10
 	margin: 0; padding: 0;
 }
 
-.bookingdisplay #defaultview { width: 100%; height: 100%; padding: 0; margin: 0; }
-.bookingdisplay #defaultview div { position: absolute; top: 50px; bottom: -1px; left: 0; right: 0; width: 100%; margin: 0; padding: 0; }
+.bookingdisplay #defaultview, .bookingdisplay #ICT1_ICT2 { width: 100%; height: 100%; padding: 0; margin: 0; }
+.bookingdisplay #defaultview div, .bookingdisplay #ICT1_ICT2 div { position: absolute; top: 50px; bottom: -1px; left: 0; right: 0; width: 100%; margin: 0; padding: 0; }
 .bookingdisplay table { height: 100%; position: relative; z-index: 100; }
 .bookingdisplay table td, .bookingdisplay table tr { vertical-align: middle; }
 .bookingdisplay table tr { font-size: 20px }

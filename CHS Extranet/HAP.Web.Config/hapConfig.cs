@@ -73,6 +73,15 @@ namespace HAP.Web.Configuration
                     doc.SelectSingleNode("/hapConfig/Homepage/Links/Group/Link[@name='Access a School Computer']").Attributes["name"].Value = "Remote Apps";
                 if (doc.SelectSingleNode("/hapConfig/Homepage/Links/Group/Link[@name='RM Management Console']") != null)
                     doc.SelectSingleNode("/hapConfig/Homepage/Links/Group/Link[@name='RM Management Console']").Attributes["name"].Value = "RM Console";
+            } 
+            if (version.CompareTo(Version.Parse("7.4")) == -1)
+            {//Perform v7.4 upgrade
+                foreach (XmlNode n in doc.SelectNodes("/hapConfig/Homepage/Links/Group"))
+                {
+                    XmlAttribute a = doc.CreateAttribute("subtitle");
+                    a.Value = "";
+                    n.Attributes.Append(a);
+                }
             }
             doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             doc.Save(ConfigPath);
