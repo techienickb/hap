@@ -41,7 +41,7 @@
                 if (newlesson == null && lesson == null) {
                 }
                 else if (newlesson == null && lesson != null) {
-                    $("#" + lesson.ID).animate({ "font-size": "16px" }, 100);
+                    $("." + lesson.ID).animate({ "font-size": "16px" }, 100);
                     if ($("#statebar").position().top == 100)
                         $("#statebar").css("height", "0");
                     else {
