@@ -35,7 +35,9 @@
                 </ul>
                 <asp:PlaceHolder runat="server" ID="tab_Me" Visible="false">
                     <div id="Me_tab">
+                        <div style="float: left; height: 140px;">
                         <asp:Image runat="server" ID="userimage" ImageUrl="~/images/imageres18.png" />
+                        </div>
                         <div><%=string.IsNullOrEmpty(ADUser.FirstName) ? ADUser.DisplayName : ADUser.FirstName + " " + ADUser.LastName %></div>
                         <div><%=Department %></div>
                         <div><%=ADUser.Email %></div>
