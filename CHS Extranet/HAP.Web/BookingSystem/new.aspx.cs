@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 
 namespace HAP.Web.BookingSystem
 {
-    public partial class _new : System.Web.UI.Page
+    public partial class _new : HAP.Web.Controls.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {

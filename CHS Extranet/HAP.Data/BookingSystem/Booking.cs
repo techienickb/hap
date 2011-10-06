@@ -99,6 +99,7 @@ namespace HAP.Data.BookingSystem
             this.Room = b.Room;
             this.Lesson = b.Lesson;
             this.Name = b.Name;
+            this.Username = b.Username;
             try
             {
                 this.DisplayName = b.User.Notes;
@@ -123,5 +124,6 @@ namespace HAP.Data.BookingSystem
         public string EquipRoom { get; set; }
         public int LTCount { get; set; }
         public bool Static { get; set; }
+        public string Username { get; set; }
     }
 }

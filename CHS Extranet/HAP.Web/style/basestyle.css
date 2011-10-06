@@ -1,9 +1,10 @@
-﻿.tile-color { background: #0060a6; border-color: #0060a6; }
-.tile-border-color { border-color: #0060a6; }
+﻿.tile-color, .ui-widget-header { background: #0060a6; border-color: #0060a6; }
+.tile-border-color, .ui-widget-content { border-color: #0060a6; }
 .tile-color-font, #hometabs .ui-tabs-nav li.ui-state-active a, #hometabs .ui-tabs-nav li.ui-state-active a:hover { color: #0060a6; }
 .tiles a { background-color: #0060a6; color: #fff; }
 .tiles a:hover { background-color: #3286C1; }
 .tiles a:active { background-color: #004577; }
+.ui-widget-header a, .ui-widget-header { color: #fff; }
 
 html, #hapContent {font-family: Segoe UI, Tahoma; font-size: 13px; }
 a img { border: 0; }
@@ -17,7 +18,7 @@ a img { border: 0; }
 
 #usertop { position: absolute; z-index: 1909; top: 20px; right: 20px; padding: 2px 10px; border: solid 1px gray; border-radius: 3px; box-shadow: 5px 5px 5px #dedede; background: #fff; }
 
-#tab_me_progress { float: right; width: 312px; height: 18px; border: solid 1px gray; border-radius: 3px; background: transparent url(../images/progressbar.png) repeat-x top left; position: relative; overflow: hidden; margin: 5px 0 0 0; }
+#tab_me_progress { width: 100%; height: 18px; border: solid 1px gray; border-radius: 3px; background: transparent url(../images/progressbar.png) repeat-x top left; position: relative; overflow: hidden; margin: 5px 0 0 0; }
 #tab_me_progress div { height: 18px; background: transparent url(../images/progressbar-active.png) repeat-x top left; }
 #tab_me_progress label { position: absolute; top: 0; left: 0; right: 0; bottom: 0; text-align: center; font-size: 14px; }
 #Me_tab { padding-left: 12px; padding-right: 12px; }
@@ -51,21 +52,21 @@ h1.Announcement b { font-size: 16px; }
 #EditAnn a.EditAnnLink img { vertical-align: middle; text-decoration: none; height: 48px; }
 
 #HomeButtons a { float: left; margin: 3px 3px 0 0; padding: 8px; height: 108px; width: 108px; font-size: 11px; text-decoration: none; }
-#HomeButtons a span { display: table-cell; text-align: center; width: 108px; height: 90px; line-height: 74px; vertical-align: middle; }
+#HomeButtons a span { display: block; text-align: center; width: 108px; height: 90px; line-height: 90px; vertical-align: middle; background: transparent no-repeat center center; }
 #HomeButtons a:hover { text-decoration: none; }
 
-#hometabs { height: 180px; border-radius: 0; }
+#hometabs { height: 200px; border-radius: 0; }
 #hometabs .ui-tabs-nav li { border-radius: 0; background: transparent; border: 0; color: #fff; }
 #hometabs .ui-tabs-nav li a { color: #ddd; }
 #hometabs .ui-tabs-nav li a:hover { color: #fff; }
 #hometabs .ui-tabs-nav li.ui-state-active { background: #fff; }
-#homepageiwt { float: right; margin-left: 6px; padding: 0; height: 182px; width: 264px; overflow: hidden; }
+#homepageiwt { float: right; margin-left: 6px; padding: 0; height: 202px; width: 264px; overflow: hidden; }
 #homepageiwt h1, #homepageiwt h2 { line-height: normal; padding: 0; margin: 0; }
 #homepageiwt h1 { font-weight: lighter; color: #fff; padding: 0 6px; font-size: 22px; line-height: 26px; }
 #homepageiwt h2 { font-size: 13px; font-weight: bold; }
 #homepageiwt a.togglelink { color: #fff; text-decoration: none; display: block; height: 24px; line-height: 24px; padding: 0 6px 0 24px; }
 #homepageiwt div { padding: 1px; }
-#homepageiwt div div { padding: 4px; background: #fff; font-size: 11px; overflow: hidden; }
+#homepageiwt div div { padding: 4px; height: 116px; background: #fff; font-size: 11px; overflow: hidden; }
 #homepageiwt div div a { float: left; height: 19px; line-height: 19px; padding: 0 26px 0 5px; border: 1px solid #ccc; text-decoration: none; }
 #homepageiwt div div a:hover { background: #dbe4f4; }
 #homepageiwt img { float: left; margin: 4px 12px 12px 4px; }
