@@ -27,7 +27,22 @@
                 </div>
                 <div id="iwt2">
                     <a href="#iwt2" class="togglelink">Protect my PC</a>
+                    <div>
+                        <img src="images/icons/069.png" alt="" />
+                        <h2>Protect my PC</h2>
+                        <p>Scan your computer if you think it might be infected with a virus, spyware, or other malware.</p>
+                        <a href="http://www.microsoft.com/security/default.aspx">Microsoft Security</a>
+                    </div>
                 </div>
+                <script type="text/javascript">
+                    $("#iwt2 > div").animate({ height: 'toggle' });
+                    $(".togglelink").bind("click", function () { return switchIWT(this); });
+                    function switchIWT(e) {
+                        $("#iwt2 > div").animate({ height: 'toggle' });
+                        $("#iwt1 > div").animate({ height: 'toggle' });
+                        return false;
+                    }
+                </script>
             </div>
             <div id="hometabs" class="tile-border-color">
                 <ul class="tile-color">
@@ -35,7 +50,7 @@
                 </ul>
                 <asp:PlaceHolder runat="server" ID="tab_Me" Visible="false">
                     <div id="Me_tab">
-                        <div style="float: left; height: 140px;">
+                        <div style="float: left;">
                         <asp:Image runat="server" ID="userimage" ImageUrl="~/images/imageres18.png" />
                         </div>
                         <div><%=string.IsNullOrEmpty(ADUser.FirstName) ? ADUser.DisplayName : ADUser.FirstName + " " + ADUser.LastName %></div>
@@ -43,7 +58,7 @@
                         <div><%=ADUser.Email %></div>
                         <asp:Button runat="server" Text="Update My Details" ID="updatemydetails" />
                         <asp:PlaceHolder runat="server" ID="hds">
-                        <div>
+                        <div style="padding-top: 20px;">
                             <div>Home Drive Space</div>
                             <div id="tab_me_progress"><div style="width: <%=Math.Round(space, 0)%>%;"></div><label><%=space %>%</label></div>
                         </div>
@@ -138,7 +153,7 @@
                             <asp:Repeater runat="server" DataSource='<%#((HAP.Web.Configuration.LinkGroup)Container.DataItem).FilteredLinks %>'>
                                 <ItemTemplate> 
                                     <asp:HyperLink runat="server" ID="mycomputer" NavigateUrl='<%#Eval("Url")%>' Target='<%#Eval("Target") %>' ToolTip='<%#Eval("Description") %>'>
-                                        <span><asp:Image runat="server" ImageUrl='<%#Eval("Icon")%>' AlternateText="" /></span>
+                                        <span style="background-image: url(<%#ResolveClientUrl(Eval("Icon").ToString())%>);"></span>
                                         <%#Eval("Name") %>
                                     </asp:HyperLink>
                                 </ItemTemplate>
