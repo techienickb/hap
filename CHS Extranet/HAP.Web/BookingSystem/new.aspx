@@ -6,6 +6,9 @@
     <link href="../style/bookingsystem.css" rel="stylesheet" type="text/css" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
+    <div id="bookingform" title="Booking Form">
+        <div>This will be the Booking Form</div>
+    </div>
     <div id="datepicker" style="position: absolute;"></div>
     <div id="bookingsystemcontent">
         <div id="bookingday" class="tile-border-color">
@@ -41,7 +44,42 @@
     <script type="text/javascript">
         var curdate;
         var user = { username: '<%=ADUser.UserName %>', isAdminOf: [ "ICT1", "ICT2", "E3", "A6", "Laptops" ], minDate: new Date(<%=DateTime.Now.Year %>, <%=DateTime.Now.Month - 1 %>, <%=DateTime.Now.Day %>), maxDate: new Date(<%=DateTime.Now.AddDays(14).Year %>, <%=DateTime.Now.AddDays(14).Month - 1 %>, <%=DateTime.Now.AddDays(14).Day %>) };
-        var rooms = [ "ICT1", "ICT2", "E3", "A6", "Laptops" ];
+        var resources = [new resource("ICT1", "Room"), new resource("ICT2", "Room"), new resource("E3", "Room"), new resource("A6", "Room"), new resource("Laptops", "Laptops")];
+        function resource(name, type){
+            this.Name = name;
+            this.Type = type;
+            this.Refresh = function() {
+                $.ajax({
+                    type: 'GET',
+                    url: '<%=ResolveUrl("~/api/BookingSystem/LoadRoom/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + this.Name,
+                    dataType: 'json',
+                    context: this,
+                    success: function (data) {
+                        var h = "";
+                        for (var x = 0; x < data.length; x++) {
+                            h += '<a onclick="return ';
+                            if (data[x].Name == "FREE") h += "doBooking('" +  this.Name + "', '" + data[x].Lesson + "');";
+                            else {
+                                if (data[x].Static && $.inArray(this.Name, user.isAdminOf) != -1) h += "doBooking('" + this.Name + "', '" + data[x].Lesson + "');";
+                                else if (data[x].Static == false && (data[x].Username == user.Username || $.inArray(this.Name, user.isAdminOf) != -1)) h += "doRemove('" + this.Name + "', '" + data[x].Lesson + "', '" + data[x].Name + "');";
+                                else h += "false;";
+                            }
+                            h += '" href="#' + this.Name + '-' + data[x].Lesson.toLowerCase().replace(/ /g, "") + '" class="' + ($.inArray(this.Name, user.isAdminOf) == -1 ? '' : 'admin') + ((data[x].Username == user.Username && $.inArray(this.Name, user.isAdminOf) == -1) ? ' bookie' : '') + ((data[x].Name == "FREE") ? ' free' : '') + '">';
+                            h += (data[x].Static ? '<span class="state static" title="Timetabled Lesson"><i></i><span>Override</span></span>' : (data[x].Name == "FREE" ? '<span class="state book" title="Book"><i></i><span>Book</span></span>' : '<span class="state remove" title="Remove"><i></i><span>Remove</span></span>'));
+                            h += data[x].Name + '<span>' + data[x].DisplayName;
+                            if (data[x].Name == "FREE" || data[x].Name == "UNAVAILABLE" || data[x].Name == "CHARGING") { }
+                            else {
+                                if (this.Type == "Laptops") h += ' in ' + data[x].LTRoom + ' [' + data[x].LTCount + '|' + (data[x].LTHeadPhones ? 'HP' : 'N-HP') + ']';
+                                else if (this.Type == "Equipment") h += ' in ' + data[x].EquipRoom;
+                            }
+                            h += '</span></a>';
+                        }
+                        $("#" + this.Name).html(h);
+                    },
+                    error: OnError
+                });
+            }
+        }
         function disableAllTheseDays(date) {
             var noWeekend = $.datepicker.noWeekends(date);
             if (noWeekend[0]) {
@@ -57,47 +95,26 @@
             return false;
         }
         function loadDate() {
-            for (var i = 0; i < rooms.length; i++) {
-                $("#" + rooms[i]).html(" ");
-                new Resource(rooms[i]).Refresh();
-            }
-        }
-        function Resource(name) {
-            this.Name = name;
-            this.Refresh = function() {
-                $.ajax({
-                    type: 'GET',
-                    url: '<%=ResolveUrl("~/api/BookingSystem/LoadRoom/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + this.Name,
-                    dataType: 'json',
-                    context: this,
-                    success: function (data) {
-                        var h = "";
-                        for (var x = 0; x < data.length; x++) {
-                            h += '<a onclick="return false;" href="#' + this.Name + '-' + data[x].Lesson.toLowerCase().replace(/ /g, "") + '" class="' + ($.inArray(this.Name, user.isAdminOf) == -1 ? '' : 'admin') + ((data[x].Username == user.Username && $.inArray(this.Name, user.isAdminOf) == -1) ? ' bookie' : '') + ((data[x].Name == "FREE") ? ' free' : '') + '">' + (data[x].Static ? '<span class="state static" title="Timetabled Lesson"><i></i><span>Override</span></span>' : (data[x].Name == "FREE" ? '<span class="state book" title="Book"><i></i><span>Book</span></span>' : '<span class="state remove" title="Remove"><i></i><span>Remove</span></span>')) + data[x].Name + '<span>' + data[x].DisplayName + '</span></a>';
-                        }
-                        $("#" + this.Name).html(h);
-                    },
-                    error: OnError
-                });
-            }
-        }
-        function OnLoadSuccess(response) {
-            if (response != null) {
-                var x = '';
-                var i = 0;
-                for (var i = 0; i < response.length; i++)
-                    x += '<tr id="' + $.trim(response[i].Lesson.toLowerCase().replace(/ /g, "")) + '" class="' + $.trim(response[i].Lesson.toLowerCase().replace(/ /g, "")) + '"><td class="lesson">' + $.trim(response[i].Lesson.replace(/Lesson /g, "")) + '</td><td><span>' + response[i].Name + '</span>' + response[i].DisplayName + '</td></tr>';
-                $("#ict1").html(x);
+            for (var i = 0; i < resources.length; i++) {
+                $("#" + resources[i].Name).html(" ");
+                resources[i].Refresh();
             }
         }
         function OnError(xhr, ajaxOptions, thrownError) {
-            
         }
         $(window).hashchange(function () {
             if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curdate = new Date(window.location.href.split('#')[1].split('/')[2], window.location.href.split('#')[1].split('/')[1] - 1, window.location.href.split('#')[1].split('/')[0]);
             else curdate = new Date();
             loadDate();
         });
+        function doBooking(resource, lesson) {
+            $("#bookingform").dialog({ modal: true, autoOpen: true });
+            return false;
+        }
+        function doRemove(resource, lesson, name) {
+            confirm("Are you sure you want to remove the booking\n" + name + " in " + resource + " during " + lesson + "?");
+            return false;
+        }
         $(function () {
             try {
                 if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curdate = new Date(window.location.href.split('#')[1].split('/')[2], window.location.href.split('#')[1].split('/')[1] - 1, window.location.href.split('#')[1].split('/')[0]);
@@ -116,6 +133,7 @@
                     location.href = "#" + $.datepicker.formatDate('dd/mm/yy', curdate);
                 }
             });
+            $("#bookingform").dialog({ autoOpen: false });
             $("#picker").val($.datepicker.formatDate('d MM yy', curdate));
             $("input[type=button]").button();
             $("#datepicker").css("top", $("#picker").position().top + 29);
