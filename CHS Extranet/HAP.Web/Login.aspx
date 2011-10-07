@@ -27,5 +27,10 @@
         $(document).ready(function () {
             $("#<%=login.ClientID %>").button();
         });
+        $('input[type=text]').keyup(function (e) {
+            if (e.keyCode == 13) {
+                $("#<%=login.ClientID %>").trigger('click');
+            }
+        });
     </script>
 </asp:Content>

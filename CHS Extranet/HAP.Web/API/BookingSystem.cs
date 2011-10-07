@@ -12,6 +12,7 @@ using HAP.Data;
 using System.DirectoryServices.AccountManagement;
 using System.DirectoryServices;
 using HAP.Data.BookingSystem;
+using System.Xml;
 
 namespace HAP.Web.API
 {
@@ -33,6 +34,75 @@ namespace HAP.Web.API
             foreach (Lesson lesson in hapConfig.Current.BookingSystem.Lessons)
                 bookings.Add(new JSONBooking(bs.getBooking(Room, lesson.Name)));
             return bookings.ToArray();
+        }
+
+        [OperationContract]
+        [WebGet(ResponseFormat=WebMessageFormat.Json, UriTemplate="/BookingCount/{Date}/{Username}")]
+        public int BookingCount(string Username, string Date)
+        {
+            if (!isAdmin(Username))
+            {
+                XmlDocument doc = HAP.Data.BookingSystem.BookingSystem.BookingsDoc;
+                int max = hapConfig.Current.BookingSystem.MaxBookingsPerWeek;
+                foreach (AdvancedBookingRight right in HAP.Data.BookingSystem.BookingSystem.BookingRights)
+                    if (right.Username == Username)
+                        max = right.Numperweek;
+                int x = 0;
+                foreach (DateTime d in getWeekDates(DateTime.Parse(Date)))
+                    x += doc.SelectNodes("/Bookings/Booking[@date='" + d.ToShortDateString() + "' and @username='" + Username + "']").Count;
+                return max - x;
+            }
+
+            return 0;
+        }
+
+        private DateTime[] getWeekDates(DateTime Date)
+        {
+            List<DateTime> dates = new List<DateTime>();
+            if (Date.DayOfWeek == DayOfWeek.Monday)
+            {
+                dates.Add(Date); dates.Add(Date.AddDays(1));
+                dates.Add(Date.AddDays(2)); dates.Add(Date.AddDays(3));
+                dates.Add(Date.AddDays(4));
+            }
+            else if (Date.DayOfWeek == DayOfWeek.Tuesday)
+            {
+                dates.Add(Date); dates.Add(Date.AddDays(1));
+                dates.Add(Date.AddDays(2)); dates.Add(Date.AddDays(3));
+                dates.Add(Date.AddDays(-1));
+            }
+            else if (Date.DayOfWeek == DayOfWeek.Wednesday)
+            {
+                dates.Add(Date); dates.Add(Date.AddDays(1));
+                dates.Add(Date.AddDays(2)); dates.Add(Date.AddDays(-1));
+                dates.Add(Date.AddDays(-2));
+            }
+            else if (Date.DayOfWeek == DayOfWeek.Tuesday)
+            {
+                dates.Add(Date); dates.Add(Date.AddDays(1));
+                dates.Add(Date.AddDays(-1)); dates.Add(Date.AddDays(-2));
+                dates.Add(Date.AddDays(-3));
+            }
+            else
+            {
+                dates.Add(Date); dates.Add(Date.AddDays(-1));
+                dates.Add(Date.AddDays(-2)); dates.Add(Date.AddDays(-3));
+                dates.Add(Date.AddDays(-4));
+            }
+            return dates.ToArray();
+        }
+
+        private bool isAdmin(string Username)
+        {
+            if (new HAP.AD.User(Username).IsMemberOf(GroupPrincipal.FindByIdentity(AD.ADUtils.GetPContext(), "Domain Admins"))) return true;
+            return isBSAdmin(Username);
+        }
+
+        private bool isBSAdmin(string Username)
+        {
+            foreach (string s in hapConfig.Current.BookingSystem.Admins.Split(new char[] { ',' }))
+                if (s.Trim().ToLower().Equals(Username.ToLower())) return true;
+            return false;
         }
 
     }
