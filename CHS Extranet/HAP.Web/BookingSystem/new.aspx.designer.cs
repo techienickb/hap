@@ -13,6 +13,15 @@ namespace HAP.Web.BookingSystem {
     public partial class _new {
         
         /// <summary>
+        /// adminlink control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink adminlink;
+        
+        /// <summary>
         /// subjects control.
         /// </summary>
         /// <remarks>
@@ -37,7 +46,7 @@ namespace HAP.Web.BookingSystem {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater userlist;
+        protected global::System.Web.UI.WebControls.DropDownList userlist;
         
         /// <summary>
         /// lessons control.

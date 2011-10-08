@@ -1,29 +1,22 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="HAP.Web.Tracker.Default" %>
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <link href="../mycomputer.css" rel="stylesheet" type="text/css" />
-</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
-    <div style="text-align: center;"><a href="http://hap.codeplex.com" target="_blank"><img src="logontracker.png" alt="Logon Tracker" /></a></div>
-    <p id="HomeButtons">
-        <a href="live.aspx">
-            <img src="../images/icons/tracker-live.png" alt="" />
-            Live Tracker
-            <i>View the live action from the tracker</i>
-        </a>
-        <a href="logs.aspx">
-            <img src="../images/icons/tracker-historic.png" alt="" />
-            Historic Logs
-            <i>Drill down through the Historic Logs</i>
-        </a>
-        <asp:HyperLink ID="dbup" runat="server" Visible="false" NavigateUrl="~/Tracker/XML2SQL.aspx">
-            <img src="../images/icons/dbup.png" alt="" />
-            XML 2 SQL
-            <i>Upgrade from XML to a SQL Database</i>
-        </asp:HyperLink>
-        <a href="../">
-            <img src="../images/icons/school.png" alt="" />
-            Home Access Plus+ Home
-            <i>Go Back to the Home Access Plus+ Homepage</i>
-        </a>
-    </p>
+	<div style="text-align: center;"><a href="http://hap.codeplex.com" target="_blank"><img src="logontracker.png" alt="Logon Tracker" style="width: 700px;" /></a></div>
+	<div id="HomeButtons" class="tiles">
+		<a href="live.aspx" title="View the live action from the tracker">
+			<span style="background-image: url(../images/icons/white/tracker-live.png);"></span>
+			Live Tracker
+		</a>
+		<a href="logs.aspx" title="Drill down through the Historic Logs">
+			<span style="background-image: url(../images/icons/white/tracker-historic.png");"></span>
+			Historic Logs
+		</a>
+		<asp:HyperLink ID="dbup" runat="server" Visible="false" NavigateUrl="~/Tracker/XML2SQL.aspx" ToolTip="Upgrade from XML to a SQL Database">
+			<span style="background-image: url(../images/icons/white/dbup.png);"></span>
+			XML 2 SQL
+		</asp:HyperLink>
+		<a href="../" title="Go Back to the Home Access Plus+ Homepage">
+			<span style="background-image: url(../images/icons/white/school.png);"></span>
+			HAP+ Home
+		</a>
+	</div>
 </asp:Content>

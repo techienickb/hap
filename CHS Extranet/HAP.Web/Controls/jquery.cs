@@ -20,7 +20,7 @@ namespace HAP.Web.Controls
         protected override void RenderContents(HtmlTextWriter output)
         {
             output.WriteLine("<script src=\"" + ResolveClientUrl("~/Scripts/jquery-1.6.2.min.js") + "\" type=\"text/javascript\"></script>");
-            output.WriteLine("<script src=\"" + ResolveClientUrl("~/Scripts/jquery-ui-1.8.14.custom.min.js") + "\" type=\"text/javascript\"></script>");
+            output.WriteLine("<script src=\"" + ResolveClientUrl("~/Scripts/jquery-ui-1.8.16.custom.min.js") + "\" type=\"text/javascript\"></script>");
             
         }
 

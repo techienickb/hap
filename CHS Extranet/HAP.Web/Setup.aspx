@@ -229,13 +229,16 @@
 							</ul>
 							<asp:Repeater ID="homepageTabs2" runat="server"><ItemTemplate>
 								<div id="homepagetabs-<%#Eval("Type") %>">
+									<div style="overflow: hidden; clear: both;">
 									<label for="homepagetabs-<%#Eval("Type") %>-Name">Name: </label>
 									<input type="text" id="homepagetabs-<%#Eval("Type") %>-Name" value="<%#Eval("Name") %>" onchange="updatetab('<%#Eval("Type") %>');" />
-									<br />
+									</div>
+									<div style="overflow: hidden; clear: both;">
 									<label for="homepagetabs-<%#Eval("Type") %>-ShowTo">Show To: </label>
 									<input type="text" id="homepagetabs-<%#Eval("Type") %>-ShowTo" value="<%#Eval("ShowTo") %>" onclick="showadbuilder(this, false);"  onchange="updatetab('<%#Eval("Type") %>');" />
-									<%#((HAP.Web.Configuration.TabType)Eval("Type")) == HAP.Web.Configuration.TabType.Me ? "<br /><label for=\"homepagetabs-" + Eval("Type").ToString() + "-allowupdateto\">Allow Update To: </label><input type=\"text\" id=\"homepagetabs-" + Eval("Type").ToString() + "-allowupdateto\" value=\"" + Eval("AllowUpdateTo").ToString() + "\" onclick=\"showadbuilder(this, false);\" onchange=\"updatetab('" + Eval("Type").ToString() + "');\" /><br />" : "" %>
-									<%#((HAP.Web.Configuration.TabType)Eval("Type")) == HAP.Web.Configuration.TabType.Me ? "<label for=\"homepagetabs-" + Eval("Type").ToString() + "-showspace\">Show Space: </label><input type=\"checkbox\" id=\"homepagetabs-" + Eval("Type").ToString() + "-showspace\"" + (((Nullable<bool>)Eval("ShowSpace")).Value ? " checked=\"checked\"" : "") + " onchange=\"updatetab('" + Eval("Type").ToString() + "');\" />" : ""%>
+									</div>
+									<%#((HAP.Web.Configuration.TabType)Eval("Type")) == HAP.Web.Configuration.TabType.Me ? "<div style=\"overflow: hidden; clear: both;\"><label for=\"homepagetabs-" + Eval("Type").ToString() + "-allowupdateto\">Allow Update To: </label><input type=\"text\" id=\"homepagetabs-" + Eval("Type").ToString() + "-allowupdateto\" value=\"" + Eval("AllowUpdateTo").ToString() + "\" onclick=\"showadbuilder(this, false);\" onchange=\"updatetab('" + Eval("Type").ToString() + "');\" /></div>" : "" %>
+									<%#((HAP.Web.Configuration.TabType)Eval("Type")) == HAP.Web.Configuration.TabType.Me ? "<div style=\"overflow: hidden; clear: both;\"><label for=\"homepagetabs-" + Eval("Type").ToString() + "-showspace\">Show Space: </label><input type=\"checkbox\" id=\"homepagetabs-" + Eval("Type").ToString() + "-showspace\"" + (((Nullable<bool>)Eval("ShowSpace")).Value ? " checked=\"checked\"" : "") + " onchange=\"updatetab('" + Eval("Type").ToString() + "');\" /></div>" : ""%>
 								</div>
 							</ItemTemplate></asp:Repeater>
 							</div>
