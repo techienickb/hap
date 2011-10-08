@@ -1,14 +1,23 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true" CodeBehind="new.aspx.cs" Inherits="HAP.Web.BookingSystem._new" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 	<script src="../Scripts/jquery-1.6.2.min.js" type="text/javascript"></script>
-	<script src="../Scripts/jquery-ui-1.8.14.custom.min.js" type="text/javascript"></script>
+	<script src="../Scripts/jquery-ui-1.8.16.custom.min.js" type="text/javascript"></script>
 	<script src="../Scripts/jquery.ba-hashchange.min.js" type="text/javascript"></script>
 	<link href="../style/bookingsystem.css" rel="stylesheet" type="text/css" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
-	<p class="ui-state-highlight ui-corner-all" style="padding: 2px 6px" id="mainnotice">
+	<div class="tiles" style="float: left;">
+		<a class="button" href="../">Home Access Plus+ Home</a>
+	</div>
+	<div class="tiles" style="float: right; text-align: right;">
+		<asp:HyperLink CssClass="button" runat="server" NavigateUrl="Admin/" ID="adminlink" Text="Control Panel" />
+	</div>
+	<div style="text-align: center;">
+		<img src="../images/booking-system.png" alt="Booking System" />
+	</div>
+	<p class="ui-state-highlight ui-corner-all" style="padding: 2px 6px">
 		<span class="ui-icon ui-icon-info" style="float: left; margin-right: 5px;"></span>
-		<span id="val">You have x bookings available to use this week</span>
+		<span id="val">Loading...</span>
 	</p>
 	<div id="bookingform" title="Booking Form">
 		<div>
@@ -27,18 +36,18 @@
 			<span id="subjecterror" style="display: none; color: red;">*</span>
 			<asp:PlaceHolder runat="server" ID="adminbookingpanel">
 			<div>
-				<select id="bfuser">
-					<asp:Repeater runat="server" ID="userlist"><ItemTemplate><option value="<%#Eval("UserName") %>"><%#Eval("Notes") %></option></ItemTemplate></asp:Repeater>
-				</select>
+				<asp:Label runat="server" AssociatedControlID="userlist" Text="User To Book For: " />
+				<asp:DropDownList runat="server" ID="userlist" />
 			</div>
 			</asp:PlaceHolder>
 			<div id="bfLaptops" class="bfType">
 				<div style="float: left;">
 					<label for="bflroom">Room Required In: </label><input type="text" id="bflroom" style="width: 60px" /> <span id="bflroomerror" style="display: none;">*</span>
+					<label for="bflheadphones">Headphones?: </label><input type="checkbox" id="bflheadphones" />
 					<label for="bflquant">Quantity: </label>
 				</div>
 				<div id="bflquant" style="float: left;">
-					<input type="radio" name="bflquant" checked="checked" id="bflquant-16" value="16" /><label for="bflquant-16">16</label>
+					<input type="radio" name="bflquant" id="bflquant-16" value="16" /><label for="bflquant-16">16</label>
 					<input type="radio" name="bflquant" id="bflquant-32" value="32" /><label for="bflquant-32">32</label>
 				</div>
 			</div>
@@ -54,7 +63,7 @@
 				<h1><input type="button" id="picker" onclick="return showDatePicker();" /></h1>
 				<asp:Repeater runat="server" ID="lessons"><ItemTemplate><h1><%#Eval("Name") %></h1></ItemTemplate></asp:Repeater>
 			</div>
-			<div class="body">
+			<div class="body"<%=BodyCode[0] %>>
 				<div id="resources" class="col tile-color">
 					<asp:Repeater runat="server" ID="resources1"><ItemTemplate><div><%#Eval("Name") %></div></ItemTemplate></asp:Repeater>
 				</div>
@@ -64,7 +73,7 @@
 						</div>
 					</ItemTemplate>
 				</asp:Repeater>
-			</div>
+			</div><%=BodyCode[1] %>
 		</div>
 	</div>
 	<script type="text/javascript">
@@ -114,6 +123,7 @@
 			if (chosenoption.value == "CUSTOM") {
 				$("#bfsubject").val("");
 				$("#bfsubject").removeAttr("style");
+				$("#bfsubject").select();
 			} else {
 				$("#bfsubject").val(chosenoption.value);
 				$("#bfsubject").css("display", "none");
@@ -146,28 +156,32 @@
 			return false;
 		}
 		function loadDate() {
+			$("#val").html("Loading...");
+			$.ajax({
+				type: 'GET',
+				url: '<%=ResolveUrl("~/api/BookingSystem/Initial/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username,
+				dataType: 'json',
+				success: function (data) {
+					if (user.isBSAdmin) $("#val").html("This Week is a Week " + data[1]);
+					else {
+						$("#val").html("You have " + data[0] + " bookings available to use this week. This Week is a Week " + data[1]);
+						availbookings = data;
+					}
+				},
+				error: OnError
+			});
 			for (var i = 0; i < resources.length; i++) {
 				$("#" + resources[i].Name).html(" ");
 				resources[i].Refresh();
-			}
-			if (!user.isBSAdmin) {
-				$.ajax({
-					type: 'GET',
-					url: '<%=ResolveUrl("~/api/BookingSystem/BookingCount/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username,
-					dataType: 'json',
-					success: function (data) {
-						$("#val").html("You have " + data + " bookings available to use this week");
-						availbookings = data;
-					},
-					error: OnError
-				});
 			}
 		}
 		function OnError(xhr, ajaxOptions, thrownError) {
 		}
 		$(window).hashchange(function () {
 			if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curdate = new Date(window.location.href.split('#')[1].split('/')[2], window.location.href.split('#')[1].split('/')[1] - 1, window.location.href.split('#')[1].split('/')[0]);
-			else curdate = new Date();
+			else curdate = new Date(<%=CurrentDate.Year %>, <%=CurrentDate.Month - 1 %>, <%=CurrentDate.Day %>);
+			$('#datepicker').datepicker("setDate", curdate);
+			$("#picker").val($.datepicker.formatDate('d MM yy', curdate));
 			loadDate();
 		});
 		function doBooking(res, lesson) {
@@ -189,8 +203,12 @@
 			}
 			$("#bflroomerror").css("display", "none");
 			$("#bferoomerror").css("display", "none");
-			$("#bfname").val("");
+			$("#bfsubject").val("");
+			$("#bfsubjects option:selected").removeAttr("selected")
+			$("#bfsubjects option:first").attr("selected", "selected")
+			$("#bflheadphones").removeAttr("checked");
 			$("#bflroom").val("");
+			$("#bferoom").val("");
 			$("#bflesson").html(lesson);
 			$("#bookingform").dialog({ 
 					modal: true, 
@@ -214,9 +232,44 @@
 								abort = true;
 							} else $("#bferoomerror").css("display", "none");
 							
-							//if (curres.Type == "Laptops") alert($("input[@name=bflquant]:checked").val());
+							var n1 = "";
+							if ($("#bfyear option:selected").val() != null || $("#bfyear option:selected").val() != "") n1 = $("#bfyear option:selected").val();
+							if (n1 != "") n1 += " ";
+							n1 += $("#bfsubject").val();
 							if (abort) return;
-							curres.Refresh();
+							var d = '{ "booking": { "Room": "' + curres.Name + '", "Lesson": "' + curles + '", "Username": "' + $("#<%=userlist.ClientID %> option:selected").val() + '", "Name": "' + n1 + '"';
+							if (curres.Type == "Laptops") {
+								d += ', "LTCount": ' + $("#bflquant input:checked").attr("value") + ', "LTRoom": "' + $("#bflroom").val() + '", "LTHeadPhones": ' + (($('#bflheadphones:checked').val() !== undefined) ? 'true' : 'false');
+							}
+							else if (curres.Type == "Equipment") {
+								d += ', "EquipRoom": "' + $("#bferoom").val() + '"';
+							}
+							d += " } }";
+							$.ajax({
+								type: 'POST',
+								url: '<%=ResolveUrl("~/api/BookingSystem/Booking/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear(),
+								dataType: 'json',
+								contentType: 'application/json; charset=utf-8',
+								data: d,
+								success: function (data) {
+									$.ajax({
+										type: 'GET',
+										url: '<%=ResolveUrl("~/api/BookingSystem/Initial/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username,
+										dataType: 'json',
+										success: function (data) {
+											if (user.isBSAdmin) $("#val").html("This Week is a Week " + data[1]);
+											else {
+												$("#val").html("You have " + data[0] + " bookings available to use this week. This Week is a Week " + data[1]);
+												availbookings = data;
+											}
+										},
+										error: OnError
+									});
+									curres.Refresh();
+								},
+								error: OnError
+							});
+							
 							$(this).dialog("close");
 						},
 						"Cancel": function () {
@@ -226,16 +279,44 @@
 				});
 			return false;
 		}
-		function doRemove(resource, lesson, name) {
-			confirm("Are you sure you want to remove the booking\n" + name + " in " + resource + " during " + lesson + "?");
+		function doRemove(res, lesson, name) {
+			if (confirm("Are you sure you want to remove the booking\n" + name + " in " + res + " during " + lesson + "?")) {
+				curles = lesson;
+				$("#bfdate").html($.datepicker.formatDate('d MM yy', curdate));
+				for (var i = 0; i < resources.length; i++)
+					if (resources[i].Name == res) curres = resources[i];
+				$.ajax({
+					type: 'DELETE',
+					url: '<%=ResolveUrl("~/api/BookingSystem/Booking/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear(),
+					dataType: 'json',
+					contentType: 'application/json; charset=utf-8',
+					data: '{ "booking": { "Room": "' + curres.Name + '", "Lesson": "' + curles + '", "Name": "' + name + '" } }',
+					success: function (data) {
+						$.ajax({
+							type: 'GET',
+							url: '<%=ResolveUrl("~/api/BookingSystem/Initial/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username,
+							dataType: 'json',
+							success: function (data) {
+								if (user.isBSAdmin) $("#val").html("This Week is a Week " + data[1]);
+								else {
+									$("#val").html("You have " + data[0] + " bookings available to use this week. This Week is a Week " + data[1]);
+									availbookings = data;
+								}
+							},
+							error: OnError
+						});
+						curres.Refresh();
+					},
+					error: OnError
+				});
+			}
 			return false;
 		}
 		$(function () {
 			try {
 				if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curdate = new Date(window.location.href.split('#')[1].split('/')[2], window.location.href.split('#')[1].split('/')[1] - 1, window.location.href.split('#')[1].split('/')[0]);
-				else curdate = new Date();
+				else curdate = new Date(<%=CurrentDate.Year %>, <%=CurrentDate.Month - 1 %>, <%=CurrentDate.Day %>);
 			} catch (ex) { alert(ex); }
-			if (user.isBSAdmin) $("#mainnotice").css("display", "none");
 			$("#datepicker").datepicker({ 
 				minDate: user.minDate,
 				maxDate: user.maxDate,
@@ -245,13 +326,13 @@
 				defaultDate: curdate,
 				onSelect: function(dateText, inst) {
 					curdate = new Date(dateText);
-					$("#picker").val($.datepicker.formatDate('d MM yy', curdate));
 					location.href = "#" + $.datepicker.formatDate('dd/mm/yy', curdate);
 				}
 			});
 			$("#bookingform").dialog({ autoOpen: false });
 			$("#picker").val($.datepicker.formatDate('d MM yy', curdate));
 			$("input[type=button]").button();
+			$(".button").button();
 			$("#datepicker").css("top", $("#picker").position().top + 29);
 			$("#datepicker").animate({ height: 'toggle' });
 			$("#bflquant").buttonset();

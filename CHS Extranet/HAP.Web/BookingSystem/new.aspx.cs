@@ -20,11 +20,54 @@ namespace HAP.Web.BookingSystem
             lessons.DataBind();
             subjects.DataSource = config.BookingSystem.Subjects.ToArray();
             subjects.DataBind();
-            adminbookingpanel.Visible = isBSAdmin;
-            if (isBSAdmin)
+            adminbookingpanel.Visible = adminlink.Visible = isBSAdmin || User.IsInRole("Domain Admins");
+            if (isBSAdmin || User.IsInRole("Domain Admins"))
             {
-                userlist.DataSource = ADUtils.FindUsers();
-                userlist.DataBind();
+                userlist.Items.Clear();
+                foreach (UserInfo user in ADUtils.FindUsers())
+                    if (user.DisplayName == user.UserName)
+                        userlist.Items.Add(new ListItem(user.UserName, user.UserName.ToLower()));
+                    else
+                        userlist.Items.Add(new ListItem(string.Format("{0} - ({1})", user.UserName, user.Notes), user.UserName.ToLower()));
+                userlist.SelectedValue = ADUser.UserName.ToLower();
+            }
+            try
+            {
+                DateTime d = CurrentDate;
+                BodyCode = new string[] { "", "" };
+            }
+            catch (ArgumentOutOfRangeException) { BodyCode = new string[] { " style=\"display: none;\"", "You are current outside of the set terms, please get an Admin to set the new year terms" }; }
+        }
+
+        protected string[] BodyCode { get; set; }
+
+        protected DateTime CurrentDate
+        {
+            get
+            {
+                DateTime date = DateTime.Now;
+                if (date.DayOfWeek == DayOfWeek.Saturday) date = date.AddDays(2);
+                else if (date.DayOfWeek == DayOfWeek.Sunday) date = date.AddDays(1);
+                Terms terms = new Terms();
+
+                if (date < terms[0].StartDate) date = terms[0].StartDate;
+                else if (date > terms[terms.Count - 1].EndDate) throw new ArgumentOutOfRangeException("Current Date", "The Current Date is After the Last Date in the Term!");
+                else
+                {
+                    foreach (Term t in terms)
+                        if (date >= t.StartDate && date <= t.EndDate)
+                        {
+                            if (date >= t.HalfTerm.StartDate && date <= t.HalfTerm.EndDate)
+                            {
+                                date = t.HalfTerm.EndDate;
+                                if (date.DayOfWeek == DayOfWeek.Friday) date.AddDays(3);
+                                else if (date.DayOfWeek == DayOfWeek.Saturday) date.AddDays(2);
+                                else if (date.DayOfWeek == DayOfWeek.Sunday) date.AddDays(1);
+                            }
+                        }
+                }
+
+                return date;
             }
         }
 

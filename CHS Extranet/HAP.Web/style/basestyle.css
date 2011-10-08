@@ -1,10 +1,10 @@
 ﻿.tile-color, .ui-widget-header { background: #0060a6; border-color: #0060a6; }
 .tile-border-color, .ui-widget-content { border-color: #0060a6; }
-.tile-color-font, #hometabs .ui-tabs-nav li.ui-state-active a, #hometabs .ui-tabs-nav li.ui-state-active a:hover { color: #0060a6; }
+.ui-widget-header a, .ui-widget-header { color: #fff; }
+.tile-color-font, .ui-tabs .ui-tabs-nav li.ui-tabs-selected a, .ui-tabs .ui-tabs-nav li.ui-tabs-selected a:hover { color: #0060a6; }
 .tiles a { background-color: #0060a6; color: #fff; }
 .tiles a:hover { background-color: #3286C1; }
 .tiles a:active { background-color: #004577; }
-.ui-widget-header a, .ui-widget-header { color: #fff; }
 
 html, #hapContent {font-family: Segoe UI, Tahoma; font-size: 13px; }
 a img { border: 0; }
@@ -56,10 +56,6 @@ h1.Announcement b { font-size: 16px; }
 #HomeButtons a:hover { text-decoration: none; }
 
 #hometabs { height: 200px; border-radius: 0; }
-#hometabs .ui-tabs-nav li { border-radius: 0; background: transparent; border: 0; color: #fff; }
-#hometabs .ui-tabs-nav li a { color: #ddd; }
-#hometabs .ui-tabs-nav li a:hover { color: #fff; }
-#hometabs .ui-tabs-nav li.ui-state-active { background: #fff; }
 #homepageiwt { float: right; margin-left: 6px; padding: 0; height: 202px; width: 264px; overflow: hidden; }
 #homepageiwt h1, #homepageiwt h2 { line-height: normal; padding: 0; margin: 0; }
 #homepageiwt h1 { font-weight: lighter; color: #fff; padding: 0 6px; font-size: 22px; line-height: 26px; }
