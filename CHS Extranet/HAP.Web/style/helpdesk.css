@@ -1,0 +1,2 @@
+﻿.ticket .notes { overflow: auto; height: 400px; margin-top: 5px; border-width: 1px; border-style: solid; padding: 10px }
+.ticket .notes pre { white-space: normal; }

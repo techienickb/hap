@@ -6,19 +6,25 @@
 	<link href="../style/bookingsystem.css" rel="stylesheet" type="text/css" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
-	<div class="tiles" style="float: left;">
-		<a class="button" href="../">Home Access Plus+ Home</a>
-	</div>
-	<div class="tiles" style="float: right; text-align: right;">
-		<asp:HyperLink CssClass="button" runat="server" NavigateUrl="Admin/" ID="adminlink" Text="Control Panel" />
-	</div>
-	<div style="text-align: center;">
-		<img src="../images/booking-system.png" alt="Booking System" />
+	<div style="overflow: hidden; clear: both;">
+		<div class="tiles" style="float: left;">
+			<a class="button" href="../">Home Access Plus+ Home</a>
+		</div>
+		<div class="tiles" style="float: right; text-align: right;">
+			<asp:HyperLink CssClass="button" runat="server" NavigateUrl="Admin/" ID="adminlink" Text="Control Panel" />
+			<a href="OverviewCalendar.aspx" id="overview" class="button">Overview</a>
+		</div>
+		<div style="text-align: center;">
+			<img src="../images/booking-system.png" alt="Booking System" />
+		</div>
 	</div>
 	<p class="ui-state-highlight ui-corner-all" style="padding: 2px 6px">
 		<span class="ui-icon ui-icon-info" style="float: left; margin-right: 5px;"></span>
 		<span id="val">Loading...</span>
 	</p>
+	<div id="overviewcalendar" title="Overview Calendar">
+		<iframe src="OverviewCalendar.aspx" style="border: 0; margin: 0; padding: 0; width: 100%; height: 400px;"></iframe>
+	</div>
 	<div id="bookingform" title="Booking Form">
 		<div>
 			<p class="ui-state-highlight ui-corner-all" style="margin-bottom: 4px; padding: 4px 6px">
@@ -329,6 +335,14 @@
 					location.href = "#" + $.datepicker.formatDate('dd/mm/yy', curdate);
 				}
 			});
+			$("#overview").click(function () {
+				$("#overviewcalendar").dialog({ 
+					autoOpen: true,
+					minWidth: 450
+				});
+				return false;
+			});
+			$("#overviewcalendar").dialog({ autoOpen: false });
 			$("#bookingform").dialog({ autoOpen: false });
 			$("#picker").val($.datepicker.formatDate('d MM yy', curdate));
 			$("input[type=button]").button();

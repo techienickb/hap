@@ -72,6 +72,8 @@
     <Compile Include="ComputerBrowser\CBFile.cs" />
     <Compile Include="ComputerBrowser\UNCPath.cs" />
     <Compile Include="ComputerBrowser\UploadFilter.cs" />
+    <Compile Include="HelpDesk\Note.cs" />
+    <Compile Include="HelpDesk\Ticket.cs" />
     <Compile Include="OU.cs" />
     <Compile Include="Pupils.cs" />
     <Compile Include="Service References\Quota\Reference.cs">
