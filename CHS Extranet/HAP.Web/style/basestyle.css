@@ -60,7 +60,8 @@ h1.Announcement b { font-size: 16px; }
 #homepageiwt h1, #homepageiwt h2 { line-height: normal; padding: 0; margin: 0; }
 #homepageiwt h1 { font-weight: lighter; color: #fff; padding: 0 6px; font-size: 22px; line-height: 26px; }
 #homepageiwt h2 { font-size: 13px; font-weight: bold; }
-#homepageiwt a.togglelink { color: #fff; text-decoration: none; display: block; height: 24px; line-height: 24px; padding: 0 6px 0 24px; }
+#homepageiwt a.togglelink { color: #fff; text-decoration: none; display: block; height: 24px; line-height: 24px; padding: 0 6px 0 30px; background: transparent url(../images/appbar.add.rest.png) no-repeat -10px center; }
+#homepageiwt a.active { background-image: url(../images/appbar.minus.rest.png); }
 #homepageiwt div { padding: 1px; }
 #homepageiwt div div { padding: 4px; height: 116px; background: #fff; font-size: 11px; overflow: hidden; }
 #homepageiwt div div a { float: left; height: 19px; line-height: 19px; padding: 0 26px 0 5px; border: 1px solid #ccc; text-decoration: none; }

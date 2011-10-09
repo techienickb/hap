@@ -114,6 +114,9 @@
     <Content Include="Controls\Announcement.ascx" />
     <Content Include="App_Data\Announcement.xml" />
     <Content Include="App_Data\Tickets.xml" />
+    <Content Include="HelpDesk\Test.aspx" />
+    <Content Include="images\appbar.add.rest.png" />
+    <Content Include="images\appbar.minus.rest.png" />
     <Content Include="images\arrow-collapse.png" />
     <Content Include="images\arrow-collapseover.png" />
     <Content Include="images\arrow-expand.png" />
@@ -237,6 +240,7 @@
     <Content Include="Login.aspx" />
     <Content Include="Scripts\jquery-ui-1.8.16.custom.min.js" />
     <Content Include="Scripts\jquery.ba-hashchange.min.js" />
+    <Content Include="Scripts\JSON.js" />
     <Content Include="style\basestyle.css" />
     <Content Include="Controls\Delete.ascx" />
     <Content Include="Controls\Rename.ascx" />
@@ -291,6 +295,7 @@
     <Content Include="Scripts\homepagescripts.js" />
     <Content Include="Setup.aspx" />
     <Content Include="style\bookingsystem.css" />
+    <Content Include="style\helpdesk.css" />
     <Content Include="style\jquery-ui.css" />
     <Content Include="style\setup.css" />
     <Content Include="style\timetable.css" />
@@ -375,6 +380,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="API\BookingSystem.cs" />
+    <Compile Include="API\HelpDesk.cs" />
     <Compile Include="API\Icon.cs" />
     <Compile Include="API\Setup.cs" />
     <Compile Include="API\Thumbs.cs" />
@@ -522,6 +528,13 @@
     </Compile>
     <Compile Include="HelpDesk\Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="HelpDesk\Test.aspx.cs">
+      <DependentUpon>Test.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HelpDesk\Test.aspx.designer.cs">
+      <DependentUpon>Test.aspx</DependentUpon>
     </Compile>
     <Compile Include="Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>

@@ -18,6 +18,7 @@ namespace HAP.Web.API
             WebServiceHostFactory factory = new WebServiceHostFactory();
             RouteTable.Routes.Add(new ServiceRoute("api/setup", factory, typeof(setup)));
             RouteTable.Routes.Add(new ServiceRoute("api/bookingsystem", factory, typeof(BookingSystem)));
+            RouteTable.Routes.Add(new ServiceRoute("api/helpdesk", factory, typeof(HelpDesk)));
         }
     }
 }

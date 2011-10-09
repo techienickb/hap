@@ -17,7 +17,7 @@
             <div id="homepageiwt" class="tile-color">
                 <h1>I want to...</h1>
                 <div id="iwt1">
-                    <a href="#iwt1" class="togglelink">Get some files from school</a>
+                    <a href="#iwt1" class="togglelink active">Get some files from school</a>
                     <div>
                         <img src="images/icons/net.png" alt="" />
                         <h2>Access my Files</h2>
@@ -38,6 +38,13 @@
                     $("#iwt2 > div").animate({ height: 'toggle' });
                     $(".togglelink").bind("click", function () { return switchIWT(this); });
                     function switchIWT(e) {
+                        if ($("#iwt1 > a").hasClass("active")) {
+                            $("#iwt1 > a").removeClass("active");
+                            $("#iwt2 > a").addClass("active");
+                        } else {
+                            $("#iwt2 > a").removeClass("active");
+                            $("#iwt1 > a").addClass("active");
+                        }
                         $("#iwt2 > div").animate({ height: 'toggle' });
                         $("#iwt1 > div").animate({ height: 'toggle' });
                         return false;
