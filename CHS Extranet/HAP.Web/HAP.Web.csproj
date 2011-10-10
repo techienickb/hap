@@ -114,7 +114,7 @@
     <Content Include="Controls\Announcement.ascx" />
     <Content Include="App_Data\Announcement.xml" />
     <Content Include="App_Data\Tickets.xml" />
-    <Content Include="HelpDesk\Test.aspx" />
+    <Content Include="HelpDesk\new.aspx" />
     <Content Include="images\appbar.add.rest.png" />
     <Content Include="images\appbar.minus.rest.png" />
     <Content Include="images\arrow-collapse.png" />
@@ -528,12 +528,12 @@
     <Compile Include="HelpDesk\Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
-    <Compile Include="HelpDesk\Test.aspx.cs">
-      <DependentUpon>Test.aspx</DependentUpon>
+    <Compile Include="HelpDesk\new.aspx.cs">
+      <DependentUpon>new.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="HelpDesk\Test.aspx.designer.cs">
-      <DependentUpon>Test.aspx</DependentUpon>
+    <Compile Include="HelpDesk\new.aspx.designer.cs">
+      <DependentUpon>new.aspx</DependentUpon>
     </Compile>
     <Compile Include="Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>

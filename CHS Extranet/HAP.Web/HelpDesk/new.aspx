@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true" CodeBehind="Test.aspx.cs" Inherits="HAP.Web.HelpDesk.Test" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true" CodeBehind="new.aspx.cs" Inherits="HAP.Web.HelpDesk.New" %>
 <asp:Content ContentPlaceHolderID="head" runat="server">
 	<script src="../Scripts/jquery-1.6.2.min.js" type="text/javascript"></script>
 	<script src="../Scripts/jquery-ui-1.8.16.custom.min.js" type="text/javascript"></script>

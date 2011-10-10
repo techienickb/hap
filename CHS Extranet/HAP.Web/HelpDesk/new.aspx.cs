@@ -8,7 +8,7 @@ using HAP.AD;
 
 namespace HAP.Web.HelpDesk
 {
-    public partial class Test : HAP.Web.Controls.Page
+    public partial class New : HAP.Web.Controls.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
