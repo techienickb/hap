@@ -212,21 +212,7 @@ namespace HAP.AD
                                 return true;
                             }
                         }
-                    }
-                    else if (ADUtils.LogonUserA(this.UserName, this.DomainName, this.Password, LOGON32_LOGON_NETWORK, LOGON32_PROVIDER_DEFAULT, ref token) != 0)
-                    {
-                        if (ADUtils.DuplicateToken(token, 2, ref tokenDuplicate) != 0)
-                        {
-                            tempWindowsIdentity = new WindowsIdentity(tokenDuplicate);
-                            impersonationContext = tempWindowsIdentity.Impersonate();
-                            if (impersonationContext != null)
-                            {
-                                ADUtils.CloseHandle(token);
-                                ADUtils.CloseHandle(tokenDuplicate);
-                                return true;
-                            }
-                        }
-                    } else throw new Exception("I cannot impersonate " + this.UserName + " due to an issue logging onto the domain " + this.DomainName + " using an Either Interactive or Network Login");
+                    } else throw new Exception("I cannot impersonate " + this.UserName + " due to an issue logging onto the domain " + this.DomainName + " using an Interactive Login.  HAP+ Requires Interactive Login Rights on the Server it is running on");
                 }
             }
             if (token != IntPtr.Zero)
