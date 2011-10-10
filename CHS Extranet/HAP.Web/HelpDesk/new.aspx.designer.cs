@@ -10,7 +10,7 @@
 namespace HAP.Web.HelpDesk {
     
     
-    public partial class Test {
+    public partial class New {
         
         /// <summary>
         /// adminupdatepanel control.
