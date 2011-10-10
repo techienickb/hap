@@ -6,7 +6,7 @@
 	<link href="../style/bookingsystem.css" rel="stylesheet" type="text/css" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
-	<div style="overflow: hidden; clear: both;">
+	<div style="overflow: hidden; clear: both; position: relative;">
 		<div class="tiles" style="float: left;">
 			<a class="button" href="../">Home Access Plus+ Home</a>
 		</div>
