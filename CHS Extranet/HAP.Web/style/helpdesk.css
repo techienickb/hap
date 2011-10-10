@@ -1,2 +1,5 @@
 ﻿.ticket .notes { overflow: auto; height: 400px; margin-top: 5px; border-width: 1px; border-style: solid; padding: 10px }
 .ticket .notes pre { white-space: normal; }
+
+#newticket div, .ticket div, #updateticket div { overflow: hidden; }
+#newticket div label, .ticket div label, #updateticket div label { float: left; width: 100px; }

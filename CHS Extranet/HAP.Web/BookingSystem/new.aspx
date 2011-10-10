@@ -88,7 +88,7 @@
 		var resources = <%=JSResources %>;
 		var curres;
 		var curles;
-		var availbookings;
+		var availbookings = [ 0, 0 ];
 		function resource(name, type){
 			this.Name = name;
 			this.Type = type;
@@ -105,10 +105,10 @@
 							if (data[x].Name == "FREE") h += "doBooking('" +  this.Name + "', '" + data[x].Lesson + "');";
 							else {
 								if (data[x].Static && $.inArray(this.Name, user.isAdminOf) != -1) h += "doBooking('" + this.Name + "', '" + data[x].Lesson + "');";
-								else if (data[x].Static == false && (data[x].Username == user.Username || $.inArray(this.Name, user.isAdminOf) != -1)) h += "doRemove('" + this.Name + "', '" + data[x].Lesson + "', '" + data[x].Name + "');";
+								else if (data[x].Static == false && (data[x].Username == user.username || $.inArray(this.Name, user.isAdminOf) != -1)) h += "doRemove('" + this.Name + "', '" + data[x].Lesson + "', '" + data[x].Name + "');";
 								else h += "false;";
 							}
-							h += '" href="#' + this.Name + '-' + data[x].Lesson.toLowerCase().replace(/ /g, "") + '" class="' + ($.inArray(this.Name, user.isAdminOf) == -1 ? '' : 'admin') + ((data[x].Username == user.Username && $.inArray(this.Name, user.isAdminOf) == -1) ? ' bookie' : '') + ((data[x].Name == "FREE") ? ' free' : '') + '">';
+							h += '" href="#' + this.Name + '-' + data[x].Lesson.toLowerCase().replace(/ /g, "") + '" class="' + ($.inArray(this.Name, user.isAdminOf) == -1 ? '' : 'admin') + ((data[x].Username == user.username && $.inArray(this.Name, user.isAdminOf) == -1) ? ' bookie' : '') + ((data[x].Name == "FREE") ? ' free' : '') + '">';
 							h += (data[x].Static ? '<span class="state static" title="Timetabled Lesson"><i></i><span>Override</span></span>' : (data[x].Name == "FREE" ? '<span class="state book" title="Book"><i></i><span>Book</span></span>' : '<span class="state remove" title="Remove"><i></i><span>Remove</span></span>'));
 							h += data[x].Name + '<span>' + data[x].DisplayName;
 							if (data[x].Name == "FREE" || data[x].Name == "UNAVAILABLE" || data[x].Name == "CHARGING") { }
@@ -191,7 +191,7 @@
 			loadDate();
 		});
 		function doBooking(res, lesson) {
-			if (availbookings <= 0 && !user.isBSAdmin) { 
+			if (availbookings[0] <= 0 && !user.isBSAdmin) { 
 				alert("You have exceeded your allowed bookings, please contact an Admin if this is wrong");
 				return false; 
 			}
@@ -243,7 +243,7 @@
 							if (n1 != "") n1 += " ";
 							n1 += $("#bfsubject").val();
 							if (abort) return;
-							var d = '{ "booking": { "Room": "' + curres.Name + '", "Lesson": "' + curles + '", "Username": "' + $("#<%=userlist.ClientID %> option:selected").val() + '", "Name": "' + n1 + '"';
+							var d = '{ "booking": { "Room": "' + curres.Name + '", "Lesson": "' + curles + '", "Username": "' + (user.isBSAdmin ? $("#<%=userlist.ClientID %> option:selected").val() : user.username) + '", "Name": "' + n1 + '"';
 							if (curres.Type == "Laptops") {
 								d += ', "LTCount": ' + $("#bflquant input:checked").attr("value") + ', "LTRoom": "' + $("#bflroom").val() + '", "LTHeadPhones": ' + (($('#bflheadphones:checked').val() !== undefined) ? 'true' : 'false');
 							}

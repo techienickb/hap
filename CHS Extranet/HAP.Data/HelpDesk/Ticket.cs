@@ -18,6 +18,7 @@ namespace HAP.Data.HelpDesk
         public string Date { get; set; }
         public string Username { get; set; }
         public string DisplayName { get; set; }
+        public string ShowTo { get; set; }
 
         public Ticket(XmlNode node)
         {
@@ -29,6 +30,7 @@ namespace HAP.Data.HelpDesk
                 Date = DateTime.Parse(node.SelectNodes("Note")[0].Attributes["date"].Value + " " + node.SelectNodes("Note")[0].Attributes["time"].Value).ToString("dd/MM/yy HH:mm");
             Date = DateTime.Parse(node.SelectNodes("Note")[0].Attributes["datetime"].Value).ToString("dd/MM/yy HH:mm");
             Username = ADUtils.FindUserInfos(node.SelectNodes("Note")[0].Attributes["username"].Value)[0].UserName;
+            ShowTo = node.Attributes["showto"] == null ? "" : node.Attributes["showto"].Value;
             DisplayName = ADUtils.FindUserInfos(node.SelectNodes("Note")[0].Attributes["username"].Value)[0].DisplayName;
         }
     }

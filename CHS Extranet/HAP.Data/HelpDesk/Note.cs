@@ -18,7 +18,7 @@ namespace HAP.Data.HelpDesk
 
         public Note(XmlNode node)
         {
-            NoteText = HttpUtility.UrlEncode(node.InnerXml.Replace("<![CDATA[", "").Replace("]]>", ""), System.Text.Encoding.Default); ;
+            NoteText = HttpUtility.UrlEncode(node.InnerXml.Replace("<![CDATA[", "").Replace("]]>", "").Replace("\n", "<br />"), System.Text.Encoding.Default); ;
             if (node.Attributes["date"] != null && node.Attributes["time"] != null)
                 Date = DateTime.Parse(node.Attributes["date"].Value + " " + node.Attributes["time"].Value).ToString("dd/MM/yy HH:mm");
             else Date = DateTime.Parse(node.Attributes["datetime"].Value).ToString("dd/MM/yy HH:mm");
