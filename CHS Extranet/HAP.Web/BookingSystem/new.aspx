@@ -7,10 +7,10 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
 	<div style="overflow: hidden; clear: both; position: relative;">
-		<div class="tiles" style="float: left;">
+		<div class="tiles" style="float: left; margin-top: 45px;">
 			<a class="button" href="../">Home Access Plus+ Home</a>
 		</div>
-		<div class="tiles" style="float: right; text-align: right;">
+		<div class="tiles" style="float: right; text-align: right; margin-top: 45px;">
 			<asp:HyperLink CssClass="button" runat="server" NavigateUrl="Admin/" ID="adminlink" Text="Control Panel" />
 			<a href="OverviewCalendar.aspx" id="overview" class="button">Overview</a>
 		</div>
@@ -105,10 +105,10 @@
 							if (data[x].Name == "FREE") h += "doBooking('" +  this.Name + "', '" + data[x].Lesson + "');";
 							else {
 								if (data[x].Static && $.inArray(this.Name, user.isAdminOf) != -1) h += "doBooking('" + this.Name + "', '" + data[x].Lesson + "');";
-								else if (data[x].Static == false && (data[x].Username == user.username || $.inArray(this.Name, user.isAdminOf) != -1)) h += "doRemove('" + this.Name + "', '" + data[x].Lesson + "', '" + data[x].Name + "');";
+								else if (data[x].Static == false && (data[x].Username.toLowerCase() == user.username.toLowerCase() || $.inArray(this.Name, user.isAdminOf) != -1)) h += "doRemove('" + this.Name + "', '" + data[x].Lesson + "', '" + data[x].Name + "');";
 								else h += "false;";
 							}
-							h += '" href="#' + this.Name + '-' + data[x].Lesson.toLowerCase().replace(/ /g, "") + '" class="' + ($.inArray(this.Name, user.isAdminOf) == -1 ? '' : 'admin') + ((data[x].Username == user.username && $.inArray(this.Name, user.isAdminOf) == -1) ? ' bookie' : '') + ((data[x].Name == "FREE") ? ' free' : '') + '">';
+							h += '" href="#' + this.Name + '-' + data[x].Lesson.toLowerCase().replace(/ /g, "") + '" class="' + ($.inArray(this.Name, user.isAdminOf) == -1 ? '' : 'admin') + ((data[x].Username.toLowerCase() == user.username.toLowerCase() && $.inArray(this.Name, user.isAdminOf) == -1) ? ' bookie' : '') + ((data[x].Name == "FREE") ? ' free' : '') + '">';
 							h += (data[x].Static ? '<span class="state static" title="Timetabled Lesson"><i></i><span>Override</span></span>' : (data[x].Name == "FREE" ? '<span class="state book" title="Book"><i></i><span>Book</span></span>' : '<span class="state remove" title="Remove"><i></i><span>Remove</span></span>'));
 							h += data[x].Name + '<span>' + data[x].DisplayName;
 							if (data[x].Name == "FREE" || data[x].Name == "UNAVAILABLE" || data[x].Name == "CHARGING") { }
@@ -165,7 +165,7 @@
 			$("#val").html("Loading...");
 			$.ajax({
 				type: 'GET',
-				url: '<%=ResolveUrl("~/api/BookingSystem/Initial/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username,
+				url: '<%=ResolveUrl("~/api/BookingSystem/Initial/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username.toLowerCase(),
 				dataType: 'json',
 				success: function (data) {
 					if (user.isBSAdmin) $("#val").html("This Week is a Week " + data[1]);
@@ -184,8 +184,9 @@
 		function OnError(xhr, ajaxOptions, thrownError) {
 		}
 		$(window).hashchange(function () {
+			
 			if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curdate = new Date(window.location.href.split('#')[1].split('/')[2], window.location.href.split('#')[1].split('/')[1] - 1, window.location.href.split('#')[1].split('/')[0]);
-			else curdate = new Date(<%=CurrentDate.Year %>, <%=CurrentDate.Month - 1 %>, <%=CurrentDate.Day %>);
+			else curdate = new Date(<%try { %><%=CurrentDate.Year %>, <%=CurrentDate.Month - 1 %>, <%=CurrentDate.Day %> <% } catch { } %>);
 			$('#datepicker').datepicker("setDate", curdate);
 			$("#picker").val($.datepicker.formatDate('d MM yy', curdate));
 			loadDate();
@@ -321,7 +322,7 @@
 		$(function () {
 			try {
 				if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curdate = new Date(window.location.href.split('#')[1].split('/')[2], window.location.href.split('#')[1].split('/')[1] - 1, window.location.href.split('#')[1].split('/')[0]);
-				else curdate = new Date(<%=CurrentDate.Year %>, <%=CurrentDate.Month - 1 %>, <%=CurrentDate.Day %>);
+				else curdate = new Date(<%try { %><%=CurrentDate.Year %>, <%=CurrentDate.Month - 1 %>, <%=CurrentDate.Day %><% } catch { } %>);
 			} catch (ex) { alert(ex); }
 			$("#datepicker").datepicker({ 
 				minDate: user.minDate,

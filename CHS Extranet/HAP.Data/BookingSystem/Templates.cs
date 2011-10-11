@@ -30,7 +30,7 @@ namespace HAP.Data.BookingSystem
                 t1.InnerXml = t.Content.Replace("\n", "");
                 doc.SelectSingleNode("/templates").AppendChild(t1);
             }
-            doc.Save(HttpContext.Current.Server.MapPath("~/App_Data/bookingstemplate.xml"));
+            doc.Save(HttpContext.Current.Server.MapPath("~/App_Data/BookingTemplates.xml"));
         }
     }
 }

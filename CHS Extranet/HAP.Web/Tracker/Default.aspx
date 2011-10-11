@@ -2,6 +2,10 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
 	<div style="text-align: center;"><a href="http://hap.codeplex.com" target="_blank"><img src="logontracker.png" alt="Logon Tracker" style="width: 700px;" /></a></div>
 	<div id="HomeButtons" class="tiles">
+		<a href="../" title="Go Back to the Home Access Plus+ Homepage">
+			<span style="background-image: url(../images/icons/white/school.png);"></span>
+			HAP+ Home
+		</a>
 		<a href="live.aspx" title="View the live action from the tracker">
 			<span style="background-image: url(../images/icons/white/tracker-live.png);"></span>
 			Live Tracker
@@ -14,9 +18,5 @@
 			<span style="background-image: url(../images/icons/white/dbup.png);"></span>
 			XML 2 SQL
 		</asp:HyperLink>
-		<a href="../" title="Go Back to the Home Access Plus+ Homepage">
-			<span style="background-image: url(../images/icons/white/school.png);"></span>
-			HAP+ Home
-		</a>
 	</div>
 </asp:Content>
