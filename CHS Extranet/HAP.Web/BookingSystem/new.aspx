@@ -25,6 +25,7 @@
 	<div id="overviewcalendar" title="Overview Calendar">
 		<iframe src="OverviewCalendar.aspx" style="border: 0; margin: 0; padding: 0; width: 100%; height: 400px;"></iframe>
 	</div>
+	<div id="questionbox" title="Question"><span></span></div>
 	<div id="bookingform" title="Booking Form">
 		<div>
 			<p class="ui-state-highlight ui-corner-all" style="margin-bottom: 4px; padding: 4px 6px">
@@ -92,6 +93,29 @@
 		function resource(name, type){
 			this.Name = name;
 			this.Type = type;
+			this.Data;
+			this.Render = function() {
+				var h = "";
+				for (var x = 0; x < this.Data.length; x++) {
+					h += '<a onclick="return ';
+					if (this.Data[x].Name == "FREE") h += "doBooking('" +  this.Name + "', '" + this.Data[x].Lesson + "');";
+					else {
+						if (this.Data[x].Static && $.inArray(this.Name, user.isAdminOf) != -1) h += "doBooking('" + this.Name + "', '" + this.Data[x].Lesson + "');";
+						else if (this.Data[x].Static == false && (this.Data[x].Username.toLowerCase() == user.username.toLowerCase() || $.inArray(this.Name, user.isAdminOf) != -1)) h += "doRemove('" + this.Name + "', '" + this.Data[x].Lesson + "', '" + this.Data[x].Name + "');";
+						else h += "false;";
+					}
+					h += '" href="#' + this.Name + '-' + this.Data[x].Lesson.toLowerCase().replace(/ /g, "") + '" class="' + ($.inArray(this.Name, user.isAdminOf) == -1 ? '' : 'admin') + ((this.Data[x].Username.toLowerCase() == user.username.toLowerCase() && $.inArray(this.Name, user.isAdminOf) == -1) ? ' bookie' : '') + ((this.Data[x].Name == "FREE") ? ' free' : '') + '">';
+					h += (this.Data[x].Static ? '<span class="state static" title="Timetabled Lesson"><i></i><span>Override</span></span>' : (this.Data[x].Name == "FREE" ? '<span class="state book" title="Book"><i></i><span>Book</span></span>' : '<span class="state remove" title="Remove"><i></i><span>Remove</span></span>'));
+					h += this.Data[x].Name + '<span>' + this.Data[x].DisplayName;
+					if (this.Data[x].Name == "FREE" || this.Data[x].Name == "UNAVAILABLE" || this.Data[x].Name == "CHARGING") { }
+					else {
+						if (this.Type == "Laptops") h += ' in ' + this.Data[x].LTRoom + ' [' + this.Data[x].LTCount + '|' + (this.Data[x].LTHeadPhones ? 'HP' : 'N-HP') + ']';
+						else if (this.Type == "Equipment") h += ' in ' + this.Data[x].EquipRoom;
+					}
+					h += '</span></a>';
+				}
+				$("#" + this.Name).html(h);
+			};
 			this.Refresh = function() {
 				$.ajax({
 					type: 'GET',
@@ -99,30 +123,12 @@
 					dataType: 'json',
 					context: this,
 					success: function (data) {
-						var h = "";
-						for (var x = 0; x < data.length; x++) {
-							h += '<a onclick="return ';
-							if (data[x].Name == "FREE") h += "doBooking('" +  this.Name + "', '" + data[x].Lesson + "');";
-							else {
-								if (data[x].Static && $.inArray(this.Name, user.isAdminOf) != -1) h += "doBooking('" + this.Name + "', '" + data[x].Lesson + "');";
-								else if (data[x].Static == false && (data[x].Username.toLowerCase() == user.username.toLowerCase() || $.inArray(this.Name, user.isAdminOf) != -1)) h += "doRemove('" + this.Name + "', '" + data[x].Lesson + "', '" + data[x].Name + "');";
-								else h += "false;";
-							}
-							h += '" href="#' + this.Name + '-' + data[x].Lesson.toLowerCase().replace(/ /g, "") + '" class="' + ($.inArray(this.Name, user.isAdminOf) == -1 ? '' : 'admin') + ((data[x].Username.toLowerCase() == user.username.toLowerCase() && $.inArray(this.Name, user.isAdminOf) == -1) ? ' bookie' : '') + ((data[x].Name == "FREE") ? ' free' : '') + '">';
-							h += (data[x].Static ? '<span class="state static" title="Timetabled Lesson"><i></i><span>Override</span></span>' : (data[x].Name == "FREE" ? '<span class="state book" title="Book"><i></i><span>Book</span></span>' : '<span class="state remove" title="Remove"><i></i><span>Remove</span></span>'));
-							h += data[x].Name + '<span>' + data[x].DisplayName;
-							if (data[x].Name == "FREE" || data[x].Name == "UNAVAILABLE" || data[x].Name == "CHARGING") { }
-							else {
-								if (this.Type == "Laptops") h += ' in ' + data[x].LTRoom + ' [' + data[x].LTCount + '|' + (data[x].LTHeadPhones ? 'HP' : 'N-HP') + ']';
-								else if (this.Type == "Equipment") h += ' in ' + data[x].EquipRoom;
-							}
-							h += '</span></a>';
-						}
-						$("#" + this.Name).html(h);
+						this.Data = data;
+						this.Render();
 					},
 					error: OnError
 				});
-			}
+			};
 		}
 		function subjectchance(box) {
 			var chosenoption = box.options[box.selectedIndex] //this refers to "selectmenu"
@@ -259,6 +265,8 @@
 								contentType: 'application/json; charset=utf-8',
 								data: d,
 								success: function (data) {
+									curres.Data = data;
+									curres.Render();
 									$.ajax({
 										type: 'GET',
 										url: '<%=ResolveUrl("~/api/BookingSystem/Initial/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username,
@@ -272,7 +280,6 @@
 										},
 										error: OnError
 									});
-									curres.Refresh();
 								},
 								error: OnError
 							});
@@ -287,36 +294,43 @@
 			return false;
 		}
 		function doRemove(res, lesson, name) {
-			if (confirm("Are you sure you want to remove the booking\n" + name + " in " + res + " during " + lesson + "?")) {
-				curles = lesson;
-				$("#bfdate").html($.datepicker.formatDate('d MM yy', curdate));
-				for (var i = 0; i < resources.length; i++)
-					if (resources[i].Name == res) curres = resources[i];
-				$.ajax({
-					type: 'DELETE',
-					url: '<%=ResolveUrl("~/api/BookingSystem/Booking/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear(),
-					dataType: 'json',
-					contentType: 'application/json; charset=utf-8',
-					data: '{ "booking": { "Room": "' + curres.Name + '", "Lesson": "' + curles + '", "Name": "' + name + '" } }',
-					success: function (data) {
-						$.ajax({
-							type: 'GET',
-							url: '<%=ResolveUrl("~/api/BookingSystem/Initial/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username,
-							dataType: 'json',
-							success: function (data) {
-								if (user.isBSAdmin) $("#val").html("This Week is a Week " + data[1]);
-								else {
-									$("#val").html("You have " + data[0] + " bookings available to use this week. This Week is a Week " + data[1]);
-									availbookings = data;
-								}
-							},
-							error: OnError
-						});
-						curres.Refresh();
-					},
-					error: OnError
-				});
-			}
+			$("#questionbox span").html("Are you sure you want to remove<br/>" + name + " in/with " + res + " during " + lesson);
+			$("#questionbox").dialog({ autoOpen: true, 
+				buttons: { "Yes": function() {
+					curles = lesson;
+					$("#bfdate").html($.datepicker.formatDate('d MM yy', curdate));
+					for (var i = 0; i < resources.length; i++)
+						if (resources[i].Name == res) curres = resources[i];
+					$.ajax({
+						type: 'DELETE',
+						url: '<%=ResolveUrl("~/api/BookingSystem/Booking/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear(),
+						dataType: 'json',
+						contentType: 'application/json; charset=utf-8',
+						data: '{ "booking": { "Room": "' + curres.Name + '", "Lesson": "' + curles + '", "Name": "' + name + '" } }',
+						success: function (data) {
+							curres.Data = data;
+							curres.Render();
+							$.ajax({
+								type: 'GET',
+								url: '<%=ResolveUrl("~/api/BookingSystem/Initial/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username,
+								dataType: 'json',
+								success: function (data) {
+									if (user.isBSAdmin) $("#val").html("This Week is a Week " + data[1]);
+									else {
+										$("#val").html("You have " + data[0] + " bookings available to use this week. This Week is a Week " + data[1]);
+										availbookings = data;
+									}
+								},
+								error: OnError
+							});
+						},
+						error: OnError
+					});
+					$(this).dialog("close");
+				}, "No": function() {
+					$(this).dialog("close");
+				} } 
+			});
 			return false;
 		}
 		$(function () {
@@ -343,6 +357,7 @@
 				});
 				return false;
 			});
+			$("#questionbox").dialog({ autoOpen: false });
 			$("#overviewcalendar").dialog({ autoOpen: false });
 			$("#bookingform").dialog({ autoOpen: false });
 			$("#picker").val($.datepicker.formatDate('d MM yy', curdate));

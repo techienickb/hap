@@ -29,7 +29,7 @@ namespace HAP.Web.API
 
         [OperationContract]
         [WebInvoke(Method = "DELETE", UriTemplate = "/Booking/{Date}", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public void RemoveBooking(string Date, JSONBooking booking)
+        public JSONBooking[] RemoveBooking(string Date, JSONBooking booking)
         {
             HAP.Data.BookingSystem.BookingSystem bs = new HAP.Data.BookingSystem.BookingSystem(DateTime.Parse(Date));
             Booking b = bs.getBooking(booking.Room, booking.Lesson);
@@ -57,11 +57,12 @@ namespace HAP.Web.API
                     doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + DateTime.Parse(Date).ToShortDateString() + "' and @lesson='" + previouslesson.Name + "' and @room='" + booking.Room + "' and @name='UNAVAILABLE']"));
             }
             HAP.Data.BookingSystem.BookingSystem.BookingsDoc = doc;
+            return LoadRoom(Date, booking.Room);
         }
 
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "/Booking/{Date}", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public void Book(string Date, JSONBooking booking)
+        public JSONBooking[] Book(string Date, JSONBooking booking)
         {
             XmlDocument doc = HAP.Data.BookingSystem.BookingSystem.BookingsDoc;
             XmlElement node = doc.CreateElement("Booking");
@@ -124,6 +125,7 @@ namespace HAP.Web.API
                 iCalGenerator.Generate(b, DateTime.Parse(Date));
                 if (config.BookingSystem.Resources[booking.Room].EmailAdmins) iCalGenerator.Generate(b, DateTime.Parse(Date), true);
             }
+            return LoadRoom(Date, booking.Room);
         }
 
         [OperationContract]

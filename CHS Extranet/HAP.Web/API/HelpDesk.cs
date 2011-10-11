@@ -49,7 +49,7 @@ namespace HAP.Web.API
                 MailMessage mes = new MailMessage();
 
                 mes.Subject = "Ticket (#" + Id + ") has been Updated";
-                mes.From = mes.Sender = new MailAddress(ADUtils.FindUserInfos(ticket.Attributes["username"].Value)[0].Email, ADUtils.FindUserInfos(ticket.Attributes["username"].Value)[0].DisplayName);
+                mes.From = mes.Sender = new MailAddress(ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].Email, ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].DisplayName);
                 mes.ReplyToList.Add(mes.From);
                 mes.To.Add(new MailAddress(hapConfig.Current.SMTP.FromEmail, hapConfig.Current.SMTP.FromUser));
 
@@ -60,7 +60,7 @@ namespace HAP.Web.API
 
                 mes.Body = fs.ReadToEnd().Replace("{0}", Id).Replace("{1}",
                     HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />")).Replace("{2}",
-                    ADUtils.FindUserInfos(ticket.Attributes["username"].Value)[0].DisplayName).Replace("{3}",
+                    ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].DisplayName).Replace("{3}",
                     HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath);
 
                 SmtpClient smtp = new SmtpClient(hapConfig.Current.SMTP.Server, hapConfig.Current.SMTP.Port);
