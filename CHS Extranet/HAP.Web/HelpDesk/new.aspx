@@ -99,7 +99,7 @@
 				"Update": function () {
 					var data = '{ "Note": "' + escape($("#ticket-note").val()) + '", "State": ';
 					var url = '<%=ResolveUrl("~/api/HelpDesk/Ticket/")%>' + curticket;
-					if ($("#ticket-priority") != null) {
+					if (<%=User.IsInRole("Domain Admins").ToString().ToLower() %>) {
 						data += ($("#ticket-fixed").is(":checked") ? '"Fixed"' : '"With IT"') + ', "Priority": "' + $("#ticket-priority input:checked").attr("value") + '", "ShowTo": "' + $("#ticket-showto").val() + '"';
 						url = '<%=ResolveUrl("~/api/HelpDesk/AdminTicket/")%>' + curticket;
 					} else data += '"New"';
@@ -112,7 +112,7 @@
 						contentType: 'application/json; charset=utf-8',
 						success: function (data) {
 							$("#ticket-note").val("");
-							if ($("#ticket-priority") != null) {
+							if (<%=User.IsInRole("Domain Admins").ToString().ToLower() %>) {
 								$("ticket-priority input:checked").removeAttr("checked");
 								$("#ticket-showto").val("");
 								$("#ticket-fixed").removeAttr("checked");
@@ -173,7 +173,7 @@
 		function fileTicket() {
 			var data = '{ "Subject": "' + escape($("#newticket-subject").val()) + '", "Room": "' + $("#newticket-room").val() + '", "Note": "' + escape($("#newticket-note").val()) + '"';
 			var url = '<%=ResolveUrl("~/api/HelpDesk/Ticket")%>';
-			if ($("#<%=userlist.ClientID %>") != null) {
+			if (<%=User.IsInRole("Domain Admins").ToString().ToLower() %>) {
 				data += ', "Priority": "' + $("#priorityradioes input:checked").val() + '", "User": "' + $("#<%=userlist.ClientID %> option:selected").attr("value") + '", "ShowTo": "' + $("#newticket-showto").val() + '"';
 				url = '<%=ResolveUrl("~/api/HelpDesk/AdminTicket")%>';
 			}
@@ -188,7 +188,7 @@
 					$("#newticket-subject").val("");
 					$("#newticket-room").val("");
 					$("#newticket-note").val("");
-					if ($("#<%=userlist.ClientID %>") != null) {
+					if (<%=User.IsInRole("Domain Admins").ToString().ToLower() %>) {
 						$("#priorityradioes input:checked").removeAttr("checked");
 						$("#newticket-showto").val("");
 					}
@@ -203,7 +203,6 @@
 					h += '</div>';
 					$("#ticket-" + curticket).html(h);
 					$("button").button();
-					window.location.href = "#ticket-" + data.Id;
 					$.ajax({
 						type: 'GET',
 						url: '<%=ResolveUrl("~/api/HelpDesk/Tickets/Open" + (User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName))%>',
