@@ -17,8 +17,13 @@ namespace HAP.Web.BookingSystem.admin
         protected void Page_Load(object sender, EventArgs e)
         {
             SaveButton.Click += new EventHandler(SaveButton_Click);
-            staticbookingsgrid.RowDeleting += new GridViewDeleteEventHandler(staticbookingsgrid_RowDeleting);
+            ListView1.ItemDeleting += new EventHandler<ListViewDeleteEventArgs>(ListView1_ItemDeleting);
             ABR.ItemDeleting += new EventHandler<ListViewDeleteEventArgs>(ABR_ItemDeleting);
+        }
+
+        void ListView1_ItemDeleting(object sender, ListViewDeleteEventArgs e)
+        {
+            new HAP.Data.BookingSystem.BookingSystem().deleteStaticBooking1(e.Values[1].ToString(), e.Values[2].ToString(), int.Parse(e.Values[0].ToString()));
         }
 
         public Default()
@@ -77,7 +82,7 @@ namespace HAP.Web.BookingSystem.admin
 
         void ABR_ItemDeleting(object sender, ListViewDeleteEventArgs e)
         {
-            new HAP.Data.BookingSystem.BookingSystem().deleteBookingRights1(e.Values[0].ToString());
+            
         }
 
         void SaveButton_Click(object sender, EventArgs e)
@@ -122,12 +127,6 @@ namespace HAP.Web.BookingSystem.admin
             catch { }
 
         }
-
-        void staticbookingsgrid_RowDeleting(object sender, GridViewDeleteEventArgs e)
-        {
-            new HAP.Data.BookingSystem.BookingSystem().deleteStaticBooking1(e.Values[1].ToString(), e.Values[2].ToString(), int.Parse(e.Values[0].ToString()));
-        }
-
 
         public Template[] getTemplates()
         {

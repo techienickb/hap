@@ -21,7 +21,6 @@ namespace HAP.Web
             RouteTable.Routes.Add(new Route("upload/check/{drive}/{*path}", new UploadHandler("check")));
             RouteTable.Routes.Add(new Route("upload/transfer/{*path}", new UploadHandler("transfer")));
             RouteTable.Routes.Add(new Route("preview/{drive}/{*path}", new PreviewRoutingHandler()));
-            RouteTable.Routes.Add(new Route("helpdesk/ticket/{ticket}", new HelpDeskRoutingHandler()));
             RouteTable.Routes.Add(new Route("bookingsystem/{room}/display", new BookingSystemDislayRoutingHandler()));
             RouteTable.Routes.Add(new Route("tracker/{year}/{month}/", new PageRouteHandler("~/tracker/log.aspx", true)));
             RouteTable.Routes.Add(new Route("tracker/{year}/{month}/c/{computer}/", new PageRouteHandler("~/tracker/log.aspx", true)));

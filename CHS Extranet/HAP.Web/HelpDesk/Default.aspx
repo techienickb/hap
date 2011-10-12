@@ -132,7 +132,7 @@
 								success: function (data) {
 									var x = "";
 									for (var i = 0; i < data.length; i++) {
-										x += '<div><a href="#ticket-' + data[i].Id + '">' + data[i].Subject + '</a></div>'
+										x += '<div><a href="#ticket-' + data[i].Id + '" class="' + data[i].Priority.replace(/ /g, "-") + '">' + data[i].Subject + '</a></div>'
 									}
 									if (data.length == 0) x = "No Tickets";
 									$("#opentickets").html(x);
@@ -146,7 +146,7 @@
 								success: function (data) {
 									var x = "";
 									for (var i = 0; i < data.length; i++) {
-										x += '<div><a href="#ticket-' + data[i].Id + '">' + data[i].Subject + '</a></div>'
+										x += '<div><a href="#ticket-' + data[i].Id + '" class="' + data[i].Priority.replace(/ /g, "-") + '">' + data[i].Subject + '</a></div>'
 									}
 									if (data.length == 0) x = "No Tickets";
 									$("#closedtickets").html(x);
@@ -211,7 +211,7 @@
 						success: function (data) {
 							var x = "";
 							for (var i = 0; i < data.length; i++) {
-								x += '<div><a href="#ticket-' + data[i].Id + '">' + data[i].Subject + '</a></div>'
+								x += '<div><a href="#ticket-' + data[i].Id + '" class="' + data[i].Priority.replace(/ /g, "-") + '">' + data[i].Subject + '</a></div>'
 							}
 							if (data.length == 0) x = "No Tickets";
 							$("#opentickets").html(x);
@@ -265,7 +265,7 @@
 				success: function (data) {
 					var x = "";
 					for (var i = 0; i < data.length; i++) {
-						x += '<div><a href="#ticket-' + data[i].Id + '">' + data[i].Subject + '</a></div>'
+						x += '<div><a href="#ticket-' + data[i].Id + '" class="' + data[i].Priority.replace(/ /g, "-") + '">' + data[i].Subject + '</a></div>'
 					}
 					if (data.length == 0) x = "No Tickets";
 					$("#opentickets").html(x);
@@ -279,7 +279,7 @@
 				success: function (data) {
 					var x = "";
 					for (var i = 0; i < data.length; i++) {
-						x += '<div><a href="#ticket-' + data[i].Id + '">' + data[i].Subject + '</a></div>'
+						x += '<div><a href="#ticket-' + data[i].Id + '" class="' + data[i].Priority.replace(/ /g, "-") + '">' + data[i].Subject + '</a></div>'
 					}
 					if (data.length == 0) x = "No Tickets";
 					$("#closedtickets").html(x);
