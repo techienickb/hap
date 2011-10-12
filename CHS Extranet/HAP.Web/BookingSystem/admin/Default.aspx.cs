@@ -12,15 +12,18 @@ using HAP.Data.BookingSystem;
 
 namespace HAP.Web.BookingSystem.admin
 {
-    public partial class Default : System.Web.UI.Page
+    public partial class Default : HAP.Web.Controls.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
             SaveButton.Click += new EventHandler(SaveButton_Click);
             staticbookingsgrid.RowDeleting += new GridViewDeleteEventHandler(staticbookingsgrid_RowDeleting);
             ABR.ItemDeleting += new EventHandler<ListViewDeleteEventArgs>(ABR_ItemDeleting);
-            hapConfig config = hapConfig.Current;
-            this.Title = string.Format("{0} - Home Access Plus+ - IT Booking System - Admin", config.School.Name);
+        }
+
+        public Default()
+        {
+            this.SectionTitle = "Booking System - Admin";
         }
 
         public Resource[] getResources()
