@@ -40,22 +40,22 @@ namespace HAP.Web.BookingSystem.admin {
         protected global::System.Web.UI.WebControls.Button SaveButton;
         
         /// <summary>
-        /// UpdatePanel1 control.
+        /// ListView1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel UpdatePanel1;
+        protected global::System.Web.UI.WebControls.ListView ListView1;
         
         /// <summary>
-        /// staticbookingsgrid control.
+        /// importSIMS control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView staticbookingsgrid;
+        protected global::System.Web.UI.WebControls.Button importSIMS;
         
         /// <summary>
         /// StaticBookingsDS control.

@@ -101,7 +101,7 @@
     <Content Include="BookingSystem\bookingsystem.css" />
     <Content Include="BookingSystem\Display.aspx" />
     <Content Include="BookingSystem\loading.gif" />
-    <Content Include="BookingSystem\new.aspx" />
+    <Content Include="BookingSystem\Default.aspx" />
     <Content Include="BookingSystem\OverviewCalendar.ascx" />
     <Content Include="BookingSystem\OverviewCalendar.aspx" />
     <Content Include="BookingSystem\SIMS.ascx" />
@@ -238,6 +238,7 @@
     <Content Include="Login.aspx" />
     <Content Include="Scripts\jquery-ui-1.8.16.custom.min.js" />
     <Content Include="Scripts\jquery.ba-hashchange.min.js" />
+    <Content Include="Scripts\jquery.dataTables.js" />
     <Content Include="style\basestyle.css" />
     <Content Include="Controls\Delete.ascx" />
     <Content Include="Controls\Rename.ascx" />
@@ -402,12 +403,12 @@
       <DependentUpon>Display.aspx</DependentUpon>
     </Compile>
     <Compile Include="BookingSystem\iCalGenerator.cs" />
-    <Compile Include="BookingSystem\new.aspx.cs">
-      <DependentUpon>new.aspx</DependentUpon>
+    <Compile Include="BookingSystem\Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="BookingSystem\new.aspx.designer.cs">
-      <DependentUpon>new.aspx</DependentUpon>
+    <Compile Include="BookingSystem\Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
     <Compile Include="BookingSystem\OverviewCalendar.ascx.cs">
       <DependentUpon>OverviewCalendar.ascx</DependentUpon>
@@ -551,10 +552,8 @@
     <Compile Include="routing\BookingSystemDisplayRoutingHandler.cs" />
     <Compile Include="routing\DocXPreviewHandler.cs" />
     <Compile Include="routing\DownloadRoutingHandler.cs" />
-    <Compile Include="routing\HelpDeskRoutingHandler.cs" />
     <Compile Include="routing\IBookingSystemDisplay.cs" />
     <Compile Include="routing\IMyComputerDisplay.cs" />
-    <Compile Include="routing\ITicketDisplay.cs" />
     <Compile Include="routing\MyComputerRoutingHandler.cs" />
     <Compile Include="routing\PreviewRoutingHandler.cs" />
     <Compile Include="routing\UploadCheckerHandler.cs" />

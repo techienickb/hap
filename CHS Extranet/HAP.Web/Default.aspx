@@ -128,7 +128,7 @@
                                 <tr style="">
                                     <td><img width="32px" src="images/statusicons/<%# Eval("Status")%>.png" alt="<%# Eval("Status")%>" /></td>
                                     <td><img width="32px" src="images/statusicons/priority_<%# Eval("Priority")%>.png" alt="<%# Eval("Priority")%>" /></td>
-                                    <td><a href="helpdesk/ticket/<%#Eval("Id") %>"><%# Eval("Subject") %></a></td>
+                                    <td><a href="helpdesk/#ticket-<%#Eval("Id") %>"><%# Eval("Subject") %></a></td>
                                 </tr>
                             </ItemTemplate>
                             <LayoutTemplate>
