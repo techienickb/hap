@@ -254,7 +254,6 @@
     <Content Include="HelpDesk\newusernote.htm" />
     <Content Include="HelpDesk\newadminnote.htm" />
     <Content Include="HelpDesk\newadminticket.htm" />
-    <Content Include="HelpDesk\Default.aspx" />
     <Content Include="HelpDesk\helpdesksheet.css" />
     <Content Include="HelpDesk\newuserticket.htm" />
     <Content Include="images\arrow-right.gif" />
@@ -521,13 +520,6 @@
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="HelpDesk\Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="HelpDesk\Default.aspx.designer.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
     <Compile Include="HelpDesk\new.aspx.cs">
       <DependentUpon>new.aspx</DependentUpon>
