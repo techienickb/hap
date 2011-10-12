@@ -98,10 +98,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="BookingSystem\admin\Default.aspx" />
-    <Content Include="BookingSystem\BookingPopup.ascx" />
     <Content Include="BookingSystem\bookingsystem.css" />
-    <Content Include="BookingSystem\DayList.ascx" />
-    <Content Include="BookingSystem\Default.aspx" />
     <Content Include="BookingSystem\Display.aspx" />
     <Content Include="BookingSystem\loading.gif" />
     <Content Include="BookingSystem\new.aspx" />
@@ -114,7 +111,7 @@
     <Content Include="Controls\Announcement.ascx" />
     <Content Include="App_Data\Announcement.xml" />
     <Content Include="App_Data\Tickets.xml" />
-    <Content Include="HelpDesk\new.aspx" />
+    <Content Include="HelpDesk\Default.aspx" />
     <Content Include="images\appbar.add.rest.png" />
     <Content Include="images\appbar.minus.rest.png" />
     <Content Include="images\arrow-collapse.png" />
@@ -396,30 +393,7 @@
     <Compile Include="BookingSystem\api.ashx.cs">
       <DependentUpon>api.ashx</DependentUpon>
     </Compile>
-    <Compile Include="BookingSystem\BookingCalendar.cs" />
-    <Compile Include="BookingSystem\BookingPopup.ascx.cs">
-      <DependentUpon>BookingPopup.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="BookingSystem\BookingPopup.ascx.designer.cs">
-      <DependentUpon>BookingPopup.ascx</DependentUpon>
-    </Compile>
     <Compile Include="BookingSystem\BigBookingCalendar.cs" />
-    <Compile Include="BookingSystem\DayList.ascx.cs">
-      <DependentUpon>DayList.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="BookingSystem\DayList.ascx.designer.cs">
-      <DependentUpon>DayList.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="BookingSystem\DayListRow.cs" />
-    <Compile Include="BookingSystem\Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="BookingSystem\Default.aspx.designer.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-    </Compile>
     <Compile Include="BookingSystem\Display.aspx.cs">
       <DependentUpon>Display.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -521,12 +495,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="HelpDesk\new.aspx.cs">
-      <DependentUpon>new.aspx</DependentUpon>
+    <Compile Include="HelpDesk\Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="HelpDesk\new.aspx.designer.cs">
-      <DependentUpon>new.aspx</DependentUpon>
+    <Compile Include="HelpDesk\Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
     <Compile Include="Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>

@@ -121,7 +121,7 @@ namespace HAP.Web.API
                     (State == "Fixed" ? "Closed" : "Updated")).Replace("{2}",
                     HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />")).Replace("{3}",
                     (State == "Fixed" ? "reopen" : "update")).Replace("{4}",
-                    HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath);
+                    HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath).Replace("{5}", HttpContext.Current.User.Identity.Name).Replace("{6}", user.DisplayName);
 
                 SmtpClient smtp = new SmtpClient(hapConfig.Current.SMTP.Server, hapConfig.Current.SMTP.Port);
                 if (!string.IsNullOrEmpty(hapConfig.Current.SMTP.User))
