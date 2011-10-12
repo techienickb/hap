@@ -176,7 +176,7 @@ namespace HAP.Web.API
             else x = 1;
             XmlElement ticket = doc.CreateElement("Ticket");
             ticket.SetAttribute("id", x.ToString());
-            ticket.SetAttribute("subject", Subject);
+            ticket.SetAttribute("subject", HttpUtility.UrlDecode(Subject, System.Text.Encoding.Default));
             ticket.SetAttribute("priority", "Normal");
             ticket.SetAttribute("status", "New");
             XmlElement node = doc.CreateElement("Note");
@@ -210,7 +210,7 @@ namespace HAP.Web.API
                 FileInfo template = new FileInfo(HttpContext.Current.Server.MapPath("~/HelpDesk/newuserticket.htm"));
                 StreamReader fs = template.OpenText();
                 mes.Body = fs.ReadToEnd().Replace("{0}", x.ToString()).Replace("{1}",
-                    Subject).Replace("{2}",
+                    HttpUtility.UrlDecode(Subject, System.Text.Encoding.Default)).Replace("{2}",
                     HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />")).Replace("{3}",
                     Room).Replace("{4}",
                     ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].DisplayName).Replace("{5}",
@@ -240,7 +240,7 @@ namespace HAP.Web.API
             else x = 1;
             XmlElement ticket = doc.CreateElement("Ticket");
             ticket.SetAttribute("id", x.ToString());
-            ticket.SetAttribute("subject", Subject);
+            ticket.SetAttribute("subject", HttpUtility.UrlDecode(Subject, System.Text.Encoding.Default));
             ticket.SetAttribute("priority", Priority == "" ? "Normal": Priority);
             ticket.SetAttribute("status", "New");
             XmlElement node = doc.CreateElement("Note");
@@ -275,7 +275,7 @@ namespace HAP.Web.API
                 FileInfo template = new FileInfo(HttpContext.Current.Server.MapPath("~/HelpDesk/newadminticket.htm"));
                 StreamReader fs = template.OpenText();
                 mes.Body = fs.ReadToEnd().Replace("{0}", x.ToString()).Replace("{1}",
-                    Subject).Replace("{2}",
+                    HttpUtility.UrlDecode(Subject, System.Text.Encoding.Default)).Replace("{2}",
                     HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />")).Replace("{3}",
                     ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].DisplayName).Replace("{4}",
                     HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath);
@@ -303,7 +303,7 @@ namespace HAP.Web.API
                     FileInfo template = new FileInfo(HttpContext.Current.Server.MapPath("~/HelpDesk/newuserticket.htm"));
                     StreamReader fs = template.OpenText();
                     mes.Body = fs.ReadToEnd().Replace("{0}", x.ToString()).Replace("{1}",
-                        Subject).Replace("{2}",
+                        HttpUtility.UrlDecode(Subject, System.Text.Encoding.Default)).Replace("{2}",
                         HttpUtility.UrlDecode(Note, System.Text.Encoding.Default)).Replace("{3}",
                         Room).Replace("{4}",
                         ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].DisplayName).Replace("{5}",
