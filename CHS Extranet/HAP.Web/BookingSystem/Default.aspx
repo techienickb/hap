@@ -66,11 +66,12 @@
 	<div id="datepicker" style="position: absolute;"></div>
 	<div id="bookingsystemcontent">
 		<div id="bookingday" class="tile-border-color">
-			<div class="head tile-color">
+			<div class="head tile-color" style="width: <%=(156 * (config.BookingSystem.Lessons.Count + 1)) + 2 %>px">
 				<h1><input type="button" id="picker" onclick="return showDatePicker();" /></h1>
 				<asp:Repeater runat="server" ID="lessons"><ItemTemplate><h1><%#Eval("Name") %></h1></ItemTemplate></asp:Repeater>
 			</div>
-			<div class="body"<%=BodyCode[0] %>>
+			
+			<div class="body"<%=BodyCode[0] %> style="width: <%=(156 * (config.BookingSystem.Lessons.Count + 1)) + 2 %>px">
 				<div id="resources" class="col tile-color">
 					<asp:Repeater runat="server" ID="resources1"><ItemTemplate><div><%#Eval("Name") %></div></ItemTemplate></asp:Repeater>
 				</div>

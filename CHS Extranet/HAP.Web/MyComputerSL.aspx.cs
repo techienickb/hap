@@ -10,6 +10,7 @@ using System.Text;
 using System.IO;
 using HAP.Data;
 using System.Web.Security;
+using HAP.AD;
 
 namespace HAP.Web
 {

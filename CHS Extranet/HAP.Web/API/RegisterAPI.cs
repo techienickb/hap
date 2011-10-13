@@ -19,6 +19,7 @@ namespace HAP.Web.API
             RouteTable.Routes.Add(new ServiceRoute("api/setup", factory, typeof(setup)));
             RouteTable.Routes.Add(new ServiceRoute("api/bookingsystem", factory, typeof(BookingSystem)));
             RouteTable.Routes.Add(new ServiceRoute("api/helpdesk", factory, typeof(HelpDesk)));
+            RouteTable.Routes.Add(new ServiceRoute("api/myfiles", factory, typeof(MyFiles)));
         }
     }
 }

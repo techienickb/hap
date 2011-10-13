@@ -6,6 +6,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.Security;
 using HAP.Web.Configuration;
+using HAP.Data;
+using HAP.AD;
 
 namespace HAP.Web
 {
@@ -29,6 +31,9 @@ namespace HAP.Web
             {
                 Session.Add("password", password.Text);
                 FormsAuthentication.SetAuthCookie(username.Text, false);
+                HttpCookie tokenCookie = new HttpCookie("token", TokenGenerator.ConvertToToken(password.Text));
+                if (Request.Cookies["token"] == null) Response.AppendCookie(tokenCookie);
+                else Response.SetCookie(tokenCookie);
                 FormsAuthentication.RedirectFromLoginPage(username.Text, false);
             }
             else // Fail to login

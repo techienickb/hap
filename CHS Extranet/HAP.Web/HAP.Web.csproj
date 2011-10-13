@@ -236,6 +236,7 @@
     <Content Include="images\ui-icons_ffd27a_256x240.png" />
     <Content Include="images\ui-icons_ffffff_256x240.png" />
     <Content Include="Login.aspx" />
+    <Content Include="MyFiles\Default.aspx" />
     <Content Include="Scripts\jquery-ui-1.8.16.custom.min.js" />
     <Content Include="Scripts\jquery.ba-hashchange.min.js" />
     <Content Include="Scripts\jquery.dataTables.js" />
@@ -294,6 +295,7 @@
     <Content Include="style\bookingsystem.css" />
     <Content Include="style\helpdesk.css" />
     <Content Include="style\jquery-ui.css" />
+    <Content Include="style\MyFiles.css" />
     <Content Include="style\setup.css" />
     <Content Include="style\timetable.css" />
     <Content Include="style\ui.dynatree.css" />
@@ -379,6 +381,7 @@
     <Compile Include="API\BookingSystem.cs" />
     <Compile Include="API\HelpDesk.cs" />
     <Compile Include="API\Icon.cs" />
+    <Compile Include="API\MyFiles.cs" />
     <Compile Include="API\Setup.cs" />
     <Compile Include="API\Thumbs.cs" />
     <Compile Include="API\RegisterAPI.cs" />
@@ -530,6 +533,13 @@
     </Compile>
     <Compile Include="MyComputerSL.aspx.designer.cs">
       <DependentUpon>MyComputerSL.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MyFiles\Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MyFiles\Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
     <Compile Include="p.ashx.cs">
       <DependentUpon>p.ashx</DependentUpon>

@@ -53,6 +53,7 @@
     <Compile Include="MembershipProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoleProvider.cs" />
+    <Compile Include="TokenGenerator.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UserInfo.cs" />
   </ItemGroup>
