@@ -5,7 +5,7 @@ using System.Text;
 using System.Security.Cryptography;
 using System.IO;
 
-namespace HAP.Data
+namespace HAP.AD
 {
     public class TokenGenerator
     {

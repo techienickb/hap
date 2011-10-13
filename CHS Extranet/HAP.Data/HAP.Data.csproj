@@ -74,6 +74,8 @@
     <Compile Include="ComputerBrowser\UploadFilter.cs" />
     <Compile Include="HelpDesk\Note.cs" />
     <Compile Include="HelpDesk\Ticket.cs" />
+    <Compile Include="MyFiles\Drive.cs" />
+    <Compile Include="MyFiles\File.cs" />
     <Compile Include="OU.cs" />
     <Compile Include="Pupils.cs" />
     <Compile Include="Service References\Quota\Reference.cs">
@@ -84,7 +86,6 @@
     <Compile Include="Timetables\TimetableDay.cs" />
     <Compile Include="Timetables\TimetableRecord.cs" />
     <Compile Include="Timetables\Timetables.cs" />
-    <Compile Include="TokenGenerator.cs" />
     <Compile Include="Tracker\Logons.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tracker\trackerlogentry.cs" />
