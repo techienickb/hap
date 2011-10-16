@@ -14,11 +14,35 @@ namespace HAP.Data.MyFiles
     public class File : IComparable
     {
         public File() { }
+        public File(DirectoryInfo file, DriveMapping mapping, User user)
+        {
+            Extension = file.Extension;
+            Type = "Directory";
+            Name = file.Name + (file.Name.Contains(file.Extension) ? "" : file.Extension);
+            FileIcon fi;
+            if (FileIcon.TryGet(Extension, out fi))
+            {
+                Type = fi.Type;
+                Name = Name.Remove(Name.LastIndexOf(file.Extension));
+            }
+            Icon = "../images/icons/" + ParseForImage(file);
+            if (Icon.EndsWith(".ico")) Icon = "../api/mycomputer/" + ParseForImage(file);
+            if (file.Extension.ToLower().Equals(".png") || file.Extension.ToLower().Equals(".jpg") || file.Extension.ToLower().Equals(".jpeg") || file.Extension.ToLower().Equals(".gif") || file.Extension.ToLower().Equals(".bmp") || file.Extension.ToLower().Equals(".wmf"))
+                Icon = "../api/mycomputer/thumb/" + Converter.UNCtoDrive2(file.FullName, mapping, user).Replace('&', '^');
+            CreationTime = file.CreationTime.ToString();
+            ModifiedTime = file.LastWriteTime.ToString();
+            Size = "";
+            Path = Converter.UNCtoDrive(file.FullName, mapping, user).Replace(":", "");
+
+        }
         public File(FileInfo file, DriveMapping mapping, User user)
         {
             Extension = file.Extension;
             Type = "File";
             Name = file.Name + (file.Name.Contains(file.Extension) ? "" : file.Extension);
+            CreationTime = file.CreationTime.ToString();
+            ModifiedTime = file.LastWriteTime.ToString();
+            Size = parseLength(file.Length);
             FileIcon fi;
             if (FileIcon.TryGet(Extension, out fi))
             {
@@ -39,17 +63,21 @@ namespace HAP.Data.MyFiles
             if (Type != "File")
             {
                 Icon = "../images/icons/" + ParseForImage(file);
-                if (Icon.EndsWith(".ico")) Icon = "api/mycomputer/" + ParseForImage(file);
+                if (Icon.EndsWith(".ico")) Icon = "../api/mycomputer/" + ParseForImage(file);
             }
             else Icon = "../images/icons/file.png";
+            string m = Converter.UNCtoDrive2(file.FullName, mapping, user);
+            Path = "../Download/" + m.Replace(":", "");
             if (file.Extension.ToLower().Equals(".png") || file.Extension.ToLower().Equals(".jpg") || file.Extension.ToLower().Equals(".jpeg") || file.Extension.ToLower().Equals(".gif") || file.Extension.ToLower().Equals(".bmp") || file.Extension.ToLower().Equals(".wmf"))
-                Icon = "../api/mycomputer/thumb/" + Converter.UNCtoDrive2(file.FullName, mapping).Replace('&', '^');
-            CreationTime = file.CreationTime.ToString();
-            ModifiedTime = file.LastWriteTime.ToString();
-            Size = parseLength(file.Length);
-            Path = Converter.UNCtoDrive(file.FullName, mapping);
-
+                Icon = "../api/mycomputer/thumb/" + m.Replace('&', '^');
         }
+
+        public File(FileInfo file, DriveMapping mapping, User user, AccessControlActions actions)
+            : this(file, mapping, user)
+        {
+            this.Actions = actions;
+        }
+
         public string CreationTime { get; set; }
         public string ModifiedTime { get; set; }
         public string Name { get; set; }

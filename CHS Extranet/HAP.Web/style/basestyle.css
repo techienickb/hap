@@ -2,9 +2,9 @@
 .tile-border-color, .ui-widget-content { border-color: #0060a6; }
 .ui-widget-header a, .ui-widget-header { color: #fff; }
 .tile-color-font, .ui-tabs .ui-tabs-nav li.ui-tabs-selected a, .ui-tabs .ui-tabs-nav li.ui-tabs-selected a:hover { color: #0060a6; }
-.tiles a { background-color: #0060a6; color: #fff; }
-.tiles a:hover { background-color: #3286C1; }
-.tiles a:active { background-color: #004577; }
+.tiles a { background-color: #0060a6; color: #fff; border-color: #0060a6; }
+.tiles a:hover { background-color: #3286C1; border-color: #3286C1; }
+.tiles a:active { background-color: #004577; border-color: #004577; }
 
 html, #hapContent {font-family: Segoe UI, Tahoma; font-size: 13px; }
 a img { border: 0; }

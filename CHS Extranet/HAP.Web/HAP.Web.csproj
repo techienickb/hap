@@ -205,6 +205,7 @@
     <Content Include="images\icons\white\xps.png" />
     <Content Include="images\icons\white\zip.png" />
     <Content Include="images\icons\winword-app.png" />
+    <Content Include="images\myfiles.png" />
     <Content Include="images\setup\1.png" />
     <Content Include="images\setup\2.png" />
     <Content Include="images\setup\266.png" />
@@ -261,7 +262,6 @@
     <Content Include="images\browser-a-override-hover.gif" />
     <Content Include="images\dashed.gif" />
     <Content Include="images\haplogo.png" />
-    <Content Include="images\headbg.png" />
     <Content Include="images\icons\config.png" />
     <Content Include="images\icons\cs.png" />
     <Content Include="images\icons\dbup.png" />
@@ -304,7 +304,6 @@
     <Content Include="Tracker\log.aspx" />
     <Content Include="Tracker\logontracker-small.png" />
     <Content Include="images\Silverlight-Prompt.png" />
-    <Content Include="images\staticb.png" />
     <Content Include="images\statusicons\priority_high.png" />
     <Content Include="images\statusicons\priority_low.png" />
     <Content Include="images\statusicons\fixed.png" />
@@ -313,7 +312,6 @@
     <Content Include="images\statusicons\newticket.png" />
     <Content Include="images\statusicons\priority_normal.png" />
     <Content Include="images\statusicons\withit.png" />
-    <Content Include="images\swish.png" />
     <Content Include="images\table-head-bg.gif" />
     <Content Include="move.aspx" />
     <Content Include="Controls\NewFolder.ascx" />
