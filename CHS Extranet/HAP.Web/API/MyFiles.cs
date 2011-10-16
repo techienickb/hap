@@ -20,6 +20,63 @@ namespace HAP.Web.API
     public class MyFiles
     {
         [OperationContract]
+        [WebGet(UriTemplate="{Drive}/{*Path}")]
+        public HAP.Data.MyFiles.File[] List(string Drive, string Path)
+        {
+            DateTime d1 = DateTime.Now;
+            Path = "/" + Path;
+            hapConfig config = hapConfig.Current;
+            List<HAP.Data.MyFiles.File> Items = new List<Data.MyFiles.File>();
+            User user = new User();
+            HttpCookie token = HttpContext.Current.Request.Cookies["token"];
+            if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
+            user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
+            user.ImpersonateContained();
+            try
+            {
+                DriveMapping mapping;
+                string path = Converter.DriveToUNC(Path, Drive, out mapping, user);
+                HAP.Data.MyFiles.AccessControlActions allowactions = isWriteAuth(mapping) ? HAP.Data.MyFiles.AccessControlActions.Change : HAP.Data.MyFiles.AccessControlActions.View;
+                DirectoryInfo dir = new DirectoryInfo(path);
+                foreach (DirectoryInfo subdir in dir.GetDirectories())
+                    try
+                    {
+                        bool isHidden = (subdir.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden;
+                        bool isSystem = (subdir.Attributes & FileAttributes.System) == FileAttributes.System;
+                        if (!subdir.Name.ToLower().Contains("recycle") && !isSystem && !isHidden && !subdir.Name.ToLower().Contains("system volume info"))
+                        {
+                            HAP.Data.MyFiles.AccessControlActions actions = allowactions;
+                            if (actions == HAP.Data.MyFiles.AccessControlActions.Change)
+                            {
+                                try { System.IO.File.Create(System.IO.Path.Combine(subdir.FullName, "temp.ini")).Close(); System.IO.File.Delete(System.IO.Path.Combine(subdir.FullName, "temp.ini")); }
+                                catch { actions = HAP.Data.MyFiles.AccessControlActions.View; }
+                            }
+                            try { subdir.GetDirectories(); }
+                            catch { actions = HAP.Data.MyFiles.AccessControlActions.None; }
+                            Items.Add(new Data.MyFiles.File(subdir, mapping, user));
+                        }
+                    }
+                    catch { }
+                foreach (FileInfo file in dir.GetFiles())
+                {
+                    try
+                    {
+                        bool isHidden = (file.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden;
+                        bool isSystem = (file.Attributes & FileAttributes.System) == FileAttributes.System;
+                        if (!file.Name.ToLower().Contains("thumbs") && checkext(file.Extension) && !isHidden && !isSystem)
+                            Items.Add(new Data.MyFiles.File(file, mapping, user, allowactions));
+                    }
+                    catch
+                    {
+                        //Response.Redirect("unauthorised.aspx?path=" + Server.UrlPathEncode(uae.Message), true);
+                    }
+                }
+            }
+            finally { user.EndContainedImpersonate(); }
+            return Items.ToArray();
+        }
+
+        [OperationContract]
         [WebGet(UriTemplate="Drives")]
         public Drive[] Drives()
         {
@@ -59,7 +116,7 @@ namespace HAP.Web.API
                         catch { }
                     }
                 }
-                if (isAuth(p)) drives.Add(new Drive(p.Name, "../images/icons/netdrive.png", space, p.Drive + ":", isWriteAuth(p) ? HAP.Data.MyFiles.AccessControlActions.Change : HAP.Data.MyFiles.AccessControlActions.View));
+                if (isAuth(p)) drives.Add(new Drive(p.Name, "../images/icons/netdrive.png", space, p.Drive.ToString() + "\\", isWriteAuth(p) ? HAP.Data.MyFiles.AccessControlActions.Change : HAP.Data.MyFiles.AccessControlActions.View));
             }
             user.EndContainedImpersonate();
             return drives.ToArray();
