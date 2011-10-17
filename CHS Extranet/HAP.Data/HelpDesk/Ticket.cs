@@ -18,6 +18,7 @@ namespace HAP.Data.HelpDesk
         public string Date { get; set; }
         public string Username { get; set; }
         public string DisplayName { get; set; }
+        public bool FAQ { get; set; }
         public string ShowTo { get; set; }
 
         public Ticket(XmlNode node)
@@ -32,6 +33,8 @@ namespace HAP.Data.HelpDesk
             Username = ADUtils.FindUserInfos(node.SelectNodes("Note")[0].Attributes["username"].Value)[0].UserName;
             ShowTo = node.Attributes["showto"] == null ? "" : node.Attributes["showto"].Value;
             DisplayName = ADUtils.FindUserInfos(node.SelectNodes("Note")[0].Attributes["username"].Value)[0].DisplayName;
+            FAQ = false;
+            if (node.Attributes["faq"] != null) FAQ = bool.Parse(node.Attributes["faq"].Value);
         }
     }
 
