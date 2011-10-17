@@ -74,7 +74,7 @@ namespace HAP.Web.API
 
         [OperationContract]
         [WebInvoke(Method = "PUT", UriTemplate = "/AdminTicket/{Id}", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public FullTicket UpdateAdminTicket(string Id, string Note, string State, string Priority, string ShowTo)
+        public FullTicket UpdateAdminTicket(string Id, string Note, string State, string Priority, string ShowTo, string faq)
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
@@ -91,6 +91,8 @@ namespace HAP.Web.API
             ticket.Attributes["priority"].Value = Priority;
             if (ticket.Attributes["showto"] == null) ticket.Attributes.Append(doc.CreateAttribute("showto"));
             ticket.Attributes["showto"].Value = ShowTo;
+            if (ticket.Attributes["faq"] == null) ticket.Attributes.Append(doc.CreateAttribute("faq"));
+            ticket.Attributes["faq"].Value = faq;
 
             XmlWriterSettings set = new XmlWriterSettings();
             set.Indent = true;
@@ -360,6 +362,18 @@ namespace HAP.Web.API
             XmlDocument doc = new XmlDocument();
             doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
             return new FullTicket(doc.SelectSingleNode("/Tickets/Ticket[@id='" + TicketId + "']"));
+        }
+
+        [OperationContract]
+        [WebGet(UriTemplate = "FAQs")]
+        public Ticket[] FAQs()
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
+            List<Ticket> tickets = new List<Ticket>();
+            foreach (XmlNode node in doc.SelectNodes("/Tickets/Ticket[@faq='true']"))
+                tickets.Add(new Ticket(node));
+            return tickets.ToArray();
         }
     }
 }

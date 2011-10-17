@@ -32,6 +32,10 @@
 			<label for="ticket-fixed">Fixed: </label>
 			<input type="checkbox" id="ticket-fixed" />
 		</div>
+		<div>
+			<label for="ticket-faq">Mark as FAX: </label>
+			<input type="checkbox" id="ticket-faq" />
+		</div>
 		</asp:PlaceHolder>
 		<div>
 			<label for="ticket-note">Note: </label>
@@ -43,6 +47,7 @@
 			<li><a href="#opentickets">Open Tickets</a></li>
 			<li><a href="#closedtickets">Closed Tickets</a></li>
 			<li><a href="#newticket">New Ticket</a></li>
+			<li><a href="#faqs">FAQs</a></li>
 		</ul>
 		<div id="opentickets">
 			
@@ -88,6 +93,9 @@
 			</asp:PlaceHolder>
 			<input type="submit" value="File Ticket" onclick="return fileTicket()" />
 		</div>
+		<div id="faqs">
+			
+		</div>
 	</div>
 	<script type="text/javascript">
 		var curticket;
@@ -100,7 +108,7 @@
 					var data = '{ "Note": "' + escape($("#ticket-note").val()) + '", "State": ';
 					var url = '<%=ResolveUrl("~/api/HelpDesk/Ticket/")%>' + curticket;
 					if (<%=User.IsInRole("Domain Admins").ToString().ToLower() %>) {
-						data += ($("#ticket-fixed").is(":checked") ? '"Fixed"' : '"With IT"') + ', "Priority": "' + $("#ticket-priority input:checked").attr("value") + '", "ShowTo": "' + $("#ticket-showto").val() + '"';
+						data += ($("#ticket-fixed").is(":checked") ? '"Fixed"' : '"With IT"') + ', "Priority": "' + $("#ticket-priority input:checked").attr("value") + '", "ShowTo": "' + $("#ticket-showto").val() + '", "FAQ": "' + ($("ticket-faq").is(":checked") ? + 'true' : 'false') + '"';
 						url = '<%=ResolveUrl("~/api/HelpDesk/AdminTicket/")%>' + curticket;
 					} else data += '"New"';
 					data += ' }';
@@ -152,6 +160,20 @@
 									$("#closedtickets").html(x);
 								}
 							});
+			                $.ajax({
+				                type: 'GET',
+				                url: '<%=ResolveUrl("~/api/HelpDesk/FAQs")%>',
+				                dataType: 'json',
+				                contentType: 'application/json; charset=utf-8',
+				                success: function (data) {
+					                var x = "";
+					                for (var i = 0; i < data.length; i++) {
+						                x += '<div><a href="#ticket-' + data[i].Id + '" class="' + data[i].Priority.replace(/ /g, "-") + '">' + data[i].Subject + '</a></div>'
+					                }
+					                if (data.length == 0) x = "No FAQs";
+					                $("#faqs").html(x);
+				                }
+			                });
 						}
 					});
 					$(this).dialog("close");
@@ -194,8 +216,8 @@
 					}
 					curticket = data.Id;
 					$('<div id="ticket-' + curticket + '" class="ticket">Loading Ticket ' + curticket + '...</div>').appendTo("#tabs");
-					$("#tabs").tabs("add", '#ticket-' + curticket, "Ticket: " + curticket, 3);
-					$("#tabs").tabs("select", 3);
+					$("#tabs").tabs("add", '#ticket-' + curticket, "Ticket: " + curticket, 4);
+					$("#tabs").tabs("select", 4);
 					$(".ui-tabs-selected a span").html("Ticket: " + data.Subject);
 					var h = '<button style="float: right;" onclick="return updateTicket();">Update</button><div><label>Ticket ' + curticket + ': </label>' + data.Subject + '</div><div><label>Opened By: </label>' + data.DisplayName + ' (' + data.Username + ')</div><div><label>Opened on: </label>' + data.Date + '</div><div><label>Priority: </label>' + data.Priority + '</div><div><label>Status: </label>' + data.Status + '</div><div class="notes tile-border-color">';
 					for (var i = 0; i < data.Notes.length; i++)
@@ -223,12 +245,12 @@
 		}
 
 		function loadTicket() {
-			$("#tabs").tabs("remove", 3);
+			$("#tabs").tabs("remove", 4);
 			$(".ticket").remove();
 			if (curticket != null) {
 				$('<div id="ticket-' + curticket + '" class="ticket">Loading Ticket ' + curticket + '...</div>').appendTo("#tabs");
-				$("#tabs").tabs("add", '#ticket-' + curticket, "Ticket: " + curticket, 3);
-				$("#tabs").tabs("select", 3);
+				$("#tabs").tabs("add", '#ticket-' + curticket, "Ticket: " + curticket, 4);
+				$("#tabs").tabs("select", 4);
 				$.ajax({
 					type: 'GET',
 					url: '<%=ResolveUrl("~/api/HelpDesk/Ticket/")%>' + curticket,
@@ -253,7 +275,7 @@
 		});
 		$(function () {
 			$("#updateticket").dialog({ autoOpen: false });
-			$("#tabs").tabs({ select: function (event, ui) { if (ui.index < 3) { window.location.href = '#'; $("#updateticket").dialog("close"); } return true; } });
+			$("#tabs").tabs({ select: function (event, ui) { if (ui.index < 4) { window.location.href = '#'; $("#updateticket").dialog("close"); } return true; } });
 			$("button").button();
 			$("input[type=submit]").button();
 			$(".button").button();
@@ -283,6 +305,20 @@
 					}
 					if (data.length == 0) x = "No Tickets";
 					$("#closedtickets").html(x);
+				}
+			});
+			$.ajax({
+				type: 'GET',
+				url: '<%=ResolveUrl("~/api/HelpDesk/FAQs")%>',
+				dataType: 'json',
+				contentType: 'application/json; charset=utf-8',
+				success: function (data) {
+					var x = "";
+					for (var i = 0; i < data.length; i++) {
+						x += '<div><a href="#ticket-' + data[i].Id + '" class="' + data[i].Priority.replace(/ /g, "-") + '">' + data[i].Subject + '</a></div>'
+					}
+					if (data.length == 0) x = "No FAQs";
+					$("#faqs").html(x);
 				}
 			});
 			if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curticket = window.location.href.split('#')[1].substr(7);
