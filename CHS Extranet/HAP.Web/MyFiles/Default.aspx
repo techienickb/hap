@@ -117,7 +117,7 @@
 							items.push(new Drive(data[i]));
 						for (var i = 0; i < items.length; i++)
 							items[i].Render();
-					}
+		            }, error: OnError
 				});
 			} else {
 				$.ajax({
@@ -132,7 +132,7 @@
 							items.push(new Item(data[i]));
 						for (var i = 0; i < items.length; i++)
 							items[i].Render();
-					}
+		            }, error: OnError
 				});
 			}
 		}
@@ -151,7 +151,7 @@
 									res.push({ title: data[i].Name, href: "#" + data[i].Path, isFolder: true, isLazy: true, noLink: false, key: data[i].Path });
 								node.setLazyNodeStatus(DTNodeStatus_Ok);
 								node.addChild(res);
-							}
+				            }, error: OnError
 						});
 					} else {
 						$.ajax({
@@ -167,7 +167,7 @@
 									}
 								node.setLazyNodeStatus(DTNodeStatus_Ok);
 								node.addChild(res);
-							}
+							}, error: OnError
 						});
 					}
 				},
@@ -176,6 +176,12 @@
 						$(nodeSpan).children("a").attr("href", dtnode.data.href);
 				}
 			});
+			function OnError(xhr, ajaxOptions, thrownError) {
+				console.log(thrownError);
+				console.log(ajaxOptions);
+				console.log(xhr);
+				alert(thrownError);
+			}
 			if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curpath = window.location.href.split("#")[1];
 			else curpath = null;
 			Load();

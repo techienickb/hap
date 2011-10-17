@@ -14,6 +14,7 @@ using Microsoft.Win32;
 using HAP.Data.ComputerBrowser;
 using System.Text;
 using System.Web.SessionState;
+using HAP.AD;
 
 namespace HAP.Web.routing
 {
@@ -48,7 +49,13 @@ namespace HAP.Web.routing
         {
             get
             {
-                if (_ADUser == null) _ADUser = ((HAP.AD.User)Membership.GetUser());
+                if (_ADUser == null)
+                {
+                    _ADUser = new User();
+                    HttpCookie token = HttpContext.Current.Request.Cookies["token"];
+                    if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
+                    _ADUser.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
+                }
                 return _ADUser;
             }
         }
@@ -85,14 +92,11 @@ namespace HAP.Web.routing
         public void ProcessRequest(HttpContext context)
         {
             config = hapConfig.Current;
-            ADUser.Impersonate();
-            string userhome = ADUser.HomeDirectory;
-            if (!userhome.EndsWith("\\")) userhome += "\\";
             string path = RoutingPath.Replace('^', '&').Replace("%20", " ");
-            DriveMapping unc = null;
-            unc = config.MySchoolComputerBrowser.Mappings[RoutingDrive.ToCharArray()[0]];
+            DriveMapping unc = config.MySchoolComputerBrowser.Mappings[RoutingDrive.ToCharArray()[0]];
             if (unc == null || !isAuth(unc)) context.Response.Redirect(context.Request.ApplicationPath + "/unauthorised.aspx", true);
             else path = Converter.FormatMapping(unc.UNC, ADUser) + '\\' + path.Replace('/', '\\');
+            ADUser.Impersonate();
             long startBytes = 0;
 
             FileInfo file = new FileInfo(path);
