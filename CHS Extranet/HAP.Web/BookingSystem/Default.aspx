@@ -189,6 +189,10 @@
 			}
 		}
 		function OnError(xhr, ajaxOptions, thrownError) {
+			console.log(thrownError);
+			console.log(ajaxOptions);
+			console.log(xhr);
+			alert(thrownError);
 		}
 		$(window).hashchange(function () {
 			
