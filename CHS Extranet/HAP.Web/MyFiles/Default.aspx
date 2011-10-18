@@ -8,7 +8,7 @@
 	<link href="../style/MyFiles.css" rel="stylesheet" type="text/css" />
 </asp:Content>
 <asp:Content ContentPlaceHolderID="body" runat="server">
-		<div style="overflow: hidden; clear: both; position: relative;">
+	<div style="overflow: hidden; clear: both; position: relative; height: 120px">
 		<div class="tiles" style="position: absolute; left: 0; margin-top: 45px;">
 			<a class="button" href="../">Home Access Plus+ Home</a>
 		</div>
@@ -33,30 +33,31 @@
 			else curpath = null;
 			Load();
 		});
+		function OnError(xhr, ajaxOptions, thrownError) {
+			console.log(thrownError);
+			console.log(ajaxOptions);
+			console.log(xhr);
+			alert(thrownError);
+		}
 		function Drive(data) {
 			this.Data = data;
 			this.Id = "";
 			this.Render = function () {
 				this.Id = this.Data.Path.substr(0, 1);
-				var label = this.Data.Name + " (" + this.Data.Path.substr(0, 1) + ")";
-
-				$("#MyFiles").append('<a id="' + this.Id + '" href="#' + this.Data.Path + '" class="Drive"><span class="icon" style="background-image: url(' + this.Data.Icon + ');"></span><span class="label">' + label + '</span><span class="progress"><label>' + this.Data.Space + '%</label><i style="width: ' + this.Data.Space + '%"></i></span></a>');
-				if ($("#Tree > ul > li > ul").has("#nav-" + this.Id).length == 0) 
-					$("#Tree > ul > li > ul").append('<li id="nav-' + this.Id + '"><a href="#' + this.Data.Path + '">' + this.Data.Name + '</a></li>');
+				$("#MyFiles").append('<a id="' + this.Id + '" href="#' + this.Data.Path + '" class="Drive"><span class="icon">' + this.Data.Path.substr(0, 1) + '</span><span class="label">' + this.Data.Name + '</span><span class="progress"><label>' + this.Data.Space + '%</label><i style="width: ' + this.Data.Space + '%"></i></span></a>');
 			};
 			this.Refresh = function () {
 				$("#" + this.Id).attr("href", "#" + this.Data.Path);
-				var label = this.Data.Name + " (" + this.Data.Path + ")";
-				$("#" + this.Id).html('<span class="icon" style="background-image: url(' + this.Data.Icon + ');"></span><span class="label">' + label + '</span><span class="progress"><label>' + this.Data.Space + '%</label><i style="width: ' + this.Data.Space + '%"></i></span>');
+				$("#" + this.Id).html('<span class="icon">' + this.Data.Path.substr(0, 1) + '</span><span class="label">' + this.Data.Name + '</span><span class="progress"><label>' + this.Data.Space + '%</label><i style="width: ' + this.Data.Space + '%"></i></span>');
 				$('#nav-' + this.Id + ' > a').attr("href", '#' + this.Data.Path);
-				$('#nav-' + this.Id + ' > a').html(this.Data.Name);
+				$('#nav-' + this.Id + ' > a > span').html(this.Data.Name);
 			};
 		}
 		function Item(data) {
 			this.Data = data;
 			this.Id = "";
 			this.Render = function () {
-				this.Id = this.Data.Name.replace(/ /g, "_");
+				this.Id = this.Data.Name.replace(/ /g, "_").replace(/\\/g, "-");
 				var label = this.Data.Name;
 
 				var h = '<a id="' + this.Id + '" ';
@@ -117,7 +118,7 @@
 							items.push(new Drive(data[i]));
 						for (var i = 0; i < items.length; i++)
 							items[i].Render();
-		            }, error: OnError
+					}, error: OnError
 				});
 			} else {
 				$.ajax({
@@ -132,7 +133,7 @@
 							items.push(new Item(data[i]));
 						for (var i = 0; i < items.length; i++)
 							items[i].Render();
-		            }, error: OnError
+					}, error: OnError
 				});
 			}
 		}
@@ -151,7 +152,7 @@
 									res.push({ title: data[i].Name, href: "#" + data[i].Path, isFolder: true, isLazy: true, noLink: false, key: data[i].Path });
 								node.setLazyNodeStatus(DTNodeStatus_Ok);
 								node.addChild(res);
-				            }, error: OnError
+							}, error: OnError
 						});
 					} else {
 						$.ajax({
@@ -176,12 +177,6 @@
 						$(nodeSpan).children("a").attr("href", dtnode.data.href);
 				}
 			});
-			function OnError(xhr, ajaxOptions, thrownError) {
-				console.log(thrownError);
-				console.log(ajaxOptions);
-				console.log(xhr);
-				alert(thrownError);
-			}
 			if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curpath = window.location.href.split("#")[1];
 			else curpath = null;
 			Load();

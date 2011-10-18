@@ -74,7 +74,7 @@ namespace HAP.Web.API
 
         [OperationContract]
         [WebInvoke(Method = "PUT", UriTemplate = "/AdminTicket/{Id}", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public FullTicket UpdateAdminTicket(string Id, string Note, string State, string Priority, string ShowTo, string faq)
+        public FullTicket UpdateAdminTicket(string Id, string Note, string State, string Priority, string ShowTo, string FAQ)
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
@@ -92,7 +92,7 @@ namespace HAP.Web.API
             if (ticket.Attributes["showto"] == null) ticket.Attributes.Append(doc.CreateAttribute("showto"));
             ticket.Attributes["showto"].Value = ShowTo;
             if (ticket.Attributes["faq"] == null) ticket.Attributes.Append(doc.CreateAttribute("faq"));
-            ticket.Attributes["faq"].Value = faq;
+            ticket.Attributes["faq"].Value = string.IsNullOrWhiteSpace(FAQ) ? "false" : FAQ;
 
             XmlWriterSettings set = new XmlWriterSettings();
             set.Indent = true;
@@ -105,7 +105,7 @@ namespace HAP.Web.API
 
             UserInfo user = ADUtils.FindUserInfos(ticket.SelectNodes("Note")[0].Attributes["username"].Value)[0];
             UserInfo currentuser = ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0];
-            if (hapConfig.Current.SMTP.Enabled && !string.IsNullOrEmpty(user.Email))
+            if (hapConfig.Current.SMTP.Enabled && user.Email != null && !string.IsNullOrEmpty(user.Email))
             {
                 MailMessage mes = new MailMessage();
                 mes.Subject = "Your Ticket (#" + Id + ") has been " + (State == "Fixed" ? "Closed" : "Updated");
@@ -261,7 +261,7 @@ namespace HAP.Web.API
             writer.Flush();
             writer.Close();
 
-            if (hapConfig.Current.SMTP.Enabled && !string.IsNullOrEmpty(ADUtils.FindUserInfos(User)[0].Email))
+            if (hapConfig.Current.SMTP.Enabled && ADUtils.FindUserInfos(User)[0].Email != null && !string.IsNullOrEmpty(ADUtils.FindUserInfos(User)[0].Email))
             {
                 MailMessage mes = new MailMessage();
 

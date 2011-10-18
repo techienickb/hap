@@ -72,8 +72,6 @@ namespace HAP.Web
             if (!IsPostBack && !IsCallback && !IsAsync)
             {
                 ADUser.Impersonate();
-                string userhome = ADUser.HomeDirectory;
-                if (!userhome.EndsWith("\\")) userhome += "\\";
                 string path = Request.QueryString["path"].Remove(0, 1).Replace('^', '&');
                 string p = Request.QueryString["path"].Substring(0, 1);
                 DriveMapping unc = null;
@@ -88,8 +86,6 @@ namespace HAP.Web
         {
             ADUser.Impersonate();
             message.Text = "";
-            string userhome = ADUser.HomeDirectory;
-            if (!userhome.EndsWith("\\")) userhome += "\\";
             string path = Request.QueryString["path"].Remove(0, 1);
             string p = Request.QueryString["path"].Substring(0, 1);
             DriveMapping unc = null;

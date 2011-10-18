@@ -20,8 +20,8 @@ a.dynatree-title:active { border-color: #333; background: #333; color: #fff; }
 #MyFiles a.Selectable:hover { background-color: #dedede; border-color: #dedede; }
 #MyFiles a.Selectable:active { background-color: #333; border-color: #333; color: #fff; }
 #MyFiles a.Drive { height: 70px; }
-#MyFiles a .icon { float: left; text-align: center; margin-right: 10px; width: 40px; height: 40px; background: transparent no-repeat center center; }
-#MyFiles a.Drive .icon { height: 64px; width: 64px; }
+#MyFiles a .icon { float: left; text-align: center; margin-right: 10px; width: 40px; height: 40px; background: transparent no-repeat center center; font-size: 36px; line-height: 40px; }
+#MyFiles a.Drive .icon { height: 64px; width: 64px; font-size: 60px; line-height: 64px; }
 #MyFiles a .label { padding: 0; display: block; line-height: 13px; }
 #MyFiles a.Selectable:active .label, #MyFiles a.Selected { color: #fff; }
 #MyFiles a.Folder .label { padding-top: 4px; overflow: hidden; text-overflow: ellipse; white-space: nowrap; }
