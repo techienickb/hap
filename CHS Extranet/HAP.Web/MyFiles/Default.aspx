@@ -110,7 +110,7 @@
 					type: 'GET',
 					url: '<%=ResolveUrl("~/api/MyFiles/Drives")%>',
 					dataType: 'json',
-					contentType: 'application/json; charset=utf-8',
+					contentType: 'application/json;',
 					success: function (data) {
 						items = new Array();
 						$("#MyFiles").html("");
@@ -125,7 +125,7 @@
 					type: 'GET',
 					url: '<%=ResolveUrl("~/api/MyFiles/")%>' + curpath.replace(/\\/gi, "/"),
 					dataType: 'json',
-					contentType: 'application/json; charset=utf-8',
+					contentType: 'application/json',
 					success: function (data) {
 						items = new Array();
 						$("#MyFiles").html("");
@@ -145,7 +145,7 @@
 							type: 'GET',
 							url: '<%=ResolveUrl("~/api/MyFiles/Drives")%>',
 							dataType: 'json',
-							contentType: 'application/json; charset=utf-8',
+							contentType: 'application/json',
 							success: function (data) {
 								res = [];
 								for (var i = 0; i < data.length; i++)
@@ -159,7 +159,7 @@
 							type: 'GET',
 							url: '<%=ResolveUrl("~/api/MyFiles/")%>' + node.data.href.substr(1).replace(/\\/g, "/"),
 							dataType: 'json',
-							contentType: 'application/json; charset=utf-8',
+							contentType: 'application/json',
 							success: function (data) {
 								res = [];
 								for (var i = 0; i < data.length; i++)

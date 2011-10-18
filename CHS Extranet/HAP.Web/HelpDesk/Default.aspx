@@ -117,7 +117,7 @@
 						url: url,
 						dataType: 'json',
 						data: data,
-						contentType: 'application/json; charset=utf-8',
+						contentType: 'application/json',
 						success: function (data) {
 							$("#ticket-note").val("");
 							if (<%=User.IsInRole("Domain Admins").ToString().ToLower() %>) {
@@ -136,7 +136,7 @@
 								type: 'GET',
 								url: '<%=ResolveUrl("~/api/HelpDesk/Tickets/Open" + (User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName))%>',
 								dataType: 'json',
-								contentType: 'application/json; charset=utf-8',
+								contentType: 'application/json',
 								success: function (data) {
 									var x = "";
 									for (var i = 0; i < data.length; i++) {
@@ -150,7 +150,7 @@
 								type: 'GET',
 								url: '<%=ResolveUrl("~/api/HelpDesk/Tickets/Closed" + (User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName))%>',
 								dataType: 'json',
-								contentType: 'application/json; charset=utf-8',
+								contentType: 'application/json',
 								success: function (data) {
 									var x = "";
 									for (var i = 0; i < data.length; i++) {
@@ -164,7 +164,7 @@
 				                type: 'GET',
 				                url: '<%=ResolveUrl("~/api/HelpDesk/FAQs")%>',
 				                dataType: 'json',
-				                contentType: 'application/json; charset=utf-8',
+				                contentType: 'application/json',
 				                success: function (data) {
 					                var x = "";
 					                for (var i = 0; i < data.length; i++) {
@@ -205,7 +205,7 @@
 				url: url,
 				dataType: 'json',
 				data: data,
-				contentType: 'application/json; charset=utf-8',
+				contentType: 'application/json',
 				success: function (data) {
 					$("#newticket-subject").val("");
 					$("#newticket-room").val("");
@@ -229,7 +229,7 @@
 						type: 'GET',
 						url: '<%=ResolveUrl("~/api/HelpDesk/Tickets/Open" + (User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName))%>',
 						dataType: 'json',
-						contentType: 'application/json; charset=utf-8',
+						contentType: 'application/json',
 						success: function (data) {
 							var x = "";
 							for (var i = 0; i < data.length; i++) {
@@ -255,7 +255,7 @@
 					type: 'GET',
 					url: '<%=ResolveUrl("~/api/HelpDesk/Ticket/")%>' + curticket,
 					dataType: 'json',
-					contentType: 'application/json; charset=utf-8',
+					contentType: 'application/json',
 					success: function (data) {
 						$(".ui-tabs-selected a span").html("Ticket: " + data.Subject);
 						var h = '<button style="float: right;" onclick="return updateTicket();">Update</button><div><label>Ticket ' + curticket + ': </label>' + data.Subject + '</div><div><label>Opened By: </label>' + data.DisplayName + ' (' + data.Username + ')</div><div><label>Opened on: </label>' + data.Date + '</div><div><label>Priority: </label>' + data.Priority + '</div><div><label>Status: </label>' + data.Status + '</div><div class="notes tile-border-color">';
@@ -283,7 +283,7 @@
 				type: 'GET',
 				url: '<%=ResolveUrl("~/api/HelpDesk/Tickets/Open" + (User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName))%>',
 				dataType: 'json',
-				contentType: 'application/json; charset=utf-8',
+				contentType: 'application/json',
 				success: function (data) {
 					var x = "";
 					for (var i = 0; i < data.length; i++) {
@@ -297,7 +297,7 @@
 				type: 'GET',
 				url: '<%=ResolveUrl("~/api/HelpDesk/Tickets/Closed" + (User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName))%>',
 				dataType: 'json',
-				contentType: 'application/json; charset=utf-8',
+				contentType: 'application/json',
 				success: function (data) {
 					var x = "";
 					for (var i = 0; i < data.length; i++) {
@@ -311,7 +311,7 @@
 				type: 'GET',
 				url: '<%=ResolveUrl("~/api/HelpDesk/FAQs")%>',
 				dataType: 'json',
-				contentType: 'application/json; charset=utf-8',
+				contentType: 'application/json',
 				success: function (data) {
 					var x = "";
 					for (var i = 0; i < data.length; i++) {

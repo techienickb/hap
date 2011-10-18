@@ -217,6 +217,9 @@ namespace HAP.Web
                 hapConfig config = hapConfig.Current;
                 errormess.Text = "Password Changed";
                 Session["password"] = newpass.Text;
+                HttpCookie c = Request.Cookies["token"];
+                c.Value = newpass.Text;
+                Response.SetCookie(c);
             }
             catch (Exception ex) { errormess.Text = ex.Message; }
             savepass.Enabled = true;
