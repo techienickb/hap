@@ -18,7 +18,7 @@ using HAP.Web.BookingSystem;
 namespace HAP.Web.API
 {
     [ServiceContract(Namespace = "HAP.Web.API")]
-    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
+    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
     public class BookingSystem
     {
         // To use HTTP GET, add [WebGet] attribute. (Default ResponseFormat is WebMessageFormat.Json)

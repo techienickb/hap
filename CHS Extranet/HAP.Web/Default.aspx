@@ -22,7 +22,7 @@
                         <img src="images/icons/net.png" alt="" />
                         <h2>Access my Files</h2>
                         <p>Transfer files between your home and school without emailing and USB Keys</p>
-                        <asp:HyperLink runat="server" NavigateUrl="~/mycomputer.aspx">Browse for files</asp:HyperLink>
+                        <asp:HyperLink runat="server" NavigateUrl="~/mycomputer.aspx">Browse for files<span class="l1"></span></asp:HyperLink>
                     </div>
                 </div>
                 <div id="iwt2">
@@ -31,7 +31,7 @@
                         <img src="images/icons/069.png" alt="" />
                         <h2>Protect my PC</h2>
                         <p>Scan your computer if you think it might be infected with a virus, spyware, or other malware.</p>
-                        <a href="http://www.microsoft.com/security/default.aspx">Microsoft Security</a>
+                        <a href="http://www.microsoft.com/security/default.aspx">Microsoft Security<span class="l1"></span></a>
                     </div>
                 </div>
                 <script type="text/javascript">

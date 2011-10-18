@@ -563,7 +563,7 @@
 											type: 'POST',
 											url: 'API/Setup/AddMapping',
 											data: '{ "drive": "' + $("#mappingDrive").val() + '", "name": "' + $("#mappingName").val() + '", "unc": "' + $("#mappingUNC").val().replace(/\\/g, "/") + '", "enablemove": ' + ($("#mappingEnableMove").attr("checked") ? "true" : "false") + ', "enablereadto": "' + $("#mappingEnableReadTo").val() + '", "enablewriteto": "' + $("#mappingEnableWriteTo").val() + '", "usagemode": "' + ($("mappingUsageModeDriveSpace").attr("checked") ? "DriveSpace" : "Quota") + '" }',
-											contentType: 'application/json; charset=utf-8',
+											contentType: 'application/json',
 											dataType: 'json',
 											success: OnMappingAddSuccess,
 											error: OnUpdateError
@@ -614,7 +614,7 @@
 											type: 'POST',
 											url: 'API/Setup/UpdateMapping',
 											data: '{ "origdrive": "' + tempe.children("a").children("b").html() + '", "drive": "' + $("#mappingDrive").val() + '", "name": "' + $("#mappingName").val() + '", "unc": "' + $("#mappingUNC").val().replace(/\\/g, "/") + '", "enablemove": ' + ($("#mappingEnableMove").attr("checked") ? "true" : "false") + ', "enablereadto": "' + $("#mappingEnableReadTo").val() + '", "enablewriteto": "' + $("#mappingEnableWriteTo").val() + '", "usagemode": "' + ($("mappingUsageModeDriveSpace").attr("checked") ? "DriveSpace" : "Quota") + '" }',
-											contentType: 'application/json; charset=utf-8',
+											contentType: 'application/json',
 											dataType: 'json',
 											success: OnMappingUpdateSuccess,
 											error: OnUpdateError
@@ -653,7 +653,7 @@
 								type: 'POST',
 								url: 'API/Setup/RemoveMapping',
 								data: '{ "drive": "' + tempe.children("a").children("b").html() + '" }',
-								contentType: 'application/json; charset=utf-8',
+								contentType: 'application/json',
 								dataType: 'json',
 								success: OnMappingRemoveSuccess,
 								error: OnUpdateError
@@ -681,7 +681,7 @@
 											type: 'POST',
 											url: 'API/Setup/UpdateFilter',
 											data: '{ "origname": "' + tempe.children("a").children("b").html() + '", "origexpression": "' + tempe.children("a").children("i").html() + '", "name": "' + $("#filterName").val() + '", "expression": "' + $("#filterExpression").val() + '", "enablefor": "' + $("#filterEnableFor").val() + '" }',
-											contentType: 'application/json; charset=utf-8',
+											contentType: 'application/json',
 											dataType: 'json',
 											success: OnFilterUpdateSuccess,
 											error: OnUpdateError
@@ -714,7 +714,7 @@
 								type: 'POST',
 								url: 'API/Setup/RemoveFilter',
 								data: '{ "name": "' + tempe.children("a").children("b").html() + '", "expression": "' + tempe.children("a").children("i").html() + '" }',
-								contentType: 'application/json; charset=utf-8',
+								contentType: 'application/json',
 								dataType: 'json',
 								success: OnFilterRemoveSuccess,
 								error: OnUpdateError
@@ -741,7 +741,7 @@
 											type: 'POST',
 											url: 'API/Setup/AddFilter',
 											data: '{ "name": "' + $("#filterName").val() + '", "expression": "' + $("#filterExpression").val() + '", "enablefor": "' + $("#filterEnableFor").val() + '" }',
-											contentType: 'application/json; charset=utf-8',
+											contentType: 'application/json',
 											dataType: 'json',
 											success: OnFilterAddSuccess,
 											error: OnUpdateError
@@ -780,7 +780,7 @@
 											type: 'POST',
 											url: 'API/Setup/UpdateQServer',
 											data: '{ "origserver": "' + tempe.children("a").children("b").html() + '", "origexpression": "' + tempe.children("a").children("i").html().replace(/\\/g, "/") + '", "server": "' + $("#qserver").val() + '", "expression": "' + $("#qexpression").val().replace(/\\/g, "/") + ', "drive": "' + $("#qdrive").val() + '" }',
-											contentType: 'application/json; charset=utf-8',
+											contentType: 'application/json',
 											dataType: 'json',
 											success: OnQServerUpdateSuccess,
 											error: OnUpdateError
@@ -813,7 +813,7 @@
 								type: 'POST',
 								url: 'API/Setup/RemoveQServer',
 								data: '{ "server": "' + tempe.children("a").children("b").html() + '", "expression": "' + tempe.children("a").children("i").html().replace(/\\/g, "/") + '" }',
-								contentType: 'application/json; charset=utf-8',
+								contentType: 'application/json',
 								dataType: 'json',
 								success: OnQServerRemoveSuccess,
 								error: OnUpdateError
@@ -839,7 +839,7 @@
 											type: 'POST',
 											url: 'API/Setup/AddQServer',
 											data: '{ "server": "' + $("#qserver").val() + '", "expression": "' + $("#qexpression").val().replace(/\\/g, "/") + '", "drive": "' + $("#qdrive").val() + '" }',
-											contentType: 'application/json; charset=utf-8',
+											contentType: 'application/json',
 											dataType: 'json',
 											success: OnQServerAddSuccess,
 											error: OnUpdateError
@@ -880,7 +880,7 @@
 											type: 'POST',
 											url: 'API/Setup/AddResource',
 											data: '{ "name": "' + $("#resName").val() + '", "type": "' + $("#resType").val() + '", "enabled": ' + ($("#resEnabled").attr("checked") ? 'true' : 'false') + ', "charging": ' + ($("#resCharging").attr("checked") ? 'true' : 'false') + ', "admins": "' + $("#resAdmins").val() + '", "emailadmins": ' + ($("#resEmail").attr("checked") ? 'true' : 'false') + ' }',
-											contentType: 'application/json; charset=utf-8',
+											contentType: 'application/json',
 											dataType: 'json',
 											success: OnResourceAddSuccess,
 											error: OnUpdateError
@@ -925,7 +925,7 @@
 											type: 'POST',
 											url: 'API/Setup/UpdateResource',
 											data: '{ "origname": "' + tempe.children(".resource").children("span").html() + '", "name": "' + $("#resName").val() + '", "type": "' + $("#resType").val() + '", "enabled": ' + ($("#resEnabled").attr("checked") == "checked" ? 'true' : 'false') + ', "charging": ' + ($("#resCharging").attr("checked") ? 'true' : 'false') + ', "admins": "' + $("#resAdmins").val() + '", "emailadmins": ' + ($("#resEmail").attr("checked") ? 'true' : 'false') + ' }',
-											contentType: 'application/json; charset=utf-8',
+											contentType: 'application/json',
 											dataType: 'json',
 											success: OnResourceUpdateSuccess,
 											error: OnUpdateError
@@ -956,7 +956,7 @@
 								type: 'POST',
 								url: 'API/Setup/RemoveResource',
 								data: '{ name: "' + tempe.children(".resource").children("span").html() + '" }',
-								contentType: 'application/json; charset=utf-8',
+								contentType: 'application/json',
 								dataType: 'json',
 								success: OnResourceRemoveSuccess,
 								error: OnUpdateError
@@ -987,7 +987,7 @@
 											type: 'POST',
 											url: 'API/Setup/AddLesson',
 											data: '{ "name": "' + $("#lessonName").val() + '", "type": "' + $("#lessonType").val() + '", "start": "' + $("#lessonStart").val() + '", "end": "' + $("#lessonEnd").val() + '" }',
-											contentType: 'application/json; charset=utf-8',
+											contentType: 'application/json',
 											dataType: 'json',
 											success: OnLessonAddSuccess,
 											error: OnUpdateError
@@ -1027,7 +1027,7 @@
 											type: 'POST',
 											url: 'API/Setup/EditLesson',
 											data: '{ "origname": "' + $(tempe).parent().parent().children(".lesson").children("span").html() + '", "name": "' + $("#lessonName").val() + '", "type": "' + $("#lessonType").val() + '", "start": "' + $("#lessonStart").val() + '", "end": "' + $("#lessonEnd").val() + '" }',
-											contentType: 'application/json; charset=utf-8',
+											contentType: 'application/json',
 											dataType: 'json',
 											success: OnLessonEditSuccess,
 											error: OnUpdateError
@@ -1062,7 +1062,7 @@
 								type: 'POST',
 								url: 'API/Setup/RemoveLesson',
 								data: '{ "name": "' + $(b).parent().parent().children(".lesson").children("span").html() + '" }',
-								contentType: 'application/json; charset=utf-8',
+								contentType: 'application/json',
 								dataType: 'json',
 								success: OnLessonRemoveSuccess,
 								error: OnUpdateError
@@ -1090,7 +1090,7 @@
 											type: 'POST',
 											url: 'API/Setup/AddSubject',
 											data: '{ "subject": "' + $("#subject").val() + '"   }',
-											contentType: 'application/json; charset=utf-8',
+											contentType: 'application/json',
 											dataType: 'json',
 											success: OnSubjectAddSuccess,
 											error: OnUpdateError
@@ -1127,7 +1127,7 @@
 											type: 'POST',
 											url: 'API/Setup/UpdateSubject',
 											data: '{ "origsubject": "' + $(tempe).parent().parent().children("span").html() + '", "subject": "' + $("#subject").val() + '"   }',
-											contentType: 'application/json; charset=utf-8',
+											contentType: 'application/json',
 											dataType: 'json',
 											success: OnSubjectEditSuccess,
 											error: OnUpdateError
@@ -1158,7 +1158,7 @@
 								type: 'POST',
 								url: 'API/Setup/RemoveSubject',
 								data: '{ "subject": "' + $(tempe).parent().parent().children("span").html() + '" }',
-								contentType: 'application/json; charset=utf-8',
+								contentType: 'application/json',
 								dataType: 'json',
 								success: OnRemoveSubjectSuccess,
 								error: OnUpdateError
@@ -1181,7 +1181,7 @@
 								type: 'POST',
 								url: 'API/Setup/RemoveLink',
 								data: '{ "group": "' + $("#" + $(tempe).parent().parent().parent().attr("id") + " > h4 > .lgName").html() + '", "name": "' + $("#" + $(tempe).parent().attr("id") + " > a > b").html() + '" }',
-								contentType: 'application/json; charset=utf-8',
+								contentType: 'application/json',
 								dataType: 'json',
 								success: OnLinkDeleteSuccess,
 								error: OnUpdateError
@@ -1215,7 +1215,7 @@
 											type: 'POST',
 											url: 'API/Setup/AddLink',
 											data: '{ "group": "' + $("#" + tempe + " > h4 > .lgName").html() + '", "name": "' + $("#linkName").val() + '", "desc": "' + $("#linkDesc").val() + '", "icon": "' + $("#linkIcon").val() + '", "url": "' + $("#linkUrl").val() + '", "target": "' + $("#linkTarget").val() + '", "showto": "' + $("#linkShowTo").val() + '" }',
-											contentType: 'application/json; charset=utf-8',
+											contentType: 'application/json',
 											dataType: 'json',
 											success: OnLinkAddSuccess,
 											error: OnUpdateError
@@ -1258,7 +1258,7 @@
 											type: 'POST',
 											url: 'API/Setup/UpdateLink',
 											data: '{ "group": "' + $("#" + $(tempe).parent().parent().parent().attr("id") + " > h4 > .lgName").html() + '", "origname": "' + $(tempe).children("b").html() + '", "name": "' + $("#linkName").val() + '", "desc": "' + $("#linkDesc").val() + '", "icon": "' + $("#linkIcon").val() + '", "url": "' + $("#linkUrl").val() + '", "target": "' + $("#linkTarget").val() + '", "showto": "' + $("#linkShowTo").val() + '" }',
-											contentType: 'application/json; charset=utf-8',
+											contentType: 'application/json',
 											dataType: 'json',
 											success: OnLinkUpdateSuccess,
 											error: OnUpdateError
@@ -1295,7 +1295,7 @@
 								type: 'POST',
 								url: 'API/Setup/RemoveLinkGroup',
 								data: '{ "name": "' + $("#" + tempe + " > h4 > .lgName").html() + '" }',
-								contentType: 'application/json; charset=utf-8',
+								contentType: 'application/json',
 								dataType: 'json',
 								success: OnLinkGroupDeleteSuccess,
 								error: OnUpdateError
@@ -1326,7 +1326,7 @@
 											type: 'POST',
 											url: 'API/Setup/UpdateLinkGroup',
 											data: '{ "origname": "' + $("#linkgroup" + tempe + " > h4 > .lgName").html() + '", "name": "' + $("#groupName").val() + '", "showto": "' + $("#groupShowTo").val() + '", "subtitle": "' + $("#groupSubTitle").val() + '" }',
-											contentType: 'application/json; charset=utf-8',
+											contentType: 'application/json',
 											dataType: 'json',
 											success: OnLinkGroupUpdateSuccess,
 											error: OnUpdateError
@@ -1367,7 +1367,7 @@
 											type: 'POST',
 											url: 'API/Setup/AddLinkGroup',
 											data: '{ "name": "' + $("#groupName").val() + '", "showto": "' + $("#groupShowTo").val() + '", "subtitle": "' + $("#groupSubTitle").val() + '" }',
-											contentType: 'application/json; charset=utf-8',
+											contentType: 'application/json',
 											dataType: 'json',
 											success: OnLinkGroupAddSuccess,
 											error: OnUpdateError
@@ -1423,7 +1423,7 @@
 								type: 'POST',
 								url: 'API/Setup/UpdateTab',
 								data: '{ "tab": "' + d + '" }',
-								contentType: 'application/json; charset=utf-8',
+								contentType: 'application/json',
 								dataType: 'json',
 								success: OnTabUpdateSuccess,
 								error: OnUpdateError
@@ -1455,7 +1455,7 @@
 									type: 'POST',
 									url: 'api/setup/GetADTree',
 									data: '{"username": "' + $("#<%=un.ClientID %>").val() + '", "password": "' + $("#<%=up.ClientID %>").val() + '", "domain": "' + $("#<%=upn.ClientID %>").val() + '"}',
-									contentType: 'application/json; charset=utf-8',
+									contentType: 'application/json',
 									dataType: 'json',
 									success: OnADUpdateSuccess,
 									error: OnUpdateError
@@ -1589,7 +1589,7 @@
 										type: 'POST',
 										url: 'API/Setup/UpdateLinkGroupOrder',
 										data: '{"groups": "' + $(this).sortable('toArray').toString() + '"}',
-										contentType: 'application/json; charset=utf-8',
+										contentType: 'application/json',
 										dataType: 'json',
 										success: OnGroupOrderUpdateSuccess,
 										error: OnUpdateError
@@ -1604,7 +1604,7 @@
 										type: 'POST',
 										url: 'API/Setup/UpdateLinkOrder',
 										data: '{"group": "' + $(this).parent(".linkgroup").attr("id") + '", "links": "' + $(this).sortable('toArray').toString() + '"}',
-										contentType: 'application/json; charset=utf-8',
+										contentType: 'application/json',
 										dataType: 'json',
 										success: OnGroupOrderUpdateSuccess,
 										error: OnUpdateError

@@ -16,7 +16,7 @@ using HAP.Data.ComputerBrowser;
 namespace HAP.Web.API
 {
     [ServiceContract(Namespace = "HAP.Web.API")]
-    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
+    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
     public class MyFiles
     {
         [OperationContract]

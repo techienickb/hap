@@ -267,7 +267,7 @@
 								type: 'POST',
 								url: '<%=ResolveUrl("~/api/BookingSystem/Booking/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear(),
 								dataType: 'json',
-								contentType: 'application/json; charset=utf-8',
+								contentType: 'application/json',
 								data: d,
 								success: function (data) {
 									curres.Data = data;
@@ -310,7 +310,7 @@
 						type: 'DELETE',
 						url: '<%=ResolveUrl("~/api/BookingSystem/Booking/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear(),
 						dataType: 'json',
-						contentType: 'application/json; charset=utf-8',
+						contentType: 'application/json',
 						data: '{ "booking": { "Room": "' + curres.Name + '", "Lesson": "' + curles + '", "Name": "' + name + '" } }',
 						success: function (data) {
 							curres.Data = data;

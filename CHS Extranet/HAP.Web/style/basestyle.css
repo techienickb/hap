@@ -70,3 +70,5 @@ h1.Announcement b { font-size: 16px; }
 #homepageiwt div div a { float: left; height: 19px; line-height: 19px; padding: 0 26px 0 5px; border: 1px solid #ccc; text-decoration: none; }
 #homepageiwt div div a:hover { background: #dbe4f4; }
 #homepageiwt img { float: left; margin: 4px 12px 12px 4px; }
+
+.l1 { float: right; margin-top: 1px; height: 16px; width: 16px; background-position: -32px 0; background-image: url(../images/ui-icons_228ef1_256x240.png); }
