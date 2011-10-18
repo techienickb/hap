@@ -6,7 +6,7 @@
 	<link href="../style/helpdesk.css" rel="stylesheet" type="text/css" />
 </asp:Content>
 <asp:Content ContentPlaceHolderID="body" runat="server">
-	<div style="overflow: hidden; clear: both; position: relative;">
+	<div style="overflow: hidden; clear: both; position: relative; height: 120px">
 		<div class="tiles" style="position: absolute; left: 0; margin-top: 45px;">
 			<a class="button" href="../">Home Access Plus+ Home</a>
 		</div>
@@ -33,7 +33,7 @@
 			<input type="checkbox" id="ticket-fixed" />
 		</div>
 		<div>
-			<label for="ticket-faq">Mark as FAX: </label>
+			<label for="ticket-faq">Mark as FAQ: </label>
 			<input type="checkbox" id="ticket-faq" />
 		</div>
 		</asp:PlaceHolder>

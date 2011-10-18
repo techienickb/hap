@@ -37,8 +37,6 @@ namespace HAP.Web.routing
                 {
                     config = hapConfig.Current;
                     ADUser.Impersonate();
-                    string userhome = ADUser.HomeDirectory;
-                    if (!userhome.EndsWith("\\")) userhome += "\\";
                     string path = RoutingPath.Replace('^', '&');
                     DriveMapping unc = null;
                     unc = config.MySchoolComputerBrowser.Mappings[RoutingDrive.ToCharArray()[0]];
