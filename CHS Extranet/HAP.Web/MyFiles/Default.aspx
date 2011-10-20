@@ -6,6 +6,7 @@
 	<script src="../Scripts/jquery.dynatree.js" type="text/javascript"></script>
 	<link href="../style/ui.dynatree.css" rel="stylesheet" type="text/css" />
 	<link href="../style/MyFiles.css" rel="stylesheet" type="text/css" />
+	<meta name="DownloadOptions" content="noopen" />
 </asp:Content>
 <asp:Content ContentPlaceHolderID="body" runat="server">
 	<div style="overflow: hidden; clear: both; position: relative; height: 120px">
