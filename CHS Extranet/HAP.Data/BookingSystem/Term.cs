@@ -93,16 +93,17 @@ namespace HAP.Data.BookingSystem
                     {
                         int y = cal.GetWeekOfYear(this.startDate, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
 
-                        int a = (((x - y) % 2) == 0) ? this.startWeekNum : this.startWeekNum + 1;
+                        int a = ((((x - y) % 2) == 0) ? this.startWeekNum : this.startWeekNum + 1);
                         if (a == 3) a = 1;
                         return a;
                     }
                     else if ((date > this.halfTerm.EndDate) && (date <= this.EndDate))
                     {
                         int y = cal.GetWeekOfYear(this.startDate, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
-                        int a = (((x - y) % 2) == 0) ? this.startWeekNum : this.startWeekNum + 1;
-                        if (this.startWeekNum == 2) a = (a == 2 ? 1 : 2);
+                        int a = ((((x - y) % 2) == 0) ? this.startWeekNum : this.startWeekNum + 1);
+                        //if (this.startWeekNum == 2) a = (a == 2 ? 1 : 2);
                         if (a > 2) a = 1;
+                        a = a == 2 ? 1 : 2;
                         return a;
                     }
                     else return 0;
