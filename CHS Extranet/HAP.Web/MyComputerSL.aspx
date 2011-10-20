@@ -1,5 +1,6 @@
 ﻿<%@ Page Title="Crickhowell High School - Home Access Plus+ - My Computer Extended Edition" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true" CodeBehind="MyComputerSL.aspx.cs" Inherits="HAP.Web.MyComputerSL" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+	<meta name="DownloadOptions" content="noopen" />
 	<link href="style/mycomputer.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript">
 		function onSilverlightError(sender, args) {
