@@ -290,7 +290,6 @@
     <Content Include="Scripts\jquery-1.6.2.min.js" />
     <Content Include="Scripts\jquery-Gtimepicker.js" />
     <Content Include="Scripts\jquery.dynatree.js" />
-    <Content Include="Scripts\homepagescripts.js" />
     <Content Include="Setup.aspx" />
     <Content Include="style\bookingsystem.css" />
     <Content Include="style\helpdesk.css" />

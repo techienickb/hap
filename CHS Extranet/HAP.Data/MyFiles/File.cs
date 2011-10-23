@@ -29,8 +29,8 @@ namespace HAP.Data.MyFiles
             if (Icon.EndsWith(".ico")) Icon = "../api/mycomputer/" + ParseForImage(file);
             if (file.Extension.ToLower().Equals(".png") || file.Extension.ToLower().Equals(".jpg") || file.Extension.ToLower().Equals(".jpeg") || file.Extension.ToLower().Equals(".gif") || file.Extension.ToLower().Equals(".bmp") || file.Extension.ToLower().Equals(".wmf"))
                 Icon = "../api/mycomputer/thumb/" + Converter.UNCtoDrive2(file.FullName, mapping, user).Replace('&', '^');
-            CreationTime = file.CreationTime.ToString();
-            ModifiedTime = file.LastWriteTime.ToString();
+            CreationTime = file.CreationTime.ToShortDateString() + " " + file.CreationTime.ToString("hh:mm");
+            ModifiedTime = file.LastWriteTime.ToShortDateString() + " " + file.CreationTime.ToString("hh:mm");
             Size = "";
             Path = Converter.UNCtoDrive(file.FullName, mapping, user).Replace(":", "");
 
@@ -40,8 +40,8 @@ namespace HAP.Data.MyFiles
             Extension = file.Extension;
             Type = "File";
             Name = file.Name + (file.Name.Contains(file.Extension) ? "" : file.Extension);
-            CreationTime = file.CreationTime.ToString();
-            ModifiedTime = file.LastWriteTime.ToString();
+            CreationTime = file.CreationTime.ToShortDateString() + " " + file.CreationTime.ToString("hh:mm");
+            ModifiedTime = file.LastWriteTime.ToShortDateString() + " " + file.CreationTime.ToString("hh:mm");
             Size = parseLength(file.Length);
             FileIcon fi;
             if (FileIcon.TryGet(Extension, out fi))

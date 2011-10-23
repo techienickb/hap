@@ -46,24 +46,30 @@ namespace HAP.Web.BookingSystem
             get
             {
                 DateTime date = DateTime.Now;
+                Terms terms = new Terms();
                 if (date.DayOfWeek == DayOfWeek.Saturday) date = date.AddDays(2);
                 else if (date.DayOfWeek == DayOfWeek.Sunday) date = date.AddDays(1);
-                Terms terms = new Terms();
-
                 if (date < terms[0].StartDate) date = terms[0].StartDate;
                 else if (date > terms[terms.Count - 1].EndDate) throw new ArgumentOutOfRangeException("Current Date", "The Current Date is After the Last Date in the Term!");
                 else
                 {
+                    bool found = false;
                     foreach (Term t in terms)
                         if (date >= t.StartDate && date <= t.EndDate)
                         {
+                            found = true;
                             if (date >= t.HalfTerm.StartDate && date <= t.HalfTerm.EndDate)
                             {
                                 date = t.HalfTerm.EndDate;
-                                if (date.DayOfWeek == DayOfWeek.Friday) date.AddDays(3);
-                                else if (date.DayOfWeek == DayOfWeek.Saturday) date.AddDays(2);
-                                else if (date.DayOfWeek == DayOfWeek.Sunday) date.AddDays(1);
+                                if (date.DayOfWeek == DayOfWeek.Friday) date = date.AddDays(3);
+                                else if (date.DayOfWeek == DayOfWeek.Saturday) date = date.AddDays(2);
+                                else if (date.DayOfWeek == DayOfWeek.Sunday) date = date.AddDays(1);
                             }
+                        }
+                    if (!found) for (int i = 0; i < terms.Count - 2; i++)
+                        {
+                            if (date > terms[i].EndDate && date < terms[i + 1].StartDate)
+                                date = terms[i + 1].StartDate;
                         }
                 }
 

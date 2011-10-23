@@ -41,3 +41,9 @@ a.dynatree-title:active { border-color: #333; background: #333; color: #fff; }
 #MyFiles a.Selected:active { background-color: #aaa; border-color: #aaa; color: #eee; }
 #MyFiles a.Selected:active .label { color: #000; }
 #MyFiles a.Selected:active .type { color: #666; }
+
+#Views { position: absolute; border-width: 1px; border-style: solid; float: right; overflow: hidden; white-space: nowrap; width: 100px; z-index: 1000; }
+#Views button { display: block; width: 100px;  }
+#MyFiles-Table_wrapper { height: 410px; overflow: auto; margin: 0; position: relative; }
+#MyFiles-Table img { vertical-align: middle; height: 16px; width: 16px; }
+#MyFiles-Table a { display: block; }
