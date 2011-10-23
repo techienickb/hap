@@ -103,9 +103,9 @@
 			<asp:UpdatePanel runat="server" ChildrenAsTriggers="true">
 				<ContentTemplate>
 					<table id="staticbookingstable">
-						<thead><tr><th width="120"></th><th width="50">Room</th><th width="50">Day</th><th width="100">Lesson</th><th width="200">Name</th><th width="140">Username</th></tr></thead>
+						<thead><tr><th width="120"></th><th width="70"><label>Room</label></th><th width="60"><label>Day</label></th><th width="100">Lesson</th><th width="200">Name</th><th width="140">Username</th></tr></thead>
 						<tbody>
-						<asp:ListView ID="ListView1" runat="server" DataSourceID="StaticBookingsDS">
+						<asp:ListView ID="ListView1" runat="server" DataSourceID="StaticBookingsDS" DataKeyNames="Day,Lesson,Room">
 							<AlternatingItemTemplate>
 								<tr style="">
 									<td>
@@ -283,7 +283,7 @@
 					<asp:ObjectDataSource ID="dayds" runat="server" SelectMethod="getDays" TypeName="HAP.Web.BookingSystem.admin.Default" />
 					<asp:ObjectDataSource ID="usersds" runat="server" SelectMethod="getUsers" TypeName="HAP.Web.BookingSystem.admin.Default" />
 			</ContentTemplate>
-		</asp:UpdatePanel>
+		    </asp:UpdatePanel>
 		</div>
 		<div id="abr">
 			<asp:UpdatePanel ID="UpdatePanel2" runat="server" ChildrenAsTriggers="true" RenderMode="Block">

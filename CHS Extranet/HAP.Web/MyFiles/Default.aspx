@@ -4,6 +4,7 @@
 	<script src="../Scripts/jquery-ui-1.8.16.custom.min.js" type="text/javascript"></script>
 	<script src="../Scripts/jquery.ba-hashchange.min.js" type="text/javascript"></script>
 	<script src="../Scripts/jquery.dynatree.js" type="text/javascript"></script>
+	<script src="../Scripts/jquery.dataTables.js" type="text/javascript"></script>
 	<link href="../style/ui.dynatree.css" rel="stylesheet" type="text/css" />
 	<link href="../style/MyFiles.css" rel="stylesheet" type="text/css" />
 	<meta name="DownloadOptions" content="noopen" />
@@ -20,14 +21,29 @@
 		</div>
 	</div>
 	<div id="toolbar" style="padding: 4px; margin-bottom: 4px;" class="ui-widget-header">
-		<button class="dropdown">Organise</button> <button>Open</button> <button>New Folder</button><button class="dropdown" style="float: right;">View</button>
+		<button class="dropdown">Organise</button> <button>Open</button> <button>New Folder</button><button class="dropdown" id="view" style="float: right;">View</button>
+	</div>
+	<div id="Views" class="tile-border-color">
+		<button>Tiles</button>
+		<button>Details</button>
 	</div>
 	<div id="Tree" class="tile-border-color">
 	</div>
 	<div id="MyFiles" class="tiles">
 	</div>
+	<div id="MyFilesTable">
+	<table id="MyFiles-Table">
+		<thead>
+			<tr><th>Name</th><th>Type</th><th width="105px">Date modified</th><th>Size</th></tr>
+		</thead>
+		<tbody></tbody>
+	</table>
+	</div>
 	<script type="text/javascript">
 		var items = new Array();
+		var showView = 0;
+		var viewMode = 0;
+		var table = null;
 		var curpath = null;
 		$(window).hashchange(function () {
 			if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curpath = window.location.href.split("#")[1];
@@ -69,6 +85,26 @@
 				else h += this.Data.Type + '<br />' + this.Data.Size;
 				h += '</span></a>';
 				$("#MyFiles").append(h);
+				$("#" + this.Id).click(this.Click);
+				$("#" + this.Id).click(function () { return false; });
+			};
+			this.RenderTable = function () {
+				this.Id = this.Data.Name.replace(/ /g, "_").replace(/\\/g, "-");
+				var label = this.Data.Name;
+
+				var h = '<tr><td><a id="' + this.Id + '" ';
+				if (this.Data.Type == 'Directory') h += 'class="Folder Selectable" ';
+				else h += 'class="Selectable" ';
+				h += 'href="' + (this.Data.Path.match(/\.\./i) ? this.Data.Path.replace(/\\/g, "/") : '#' + this.Data.Path) + '"><img class="icon" src="' + this.Data.Icon + '" alt="" /><span class="label">' + label + '</span></a></td>';
+				h += '<td>';
+				if (this.Data.Type == 'Directory') h += 'File Folder';
+				else h += this.Data.Type;
+				h += '</td>';
+				h += '<td>' + this.Data.ModifiedTime + '</td><td>';
+				if (this.Data.Type == 'Directory') h += '&nbsp;';
+				else h += this.Data.Size;
+				h += '</td></tr>';
+				$("#MyFiles-Table tbody").append(h);
 				$("#" + this.Id).click(this.Click);
 				$("#" + this.Id).click(function () { return false; });
 			};
@@ -114,7 +150,10 @@
 					contentType: 'application/json;',
 					success: function (data) {
 						items = new Array();
+						$("MyFiles").css("display", "block");
+						$("MyFilesTable").css("display", "none");
 						$("#MyFiles").html("");
+						$("#MyFiles-Table tbody").html("");
 						for (var i = 0; i < data.length; i++)
 							items.push(new Drive(data[i]));
 						for (var i = 0; i < items.length; i++)
@@ -130,15 +169,33 @@
 					success: function (data) {
 						items = new Array();
 						$("#MyFiles").html("");
+						if (table != null) $("#MyFiles-Table").dataTable().fnDestroy();
+						$("#MyFiles-Table tbody").html("");
+						if (viewMode == 1) {
+						    $("#MyFiles").css("display", "none");
+						    $("#MyFilesTable").css("display", "block");
+						}
+						else {
+						    $("#MyFiles").css("display", "block");
+						    $("#MyFilesTable").css("display", "none");
+						}
 						for (var i = 0; i < data.length; i++)
-							items.push(new Item(data[i]));
+						    items.push(new Item(data[i]));
 						for (var i = 0; i < items.length; i++)
-							items[i].Render();
+						    if (viewMode == 0) items[i].Render();
+						    else items[i].RenderTable();
+						if (viewMode == 1) {
+						    $("#MyFiles-Table").dataTable({ "bJQueryUI": true, bPaginate: false, bLengthChange: false, bSort: false, bInfo: false, bFilter: false });
+						    if (table != null) $("#MyFiles-Table").dataTable().fnAdjustColumnSizing();
+						    table = $("#MyFiles-Table").dataTable();
+						}
 					}, error: OnError
 				});
 			}
 		}
 		$(function () {
+			$("#MyFilesTable").css("display", "none");
+			$("#Views").animate({ height: 'toggle' });
 			$("#Tree").dynatree({ imagePath: "../images/setup/", selectMode: 1, noLink: false, minExpandLevel: 1, children: [{ title: "My Drives", href: "#", isFolder: true, isLazy: true}], fx: { height: "toggle", duration: 200 },
 				onLazyRead: function (node) {
 					if (node.data.href == "#") {
@@ -185,6 +242,42 @@
 			$("button").click(function () { return false; });
 			$("button.dropdown").button({ icons: { secondary: "ui-icon-carat-1-s"} });
 			$(".button").button();
+			$("#Views").css("top", $("#view").position().top + $("#view").parent().height() + 2);
+			$("#Views").css("left", $("#view").position().left - ($("#Views").width() - $("#view").width()));
+			$("#view").click(function () {
+				if (showView == 0) {
+					showView = 1;
+					$("#Views").animate({ height: 'toggle' });
+				}
+				return false;
+			});
+			$("#hapContent").click(function () {
+				if (showView == 2) { $("#Views").animate({ height: 'toggle' }); showView = 0; }
+				else if (showView == 1) showView = 2;
+			});
+			$("#Views button").click(function () {
+				$("#MyFiles").html("");
+				if (table != null) $("#MyFiles-Table").dataTable().fnDestroy();
+				$("#MyFiles-Table tbody").html("");
+				if ($(this).text() == "Details") {
+					viewMode = 1;
+					$("#MyFiles").css("display", "none");
+					$("#MyFilesTable").css("display", "block");
+				}
+				else {
+					viewMode = 0;
+					$("#MyFiles").css("display", "block");
+					$("#MyFilesTable").css("display", "none");
+				}
+				for (var i = 0; i < items.length; i++)
+					if (viewMode == 0) items[i].Render();
+					else items[i].RenderTable();
+				if (viewMode == 1) {
+					$("#MyFiles-Table").dataTable({ "bJQueryUI": true, bPaginate: false, bLengthChange: false, bSort: false, bInfo: false, bFilter: false });
+					if (table != null) $("#MyFiles-Table").dataTable().fnAdjustColumnSizing();
+					table = $("#MyFiles-Table").dataTable();
+				}
+			});
 		});
 	</script>
 </asp:Content>
