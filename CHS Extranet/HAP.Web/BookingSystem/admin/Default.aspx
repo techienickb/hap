@@ -229,7 +229,7 @@
 						Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
 						$(function () { $("#staticbookingstable").dataTable({ "bJQueryUI": true, "sPaginationType": "full_numbers" }); });
 					</script>
-					<div style="float: right; padding: 10px;">
+					<div style="float: right; padding: 10px; width: 50%">
 						<p>Save the SIMS export to <%=Server.MapPath("~/app_data/sims-bookings.xml") %> then click the button:</p>
 						<asp:Button runat="server" ID="importSIMS" Text="Import SIMS" 
 							style="font-size: 130%" onclick="importSIMS_Click" />
@@ -239,7 +239,7 @@
 						DeleteMethod="deleteStaticBooking" InsertMethod="addStaticBooking" SelectMethod="getStaticBookingsArray"
 						TypeName="HAP.Data.BookingSystem.BookingSystem" UpdateMethod="updateStaticBooking" />
 					<asp:DetailsView ID="DetailsView1" runat="server" AutoGenerateRows="False" DataSourceID="StaticBookingsDS"
-						DefaultMode="Insert" EnableModelValidation="True" CssClass="tile-border-color">
+						DefaultMode="Insert" EnableModelValidation="True" GridLines="None" CssClass="tile-border-color" style="border-width: 1px; border-style: solid; border-top: 0;">
 						<Fields>
 							<asp:TemplateField HeaderText="Day" SortExpression="Day">
 								<InsertItemTemplate>
