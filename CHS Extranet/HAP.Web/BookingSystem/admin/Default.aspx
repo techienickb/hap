@@ -229,15 +229,17 @@
 						Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
 						$(function () { $("#staticbookingstable").dataTable({ "bJQueryUI": true, "sPaginationType": "full_numbers" }); });
 					</script>
-					<div style="float: right;">
+					<div style="float: right; padding: 10px;">
 						<p>Save the SIMS export to <%=Server.MapPath("~/app_data/sims-bookings.xml") %> then click the button:</p>
-						<asp:Button runat="server" ID="importSIMS" Text="Import SIMS" />
+						<asp:Button runat="server" ID="importSIMS" Text="Import SIMS" 
+							style="font-size: 130%" onclick="importSIMS_Click" />
+						<p>CAUTION: The Teacher's Name from the SIMS Export (Title Initial Surname) needs to equal the Notes/Display Name field in AD for that user, or the Notes/Display name only has one person with that surname</p>
 					</div>
 					<asp:ObjectDataSource ID="StaticBookingsDS" runat="server" DataObjectTypeName="HAP.Data.BookingSystem.Booking"
 						DeleteMethod="deleteStaticBooking" InsertMethod="addStaticBooking" SelectMethod="getStaticBookingsArray"
 						TypeName="HAP.Data.BookingSystem.BookingSystem" UpdateMethod="updateStaticBooking" />
 					<asp:DetailsView ID="DetailsView1" runat="server" AutoGenerateRows="False" DataSourceID="StaticBookingsDS"
-						DefaultMode="Insert" EnableModelValidation="True">
+						DefaultMode="Insert" EnableModelValidation="True" CssClass="tile-border-color">
 						<Fields>
 							<asp:TemplateField HeaderText="Day" SortExpression="Day">
 								<InsertItemTemplate>
@@ -283,7 +285,7 @@
 					<asp:ObjectDataSource ID="dayds" runat="server" SelectMethod="getDays" TypeName="HAP.Web.BookingSystem.admin.Default" />
 					<asp:ObjectDataSource ID="usersds" runat="server" SelectMethod="getUsers" TypeName="HAP.Web.BookingSystem.admin.Default" />
 			</ContentTemplate>
-		    </asp:UpdatePanel>
+			</asp:UpdatePanel>
 		</div>
 		<div id="abr">
 			<asp:UpdatePanel ID="UpdatePanel2" runat="server" ChildrenAsTriggers="true" RenderMode="Block">

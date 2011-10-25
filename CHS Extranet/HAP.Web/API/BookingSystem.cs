@@ -132,6 +132,7 @@ namespace HAP.Web.API
         [WebGet(ResponseFormat=WebMessageFormat.Json, UriTemplate="/LoadRoom/{Date}/{Resource}")]
         public JSONBooking[] LoadRoom(string Date, string Resource)
         {
+            Resource = HttpUtility.UrlDecode(Resource, System.Text.Encoding.Default).Replace("%20", " ");
             List<JSONBooking> bookings = new List<JSONBooking>();
             HAP.Data.BookingSystem.BookingSystem bs = new HAP.Data.BookingSystem.BookingSystem(DateTime.Parse(Date));
             foreach (Lesson lesson in hapConfig.Current.BookingSystem.Lessons)

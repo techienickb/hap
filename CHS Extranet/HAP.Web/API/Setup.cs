@@ -64,7 +64,7 @@ namespace HAP.Web.API
         public int AddFilter(string name, string expression, string enablefor)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
-            Config.MySchoolComputerBrowser.Filters.Add(name, expression, enablefor);
+            Config.MySchoolComputerBrowser.Filters.Add(name, expression.Replace("/", "\\"), enablefor);
             return 0;
         }
 
@@ -73,7 +73,7 @@ namespace HAP.Web.API
         public int RemoveFilter(string name, string expression)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
-            Config.MySchoolComputerBrowser.Filters.Delete(name, expression);
+            Config.MySchoolComputerBrowser.Filters.Delete(name, expression.Replace("/", "\\"));
             return 0;
         }
 
@@ -82,11 +82,11 @@ namespace HAP.Web.API
         public int UpdateFilter(string origname, string origexpression, string name, string expression, string enablefor)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
-            Filter f = Config.MySchoolComputerBrowser.Filters.Find(origname, origexpression);
+            Filter f = Config.MySchoolComputerBrowser.Filters.Find(origname, origexpression.Replace("/", "\\"));
             f.Name = name;
-            f.Expression = expression;
+            f.Expression = expression.Replace("/", "\\");
             f.EnableFor = enablefor;
-            Config.MySchoolComputerBrowser.Filters.Update(origname, origexpression, f);
+            Config.MySchoolComputerBrowser.Filters.Update(origname, origexpression.Replace("/", "\\"), f);
             return 0;
         }
 

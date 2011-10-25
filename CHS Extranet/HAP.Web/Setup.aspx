@@ -680,7 +680,7 @@
 										$.ajax({
 											type: 'POST',
 											url: 'API/Setup/UpdateFilter',
-											data: '{ "origname": "' + tempe.children("a").children("b").html() + '", "origexpression": "' + tempe.children("a").children("i").html() + '", "name": "' + $("#filterName").val() + '", "expression": "' + $("#filterExpression").val() + '", "enablefor": "' + $("#filterEnableFor").val() + '" }',
+											data: '{ "origname": "' + tempe.children("a").children("b").html() + '", "origexpression": "' + tempe.children("a").children("i").html() + '", "name": "' + $("#filterName").val() + '", "expression": "' + $("#filterExpression").val().replace(/\\/g, "/") + '", "enablefor": "' + $("#filterEnableFor").val() + '" }',
 											contentType: 'application/json',
 											dataType: 'json',
 											success: OnFilterUpdateSuccess,
@@ -713,7 +713,7 @@
 							$.ajax({
 								type: 'POST',
 								url: 'API/Setup/RemoveFilter',
-								data: '{ "name": "' + tempe.children("a").children("b").html() + '", "expression": "' + tempe.children("a").children("i").html() + '" }',
+								data: '{ "name": "' + tempe.children("a").children("b").html() + '", "expression": "' + tempe.children("a").children("i").html().replace(/\\/g, "/") + '" }',
 								contentType: 'application/json',
 								dataType: 'json',
 								success: OnFilterRemoveSuccess,
@@ -740,7 +740,7 @@
 										$.ajax({
 											type: 'POST',
 											url: 'API/Setup/AddFilter',
-											data: '{ "name": "' + $("#filterName").val() + '", "expression": "' + $("#filterExpression").val() + '", "enablefor": "' + $("#filterEnableFor").val() + '" }',
+											data: '{ "name": "' + $("#filterName").val() + '", "expression": "' + $("#filterExpression").val().replace(/\\/g, "/") + '", "enablefor": "' + $("#filterEnableFor").val() + '" }',
 											contentType: 'application/json',
 											dataType: 'json',
 											success: OnFilterAddSuccess,
@@ -779,7 +779,7 @@
 										$.ajax({
 											type: 'POST',
 											url: 'API/Setup/UpdateQServer',
-											data: '{ "origserver": "' + tempe.children("a").children("b").html() + '", "origexpression": "' + tempe.children("a").children("i").html().replace(/\\/g, "/") + '", "server": "' + $("#qserver").val() + '", "expression": "' + $("#qexpression").val().replace(/\\/g, "/") + ', "drive": "' + $("#qdrive").val() + '" }',
+											data: '{ "origserver": "' + tempe.children("a").children("b").html() + '", "origexpression": "' + tempe.children("a").children("i").html().replace(/\\/g, "/") + '", "server": "' + $("#qserver").val() + '", "expression": "' + $("#qexpression").val().replace(/\\/g, "/") + '", "drive": "' + $("#qdrive").val() + '" }',
 											contentType: 'application/json',
 											dataType: 'json',
 											success: OnQServerUpdateSuccess,
@@ -955,7 +955,7 @@
 							$.ajax({
 								type: 'POST',
 								url: 'API/Setup/RemoveResource',
-								data: '{ name: "' + tempe.children(".resource").children("span").html() + '" }',
+								data: '{ "name": "' + tempe.children(".resource").children("span").html() + '" }',
 								contentType: 'application/json',
 								dataType: 'json',
 								success: OnResourceRemoveSuccess,

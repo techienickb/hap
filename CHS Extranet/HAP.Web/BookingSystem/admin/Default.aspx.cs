@@ -9,6 +9,8 @@ using System.Configuration;
 using HAP.Web.HelpDesk;
 using HAP.AD;
 using HAP.Data.BookingSystem;
+using System.IO;
+using System.Xml;
 
 namespace HAP.Web.BookingSystem.admin
 {
@@ -169,6 +171,55 @@ namespace HAP.Web.BookingSystem.admin
             t.Add(t1.ID, t1);
             t.Save();
             etemplates.DataBind();
+        }
+
+        protected void importSIMS_Click(object sender, EventArgs args)
+        {
+            if (!File.Exists(Server.MapPath("~/app_data/timetable.xml"))) throw new ArgumentNullException("SIMS Tabletable Export", "The SIMS.net Timetable Export has not been found in the " + Server.MapPath("~/app_data") + "folder.  The export path you enter into the SIMS Report is: '" + Server.MapPath("~/App_Data/Timetable.xml") + "'");
+            XmlDocument doc = new XmlDocument();
+            doc.Load(Server.MapPath("~/app_data/timetable.xml"));
+            XmlDocument sb = new XmlDocument();
+            sb.Load(Server.MapPath("~/app_data/StaticBookings.xml"));
+            foreach (XmlNode n in doc.SelectNodes("/SuperStarReport/Record"))
+            {
+                string res = "";
+                try {
+                     res = n.SelectSingleNode("Name").InnerText;
+                }
+                catch { continue; }
+                string user = "";
+                if (getUsers().Count(u => u.Value.ToLower() == n.SelectSingleNode("MainTeacher").InnerText.ToLower()) > 0)
+                    user = getUsers().Single(u => u.Value.ToLower() == n.SelectSingleNode("MainTeacher").InnerText).Key;
+                else if (getUsers().Count(u => u.Value.ToLower().EndsWith(n.SelectSingleNode("MainTeacher").InnerText.ToLower().Split(new char[] { ' ' })[n.SelectSingleNode("MainTeacher").InnerText.ToLower().Split(new char[] { ' ' }).Length - 1])) == 1)
+                    user = getUsers().Single(u => u.Value.ToLower().EndsWith(n.SelectSingleNode("MainTeacher").InnerText.ToLower().Split(new char[] { ' ' })[n.SelectSingleNode("MainTeacher").InnerText.ToLower().Split(new char[] { ' ' }).Length - 1])).Key;
+                if (string.IsNullOrWhiteSpace(user)) throw new ArgumentOutOfRangeException("MainTeacher", "User cannot be found from " + n.SelectSingleNode("MainTeacher").InnerText);
+                string name = n.SelectSingleNode("Description").InnerText;
+                if (n.SelectSingleNode("YearGroup") != null) name = n.SelectSingleNode("YearGroup").InnerText.Replace("  ", " ") + " " + name;
+                string d = n.SelectSingleNode("Name1").InnerText.Split(new char[] { ':' })[0];
+                int day;
+                if (int.TryParse(d.Substring(d.Length - 2, 1), out day)) day = int.Parse(d.Substring(d.Length - 2, 2));
+                else day = int.Parse(d.Substring(d.Length - 1, 1));
+                string lesson = n.SelectSingleNode("Name1").InnerText.Split(new char[] { ':' })[1];
+                lesson = config.BookingSystem.Resources.Single(r => r.Key.EndsWith(" " + lesson)).Value.Name;
+                if (sb.SelectSingleNode("/Bookings/Booking[@day='" + day + "' AND lesson='" + lesson + "' AND room='" + res + "'") == null)
+                {
+                    XmlElement e = sb.CreateElement("Booking");
+                    e.SetAttribute("day", day.ToString());
+                    e.SetAttribute("lesson", lesson);
+                    e.SetAttribute("room", res);
+                    e.SetAttribute("name", name);
+                    e.SetAttribute("username", user);
+                    sb.AppendChild(e);
+                }
+                else
+                {
+                    XmlNode e = sb.SelectSingleNode("/Bookings/Booking[@day='" + day + "' AND lesson='" + lesson + "' AND room='" + res + "'");
+                    e.Attributes["name"].Value = name;
+                    e.Attributes["username"].Value = user;
+                }
+            }
+            doc.Save(HttpContext.Current.Server.MapPath("~/App_Data/StaticBookings.xml"));
+            message.Text = "Timetabled Lessons Loaded from SIMS Export, you can now delete the exported file";
         }
     }
 
