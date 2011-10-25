@@ -77,7 +77,7 @@
 				</div>
 				<asp:Repeater runat="server" ID="resources2">
 					<ItemTemplate>
-						<div id="<%#Eval("Name") %>" class="col">
+						<div id="<%#Eval("Name").ToString().Replace(" ", "_") %>" class="col">
 						</div>
 					</ItemTemplate>
 				</asp:Repeater>
@@ -115,7 +115,7 @@
 					}
 					h += '</span></a>';
 				}
-				$("#" + this.Name).html(h);
+				$("#" + this.Name.replace(/ /g, '_')).html(h);
 			};
 			this.Refresh = function() {
 				$.ajax({

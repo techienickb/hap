@@ -92,7 +92,7 @@ namespace HAP.Web.API
             long freeBytesForUser, totalBytes, freeBytes;
 
             string userhome = user.HomeDirectory;
-            foreach (DriveMapping p in config.MySchoolComputerBrowser.Mappings.Values)
+            foreach (DriveMapping p in config.MySchoolComputerBrowser.Mappings.Values.OrderBy(m => m.Drive))
             {
                 decimal space = -1;
                 bool showspace = isWriteAuth(p);

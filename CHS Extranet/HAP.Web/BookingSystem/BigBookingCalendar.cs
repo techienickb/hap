@@ -44,7 +44,7 @@ namespace HAP.Web.BookingSystem
                 int y = 0;
                 for (int x = 0; x < terms.Count; x++)
                     if (terms[x].Equals(term)) y = x + 1;
-                if (y == 3) y = 2;
+                if (y == terms.Count) y = terms.Count - 1;
                 if (DateTime.Now.AddDays(this.maxday) < terms[y].StartDate && DateTime.Now.AddDays(this.maxday) > term.EndDate)
                     this.maxday += (terms[y].StartDate - DateTime.Now).Days - 7;
                 int dow = 0;
