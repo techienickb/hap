@@ -42,23 +42,28 @@ namespace HAP.Web.routing
         }
     }
 
-    public class Downloader : IMyComputerDisplay, IHttpHandler, IRequiresSessionState
+    public class Downloader : RangeRequestHandlerBase, IMyComputerDisplay
     {
-        private HAP.AD.User _ADUser = null;
-        public HAP.AD.User ADUser
+        public override FileInfo GetRequestedFileInfo(HttpContext context)
         {
-            get
-            {
-                if (_ADUser == null)
-                {
-                    _ADUser = new User();
-                    HttpCookie token = HttpContext.Current.Request.Cookies["token"];
-                    if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
-                    _ADUser.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
-                }
-                return _ADUser;
-            }
+            config = hapConfig.Current;
+            string path = RoutingPath.Replace('^', '&').Replace("%20", " ");
+            DriveMapping unc = config.MySchoolComputerBrowser.Mappings[RoutingDrive.ToCharArray()[0]];
+            if (unc == null || !isAuth(unc)) context.Response.Redirect(context.Request.ApplicationPath + "/unauthorised.aspx", true);
+            else path = Converter.FormatMapping(unc.UNC, ADUser) + '\\' + path.Replace('/', '\\');
+            return new FileInfo(path);
         }
+
+        public override string GetRequestedFileMimeType(HttpContext context)
+        {
+            config = hapConfig.Current;
+            string path = RoutingPath.Replace('^', '&').Replace("%20", " ");
+            DriveMapping unc = config.MySchoolComputerBrowser.Mappings[RoutingDrive.ToCharArray()[0]];
+            if (unc == null || !isAuth(unc)) context.Response.Redirect(context.Request.ApplicationPath + "/unauthorised.aspx", true);
+            else path = Converter.FormatMapping(unc.UNC, ADUser) + '\\' + path.Replace('/', '\\');
+            return MimeType(Path.GetExtension(path));
+        }
+
         private hapConfig config;
 
         private bool isAuth(DriveMapping path)
@@ -86,47 +91,6 @@ namespace HAP.Web.routing
                 return vis;
             }
             return false;
-        }
-
-
-        public void ProcessRequest(HttpContext context)
-        {
-            config = hapConfig.Current;
-            string path = RoutingPath.Replace('^', '&').Replace("%20", " ");
-            DriveMapping unc = config.MySchoolComputerBrowser.Mappings[RoutingDrive.ToCharArray()[0]];
-            if (unc == null || !isAuth(unc)) context.Response.Redirect(context.Request.ApplicationPath + "/unauthorised.aspx", true);
-            else path = Converter.FormatMapping(unc.UNC, ADUser) + '\\' + path.Replace('/', '\\');
-            ADUser.Impersonate();
-            long startBytes = 0;
-
-            FileInfo file = new FileInfo(path);
-
-            string lastUpdateTimeStamp = file.LastWriteTimeUtc.ToString("r");
-            string _EncodedData = HttpUtility.UrlEncode(file.Name, Encoding.UTF8) + lastUpdateTimeStamp;
-
-            BinaryReader _BinaryReader = new BinaryReader(file.OpenRead());
-            context.Response.ContentType = MimeType(file.Extension);
-            context.Response.Buffer = false;
-            context.Response.AddHeader("Accept-Ranges", "bytes");
-            context.Response.AppendHeader("ETag", "\"" + _EncodedData + "\"");
-            context.Response.AppendHeader("Last-Modified", lastUpdateTimeStamp);
-            context.Response.AddHeader("Content-Length", (file.Length - startBytes).ToString());
-            context.Response.AddHeader("Connection", "Keep-Alive");
-            if (string.IsNullOrEmpty(context.Request.QueryString["inline"]))
-                context.Response.AppendHeader("Content-Disposition", "attachment; filename=\"" + file.Name + "\"");
-            else context.Response.AppendHeader("Content-Disposition", "inline; filename=\"" + file.Name + "\"");
-            context.Response.ContentEncoding = Encoding.UTF8;
-            _BinaryReader.BaseStream.Seek(startBytes, SeekOrigin.Begin);
-            int maxCount = (int)Math.Ceiling((file.Length - startBytes + 0.0) / 1024);
-            int i;
-            for (i = 0; i < maxCount && context.Response.IsClientConnected; i++)
-            {
-                context.Response.BinaryWrite(_BinaryReader.ReadBytes(1024));
-                context.Response.Flush();
-            }
-            context.Response.End();
-            _BinaryReader.Close();
-            ADUser.EndImpersonate();
         }
 
         public static string MimeType(string Extension)

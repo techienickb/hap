@@ -563,6 +563,7 @@
     <Compile Include="routing\IMyComputerDisplay.cs" />
     <Compile Include="routing\MyComputerRoutingHandler.cs" />
     <Compile Include="routing\PreviewRoutingHandler.cs" />
+    <Compile Include="routing\RangeRequestHandlerBase.cs" />
     <Compile Include="routing\UploadCheckerHandler.cs" />
     <Compile Include="routing\UploadHandler.cs" />
     <Compile Include="routing\UploadProcess.cs" />
