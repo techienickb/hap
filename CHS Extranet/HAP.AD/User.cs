@@ -254,16 +254,18 @@ namespace HAP.AD
             return false;
         }
 
-        private WindowsImpersonationContext ContainedImpersonationContext;
+        public WindowsImpersonationContext ContainedImpersonationContext { get; set; }
 
         public void EndContainedImpersonate()
         {
             if (ContainedImpersonationContext != null) ContainedImpersonationContext.Undo();
+            ContainedImpersonationContext = null;
         }
 
         public void EndImpersonate()
         {
             if (impersonationContext != null) impersonationContext.Undo();
+            impersonationContext = null;
         }
 
         public int CompareTo(object obj)
