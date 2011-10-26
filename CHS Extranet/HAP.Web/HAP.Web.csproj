@@ -716,6 +716,7 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="style\Web.config" />
+    <Content Include="MyFiles\Web.config" />
     <None Include="Thanks.rtf" />
     <Content Include="Tracker\Web.config" />
     <Content Include="UserCard\Web.config" />
