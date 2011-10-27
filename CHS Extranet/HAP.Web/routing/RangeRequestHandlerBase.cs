@@ -107,14 +107,6 @@ public abstract class RangeRequestHandlerBase : IHttpHandler
     public virtual int BufferSize { get { return 10240; } }
 
     /// <summary>
-    /// Indicates the path to the log file that records HTTP request and response headers.
-    /// </summary>
-    /// <remarks>
-    /// The log is only enabled when the application is executing in Debug mode.
-    /// </remarks>
-    public virtual string LogFileName { get { return "~/App_Data/ResumableFileDownloadHandler.log"; } }
-
-    /// <summary>
     /// Indicates whether Range requests are enabled. If false, the HTTP Handler
     /// ignores the Range HTTP Header and returns the entire contents.
     /// </summary>
@@ -185,7 +177,7 @@ public abstract class RangeRequestHandlerBase : IHttpHandler
             this.InternalRequestedFileMimeType = this.GetRequestedFileMimeType(context);
 
 #if DEBUG
-            LogRequestHttpHeaders(context.Server.MapPath(this.LogFileName), context.Request);
+            LogRequestHttpHeaders(context.Request);
 #endif
 
             // Parse the Range header (if it exists), populating the StartRangeBytes and EndRangeBytes arrays
@@ -196,7 +188,7 @@ public abstract class RangeRequestHandlerBase : IHttpHandler
                 if (check(context) == false)
                 {
 #if DEBUG
-                    LogResponseHttpHeaders(context.Server.MapPath(this.LogFileName), context.Response);
+                    LogResponseHttpHeaders(context.Response);
 #endif
                     return;
                 }
@@ -235,7 +227,7 @@ public abstract class RangeRequestHandlerBase : IHttpHandler
         WriteCommonResponseHeaders(Response, this.InternalRequestedFileInfo.Length, this.InternalRequestedFileMimeType);
 
 #if DEBUG
-        LogResponseHttpHeaders(context.Server.MapPath(this.LogFileName), Response);
+        LogResponseHttpHeaders(Response);
         ReturnChunkedResponse(context);
 #else
         if (Request.HttpMethod.Equals(HTTP_METHOD_HEAD) == false)
@@ -264,7 +256,7 @@ public abstract class RangeRequestHandlerBase : IHttpHandler
                                     this.IsMultipartRequest ? MULTIPART_CONTENTTYPE : this.InternalRequestedFileMimeType);
 
 #if DEBUG
-        LogResponseHttpHeaders(context.Server.MapPath(this.LogFileName), Response);
+        LogResponseHttpHeaders(Response);
 #endif
 
         if (Request.HttpMethod.Equals(HTTP_METHOD_HEAD) == false)
@@ -358,6 +350,9 @@ public abstract class RangeRequestHandlerBase : IHttpHandler
         AddHeader(Response, HTTP_HEADER_CONTENT_TYPE, contentType);
         AddHeader(Response, HTTP_HEADER_LAST_MODIFIED, this.InternalRequestedFileInfo.LastWriteTimeUtc.ToString("r"));
         AddHeader(Response, HTTP_HEADER_ENTITY_TAG, string.Concat("\"", this.InternalRequestedFileEntityTag, "\""));
+        if (string.IsNullOrEmpty(HttpContext.Current.Request.QueryString["inline"]))
+            AddHeader(Response, "Content-Disposition", "attachment; filename=\"" + this.InternalRequestedFileInfo.Name + "\"");
+        else AddHeader(Response, "Content-Disposition", "inline; filename=\"" + this.InternalRequestedFileInfo.Name + "\"");
 
         if (this.EnableRangeRequests)
             AddHeader(Response, HTTP_HEADER_ACCEPT_RANGES, HTTP_HEADER_ACCEPT_RANGES_BYTES);
@@ -679,7 +674,7 @@ public abstract class RangeRequestHandlerBase : IHttpHandler
     #endregion
 
     #region Logging Methods
-    private void LogRequestHttpHeaders(string logFile, HttpRequest Request)
+    private void LogRequestHttpHeaders(HttpRequest Request)
     {
         string output = string.Concat("REQUEST INFORMATION (", Request.HttpMethod, ")", Environment.NewLine);
         foreach (string name in Request.Headers.Keys)
@@ -689,10 +684,10 @@ public abstract class RangeRequestHandlerBase : IHttpHandler
 
         output += Environment.NewLine + Environment.NewLine;
 
-        File.AppendAllText(logFile, output);
+        HAP.Web.Logging.EventViewer.Log(HttpContext.Current.Request.RawUrl, output, System.Diagnostics.EventLogEntryType.Information);
     }
 
-    private void LogResponseHttpHeaders(string logFile, HttpResponse Response)
+    private void LogResponseHttpHeaders(HttpResponse Response)
     {
         string output = string.Concat("RESPONSE INFORMATION (", Response.StatusCode.ToString(), ")", Environment.NewLine);
         foreach (string name in InternalResponseHeaders.Keys)
@@ -701,8 +696,7 @@ public abstract class RangeRequestHandlerBase : IHttpHandler
         }
 
         output += Environment.NewLine + Environment.NewLine;
-
-        File.AppendAllText(logFile, output);
+        HAP.Web.Logging.EventViewer.Log(HttpContext.Current.Request.RawUrl, output, System.Diagnostics.EventLogEntryType.Information);
     }
     #endregion
     #endregion

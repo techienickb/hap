@@ -46,4 +46,9 @@ a.dynatree-title:active { border-color: #333; background: #333; color: #fff; }
 #Views button { display: block; width: 100px;  }
 #MyFiles-Table_wrapper { height: 410px; overflow: auto; margin: 0; position: relative; }
 #MyFiles-Table img { vertical-align: middle; height: 16px; width: 16px; }
-#MyFiles-Table a { display: block; }
+#MyFiles-Table a { display: block; text-decoration: none; }
+#MyFiles-Table a.Selected { background-color: #333; border-color: #333; color: #bbb; }
+#MyFiles-Table a.Selected:hover { background-color: #666; border-color: #666; }
+#MyFiles-Table a.Selected .label { color: #fff; }
+#MyFiles-Table a.Selected:active { background-color: #aaa; border-color: #aaa; color: #eee; }
+#MyFiles-Table a.Selected:active .label { color: #000; }

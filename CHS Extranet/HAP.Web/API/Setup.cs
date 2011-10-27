@@ -360,15 +360,24 @@ namespace HAP.Web.API
 
         private ADOU FillNode(DirectoryEntry root)
         {
-            ADOU adou = new ADOU();
-            adou.Name = root.Name.Remove(0, 3);
-            adou.Icon = (root.Name.StartsWith("DC=") ? "1" : root.SchemaClassName == "group" ? "78" : "2") + ".png";
-            if (!root.Name.StartsWith("DC="))
+            try
             {
-                adou.Url = "javascript:selectad('" + (root.SchemaClassName == "organizationalUnit" ? root.Path : root.Name.Remove(0, 3)) + "', '" + root.SchemaClassName + "');";
+                ADOU adou = new ADOU();
+                adou.Name = root.Name.Remove(0, 3);
+                adou.Icon = (root.Name.StartsWith("DC=") ? "1" : root.SchemaClassName == "group" ? "78" : "2") + ".png";
+                if (!root.Name.StartsWith("DC="))
+                {
+                    adou.Url = "javascript:selectad('" + (root.SchemaClassName == "organizationalUnit" ? root.Path : root.Name.Remove(0, 3)) + "', '" + root.SchemaClassName + "');";
+                }
+
+                foreach (DirectoryEntry de in root.Children) if ((de.SchemaClassName == "group" || de.SchemaClassName == "container" || de.SchemaClassName == "builtinDomain" || de.SchemaClassName == "organizationalUnit") && (de.Name != "CN=Program Data" && de.Name != "CN=System" && de.Name != "CN=Computers" && de.Name != "CN=Managed Service Accounts" && de.Name != "CN=ForeignSecurityPrincipals"))
+                    {
+                        ADOU a = FillNode(de);
+                        if (a != null) adou.Items.Add(a);
+                    }
+                return adou;
             }
-            foreach (DirectoryEntry de in root.Children) if ((de.SchemaClassName == "group" || de.SchemaClassName == "container" || de.SchemaClassName == "builtinDomain" || de.SchemaClassName == "organizationalUnit") && (de.Name != "CN=Program Data" && de.Name != "CN=System" && de.Name != "CN=Computers" && de.Name != "CN=Managed Service Accounts" && de.Name != "CN=ForeignSecurityPrincipals")) adou.Items.Add(FillNode(de));
-            return adou;
+            catch { return null; } 
         }
     }
 }

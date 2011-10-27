@@ -674,6 +674,10 @@
       <Project>{1F2CFBBF-1C06-4CAC-BB4B-5551BF6A398C}</Project>
       <Name>HAP.Web.Configuration</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HAP.Web.Logging\HAP.Web.Logging.csproj">
+      <Project>{3733B9AC-7559-4ABF-AC72-FB383030326A}</Project>
+      <Name>HAP.Web.Logging</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="p.ashx" />
