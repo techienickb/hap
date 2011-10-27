@@ -112,14 +112,6 @@ namespace HAP.Web.routing
 
         }
 
-        public bool IsReusable
-        {
-            get
-            {
-                return false;
-            }
-        }
-
         public string RoutingPath { get; set; }
         public string RoutingDrive { get; set; }
     }

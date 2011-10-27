@@ -43,6 +43,7 @@
 		var items = new Array();
 		var showView = 0;
 		var viewMode = 0;
+        var keys = { shift: false, ctrl: false };
 		var table = null;
 		var curpath = null;
 		$(window).hashchange(function () {
@@ -73,23 +74,23 @@
 		function Item(data) {
 			this.Data = data;
 			this.Id = "";
+			this.Clicks = 0;
 			this.Render = function () {
-				this.Id = this.Data.Name.replace(/ /g, "_").replace(/\\/g, "-");
-				var label = this.Data.Name;
+			    this.Id = this.Data.Name.replace(/ /g, "_").replace(/\\/g, "-").replace(/\./g, "");
+			    var label = this.Data.Name;
 
-				var h = '<a id="' + this.Id + '" ';
-				if (this.Data.Type == 'Directory') h += 'class="Folder Selectable" ';
-				else h += 'class="Selectable" ';
-				h += 'href="' + (this.Data.Path.match(/\.\./i) ? this.Data.Path.replace(/\\/g, "/") : '#' + this.Data.Path) + '"><img class="icon" src="' + this.Data.Icon + '" alt="" /><span class="label">' + label + '</span><span class="type">';
-				if (this.Data.Type == 'Directory') h += 'File Folder';
-				else h += this.Data.Type + '<br />' + this.Data.Size;
-				h += '</span></a>';
-				$("#MyFiles").append(h);
-				$("#" + this.Id).click(this.Click);
-				$("#" + this.Id).click(function () { return false; });
+			    var h = '<a id="' + this.Id + '" ';
+			    if (this.Data.Type == 'Directory') h += 'class="Folder Selectable" ';
+			    else h += 'class="Selectable" ';
+			    h += 'href="' + (this.Data.Path.match(/\.\./i) ? this.Data.Path.replace(/\\/g, "/") : '#' + this.Data.Path) + '"><img class="icon" src="' + this.Data.Icon + '" alt="" /><span class="label">' + label + '</span><span class="type">';
+			    if (this.Data.Type == 'Directory') h += 'File Folder';
+			    else h += this.Data.Type + '<br />' + this.Data.Size;
+			    h += '</span></a>';
+			    $("#MyFiles").append(h);
+			    $("#" + this.Id).bind("click", this.Click);
 			};
 			this.RenderTable = function () {
-				this.Id = this.Data.Name.replace(/ /g, "_").replace(/\\/g, "-");
+			    this.Id = this.Data.Name.replace(/ /g, "_").replace(/\\/g, "-").replace(/\./g, "");
 				var label = this.Data.Name;
 
 				var h = '<tr><td><a id="' + this.Id + '" ';
@@ -105,42 +106,79 @@
 				else h += this.Data.Size;
 				h += '</td></tr>';
 				$("#MyFiles-Table tbody").append(h);
-				$("#" + this.Id).click(this.Click);
-				$("#" + this.Id).click(function () { return false; });
+				$("#" + this.Id).bind("click", this.Click);
 			};
 			this.Refresh = function () {
-				$("#" + this.Id).attr("href", "#" + this.Data.Path);
-				if (this.Selected) $("#" + this.Id).addClass("Selected");
-				else $("#" + this.Id).removeClass("Selected");
-				var label = this.Data.Name;
-				var h = '<img class="icon" src="' + this.Data.Icon + '" alt="" /><span class="label">' + label + '</span><span class="type">';
-				if (this.Data.Type == 'Directory') h += 'File Folder';
-				else h += this.Data.Type + '<br />' + this.Data.Size;
-				h += '</span>';
+			    if (viewMode == 1) {
+			        var label = this.Data.Name;
+			        var h = '<td><a id="' + this.Id + '" ';
+			        if (this.Data.Type == 'Directory') h += 'class="Folder Selectable" ';
+			        else h += 'class="Selectable" ';
+			        h += 'href="' + (this.Data.Path.match(/\.\./i) ? this.Data.Path.replace(/\\/g, "/") : '#' + this.Data.Path) + '"><img class="icon" src="' + this.Data.Icon + '" alt="" /><span class="label">' + label + '</span></a></td>';
+			        h += '<td>';
+			        if (this.Data.Type == 'Directory') h += 'File Folder';
+			        else h += this.Data.Type;
+			        h += '</td>';
+			        h += '<td>' + this.Data.ModifiedTime + '</td><td>';
+			        if (this.Data.Type == 'Directory') h += '&nbsp;';
+			        else h += this.Data.Size;
+			        h += '</td>';
+			        $("#" + this.Id).parent().parent().html(h);
+			        $("#" + this.Id).click(this.Click);
+			        $("#" + this.Id).click(function () { return false; });
 
-				$("#" + this.Id).html(h);
+			        if (this.Selected) $("#" + this.Id).addClass("Selected");
+			        else $("#" + this.Id).removeClass("Selected");
+			    }
+			    else {
+			        $("#" + this.Id).attr("href", (this.Data.Path.match(/\.\./i) ? this.Data.Path.replace(/\\/g, "/") : '#' + this.Data.Path));
+			        if (this.Selected) $("#" + this.Id).addClass("Selected");
+			        else $("#" + this.Id).removeClass("Selected");
+			        var label = this.Data.Name;
+			        var h = '<img class="icon" src="' + this.Data.Icon + '" alt="" /><span class="label">' + label + '</span><span class="type">';
+			        if (this.Data.Type == 'Directory') h += 'File Folder';
+			        else h += this.Data.Type + '<br />' + this.Data.Size;
+			        h += '</span>';
+
+			        $("#" + this.Id).html(h);
+			    }
 			};
 			this.Selected = false;
+			this.ClickTimer = null;
 			this.Click = function (e) {
-				clearTimeout(ClickCapture.Timer);
-				ClickCapture.Timer = setTimeout(function () { ClickCapture.Clicks = 0; }, ClickCapture.Delay);
-				ClickCapture.Clicks++;
-				if (ClickCapture.Clicks === 1) {
-					var item = null;
-					for (var x = 0; x < items.length; x++)
-						if (items[x].Id == $(this).attr("id")) { item = items[x]; break; }
-					item.Selected = !item.Selected;
-					item.Refresh();
-				} else {
-					e.preventDefault();
-					var item = null;
-					for (var x = 0; x < items.length; x++)
-						if (items[x].Id == $(this).attr("id")) { item = items[x]; break; }
-					window.location.href = (item.Data.Path.match(/\.\./i) ? item.Data.Path.replace(/\\/g, "/") : '#' + item.Data.Path);
-				}
+			    e.preventDefault();
+			    var item = null;
+			    for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
+			    clearTimeout(item.ClickTimer);
+			    item.Clicks++;
+			    item.ClickTimer = setTimeout("for (var x = 0; x < items.length; x++) if (items[x].Id == '" + item.Id + "') items[x].Clicks = 0;", 300);
+			    if (item.Clicks === 1) {
+			        var i = -1, z = -1;
+			        for (var x = 0; x < items.length; x++) {
+			            if (items[x].Id == $(this).attr("id")) { z = x; }
+			            else if (items[x].Selected && keys.shift) { if (i == -1) i = x; }
+			            else if (items[x].Selected && !keys.ctrl) { items[x].Selected = false; items[x].Refresh(); }
+			        }
+			        item.Selected = true;
+			        item.ClickCount = 1;
+			        if (i != -1 && z != -1 && keys.shift) {
+			            if (i > z) { var ti = i; i = z; z = ti; }
+			            for (var x = i; x < z; x++) {
+			                items[x].Selected = true;
+			                items[x].Refresh();
+			            }
+			        }
+			        item.Refresh();
+			    } else {
+			        alert("You are about to download this file, if you wish to edit this file, please remember to\nSave it to your computer, and upload it back once you have finished!");
+			        var item = null;
+			        for (var x = 0; x < items.length; x++)
+			            if (items[x].Id == $(this).attr("id")) { item = items[x]; break; }
+			        window.location.href = (item.Data.Path.match(/\.\./i) ? item.Data.Path.replace(/\\/g, "/") : '#' + item.Data.Path);
+			    }
+			    return false;
 			};
 		}
-		var ClickCapture = { Delay: 500, Clicks: 0, Timer: null };
 		function Load() {
 			if (curpath == null) {
 				$.ajax({
@@ -194,90 +232,92 @@
 			}
 		}
 		$(function () {
-			$("#MyFilesTable").css("display", "none");
-			$("#Views").animate({ height: 'toggle' });
-			$("#Tree").dynatree({ imagePath: "../images/setup/", selectMode: 1, noLink: false, minExpandLevel: 1, children: [{ title: "My Drives", href: "#", isFolder: true, isLazy: true}], fx: { height: "toggle", duration: 200 },
-				onLazyRead: function (node) {
-					if (node.data.href == "#") {
-						$.ajax({
-							type: 'GET',
-							url: '<%=ResolveUrl("~/api/MyFiles/Drives")%>',
-							dataType: 'json',
-							contentType: 'application/json',
-							success: function (data) {
-								res = [];
-								for (var i = 0; i < data.length; i++)
-									res.push({ title: data[i].Name, href: "#" + data[i].Path, isFolder: true, isLazy: true, noLink: false, key: data[i].Path });
-								node.setLazyNodeStatus(DTNodeStatus_Ok);
-								node.addChild(res);
-							}, error: OnError
-						});
-					} else {
-						$.ajax({
-							type: 'GET',
-							url: '<%=ResolveUrl("~/api/MyFiles/")%>' + node.data.href.substr(1).replace(/\\/g, "/"),
-							dataType: 'json',
-							contentType: 'application/json',
-							success: function (data) {
-								res = [];
-								for (var i = 0; i < data.length; i++)
-									if (data[i].Type == "Directory") {
-										res.push({ title: data[i].Name, href: "#" + data[i].Path, isFolder: true, isLazy: true, noLink: false, key: data[i].Path });
-									}
-								node.setLazyNodeStatus(DTNodeStatus_Ok);
-								node.addChild(res);
-							}, error: OnError
-						});
-					}
-				},
-				onRender: function (dtnode, nodeSpan) {
-					if (dtnode.data.href != "#")
-						$(nodeSpan).children("a").attr("href", dtnode.data.href);
-				}
-			});
-			if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curpath = window.location.href.split("#")[1];
-			else curpath = null;
-			Load();
-			$("button").button();
-			$("button").click(function () { return false; });
-			$("button.dropdown").button({ icons: { secondary: "ui-icon-carat-1-s"} });
-			$(".button").button();
-			$("#Views").css("top", $("#view").position().top + $("#view").parent().height() + 2);
-			$("#Views").css("left", $("#view").position().left - ($("#Views").width() - $("#view").width()));
-			$("#view").click(function () {
-				if (showView == 0) {
-					showView = 1;
-					$("#Views").animate({ height: 'toggle' });
-				}
-				return false;
-			});
-			$("#hapContent").click(function () {
-				if (showView == 2) { $("#Views").animate({ height: 'toggle' }); showView = 0; }
-				else if (showView == 1) showView = 2;
-			});
-			$("#Views button").click(function () {
-				$("#MyFiles").html("");
-				if (table != null) $("#MyFiles-Table").dataTable().fnDestroy();
-				$("#MyFiles-Table tbody").html("");
-				if ($(this).text() == "Details") {
-					viewMode = 1;
-					$("#MyFiles").css("display", "none");
-					$("#MyFilesTable").css("display", "block");
-				}
-				else {
-					viewMode = 0;
-					$("#MyFiles").css("display", "block");
-					$("#MyFilesTable").css("display", "none");
-				}
-				for (var i = 0; i < items.length; i++)
-					if (viewMode == 0) items[i].Render();
-					else items[i].RenderTable();
-				if (viewMode == 1) {
-					$("#MyFiles-Table").dataTable({ "bJQueryUI": true, bPaginate: false, bLengthChange: false, bSort: false, bInfo: false, bFilter: false });
-					if (table != null) $("#MyFiles-Table").dataTable().fnAdjustColumnSizing();
-					table = $("#MyFiles-Table").dataTable();
-				}
-			});
+		    $("#MyFilesTable").css("display", "none");
+		    $("#Views").animate({ height: 'toggle' });
+		    $("#Tree").dynatree({ imagePath: "../images/setup/", selectMode: 1, noLink: false, minExpandLevel: 1, children: [{ title: "My Drives", href: "#", isFolder: true, isLazy: true}], fx: { height: "toggle", duration: 200 },
+		        onLazyRead: function (node) {
+		            if (node.data.href == "#") {
+		                $.ajax({
+		                    type: 'GET',
+		                    url: '<%=ResolveUrl("~/api/MyFiles/Drives")%>',
+		                    dataType: 'json',
+		                    contentType: 'application/json',
+		                    success: function (data) {
+		                        res = [];
+		                        for (var i = 0; i < data.length; i++)
+		                            res.push({ title: data[i].Name, href: "#" + data[i].Path, isFolder: true, isLazy: true, noLink: false, key: data[i].Path });
+		                        node.setLazyNodeStatus(DTNodeStatus_Ok);
+		                        node.addChild(res);
+		                    }, error: OnError
+		                });
+		            } else {
+		                $.ajax({
+		                    type: 'GET',
+		                    url: '<%=ResolveUrl("~/api/MyFiles/")%>' + node.data.href.substr(1).replace(/\\/g, "/"),
+		                    dataType: 'json',
+		                    contentType: 'application/json',
+		                    success: function (data) {
+		                        res = [];
+		                        for (var i = 0; i < data.length; i++)
+		                            if (data[i].Type == "Directory") {
+		                                res.push({ title: data[i].Name, href: "#" + data[i].Path, isFolder: true, isLazy: true, noLink: false, key: data[i].Path });
+		                            }
+		                        node.setLazyNodeStatus(DTNodeStatus_Ok);
+		                        node.addChild(res);
+		                    }, error: OnError
+		                });
+		            }
+		        },
+		        onRender: function (dtnode, nodeSpan) {
+		            if (dtnode.data.href != "#")
+		                $(nodeSpan).children("a").attr("href", dtnode.data.href);
+		        }
+		    });
+		    if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curpath = window.location.href.split("#")[1];
+		    else curpath = null;
+		    Load();
+		    $("button").button();
+		    $("button").click(function () { return false; });
+		    $("button.dropdown").button({ icons: { secondary: "ui-icon-carat-1-s"} });
+		    $(".button").button();
+		    $("#Views").css("top", $("#view").position().top + $("#view").parent().height() + 2);
+		    $("#Views").css("left", $("#view").position().left - ($("#Views").width() - $("#view").width()));
+		    $("#view").click(function () {
+		        if (showView == 0) {
+		            showView = 1;
+		            $("#Views").animate({ height: 'toggle' });
+		        }
+		        return false;
+		    });
+		    $("#hapContent").click(function () {
+		        if (showView == 2) { $("#Views").animate({ height: 'toggle' }); showView = 0; }
+		        else if (showView == 1) showView = 2;
+		    });
+		    $("#Views button").click(function () {
+		        $("#MyFiles").html("");
+		        if (table != null) $("#MyFiles-Table").dataTable().fnDestroy();
+		        $("#MyFiles-Table tbody").html("");
+		        if ($(this).text() == "Details") {
+		            viewMode = 1;
+		            $("#MyFiles").css("display", "none");
+		            $("#MyFilesTable").css("display", "block");
+		        }
+		        else {
+		            viewMode = 0;
+		            $("#MyFiles").css("display", "block");
+		            $("#MyFilesTable").css("display", "none");
+		        }
+		        for (var i = 0; i < items.length; i++)
+		            if (viewMode == 0) items[i].Render();
+		            else items[i].RenderTable();
+		        if (viewMode == 1) {
+		            $("#MyFiles-Table").dataTable({ "bJQueryUI": true, bPaginate: false, bLengthChange: false, bSort: false, bInfo: false, bFilter: false });
+		            if (table != null) $("#MyFiles-Table").dataTable().fnAdjustColumnSizing();
+		            table = $("#MyFiles-Table").dataTable();
+		        }
+		    });
 		});
+		$(document).bind('keydown', function (e) { keys.shift = (e.keyCode == 16); keys.ctrl = (e.keyCode == 17); });
+		$(document).bind('keyup', function (e) { keys.shift = keys.ctrl = false; });
 	</script>
 </asp:Content>

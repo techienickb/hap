@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Home Access Plus+")]
-[assembly: AssemblyDescription("Home Access Plus+")]
+[assembly: AssemblyTitle("HAP.Logging.Setup")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("nb development")]
-[assembly: AssemblyProduct("HAP")]
-[assembly: AssemblyCopyright("Copyright © nb development 2009-2011")]
+[assembly: AssemblyProduct("HAP.Logging.Setup")]
+[assembly: AssemblyCopyright("Copyright © nb development 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("65354c9d-0bed-4420-ba44-fe145838c798")]
+[assembly: Guid("92d944a3-836d-4925-9e39-e7a335c14d5b")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -29,7 +29,8 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-// You can specify all the values or you can default the Revision and Build Numbers 
+// You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("7.6.1027.1200")]
-[assembly: AssemblyFileVersion("7.6.1027.1200")]
+// [assembly: AssemblyVersion("1.0.*")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]
