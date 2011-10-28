@@ -52,3 +52,9 @@ a.dynatree-title:active { border-color: #333; background: #333; color: #fff; }
 #MyFiles-Table a.Selected .label { color: #fff; }
 #MyFiles-Table a.Selected:active { background-color: #aaa; border-color: #aaa; color: #eee; }
 #MyFiles-Table a.Selected:active .label { color: #000; }
+button.back span { top: 4px; }
+
+/* all context menus have this class */
+.context-menu { background-color: #f2f2f2; border: 1px solid #999; list-style-type: none; margin: 0; padding: 0; }
+.context-menu a { display: block; padding: 2px 6px; text-decoration: none; color: #333; }
+.context-menu a:hover { background-color: #666; color: white; }

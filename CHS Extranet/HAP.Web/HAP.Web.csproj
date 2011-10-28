@@ -240,6 +240,7 @@
     <Content Include="MyFiles\Default.aspx" />
     <Content Include="Scripts\jquery-ui-1.8.16.custom.min.js" />
     <Content Include="Scripts\jquery.ba-hashchange.min.js" />
+    <Content Include="Scripts\jquery.contextMenu.js" />
     <Content Include="Scripts\jquery.dataTables.js" />
     <Content Include="style\basestyle.css" />
     <Content Include="Controls\Delete.ascx" />

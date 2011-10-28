@@ -5,6 +5,7 @@
 	<script src="../Scripts/jquery.ba-hashchange.min.js" type="text/javascript"></script>
 	<script src="../Scripts/jquery.dynatree.js" type="text/javascript"></script>
 	<script src="../Scripts/jquery.dataTables.js" type="text/javascript"></script>
+    <script src="../Scripts/jquery.contextmenu.js" type="text/javascript"></script>
 	<link href="../style/ui.dynatree.css" rel="stylesheet" type="text/css" />
 	<link href="../style/MyFiles.css" rel="stylesheet" type="text/css" />
 	<meta name="DownloadOptions" content="noopen" />
@@ -21,7 +22,13 @@
 		</div>
 	</div>
 	<div id="toolbar" style="padding: 4px; margin-bottom: 4px;" class="ui-widget-header">
-		<button class="dropdown">Organise</button> <button>Open</button> <button>New Folder</button><button class="dropdown" id="view" style="float: right;">View</button>
+        <div style="float: right;">
+            <span style="color: #fff;" id="search">Search:
+            <input type="text" id="filter" />
+            </span>
+            <button class="dropdown" id="view">View</button>
+        </div>
+		<button class="dropdown">Organise</button> <button id="backup">...</button> <button>Open</button> <button>New Folder</button>
 	</div>
 	<div id="Views" class="tile-border-color">
 		<button>Tiles</button>
@@ -47,9 +54,25 @@
 		var table = null;
 		var curpath = null;
 		$(window).hashchange(function () {
-			if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curpath = window.location.href.split("#")[1];
-			else curpath = null;
-			Load();
+		    $("#filter").val("");
+		    if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) {
+		        curpath = window.location.href.split("#")[1];
+		        if ($("#backup").width() < 23) {
+		            $("#backup").removeAttr("style");
+		            $("#search").animate({ opacity: 1.0 });
+		            $("#backup").animate({ width: 25, opacity: 1.0 });
+		        }
+		    }
+		    else {
+		        curpath = null;
+		        if ($("#backup").width() != 0) {
+		            $("#backup").animate({ width: 0, opacity: 0.0 }, 200, function () {
+		                $("#backup").css("display", "none");
+		            });
+		            $("#search").animate({ opacity: 0.0 });
+		        }
+		    }
+		    Load();
 		});
 		function OnError(xhr, ajaxOptions, thrownError) {
 			console.log(thrownError);
@@ -74,9 +97,10 @@
 		function Item(data) {
 			this.Data = data;
 			this.Id = "";
+            this.Show = true;
 			this.Clicks = 0;
 			this.Render = function () {
-			    this.Id = this.Data.Name.replace(/ /g, "_").replace(/\\/g, "-").replace(/\./g, "");
+			    this.Id = (this.Data.Name + this.Data.Extension).replace(/ /g, "_").replace(/\\/g, "-").replace(/\./g, "");
 			    var label = this.Data.Name;
 
 			    var h = '<a id="' + this.Id + '" ';
@@ -88,9 +112,31 @@
 			    h += '</span></a>';
 			    $("#MyFiles").append(h);
 			    $("#" + this.Id).bind("click", this.Click);
+			    $("#" + this.Id).contextMenu('context-menu-' + this.Id, {
+			        'Delete': {
+			            click: function (element) {  // element is the jquery obj clicked on when context menu launched
+			                alert('Menu item 1 clicked');
+			            }
+			        },
+			        'Rename': {
+			            click: function (element) { alert('second clicked'); }
+			        },
+			        'Properties': {
+			            click: function (element) { alert('hello'); }
+			        }
+			    },
+                {
+                    showMenu: function (element) {
+                        var item = null;
+                        for (var x = 0; x < items.length; x++) if (items[x].Id == $(element).attr("id")) item = items[x];
+                        item.Selected = true;
+                        item.Refresh();
+                    },
+                    hideMenu: function (element) { }
+                });
 			};
 			this.RenderTable = function () {
-			    this.Id = this.Data.Name.replace(/ /g, "_").replace(/\\/g, "-").replace(/\./g, "");
+			    this.Id = (this.Data.Name + this.Data.Extension).replace(/ /g, "_").replace(/\\/g, "-").replace(/\./g, "");
 				var label = this.Data.Name;
 
 				var h = '<tr><td><a id="' + this.Id + '" ';
@@ -129,6 +175,8 @@
 
 			        if (this.Selected) $("#" + this.Id).addClass("Selected");
 			        else $("#" + this.Id).removeClass("Selected");
+                    if (this.Show) $("#" + this.Id).parent().parent().removeAttr("style");
+                    else $("#" + this.Id).parent().parent().css("display", "none");
 			    }
 			    else {
 			        $("#" + this.Id).attr("href", (this.Data.Path.match(/\.\./i) ? this.Data.Path.replace(/\\/g, "/") : '#' + this.Data.Path));
@@ -141,6 +189,8 @@
 			        h += '</span>';
 
 			        $("#" + this.Id).html(h);
+                    if (this.Show) $("#" + this.Id).removeAttr("style");
+                    else $("#" + this.Id).css("display", "none");
 			    }
 			};
 			this.Selected = false;
@@ -159,7 +209,7 @@
 			            else if (items[x].Selected && keys.shift) { if (i == -1) i = x; }
 			            else if (items[x].Selected && !keys.ctrl) { items[x].Selected = false; items[x].Refresh(); }
 			        }
-			        item.Selected = true;
+			        item.Selected = !item.Selected;
 			        item.ClickCount = 1;
 			        if (i != -1 && z != -1 && keys.shift) {
 			            if (i > z) { var ti = i; i = z; z = ti; }
@@ -170,7 +220,7 @@
 			        }
 			        item.Refresh();
 			    } else {
-			        alert("You are about to download this file, if you wish to edit this file, please remember to\nSave it to your computer, and upload it back once you have finished!");
+                    if (item.Data.Type != 'Directory') alert("You are about to download this file, if you wish to edit this file, please remember to\nSave it to your computer, and upload it back once you have finished!");
 			        var item = null;
 			        for (var x = 0; x < items.length; x++)
 			            if (items[x].Id == $(this).attr("id")) { item = items[x]; break; }
@@ -180,6 +230,7 @@
 			};
 		}
 		function Load() {
+		    $(".context-menu").remove();
 			if (curpath == null) {
 				$.ajax({
 					type: 'GET',
@@ -231,6 +282,10 @@
 				});
 			}
 		}
+		function searchres(data) {
+		    var re = new RegExp("(" + $("#filter").val().replace(/\*/g, ")(.*)(").replace(/ /g, ")(.*)(").replace(/\(\)/g, "") + ")", "i");
+		    return data.match(re);
+		}
 		$(function () {
 		    $("#MyFilesTable").css("display", "none");
 		    $("#Views").animate({ height: 'toggle' });
@@ -273,12 +328,29 @@
 		                $(nodeSpan).children("a").attr("href", dtnode.data.href);
 		        }
 		    });
-		    if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curpath = window.location.href.split("#")[1];
-		    else curpath = null;
+		    $("#filter").val("");
+		    if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) {
+		        curpath = window.location.href.split("#")[1];
+		        if ($("#backup").width() < 23) {
+		            $("#backup").removeAttr("style");
+		            $("#search").animate({ opacity: 1.0 });
+		            $("#backup").animate({ width: 25, opacity: 1.0 });
+		        }
+		    }
+		    else {
+		        curpath = null;
+		        if ($("#backup").width() != 0) {
+		            $("#backup").animate({ width: 0, opacity: 0.0 }, 200, function () {
+		                $("#backup").css("display", "none");
+		            });
+		            $("#search").animate({ opacity: 0.0 });
+		        }
+		    }
 		    Load();
 		    $("button").button();
 		    $("button").click(function () { return false; });
 		    $("button.dropdown").button({ icons: { secondary: "ui-icon-carat-1-s"} });
+		    $("#backup").click(function () { history.go(-1); return false; });
 		    $(".button").button();
 		    $("#Views").css("top", $("#view").position().top + $("#view").parent().height() + 2);
 		    $("#Views").css("left", $("#view").position().left - ($("#Views").width() - $("#view").width()));
@@ -288,6 +360,12 @@
 		            $("#Views").animate({ height: 'toggle' });
 		        }
 		        return false;
+		    });
+		    $("#filter").keyup(function () {
+		        if ($("#filter").val().length == 0) for (var x = 0; x < items.length; x++) { items[x].Show = true; items[x].Refresh(); }
+		        else {
+		            for (var x = 0; x < items.length; x++) { if (searchres(items[x].Data.Name + items[x].Data.Extension)) items[x].Show = true; else items[x].Show = false; items[x].Refresh(); }
+		        }
 		    });
 		    $("#hapContent").click(function () {
 		        if (showView == 2) { $("#Views").animate({ height: 'toggle' }); showView = 0; }

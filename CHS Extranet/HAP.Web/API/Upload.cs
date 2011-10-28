@@ -43,33 +43,40 @@ namespace HAP.Web.API
 
         public void ProcessRequest(HttpContext context)
         {
-            ((HAP.AD.User)Membership.GetUser()).Impersonate();
-            context.Response.ExpiresAbsolute = DateTime.Now;
+            HAP.AD.User u = Membership.GetUser() as HAP.AD.User;
+            u.ImpersonateContained();
             try
             {
-                if (context.Request.HttpMethod == "POST")
+                context.Response.ExpiresAbsolute = DateTime.Now;
+                try
                 {
-                    UploadProcess fileUpload = new UploadProcess();
-                    fileUpload.FileUploadCompleted += new FileUploadCompletedEvent(fileUpload_FileUploadCompleted);
-                    fileUpload.ProcessRequest(context, Converter.DriveToUNC(RoutingPath, RoutingDrive));
+                    if (context.Request.HttpMethod == "POST")
+                    {
+                        UploadProcess fileUpload = new UploadProcess();
+                        fileUpload.FileUploadCompleted += new FileUploadCompletedEvent(fileUpload_FileUploadCompleted);
+                        fileUpload.ProcessRequest(context, Converter.DriveToUNC(RoutingPath, RoutingDrive));
+                    }
+                    else
+                    {
+                        context.Response.Write("You have reached this page via GET, this is NOT supported!\n");
+                        context.Response.Write("DEBUG INFO:\n");
+                        context.Response.Write(RoutingDrive + "\n");
+                        context.Response.Write(RoutingPath + "\n");
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    context.Response.Write("You have reached this page via GET, this is NOT supported!\n");
-                    context.Response.Write("DEBUG INFO:\n");
-                    context.Response.Write(RoutingDrive + "\n");
-                    context.Response.Write(RoutingPath + "\n");
+                    FileInfo file = new FileInfo(context.Server.MapPath("~/App_Data/log.log"));
+                    if (!file.Exists) file.Create();
+                    StreamWriter sw = file.AppendText();
+                    sw.WriteLine(e.Message);
+                    sw.Close();
                 }
             }
-            catch (Exception e)
+            finally
             {
-                FileInfo file = new FileInfo(context.Server.MapPath("~/App_Data/log.log"));
-                if (!file.Exists) file.Create();
-                StreamWriter sw = file.AppendText();
-                sw.WriteLine(e.Message);
-                sw.Close();
+                u.EndContainedImpersonate();
             }
-            ((HAP.AD.User)Membership.GetUser()).EndImpersonate();
         }
 
         void fileUpload_FileUploadCompleted(object sender, FileUploadCompletedEventArgs args)

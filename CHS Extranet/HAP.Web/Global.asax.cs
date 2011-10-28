@@ -36,7 +36,8 @@ namespace HAP.Web
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
-
+            if (Context.Request.Path.StartsWith(Context.Request.ApplicationPath + "/api/"))
+                Context.SetSessionStateBehavior(SessionStateBehavior.Disabled);
         }
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)
