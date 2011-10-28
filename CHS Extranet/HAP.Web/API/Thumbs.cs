@@ -47,32 +47,39 @@ namespace HAP.Web.API
 
         public void ProcessRequest(HttpContext context)
         {
-            ((HAP.AD.User)Membership.GetUser()).Impersonate();
-            Context = context;
-            config = hapConfig.Current;
-            DriveMapping unc;
-            string path = Converter.DriveToUNC(RoutingPath.Replace('^', '&'), RoutingDrive, out unc, ((HAP.AD.User)Membership.GetUser()));
-            FileInfo file = new FileInfo(path);
-            FileStream fs = file.OpenRead();
-            Image image = Image.FromStream(fs);
-            Image thumb = FixedSize(image, 64, 64);
-            image.Dispose();
-            fs.Close();
-            fs.Dispose();
-            
-            MemoryStream memstr = new MemoryStream();
-            thumb.Save(memstr, ImageFormat.Png);
-            context.Response.Clear();
-            context.Response.ExpiresAbsolute = DateTime.Now;
-            context.Response.ContentType = Converter.MimeType(".png");
-            context.Response.Buffer = true;
-            context.Response.AppendHeader("Content-Disposition", "inline; filename=\"" + file.Name + "\"");
-            context.Response.AddHeader("Content-Length", memstr.Length.ToString());
-            context.Response.Clear();
-            memstr.WriteTo(context.Response.OutputStream);
-            context.Response.Flush();
-            file = null;
-            ((HAP.AD.User)Membership.GetUser()).EndImpersonate();
+            HAP.AD.User u = Membership.GetUser() as HAP.AD.User;
+            u.ImpersonateContained();
+            try
+            {
+                Context = context;
+                config = hapConfig.Current;
+                DriveMapping unc;
+                string path = Converter.DriveToUNC(RoutingPath.Replace('^', '&'), RoutingDrive, out unc, ((HAP.AD.User)Membership.GetUser()));
+                FileInfo file = new FileInfo(path);
+                FileStream fs = file.OpenRead();
+                Image image = Image.FromStream(fs);
+                Image thumb = FixedSize(image, 64, 64);
+                image.Dispose();
+                fs.Close();
+                fs.Dispose();
+
+                MemoryStream memstr = new MemoryStream();
+                thumb.Save(memstr, ImageFormat.Png);
+                context.Response.Clear();
+                context.Response.ExpiresAbsolute = DateTime.Now;
+                context.Response.ContentType = Converter.MimeType(".png");
+                context.Response.Buffer = true;
+                context.Response.AppendHeader("Content-Disposition", "inline; filename=\"" + file.Name + "\"");
+                context.Response.AddHeader("Content-Length", memstr.Length.ToString());
+                context.Response.Clear();
+                memstr.WriteTo(context.Response.OutputStream);
+                context.Response.Flush();
+                file = null;
+            }
+            finally
+            {
+                u.EndContainedImpersonate();
+            }
         }
 
         private Image FixedSize(Image imgPhoto, int Width, int Height)

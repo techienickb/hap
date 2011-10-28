@@ -39,15 +39,22 @@ namespace HAP.Web.API
 
         public void ProcessRequest(HttpContext context)
         {
-            ((HAP.AD.User)Membership.GetUser()).Impersonate();
-            FileInfo file = new FileInfo(Converter.DriveToUNC(RoutingPath.Replace('^', '&'), RoutingDrive));
-            context.Response.Clear();
-            context.Response.ExpiresAbsolute = DateTime.Now;
-            context.Response.ContentType = "text/plain";
-            context.Response.Write(file.Exists ? "EXISTS" : "OK");
-            context.Response.Write("\n");
-            context.Response.Write("images/icons/" + MyComputerItem.ParseForImage(file));
-            ((HAP.AD.User)Membership.GetUser()).EndImpersonate();
+            HAP.AD.User u = Membership.GetUser() as HAP.AD.User;
+            u.ImpersonateContained();
+            try
+            {
+                FileInfo file = new FileInfo(Converter.DriveToUNC(RoutingPath.Replace('^', '&'), RoutingDrive));
+                context.Response.Clear();
+                context.Response.ExpiresAbsolute = DateTime.Now;
+                context.Response.ContentType = "text/plain";
+                context.Response.Write(file.Exists ? "EXISTS" : "OK");
+                context.Response.Write("\n");
+                context.Response.Write("images/icons/" + MyComputerItem.ParseForImage(file));
+            }
+            finally
+            {
+                u.EndContainedImpersonate();
+            }
         }
     }
 }
