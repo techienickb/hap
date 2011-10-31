@@ -228,11 +228,8 @@ public abstract class RangeRequestHandlerBase : IHttpHandler
 
 #if DEBUG
         LogResponseHttpHeaders(Response);
-        ReturnChunkedResponse(context);
-#else
-        if (Request.HttpMethod.Equals(HTTP_METHOD_HEAD) == false)
-            Response.TransmitFile(this.InternalRequestedFileInfo.FullName);
 #endif
+        ReturnChunkedResponse(context);
     }
 
     private void ReturnPartialEntity(HttpContext context)
