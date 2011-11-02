@@ -131,6 +131,7 @@ namespace HAP.Web.API
             HAP.Data.BookingSystem.BookingSystem bs = new HAP.Data.BookingSystem.BookingSystem(DateTime.Parse(Date));
             foreach (Lesson lesson in hapConfig.Current.BookingSystem.Lessons)
                 bookings.Add(new JSONBooking(bs.getBooking(Resource, lesson.Name)));
+            WebOperationContext.Current.OutgoingResponse.Format = WebMessageFormat.Json;
             return bookings.ToArray();
         }
 
@@ -150,7 +151,7 @@ namespace HAP.Web.API
                     x += doc.SelectNodes("/Bookings/Booking[@date='" + d.ToShortDateString() + "' and @username='" + Username + "']").Count;
                 return new int[] { max - x, new HAP.Data.BookingSystem.BookingSystem(DateTime.Parse(Date)).WeekNumber };
             }
-
+            WebOperationContext.Current.OutgoingResponse.Format = WebMessageFormat.Json;
             return new int[] { 0, new HAP.Data.BookingSystem.BookingSystem(DateTime.Parse(Date)).WeekNumber };
         }
 

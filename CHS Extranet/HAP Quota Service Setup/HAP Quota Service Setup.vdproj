@@ -15,13 +15,13 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_7ED45AF4287214C038AF97B21E523A56"
-        "OwnerKey" = "8:_FA743CA1BE258E4961BD5D1D64BB9CB6"
+        "MsmKey" = "8:_3129E2AA7A643CCDBD0E6C59AC115DD0"
+        "OwnerKey" = "8:_F7C0F3AD5E1A5652A4E0100C1531E988"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_7ED45AF4287214C038AF97B21E523A56"
+        "MsmKey" = "8:_3129E2AA7A643CCDBD0E6C59AC115DD0"
         "OwnerKey" = "8:_8DACAF23DEBB425C84BC83E8E9145A0E"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -34,31 +34,31 @@
         "Entry"
         {
         "MsmKey" = "8:_DB47DD3CB3DFE9A78D80B4EB5CE34F1A"
-        "OwnerKey" = "8:_7ED45AF4287214C038AF97B21E523A56"
+        "OwnerKey" = "8:_3129E2AA7A643CCDBD0E6C59AC115DD0"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_FA743CA1BE258E4961BD5D1D64BB9CB6"
+        "MsmKey" = "8:_F7C0F3AD5E1A5652A4E0100C1531E988"
         "OwnerKey" = "8:_8DACAF23DEBB425C84BC83E8E9145A0E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_3129E2AA7A643CCDBD0E6C59AC115DD0"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_F7C0F3AD5E1A5652A4E0100C1531E988"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_8DACAF23DEBB425C84BC83E8E9145A0E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_FA743CA1BE258E4961BD5D1D64BB9CB6"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_7ED45AF4287214C038AF97B21E523A56"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -222,14 +222,14 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7ED45AF4287214C038AF97B21E523A56"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_3129E2AA7A643CCDBD0E6C59AC115DD0"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:Interop.DiskQuotaTypeLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
-                    "_7ED45AF4287214C038AF97B21E523A56"
+                    "_3129E2AA7A643CCDBD0E6C59AC115DD0"
                     {
                     "Name" = "8:Interop.DiskQuotaTypeLibrary.dll"
                     "Attributes" = "3:512"
@@ -273,14 +273,14 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_FA743CA1BE258E4961BD5D1D64BB9CB6"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F7C0F3AD5E1A5652A4E0100C1531E988"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:HAP.Data.Quota, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_FA743CA1BE258E4961BD5D1D64BB9CB6"
+                    "_F7C0F3AD5E1A5652A4E0100C1531E988"
                     {
                     "Name" = "8:HAP.Data.Quota.dll"
                     "Attributes" = "3:512"
@@ -338,15 +338,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HAP Quota Service"
-        "ProductCode" = "8:{DD7A5DC0-FCC5-4D47-8DE5-AFF146E0E1C2}"
-        "PackageCode" = "8:{6AC698D4-BFDB-4568-B46F-360B1953FAE6}"
+        "ProductCode" = "8:{34808C70-2027-45C0-9367-E221551FC35F}"
+        "PackageCode" = "8:{BD9BBFDB-E29F-469F-8E10-B3F0B8441D2D}"
         "UpgradeCode" = "8:{55C8129E-4F05-41B8-A23E-1AE6A8DC351D}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:2.0.0"
         "Manufacturer" = "8:nb development"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -860,7 +860,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_8DACAF23DEBB425C84BC83E8E9145A0E"
             {
-            "SourcePath" = "8:..\\HAP.Data.Quota.Service\\obj\\x86\\Release\\HAP Quota Service.exe"
+            "SourcePath" = "8:..\\HAP.Data.Quota.Service\\obj\\x86\\Debug\\HAP Quota Service.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_7E1444332F30452BA4B4CF811F9B6B8D"
