@@ -30,20 +30,24 @@ namespace HAP.Web.API
 #endif
             HAP.Data.BookingSystem.BookingSystem bs = new HAP.Data.BookingSystem.BookingSystem(DateTime.Parse(Date));
             Booking b = bs.getBooking(booking.Room, booking.Lesson);
-#if DEBUG
-            HAP.Web.Logging.EventViewer.Log("Booking System JSON API", "Checking if Email is Enabled and a UID exists on the booking", System.Diagnostics.EventLogEntryType.Information);
-#endif
-            if (!string.IsNullOrEmpty(b.uid) && hapConfig.Current.SMTP.Enabled)
+            try
             {
 #if DEBUG
-                HAP.Web.Logging.EventViewer.Log("Booking System JSON API", "Asking for an iCal Cancel to be Generated and Sent", System.Diagnostics.EventLogEntryType.Information);
+                HAP.Web.Logging.EventViewer.Log("Booking System JSON API", "Checking if Email is Enabled and a UID exists on the booking", System.Diagnostics.EventLogEntryType.Information);
 #endif
-                iCalGenerator.GenerateCancel(b, DateTime.Parse(Date));
+                if (!string.IsNullOrEmpty(b.uid) && hapConfig.Current.SMTP.Enabled)
+                {
 #if DEBUG
-                HAP.Web.Logging.EventViewer.Log("Booking System JSON API", "Asking for an iCan Admin Cancel to be Generated and Sent", System.Diagnostics.EventLogEntryType.Information);
+                    HAP.Web.Logging.EventViewer.Log("Booking System JSON API", "Asking for an iCal Cancel to be Generated and Sent", System.Diagnostics.EventLogEntryType.Information);
 #endif
-                if (hapConfig.Current.BookingSystem.Resources[booking.Room].EmailAdmins) iCalGenerator.GenerateCancel(b, DateTime.Parse(Date), true);
+                    iCalGenerator.GenerateCancel(b, DateTime.Parse(Date));
+#if DEBUG
+                    HAP.Web.Logging.EventViewer.Log("Booking System JSON API", "Asking for an iCan Admin Cancel to be Generated and Sent", System.Diagnostics.EventLogEntryType.Information);
+#endif
+                    if (hapConfig.Current.BookingSystem.Resources[booking.Room].EmailAdmins) iCalGenerator.GenerateCancel(b, DateTime.Parse(Date), true);
+                }
             }
+            catch (Exception ex) { HAP.Web.Logging.EventViewer.Log("Booking System JSON API", ex.ToString() + "\nMessage:\n" + ex.Message + "\nStack Trace:\n" + ex.StackTrace, System.Diagnostics.EventLogEntryType.Error); }
             XmlDocument doc = HAP.Data.BookingSystem.BookingSystem.BookingsDoc;
 #if DEBUG
             HAP.Web.Logging.EventViewer.Log("Booking System JSON API", "Remove XML Element from XML Datasource", System.Diagnostics.EventLogEntryType.Information);
