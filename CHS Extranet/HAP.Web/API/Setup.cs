@@ -359,7 +359,7 @@ namespace HAP.Web.API
                 DirectoryEntry root = new DirectoryEntry("LDAP://DC=" + domain.Replace(".", ",DC="));
                 return FillNode(root);
             }
-            catch (Exception ex) { HAP.Web.Logging.EventViewer.Log("Booking System JSON API", ex.ToString() + "\nMessage:\n" + ex.Message + "\nStack Trace:\n" + ex.StackTrace, System.Diagnostics.EventLogEntryType.Error); return null; }
+            catch (Exception ex) { HAP.Web.Logging.EventViewer.Log("Setup API", ex.ToString() + "\nMessage:\n" + ex.Message + "\nStack Trace:\n" + ex.StackTrace, System.Diagnostics.EventLogEntryType.Error); return null; }
         }
 
         private ADOU FillNode(DirectoryEntry root)
@@ -381,7 +381,7 @@ namespace HAP.Web.API
                     }
                 return adou;
             }
-            catch (Exception ex) { HAP.Web.Logging.EventViewer.Log("Booking System JSON API", ex.ToString() + "\nMessage:\n" + ex.Message + "\nStack Trace:\n" + ex.StackTrace, System.Diagnostics.EventLogEntryType.Error); return null; }
+            catch (Exception ex) { HAP.Web.Logging.EventViewer.Log("Setup API -> FillNode(DirectoryEntry room)", ex.ToString() + "\nMessage:\n" + ex.Message + "\nStack Trace:\n" + ex.StackTrace, System.Diagnostics.EventLogEntryType.Error); return null; }
         }
     }
 }
