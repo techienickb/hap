@@ -352,10 +352,14 @@ namespace HAP.Web.API
         [OperationContract]
         public ADOU GetADTree(string username, string password, string domain)
         {
-            if (username.Length < 2 && password.Length < 2 && domain.Length < 2) throw new Exception("Invailid Domain/Credentials");
-            PrincipalContext pc = new PrincipalContext(ContextType.Domain, domain, username, password);
-            DirectoryEntry root = new DirectoryEntry("LDAP://DC=" + domain.Replace(".", ",DC="));
-            return FillNode(root);
+            try
+            {
+                if (username.Length < 2 && password.Length < 2 && domain.Length < 2) throw new Exception("Invailid Domain/Credentials");
+                PrincipalContext pc = new PrincipalContext(ContextType.Domain, domain, username, password);
+                DirectoryEntry root = new DirectoryEntry("LDAP://DC=" + domain.Replace(".", ",DC="));
+                return FillNode(root);
+            }
+            catch (Exception ex) { HAP.Web.Logging.EventViewer.Log("Booking System JSON API", ex.ToString() + "\nMessage:\n" + ex.Message + "\nStack Trace:\n" + ex.StackTrace, System.Diagnostics.EventLogEntryType.Error); return null; }
         }
 
         private ADOU FillNode(DirectoryEntry root)
@@ -377,7 +381,7 @@ namespace HAP.Web.API
                     }
                 return adou;
             }
-            catch { return null; } 
+            catch (Exception ex) { HAP.Web.Logging.EventViewer.Log("Booking System JSON API", ex.ToString() + "\nMessage:\n" + ex.Message + "\nStack Trace:\n" + ex.StackTrace, System.Diagnostics.EventLogEntryType.Error); return null; }
         }
     }
 }
