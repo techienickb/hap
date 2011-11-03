@@ -25,17 +25,38 @@ namespace HAP.Web.API
         [WebInvoke(Method = "DELETE", UriTemplate = "/Booking/{Date}", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         public JSONBooking[] RemoveBooking(string Date, JSONBooking booking)
         {
+#if DEBUG
+            HAP.Web.Logging.EventViewer.Log("Booking System JSON API", "Loading Booking from XML Datasource", System.Diagnostics.EventLogEntryType.Information);
+#endif
             HAP.Data.BookingSystem.BookingSystem bs = new HAP.Data.BookingSystem.BookingSystem(DateTime.Parse(Date));
             Booking b = bs.getBooking(booking.Room, booking.Lesson);
+#if DEBUG
+            HAP.Web.Logging.EventViewer.Log("Booking System JSON API", "Checking if Email is Enabled and a UID exists on the booking", System.Diagnostics.EventLogEntryType.Information);
+#endif
             if (!string.IsNullOrEmpty(b.uid) && hapConfig.Current.SMTP.Enabled)
             {
+#if DEBUG
+                HAP.Web.Logging.EventViewer.Log("Booking System JSON API", "Asking for an iCal Cancel to be Generated and Sent", System.Diagnostics.EventLogEntryType.Information);
+#endif
                 iCalGenerator.GenerateCancel(b, DateTime.Parse(Date));
+#if DEBUG
+                HAP.Web.Logging.EventViewer.Log("Booking System JSON API", "Asking for an iCan Admin Cancel to be Generated and Sent", System.Diagnostics.EventLogEntryType.Information);
+#endif
                 if (hapConfig.Current.BookingSystem.Resources[booking.Room].EmailAdmins) iCalGenerator.GenerateCancel(b, DateTime.Parse(Date), true);
             }
             XmlDocument doc = HAP.Data.BookingSystem.BookingSystem.BookingsDoc;
+#if DEBUG
+            HAP.Web.Logging.EventViewer.Log("Booking System JSON API", "Remove XML Element from XML Datasource", System.Diagnostics.EventLogEntryType.Information);
+#endif
             doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + DateTime.Parse(Date).ToShortDateString() + "' and @lesson='" + booking.Lesson + "' and @room='" + booking.Room + "']"));
+#if DEBUG
+            HAP.Web.Logging.EventViewer.Log("Booking System JSON API", "Checking to see if the Room has a Charging Flag", System.Diagnostics.EventLogEntryType.Information);
+#endif
             if (hapConfig.Current.BookingSystem.Resources[booking.Room].EnableCharging)
             {
+#if DEBUG
+                HAP.Web.Logging.EventViewer.Log("Booking System JSON API", "Removing the Charging and Unavailable Items", System.Diagnostics.EventLogEntryType.Information);
+#endif
                 int index = hapConfig.Current.BookingSystem.Lessons.FindIndex(l1 => l1.Name == booking.Lesson) + 1;
                 if (index >= hapConfig.Current.BookingSystem.Lessons.Count) index--;
                 Lesson nextlesson = hapConfig.Current.BookingSystem.Lessons[index];
@@ -50,7 +71,13 @@ namespace HAP.Web.API
                 if (doc.SelectSingleNode("/Bookings/Booking[@date='" + DateTime.Parse(Date).ToShortDateString() + "' and @lesson='" + previouslesson.Name + "' and @room='" + booking.Room + "' and @name='UNAVAILABLE']") != null)
                     doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + DateTime.Parse(Date).ToShortDateString() + "' and @lesson='" + previouslesson.Name + "' and @room='" + booking.Room + "' and @name='UNAVAILABLE']"));
             }
+#if DEBUG
+            HAP.Web.Logging.EventViewer.Log("Booking System JSON API", "Save XML Datasource", System.Diagnostics.EventLogEntryType.Information);
+#endif
             HAP.Data.BookingSystem.BookingSystem.BookingsDoc = doc;
+#if DEBUG
+            HAP.Web.Logging.EventViewer.Log("Booking System JSON API", "Loading Resource from XML Datasource for the specific day", System.Diagnostics.EventLogEntryType.Information);
+#endif
             return LoadRoom(Date, booking.Room);
         }
 
