@@ -55,7 +55,7 @@ namespace HAP.Web.BookingSystem.admin
             else
             {
                 cache = new List<CustomDataType>();
-                foreach (UserInfo user in ADUtils.FindUsers())
+                foreach (UserInfo user in ADUtils.FindUsers(OUVisibility.BookingSystem))
                     if (user.Notes == user.UserName) cache.Add(new CustomDataType(string.Format("{0}", user.UserName), user.UserName.ToLower()));
                     else cache.Add(new CustomDataType(string.Format("{0} - ({1})", user.UserName, user.Notes), user.UserName.ToLower()));
                 HttpContext.Current.Cache.Insert("userddlcache", cache, new System.Web.Caching.CacheDependency(new string[] { }, new string[] { }), DateTime.Now.AddHours(1), TimeSpan.Zero);

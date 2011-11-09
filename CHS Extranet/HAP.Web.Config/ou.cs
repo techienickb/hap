@@ -12,11 +12,13 @@ namespace HAP.Web.Configuration
         {
             Name = node.Attributes["name"].Value;
             Path = node.Attributes["path"].Value;
-            Ignore = bool.Parse(node.Attributes["ignore"].Value);
+            OUVisibility vis;
+            if (Enum.TryParse<OUVisibility>(node.Attributes["visibility"].Value, out vis)) Visibility = vis; else Visibility = OUVisibility.None;
         }
 
         public string Name { get; private set; }
         public string Path { get; private set; }
-        public bool Ignore { get; private set; }
+        public OUVisibility Visibility { get; private set; }
     }
+    public enum OUVisibility { HelpDesk, BookingSystem, Both, None }
 }

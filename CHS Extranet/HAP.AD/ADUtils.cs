@@ -28,12 +28,12 @@ namespace HAP.AD
             return users.ToArray();
         }
 
-        public static UserInfo[] FindUsers()
+        public static UserInfo[] FindUsers(OUVisibility vis)
         {
             hapConfig config = hapConfig.Current;
             List<UserInfo> users = new List<UserInfo>();
             foreach (ou ob in hapConfig.Current.AD.OUs.Values)
-                if (!ob.Ignore)
+                if (ob.Visibility == vis || ob.Visibility == OUVisibility.Both)
                     foreach (UserInfo info in FindUsers(ob, ""))
                         if (!users.Contains(info))
                             users.Add(info);

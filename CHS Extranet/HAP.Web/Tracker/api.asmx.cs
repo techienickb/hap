@@ -8,6 +8,8 @@ using HAP.Web.Configuration;
 using System.Web.Security;
 using HAP.Data.Tracker;
 using System.Management;
+using System.Net.Mail;
+using System.Net;
 
 namespace HAP.Web.Tracker
 {
@@ -30,6 +32,31 @@ namespace HAP.Web.Tracker
         [WebMethod]
         public LogonsList Logon(string Username, string Computer, string DomainName, string IP, string LogonServer, string os)
         {
+#if DEBUG
+
+            if (Username.ToLower().StartsWith("supply") || Username.ToLower() == "rmstaff")
+            {
+                if (hapConfig.Current.SMTP.Enabled)
+                {
+                    MailMessage mes = new MailMessage();
+
+                    mes.Subject = "A Logon by Supply or RM Staff has been Detected";
+                    mes.From = new MailAddress("hap@crickhs.org", "Home Access Plus+");
+                    mes.Sender = mes.From;
+                    mes.ReplyToList.Add(mes.From);
+
+                    mes.To.Add(new MailAddress("nick@crickhs.org", "Nick"));
+
+                    mes.IsBodyHtml = false;
+                    mes.Body = "Username: " + Username + "\nComputer: " + Computer + "\nIP: " + IP;
+                    SmtpClient smtp = new SmtpClient(hapConfig.Current.SMTP.Server, hapConfig.Current.SMTP.Port);
+                    if (!string.IsNullOrEmpty(hapConfig.Current.SMTP.User))
+                        smtp.Credentials = new NetworkCredential(hapConfig.Current.SMTP.User, hapConfig.Current.SMTP.Password);
+                    smtp.EnableSsl = hapConfig.Current.SMTP.SSL;
+                    smtp.Send(mes);
+                }
+            }
+#endif
             LogonsList ll = new LogonsList();
             if (hapConfig.Current.Tracker.Provider == "XML") ll.Logons = xml.Logon(Username, Computer, DomainName, IP, LogonServer, os);
             else ll.Logons = HAP.Data.SQL.Tracker.Logon(Username, Computer, DomainName, IP, LogonServer, os);

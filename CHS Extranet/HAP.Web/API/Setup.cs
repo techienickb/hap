@@ -18,11 +18,24 @@ namespace HAP.Web.API
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class setup
     {
-        // To use HTTP GET, add [WebGet] attribute. (Default ResponseFormat is WebMessageFormat.Json)
-        // To create an operation that returns XML,
-        //     add [WebGet(ResponseFormat=WebMessageFormat.Xml)],
-        //     and include the following line in the operation body:
-        //         WebOperationContext.Current.OutgoingResponse.ContentType = "text/xml";
+        [OperationContract]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/AddOU", BodyStyle = WebMessageBodyStyle.Wrapped)]
+        public int AddOU(string path, string name, string visibility)
+        {
+            hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
+            Config.AD.OUs.Add(name, HttpUtility.UrlDecode(path, System.Text.Encoding.Default), (OUVisibility)Enum.Parse(typeof(OUVisibility), visibility));
+            return 0;
+        }
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/RemoveOU", BodyStyle = WebMessageBodyStyle.Wrapped)]
+        public int RemoveOU(string name)
+        {
+            hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
+            Config.AD.OUs.Remove(name);
+            return 0;
+        }
+
         [OperationContract]
         [WebInvoke(Method="POST", RequestFormat=WebMessageFormat.Json, ResponseFormat=WebMessageFormat.Json, UriTemplate="/AddMapping", BodyStyle=WebMessageBodyStyle.Wrapped)]
         public int AddMapping(string drive, string name, string unc, string enablereadto, string enablewriteto, bool enablemove, string usagemode)

@@ -16,7 +16,7 @@ namespace HAP.Web.HelpDesk
             if (User.IsInRole("Domain Admins"))
             {
                 userlist.Items.Clear();
-                foreach (UserInfo user in ADUtils.FindUsers())
+                foreach (UserInfo user in ADUtils.FindUsers(Configuration.OUVisibility.HelpDesk))
                     if (user.DisplayName == user.UserName) userlist.Items.Add(new ListItem(user.UserName, user.UserName.ToLower()));
                     else userlist.Items.Add(new ListItem(string.Format("{0} - ({1})", user.UserName, user.DisplayName), user.UserName.ToLower()));
                 userlist.SelectedValue = ADUser.UserName.ToLower();

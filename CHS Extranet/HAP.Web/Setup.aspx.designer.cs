@@ -103,15 +103,6 @@ namespace HAP.Web {
         protected global::System.Web.UI.WebControls.TextBox up;
         
         /// <summary>
-        /// adbasestate control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Image adbasestate;
-        
-        /// <summary>
         /// sg control.
         /// </summary>
         /// <remarks>
@@ -128,42 +119,6 @@ namespace HAP.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Repeater adorgs;
-        
-        /// <summary>
-        /// ouname control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox ouname;
-        
-        /// <summary>
-        /// ouignore control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox ouignore;
-        
-        /// <summary>
-        /// oupath control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox oupath;
-        
-        /// <summary>
-        /// newou control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button newou;
         
         /// <summary>
         /// proxystate control.

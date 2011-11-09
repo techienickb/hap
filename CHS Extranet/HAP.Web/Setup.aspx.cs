@@ -25,8 +25,6 @@ namespace HAP.Web
                 un.Text = Config.AD.User;
                 up.Text = "";
                 sg.Text = Config.AD.StudentsGroup;
-                if (sg.Text.Length > 0) adbasestate.ImageUrl = "~/images/setup/267.png";
-                else adstate.ImageUrl = "~/images/setup/266.png";
                 hp_ab_st.Text = Config.Homepage.AnnouncementBox.ShowTo;
                 hp_ab_adt.Text = Config.Homepage.AnnouncementBox.EnableEditTo;
                 proxyaddress.Text = Config.ProxyServer.Address;
@@ -73,37 +71,6 @@ namespace HAP.Web
                 mscbQuotaServers.DataBind();
                 mscbExt.Text = Config.MySchoolComputerBrowser.HideExtensions;
             }
-        }
-
-        protected void sg_TextChanged(object sender, EventArgs e)
-        {
-            if (sg.Text.Length > 0) adbasestate.ImageUrl = "~/images/setup/267.png";
-            else adstate.ImageUrl = "~/images/setup/266.png";
-        }
-
-        protected void adorgs_ItemCommand(object source, RepeaterCommandEventArgs e)
-        {
-            if (e.CommandName == "Delete")
-            {
-                if (Config == null) Config = Cache["tempConfig"] as hapConfig;
-                Config.AD.OUs.Remove((string)e.CommandArgument);
-                adorgs.DataSource = Config.AD.OUs.Values;
-                adorgs.DataBind();
-                Cache.Remove("tempConfig");
-                Cache.Insert("tempConfig", Config, null, DateTime.MaxValue, TimeSpan.FromMinutes(4));
-            }
-        }
-
-        protected void newou_Click(object sender, EventArgs e)
-        {
-            if (Config == null) Config = Cache["tempConfig"] as hapConfig;
-            Config.AD.OUs.Add(ouname.Text, oupath.Text, ouignore.Checked);
-            Cache.Remove("tempConfig");
-            Cache.Insert("tempConfig", Config, null, DateTime.MaxValue, TimeSpan.FromMinutes(4));
-            adorgs.DataSource = Config.AD.OUs.Values;
-            adorgs.DataBind();
-            ouname.Text = oupath.Text = "";
-            ouignore.Checked = false;
         }
 
         protected void Save_Click(object sender, EventArgs e)

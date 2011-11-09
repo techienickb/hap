@@ -83,6 +83,15 @@ namespace HAP.Web.Configuration
                     n.Attributes.Append(a);
                 }
             }
+            if (version.CompareTo(Version.Parse("7.7")) == -1)
+            {//Perform v7.7 Upgrade
+                foreach (XmlNode n in doc.SelectNodes("/hapConfig/AD/OUs/OU")) {
+                    XmlAttribute a = doc.CreateAttribute("visibility");
+                    a.Value = bool.Parse(n.Attributes["ignore"].Value) ? OUVisibility.None.ToString() : OUVisibility.Both.ToString();
+                    n.Attributes.Append(a);
+                    n.Attributes.Remove(n.Attributes["ignore"]);
+                }
+            }
             doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             doc.Save(ConfigPath);
         }
