@@ -24,7 +24,7 @@ namespace HAP.Web.BookingSystem
             if (isBSAdmin || User.IsInRole("Domain Admins"))
             {
                 userlist.Items.Clear();
-                foreach (UserInfo user in ADUtils.FindUsers())
+                foreach (UserInfo user in ADUtils.FindUsers(OUVisibility.BookingSystem))
                     if (user.DisplayName == user.UserName)
                         userlist.Items.Add(new ListItem(user.UserName, user.UserName.ToLower()));
                     else

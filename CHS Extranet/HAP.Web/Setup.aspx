@@ -104,43 +104,30 @@
 						</div>
 
 					</div>
-					<asp:UpdatePanel runat="server">
-						<ContentTemplate>
-							<h2><span><span><b><i onclick="toggleGroup(this)"></i>Active Directory Base Settings <asp:Image ID="adbasestate" runat="server" ImageUrl="~/images/setup/266.png" /></b></span></span></h2>
-							<div class="group">
-								<div>
-									<asp:Label runat="server" Text="Students Group: " AssociatedControlID="sg" />
-									<asp:TextBox runat="server" ID="sg" Text="" AutoPostBack="true" ontextchanged="sg_TextChanged" onclick="showadbrowser(this, 'group');" />
-								</div>
-								<div>
-									<h3>AD Organizational Units</h3>
-									<p>For user selection, each OU unit will be processed in the Booking System/Help Desk Admin User Drop Down Selectors</p>
-									<asp:Repeater runat="server" ID="adorgs" onitemcommand="adorgs_ItemCommand">
-										<ItemTemplate>
-											<div>
-												Name: <%#Eval("Name") %><br />
-												Ignore: <%#Eval("Ignore") %> <asp:Button runat="server" Text="Delete" CommandName="Delete" CommandArgument='<%#Eval("Name") %>' />
-												<pre><%#Eval("Path") %></pre>
-											</div>
-										</ItemTemplate>
-									</asp:Repeater>
-									<h4>New</h4>
-									<div>
-										<asp:Label runat="server" Text="Name: " AssociatedControlID="ouname" />
-										<asp:TextBox ID="ouname" runat="server" />
+					<h2><span><span><b><i onclick="toggleGroup(this)"></i>Active Directory Groups<img alt="" id="adgroupsstate" src="images/setup/266.png" /></b></span></span></h2>
+					<div class="group">
+						<div>
+							<asp:Label runat="server" Text="Students Group: " AssociatedControlID="sg" />
+							<asp:TextBox runat="server" ID="sg" Text="" AutoPostBack="true" onclick="showadbrowser(this, 'group');" />
+						</div>
+					</div>
+					<h2><span><span><b><i onclick="toggleGroup(this)"></i>Active Directory User List OUs</b></span></span></h2>
+						<div>
+							<p>For user selection, each OU unit will be processed in the Booking System/Help Desk Admin User Drop Down Selectors</p>
+							<button class="addbutton" onclick="return addou();" style="float: right;">Add</button>
+							<div id="adorg_s">
+							<asp:Repeater runat="server" ID="adorgs">
+								<ItemTemplate>
+									<div id="<%#Eval("Name").ToString().Replace(" ", "_") %>">
+										Name: <%#Eval("Name") %><br />
+										Visibility: <%#Eval("Visibility") %><button onclick="return removeou(this);" class="minusbutton">Remove</button>
+										<pre><%#Eval("Path") %></pre>
 									</div>
-									<div>
-										<asp:CheckBox runat="server" ID="ouignore" Text="Ignore: " TextAlign="Left" />
-									</div>
-									<div>
-										<asp:Label runat="server" Text="OU Path: " AssociatedControlID="oupath" />
-										<asp:TextBox runat="server" ID="oupath" onclick="showadbrowser(this, 'organizationalUnit');" />
-									</div>
-									<asp:Button runat="server" ID="newou" Text="Add" onclick="newou_Click" style="width: 37px; margin-left: 220px;" />
-								</div>
+								</ItemTemplate>
+							</asp:Repeater>
 							</div>
-						</ContentTemplate>
-					</asp:UpdatePanel>
+						</div>
+					</div>
 					<h2><span><span><b><i onclick="toggleGroup(this)"></i>Web Proxy Server <asp:Image ID="proxystate" runat="server" ImageUrl="~/images/setup/267.png" /></b></span></span></h2>
 					<div class="group">
 						<div>
@@ -527,6 +514,23 @@
 							<label for="qexpression" style="width: 100px;">Expression: </label><input type="text" id="qexpression" />
 						</div>
 					</div>
+					<div id="ouEditor" title="AD User Browser OU Editor">
+						<div>
+							<label for="ouname" style="width: 100px;">Name: </label><input type="text" id="ouname" />
+						</div>
+						<div>
+							<label for="oupath" style="width: 100px;">Path: </label><input type="text" id="oupath" onclick="showadbrowser(this, 'organizationalUnit');" />
+						</div>
+						<div>
+							<label for="ouvisibility" style="width: 100px;">Visibility: </label>
+							<select id="ouvisibility">
+								<option value="None">None</option>
+								<option value="BookingSystem">Booking System</option>
+								<option value="HelpDesk">Help Desk</option>
+								<option value="Both">Both</option>
+							</select>
+						</div>
+					</div>
 					<asp:Button runat="server" UseSubmitBehavior="true" Text="Save" Font-Size="XX-Large" CssClass="checkbutton" ID="Save" onclick="Save_Click" />
 					<div id="adgroups" title="Group Builder">
 						<div id="adgroups-mode">
@@ -545,6 +549,62 @@
 					</div>
 					<script type="text/javascript">
 						var tempe = null;
+						function addou() {
+							$("#ouname").val("");
+							$("#oupath").val("");
+							$("#ouvisibility").select("None");
+							$("#ouEditor").dialog({
+								autoOpen: true,
+								width: 500,
+								buttons: {
+									"Add": function () {
+										$.ajax({
+											type: 'POST',
+											url: 'API/Setup/AddOU',
+											data: '{ "name": "' + $("#ouname").val() + '", "path": "' + escape($("#oupath").val()) + '", "visibility": "' + $("#ouvisibility option:selected").val() + '" }',
+											contentType: 'application/json',
+											dataType: 'json',
+											success: function (response) {
+												if (response != null && response.AddOUResult != null) {
+													var data = response.AddOUResult;
+													if (data != 0) alert(data);
+													else {
+														$("#adorg_s").append('<div id="' + $("#ouname").val().replace(/ /g, "_") + '">Name: ' + $("#ouname").val() + '<br />Visibility: ' + $("#ouvisibility option:selected").val() + '<button class="minusbutton" onclick="return removeou(this);">Delete</button><pre>' + $("#oupath").val() + '</pre></div>');
+														resetButtons();
+													}
+												}
+											},
+											error: OnUpdateError
+										});
+										$(this).dialog("close");
+									},
+									"Close": function () {
+										$(this).dialog("close");
+									}
+								}
+							});
+							return false;
+						}
+						function removeou(e) {
+						    tempe = e;
+						    $.ajax({
+						        type: 'POST',
+						        url: 'API/Setup/RemoveOU',
+						        data: '{ "name": "' + $(e).parent().attr("id").replace(/_/g, " ") + '" }',
+						        contentType: 'application/json',
+						        dataType: 'json',
+						        success: function (response) {
+						            if (response != null && response.RemoveOUResult != null) {
+						                var data = response.RemoveOUResult;
+						                if (data != 0) alert(data);
+						                else $(tempe).parent().remove();
+						                tempe = null;
+						            }
+						        },
+						        error: OnUpdateError
+						    });
+							return false;
+						}
 						function addmapping() {
 							$("#mappingDrive").val("");
 							$("#mappingUNC").val("");
@@ -579,7 +639,7 @@
 							return false;
 						}
 						function OnMappingAddSuccess(response) {
-							if (response != null && response.GetAddMappingResult != null) {
+							if (response != null && response.AddMappingResult != null) {
 								var data = response.AddMappingResult;
 								if (data != 0) alert(data);
 								else {
@@ -630,7 +690,7 @@
 							return false;
 						}
 						function OnMappingUpdateSuccess(response) {
-							if (response != null && response.GetUpdateMappingResult != null) {
+							if (response != null && response.UpdateMappingResult != null) {
 								var data = response.UpdateMappingResult;
 								if (data != 0) alert(data);
 								else {
@@ -697,7 +757,7 @@
 							return false;
 						}
 						function OnFilterUpdateSuccess(response) {
-							if (response != null && response.GetUpdateFilterResult != null) {
+							if (response != null && response.UpdateFilterResult != null) {
 								var data = response.UpdateFilterResult;
 								if (data != 0) alert(data);
 								else {
@@ -1580,75 +1640,80 @@
 							$("#<%=generalstate.ClientID %>").attr("src", root + "images/setup/" + i);
 						}
 						$(function () {
-							$('#homepagetabs').tabs();
-							$(".sortablegroup").sortable({
-								placeholder: 'homepagegroup',
-								axis: 'y',
-								update: function (e, u) {
-									$.ajax({
-										type: 'POST',
-										url: 'API/Setup/UpdateLinkGroupOrder',
-										data: '{"groups": "' + $(this).sortable('toArray').toString() + '"}',
-										contentType: 'application/json',
-										dataType: 'json',
-										success: OnGroupOrderUpdateSuccess,
-										error: OnUpdateError
-									});
-								}
-							});
-							$(".sortablegroup").disableSelection();
-							$(".sortable").sortable({
-								placeholder: 'homepagelink',
-								update: function (e, u) {
-									$.ajax({
-										type: 'POST',
-										url: 'API/Setup/UpdateLinkOrder',
-										data: '{"group": "' + $(this).parent(".linkgroup").attr("id") + '", "links": "' + $(this).sortable('toArray').toString() + '"}',
-										contentType: 'application/json',
-										dataType: 'json',
-										success: OnGroupOrderUpdateSuccess,
-										error: OnUpdateError
-									});
-								}
-							});
-							$(".sortable").disableSelection();
-							$("#adgroups-mode-custom").click(function () {
-								document.getElementById("adgroup-custom").style.display = "block";
-							});
-							$("#adgroups-mode-all").click(function () {
-								document.getElementById("adgroup-custom").style.display = "none";
-							});
-							$("#adgroups-mode-inherit").click(function () {
-								document.getElementById("adgroup-custom").style.display = "none";
-							});
-							$("#test").click(function () {
-								checkad();
-								$("#adbrowserwrapper").dialog({
-									autoOpen: true,
-									width: 400,
-									height: 600,
-									buttons: {
-										"Close": function () {
-											$(this).dialog("close");
-										}
-									}
-								});
-								return false;
-							});
-							generalchange();
-							checkweb();
-							checksmtp();
-							checktracker();
-							$("#adgroups").dialog({ autoOpen: false });
-							$("#linkgroupEditor").dialog({ autoOpen: false });
-							$("#linkEditor").dialog({ autoOpen: false });
-							$("#addsub").dialog({ autoOpen: false });
-							$("#addres").dialog({ autoOpen: false });
-							$("#addlesson").dialog({ autoOpen: false });
-							$("#adbrowserwrapper").dialog({ autoOpen: false });
-							$("#qserverEditor").dialog({ autoOpen: false });
-							$("#filterEditor").dialog({ autoOpen: false });
-							$("#mappingEditor").dialog({ autoOpen: false });
+						    $('#homepagetabs').tabs();
+						    $("#<%=sg.ClientID %>").keyup(function () {
+						        if ($("#<%=sg.ClientID %>").val().length > 2) $("#adgroupsstate").attr("src", root + "images/setup/267.png");
+						        else $("#adgroupsstate").attr("src", root + "images/setup/266.png");
+						    }).trigger('keyup');
+						    $(".sortablegroup").sortable({
+						        placeholder: 'homepagegroup',
+						        axis: 'y',
+						        update: function (e, u) {
+						            $.ajax({
+						                type: 'POST',
+						                url: 'API/Setup/UpdateLinkGroupOrder',
+						                data: '{"groups": "' + $(this).sortable('toArray').toString() + '"}',
+						                contentType: 'application/json',
+						                dataType: 'json',
+						                success: OnGroupOrderUpdateSuccess,
+						                error: OnUpdateError
+						            });
+						        }
+						    });
+						    $(".sortablegroup").disableSelection();
+						    $(".sortable").sortable({
+						        placeholder: 'homepagelink',
+						        update: function (e, u) {
+						            $.ajax({
+						                type: 'POST',
+						                url: 'API/Setup/UpdateLinkOrder',
+						                data: '{"group": "' + $(this).parent(".linkgroup").attr("id") + '", "links": "' + $(this).sortable('toArray').toString() + '"}',
+						                contentType: 'application/json',
+						                dataType: 'json',
+						                success: OnGroupOrderUpdateSuccess,
+						                error: OnUpdateError
+						            });
+						        }
+						    });
+						    $(".sortable").disableSelection();
+						    $("#adgroups-mode-custom").click(function () {
+						        document.getElementById("adgroup-custom").style.display = "block";
+						    });
+						    $("#adgroups-mode-all").click(function () {
+						        document.getElementById("adgroup-custom").style.display = "none";
+						    });
+						    $("#adgroups-mode-inherit").click(function () {
+						        document.getElementById("adgroup-custom").style.display = "none";
+						    });
+						    $("#test").click(function () {
+						        checkad();
+						        $("#adbrowserwrapper").dialog({
+						            autoOpen: true,
+						            width: 400,
+						            height: 600,
+						            buttons: {
+						                "Close": function () {
+						                    $(this).dialog("close");
+						                }
+						            }
+						        });
+						        return false;
+						    });
+						    generalchange();
+						    checkweb();
+						    checksmtp();
+						    checktracker();
+						    $("#adgroups").dialog({ autoOpen: false });
+						    $("#linkgroupEditor").dialog({ autoOpen: false });
+						    $("#linkEditor").dialog({ autoOpen: false });
+						    $("#addsub").dialog({ autoOpen: false });
+						    $("#addres").dialog({ autoOpen: false });
+						    $("#addlesson").dialog({ autoOpen: false });
+						    $("#adbrowserwrapper").dialog({ autoOpen: false });
+						    $("#qserverEditor").dialog({ autoOpen: false });
+						    $("#filterEditor").dialog({ autoOpen: false });
+						    $("#ouEditor").dialog({ autoOpen: false });
+						    $("#mappingEditor").dialog({ autoOpen: false });
 						});
 						checkad();
 					</script>

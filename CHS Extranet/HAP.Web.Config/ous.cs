@@ -24,12 +24,12 @@ namespace HAP.Web.Configuration
             doc.SelectSingleNode("/hapConfig/AD/OUs").AppendChild(e);
             base.Add(Name, new ou(e));
         }
-        public void Add(string Name, string Path, bool Ignore)
+        public void Add(string Name, string Path, OUVisibility Visibility)
         {
             XmlElement e = doc.CreateElement("OU");
             e.SetAttribute("name", Name);
             e.SetAttribute("path", Path);
-            e.SetAttribute("ignore", Ignore.ToString());
+            e.SetAttribute("visibility", Visibility.ToString());
             doc.SelectSingleNode("/hapConfig/AD/OUs").AppendChild(e);
             base.Add(Name, new ou(e));
         }
