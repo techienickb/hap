@@ -76,6 +76,7 @@
     <Compile Include="HelpDesk\Ticket.cs" />
     <Compile Include="MyFiles\Drive.cs" />
     <Compile Include="MyFiles\File.cs" />
+    <Compile Include="MyFiles\Properties.cs" />
     <Compile Include="OU.cs" />
     <Compile Include="Pupils.cs" />
     <Compile Include="Service References\Quota\Reference.cs">

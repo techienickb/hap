@@ -20,6 +20,32 @@ namespace HAP.Web.API
     public class MyFiles
     {
         [OperationContract]
+        [WebGet(UriTemplate="Properties/{Drive}/{*Path}")]
+        public Properties Properties(string Drive, string Path)
+        {
+            Properties ret = new Data.MyFiles.Properties();
+            Path = "/" + Path;
+            hapConfig config = hapConfig.Current;
+            List<HAP.Data.MyFiles.File> Items = new List<Data.MyFiles.File>();
+            User user = new User();
+            HttpCookie token = HttpContext.Current.Request.Cookies["token"];
+            if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
+            user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
+            user.ImpersonateContained();
+            try
+            {
+                DriveMapping mapping;
+                string path = Converter.DriveToUNC(Path, Drive, out mapping, user);
+                FileAttributes attr = System.IO.File.GetAttributes(path);
+                //detect whether its a directory or file
+                ret = ((attr & FileAttributes.Directory) == FileAttributes.Directory) ? new Properties(new DirectoryInfo(path), mapping, user) : new Properties(new FileInfo(path), mapping, user);
+            }
+            finally { user.EndContainedImpersonate(); }
+            
+            return ret;
+        }
+
+        [OperationContract]
         [WebGet(UriTemplate="{Drive}/{*Path}")]
         public HAP.Data.MyFiles.File[] List(string Drive, string Path)
         {
