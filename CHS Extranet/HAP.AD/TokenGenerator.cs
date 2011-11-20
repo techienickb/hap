@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Security.Cryptography;
 using System.IO;
+using System.Web;
 
 namespace HAP.AD
 {
     public class TokenGenerator
     {
         static byte[] _salt = Encoding.ASCII.GetBytes("yV9vL9Wbkh");
-        static string _key = "5ajX29BJfPM38xdv9DCsgWTn";
+        static string _key = "5ajX29BJfPM38" + HttpContext.Current.Server.MachineName + "xdv9DCsgWTn";
 
         public static string ConvertToPlain(string token)
         {
