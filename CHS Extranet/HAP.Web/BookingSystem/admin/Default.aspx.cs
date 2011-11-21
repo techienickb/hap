@@ -180,6 +180,7 @@ namespace HAP.Web.BookingSystem.admin
             doc.Load(Server.MapPath("~/app_data/timetable.xml"));
             XmlDocument sb = new XmlDocument();
             sb.Load(Server.MapPath("~/app_data/StaticBookings.xml"));
+            UserInfo[] users = ADUtils.FindUsers(OUVisibility.BookingSystem);
             foreach (XmlNode n in doc.SelectNodes("/SuperStarReport/Record"))
             {
                 string res = "";
@@ -188,17 +189,17 @@ namespace HAP.Web.BookingSystem.admin
                 }
                 catch { continue; }
                 string user = "";
-                if (getUsers().Count(u => u.Value.ToLower() == n.SelectSingleNode("MainTeacher").InnerText.ToLower()) > 0)
-                    user = getUsers().Single(u => u.Value.ToLower() == n.SelectSingleNode("MainTeacher").InnerText).Key;
-                else if (getUsers().Count(u => u.Value.ToLower().EndsWith(n.SelectSingleNode("MainTeacher").InnerText.ToLower().Split(new char[] { ' ' })[n.SelectSingleNode("MainTeacher").InnerText.ToLower().Split(new char[] { ' ' }).Length - 1])) == 1)
-                    user = getUsers().Single(u => u.Value.ToLower().EndsWith(n.SelectSingleNode("MainTeacher").InnerText.ToLower().Split(new char[] { ' ' })[n.SelectSingleNode("MainTeacher").InnerText.ToLower().Split(new char[] { ' ' }).Length - 1])).Key;
+                if (users.Count(u => u.Notes.ToLower() == n.SelectSingleNode("MainTeacher").InnerText.ToLower()) > 0)
+                    user = users.Single(u => u.Notes.ToLower() == n.SelectSingleNode("MainTeacher").InnerText.ToLower()).UserName;
+                else if (users.Count(u => u.DisplayName.ToLower().EndsWith(n.SelectSingleNode("MainTeacher").InnerText.ToLower().Split(new char[] { ' ' })[n.SelectSingleNode("MainTeacher").InnerText.ToLower().Split(new char[] { ' ' }).Length - 1])) == 1)
+                        user = users.Single(u => u.DisplayName.ToLower().EndsWith(n.SelectSingleNode("MainTeacher").InnerText.ToLower().Split(new char[] { ' ' })[n.SelectSingleNode("MainTeacher").InnerText.ToLower().Split(new char[] { ' ' }).Length - 1])).UserName;
                 if (string.IsNullOrWhiteSpace(user)) throw new ArgumentOutOfRangeException("MainTeacher", "User cannot be found from " + n.SelectSingleNode("MainTeacher").InnerText);
                 string name = n.SelectSingleNode("Description").InnerText;
                 if (n.SelectSingleNode("YearGroup") != null) name = n.SelectSingleNode("YearGroup").InnerText.Replace("  ", " ") + " " + name;
                 string d = n.SelectSingleNode("Name1").InnerText.Split(new char[] { ':' })[0];
                 int day;
                 if (int.TryParse(d.Substring(d.Length - 2, 1), out day)) day = int.Parse(d.Substring(d.Length - 2, 2));
-                else day = int.Parse(d.Substring(d.Length - 1, 1));
+                else if (!int.TryParse(d.Substring(d.Length - 1, 1), out day)) day = ConvertDayToInt(d);
                 string lesson = n.SelectSingleNode("Name1").InnerText.Split(new char[] { ':' })[1];
                 lesson = config.BookingSystem.Resources.Single(r => r.Key.EndsWith(" " + lesson)).Value.Name;
                 if (sb.SelectSingleNode("/Bookings/Booking[@day='" + day + "' AND lesson='" + lesson + "' AND room='" + res + "'") == null)
@@ -220,6 +221,15 @@ namespace HAP.Web.BookingSystem.admin
             }
             doc.Save(HttpContext.Current.Server.MapPath("~/App_Data/StaticBookings.xml"));
             message.Text = "Timetabled Lessons Loaded from SIMS Export, you can now delete the exported file";
+        }
+
+        private int ConvertDayToInt(string day)
+        {
+            string[] s = { "MonA", "TueA", "WedA", "ThuA", "FriA", "MonB", "TueB", "WedB", "ThuB", "FriB" };
+            int[] d = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            for (int i = 0; i < s.Length; i++)
+                if (s[i] == day) return d[i];
+            return -1;
         }
     }
 
