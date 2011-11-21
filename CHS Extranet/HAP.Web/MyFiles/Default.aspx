@@ -97,6 +97,12 @@
 				$('#nav-' + this.Id + ' > a > span').html(this.Data.Name);
 			};
 		}
+		function SelectedItems() {
+		    var val = new Array();
+		    for (var i = 0; i < items.length; i++)
+		        if (items[i].Selected) val.push(items[i]);
+		    return val;
+		}
 		function Item(data) {
 			this.Data = data;
 			this.Id = "";
@@ -126,7 +132,7 @@
 			        },
 			        'Properties': {
 			            click: function (element) {
-			                if (items.length > 1) { alert("This only works on 1 item"); return false; }
+			                if (SelectedItems().length > 1) { alert("This only works on 1 item"); return false; }
 			                $("#properties").dialog({ autoOpen: true, buttons: {
 			                    "OK": function () {
 			                        $(this).dialog("close");
@@ -136,13 +142,33 @@
 			                });
 			                $.ajax({
 			                    type: 'GET',
-			                    url: '<%=ResolveUrl("~/api/MyFiles/Properties/")%>' + items[0].Data.Path.replace(/\\/gi, "/"),
+			                    url: '<%=ResolveUrl("~/api/MyFiles/Properties/")%>' + SelectedItems()[0].Data.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, ""),
 			                    dataType: 'json',
 			                    contentType: 'application/json',
 			                    success: function (data) {
-			                        $("#propcont").html(data);
+			                        var s = '<div><img src="' + data.Icon + '" alt="" style="width: 32px; float: left; margin-right: 40px;" />' + data.Name + '</div>';
+			                        s += '<hr style="height: 1px; border-width: 1px" />';
+			                        if (data.Type == "File Folder") {
+			                            s += '<div><label>Type: </label>' + data.Type + '</div>';
+			                            s += '<div><label>Location: </label>' + data.Location + '</div>';
+			                            s += '<div><label>Size: </label>' + data.Size + '</div>';
+			                            s += '<div><label>Contains: </label>' + data.Contents + '</div>';
+			                            s += '<hr style="height: 1px; border-width: 1px" />';
+			                            s += '<div><label>Created: </label>' + data.DateCreated + '</div>';
+			                        } else {
+			                            s += '<div><label>Type of file: </label>' + data.Type + ' (' + data.Extension + ')</div>';
+			                            s += '<hr style="height: 1px; border-width: 1px" />';
+			                            s += '<div><label>Location: </label>' + data.Location + '</div>';
+			                            s += '<div><label>Size: </label>' + data.Size + '</div>';
+			                            s += '<hr style="height: 1px; border-width: 1px" />';
+			                            s += '<div><label>Created: </label>' + data.DateCreated + '</div>';
+			                            s += '<div><label>Modified: </label>' + data.DateModified + '</div>';
+			                            s += '<div><label>Accessed: </label>' + data.DateAccessed + '</div>';
+			                        }
+			                        $("#propcont").html(s);
 			                    }, error: OnError
 			                });
+			                return false;
 			            }
 			        }
 			    },
