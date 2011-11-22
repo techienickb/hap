@@ -1524,16 +1524,21 @@
 							}
 						}
 						function OnADUpdateSuccess(response) {
-							if (response != null && response.GetADTreeResult != null) {
-								var data = response.GetADTreeResult;
-								$("#treeprogress").progressbar({ value: 90 });
-								var t = $(processTreeNode(data)).appendTo("#tree");
-								$("#treeprogress").progressbar({ value: 100 });
-								$("#<%=adstate.ClientID %>").attr("src", root + "images/setup/267.png");
-								$("#treecontainer").dynatree({ imagePath: root + "images/setup/", selectMode: 1, noLink: true });
-								$("#treeprogress").hide();
-								console.info(data);
-							} else $("#<%=adstate.ClientID %>").attr("src", root + "images/setup/266.png");
+						    if (response != null && response.GetADTreeResult != null) {
+						        try {
+						            var data = response.GetADTreeResult;
+						            $("#treeprogress").progressbar({ value: 90 });
+						            var t = $(processTreeNode(data)).appendTo("#tree");
+						            $("#treeprogress").progressbar({ value: 100 });
+						            $("#<%=adstate.ClientID %>").attr("src", root + "images/setup/267.png");
+						            $("#treecontainer").dynatree({ imagePath: root + "images/setup/", selectMode: 1, noLink: true });
+						            $("#treeprogress").hide();
+						        } catch (e) { console.info(data); alert("There is something wrong connecting to your AD Infrastructure,\n\nplease review the AD settings and try again.\nThe most common cause of this is using a user not in the Domain Admins or Administrators Group"); }
+						    } else {
+						        console.info(response);
+						        alert("There is something wrong connecting to your AD Infrastructure,\n\nplease review the AD settings and try again.\nThe most common cause of this is using a user not in the Domain Admins or Administrators Group");
+						        $("#<%=adstate.ClientID %>").attr("src", root + "images/setup/266.png");
+						    }
 						}
 						function processTreeNode(o) {
 							var s = "<li data=\"icon: '" + o.Icon.replace(/~\//g, root) + "'\">" + (o.Url == null ? "" : "<a href=\"" + o.Url + "\">") + o.Name + (o.Url == null ? "" : "</a>");

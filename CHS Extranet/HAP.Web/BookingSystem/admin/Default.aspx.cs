@@ -201,7 +201,7 @@ namespace HAP.Web.BookingSystem.admin
                 if (int.TryParse(d.Substring(d.Length - 2, 1), out day)) day = int.Parse(d.Substring(d.Length - 2, 2));
                 else if (!int.TryParse(d.Substring(d.Length - 1, 1), out day)) day = ConvertDayToInt(d);
                 string lesson = n.SelectSingleNode("Name1").InnerText.Split(new char[] { ':' })[1];
-                lesson = config.BookingSystem.Resources.Single(r => r.Key.EndsWith(" " + lesson)).Value.Name;
+                lesson = config.BookingSystem.Lessons.Single(l => l.Name.EndsWith(" " + lesson)).Name;
                 if (sb.SelectSingleNode("/Bookings/Booking[@day='" + day + "' AND lesson='" + lesson + "' AND room='" + res + "'") == null)
                 {
                     XmlElement e = sb.CreateElement("Booking");
