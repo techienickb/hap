@@ -43,7 +43,7 @@ namespace HAP.AD
             this.UserName = username;
             this.Password = password;
             this.DomainName = HAP.Web.Configuration.hapConfig.Current.AD.UPN;
-            UserPrincipal userp = UserP;
+            UserPrincipal userp = HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Web.Configuration.AuthMode.Forms ? UserP : UserPa;
             this.UserName = userp.SamAccountName;
             this.Comment = userp.Description;
             this.DisplayName = userp.DisplayName;
@@ -185,6 +185,7 @@ namespace HAP.AD
 
         public bool Impersonate()
         {
+            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Web.Configuration.AuthMode.Windows) return true;
             WindowsIdentity tempWindowsIdentity;
             IntPtr token = IntPtr.Zero;
             IntPtr tokenDuplicate = IntPtr.Zero;
@@ -225,6 +226,7 @@ namespace HAP.AD
 
         public bool ImpersonateContained()
         {
+            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Web.Configuration.AuthMode.Windows) return true;
             WindowsIdentity tempWindowsIdentity;
             IntPtr token = IntPtr.Zero;
             IntPtr tokenDuplicate = IntPtr.Zero;
@@ -259,12 +261,14 @@ namespace HAP.AD
 
         public void EndContainedImpersonate()
         {
+            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Web.Configuration.AuthMode.Windows) return;
             if (ContainedImpersonationContext != null) ContainedImpersonationContext.Undo();
             ContainedImpersonationContext = null;
         }
 
         public void EndImpersonate()
         {
+            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Web.Configuration.AuthMode.Windows) return;
             if (impersonationContext != null) impersonationContext.Undo();
             impersonationContext = null;
         }

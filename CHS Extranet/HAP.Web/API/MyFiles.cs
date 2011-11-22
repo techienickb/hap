@@ -28,9 +28,12 @@ namespace HAP.Web.API
             hapConfig config = hapConfig.Current;
             List<HAP.Data.MyFiles.File> Items = new List<Data.MyFiles.File>();
             User user = new User();
-            HttpCookie token = HttpContext.Current.Request.Cookies["token"];
-            if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
-            user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
+            if (config.AD.AuthenticationMode == AuthMode.Forms)
+            {
+                HttpCookie token = HttpContext.Current.Request.Cookies["token"];
+                if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
+                user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
+            }
             user.ImpersonateContained();
             try
             {
@@ -54,9 +57,12 @@ namespace HAP.Web.API
             hapConfig config = hapConfig.Current;
             List<HAP.Data.MyFiles.File> Items = new List<Data.MyFiles.File>();
             User user = new User();
-            HttpCookie token = HttpContext.Current.Request.Cookies["token"];
-            if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
-            user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
+            if (config.AD.AuthenticationMode == AuthMode.Forms)
+            {
+                HttpCookie token = HttpContext.Current.Request.Cookies["token"];
+                if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
+                user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
+            }
             user.ImpersonateContained();
             try
             {
@@ -108,16 +114,17 @@ namespace HAP.Web.API
         {
             List<Drive> drives = new List<Drive>();
             User user = new User();
-            HttpCookie token = HttpContext.Current.Request.Cookies["token"];
-            if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
-            user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
-            user.ImpersonateContained();
-
             hapConfig config = hapConfig.Current;
+            if (config.AD.AuthenticationMode == AuthMode.Forms)
+            {
+                HttpCookie token = HttpContext.Current.Request.Cookies["token"];
+                if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
+                user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
+            }
+            user.ImpersonateContained();
 
             long freeBytesForUser, totalBytes, freeBytes;
 
-            string userhome = user.HomeDirectory;
             foreach (DriveMapping p in config.MySchoolComputerBrowser.Mappings.Values.OrderBy(m => m.Drive))
             {
                 decimal space = -1;

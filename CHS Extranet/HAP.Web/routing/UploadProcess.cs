@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.IO;
+using System.Web.Security;
 
 namespace HAP.Web.routing
 {
@@ -41,43 +42,58 @@ namespace HAP.Web.routing
 
         private HttpContext _context;
 
+        private HAP.AD.User _ADUser = null;
+        public HAP.AD.User ADUser
+        {
+            get
+            {
+                if (_ADUser == null) _ADUser = ((HAP.AD.User)Membership.GetUser());
+                return _ADUser;
+            }
+        }
+
         public void ProcessRequest(HttpContext context, string uploadPath)
         {
             _context = context;
-            string filename = context.Request.QueryString["filename"];
-            bool complete = string.IsNullOrEmpty(context.Request.QueryString["Complete"]) ? true : bool.Parse(context.Request.QueryString["Complete"]);
-            long startByte = string.IsNullOrEmpty(context.Request.QueryString["StartByte"]) ? 0 : long.Parse(context.Request.QueryString["StartByte"]); ;
-
-            string filePath = Path.Combine(uploadPath, filename);
-
-            if (startByte > 0 && File.Exists(filePath))
+            try
             {
+                ADUser.ImpersonateContained();
+                string filename = context.Request.QueryString["filename"];
+                bool complete = string.IsNullOrEmpty(context.Request.QueryString["Complete"]) ? true : bool.Parse(context.Request.QueryString["Complete"]);
+                long startByte = string.IsNullOrEmpty(context.Request.QueryString["StartByte"]) ? 0 : long.Parse(context.Request.QueryString["StartByte"]); ;
 
-                using (FileStream fs = File.Open(filePath, FileMode.Append))
+                string filePath = Path.Combine(uploadPath, filename);
+
+                if (startByte > 0 && File.Exists(filePath))
                 {
-                    SaveFile(context.Request.InputStream, fs);
-                    fs.Close();
-                    fs.Dispose();
+
+                    using (FileStream fs = File.Open(filePath, FileMode.Append))
+                    {
+                        SaveFile(context.Request.InputStream, fs);
+                        fs.Close();
+                        fs.Dispose();
+                    }
+                }
+                else
+                {
+                    using (FileStream fs = File.Create(filePath))
+                    {
+                        SaveFile(context.Request.InputStream, fs);
+                        fs.Close();
+                        fs.Dispose();
+                    }
+                }
+                if (complete)
+                {
+                    if (FileUploadCompleted != null)
+                    {
+                        FileUploadCompletedEventArgs args = new FileUploadCompletedEventArgs(filename, filePath);
+                        FileUploadCompleted(this, args);
+                    }
+
                 }
             }
-            else
-            {
-                using (FileStream fs = File.Create(filePath))
-                {
-                    SaveFile(context.Request.InputStream, fs);
-                    fs.Close();
-                    fs.Dispose();
-                }
-            }
-            if (complete)
-            {
-                if (FileUploadCompleted != null)
-                {
-                    FileUploadCompletedEventArgs args = new FileUploadCompletedEventArgs(filename, filePath);
-                    FileUploadCompleted(this, args);
-                }
-
-            }
+            finally { ADUser.EndContainedImpersonate(); }
         }
 
         private void SaveFile(Stream stream, FileStream fs)

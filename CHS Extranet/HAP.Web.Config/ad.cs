@@ -123,5 +123,14 @@ namespace HAP.Web.Configuration
         }
         private byte[] _salt = Encoding.ASCII.GetBytes("zQuPbTaqzK");
         private string _key = "mKnooh8A8VbhbHngxKRu";
+        public AuthMode AuthenticationMode
+        {
+            get
+            {
+                if (el.HasAttribute("AuthMode")) return (AuthMode)Enum.Parse(typeof(AuthMode), el.GetAttribute("AuthMode"));
+                return AuthMode.Forms;
+            }
+        }
     }
+    public enum AuthMode { Forms, Windows }
 }
