@@ -24,11 +24,16 @@ namespace HAP.Web
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["password"] == null)
-            { 
-                FormsAuthentication.SignOut(); 
-                FormsAuthentication.RedirectToLoginPage("error=timeout");
-            } else InitParams.Attributes["value"] = string.Format("token={0}", TokenGenerator.ConvertToToken(ADUser.UserName + "@" + Session["password"].ToString()));
+            if (config.AD.AuthenticationMode == AuthMode.Forms)
+            {
+                if (Session["password"] == null)
+                {
+                    FormsAuthentication.SignOut();
+                    FormsAuthentication.RedirectToLoginPage("error=timeout");
+                }
+                else InitParams.Attributes["value"] = string.Format("token={0}", TokenGenerator.ConvertToToken(ADUser.UserName + "@" + Session["password"].ToString()));
+            }
+            else InitParams.Attributes["value"] = string.Format("token={0}", TokenGenerator.ConvertToToken(ADUser.UserName + "@NULL"));
         }
     }
 }
