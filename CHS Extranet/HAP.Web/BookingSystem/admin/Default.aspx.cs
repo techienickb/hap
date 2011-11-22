@@ -202,7 +202,7 @@ namespace HAP.Web.BookingSystem.admin
                 else if (!int.TryParse(d.Substring(d.Length - 1, 1), out day)) day = ConvertDayToInt(d);
                 string lesson = n.SelectSingleNode("Name1").InnerText.Split(new char[] { ':' })[1];
                 lesson = config.BookingSystem.Lessons.Single(l => l.Name.EndsWith(" " + lesson)).Name;
-                if (sb.SelectSingleNode("/Bookings/Booking[@day='" + day + "' AND lesson='" + lesson + "' AND room='" + res + "'") == null)
+                if (sb.SelectSingleNode("/Bookings").ChildNodes.Count == 0 || sb.SelectSingleNode("/Bookings/Booking[@day='" + day + "' and @lesson='" + lesson + "' and @room='" + res + "']") == null)
                 {
                     XmlElement e = sb.CreateElement("Booking");
                     e.SetAttribute("day", day.ToString());
@@ -210,11 +210,11 @@ namespace HAP.Web.BookingSystem.admin
                     e.SetAttribute("room", res);
                     e.SetAttribute("name", name);
                     e.SetAttribute("username", user);
-                    sb.AppendChild(e);
+                    sb.SelectSingleNode("/Bookings").AppendChild(e);
                 }
                 else
                 {
-                    XmlNode e = sb.SelectSingleNode("/Bookings/Booking[@day='" + day + "' AND lesson='" + lesson + "' AND room='" + res + "'");
+                    XmlNode e = sb.SelectSingleNode("/Bookings/Booking[@day='" + day + "' and @lesson='" + lesson + "' and @room='" + res + "']");
                     e.Attributes["name"].Value = name;
                     e.Attributes["username"].Value = user;
                 }
