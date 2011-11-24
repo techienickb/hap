@@ -175,7 +175,7 @@ namespace HAP.Web.BookingSystem.admin
 
         protected void importSIMS_Click(object sender, EventArgs args)
         {
-            if (!File.Exists(Server.MapPath("~/app_data/timetable.xml"))) throw new ArgumentNullException("SIMS Tabletable Export", "The SIMS.net Timetable Export has not been found in the " + Server.MapPath("~/app_data") + "folder.  The export path you enter into the SIMS Report is: '" + Server.MapPath("~/App_Data/Timetable.xml") + "'");
+            if (!File.Exists(Server.MapPath("~/app_data/timetable.xml"))) return;
             XmlDocument doc = new XmlDocument();
             doc.Load(Server.MapPath("~/app_data/timetable.xml"));
             XmlDocument sb = new XmlDocument();
@@ -219,16 +219,15 @@ namespace HAP.Web.BookingSystem.admin
                     e.Attributes["username"].Value = user;
                 }
             }
-            doc.Save(HttpContext.Current.Server.MapPath("~/App_Data/StaticBookings.xml"));
-            message.Text = "Timetabled Lessons Loaded from SIMS Export, you can now delete the exported file";
+            sb.Save(HttpContext.Current.Server.MapPath("~/App_Data/StaticBookings.xml"));
+            Response.Redirect("./");
         }
 
         private int ConvertDayToInt(string day)
         {
             string[] s = { "MonA", "TueA", "WedA", "ThuA", "FriA", "MonB", "TueB", "WedB", "ThuB", "FriB" };
-            int[] d = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
             for (int i = 0; i < s.Length; i++)
-                if (s[i] == day) return d[i];
+                if (s[i].ToLower() == day.ToLower()) return i + 1;
             return -1;
         }
     }
