@@ -101,6 +101,9 @@
 		</div>
 		<div id="static-bookings">
 			<asp:UpdatePanel runat="server" ChildrenAsTriggers="true">
+				<Triggers>
+					<asp:PostBackTrigger ControlID="importSIMS" />
+				</Triggers>
 				<ContentTemplate>
 					<table id="staticbookingstable">
 						<thead><tr><th width="120"></th><th width="70"><label>Room</label></th><th width="60"><label>Day</label></th><th width="100">Lesson</th><th width="200">Name</th><th width="140">Username</th></tr></thead>
@@ -231,7 +234,7 @@
 					</script>
 					<div style="float: right; padding: 10px; width: 50%">
 						<p>Save the SIMS export to <%=Server.MapPath("~/app_data/sims-bookings.xml") %> then click the button:</p>
-						<asp:Button runat="server" ID="importSIMS" Text="Import SIMS" 
+						<asp:Button runat="server" ID="importSIMS" Text="Import SIMS" CausesValidation="false"
 							style="font-size: 130%" onclick="importSIMS_Click" />
 						<p>CAUTION: The Teacher's Name from the SIMS Export (Title Initial Surname) needs to equal the Notes/Display Name field in AD for that user, or the Notes/Display name only has one person with that surname</p>
 					</div>

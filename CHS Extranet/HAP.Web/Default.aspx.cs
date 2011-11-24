@@ -80,7 +80,7 @@ namespace HAP.Web
                         space = -1;
                         if (mapping != null)
                         {
-                            ADUser.Impersonate();
+                            ADUser.ImpersonateContained();
                             try
                             {
                                 long freeBytesForUser, totalBytes, freeBytes;
@@ -100,7 +100,7 @@ namespace HAP.Web
                                 }
                             }
                             catch { space = -2; hds.Visible = false; }
-                            ADUser.EndImpersonate();
+                            ADUser.EndContainedImpersonate();
                         }
                         else hds.Visible = false;
                     }

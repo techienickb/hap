@@ -7,6 +7,8 @@ using System.Text;
 using System.Windows.Forms;
 using System.Net;
 using System.IO;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 
 namespace HAP.Logon.Tracker
 {
@@ -14,8 +16,16 @@ namespace HAP.Logon.Tracker
     {
         private Action action;
         private api.api api;
+
+        private static bool ValidateRemoteCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors policyErrors)
+        {
+            return true;
+        }
+
         public Loading(Action action, string baseurl)
         {
+            ServicePointManager.ServerCertificateValidationCallback += new RemoteCertificateValidationCallback(ValidateRemoteCertificate);
+
             InitializeComponent();
             this.api = new api.api();
             this.api.Url = new Uri(new Uri(baseurl), "tracker/api.asmx").ToString();
