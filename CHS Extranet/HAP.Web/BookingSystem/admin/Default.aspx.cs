@@ -175,9 +175,9 @@ namespace HAP.Web.BookingSystem.admin
 
         protected void importSIMS_Click(object sender, EventArgs args)
         {
-            if (!File.Exists(Server.MapPath("~/app_data/timetable.xml"))) return;
+            if (!File.Exists(Server.MapPath("~/app_data/sims-bookings.xml"))) return;
             XmlDocument doc = new XmlDocument();
-            doc.Load(Server.MapPath("~/app_data/timetable.xml"));
+            doc.Load(Server.MapPath("~/app_data/sims-bookings.xml"));
             XmlDocument sb = new XmlDocument();
             sb.Load(Server.MapPath("~/app_data/StaticBookings.xml"));
             UserInfo[] users = ADUtils.FindUsers(OUVisibility.BookingSystem);

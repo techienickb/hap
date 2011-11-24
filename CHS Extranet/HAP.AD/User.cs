@@ -185,7 +185,16 @@ namespace HAP.AD
 
         public bool Impersonate()
         {
-            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Web.Configuration.AuthMode.Windows) return true;
+            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Web.Configuration.AuthMode.Windows)
+            {
+                if (ADUtils.RevertToSelf())
+                {
+                    ContainedImpersonationContext = ((WindowsIdentity)HttpContext.Current.User.Identity).Impersonate();
+                    return true;
+                }
+                return false;
+            }
+
             WindowsIdentity tempWindowsIdentity;
             IntPtr token = IntPtr.Zero;
             IntPtr tokenDuplicate = IntPtr.Zero;
@@ -226,7 +235,15 @@ namespace HAP.AD
 
         public bool ImpersonateContained()
         {
-            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Web.Configuration.AuthMode.Windows) return true;
+            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Web.Configuration.AuthMode.Windows)
+            {
+                if (ADUtils.RevertToSelf())
+                {
+                    ContainedImpersonationContext = ((WindowsIdentity)HttpContext.Current.User.Identity).Impersonate();
+                    return true;
+                }
+                return false;
+            }
             WindowsIdentity tempWindowsIdentity;
             IntPtr token = IntPtr.Zero;
             IntPtr tokenDuplicate = IntPtr.Zero;
@@ -261,14 +278,12 @@ namespace HAP.AD
 
         public void EndContainedImpersonate()
         {
-            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Web.Configuration.AuthMode.Windows) return;
             if (ContainedImpersonationContext != null) ContainedImpersonationContext.Undo();
             ContainedImpersonationContext = null;
         }
 
         public void EndImpersonate()
         {
-            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Web.Configuration.AuthMode.Windows) return;
             if (impersonationContext != null) impersonationContext.Undo();
             impersonationContext = null;
         }
