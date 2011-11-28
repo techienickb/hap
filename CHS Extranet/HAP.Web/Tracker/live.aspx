@@ -47,6 +47,8 @@
             </asp:ListView>
             <div style="overflow: hidden; ">
                 <asp:Button runat="server" style="float: right;" id="logalloff" OnClientClick="return confirm('This may take some time...');" onclick="logalloff_Click" Text="Log All Off" />
+                <asp:Button runat="server" style="float: right;" id="removeall" 
+                    Text="Set all as Logged Off" onclick="removeall_Click" />
             </div>
         </ContentTemplate>
     </asp:UpdatePanel>

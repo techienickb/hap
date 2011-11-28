@@ -238,6 +238,7 @@
     <Content Include="images\ui-icons_ffffff_256x240.png" />
     <Content Include="Login.aspx" />
     <Content Include="MyFiles\Default.aspx" />
+    <Content Include="Scripts\jquery-1.7.1.min.js" />
     <Content Include="Scripts\jquery-ui-1.8.16.custom.min.js" />
     <Content Include="Scripts\jquery.ba-hashchange.min.js" />
     <Content Include="Scripts\jquery.contextMenu.js" />
@@ -288,7 +289,6 @@
     <Content Include="images\loading.gif" />
     <Content Include="images\progressbar-active.png" />
     <Content Include="images\progressbar.png" />
-    <Content Include="Scripts\jquery-1.6.2.min.js" />
     <Content Include="Scripts\jquery-Gtimepicker.js" />
     <Content Include="Scripts\jquery.dynatree.js" />
     <Content Include="Setup.aspx" />

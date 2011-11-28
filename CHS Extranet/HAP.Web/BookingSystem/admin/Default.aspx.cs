@@ -189,6 +189,7 @@ namespace HAP.Web.BookingSystem.admin
                 }
                 catch { continue; }
                 string user = "";
+                if (n.SelectSingleNode("MainTeacher") == null) continue;
                 if (users.Count(u => u.Notes.ToLower() == n.SelectSingleNode("MainTeacher").InnerText.ToLower()) > 0)
                     user = users.Single(u => u.Notes.ToLower() == n.SelectSingleNode("MainTeacher").InnerText.ToLower()).UserName;
                 else if (users.Count(u => u.DisplayName.ToLower().EndsWith(n.SelectSingleNode("MainTeacher").InnerText.ToLower().Split(new char[] { ' ' })[n.SelectSingleNode("MainTeacher").InnerText.ToLower().Split(new char[] { ' ' }).Length - 1])) == 1)

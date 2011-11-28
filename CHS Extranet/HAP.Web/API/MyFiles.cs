@@ -19,6 +19,7 @@ namespace HAP.Web.API
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
     public class MyFiles
     {
+
         [OperationContract]
         [WebGet(UriTemplate="Properties/{Drive}/{*Path}")]
         public Properties Properties(string Drive, string Path)
