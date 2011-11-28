@@ -18,6 +18,7 @@ namespace HAP.Web.Configuration
             EnableCharging = bool.Parse(node.Attributes["enablecharging"].Value);
             Admins = node.Attributes["admins"].Value != "" ? node.Attributes["admins"].Value : "Inherit";
             EmailAdmins = bool.Parse(node.Attributes["emailadmins"].Value);
+            ShowTo = node.Attributes["showto"].Value;
         }
 
         public string Name { get; set; }
@@ -26,6 +27,7 @@ namespace HAP.Web.Configuration
         public string Admins { get; set; }
         public bool EnableCharging { get; set; }
         public bool Enabled { get; set; }
+        public string ShowTo { get; set; }
     }
 
     public enum ResourceType { Room, Laptops, Equipment, Other }

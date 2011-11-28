@@ -14,7 +14,10 @@ namespace HAP.Web.BookingSystem
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            resources1.DataSource = resources2.DataSource = config.BookingSystem.Resources.Values;
+            List<Resource> rez = new List<Resource>();
+            foreach (Resource r in config.BookingSystem.Resources.Values)
+                if (isVisible(r.ShowTo)) rez.Add(r);
+            resources1.DataSource = resources2.DataSource = rez.ToArray();
             resources1.DataBind(); resources2.DataBind();
             lessons.DataSource = config.BookingSystem.Lessons;
             lessons.DataBind();
@@ -83,9 +86,17 @@ namespace HAP.Web.BookingSystem
             {
                 List<string> s = new List<string>();
                 foreach (Resource r in config.BookingSystem.Resources.Values)
-                    s.Add(string.Format("new resource(\"{0}\", \"{1}\")", r.Name, r.Type));
+                    if (isVisible(r.ShowTo)) s.Add(string.Format("new resource(\"{0}\", \"{1}\")", r.Name, r.Type));
                 return "[" + string.Join(", ", s.ToArray()) + "]";
             }
+        }
+
+        private bool isVisible(string showto)
+        {
+            if (showto == "All" || isBSAdmin || User.IsInRole("Domain Admins")) return true;
+            foreach (string s in showto.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                if (ADUser.UserName.ToLower().Equals(s.ToLower().Trim())) return true;
+            return false;
         }
 
         protected string JSTermDates

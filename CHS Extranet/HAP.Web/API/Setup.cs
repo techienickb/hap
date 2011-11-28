@@ -140,16 +140,16 @@ namespace HAP.Web.API
 
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/AddResource", BodyStyle = WebMessageBodyStyle.Wrapped)]
         [OperationContract]
-        public int AddResource(string name, string type, bool enabled, bool charging, string admins, bool emailadmins)
+        public int AddResource(string name, string type, bool enabled, bool charging, string admins, bool emailadmins, string showto)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
-            Config.BookingSystem.Resources.Add(name, (ResourceType)Enum.Parse(typeof(ResourceType), type), admins, enabled, emailadmins, charging);
+            Config.BookingSystem.Resources.Add(name, (ResourceType)Enum.Parse(typeof(ResourceType), type), admins, enabled, emailadmins, charging, showto);
             return 0;
         }
 
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/UpdateResource", BodyStyle = WebMessageBodyStyle.Wrapped)]
         [OperationContract]
-        public int UpdateResource(string origname, string name, string type, bool enabled, bool charging, string admins, bool emailadmins)
+        public int UpdateResource(string origname, string name, string type, bool enabled, bool charging, string admins, bool emailadmins, string showto)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
             Resource r = Config.BookingSystem.Resources[origname];
@@ -159,6 +159,7 @@ namespace HAP.Web.API
             r.Enabled = enabled;
             r.EmailAdmins = emailadmins;
             r.EnableCharging = charging;
+            r.ShowTo = showto;
             Config.BookingSystem.Resources.Update(origname, r);
             return 0;
         }

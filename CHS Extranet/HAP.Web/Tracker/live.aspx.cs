@@ -75,5 +75,14 @@ namespace HAP.Web.Tracker
             ListView1.DataSource = trackerlog.Current;
             ListView1.DataBind();
         }
+
+        protected void removeall_Click(object sender, EventArgs e)
+        {
+            foreach (trackerlogentry entry in trackerlog.Current)
+                if (hapConfig.Current.Tracker.Provider == "XML") xml.Clear(entry.ComputerName, entry.DomainName);
+                else HAP.Data.SQL.Tracker.Clear(entry.ComputerName, entry.DomainName);
+            ListView1.DataSource = trackerlog.Current;
+            ListView1.DataBind();
+        }
     }
 }

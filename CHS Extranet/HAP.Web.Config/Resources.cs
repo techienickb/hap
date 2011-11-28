@@ -17,7 +17,7 @@ namespace HAP.Web.Configuration
             this.node = doc.SelectSingleNode("/hapConfig/bookingsystem/resources");
             foreach (XmlNode n in node.ChildNodes) base.Add(n.Attributes["name"].Value, new Resource(n));
         }
-        public void Add(string Name, ResourceType Type, string Admins, bool Enabled, bool EmailAdmins, bool EnableCharging)
+        public void Add(string Name, ResourceType Type, string Admins, bool Enabled, bool EmailAdmins, bool EnableCharging, string showto)
         {
             XmlElement e = doc.CreateElement("resource");
             e.SetAttribute("name", Name);
@@ -26,6 +26,7 @@ namespace HAP.Web.Configuration
             e.SetAttribute("enabled", Enabled.ToString());
             e.SetAttribute("emailadmins", EmailAdmins.ToString());
             e.SetAttribute("enablecharging", EnableCharging.ToString());
+            e.SetAttribute("showto", showto);
             doc.SelectSingleNode("/hapConfig/bookingsystem/resources").AppendChild(e);
             base.Add(Name, new Resource(e));
         }
@@ -44,6 +45,7 @@ namespace HAP.Web.Configuration
             e.Attributes["admins"].Value = r.Admins;
             e.Attributes["emailadmins"].Value = r.EmailAdmins.ToString();
             e.Attributes["enablecharging"].Value = r.EnableCharging.ToString();
+            e.Attributes["showto"].Value = r.ShowTo;
             base.Add(r.Name, new Resource(e));
         }
 

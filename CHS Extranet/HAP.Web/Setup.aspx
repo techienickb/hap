@@ -309,7 +309,7 @@
 											<div class="resource" style="float: left;">
 												<span><%#Eval("Name") %></span>
 												(<i><%#Eval("Type") %></i>) [<b class="enabled"><%#((bool)Eval("Enabled")) ? "Enabled" : "Disabled" %></b>|<b class="charging"><%#((bool)Eval("EnableCharging")) ? "Charging" : "N"%></b>|<b class="email"><%#((bool)Eval("EmailAdmins")) ? "Email Admins" : "N" %></b>]<br />
-												Admins: <b class="admins"><%#Eval("Admins") %></b>
+												Admins: <b class="admins"><%#Eval("Admins") %></b>, Show To: <b class="showto"><%#Eval("ShowTo") %></b>
 											</div>
 											<div class="cbuttonset"><button onclick="return editres(this);" title="Edit">Edit</button><button onclick="return removeres(this);" title="Delete">Delete</button></div>
 										</div>
@@ -500,6 +500,9 @@
 						</div>
 						<div>
 							<label for="resEmail">Email Admins: </label><input type="checkbox" id="resEmail" />
+						</div>
+						<div>
+							<label for="resShowTo">Show To: </label><input type="text" id="resShowTo" /><br />(Comma Seperated Usernames)
 						</div>
 					</div>
 					<div id="qserverEditor" title="Quota Server Editor">
@@ -930,6 +933,7 @@
 							$("#resEnabled").attr("checked", "checked");
 							$("#resCharging").removeAttr("checked");
 							$("#resAdmins").val("");
+							$("#resShowTo").val("");
 							$("#resEmail").attr("checked", "checked");
 							$("#addres").dialog({
 								autoOpen: true,
@@ -939,7 +943,7 @@
 										$.ajax({
 											type: 'POST',
 											url: 'API/Setup/AddResource',
-											data: '{ "name": "' + $("#resName").val() + '", "type": "' + $("#resType").val() + '", "enabled": ' + ($("#resEnabled").attr("checked") ? 'true' : 'false') + ', "charging": ' + ($("#resCharging").attr("checked") ? 'true' : 'false') + ', "admins": "' + $("#resAdmins").val() + '", "emailadmins": ' + ($("#resEmail").attr("checked") ? 'true' : 'false') + ' }',
+											data: '{ "name": "' + $("#resName").val() + '", "type": "' + $("#resType").val() + '", "enabled": ' + ($("#resEnabled").attr("checked") ? 'true' : 'false') + ', "charging": ' + ($("#resCharging").attr("checked") ? 'true' : 'false') + ', "admins": "' + $("#resAdmins").val() + '", "emailadmins": ' + ($("#resEmail").attr("checked") ? 'true' : 'false') + ', "showto": "' + $("#resShowTo").val() + '" }',
 											contentType: 'application/json',
 											dataType: 'json',
 											success: OnResourceAddSuccess,
@@ -960,7 +964,7 @@
 								var data = response.AddResourceResult;
 								if (data != 0) alert(data);
 								else {
-									$("#resources").append('<div><div class="resource" style="float: left;"><span>' + $("#resName").val() + '</span> (<i>' + $("#resType").val() + '</i>) [<b class="enabled">' + ($("#resEnabled").attr("checked") ? "Enabled" : "Disabled") + '</b>|<b class="charging">' + ($("#resCharging").attr("checked") ? "Charging" : "N") + '</b>|<b class="email">' + ($("#resEmail").attr("checked") ? "Email Admins" : "N") + '</b>]<br />Admins: <b class="admins">' + $("#resAdmins").val() + '</b></div><div class="cbuttonset"><button onclick="return editres(this);" title="Edit">Edit</button><button onclick="return removeres(this);" title="Delete">Delete</button></div></div>');
+									$("#resources").append('<div><div class="resource" style="float: left;"><span>' + $("#resName").val() + '</span> (<i>' + $("#resType").val() + '</i>) [<b class="enabled">' + ($("#resEnabled").attr("checked") ? "Enabled" : "Disabled") + '</b>|<b class="charging">' + ($("#resCharging").attr("checked") ? "Charging" : "N") + '</b>|<b class="email">' + ($("#resEmail").attr("checked") ? "Email Admins" : "N") + '</b>]<br />Admins: <b class="admins">' + $("#resAdmins").val() + '</b>, Show To: <b class="showto">' + $("#resShowTo").val() + '</b></div><div class="cbuttonset"><button onclick="return editres(this);" title="Edit">Edit</button><button onclick="return removeres(this);" title="Delete">Delete</button></div></div>');
 									resetButtons();
 								}
 							}
@@ -976,6 +980,7 @@
 							if (tempe.children(".resource").children(".email").html() == "N") $("#resEmail").removeAttr("checked");
 							else $("#resEmail").attr("checked", "checked");
 							$("#resAdmins").val(tempe.children(".resource").children(".admins").html());
+							$("#resShowTo").val(tempe.children(".resource").children(".showto").html());
 							$("#addres").dialog({
 								autoOpen: true,
 								width: 500,
@@ -984,7 +989,7 @@
 										$.ajax({
 											type: 'POST',
 											url: 'API/Setup/UpdateResource',
-											data: '{ "origname": "' + tempe.children(".resource").children("span").html() + '", "name": "' + $("#resName").val() + '", "type": "' + $("#resType").val() + '", "enabled": ' + ($("#resEnabled").attr("checked") == "checked" ? 'true' : 'false') + ', "charging": ' + ($("#resCharging").attr("checked") ? 'true' : 'false') + ', "admins": "' + $("#resAdmins").val() + '", "emailadmins": ' + ($("#resEmail").attr("checked") ? 'true' : 'false') + ' }',
+											data: '{ "origname": "' + tempe.children(".resource").children("span").html() + '", "name": "' + $("#resName").val() + '", "type": "' + $("#resType").val() + '", "enabled": ' + ($("#resEnabled").attr("checked") == "checked" ? 'true' : 'false') + ', "charging": ' + ($("#resCharging").attr("checked") ? 'true' : 'false') + ', "admins": "' + $("#resAdmins").val() + '", "emailadmins": ' + ($("#resEmail").attr("checked") ? 'true' : 'false') + ', "showto": "' + $("#resShowTo").val() + '" }',
 											contentType: 'application/json',
 											dataType: 'json',
 											success: OnResourceUpdateSuccess,
@@ -1005,7 +1010,7 @@
 								var data = response.UpdateResourceResult;
 								if (data != 0) alert(data);
 								else {
-									$(tempe).children(".resource").replaceWith('<div class="resource" style="float: left;"><span>' + $("#resName").val() + '</span> (<i>' + $("#resType").val() + '</i>) [<b class="enabled">' + ($("#resEnabled").attr("checked") ? "Enabled" : "Disabled") + '</b>|<b class="charging">' + ($("#resCharging").attr("checked") ? "Charging" : "N") + '</b>|<b class="email">' + ($("#resEmail").attr("checked") ? "Email Admins" : "N") + '</b>]<br />Admins: <b class="admins">' + $("#resAdmins").val() + '</b></div>');
+									$(tempe).children(".resource").replaceWith('<div class="resource" style="float: left;"><span>' + $("#resName").val() + '</span> (<i>' + $("#resType").val() + '</i>) [<b class="enabled">' + ($("#resEnabled").attr("checked") ? "Enabled" : "Disabled") + '</b>|<b class="charging">' + ($("#resCharging").attr("checked") ? "Charging" : "N") + '</b>|<b class="email">' + ($("#resEmail").attr("checked") ? "Email Admins" : "N") + '</b>]<br />Admins: <b class="admins">' + $("#resAdmins").val() + '</b>, Show To: <b class="showto">' + $("#resShowTo").val() + '</b></div>');
 									tempe = null;
 								}
 							}

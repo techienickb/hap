@@ -92,6 +92,15 @@ namespace HAP.Web.Configuration
                     n.Attributes.Remove(n.Attributes["ignore"]);
                 }
             }
+            if (version.CompareTo(Version.Parse("7.7.1128.2200")) == -1)
+            {//Perform v7.7 Upgrade
+                foreach (XmlNode n in doc.SelectNodes("/hapConfig/bookingsystem/resources/resource"))
+                {
+                    XmlAttribute a = doc.CreateAttribute("showto");
+                    a.Value = "All";
+                    n.Attributes.Append(a);
+                }
+            }
             doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             doc.Save(ConfigPath);
         }
