@@ -6,8 +6,7 @@
 <head runat="server">
     <title>Display Board System</title>
     <link href="../style/basestyle.css" rel="stylesheet" type="text/css" />
-    <script src="<%=ResolveClientUrl("~/Scripts/jquery-1.6.2.min.js")%>" type="text/javascript"></script>
-    <script src="../Scripts/jquery-1.6.2.min.js" type="text/javascript"></script>
+    <script src="<%=ResolveClientUrl("~/Scripts/jquery-1.7.1.min.js")%>" type="text/javascript"></script>
     <link href="../style/bookingsystem.css" rel="stylesheet" type="text/css" />
 </head>
 <body class="bookingdisplay">

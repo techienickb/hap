@@ -24,6 +24,11 @@
 	<div id="properties" title="Properties">
 		<div id="propcont">Loading...</div>
 	</div>
+	<div class="contextMenu" id="contextMenu">
+	  <ul>
+		<li id="con-properties">Properties</li>
+	  </ul>
+	</div>
 	<div id="toolbar" style="padding: 4px; margin-bottom: 4px;" class="ui-widget-header">
 		<div style="float: right;">
 			<span style="color: #fff;" id="search">Search:
@@ -98,10 +103,10 @@
 			};
 		}
 		function SelectedItems() {
-		    var val = new Array();
-		    for (var i = 0; i < items.length; i++)
-		        if (items[i].Selected) val.push(items[i]);
-		    return val;
+			var val = new Array();
+			for (var i = 0; i < items.length; i++)
+				if (items[i].Selected) val.push(items[i]);
+			return val;
 		}
 		function Item(data) {
 			this.Data = data;
@@ -109,7 +114,7 @@
 			this.Show = true;
 			this.Clicks = 0;
 			this.Render = function () {
-			    this.Id = (this.Data.Name + this.Data.Extension).replace(/ /g, "_").replace(/\\/g, "-").replace(/\./g, "");
+			    this.Id = (this.Data.Name + this.Data.Extension).replace(/[\\'\. \[\]\(\)\-]/g, "_");
 			    var label = this.Data.Name;
 
 			    var h = '<a id="' + this.Id + '" ';
@@ -120,18 +125,48 @@
 			    else h += this.Data.Type + '<br />' + this.Data.Size;
 			    h += '</span></a>';
 			    $("#MyFiles").append(h);
+			    $("#" + this.Id).draggable({ helper: function () { return $('<div id="dragobject"><img /><span></span></div>'); }, start: function (event, ui) {
+			        var item = null;
+			        for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
+			        if (!item.Selected) for (var x = 0; x < items.length; x++) if (items[x].Selected) { items[x].Selected = false; items[x].Refresh(); }
+			        item.Selected = true;
+			        item.Refresh();
+			        $("#dragobject").show();
+			        $("#dragobject img").attr("src", item.Data.Icon);
+			        $("#dragobject span").text("");
+			        $("#dragobject span").hide();
+			    }
+			    });
+			    if (this.Data.Type == 'Directory') $("#" + this.Id).droppable({ accept: '.Selectable', activeClass: 'droppable-active', hoverClass: 'droppable-hover', drop: function (ev, ui) {
+
+			    }, over: function (event, ui) {
+			        var item = null;
+			        for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
+			        $("#dragobject span").text(((keys.ctrl) ? "Copy" : "Move") + " To " + item.Data.Name);
+			        $("#dragobject span").show();
+			    }, out: function (event, ui) {
+			        $("#dragobject span").text("");
+			        $("#dragobject span").hide();
+			    }
+			    });
 			    $("#" + this.Id).bind("click", this.Click);
-			    $("#" + this.Id).contextMenu('context-menu-' + this.Id, {
-			        'Delete': {
-			            click: function (element) {  // element is the jquery obj clicked on when context menu launched
-			                alert('Menu item 1 clicked');
-			            }
+			    $("#" + this.Id).contextMenu('contextMenu', {
+			        onContextMenu: function (e) {
+			            var element = $(e.target);
+			            if (!element.is("a")) element = element.parent("a");
+			            var item = null;
+			            for (var x = 0; x < items.length; x++) if (items[x].Id == element.attr("id")) item = items[x];
+			            if (!item.Selected) for (var x = 0; x < items.length; x++) if (items[x].Selected) { items[x].Selected = false; items[x].Refresh(); }
+			            item.Selected = true;
+			            item.Refresh();
+			            return true;
 			        },
-			        'Rename': {
-			            click: function (element) { alert('second clicked'); }
+			        onShowMenu: function (e, menu) {
+			            if (SelectedItems().length > 1) $("#con-properties", menu).remove();
+			            return menu;
 			        },
-			        'Properties': {
-			            click: function (element) {
+			        bindings: {
+			            'con-properties': function (t) {
 			                if (SelectedItems().length > 1) { alert("This only works on 1 item"); return false; }
 			                $("#properties").dialog({ autoOpen: true, buttons: {
 			                    "OK": function () {
@@ -168,22 +203,12 @@
 			                        $("#propcont").html(s);
 			                    }, error: OnError
 			                });
-			                return false;
 			            }
 			        }
-			    },
-				{
-				    showMenu: function (element) {
-				        var item = null;
-				        for (var x = 0; x < items.length; x++) if (items[x].Id == $(element).attr("id")) item = items[x];
-				        item.Selected = true;
-				        item.Refresh();
-				    },
-				    hideMenu: function (element) { }
-				});
+			    });
 			};
 			this.RenderTable = function () {
-				this.Id = (this.Data.Name + this.Data.Extension).replace(/ /g, "_").replace(/\\/g, "-").replace(/\./g, "");
+				this.Id = (this.Data.Name + this.Data.Extension).replace(/[\\'\. \[\]\(\)\-]/g, "_");
 				var label = this.Data.Name;
 
 				var h = '<tr><td><a id="' + this.Id + '" ';
@@ -244,6 +269,8 @@
 			this.ClickTimer = null;
 			this.Click = function (e) {
 				e.preventDefault();
+				$('#jqContextMenu').css("display", "none");
+				$('#jqContextMenuShadow').css("display", "none");
 				var item = null;
 				for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
 				clearTimeout(item.ClickTimer);
@@ -334,114 +361,114 @@
 			return data.match(re);
 		}
 		$(function () {
-			$("#MyFilesTable").css("display", "none");
-			$("#properties").dialog({ autoOpen: false });
-			$("#Views").animate({ height: 'toggle' });
-			$("#Tree").dynatree({ imagePath: "../images/setup/", selectMode: 1, noLink: false, minExpandLevel: 1, children: [{ title: "My Drives", href: "#", isFolder: true, isLazy: true}], fx: { height: "toggle", duration: 200 },
-				onLazyRead: function (node) {
-					if (node.data.href == "#") {
-						$.ajax({
-							type: 'GET',
-							url: '<%=ResolveUrl("~/api/MyFiles/Drives")%>',
-							dataType: 'json',
-							contentType: 'application/json',
-							success: function (data) {
-								res = [];
-								for (var i = 0; i < data.length; i++)
-									res.push({ title: data[i].Name, href: "#" + data[i].Path, isFolder: true, isLazy: true, noLink: false, key: data[i].Path });
-								node.setLazyNodeStatus(DTNodeStatus_Ok);
-								node.addChild(res);
-							}, error: OnError
-						});
-					} else {
-						$.ajax({
-							type: 'GET',
-							url: '<%=ResolveUrl("~/api/MyFiles/")%>' + node.data.href.substr(1).replace(/\\/g, "/"),
-							dataType: 'json',
-							contentType: 'application/json',
-							success: function (data) {
-								res = [];
-								for (var i = 0; i < data.length; i++)
-									if (data[i].Type == "Directory") {
-										res.push({ title: data[i].Name, href: "#" + data[i].Path, isFolder: true, isLazy: true, noLink: false, key: data[i].Path });
-									}
-								node.setLazyNodeStatus(DTNodeStatus_Ok);
-								node.addChild(res);
-							}, error: OnError
-						});
-					}
-				},
-				onRender: function (dtnode, nodeSpan) {
-					if (dtnode.data.href != "#")
-						$(nodeSpan).children("a").attr("href", dtnode.data.href);
-				}
-			});
-			$("#filter").val("");
-			if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) {
-				curpath = window.location.href.split("#")[1];
-				if ($("#backup").width() < 23) {
-					$("#backup").removeAttr("style");
-					$("#search").animate({ opacity: 1.0 });
-					$("#backup").animate({ width: 25, opacity: 1.0 });
-				}
-			}
-			else {
-				curpath = null;
-				if ($("#backup").width() != 0) {
-					$("#backup").animate({ width: 0, opacity: 0.0 }, 200, function () {
-						$("#backup").css("display", "none");
-					});
-					$("#search").animate({ opacity: 0.0 });
-				}
-			}
-			Load();
-			$("button").button();
-			$("button").click(function () { return false; });
-			$("button.dropdown").button({ icons: { secondary: "ui-icon-carat-1-s"} });
-			$("#backup").click(function () { history.go(-1); return false; });
-			$(".button").button();
-			$("#Views").css("top", $("#view").position().top + $("#view").parent().height() + 2);
-			$("#Views").css("left", $("#view").position().left - ($("#Views").width() - $("#view").width()));
-			$("#view").click(function () {
-				if (showView == 0) {
-					showView = 1;
-					$("#Views").animate({ height: 'toggle' });
-				}
-				return false;
-			});
-			$("#filter").keyup(function () {
-				if ($("#filter").val().length == 0) for (var x = 0; x < items.length; x++) { items[x].Show = true; items[x].Refresh(); }
-				else {
-					for (var x = 0; x < items.length; x++) { if (searchres(items[x].Data.Name + items[x].Data.Extension)) items[x].Show = true; else items[x].Show = false; items[x].Refresh(); }
-				}
-			});
-			$("#hapContent").click(function () {
-				if (showView == 2) { $("#Views").animate({ height: 'toggle' }); showView = 0; }
-				else if (showView == 1) showView = 2;
-			});
-			$("#Views button").click(function () {
-				$("#MyFiles").html("");
-				if (table != null) $("#MyFiles-Table").dataTable().fnDestroy();
-				$("#MyFiles-Table tbody").html("");
-				if ($(this).text() == "Details") {
-					viewMode = 1;
-					$("#MyFiles").css("display", "none");
-					$("#MyFilesTable").css("display", "block");
-				}
-				else {
-					viewMode = 0;
-					$("#MyFiles").css("display", "block");
-					$("#MyFilesTable").css("display", "none");
-				}
-				for (var i = 0; i < items.length; i++)
-					if (viewMode == 0) items[i].Render();
-					else items[i].RenderTable();
-				if (viewMode == 1) {
-					$("#MyFiles-Table").dataTable({ "bJQueryUI": true, bPaginate: false, bLengthChange: false, bSort: false, bInfo: false, bFilter: false });
-					if (table != null) $("#MyFiles-Table").dataTable().fnAdjustColumnSizing();
-					table = $("#MyFiles-Table").dataTable();
-				}
-			});
+		    $("#MyFilesTable").css("display", "none");
+		    $("#properties").dialog({ autoOpen: false });
+		    $("#Views").animate({ height: 'toggle' });
+		    $("#Tree").dynatree({ imagePath: "../images/setup/", selectMode: 1, noLink: false, minExpandLevel: 1, children: [{ title: "My Drives", href: "#", isFolder: true, isLazy: true}], fx: { height: "toggle", duration: 200 },
+		        onLazyRead: function (node) {
+		            if (node.data.href == "#") {
+		                $.ajax({
+		                    type: 'GET',
+		                    url: '<%=ResolveUrl("~/api/MyFiles/Drives")%>',
+		                    dataType: 'json',
+		                    contentType: 'application/json',
+		                    success: function (data) {
+		                        res = [];
+		                        for (var i = 0; i < data.length; i++)
+		                            res.push({ title: data[i].Name, href: "#" + data[i].Path, isFolder: true, isLazy: true, noLink: false, key: data[i].Path });
+		                        node.setLazyNodeStatus(DTNodeStatus_Ok);
+		                        node.addChild(res);
+		                    }, error: OnError
+		                });
+		            } else {
+		                $.ajax({
+		                    type: 'GET',
+		                    url: '<%=ResolveUrl("~/api/MyFiles/")%>' + node.data.href.substr(1).replace(/\\/g, "/"),
+		                    dataType: 'json',
+		                    contentType: 'application/json',
+		                    success: function (data) {
+		                        res = [];
+		                        for (var i = 0; i < data.length; i++)
+		                            if (data[i].Type == "Directory") {
+		                                res.push({ title: data[i].Name, href: "#" + data[i].Path, isFolder: true, isLazy: true, noLink: false, key: data[i].Path });
+		                            }
+		                        node.setLazyNodeStatus(DTNodeStatus_Ok);
+		                        node.addChild(res);
+		                    }, error: OnError
+		                });
+		            }
+		        },
+		        onRender: function (dtnode, nodeSpan) {
+		            if (dtnode.data.href != "#")
+		                $(nodeSpan).children("a").attr("href", dtnode.data.href);
+		        }
+		    });
+		    $("#filter").val("");
+		    if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) {
+		        curpath = window.location.href.split("#")[1];
+		        if ($("#backup").width() < 23) {
+		            $("#backup").removeAttr("style");
+		            $("#search").animate({ opacity: 1.0 });
+		            $("#backup").animate({ width: 25, opacity: 1.0 });
+		        }
+		    }
+		    else {
+		        curpath = null;
+		        if ($("#backup").width() != 0) {
+		            $("#backup").animate({ width: 0, opacity: 0.0 }, 200, function () {
+		                $("#backup").css("display", "none");
+		            });
+		            $("#search").animate({ opacity: 0.0 });
+		        }
+		    }
+		    Load();
+		    $("button").button();
+		    $("button").click(function () { return false; });
+		    $("button.dropdown").button({ icons: { secondary: "ui-icon-carat-1-s"} });
+		    $("#backup").click(function () { history.go(-1); return false; });
+		    $(".button").button();
+		    $("#Views").css("top", $("#view").position().top + $("#view").parent().height() + 2);
+		    $("#Views").css("left", $("#view").position().left - ($("#Views").width() - $("#view").width()));
+		    $("#view").click(function () {
+		        if (showView == 0) {
+		            showView = 1;
+		            $("#Views").animate({ height: 'toggle' });
+		        }
+		        return false;
+		    });
+		    $("#filter").keyup(function () {
+		        if ($("#filter").val().length == 0) for (var x = 0; x < items.length; x++) { items[x].Show = true; items[x].Refresh(); }
+		        else {
+		            for (var x = 0; x < items.length; x++) { if (searchres(items[x].Data.Name + items[x].Data.Extension)) items[x].Show = true; else items[x].Show = false; items[x].Refresh(); }
+		        }
+		    });
+		    $("#hapContent").click(function () {
+		        if (showView == 2) { $("#Views").animate({ height: 'toggle' }); showView = 0; }
+		        else if (showView == 1) showView = 2;
+		    });
+		    $("#Views button").click(function () {
+		        $("#MyFiles").html("");
+		        if (table != null) $("#MyFiles-Table").dataTable().fnDestroy();
+		        $("#MyFiles-Table tbody").html("");
+		        if ($(this).text() == "Details") {
+		            viewMode = 1;
+		            $("#MyFiles").css("display", "none");
+		            $("#MyFilesTable").css("display", "block");
+		        }
+		        else {
+		            viewMode = 0;
+		            $("#MyFiles").css("display", "block");
+		            $("#MyFilesTable").css("display", "none");
+		        }
+		        for (var i = 0; i < items.length; i++)
+		            if (viewMode == 0) items[i].Render();
+		            else items[i].RenderTable();
+		        if (viewMode == 1) {
+		            $("#MyFiles-Table").dataTable({ "bJQueryUI": true, bPaginate: false, bLengthChange: false, bSort: false, bInfo: false, bFilter: false });
+		            if (table != null) $("#MyFiles-Table").dataTable().fnAdjustColumnSizing();
+		            table = $("#MyFiles-Table").dataTable();
+		        }
+		    });
 		});
 		$(document).bind('keydown', function (e) { keys.shift = (e.keyCode == 16); keys.ctrl = (e.keyCode == 17); });
 		$(document).bind('keyup', function (e) { keys.shift = keys.ctrl = false; });
