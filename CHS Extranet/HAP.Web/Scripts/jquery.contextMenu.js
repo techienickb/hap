@@ -1,107 +1,145 @@
-﻿/**
-* jQuery.contextMenu - Show a custom context when right clicking something
-* Jonas Arnklint, http://github.com/arnklint/jquery-contextMenu
-* Released into the public domain
-* Date: Jan 14, 2011
-* @author Jonas Arnklint
-* @version 1.3
+﻿/*
+* ContextMenu - jQuery plugin for right-click context menus
+*
+* Author: Chris Domigan
+* Contributors: Dan G. Switzer, II
+* Parts of this plugin are inspired by Joern Zaefferer's Tooltip plugin
+*
+* Dual licensed under the MIT and GPL licenses:
+*   http://www.opensource.org/licenses/mit-license.php
+*   http://www.gnu.org/licenses/gpl.html
+*
+* Version: r2
+* Date: 16 July 2007
+*
+* For documentation visit http://www.trendskitchens.co.nz/jquery/contextmenu/
 *
 */
-// Making a local '$' alias of jQuery to support jQuery.noConflict
+
 (function ($) {
-    jQuery.fn.contextMenu = function (name, actions, options) {
-        var me = this,
-    win = $(window),
-    menu = $('<ul id="' + name + '" class="context-menu"></ul>').hide().appendTo('body'),
-    activeElement = null, // last clicked element that responds with contextMenu
-    hideMenu = function () {
-        $('.context-menu:visible').each(function () {
-            $(this).trigger("closed");
-            $(this).hide();
-            $('body').unbind('click', hideMenu);
+
+    var menu, shadow, trigger, content, hash, currentTarget;
+    var defaults = {
+        menuStyle: {
+            listStyle: 'none',
+            padding: '0',
+            margin: '0',
+            backgroundColor: '#fff',
+            border: '1px solid #999',
+            width: '100px'
+        },
+        itemStyle: {
+            margin: '0px',
+            color: '#000',
+            display: 'block',
+            cursor: 'default',
+            padding: '3px',
+            border: '0',
+            backgroundColor: 'transparent'
+        },
+        itemHoverStyle: {
+            color: "#fff",
+            backgroundColor: '#666'
+        },
+        eventPosX: 'pageX',
+        eventPosY: 'pageY',
+        shadow: true,
+        onContextMenu: null,
+        onShowMenu: null
+    };
+
+    $.fn.contextMenu = function (id, options) {
+        if (!menu) {                                      // Create singleton menu
+            menu = $('<div id="jqContextMenu"></div>')
+               .hide()
+               .css({ position: 'absolute', zIndex: '500' })
+               .appendTo('body')
+               .bind('click', function (e) {
+                   e.stopPropagation();
+               });
+        }
+        if (!shadow) {
+            shadow = $('<div id="jqContextMenuShadow"></div>')
+                 .css({ backgroundColor: '#000', position: 'absolute', opacity: 0.2, zIndex: 499 })
+                 .appendTo('body')
+                 .hide();
+        }
+        hash = hash || [];
+        hash.push({
+            id: id,
+            menuStyle: $.extend({}, defaults.menuStyle, options.menuStyle || {}),
+            itemStyle: $.extend({}, defaults.itemStyle, options.itemStyle || {}),
+            itemHoverStyle: $.extend({}, defaults.itemHoverStyle, options.itemHoverStyle || {}),
+            bindings: options.bindings || {},
+            shadow: options.shadow || options.shadow === false ? options.shadow : defaults.shadow,
+            onContextMenu: options.onContextMenu || defaults.onContextMenu,
+            onShowMenu: options.onShowMenu || defaults.onShowMenu,
+            eventPosX: options.eventPosX || defaults.eventPosX,
+            eventPosY: options.eventPosY || defaults.eventPosY
         });
-    },
-    default_options = {
-        disable_native_context_menu: false, // disables the native contextmenu everywhere you click
-        leftClick: false // show menu on left mouse click instead of right
-    },
-    options = $.extend(default_options, options);
 
-        $(document).bind('contextmenu', function (e) {
-            if (options.disable_native_context_menu) {
-                e.preventDefault();
-            }
-            hideMenu();
+        var index = hash.length - 1;
+        $(this).bind('contextmenu', function (e) {
+            // Check if onContextMenu() defined
+            var bShowContext = (!!hash[index].onContextMenu) ? hash[index].onContextMenu(e) : true;
+            if (bShowContext) display(index, this, e, options);
+            return false;
         });
+        return this;
+    };
 
-        $.each(actions, function (me, itemOptions) {
-            var menuItem = $('<li><a href="#">' + me + '</a></li>');
+    function display(index, trigger, e, options) {
+        var cur = hash[index];
+        content = $('#' + cur.id).find('ul:first').clone(true);
+        content.css(cur.menuStyle).find('li').css(cur.itemStyle).hover(
+      function () {
+          $(this).css(cur.itemHoverStyle);
+      },
+      function () {
+          $(this).css(cur.itemStyle);
+      }
+    ).find('img').css({ verticalAlign: 'middle', paddingRight: '2px' });
 
-            if (itemOptions.klass) {
-                menuItem.attr("class", itemOptions.klass);
-            }
+        // Send the content to the menu
+        menu.html(content);
 
-            menuItem.appendTo(menu).bind('click', function (e) {
-                itemOptions.click(activeElement);
-                e.preventDefault();
+        // if there's an onShowMenu, run it now -- must run after content has been added
+        // if you try to alter the content variable before the menu.html(), IE6 has issues
+        // updating the content
+        if (!!cur.onShowMenu) menu = cur.onShowMenu(e, menu);
+
+        $.each(cur.bindings, function (id, func) {
+            $('#' + id, menu).bind('click', function (e) {
+                hide();
+                func(trigger, currentTarget);
             });
         });
 
-        // fix for ie mouse button bug
-        var mouseEvent = 'contextmenu click';
-        if ($.browser.msie && options.leftClick) {
-            mouseEvent = 'click';
-        } else if ($.browser.msie && !options.leftClick) {
-            mouseEvent = 'contextmenu';
-        }
-
-        return me.bind(mouseEvent, function (e) {
-            // Hide any existing context menus
-            hideMenu();
-
-            var correctButton = ((options.leftClick && e.button == 0) || (options.leftClick == false && e.button == 2));
-            if ($.browser.msie) correctButton = true;
-
-            if (correctButton) {
-
-                activeElement = $(this); // set clicked element
-
-                if (options.showMenu) {
-                    options.showMenu.call(menu, activeElement);
-                }
-
-                // Bind to the closed event if there is a hideMenu handler specified
-                if (options.hideMenu) {
-                    menu.bind("closed", function () {
-                        options.hideMenu.call(menu, activeElement);
-                    });
-                }
-
-                menu.css({
-                    visibility: 'hidden',
-                    position: 'absolute',
-                    zIndex: 1000
-                });
-
-                // include margin so it can be used to offset from page border.
-                var mWidth = menu.outerWidth(true),
-          mHeight = menu.outerHeight(true),
-          xPos = ((e.pageX - win.scrollLeft()) + mWidth < win.width()) ? e.pageX : e.pageX - mWidth,
-          yPos = ((e.pageY - win.scrollTop()) + mHeight < win.height()) ? e.pageY : e.pageY - mHeight;
-
-                menu.show(0, function () {
-                    $('body').bind('click', hideMenu);
-                }).css({
-                    visibility: 'visible',
-                    top: yPos + 'px',
-                    left: xPos + 'px',
-                    zIndex: 1000
-                });
-
-                return false;
-            }
-        });
+        menu.css({ 'left': e[cur.eventPosX], 'top': e[cur.eventPosY] }).show();
+        if (cur.shadow) shadow.css({ width: menu.width(), height: menu.height(), left: e.pageX + 2, top: e.pageY + 2 }).show();
+        $(document).one('click', hide);
     }
+
+    function hide() {
+        menu.hide();
+        shadow.hide();
+    }
+
+    // Apply defaults
+    $.contextMenu = {
+        defaults: function (userDefaults) {
+            $.each(userDefaults, function (i, val) {
+                if (typeof val == 'object' && defaults[i]) {
+                    $.extend(defaults[i], val);
+                }
+                else defaults[i] = val;
+            });
+        }
+    };
+
 })(jQuery);
 
+$(function () {
+    $('div.contextMenu').hide();
+});
 
