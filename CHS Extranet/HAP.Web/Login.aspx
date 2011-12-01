@@ -26,6 +26,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("#<%=login.ClientID %>").button();
+            $("#<%=username.ClientID %>").focus();
         });
         $('input[type=text]').keyup(function (e) {
             if (e.keyCode == 13) {

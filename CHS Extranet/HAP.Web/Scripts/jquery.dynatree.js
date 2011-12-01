@@ -9,8 +9,8 @@
 	A current version and some documentation is available at
 		http://dynatree.googlecode.com/
 
-	$Version: 1.1.1$
-	$Revision: 481, 2011-03-02 07:25:35$
+	$Version: 1.2.0$
+	$Revision: 528, 2011-09-17 18:58:59$
 
 	@depends: jquery.js
 	@depends: jquery.ui.core.js
@@ -219,6 +219,7 @@ DynaTreeNode.prototype = {
 			var tooltip = data.tooltip ? " title='" + data.tooltip + "'" : "";
 			if( opts.noLink || data.noLink ) {
 				nodeTitle = "<span style='display: inline-block;' class='" + opts.classNames.title + "'" + tooltip + ">" + data.title + "</span>";
+//				this.tree.logDebug("nodeTitle: " + nodeTitle);
 			}else{
 				nodeTitle = "<a href='#' class='" + opts.classNames.title + "'" + tooltip + ">" + data.title + "</a>";
 			}
@@ -269,7 +270,8 @@ DynaTreeNode.prototype = {
 			data = this.data,
 			opts = tree.options,
 			cn = opts.classNames,
-			isLastSib = this.isLastSibling();
+			isLastSib = this.isLastSibling(),
+			firstTime = false;
 
 		if( !parent && !this.ul ) {
 			// Root node has only a <ul>
@@ -283,6 +285,7 @@ DynaTreeNode.prototype = {
 		} else if( parent ) {
 			// Create <li><span /> </li>
 			if( ! this.li ) {
+				firstTime = true;
 				this.li = document.createElement("li");
 				this.li.dtnode = this;
 				if( data.key && opts.generateIds ){
@@ -302,6 +305,9 @@ DynaTreeNode.prototype = {
 //						parent.ul.className = cn.noConnector;
 //					}
 				}
+				// set node connector images, links and text
+//				this.span.innerHTML = this._getInnerHtml();
+
 				parent.ul.appendChild(this.li);
 			}
 			// set node connector images, links and text
@@ -352,9 +358,13 @@ DynaTreeNode.prototype = {
 			// TODO: we should not set this in the <span> tag also, if we set it here:
 			this.li.className = isLastSib ? cn.lastsib : "";
 
+			// Allow tweaking, binding, after node was created for the first time
+			if(firstTime && opts.onCreate){
+				opts.onCreate.call(tree, this, this.span);
+			}
 			// Hide children, if node is collapsed
 //			this.ul.style.display = ( this.bExpanded || !parent ) ? "" : "none";
-			// Allow tweaking, binding, ...
+			// Allow tweaking after node state was rendered
 			if(opts.onRender){
 				opts.onRender.call(tree, this, this.span);
 			}
@@ -396,6 +406,9 @@ DynaTreeNode.prototype = {
 	},
 
 	getChildren: function() {
+		if(this.hasChildren() === undefined){
+			return undefined; // Lazy node: unloaded, currently loading, or load error
+		}
 		return this.childList;
 	},
 
@@ -498,7 +511,10 @@ DynaTreeNode.prototype = {
 			return;
 		}
 		cmp = cmp || function(a, b) {
-			return a.data.title === b.data.title ? 0 : a.data.title > b.data.title ? 1 : -1;
+//			return a.data.title === b.data.title ? 0 : a.data.title > b.data.title ? 1 : -1;
+			var x = a.data.title.toLowerCase(),
+				y = b.data.title.toLowerCase();
+			return x === y ? 0 : x > y ? 1 : -1;
 			};
 		cl.sort(cmp);
 		if( deep ){
@@ -522,6 +538,7 @@ DynaTreeNode.prototype = {
 					// I've seen exceptions here with loadKeyPath...
 					if(this.ul){
 						this.ul.removeChild(firstChild.li);
+						firstChild.li = null; // avoid leaks (issue 215)
 					}
 				}catch(e){}
 				if( this.childList.length === 1 ){
@@ -807,16 +824,62 @@ DynaTreeNode.prototype = {
 			$(this.span).removeClass(this.tree.options.classNames.partsel);
 		}
 	},
+	/**
+	 * Fix selection and partsel status, of parent nodes, according to current status of
+	 * end nodes.
+	 */
+	_updatePartSelectionState: function() {
+//		alert("_updatePartSelectionState " + this);
+//		this.tree.logDebug("_updatePartSelectionState() - %o", this);
+		var sel;
+		// Return `true` or `false` for end nodes and remove part-sel flag
+		if( ! this.hasChildren() ){
+			sel = (this.bSelected && !this.data.unselectable && !this.data.isStatusNode);
+			this._setSubSel(false);
+			return sel;
+		}
+		// Return `true`, `false`, or `undefined` for parent nodes
+		var i, l,
+			cl = this.childList,
+			allSelected = true,
+			allDeselected = true;
+		for(i=0, l=cl.length; i<l;  i++) {
+			var n = cl[i],
+				s = n._updatePartSelectionState();
+			if( s !== false){
+				allDeselected = false;
+			}
+			if( s !== true){
+				allSelected = false;
+			}
+		}
+		if( allSelected ){
+			sel = true;
+		} else if ( allDeselected ){
+			sel = false;
+		} else {
+			sel = undefined;
+		}
+		this._setSubSel(sel === undefined);
+		this.bSelected = (sel === true);
+		return sel;
+	},
 
+	/**
+	 * Fix selection status, after this node was (de)selected in multi-hier mode.
+	 * This includes (de)selecting all children.
+	 */
 	_fixSelectionState: function() {
-		// fix selection status, for multi-hier mode
-//		this.tree.logDebug("_fixSelectionState(%o) - %o", this.bSelected, this);
+//		alert("_fixSelectionState " + this);
+//		this.tree.logDebug("_fixSelectionState(%s) - %o", this.bSelected, this);
 		var p, i, l;
 		if( this.bSelected ) {
 			// Select all children
 			this.visit(function(node){
 				node.parent._setSubSel(true);
-				node._select(true, false, false);
+				if(!node.data.unselectable){
+					node._select(true, false, false);
+				}
 			});
 			// Select parents, if all children are selected
 			p = this.parent;
@@ -825,7 +888,7 @@ DynaTreeNode.prototype = {
 				var allChildsSelected = true;
 				for(i=0, l=p.childList.length; i<l;  i++) {
 					var n = p.childList[i];
-					if( !n.bSelected && !n.data.isStatusNode ) {
+					if( !n.bSelected && !n.data.isStatusNode && !n.data.unselectable) {
 						allChildsSelected = false;
 						break;
 					}
@@ -934,6 +997,10 @@ DynaTreeNode.prototype = {
 		return this.bSelected;
 	},
 
+	isLazy: function() {
+		return !!this.data.isLazy;
+	},
+
 	_loadContent: function() {
 		try {
 			var opts = this.tree.options;
@@ -1001,6 +1068,10 @@ DynaTreeNode.prototype = {
 		if ( opts.onExpand ){
 			opts.onExpand.call(this.tree, bExpand, this);
 		}
+	},
+
+	isExpanded: function() {
+		return this.bExpanded;
 	},
 
 	expand: function(flag) {
@@ -1072,7 +1143,6 @@ DynaTreeNode.prototype = {
 			this.toggleSelect();
 			this.focus(); // issue 95
 		} else {
-			return true;
 			this._userActivate();
 			var aTag = this.span.getElementsByTagName("a");
 			if(aTag[0]){
@@ -1368,7 +1438,7 @@ DynaTreeNode.prototype = {
 				+ "." + this.data.key;
 			this.tree.$tree.bind(eventType, function(e, node, isOk){
 				self.tree.$tree.unbind(eventType);
-				self.tree.logInfo("loaded %o, %o, %o", e, node, isOk);
+				self.tree.logDebug("loaded %o, %o, %o", e, node, isOk);
 				if(node !== self){
 					throw "got invalid load event";
 				}
@@ -1458,9 +1528,9 @@ DynaTreeNode.prototype = {
 		 * Internal function to add one single DynatreeNode as a child.
 		 *
 		 */
-		var tree = this.tree;
-		var opts = tree.options;
-		var pers = tree.persistence;
+		var tree = this.tree,
+			opts = tree.options,
+			pers = tree.persistence;
 
 //		tree.logDebug("%s._addChildNode(%o)", this, dtnode);
 
@@ -1484,7 +1554,6 @@ DynaTreeNode.prototype = {
 				throw "<beforeNode> must be a child of <this>";
 			}
 			this.childList.splice(iBefore, 0, dtnode);
-//			alert(this.childList);
 		} else {
 			// Append node
 			this.childList.push(dtnode);
@@ -1498,10 +1567,10 @@ DynaTreeNode.prototype = {
 		if( opts.persist && pers.cookiesFound && isInitializing ) {
 			// Init status from cookies
 //			tree.logDebug("init from cookie, pa=%o, dk=%o", pers.activeKey, dtnode.data.key);
-			if( pers.activeKey == dtnode.data.key ){
+			if( pers.activeKey === dtnode.data.key ){
 				tree.activeNode = dtnode;
 			}
-			if( pers.focusedKey == dtnode.data.key ){
+			if( pers.focusedKey === dtnode.data.key ){
 				tree.focusNode = dtnode;
 			}
 			dtnode.bExpanded = ($.inArray(dtnode.data.key, pers.expandedKeyList) >= 0);
@@ -1655,14 +1724,19 @@ DynaTreeNode.prototype = {
 				if( options.postProcess ){
 					data = options.postProcess.call(this, data, this.dataType);
 				}
+				// Process ASPX WebMethod JSON object inside "d" property
+				// http://code.google.com/p/dynatree/issues/detail?id=202
+				else if (data && data.hasOwnProperty("d")) {
+					data = data.d;
+				}
 				if(!$.isArray(data) || data.length !== 0){
 					self.addChild(data, null);
 				}
 				self.tree.phase = "postInit";
 				if( orgSuccess ){
-					orgSuccess.call(options, self);
+					orgSuccess.call(options, self, data, textStatus);
 				}
-				self.tree.logInfo("trigger " + eventType);
+				self.tree.logDebug("trigger " + eventType);
 				self.tree.$tree.trigger(eventType, [self, true]);
 				self.tree.phase = prevPhase;
 				// This should be the last command, so node.isLoading is true
@@ -1754,14 +1828,14 @@ DynaTreeNode.prototype = {
 			}
 		} else {
 			targetParent.childList = [ this ];
-			// Parent has no <ul> tag yet:
-			if( !targetParent.ul ) {
-				// This is the parent's first child: create UL tag
-				// (Hidden, because it will be
-				targetParent.ul = document.createElement("ul");
-				targetParent.ul.style.display = "none";
-				targetParent.li.appendChild(targetParent.ul);
-			}
+		}
+		// Parent has no <ul> tag yet:
+		if( !targetParent.ul ) {
+			// This is the parent's first child: create UL tag
+			// (Hidden, because it will be
+			targetParent.ul = document.createElement("ul");
+			targetParent.ul.style.display = "none";
+			targetParent.li.appendChild(targetParent.ul);
 		}
 		// Add to target DOM parent
 		targetParent.ul.appendChild(this.li);
@@ -1836,13 +1910,13 @@ DynaTreeStatus._getTreePersistData = function(cookieId, cookieOpts) {
 	return ts.toDict();
 };
 // Make available in global scope
-getDynaTreePersistData = DynaTreeStatus._getTreePersistData;
+getDynaTreePersistData = DynaTreeStatus._getTreePersistData; // TODO: deprecated
 
 
 DynaTreeStatus.prototype = {
 	// Constructor
 	initialize: function(cookieId, cookieOpts) {
-		this._log("DynaTreeStatus: initialize");
+//		this._log("DynaTreeStatus: initialize");
 		if( cookieId === undefined ){
 			cookieId = $.ui.dynatree.prototype.options.cookieId;
 		}
@@ -1863,7 +1937,7 @@ DynaTreeStatus.prototype = {
 		_log.apply(this, arguments);
 	},
 	read: function() {
-		this._log("DynaTreeStatus: read");
+//		this._log("DynaTreeStatus: read");
 		// Read or init cookies.
 		this.cookiesFound = false;
 
@@ -1889,21 +1963,21 @@ DynaTreeStatus.prototype = {
 		}
 	},
 	write: function() {
-		this._log("DynaTreeStatus: write");
+//		this._log("DynaTreeStatus: write");
 		$.cookie(this.cookieId + "-active", ( this.activeKey === null ) ? "" : this.activeKey, this.cookieOpts);
 		$.cookie(this.cookieId + "-focus", ( this.focusedKey === null ) ? "" : this.focusedKey, this.cookieOpts);
 		$.cookie(this.cookieId + "-expand", ( this.expandedKeyList === null ) ? "" : this.expandedKeyList.join(","), this.cookieOpts);
 		$.cookie(this.cookieId + "-select", ( this.selectedKeyList === null ) ? "" : this.selectedKeyList.join(","), this.cookieOpts);
 	},
 	addExpand: function(key) {
-		this._log("addExpand(%o)", key);
+//		this._log("addExpand(%o)", key);
 		if( $.inArray(key, this.expandedKeyList) < 0 ) {
 			this.expandedKeyList.push(key);
 			$.cookie(this.cookieId + "-expand", this.expandedKeyList.join(","), this.cookieOpts);
 		}
 	},
 	clearExpand: function(key) {
-		this._log("clearExpand(%o)", key);
+//		this._log("clearExpand(%o)", key);
 		var idx = $.inArray(key, this.expandedKeyList);
 		if( idx >= 0 ) {
 			this.expandedKeyList.splice(idx, 1);
@@ -1911,14 +1985,14 @@ DynaTreeStatus.prototype = {
 		}
 	},
 	addSelect: function(key) {
-		this._log("addSelect(%o)", key);
+//		this._log("addSelect(%o)", key);
 		if( $.inArray(key, this.selectedKeyList) < 0 ) {
 			this.selectedKeyList.push(key);
 			$.cookie(this.cookieId + "-select", this.selectedKeyList.join(","), this.cookieOpts);
 		}
 	},
 	clearSelect: function(key) {
-		this._log("clearSelect(%o)", key);
+//		this._log("clearSelect(%o)", key);
 		var idx = $.inArray(key, this.selectedKeyList);
 		if( idx >= 0 ) {
 			this.selectedKeyList.splice(idx, 1);
@@ -1950,7 +2024,8 @@ var DynaTree = Class.create();
 
 // --- Static members ----------------------------------------------------------
 
-DynaTree.version = "$Version: 1.1.1$";
+DynaTree.version = "$Version: 1.2.0$";
+
 /*
 DynaTree._initTree = function() {
 };
@@ -1984,7 +2059,8 @@ DynaTree.prototype = {
 
 	_load: function(callback) {
 		var $widget = this.$widget;
-		var opts = this.options;
+		var opts = this.options,
+			self = this;
 		this.bEnableUpdate = true;
 		this._nodeCount = 1;
 		this.activeNode = null;
@@ -1992,13 +2068,10 @@ DynaTree.prototype = {
 
 		// Some deprecation warnings to help with migration
 		if( opts.rootVisible !== undefined ){
-			_log("warn", "Option 'rootVisible' is no longer supported.");
+			this.logWarning("Option 'rootVisible' is no longer supported.");
 		}
-//		if( opts.title  !== undefined ){
-//			_log("warn", "Option 'title' is no longer supported.");
-//		}
 		if( opts.minExpandLevel < 1 ) {
-			_log("warn", "Option 'minExpandLevel' must be >= 1.");
+			this.logWarning("Option 'minExpandLevel' must be >= 1.");
 			opts.minExpandLevel = 1;
 		}
 //		_log("warn", "jQuery.support.boxModel " + jQuery.support.boxModel);
@@ -2024,7 +2097,7 @@ DynaTree.prototype = {
 					}else{
 						opts.imagePath = "skin/";
 					}
-					logMsg("Guessing imagePath from '%s': '%s'", this.src, opts.imagePath);
+					self.logDebug("Guessing imagePath from '%s': '%s'", this.src, opts.imagePath);
 					return false; // first match
 				}
 			});
@@ -2094,6 +2167,10 @@ DynaTree.prototype = {
 		}
 
 		this._checkConsistency();
+		// Fix part-sel flags
+		if(!isLazy && opts.selectMode == 3){
+			root._updatePartSelectionState();
+		}
 		// Render html markup
 		this.logDebug("Dynatree._load(): render nodes...");
 		this.enableUpdate(prevFlag);
@@ -2115,30 +2192,16 @@ DynaTree.prototype = {
 			this.logDebug("Focus on init: %o", this.focusNode);
 			this.focusNode.focus();
 		}
-		if( !isLazy && opts.onPostInit ) {
-			opts.onPostInit.call(this, isReloading, false);
+		if( !isLazy ) {
+			if( opts.onPostInit ) {
+				opts.onPostInit.call(this, isReloading, false);
+			}
+			if( callback ){
+				callback.call(this, "ok");
+			}
 		}
 		this.phase = "idle";
 	},
-
-//	_setNoUpdate: function(silent) {
-//		// TODO: set options to disable and re-enable updates while loading
-//		var opts = this.options;
-//		var prev = {
-//			fx: opts.fx,
-//			autoFocus: opts.autoFocus,
-//			autoCollapse: opts.autoCollapse };
-//		if(silent === true){
-//			opts.autoFocus = false;
-//			opts.fx = null;
-//			opts.autoCollapse = false;
-//		} else {
-//			opts.autoFocus = silent.autoFocus;
-//			opts.fx = silent.fx;
-//			opts.autoCollapse = silent.autoCollapse;
-//		}
-//		return prev;
-//	},
 
 	_reloadAjax: function(callback) {
 		// Reload
@@ -2163,27 +2226,33 @@ DynaTree.prototype = {
 			ajaxOpts.data.selectedKeyList = pers.selectedKeyList.join(",");
 		}
 		// Set up onPostInit callback to be called when Ajax returns
-		if( opts.onPostInit ) {
-			if( ajaxOpts.success ){
-				this.logWarning("initAjax: success callback is ignored when onPostInit was specified.");
-			}
-			if( ajaxOpts.error ){
-				this.logWarning("initAjax: error callback is ignored when onPostInit was specified.");
-			}
-			var isReloading = pers.isReloading();
-			ajaxOpts.success = function(dtnode) {
-				opts.onPostInit.call(dtnode.tree, isReloading, false);
-				if(callback){
-					callback.call(dtnode.tree, "ok");
-				}
-			};
-			ajaxOpts.error = function(dtnode) {
-				opts.onPostInit.call(dtnode.tree, isReloading, true);
-				if(callback){
-					callback.call(dtnode.tree, "error");
-				}
-			};
+		if( ajaxOpts.success ){
+			this.logWarning("initAjax: success callback is ignored; use onPostInit instead.");
 		}
+		if( ajaxOpts.error ){
+			this.logWarning("initAjax: error callback is ignored; use onPostInit instead.");
+		}
+		var isReloading = pers.isReloading();
+		ajaxOpts.success = function(dtnode, data, textStatus) {
+			if(opts.selectMode == 3){
+				dtnode.tree.tnRoot._updatePartSelectionState();
+			}
+			if(opts.onPostInit){
+				opts.onPostInit.call(dtnode.tree, isReloading, false);
+			}
+			if(callback){
+				callback.call(dtnode.tree, "ok");
+			}
+		};
+		ajaxOpts.error = function(dtnode, XMLHttpRequest, textStatus, errorThrown) {
+			if(opts.onPostInit){
+				opts.onPostInit.call(dtnode.tree, isReloading, true, XMLHttpRequest, textStatus, errorThrown);
+			}
+			if(callback){
+				callback.call(dtnode.tree, "error", XMLHttpRequest, textStatus, errorThrown);
+			}
+		};
+//		}
 		this.logDebug("Dynatree._init(): send Ajax request...");
 		this.tnRoot.appendAjax(ajaxOpts);
 	},
@@ -2381,17 +2450,27 @@ TODO: better?
 		this.$tabs = this.$lis.map(function() { return $("a", this)[0]; });
  */
 		$ulParent.find(">li").each(function() {
-			var $li = $(this);
-			var $liSpan = $li.find(">span:first");
-			var title;
+			var $li = $(this),
+				$liSpan = $li.find(">span:first"),
+				$liA = $li.find(">a:first"),
+				title,
+				href = null,
+				target = null,
+				tooltip;
 			if( $liSpan.length ) {
 				// If a <li><span> tag is specified, use it literally.
 				title = $liSpan.html();
+			} else if( $liA.length ) {
+				title = $liA.html();
+				href = $liA.attr("href");
+				target = $liA.attr("target");
+				tooltip = $liA.attr("title");
 			} else {
-				// If only a <li> tag is specified, use the trimmed string up to the next child <ul> tag.
+				// If only a <li> tag is specified, use the trimmed string up to
+				// the next child <ul> tag.
 				title = $li.html();
 				var iPos = title.search(/<ul/i);
-				if( iPos>=0 ){
+				if( iPos >= 0 ){
 					title = $.trim(title.substring(0, iPos));
 				}else{
 					title = $.trim(title);
@@ -2401,6 +2480,7 @@ TODO: better?
 			// Parse node options from ID, title and class attributes
 			var data = {
 				title: title,
+				tooltip: tooltip,
 				isFolder: $li.hasClass("folder"),
 				isLazy: $li.hasClass("lazy"),
 				expand: $li.hasClass("expanded"),
@@ -2409,8 +2489,12 @@ TODO: better?
 				focus: $li.hasClass("focused"),
 				noLink: $li.hasClass("noLink")
 			};
+			if( href ){
+				data.href = href;
+				data.target = target;
+			}
 			if( $li.attr("title") ){
-				data.tooltip = $li.attr("title");
+				data.tooltip = $li.attr("title"); // overrides <a title='...'>
 			}
 			if( $li.attr("id") ){
 				data.key = $li.attr("id");
@@ -2444,8 +2528,8 @@ TODO: better?
 
 	_setDndStatus: function(sourceNode, targetNode, helper, hitMode, accept) {
 		// hitMode: 'after', 'before', 'over', 'out', 'start', 'stop'
-		var $source = sourceNode ? $(sourceNode.span) : null;
-		var $target = $(targetNode.span);
+		var $source = sourceNode ? $(sourceNode.span) : null,
+			$target = $(targetNode.span);
 		if( !this.$dndMarker ) {
 			this.$dndMarker = $("<div id='dynatree-drop-marker'></div>")
 				.hide()
@@ -2463,7 +2547,7 @@ TODO: better?
 //		this.$dndMarker.attr("class", hitMode);
 		if(hitMode === "after" || hitMode === "before" || hitMode === "over"){
 //			$source && $source.addClass("dynatree-drag-source");
-			var pos = $target.position();
+			var pos = $target.offset();
 			switch(hitMode){
 			case "before":
 				this.$dndMarker.removeClass("dynatree-drop-after dynatree-drop-over");
@@ -2481,7 +2565,18 @@ TODO: better?
 				$target.addClass("dynatree-drop-target");
 				pos.left += 8;
 			}
-			this.$dndMarker.css({"left": (pos.left) + "px", "top": (pos.top) + "px" })
+//			logMsg("Creating marker: %o", this.$dndMarker);
+//			logMsg("    $target.offset=%o", $target);
+//			logMsg("    pos/$target.offset=%o", pos);
+//			logMsg("    $target.position=%o", $target.position());
+//			logMsg("    $target.offsetParent=%o, ot:%o", $target.offsetParent(), $target.offsetParent().offset());
+//			logMsg("    $(this.divTree).offset=%o", $(this.divTree).offset());
+//			logMsg("    $(this.divTree).parent=%o", $(this.divTree).parent());
+
+			this.$dndMarker.offset({left: pos.left, top: pos.top})
+				.css({
+					"z-index": 1000
+				})
 				.show();
 //			helper.addClass("dynatree-drop-hover");
 		} else {
@@ -2714,17 +2809,22 @@ $.widget("ui.dynatree", {
 	_init: function() {
 		if( parseFloat($.ui.version) < 1.8 ) {
 			// jquery.ui.core 1.8 renamed _init() to _create(): this stub assures backward compatibility
-			_log("warn", "ui.dynatree._init() was called; you should upgrade to jquery.ui.core.js v1.8 or higher.");
+			if(this.options.debugLevel >= 0){
+				_log("warn", "ui.dynatree._init() was called; you should upgrade to jquery.ui.core.js v1.8 or higher.");
+			}
 			return this._create();
 		}
 		// jquery.ui.core 1.8 still uses _init() to perform "default functionality"
-		_log("debug", "ui.dynatree._init() was called; no current default functionality.");
+		if(this.options.debugLevel >= 2){
+			_log("debug", "ui.dynatree._init() was called; no current default functionality.");
+		}
 	},
 
 	_create: function() {
-		logMsg("Dynatree._create(): version='%s', debugLevel=%o.", DynaTree.version, this.options.debugLevel);
-
 		var opts = this.options;
+		if(opts.debugLevel >= 1){
+			logMsg("Dynatree._create(): version='%s', debugLevel=%o.", $.ui.dynatree.version, this.options.debugLevel);
+		}
 		// The widget framework supplies this.element and this.options.
 		this.options.event += ".dynatree"; // namespace event
 
@@ -2855,6 +2955,34 @@ if( parseFloat($.ui.version) < 1.8 ) {
 	$.ui.dynatree.getter = "getTree getRoot getActiveNode getSelectedNodes";
 }
 
+/*******************************************************************************
+ * Tools in ui.dynatree namespace
+ */
+$.ui.dynatree.version = "$Version: 1.2.0$";
+
+/**
+ * Return a DynaTreeNode object for a given DOM element
+ */
+$.ui.dynatree.getNode = function(el) {
+	if(el instanceof DynaTreeNode){
+		return el; // el already was a DynaTreeNode
+	}
+	// TODO: for some reason $el.parents("[dtnode]") does not work (jQuery 1.6.1)
+	// maybe, because dtnode is a property, not an attribute
+	var $el = el.selector === undefined ? $(el) : el,
+//		parent = $el.closest("[dtnode]"),
+		parent = $el.parents("[dtnode]").first(),
+		node;
+	if(typeof parent.prop == "function"){
+		node = parent.prop("dtnode");
+	}else{ // pre jQuery 1.6
+		node = parent.attr("dtnode");
+	}
+	return node;
+}
+
+/**Return persistence information from cookies.*/
+$.ui.dynatree.getPersistData = DynaTreeStatus._getTreePersistData;
 
 /*******************************************************************************
  * Plugin default options:
@@ -2894,9 +3022,10 @@ $.ui.dynatree.prototype.options = {
 	onActivate: null, // Callback(dtnode) when a node is activated.
 	onDeactivate: null, // Callback(dtnode) when a node is deactivated.
 	onSelect: null, // Callback(flag, dtnode) when a node is (de)selected.
-	onExpand: null, // Callback(dtnode) when a node is expanded/collapsed.
+	onExpand: null, // Callback(flag, dtnode) when a node is expanded/collapsed.
 	onLazyRead: null, // Callback(dtnode) when a lazy node is expanded for the first time.
 	onCustomRender: null, // Callback(dtnode) before a node is rendered. Return a HTML string to override.
+	onCreate: null, // Callback(dtnode, nodeSpan) after a node was rendered for the first time.
 	onRender: null, // Callback(dtnode, nodeSpan) after a node was rendered.
 
 	// Drag'n'drop support
