@@ -23,8 +23,12 @@
 	<div id="properties" title="Properties">
 		<div id="propcont">Loading...</div>
 	</div>
+	<div id="preview" title="Preview" style="height: 500px; overflow: auto; width: 700px;">
+		<div id="previewcont">Loading...</div>
+	</div>
 	<div class="contextMenu" id="contextMenu">
 	  <ul>
+		<li id="con-preview">Preview</li>
 		<li id="con-properties">Properties</li>
 	  </ul>
 	</div>
@@ -36,7 +40,7 @@
 			</span>
 			<button class="dropdown" id="view">View</button>
 		</div>
-		<button class="dropdown">Organise</button> <button id="backup">...</button> <button>New Folder</button>
+		<button id="backup">...</button> <button id="newfolder">New Folder</button> <button>Upload</button> <label id="uploadto" />
 	</div>
 	<div id="Views" class="tile-border-color">
 		<button>Tiles</button>
@@ -69,6 +73,7 @@
 					$("#backup").removeAttr("style");
 					$("#search").animate({ opacity: 1.0 });
 					$("#backup").animate({ width: 25, opacity: 1.0 });
+					if (typeof (window.FileReader) != 'undefined') $("#MyFiles").attr("dropzone", "copy<%=DropZoneAccepted %>");
 				}
 			}
 			else {
@@ -78,6 +83,7 @@
 						$("#backup").css("display", "none");
 					});
 					$("#search").animate({ opacity: 0.0 });
+					if (typeof (window.FileReader) != 'undefined') $("#MyFiles").removeAttr("dropzone");
 				}
 			}
 			Load();
@@ -132,6 +138,7 @@
 			        item.Selected = true;
 			        item.Refresh();
 			        $("#dragobject").show();
+			        $("#dragobject img").show();
 			        $("#dragobject img").attr("src", item.Data.Icon);
 			        $("#dragobject span").text("");
 			        $("#dragobject span").hide();
@@ -149,6 +156,23 @@
 			        $("#dragobject span").hide();
 			    }
 			    });
+			    if (typeof (window.FileReader) != 'undefined') {
+			        $("#" + this.Id).attr("dropzone", "copy<%=DropZoneAccepted %>");
+			        $("#" + this.Id).bind("dragover", function () {
+			            var item = null;
+			            for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
+			            $("#uploadto").text("Upload To " + item.Data.Name);
+			            return false;
+			        });
+			        $("#" + this.Id).bind("dragleave", function () {
+			            $("#uploadto").text("");
+			            return false;
+			        });
+			        $("#" + this.Id).bind("dragend", function () {
+			            $("#uploadto").text("");
+			            return false;
+			        });
+			    }
 			    $("#" + this.Id).bind("click", this.Click);
 			    $("#" + this.Id).contextMenu('contextMenu', {
 			        onContextMenu: function (e) {
@@ -162,7 +186,11 @@
 			            return true;
 			        },
 			        onShowMenu: function (e, menu) {
-			            if (SelectedItems().length > 1) $("#con-properties", menu).remove();
+			            if (SelectedItems().length > 1) { $("#con-properties", menu).remove(); $("#con-preview", menu).remove(); }
+			            else {
+			                if (SelectedItems()[0].Data.Extension != ".xlsx" && SelectedItems()[0].Data.Extension != ".docx" && SelectedItems()[0].Data.Extension != ".xls" && SelectedItems()[0].Data.Extension != ".csv" && SelectedItems()[0].Data.Extension != ".png" && SelectedItems()[0].Data.Extension != ".gif" && SelectedItems()[0].Data.Extension != ".jpg" && SelectedItems()[0].Data.Extension != ".jpeg" && SelectedItems()[0].Data.Extension != ".bmp")
+			                    $("#con-preview", menu).remove();
+			            }
 			            return menu;
 			        },
 			        bindings: {
@@ -203,24 +231,43 @@
 			                        $("#propcont").html(s);
 			                    }, error: OnError
 			                });
+			            },
+			            'con-preview': function (t) {
+			                if (SelectedItems().length > 1) { alert("This only works on 1 item"); return false; }
+			                $("#preview").dialog({ autoOpen: true, height: 600, width: 900, buttons: {
+			                    "OK": function () {
+			                        $("#previewcont").html("Loading...");
+			                        $(this).dialog("close");
+			                    }
+			                }
+			                });
+			                $.ajax({
+			                    type: 'GET',
+			                    url: '<%=ResolveUrl("~/api/MyFiles/Preview/")%>' + SelectedItems()[0].Data.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, ""),
+			                    dataType: 'json',
+			                    contentType: 'application/json',
+			                    success: function (data) {
+			                        $("#previewcont").html(data);
+			                    }, error: OnError
+			                });
 			            }
 			        }
 			    });
 			};
 			this.Refresh = function () {
-			    $("#" + this.Id).attr("href", (this.Data.Path.match(/\.\./i) ? this.Data.Path.replace(/\\/g, "/") : '#' + this.Data.Path));
-			    $("#" + this.Id).attr("title", this.Data.Name);
-			    if (this.Selected) $("#" + this.Id).addClass("Selected");
-			    else $("#" + this.Id).removeClass("Selected");
-			    var label = this.Data.Name;
-			    var h = '<img class="icon" src="' + this.Data.Icon + '" alt="" /><span class="label">' + label + '</span><span class="type">';
-			    if (this.Data.Type == 'Directory') h += 'File Folder';
-			    else h += this.Data.Type + '</span><span class="extension">' + this.Data.Extension + '</span><span class="size">' + this.Data.Size;
-			    h += '</span>';
+				$("#" + this.Id).attr("href", (this.Data.Path.match(/\.\./i) ? this.Data.Path.replace(/\\/g, "/") : '#' + this.Data.Path));
+				$("#" + this.Id).attr("title", this.Data.Name);
+				if (this.Selected) $("#" + this.Id).addClass("Selected");
+				else $("#" + this.Id).removeClass("Selected");
+				var label = this.Data.Name;
+				var h = '<img class="icon" src="' + this.Data.Icon + '" alt="" /><span class="label">' + label + '</span><span class="type">';
+				if (this.Data.Type == 'Directory') h += 'File Folder';
+				else h += this.Data.Type + '</span><span class="extension">' + this.Data.Extension + '</span><span class="size">' + this.Data.Size;
+				h += '</span>';
 
-			    $("#" + this.Id).html(h);
-			    if (this.Show) $("#" + this.Id).removeAttr("style");
-			    else $("#" + this.Id).css("display", "none");
+				$("#" + this.Id).html(h);
+				if (this.Show) $("#" + this.Id).removeAttr("style");
+				else $("#" + this.Id).css("display", "none");
 			};
 			this.Selected = false;
 			this.ClickTimer = null;
@@ -263,21 +310,21 @@
 		function Load() {
 			$(".context-menu").remove();
 			if (curpath == null) {
-			    $.ajax({
-			        type: 'GET',
-			        url: '<%=ResolveUrl("~/api/MyFiles/Drives")%>',
-			        dataType: 'json',
-			        contentType: 'application/json;',
-			        success: function (data) {
-			            items = new Array();
-			            $("MyFiles").removeAttr("class");
-			            $("#MyFiles").html("");
-			            for (var i = 0; i < data.length; i++)
-			                items.push(new Drive(data[i]));
-			            for (var i = 0; i < items.length; i++)
-			                items[i].Render();
-			        }, error: OnError
-			    });
+				$.ajax({
+					type: 'GET',
+					url: '<%=ResolveUrl("~/api/MyFiles/Drives")%>',
+					dataType: 'json',
+					contentType: 'application/json;',
+					success: function (data) {
+						items = new Array();
+						$("MyFiles").removeAttr("class");
+						$("#MyFiles").html("");
+						for (var i = 0; i < data.length; i++)
+							items.push(new Drive(data[i]));
+						for (var i = 0; i < items.length; i++)
+							items[i].Render();
+					}, error: OnError
+				});
 			} else {
 				$.ajax({
 					type: 'GET',
@@ -299,9 +346,10 @@
 			return data.match(re);
 		}
 		$(function () {
-			$("#properties").dialog({ autoOpen: false });
+		    $("#properties").dialog({ autoOpen: false });
+		    $("#preview").dialog({ autoOpen: false });
 			$("#Views").animate({ height: 'toggle' });
-			$("#Tree").dynatree({ imagePath: "../images/setup/", selectMode: 1, minExpandLevel: 1, noLink: false, children: [{ title: "My Drives", href: "#", isFolder: true, isLazy: true}], fx: { height: "toggle", duration: 200 },
+			$("#Tree").dynatree({ imagePath: "../images/setup/", selectMode: 1, minExpandLevel: 1, noLink: false, children: [{ icon: "../myfiles-i.png", title: "My Drives", href: "#", isFolder: true, isLazy: true}], fx: { height: "toggle", duration: 200 },
 				onLazyRead: function (node) {
 					if (node.data.href == "#") {
 						$.ajax({
@@ -312,7 +360,7 @@
 							success: function (data) {
 								res = [];
 								for (var i = 0; i < data.length; i++)
-									res.push({ title: data[i].Name, href: "#" + data[i].Path, isFolder: true, isLazy: true, noLink: false, key: data[i].Path });
+									res.push({ title: data[i].Name + " (" + data[i].Path + ")", icon: "../drive.png", href: "#" + data[i].Path, isFolder: true, isLazy: true, noLink: false, key: data[i].Path });
 								node.setLazyNodeStatus(DTNodeStatus_Ok);
 								node.addChild(res);
 							}, error: OnError
@@ -423,24 +471,24 @@
 					$("#MyFilesHeaddings").css("display", "none");
 					$("#MyFiles").css("padding-top", $("#toolbar").height() + 10);
 				}
-	            else if ($(this).text() == "Medium Icons") {
-	                viewMode = 2;
-	                $("#MyFiles").addClass("medium");
-	                $("#MyFiles").removeClass("small");
-	                $("#MyFiles").removeClass("large");
-	                $("#MyFiles").removeClass("details");
-	                $("#MyFilesHeaddings").css("display", "none");
-	                $("#MyFiles").css("padding-top", $("#toolbar").height() + 10);
-	            }
-	            else if ($(this).text() == "Large Icons") {
-	                viewMode = 2;
-	                $("#MyFiles").addClass("large");
-	                $("#MyFiles").removeClass("medium");
-	                $("#MyFiles").removeClass("small");
-	                $("#MyFiles").removeClass("details");
-	                $("#MyFilesHeaddings").css("display", "none");
-	                $("#MyFiles").css("padding-top", $("#toolbar").height() + 10);
-	            }
+				else if ($(this).text() == "Medium Icons") {
+					viewMode = 2;
+					$("#MyFiles").addClass("medium");
+					$("#MyFiles").removeClass("small");
+					$("#MyFiles").removeClass("large");
+					$("#MyFiles").removeClass("details");
+					$("#MyFilesHeaddings").css("display", "none");
+					$("#MyFiles").css("padding-top", $("#toolbar").height() + 10);
+				}
+				else if ($(this).text() == "Large Icons") {
+					viewMode = 2;
+					$("#MyFiles").addClass("large");
+					$("#MyFiles").removeClass("medium");
+					$("#MyFiles").removeClass("small");
+					$("#MyFiles").removeClass("details");
+					$("#MyFilesHeaddings").css("display", "none");
+					$("#MyFiles").css("padding-top", $("#toolbar").height() + 10);
+				}
 				else {
 					viewMode = 0;
 					$("#MyFiles").removeClass("details");

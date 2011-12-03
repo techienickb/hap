@@ -5,25 +5,25 @@ using System.Web;
 using System.Configuration;
 using System.DirectoryServices.AccountManagement;
 using System.Security.Authentication;
-using WordVisualizer.Core.Extensions;
+using HAP.Data.MyFiles.WordVisualizer.Core.Extensions;
 using Microsoft.Office.DocumentFormat.OpenXml.Packaging;
-using WordVisualizer.Core;
+using HAP.Data.MyFiles.WordVisualizer.Core;
 using System.IO;
 using System.Xml;
 using System.Text;
 using System.Xml.Linq;
-using WordVisualizer.Core.Util;
+using HAP.Data.MyFiles.WordVisualizer.Core.Util;
 using HAP.Web.Configuration;
 using System.Web.Security;
 using HAP.Data.ComputerBrowser;
 using System.Web.SessionState;
 
-namespace HAP.Web.routing
+namespace HAP.Data.MyFiles
 {
     /// <summary>
     /// Summary description for docx
     /// </summary>
-    public class DocXPreviewHandler : IHttpHandler, IMyComputerDisplay, IRequiresSessionState
+    public class DocXPreview
     {
 
         #region Constants
@@ -50,184 +50,30 @@ namespace HAP.Web.routing
 
         #endregion
 
-        private HAP.AD.User _ADUser = null;
-        public HAP.AD.User ADUser
-        {
-            get
-            {
-                if (_ADUser == null) _ADUser = ((HAP.AD.User)Membership.GetUser());
-                return _ADUser;
-            }
-        }
         private string path;
+        private HAP.Web.Configuration.hapConfig config;
 
-        private bool isAuth(DriveMapping path)
+        public static string Render(string Path)
         {
-            if (path.EnableReadTo == "All") return true;
-            else if (path.EnableReadTo != "None")
+            string s = "";
+            using (WordprocessingDocument document = WordprocessingDocument.Open(Path, false))
             {
-                bool vis = false;
-                foreach (string s in path.EnableReadTo.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
-                    if (!vis) vis = HttpContext.Current.User.IsInRole(s.Trim());
-                return vis;
+                s += RenderStyles(document);
+                s += "   <div id=\"Document\">";
+                s += RenderDocument(document);
+                s += "   </div>";
             }
-            return false;
+            return s;
         }
-
-        private bool isWriteAuth(DriveMapping path)
-        {
-            if (path == null) return true;
-            if (path.EnableWriteTo == "All") return true;
-            else if (path.EnableWriteTo != "None")
-            {
-                bool vis = false;
-                foreach (string s in path.EnableWriteTo.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
-                    if (!vis) vis = HttpContext.Current.User.IsInRole(s.Trim());
-                return vis;
-            }
-            return false;
-        }
-
-        #region IWordDocumentRenderer Members
-
-        /// <summary>
-        /// Render
-        /// </summary>
-        /// <param name="context">Current http context</param>
-        public void ProcessRequest(System.Web.HttpContext context)
-        {
-            ADUser.Impersonate();
-            string userhome = ADUser.HomeDirectory;
-            if (!userhome.EndsWith("\\")) userhome += "\\";
-            path = RoutingPath.Replace('^', '&');
-            DriveMapping unc = null;
-            unc = HAP.Web.Configuration.hapConfig.Current.MySchoolComputerBrowser.Mappings[RoutingDrive.ToCharArray()[0]];
-            if (unc == null || !isWriteAuth(unc)) context.Response.Redirect(context.Request.ApplicationPath + "/unauthorised.aspx", true);
-            else path = Path.Combine(Converter.FormatMapping(unc.UNC, ADUser), path.Replace('/', '\\'));
-
-            // Open document
-            using (WordprocessingDocument document = WordprocessingDocument.Open(path, false))
-            {
-                // Fetch necessary document parts
-                CoreProperties coreProperties = CoreProperties.FromCoreFileProperties(document.CoreFilePropertiesPart);
-
-                // Set content type
-                context.Response.ContentType = "text/html";
-
-                // Set response code
-                context.Response.StatusCode = 200;
-
-                // Render
-                context.Response.WriteLine("<html>");
-
-                context.Response.WriteLine("  <head>");
-                context.Response.WriteLine("    <title>" + coreProperties.Title + "</title>");
-                context.Response.WriteLine("    <link href=\"" + context.Request.ApplicationPath + "/basestyle.css\" rel=\"stylesheet\" type=\"text/css\" />");
-                context.Response.WriteLine("    <link href=\"" + context.Request.ApplicationPath + "/mycomputer.css\" rel=\"stylesheet\" type=\"text/css\" />");
-                RenderStyles(context, document);
-                context.Response.WriteLine("  </head>");
-
-                context.Response.WriteLine("  <body>");
-
-                // Download link
-                RenderDownloadLink(context);
-
-                // Core properties
-                RenderCoreProperties(context, coreProperties);
-
-                // Document
-                context.Response.WriteLine("   <div id=\"Document\">");
-                RenderDocument(context, document);
-                context.Response.WriteLine("   </div>");
-
-                // Footer
-                RenderFooter(context);
-
-                context.Response.WriteLine("  </body>");
-
-                context.Response.WriteLine("</html>");
-            }
-            ADUser.EndImpersonate();
-        }
-
-        #endregion
 
         #region Private methods
 
-        /// <summary>
-        /// Render download link
-        /// </summary>
-        /// <param name="context">Current http context</param>
-        private void RenderDownloadLink(System.Web.HttpContext context)
-        {
-            context.Response.WriteLine("   <div id=\"Download\">");
-            context.Response.WriteLine("     Download document: <a href=\"" + context.Request.ApplicationPath + "/download/" + RoutingDrive + "/" + RoutingPath + "\">" + Path.GetFileName(path) + "</a>");
-            context.Response.WriteLine("   </div>");
-        }
-
-        /// <summary>
-        /// Render internal relationship link
-        /// </summary>
-        /// <param name="context">Current http context</param>
-        /// <param name="partRelationship">Part relationship id</param>
-        /// <return>Link to renderer</return>
-        private string RenderInternalRelationshipLink(System.Web.HttpContext context, string partRelationship)
+        static string RenderInternalRelationshipLink(string partRelationship)
         {
             return "";
         }
 
-        /// <summary>
-        /// Render core properties
-        /// </summary>
-        /// <param name="context">Current http context</param>
-        /// <param name="coreProperties">Core properties instance</param>
-        private void RenderCoreProperties(System.Web.HttpContext context, CoreProperties coreProperties)
-        {
-            context.Response.WriteLine("   <div id=\"CoreProperties\">");
-            context.Response.WriteLine("     <h1 id=\"Title\">Document properties</h1>");
-            context.Response.WriteLine("     <table id=\"Details\">");
-            context.Response.WriteLine("       <tr>");
-            context.Response.WriteLine("         <th>Author</th>");
-            context.Response.WriteLine("         <th>Title</th>");
-            context.Response.WriteLine("         <th>Subject</th>");
-            context.Response.WriteLine("         <th>Keywords</th>");
-            context.Response.WriteLine("       </tr>");
-            context.Response.WriteLine("       <tr>");
-            context.Response.WriteLine("         <td>&nbsp;" + coreProperties.Creator + "</td>");
-            context.Response.WriteLine("         <td>&nbsp;" + coreProperties.Title + "</td>");
-            context.Response.WriteLine("         <td>&nbsp;" + coreProperties.Subject + "</td>");
-            context.Response.WriteLine("         <td>&nbsp;" + coreProperties.Keywords + "</td>");
-            context.Response.WriteLine("       </tr>");
-            context.Response.WriteLine("       <tr>");
-            context.Response.WriteLine("         <th>Description</th>");
-            context.Response.WriteLine("         <th>Date created</th>");
-            context.Response.WriteLine("         <th>Date modified</th>");
-            context.Response.WriteLine("         <th>Revision</th>");
-            context.Response.WriteLine("       </tr>");
-            context.Response.WriteLine("       <tr>");
-            context.Response.WriteLine("         <td>&nbsp;" + coreProperties.Description + "</td>");
-            context.Response.WriteLine("         <td>&nbsp;" + coreProperties.Created.ToShortDateString() + " " + coreProperties.Created.ToShortTimeString() + "</td>");
-            context.Response.WriteLine("         <td>&nbsp;" + coreProperties.Modified.ToShortDateString() + " " + coreProperties.Modified.ToShortTimeString() + "</td>");
-            context.Response.WriteLine("         <td>&nbsp;" + coreProperties.Revision + "</td>");
-            context.Response.WriteLine("       </tr>");
-            context.Response.WriteLine("     </table>");
-            context.Response.WriteLine("   </div>");
-        }
-
-        /// <summary>
-        /// Render footer
-        /// </summary>
-        /// <param name="context">Current http context</param>
-        private void RenderFooter(System.Web.HttpContext context)
-        {
-        }
-
-        /// <summary>
-        /// Create CSS properties from XmlReader instance
-        /// </summary>
-        /// <param name="reader">XmlReader instance containing style information</param>
-        /// <returns>CSS style information (e.g. font-weight: bold;)</returns>
-        private string CreateCssProperties(XmlReader reader)
+        static string CreateCssProperties(XmlReader reader)
         {
             StringBuilder returnValue = new StringBuilder();
 
@@ -330,12 +176,7 @@ namespace HAP.Web.routing
             return returnValue.ToString();
         }
 
-        /// <summary>
-        /// Get default style name
-        /// </summary>
-        /// <param name="document">WordprocessingDocument</param>
-        /// <returns>Default style name</returns>
-        private string GetDefaultStyleName(WordprocessingDocument document)
+        static string GetDefaultStyleName(WordprocessingDocument document)
         {
             XNamespace w = WordProcessingMLNamespace;
 
@@ -356,13 +197,9 @@ namespace HAP.Web.routing
             return defaultStyle.Replace(" ", "");
         }
 
-        /// <summary>
-        /// Render styles
-        /// </summary>
-        /// <param name="context">Current http context</param>
-        /// <param name="document">WordprocessingDocument</param>
-        private void RenderStyles(System.Web.HttpContext context, WordprocessingDocument document)
+        static string RenderStyles(WordprocessingDocument document)
         {
+            string s = "";
             XNamespace w = WordProcessingMLNamespace;
 
             XDocument xDoc = XDocument.Load(
@@ -390,27 +227,23 @@ namespace HAP.Web.routing
                              };
 
             // Write Css
-            context.Response.WriteLine("<style>");
-            context.Response.WriteLine("<!--");
+            s += "<style>\n";
+            s += "<!--\n";
             foreach (var c in cssClasses)
             {
-                context.Response.Write("#Document ." + c.CssClassName + "{");
-                context.Response.Write(c.ParagraphStyle);
-                context.Response.Write(c.RunStyle);
-                context.Response.Write("}");
-                context.Response.WriteLine();
+                s += "#Document ." + c.CssClassName + "{\n";
+                s += c.ParagraphStyle;
+                s += c.RunStyle;
+                s += "}\n";
             }
-            context.Response.WriteLine("-->");
-            context.Response.WriteLine("</style>");
+            s += "-->\n";
+            s += "</style>\n";
+            return s;
         }
 
-        /// <summary>
-        /// Render document
-        /// </summary>
-        /// <param name="context">Current http context</param>
-        /// <param name="document">WordprocessingDocument</param>
-        private void RenderDocument(System.Web.HttpContext context, WordprocessingDocument document)
+        static string RenderDocument(WordprocessingDocument document)
         {
+            string s = "";
             XNamespace w = WordProcessingMLNamespace;
             XNamespace rels = RelationshipsNamespace;
             XNamespace a = DrawingMLNamespace;
@@ -451,7 +284,7 @@ namespace HAP.Web.routing
             // Write paragraphs
             foreach (var paragraph in paragraphs)
             {
-                context.Response.Write(String.Format("<p class=\"{0}\" style=\"{1}\">", paragraph.CssClass, paragraph.CssStyles));
+                s += String.Format("<p class=\"{0}\" style=\"{1}\">\n", paragraph.CssClass, paragraph.CssStyles);
 
                 // Fetch runs
                 var runs = from l_run in paragraph.Runs
@@ -482,16 +315,14 @@ namespace HAP.Web.routing
                     // Break before?
                     if (run.BreakBefore)
                     {
-                        context.Response.WriteLine("<br />");
+                        s += "<br />";
                     }
 
                     // Write run
-                    context.Response.Write(
-                        String.Format("<span class=\"{0}\" style=\"{1}\">",
+                    s += String.Format("<span class=\"{0}\" style=\"{1}\">",
                             run.CssClass,
                             run.CssStyles ?? ""
-                        )
-                    );
+                        );
 
                     // Is it an hyperlink?
                     if (run.RunType == "hyperlink")
@@ -501,7 +332,7 @@ namespace HAP.Web.routing
                                                          select rel).FirstOrDefault() as ExternalRelationship;
                         if (relation != null)
                         {
-                            context.Response.Write("<a href=\"" + relation.Uri.ToString() + "\">");
+                            s += "<a href=\"" + relation.Uri.ToString() + "\">";
                         }
                     }
 
@@ -525,31 +356,30 @@ namespace HAP.Web.routing
                     foreach (var graphic in graphics)
                     {
                         // Write graphic
-                        context.Response.Write(
+                        s += 
                             String.Format("<div style=\"float:left; clear:none; width:{1}px; height:{2}px; margin:5px;\"><img src=\"{0}\" width=\"{1}\" height=\"{2}\"/></div>",
-                                RenderInternalRelationshipLink(context, graphic.ExternalRelationId),
+                                RenderInternalRelationshipLink(graphic.ExternalRelationId),
                                 graphic.Width,
                                 graphic.Height
-                            )
-                        );
+                            );
                     }
 
                     // Write text
-                    context.Response.Write(RenderPlainText(context, run.Text));
+                    s += RenderPlainText(run.Text);
 
                     // End hyperlink
                     if (run.RunType == "hyperlink")
                     {
-                        context.Response.Write("</a>");
+                        s += "</a>";
                     }
 
                     // End run
-                    context.Response.Write("</span>");
+                    s += "</span>";
                 }
 
-                context.Response.Write("</p>");
-                context.Response.WriteLine();
+                s += "</p>\n\n";
             }
+            return s;
         }
 
         /// <summary>
@@ -558,24 +388,12 @@ namespace HAP.Web.routing
         /// <param name="context">Current http context</param>
         /// <param name="text">Text to render</param>
         /// <returns>Rendered text</returns>
-        private static string RenderPlainText(System.Web.HttpContext context, string text)
+        static string RenderPlainText(string text)
         {
-            return context.Server.HtmlEncode(text);
+            return HttpUtility.HtmlEncode(text);
         }
 
         #endregion
 
-
-        public bool IsReusable
-        {
-            get
-            {
-                return false;
-            }
-        }
-
-        public string RoutingPath { get; set; }
-
-        public string RoutingDrive { get; set; }
     }
 }

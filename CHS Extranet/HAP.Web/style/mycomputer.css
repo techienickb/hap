@@ -1,4 +1,10 @@
-﻿#bar { height: 24px; background: url(../images/bar.gif) repeat-x; padding: 3px 5px 3px 5px; border: solid 1px #7da2ce; border-bottom: 0; }
+﻿#Download { float: right; position: absolute; right: 5px; border-radius: 3px; -moz-border-radius: 3px; top: 0; border: solid 1px #7da2ce; padding: 2px 5px; border-top: 0; background: url(../images/bar-a-hover.gif) repeat-x left center; }
+#CoreProperties h1 { margin: 0; padding: 0; font-weight: normal; font-size: 18px; }
+#CoreProperties table { width: 100%; border: solid 1px #d9d9d9; border-collapse: collapse; font-size: 12px; }
+#CoreProperties table td { text-align: center; }
+#Document { position: absolute; top: 105px; bottom: 0; left: 0; right: 0; width: 100%; overflow: auto; }
+
+#bar { height: 24px; background: url(../images/bar.gif) repeat-x; padding: 3px 5px 3px 5px; border: solid 1px #7da2ce; border-bottom: 0; }
 #bar a { float: left; height: 20px; line-height: 21px; padding: 1px 15px; color: #1f3976; text-decoration: none; }
 #bar a.right { float: right; }
 #bar a span { display: block; background: url(../images/arrow.gif) no-repeat right 10px; padding: 0 16px 0 0; }

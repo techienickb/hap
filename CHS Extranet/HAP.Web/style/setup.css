@@ -1,17 +1,10 @@
 ﻿html {font-family: Segoe UI; background: #dedede; font-size: 12px; }
 body { width: 775px; margin: 10px auto; background: white; padding: 11px; }
-h2 { font-weight: normal; color: #1e3287; font-size: 16px; height: 24px; line-height: 22px; margin: 5px 0; padding: 0; border: solid 1px #fff; border-radius: 3px; }
-h2:hover { border-color: #b8d6fb; background: transparent url(../images/h2bgover.gif) repeat-x top center; }
-h2 span { display: block; height: 22px; border: solid 1px #fff; border-radius: 2px; }
-h2 span span { background: transparent url(../images/h2bg.gif) repeat-x left center; margin: 0 5px; border: 0; border-radius: 0; height: 22px; overflow: hidden; }
-h2 span b { font-weight: normal; padding: 0 5px 0 0; float: left; display: block; background: #fff; cursor: default; }
-h2 span b:hover { background: transparent url(../images/h2bgover.png) repeat-x top center; }
-h2:hover span b { background: transparent url(../images/h2bgover.gif) repeat-x top center; }
-h2 i { float: left; display: block; width: 20px; height: 22px; cursor: pointer; background: #000; background: transparent url(../images/arrow-expand.png) no-repeat center center; }
-h2 i:hover { background-image: url(../images/arrow-expandover.png); }
-h2 i.collapsed { background-image: url(../images/arrow-collapse.png); }
-h2 i.collapsed:hover { background-image: url(../images/arrow-collapseover.png); }
-h2 img { height: 22px; vertical-align: text-bottom; margin-left: 5px; }
+a img { height: 14px; vertical-align: text-bottom; margin-left: 5px; }
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a { padding-bottom: 4px; }
+h3 { line-height: normal; padding: 0; margin: 0; }
+img { vertical-align: middle; }
+h3 img { height: 22px; vertical-align: middle; margin-left: 5px; }
 div { overflow: hidden; }
 div.group { padding: 0 30px; }
 label { float: left; width: 200px; text-align: right; padding: 2px 10px; }

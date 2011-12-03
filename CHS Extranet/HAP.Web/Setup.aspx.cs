@@ -7,16 +7,37 @@ using System.Web.UI.WebControls;
 using System.DirectoryServices.AccountManagement;
 using System.DirectoryServices;
 using HAP.Web.Configuration;
+using Microsoft.Win32;
 
 namespace HAP.Web
 {
     public partial class Setup : System.Web.UI.Page
     {
+        public Version GetIisVersion()
+        {
+            using (RegistryKey componentsKey = Registry.LocalMachine.OpenSubKey(@"Software\Microsoft\InetStp", false))
+            {
+                if (componentsKey != null)
+                {
+                    int majorVersion = (int)componentsKey.GetValue("MajorVersion", -1);
+                    int minorVersion = (int)componentsKey.GetValue("MinorVersion", -1);
+                    if (majorVersion != -1 && minorVersion != -1)
+                    {
+                        return new Version(majorVersion, minorVersion);
+                    }
+                }
+                return new Version(0, 0);
+            }
+        }
+
+
         public hapConfig Config { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!Page.IsPostBack)
             {
+                iisversion.Text = GetIisVersion().ToString();
+                iis6wildcardlab.Text = (GetIisVersion().Major < 7) ? "IIS6 Wildcard Mapping: " : "IIS7 Integrated Pipeline: ";
                 Config = hapConfig.Current;
                 Cache.Insert("tempConfig", Config, null, DateTime.MaxValue, TimeSpan.FromMinutes(4));
                 name.Text = Config.School.Name;
