@@ -188,7 +188,7 @@
 			        onShowMenu: function (e, menu) {
 			            if (SelectedItems().length > 1) { $("#con-properties", menu).remove(); $("#con-preview", menu).remove(); }
 			            else {
-			                if (SelectedItems()[0].Data.Extension != ".xlsx" && SelectedItems()[0].Data.Extension != ".docx" && SelectedItems()[0].Data.Extension != ".xls" && SelectedItems()[0].Data.Extension != ".csv" && SelectedItems()[0].Data.Extension != ".png" && SelectedItems()[0].Data.Extension != ".gif" && SelectedItems()[0].Data.Extension != ".jpg" && SelectedItems()[0].Data.Extension != ".jpeg" && SelectedItems()[0].Data.Extension != ".bmp")
+			                if (SelectedItems()[0].Data.Extension != ".txt" && SelectedItems()[0].Data.Extension != ".xlsx" && SelectedItems()[0].Data.Extension != ".docx" && SelectedItems()[0].Data.Extension != ".xls" && SelectedItems()[0].Data.Extension != ".csv" && SelectedItems()[0].Data.Extension != ".png" && SelectedItems()[0].Data.Extension != ".gif" && SelectedItems()[0].Data.Extension != ".jpg" && SelectedItems()[0].Data.Extension != ".jpeg" && SelectedItems()[0].Data.Extension != ".bmp")
 			                    $("#con-preview", menu).remove();
 			            }
 			            return menu;
@@ -196,7 +196,7 @@
 			        bindings: {
 			            'con-properties': function (t) {
 			                if (SelectedItems().length > 1) { alert("This only works on 1 item"); return false; }
-			                $("#properties").dialog({ autoOpen: true, buttons: {
+			                $("#properties").dialog({ autoOpen: true, modal: true, buttons: {
 			                    "OK": function () {
 			                        $(this).dialog("close");
 			                        $("#propcont").html("Loading...");
@@ -234,7 +234,7 @@
 			            },
 			            'con-preview': function (t) {
 			                if (SelectedItems().length > 1) { alert("This only works on 1 item"); return false; }
-			                $("#preview").dialog({ autoOpen: true, height: 600, width: 900, buttons: {
+			                $("#preview").dialog({ autoOpen: true, height: 600, width: 900, modal: true, buttons: {
 			                    "OK": function () {
 			                        $("#previewcont").html("Loading...");
 			                        $(this).dialog("close");
