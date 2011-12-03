@@ -12,11 +12,7 @@ a img { border: 0; }
 input[type=text], input[type=password] { border: solid 2px #d9d9d9; background: #fff; }
 
 #hapContent { padding-top: 20px; }
-#Download { float: right; position: absolute; right: 5px; border-radius: 3px; -moz-border-radius: 3px; top: 0; border: solid 1px #7da2ce; padding: 2px 5px; border-top: 0; background: url(../images/bar-a-hover.gif) repeat-x left center; }
-#CoreProperties h1 { margin: 0; padding: 0; font-weight: normal; font-size: 18px; }
-#CoreProperties table { width: 100%; border: solid 1px #d9d9d9; border-collapse: collapse; font-size: 12px; }
-#CoreProperties table td { text-align: center; }
-#Document { position: absolute; top: 105px; bottom: 0; left: 0; right: 0; width: 100%; overflow: auto; }
+
 #useroutter { overflow: hidden; }
 
 #usertop { position: absolute; z-index: 1909; top: 20px; right: 20px; padding: 2px 10px; border: solid 1px gray; border-radius: 3px; box-shadow: 5px 5px 5px #dedede; background: #fff; }

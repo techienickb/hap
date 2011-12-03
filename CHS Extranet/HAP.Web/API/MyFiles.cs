@@ -12,6 +12,12 @@ using HAP.Web.Configuration;
 using System.IO;
 using System.Runtime.InteropServices;
 using HAP.Data.ComputerBrowser;
+using Excel;
+using System.Text;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Data.OleDb;
+using System.Data;
 
 namespace HAP.Web.API
 {
@@ -19,6 +25,81 @@ namespace HAP.Web.API
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
     public class MyFiles
     {
+        [OperationContract]
+        [WebGet(UriTemplate="Preview/{Drive}/{*Path}", ResponseFormat=WebMessageFormat.Json, BodyStyle=WebMessageBodyStyle.Bare)]
+        public string Preview(string Drive, string Path)
+        {
+            hapConfig config = hapConfig.Current;
+            User user = new User();
+
+            if (config.AD.AuthenticationMode == AuthMode.Forms)
+            {
+                HttpCookie token = HttpContext.Current.Request.Cookies["token"];
+                if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
+                user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
+            }
+            user.ImpersonateContained();
+            DriveMapping mapping;
+            string path = Converter.DriveToUNC("/" + Path, Drive, out mapping, user);
+            FileInfo file = new FileInfo(path);
+
+            string s = "";
+
+            try
+            {
+                if (Path.ToLower().EndsWith(".docx"))
+                {
+                    s = HAP.Data.MyFiles.DocXPreview.Render(file.FullName);
+                }
+                else if (Path.ToLower().EndsWith(".xls") || Path.EndsWith(".xlsx"))
+                {
+                    IExcelDataReader excelReader;
+                    if (file.Extension.ToLower().Contains("xlsx"))
+                        excelReader = ExcelReaderFactory.CreateOpenXmlReader(file.OpenRead());
+                    else excelReader = ExcelReaderFactory.CreateBinaryReader(file.OpenRead());
+                    excelReader.IsFirstRowAsColumnNames = false;
+                    StringWriter writer = new StringWriter();
+                    HtmlTextWriter htmlWriter = new HtmlTextWriter(writer);
+                    GridView GridView1 = new GridView();
+                    GridView1.DataSource = excelReader.AsDataSet();
+                    GridView1.DataBind();
+                    GridView1.RenderControl(htmlWriter);
+
+                    s = writer.ToString();
+                }
+                else if (Path.ToLower().EndsWith(".csv"))
+                {
+                    StreamReader sr = file.OpenText();
+                    s += "<table border=\"1\" style=\"border-collapse: collapse;\">";
+                    while(!sr.EndOfStream) {
+                        string[] r = sr.ReadLine().Split(new char[] { ',' });
+                        s += "<tr>";
+                        foreach (string s1 in r)
+                        {
+                            s += "<td>";
+                            s += s1.Trim().Replace("\"", "");
+                            s += "</td>";
+                        }
+                        s += "</tr>";
+                    }
+                    sr.Close();
+                    sr.Dispose();
+                    sr = null;
+                    user.EndContainedImpersonate();
+
+                    s += "</table>";
+                }
+                else if (HAP.Data.MyFiles.File.GetMimeType(file.Extension.ToLower()).StartsWith("image"))
+                {
+                    s = "<img src=\"../Download/" + Drive + "/" + Path + "\" alt=\"" + file.Name + "\" />";
+                }
+            }
+            finally
+            {
+                user.EndContainedImpersonate();
+            }
+            return s;
+        }
 
         [OperationContract]
         [WebGet(UriTemplate="Properties/{Drive}/{*Path}")]

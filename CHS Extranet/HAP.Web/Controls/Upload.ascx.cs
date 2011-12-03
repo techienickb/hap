@@ -11,8 +11,6 @@ namespace HAP.Web.Controls
 {
     public partial class Upload : System.Web.UI.UserControl
     {
-        private hapConfig config;
-
         private bool isAuth(Filter filter)
         {
             if (filter.EnableFor == "All") return true;

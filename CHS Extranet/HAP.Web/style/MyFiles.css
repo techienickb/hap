@@ -87,3 +87,4 @@ button.back span { top: 4px; }
 #dragobject { z-index: 1111; }
 #dragobject img { border: solid 1px #666; background: #fff; opacity: 0.8; vertical-align: middle; }
 #dragobject span { display: inline-block; margin-left: 5px; background: #666; border: solid 1px #666; color: #fff; padding: 0 2px; }
+#Document { line-height: normal; height: auto; }
