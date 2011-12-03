@@ -93,6 +93,14 @@ namespace HAP.Web.API
                 {
                     s = "<img src=\"../Download/" + Drive + "/" + Path + "\" alt=\"" + file.Name + "\" />";
                 }
+                else if (Path.ToLower().EndsWith(".txt"))
+                {
+                    StreamReader sr = file.OpenText();
+                    s = sr.ReadToEnd().Replace("\n", "<br />");
+                    sr.Close();
+                    sr.Dispose();
+                    sr = null;
+                }
             }
             finally
             {
