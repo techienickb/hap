@@ -13,6 +13,10 @@ namespace HAP.Data.MyFiles
 {
     public class File : IComparable
     {
+        private DirectoryInfo subdir;
+        private DriveMapping mapping;
+        private User user;
+
         public File() { }
         public File(DirectoryInfo file, DriveMapping mapping, User user)
         {
@@ -74,6 +78,12 @@ namespace HAP.Data.MyFiles
 
         public File(FileInfo file, DriveMapping mapping, User user, AccessControlActions actions)
             : this(file, mapping, user)
+        {
+            this.Actions = actions;
+        }
+
+        public File(DirectoryInfo subdir, DriveMapping mapping, User user, AccessControlActions actions)
+            : this(subdir, mapping, user)
         {
             this.Actions = actions;
         }

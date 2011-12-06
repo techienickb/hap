@@ -110,6 +110,35 @@ namespace HAP.Web.API
         }
 
         [OperationContract]
+        [WebGet(UriTemplate = "info/{Drive}/{*Path}")]
+        public Properties info(string Drive, string Path)
+        {
+            Properties ret = new Data.MyFiles.Properties();
+            Path = "/" + Path;
+            hapConfig config = hapConfig.Current;
+            List<HAP.Data.MyFiles.File> Items = new List<Data.MyFiles.File>();
+            User user = new User();
+            if (config.AD.AuthenticationMode == AuthMode.Forms)
+            {
+                HttpCookie token = HttpContext.Current.Request.Cookies["token"];
+                if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
+                user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
+            }
+            user.ImpersonateContained();
+            try
+            {
+                DriveMapping mapping;
+                string path = Converter.DriveToUNC(Path, Drive, out mapping, user);
+                FileAttributes attr = System.IO.File.GetAttributes(path);
+                //detect whether its a directory or file
+                ret = new Properties(new DirectoryInfo(path), user, mapping);
+            }
+            finally { user.EndContainedImpersonate(); }
+
+            return ret;
+        }
+
+        [OperationContract]
         [WebGet(UriTemplate="Properties/{Drive}/{*Path}")]
         public Properties Properties(string Drive, string Path)
         {
@@ -175,7 +204,7 @@ namespace HAP.Web.API
                             }
                             try { subdir.GetDirectories(); }
                             catch { actions = HAP.Data.MyFiles.AccessControlActions.None; }
-                            Items.Add(new Data.MyFiles.File(subdir, mapping, user));
+                            Items.Add(new Data.MyFiles.File(subdir, mapping, user, actions));
                         }
                     }
                     catch { }

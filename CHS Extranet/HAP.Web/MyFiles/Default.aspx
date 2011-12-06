@@ -40,7 +40,7 @@
 			</span>
 			<button class="dropdown" id="view">View</button>
 		</div>
-		<button id="backup">...</button> <button id="newfolder">New Folder</button> <button>Upload</button> <label id="uploadto" />
+		<button id="backup"></button><span id="newfolderspan"><input type="text" id="newfoldertext" style="margin-right: 6px;" /><button id="newfolder">New Folder</button></span> <button id="upload">Upload</button> <label id="uploadto" />
 	</div>
 	<div id="Views" class="tile-border-color">
 		<button>Tiles</button>
@@ -64,27 +64,26 @@
 		var lazytimer = null;
 		var temp = null;
 		var table = null;
+		var curitem = null;
 		var curpath = null;
 		$(window).hashchange(function () {
 			$("#filter").val("");
 			if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) {
 				curpath = window.location.href.split("#")[1];
-				if ($("#backup").width() < 23) {
-					$("#backup").removeAttr("style");
-					$("#search").animate({ opacity: 1.0 });
-					$("#backup").animate({ width: 25, opacity: 1.0 });
-					if (typeof (window.FileReader) != 'undefined') $("#MyFiles").attr("dropzone", "copy<%=DropZoneAccepted %>");
-				}
+				if (typeof (window.FileReader) != 'undefined') $("#MyFiles").attr("dropzone", "copy<%=DropZoneAccepted %>");
+				if (viewMode == 1) { $("#MyFiles").addClass("details"); $("#MyFilesHeaddings").show(); }
+				else if (viewMode == 2) $("#MyFiles").addClass("small");
+				else if (viewMode == 3) $("#MyFiles").addClass("medium");
+				else if (viewMode == 4) $("#MyFiles").addClass("large");
 			}
 			else {
-				curpath = null;
-				if ($("#backup").width() != 0) {
-					$("#backup").animate({ width: 0, opacity: 0.0 }, 200, function () {
-						$("#backup").css("display", "none");
-					});
-					$("#search").animate({ opacity: 0.0 });
-					if (typeof (window.FileReader) != 'undefined') $("#MyFiles").removeAttr("dropzone");
+				curitem = curpath = null;
+				$("#toolbar").slideUp();
+				if (typeof (window.FileReader) != 'undefined') {
+					$("#MyFiles").removeAttr("dropzone").attr("dropzone", "copy<%=DropZoneAccepted %>").unbind("dragover").unbind("dragleave").unbind("dragend");
 				}
+				$("#MyFiles").removeClass("details").removeClass("small").removeClass("medium").removeClass("large");
+				$("#MyFilesHeaddings").hide();
 			}
 			Load();
 		});
@@ -102,8 +101,7 @@
 				$("#MyFiles").append('<a id="' + this.Id + '" href="#' + this.Data.Path + '" class="Drive"><span class="icon">' + this.Data.Path.substr(0, 1) + '</span><span class="label">' + this.Data.Name + '</span><span class="progress"><label>' + this.Data.Space + '%</label><i style="width: ' + this.Data.Space + '%"></i></span></a>');
 			};
 			this.Refresh = function () {
-				$("#" + this.Id).attr("href", "#" + this.Data.Path);
-				$("#" + this.Id).html('<span class="icon">' + this.Data.Path.substr(0, 1) + '</span><span class="label">' + this.Data.Name + '</span><span class="progress"><label>' + this.Data.Space + '%</label><i style="width: ' + this.Data.Space + '%"></i></span>');
+				$("#" + this.Id).attr("href", "#" + this.Data.Path).html('<span class="icon">' + this.Data.Path.substr(0, 1) + '</span><span class="label">' + this.Data.Name + '</span><span class="progress"><label>' + this.Data.Space + '%</label><i style="width: ' + this.Data.Space + '%"></i></span>');
 				$('#nav-' + this.Id + ' > a').attr("href", '#' + this.Data.Path);
 				$('#nav-' + this.Id + ' > a > span').html(this.Data.Name);
 			};
@@ -120,143 +118,134 @@
 			this.Show = true;
 			this.Clicks = 0;
 			this.Render = function () {
-			    this.Id = (this.Data.Name + this.Data.Extension).replace(/[\\'\. \[\]\(\)\-]/g, "_");
-			    var label = this.Data.Name;
+				this.Id = (this.Data.Name + this.Data.Extension).replace(/[\\'\. \[\]\(\)\-]/g, "_");
+				var label = this.Data.Name;
 
-			    var h = '<a id="' + this.Id + '" title="' + this.Data.Name + '" ';
-			    if (this.Data.Type == 'Directory') h += 'class="Folder Selectable" ';
-			    else h += 'class="Selectable" ';
-			    h += 'href="' + (this.Data.Path.match(/\.\./i) ? this.Data.Path.replace(/\\/g, "/") : '#' + this.Data.Path) + '"><img class="icon" src="' + this.Data.Icon + '" alt="" /><span class="label">' + label + '</span><span class="type">';
-			    if (this.Data.Type == 'Directory') h += 'File Folder';
-			    else h += this.Data.Type + '</span><span class="extension">' + this.Data.Extension + '</span><span class="size">' + this.Data.Size;
-			    h += '</span></a>';
-			    $("#MyFiles").append(h);
-			    $("#" + this.Id).draggable({ helper: function () { return $('<div id="dragobject"><img /><span></span></div>'); }, start: function (event, ui) {
-			        var item = null;
-			        for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
-			        if (!item.Selected) for (var x = 0; x < items.length; x++) if (items[x].Selected) { items[x].Selected = false; items[x].Refresh(); }
-			        item.Selected = true;
-			        item.Refresh();
-			        $("#dragobject").show();
-			        $("#dragobject img").show();
-			        $("#dragobject img").attr("src", item.Data.Icon);
-			        $("#dragobject span").text("");
-			        $("#dragobject span").hide();
-			    }
-			    });
-			    if (this.Data.Type == 'Directory') $("#" + this.Id).droppable({ accept: '.Selectable', activeClass: 'droppable-active', hoverClass: 'droppable-hover', drop: function (ev, ui) {
+				var h = '<a id="' + this.Id + '" title="' + this.Data.Name + '" ';
+				if (this.Data.Type == 'Directory') h += 'class="Folder Selectable" ';
+				else h += 'class="Selectable" ';
+				h += 'href="' + (this.Data.Path.match(/\.\./i) ? this.Data.Path.replace(/\\/g, "/") : '#' + this.Data.Path) + '"><img class="icon" src="' + this.Data.Icon + '" alt="" /><span class="label">' + label + '</span><span class="type">';
+				if (this.Data.Type == 'Directory') h += 'File Folder';
+				else h += this.Data.Type + '</span><span class="extension">' + this.Data.Extension + '</span><span class="size">' + this.Data.Size;
+				h += '</span></a>';
+				$("#MyFiles").append(h);
+				if (this.Data.Actions == 0) $("#" + this.Id).draggable({ helper: function () { return $('<div id="dragobject"><img /><span></span></div>'); }, start: function (event, ui) {
+					var item = null;
+					for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
+					if (!item.Selected) for (var x = 0; x < items.length; x++) if (items[x].Selected) { items[x].Selected = false; items[x].Refresh(); }
+					item.Selected = true;
+					item.Refresh();
+					$("#dragobject").show();
+					$("#dragobject img").show().attr("src", item.Data.Icon);
+					$("#dragobject span").text("").hide();
+				}
+				});
+				if (this.Data.Type == 'Directory') $("#" + this.Id).droppable({ accept: '.Selectable', activeClass: 'droppable-active', hoverClass: 'droppable-hover', drop: function (ev, ui) {
 
-			    }, over: function (event, ui) {
-			        var item = null;
-			        for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
-			        $("#dragobject span").text(((keys.ctrl) ? "Copy" : "Move") + " To " + item.Data.Name);
-			        $("#dragobject span").show();
-			    }, out: function (event, ui) {
-			        $("#dragobject span").text("");
-			        $("#dragobject span").hide();
-			    }
-			    });
-			    if (typeof (window.FileReader) != 'undefined') {
-			        $("#" + this.Id).attr("dropzone", "copy<%=DropZoneAccepted %>");
-			        $("#" + this.Id).bind("dragover", function () {
-			            var item = null;
-			            for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
-			            $("#uploadto").text("Upload To " + item.Data.Name);
-			            return false;
-			        });
-			        $("#" + this.Id).bind("dragleave", function () {
-			            $("#uploadto").text("");
-			            return false;
-			        });
-			        $("#" + this.Id).bind("dragend", function () {
-			            $("#uploadto").text("");
-			            return false;
-			        });
-			    }
-			    $("#" + this.Id).bind("click", this.Click);
-			    $("#" + this.Id).contextMenu('contextMenu', {
-			        onContextMenu: function (e) {
-			            var element = $(e.target);
-			            if (!element.is("a")) element = element.parent("a");
-			            var item = null;
-			            for (var x = 0; x < items.length; x++) if (items[x].Id == element.attr("id")) item = items[x];
-			            if (!item.Selected) for (var x = 0; x < items.length; x++) if (items[x].Selected) { items[x].Selected = false; items[x].Refresh(); }
-			            item.Selected = true;
-			            item.Refresh();
-			            return true;
-			        },
-			        onShowMenu: function (e, menu) {
-			            if (SelectedItems().length > 1) { $("#con-properties", menu).remove(); $("#con-preview", menu).remove(); }
-			            else {
-			                if (SelectedItems()[0].Data.Extension != ".txt" && SelectedItems()[0].Data.Extension != ".xlsx" && SelectedItems()[0].Data.Extension != ".docx" && SelectedItems()[0].Data.Extension != ".xls" && SelectedItems()[0].Data.Extension != ".csv" && SelectedItems()[0].Data.Extension != ".png" && SelectedItems()[0].Data.Extension != ".gif" && SelectedItems()[0].Data.Extension != ".jpg" && SelectedItems()[0].Data.Extension != ".jpeg" && SelectedItems()[0].Data.Extension != ".bmp")
-			                    $("#con-preview", menu).remove();
-			            }
-			            return menu;
-			        },
-			        bindings: {
-			            'con-properties': function (t) {
-			                if (SelectedItems().length > 1) { alert("This only works on 1 item"); return false; }
-			                $("#properties").dialog({ autoOpen: true, modal: true, buttons: {
-			                    "OK": function () {
-			                        $(this).dialog("close");
-			                        $("#propcont").html("Loading...");
-			                    }
-			                }
-			                });
-			                $.ajax({
-			                    type: 'GET',
-			                    url: '<%=ResolveUrl("~/api/MyFiles/Properties/")%>' + SelectedItems()[0].Data.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, ""),
-			                    dataType: 'json',
-			                    contentType: 'application/json',
-			                    success: function (data) {
-			                        var s = '<div><img src="' + data.Icon + '" alt="" style="width: 32px; float: left; margin-right: 40px;" />' + data.Name + '</div>';
-			                        s += '<hr style="height: 1px; border-width: 1px" />';
-			                        if (data.Type == "File Folder") {
-			                            s += '<div><label>Type: </label>' + data.Type + '</div>';
-			                            s += '<div><label>Location: </label>' + data.Location + '</div>';
-			                            s += '<div><label>Size: </label>' + data.Size + '</div>';
-			                            s += '<div><label>Contains: </label>' + data.Contents + '</div>';
-			                            s += '<hr style="height: 1px; border-width: 1px" />';
-			                            s += '<div><label>Created: </label>' + data.DateCreated + '</div>';
-			                        } else {
-			                            s += '<div><label>Type of file: </label>' + data.Type + ' (' + data.Extension + ')</div>';
-			                            s += '<hr style="height: 1px; border-width: 1px" />';
-			                            s += '<div><label>Location: </label>' + data.Location + '</div>';
-			                            s += '<div><label>Size: </label>' + data.Size + '</div>';
-			                            s += '<hr style="height: 1px; border-width: 1px" />';
-			                            s += '<div><label>Created: </label>' + data.DateCreated + '</div>';
-			                            s += '<div><label>Modified: </label>' + data.DateModified + '</div>';
-			                            s += '<div><label>Accessed: </label>' + data.DateAccessed + '</div>';
-			                        }
-			                        $("#propcont").html(s);
-			                    }, error: OnError
-			                });
-			            },
-			            'con-preview': function (t) {
-			                if (SelectedItems().length > 1) { alert("This only works on 1 item"); return false; }
-			                $("#preview").dialog({ autoOpen: true, height: 600, width: 900, modal: true, buttons: {
-			                    "OK": function () {
-			                        $("#previewcont").html("Loading...");
-			                        $(this).dialog("close");
-			                    }
-			                }
-			                });
-			                $.ajax({
-			                    type: 'GET',
-			                    url: '<%=ResolveUrl("~/api/MyFiles/Preview/")%>' + SelectedItems()[0].Data.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, ""),
-			                    dataType: 'json',
-			                    contentType: 'application/json',
-			                    success: function (data) {
-			                        $("#previewcont").html(data);
-			                    }, error: OnError
-			                });
-			            }
-			        }
-			    });
+				}, over: function (event, ui) {
+					var item = null;
+					for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
+					$("#dragobject span").text(((keys.ctrl) ? "Copy" : "Move") + " To " + item.Data.Name).show();
+				}, out: function (event, ui) {
+					$("#dragobject span").text("").hide();
+				}
+				});
+				if (typeof (window.FileReader) != 'undefined' && this.Data.Type == 'Directory' && this.Data.Actions == 0) {
+					$("#" + this.Id).attr("dropzone", "copy<%=DropZoneAccepted %>").bind("dragover", function () {
+						var item = null;
+						for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
+						$("#uploadto").text("Upload To " + item.Data.Name);
+						return false;
+					}).bind("dragleave", function () {
+						$("#uploadto").text("");
+						return false;
+					}).bind("dragend", function () {
+						$("#uploadto").text("");
+						return false;
+					});
+				}
+				$("#" + this.Id).bind("click", this.Click).contextMenu('contextMenu', {
+					onContextMenu: function (e) {
+						var element = $(e.target);
+						if (!element.is("a")) element = element.parent("a");
+						var item = null;
+						for (var x = 0; x < items.length; x++) if (items[x].Id == element.attr("id")) item = items[x];
+						if (!item.Selected) for (var x = 0; x < items.length; x++) if (items[x].Selected) { items[x].Selected = false; items[x].Refresh(); }
+						item.Selected = true;
+						item.Refresh();
+						return true;
+					},
+					onShowMenu: function (e, menu) {
+						if (SelectedItems().length > 1) { $("#con-properties", menu).remove(); $("#con-preview", menu).remove(); }
+						else {
+							if (SelectedItems()[0].Data.Extension != ".txt" && SelectedItems()[0].Data.Extension != ".xlsx" && SelectedItems()[0].Data.Extension != ".docx" && SelectedItems()[0].Data.Extension != ".xls" && SelectedItems()[0].Data.Extension != ".csv" && SelectedItems()[0].Data.Extension != ".png" && SelectedItems()[0].Data.Extension != ".gif" && SelectedItems()[0].Data.Extension != ".jpg" && SelectedItems()[0].Data.Extension != ".jpeg" && SelectedItems()[0].Data.Extension != ".bmp")
+								$("#con-preview", menu).remove();
+						}
+						return menu;
+					},
+					bindings: {
+						'con-properties': function (t) {
+							if (SelectedItems().length > 1) { alert("This only works on 1 item"); return false; }
+							$("#properties").dialog({ autoOpen: true, modal: true, buttons: {
+								"OK": function () {
+									$(this).dialog("close");
+									$("#propcont").html("Loading...");
+								}
+							}
+							});
+							$.ajax({
+								type: 'GET',
+								url: '<%=ResolveUrl("~/api/MyFiles/Properties/")%>' + SelectedItems()[0].Data.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, ""),
+								dataType: 'json',
+								contentType: 'application/json',
+								success: function (data) {
+									var s = '<div><img src="' + data.Icon + '" alt="" style="width: 32px; float: left; margin-right: 40px;" />' + data.Name + '</div>';
+									s += '<hr style="height: 1px; border-width: 1px" />';
+									if (data.Type == "File Folder") {
+										s += '<div><label>Type: </label>' + data.Type + '</div>';
+										s += '<div><label>Location: </label>' + data.Location + '</div>';
+										s += '<div><label>Size: </label>' + data.Size + '</div>';
+										s += '<div><label>Contains: </label>' + data.Contents + '</div>';
+										s += '<hr style="height: 1px; border-width: 1px" />';
+										s += '<div><label>Created: </label>' + data.DateCreated + '</div>';
+									} else {
+										s += '<div><label>Type of file: </label>' + data.Type + ' (' + data.Extension + ')</div>';
+										s += '<hr style="height: 1px; border-width: 1px" />';
+										s += '<div><label>Location: </label>' + data.Location + '</div>';
+										s += '<div><label>Size: </label>' + data.Size + '</div>';
+										s += '<hr style="height: 1px; border-width: 1px" />';
+										s += '<div><label>Created: </label>' + data.DateCreated + '</div>';
+										s += '<div><label>Modified: </label>' + data.DateModified + '</div>';
+										s += '<div><label>Accessed: </label>' + data.DateAccessed + '</div>';
+									}
+									$("#propcont").html(s);
+								}, error: OnError
+							});
+						},
+						'con-preview': function (t) {
+							if (SelectedItems().length > 1) { alert("This only works on 1 item"); return false; }
+							$("#preview").dialog({ autoOpen: true, height: 600, width: 900, modal: true, buttons: {
+								"OK": function () {
+									$("#previewcont").html("Loading...");
+									$(this).dialog("close");
+								}
+							}
+							});
+							$.ajax({
+								type: 'GET',
+								url: '<%=ResolveUrl("~/api/MyFiles/Preview/")%>' + SelectedItems()[0].Data.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, ""),
+								dataType: 'json',
+								contentType: 'application/json',
+								success: function (data) {
+									$("#previewcont").html(data);
+								}, error: OnError
+							});
+						}
+					}
+				});
 			};
 			this.Refresh = function () {
-				$("#" + this.Id).attr("href", (this.Data.Path.match(/\.\./i) ? this.Data.Path.replace(/\\/g, "/") : '#' + this.Data.Path));
-				$("#" + this.Id).attr("title", this.Data.Name);
+				$("#" + this.Id).attr("href", (this.Data.Path.match(/\.\./i) ? this.Data.Path.replace(/\\/g, "/") : '#' + this.Data.Path)).attr("title", this.Data.Name);
 				if (this.Selected) $("#" + this.Id).addClass("Selected");
 				else $("#" + this.Id).removeClass("Selected");
 				var label = this.Data.Name;
@@ -317,7 +306,6 @@
 					contentType: 'application/json;',
 					success: function (data) {
 						items = new Array();
-						$("MyFiles").removeAttr("class");
 						$("#MyFiles").html("");
 						for (var i = 0; i < data.length; i++)
 							items.push(new Drive(data[i]));
@@ -326,19 +314,53 @@
 					}, error: OnError
 				});
 			} else {
-				$.ajax({
-					type: 'GET',
-					url: '<%=ResolveUrl("~/api/MyFiles/")%>' + curpath.replace(/\\/gi, "/"),
-					dataType: 'json',
-					contentType: 'application/json',
-					success: function (data) {
-						items = new Array();
-						$("#MyFiles").html("");
-						for (var i = 0; i < data.length; i++)
-							items.push(new Item(data[i]));
-						for (var i = 0; i < items.length; i++) items[i].Render();
-					}, error: OnError
-				});
+			$.ajax({
+				type: 'GET',
+				url: '<%=ResolveUrl("~/api/MyFiles/")%>' + curpath.replace(/\\/gi, "/"),
+				dataType: 'json',
+				contentType: 'application/json',
+				success: function (data) {
+					items = new Array();
+					$("#MyFiles").html("");
+					for (var i = 0; i < data.length; i++)
+						items.push(new Item(data[i]));
+					for (var i = 0; i < items.length; i++) items[i].Render();
+					$("#toolbar").slideDown();
+					$("#MyFilesHeaddings .name").css("width", $("#MyFiles > a .label").width() + $("#MyFiles > a img").width() + 4);
+					$("#MyFilesHeaddings .type").css("width", $("#MyFiles > a .type").width() + 2);
+					$("#MyFilesHeaddings .extension").css("width", $("#MyFiles > a .extension").width() + 2);
+					$("#MyFilesHeaddings .size").css("width", $("#MyFiles > a .size").width() + 2);
+				}, error: OnError
+			});
+			$.ajax({
+				type: 'GET',
+				url: '<%=ResolveUrl("~/api/MyFiles/info/")%>' + curpath.replace(/\\/gi, "/"),
+				dataType: 'json',
+				contentType: 'application/json',
+				success: function (data) {
+					curitem = data;
+					if (curitem.Actions == 0) {
+						$("#newfolderspan").animate({ opacity: 1.0 }, 500, function () { $("#newfolderspan").show(); });
+						$("#upload").animate({ opacity: 1.0 }, 500, function () { $("#upload").show(); });
+					}
+					else {
+						$("#newfolderspan").animate({ opacity: 0 }, 500, function () { $("#newfolderspan").hide(); });
+						$("#upload").animate({ opacity: 0 }, 500, function () { $("#upload").hide(); });
+					}
+					if (typeof (window.FileReader) != 'undefined' && curitem.Actions == 0) {
+						$("#MyFiles").attr("dropzone", "copy<%=DropZoneAccepted %>").bind("dragover", function () {
+							$("#uploadto").text("Upload To " + curitem.Name);
+							return false;
+						}).bind("dragleave", function () {
+							$("#uploadto").text("");
+							return false;
+						}).bind("dragend", function () {
+							$("#uploadto").text("");
+							return false;
+						});
+					}
+				}, error: OnError
+			});
 			}
 		}
 		function searchres(data) {
@@ -346,8 +368,8 @@
 			return data.match(re);
 		}
 		$(function () {
-		    $("#properties").dialog({ autoOpen: false });
-		    $("#preview").dialog({ autoOpen: false });
+			$("#properties").dialog({ autoOpen: false });
+			$("#preview").dialog({ autoOpen: false });
 			$("#Views").animate({ height: 'toggle' });
 			$("#Tree").dynatree({ imagePath: "../images/setup/", selectMode: 1, minExpandLevel: 1, noLink: false, children: [{ icon: "../myfiles-i.png", title: "My Drives", href: "#", isFolder: true, isLazy: true}], fx: { height: "toggle", duration: 200 },
 				onLazyRead: function (node) {
@@ -385,18 +407,14 @@
 				},
 				onRender: function (dtnode, nodeSpan) {
 					if (dtnode.data.href != "#") {
-						$(nodeSpan).children("a").attr("href", dtnode.data.href);
-						$(nodeSpan).children("a").bind("click", function () { window.location.href = $(this).attr("href"); });
-						$(nodeSpan).children("a").droppable({ accept: '.Selectable', activeClass: 'droppable-active', hoverClass: 'droppable-hover', drop: function (ev, ui) {
+						$(nodeSpan).children("a").attr("href", dtnode.data.href).bind("click", function () { window.location.href = $(this).attr("href"); }).droppable({ accept: '.Selectable', activeClass: 'droppable-active', hoverClass: 'droppable-hover', drop: function (ev, ui) {
 
 						}, over: function (event, ui) {
-							$("#dragobject span").text(((keys.ctrl) ? "Copy" : "Move") + " To " + $(this).text());
-							$("#dragobject span").show();
+							$("#dragobject span").text(((keys.ctrl) ? "Copy" : "Move") + " To " + $(this).text()).show();
 							temp = $(this);
 							if (lazytimer == null) lazytimer = setTimeout(function () { $("#Tree").dynatree("getTree").getNodeByKey(temp.attr("href").substr(1)).toggleExpand(); clearTimeout(lazytimer); lazytimer = null; }, 1000);
 						}, out: function (event, ui) {
-							$("#dragobject span").text("");
-							$("#dragobject span").hide();
+							$("#dragobject span").text("").hide();
 							if (lazytimer != null) {
 								clearTimeout(lazytimer);
 								lazytimer = null;
@@ -408,28 +426,19 @@
 				}
 			});
 			$("#filter").val("");
-			if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) {
-				curpath = window.location.href.split("#")[1];
-				if ($("#backup").width() < 23) {
-					$("#backup").removeAttr("style");
-					$("#search").animate({ opacity: 1.0 });
-					$("#backup").animate({ width: 25, opacity: 1.0 });
-				}
-			}
-			else {
-				curpath = null;
-				if ($("#backup").width() != 0) {
-					$("#backup").animate({ width: 0, opacity: 0.0 }, 200, function () {
-						$("#backup").css("display", "none");
-					});
-					$("#search").animate({ opacity: 0.0 });
-				}
-			}
-			Load();
-			$("button").button();
-			$("button").click(function () { return false; });
+			$("button").button().click(function () { return false; });
 			$("button.dropdown").button({ icons: { secondary: "ui-icon-carat-1-s"} });
-			$("#backup").click(function () { history.go(-1); return false; });
+			$("#backup").click(function () { history.go(-1); return false; }).button({ icons: { primary: "ui-icon-circle-arrow-w" }, text: false }).css("height", "26px");
+			$("#newfolder").click(function () {
+				if ($("#newfolder span").text() == "New Folder") {
+					$("#newfolder span").text("Create");
+					$("#newfoldertext").val("").css("margin", "0 4px").animate({ width: 150, opacity: 1.0 }).focus();
+				}
+			});
+			$("#newfoldertext").focusout(function () {
+				$("#newfoldertext").animate({ width: 0, opacity: 0.0 }).css("margin", "0");
+				$("#newfolder span").text("New Folder");
+			}).trigger("focusout");
 			$(".button").button();
 			$("#view").click(function () {
 				if (showView == 0) {
@@ -451,12 +460,8 @@
 			$("#Views button").click(function () {
 				if ($(this).text() == "Details") {
 					viewMode = 1;
-					$("#MyFiles").addClass("details");
-					$("#MyFiles").removeClass("small");
-					$("#MyFiles").removeClass("medium");
-					$("#MyFiles").removeClass("large");
+					$("#MyFiles").addClass("details").removeClass("small").removeClass("medium").removeClass("large").css("padding-top", $("#toolbar").height() + 34);
 					$("#MyFilesHeaddings").css("display", "block");
-					$("#MyFiles").css("padding-top", $("#toolbar").height() + 34);
 					$("#MyFilesHeaddings .name").css("width", $("#MyFiles > a .label").width() + $("#MyFiles > a img").width() + 4);
 					$("#MyFilesHeaddings .type").css("width", $("#MyFiles > a .type").width() + 2);
 					$("#MyFilesHeaddings .extension").css("width", $("#MyFiles > a .extension").width() + 2);
@@ -464,64 +469,45 @@
 				}
 				else if ($(this).text() == "Small Icons") {
 					viewMode = 2;
-					$("#MyFiles").addClass("small");
-					$("#MyFiles").removeClass("details");
-					$("#MyFiles").removeClass("medium");
-					$("#MyFiles").removeClass("large");
+					$("#MyFiles").addClass("small").removeClass("details").removeClass("medium").removeClass("large").css("padding-top", $("#toolbar").height() + 10);
 					$("#MyFilesHeaddings").css("display", "none");
-					$("#MyFiles").css("padding-top", $("#toolbar").height() + 10);
 				}
 				else if ($(this).text() == "Medium Icons") {
-					viewMode = 2;
-					$("#MyFiles").addClass("medium");
-					$("#MyFiles").removeClass("small");
-					$("#MyFiles").removeClass("large");
-					$("#MyFiles").removeClass("details");
+					viewMode = 3;
+					$("#MyFiles").addClass("medium").removeClass("small").removeClass("large").removeClass("details").css("padding-top", $("#toolbar").height() + 10);
 					$("#MyFilesHeaddings").css("display", "none");
-					$("#MyFiles").css("padding-top", $("#toolbar").height() + 10);
 				}
 				else if ($(this).text() == "Large Icons") {
-					viewMode = 2;
-					$("#MyFiles").addClass("large");
-					$("#MyFiles").removeClass("medium");
-					$("#MyFiles").removeClass("small");
-					$("#MyFiles").removeClass("details");
+					viewMode = 4;
+					$("#MyFiles").addClass("large").removeClass("medium").removeClass("small").removeClass("details").css("padding-top", $("#toolbar").height() + 10);
 					$("#MyFilesHeaddings").css("display", "none");
-					$("#MyFiles").css("padding-top", $("#toolbar").height() + 10);
 				}
 				else {
 					viewMode = 0;
-					$("#MyFiles").removeClass("details");
-					$("#MyFiles").removeClass("small");
-					$("#MyFiles").removeClass("medium");
-					$("#MyFiles").removeClass("large");
+					$("#MyFiles").removeClass("details").removeClass("small").removeClass("medium").removeClass("large").css("padding-top", $("#toolbar").height() + 10);
 					$("#MyFilesHeaddings").css("display", "none");
-					$("#MyFiles").css("padding-top", $("#toolbar").height() + 10);
 				}
 			});
-			$("#toolbar").css("width", $("#myfilescontent").width() - 10);
-			$("#toolbar").css("top", $("#myfilescontent").offset().top);
+			$("#toolbar").css("width", $("#myfilescontent").width() - 10).css("top", $("#myfilescontent").offset().top);
 			$("#Tree").css("top", $("#myfilescontent").offset().top + $("#toolbar").height() + 10);
-			$("#MyFiles").css("margin-left", $("#Tree").width() + 5);
-			$("#MyFiles").css("padding-top", $("#toolbar").height() + 10);
-			$("#Views").css("top", $("#view").offset().top + $("#view").parent().height());
-			$("#Views").css("left", $("#view").offset().left - ($("#Views").width() - $("#view").width()) + 1);
-			$("#MyFilesHeaddings").css("margin-left", $("#Tree").width() + 5);
-			$("#MyFilesHeaddings").css("top", $("#myfilescontent").offset().top + $("#toolbar").height() + 10);
+			$("#MyFiles").css("margin-left", $("#Tree").width() + 5).css("padding-top", $("#toolbar").height() + 10);
+			$("#Views").css("top", $("#view").offset().top + $("#view").parent().height()).css("left", $("#view").offset().left - ($("#Views").width() - $("#view").width()) + 1);
+			$("#MyFilesHeaddings").css("margin-left", $("#Tree").width() + 5).css("top", $("#myfilescontent").offset().top + $("#toolbar").height() + 10);
 			$(window).scroll(function (event) {
 				if ($(this).scrollTop() >= $("#myfilesheader").offset().top + $("#myfilesheader").height()) {
-					$("#toolbar").css("position", "fixed"); $("#toolbar").css("top", 0);
-					$("#Tree").css("position", "fixed"); $("#Tree").css("top", $("#toolbar").height() + 10);
-					$("#MyFilesHeaddings").css("position", "fixed"); $("#MyFilesHeaddings").css("top", $("#toolbar").height() + 8);
-					$("#Views").css("position", "fixed"); $("#Views").css("top", $("#toolbar").height() + 4);
+					$("#toolbar").css("position", "fixed").css("top", 0);
+					$("#Tree").css("position", "fixed").css("top", $("#toolbar").height() + 10);
+					$("#MyFilesHeaddings").css("position", "fixed").css("top", $("#toolbar").height() + 8);
+					$("#Views").css("position", "fixed").css("top", $("#toolbar").height() + 4);
 				}
 				else {
-					$("#toolbar").css("position", "absolute"); $("#toolbar").css("top", $("#myfilesheader").offset().top + $("#myfilesheader").height());
-					$("#Tree").css("position", "absolute"); $("#Tree").css("top", $("#myfilesheader").offset().top + $("#myfilesheader").height() + $("#toolbar").height() + 10);
-					$("#Views").css("position", "absolute"); $("#Views").css("top", $("#myfilesheader").offset().top + $("#myfilesheader").height() + $("#toolbar").height() + 4);
-					$("#MyFilesHeaddings").css("position", "absolute"); $("#MyFilesHeaddings").css("top", $("#myfilesheader").offset().top + $("#myfilesheader").height() + $("#toolbar").height() + 8);
+					$("#toolbar").css("position", "absolute").css("top", $("#myfilesheader").offset().top + $("#myfilesheader").height());
+					$("#Tree").css("position", "absolute").css("top", $("#myfilesheader").offset().top + $("#myfilesheader").height() + $("#toolbar").height() + 10);
+					$("#Views").css("position", "absolute").css("top", $("#myfilesheader").offset().top + $("#myfilesheader").height() + $("#toolbar").height() + 4);
+					$("#MyFilesHeaddings").css("position", "absolute").css("top", $("#myfilesheader").offset().top + $("#myfilesheader").height() + $("#toolbar").height() + 8);
 				}
 			});
+			$(window).trigger("hashchange");
 		});
 		$(document).bind('keydown', function (e) { keys.shift = (e.keyCode == 16); keys.ctrl = (e.keyCode == 17); });
 		$(document).bind('keyup', function (e) { keys.shift = keys.ctrl = false; });
