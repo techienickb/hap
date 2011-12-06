@@ -7,11 +7,13 @@ using HAP.Data.ComputerBrowser;
 using HAP.Web.Configuration;
 using HAP.AD;
 using Microsoft.Win32;
+using System.Web;
 
 namespace HAP.Data.MyFiles
 {
     public class Properties
     {
+        public AccessControlActions Actions { get; set; }
         public string Name { get; set; }
         public string DateCreated { get; set; }
         public string Location { get; set; }
@@ -26,6 +28,7 @@ namespace HAP.Data.MyFiles
         public Properties() { }
         public Properties(FileInfo file, DriveMapping mapping, User user)
         {
+            Actions = isWriteAuth(mapping) ? HAP.Data.MyFiles.AccessControlActions.Change : HAP.Data.MyFiles.AccessControlActions.View;
             Name = file.Name + (file.Name.Contains(file.Extension) ? "" : file.Extension);
             Extension = file.Extension;
             DateCreated = file.CreationTime.ToString();
@@ -53,17 +56,25 @@ namespace HAP.Data.MyFiles
             else Icon = "../images/icons/file.png";
         }
 
-        public Properties(DirectoryInfo dir, DriveMapping mapping, User user)
+        /// <summary>
+        /// Create Properties for quick use
+        /// </summary>
+        /// <param name="dir">Directory</param>
+        /// <param name="user">User</param>
+        /// <param name="mapping">Drive Mapping</param>
+        public Properties(DirectoryInfo dir, User user, DriveMapping mapping)
         {
-            Name = dir.Name;
-            DateCreated = dir.CreationTime.ToString();
-            Location = Converter.UNCtoDrive(dir.Parent.FullName, mapping, user).Replace(":", "");
-            long s = 0;
-            Contents = dir.GetFiles().Length + " Files, ";
-            Contents += dir.GetDirectories().Length + " Folders";
-            foreach (FileInfo f in dir.GetFiles("*.*", SearchOption.AllDirectories))
-                s += f.Length;
-            Size = File.parseLength(s);
+            DriveMapping m;
+            Actions = isWriteAuth(mapping) ? HAP.Data.MyFiles.AccessControlActions.Change : HAP.Data.MyFiles.AccessControlActions.View;
+            if (Actions == HAP.Data.MyFiles.AccessControlActions.Change)
+            {
+                try { System.IO.File.Create(System.IO.Path.Combine(dir.FullName, "temp.ini")).Close(); System.IO.File.Delete(System.IO.Path.Combine(dir.FullName, "temp.ini")); }
+                catch { Actions = HAP.Data.MyFiles.AccessControlActions.View; }
+            }
+            try { dir.GetDirectories(); }
+            catch { Actions = HAP.Data.MyFiles.AccessControlActions.None; }
+            Name = (dir.FullName == Converter.DriveToUNC("", mapping.Drive.ToString(), out m, user) + '\\') ? mapping.Name : dir.Name;
+            Location = Converter.UNCtoDrive(dir.FullName, mapping, user);
             Type = "File Folder";
             if (Type != "File")
             {
@@ -71,6 +82,57 @@ namespace HAP.Data.MyFiles
                 if (Icon.EndsWith(".ico")) Icon = "../api/mycomputer/" + File.ParseForImage(dir);
             }
             else Icon = "../images/icons/file.png";
+        }
+
+        public Properties(DirectoryInfo dir, DriveMapping mapping, User user)
+        {
+            Name = dir.Name;
+            DateCreated = dir.CreationTime.ToString();
+            DriveMapping m;
+            Actions = isWriteAuth(mapping) ? HAP.Data.MyFiles.AccessControlActions.Change : HAP.Data.MyFiles.AccessControlActions.View;
+            if (Actions == HAP.Data.MyFiles.AccessControlActions.Change)
+            {
+                try { System.IO.File.Create(System.IO.Path.Combine(dir.FullName, "temp.ini")).Close(); System.IO.File.Delete(System.IO.Path.Combine(dir.FullName, "temp.ini")); }
+                catch { Actions = HAP.Data.MyFiles.AccessControlActions.View; }
+            }
+            try { dir.GetDirectories(); }
+            catch { Actions = HAP.Data.MyFiles.AccessControlActions.None; }
+            if (dir.FullName == Converter.DriveToUNC("", mapping.Drive.ToString(), out m, user) + "\\")
+            {
+                Location = null;
+            }
+            else
+            {
+                Location = Converter.UNCtoDrive(dir.Parent.FullName, mapping, user).Replace(":", "");
+
+                long s = 0;
+                Contents = dir.GetFiles().Length + " Files, ";
+                Contents += dir.GetDirectories().Length + " Folders";
+                foreach (FileInfo f in dir.GetFiles("*.*", SearchOption.AllDirectories))
+                    s += f.Length;
+                Size = File.parseLength(s);
+            }
+            Type = "File Folder";
+            if (Type != "File")
+            {
+                Icon = "../images/icons/" + File.ParseForImage(dir);
+                if (Icon.EndsWith(".ico")) Icon = "../api/mycomputer/" + File.ParseForImage(dir);
+            }
+            else Icon = "../images/icons/file.png";
+        }
+
+        private bool isWriteAuth(DriveMapping path)
+        {
+            if (path == null) return true;
+            if (path.EnableWriteTo == "All") return true;
+            else if (path.EnableWriteTo != "None")
+            {
+                bool vis = false;
+                foreach (string s in path.EnableWriteTo.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
+                    if (!vis) vis = HttpContext.Current.User.IsInRole(s.Trim());
+                return vis;
+            }
+            return false;
         }
     }
 }
