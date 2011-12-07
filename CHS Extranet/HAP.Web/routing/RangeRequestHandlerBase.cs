@@ -209,10 +209,10 @@ public abstract class RangeRequestHandlerBase : IHttpHandler
     {
         get
         {
+            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == HAP.Web.Configuration.AuthMode.Windows) return ((HAP.AD.User)Membership.GetUser());
             if (_ADUser == null)
             {
                 _ADUser = new User();
-                if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == HAP.Web.Configuration.AuthMode.Windows) return ((HAP.AD.User)Membership.GetUser()); ;
                 HttpCookie token = HttpContext.Current.Request.Cookies["token"];
                 if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
                 _ADUser.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));

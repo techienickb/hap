@@ -88,3 +88,9 @@ button.back span { top: 4px; }
 #dragobject img { border: solid 1px #666; background: #fff; opacity: 0.8; vertical-align: middle; }
 #dragobject span { display: inline-block; margin-left: 5px; background: #666; border: solid 1px #666; color: #fff; padding: 0 2px; }
 #Document { line-height: normal; height: auto; }
+
+#uploadprogress { position: fixed; bottom: 0; width: 300px; z-index: 2045; background: #fff; }
+#uploadprogress .ui-widget-header { height: 26px; line-height: 26px; padding-left: 10px; font-size: 14px }
+
+#uploadprogress #progresses { padding: 6px; }
+#uploadprogress #progresses div { white-space: nowrap; overflow: hidden; height: 20px; line-height: 20px; text-overflow: ellipse; }

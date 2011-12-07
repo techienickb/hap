@@ -139,6 +139,20 @@ namespace HAP.Web.API
         }
 
         [OperationContract]
+        [WebGet(UriTemplate = "Exists/{Drive}/{*Path}")]
+        public Properties Exists(string Drive, string Path)
+        {
+            try
+            {
+                return Properties(Drive, Path);
+            }
+            catch
+            {
+                return new Properties();
+            }
+        }
+
+        [OperationContract]
         [WebGet(UriTemplate="Properties/{Drive}/{*Path}")]
         public Properties Properties(string Drive, string Path)
         {

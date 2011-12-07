@@ -5,6 +5,9 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using HAP.Web.Configuration;
+using System.Web.Configuration;
+using System.Configuration;
+using System.IO;
 
 namespace HAP.Web.MyFiles
 {
@@ -12,6 +15,35 @@ namespace HAP.Web.MyFiles
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+        }
+
+        /// <summary>
+        /// The max file size in bytes
+        /// </summary>
+        protected int maxRequestLength
+        {
+            get
+            {
+                HttpRuntimeSection section = ConfigurationManager.GetSection("system.web/httpRuntime") as HttpRuntimeSection;
+
+                if (section != null)
+                    return section.MaxRequestLength * 1024; // Cofig Value
+                else
+                    return 4096 * 1024; // Default Value
+            }
+        }
+
+        protected string AcceptedExtensions
+        {
+            get
+            {
+                List<string> filters = new List<string>();
+                foreach (Filter f in config.MySchoolComputerBrowser.Filters)
+                    if (isAuth(f) && f.Expression == "*.*") return "";
+                    else if (isAuth(f))
+                        filters.Add(f.Name + " - " + f.Expression.Trim());
+                return string.Join("\n ", filters.ToArray());
+            }
         }
 
         protected string DropZoneAccepted
@@ -40,6 +72,22 @@ namespace HAP.Web.MyFiles
                 return vis;
             }
             return false;
+        }
+
+        protected void uploadbtn_Click(object sender, EventArgs e)
+        {
+            ADUser.Impersonate();
+            DriveMapping mapping;
+            string path = HAP.Data.ComputerBrowser.Converter.DriveToUNC(p.Value, out mapping);
+            if (isAuth(uploadedfiles.PostedFile.FileName)) uploadedfiles.PostedFile.SaveAs(Path.Combine(path, uploadedfiles.PostedFile.FileName));
+            ADUser.EndImpersonate();
+        }
+
+        private bool isAuth(string extension)
+        {
+            foreach (Filter filter in config.MySchoolComputerBrowser.Filters)
+                if (filter.Expression.Contains(extension)) return true;
+            return isAuth(config.MySchoolComputerBrowser.Filters.Single(fil => fil.Name == "All Files"));
         }
     }
 }

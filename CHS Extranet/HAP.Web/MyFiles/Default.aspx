@@ -32,6 +32,16 @@
 		<li id="con-properties">Properties</li>
 	  </ul>
 	</div>
+	<div id="uploaders" title="Upload">
+		<input type="file" id="uploadedfiles" runat="server" multiple="multiple" />
+		<asp:Button runat="server" style="display: none;" id="uploadbtn" 
+			onclick="uploadbtn_Click" /><asp:HiddenField runat="server" id="p" />
+	</div>
+	<div id="uploadprogress" class="tile-border-color" style="border-width: 1px; border-style: solid; border-bottom: 0;">
+		<div class="tile-color ui-widget-header">Upload Progress</div>
+		<div id="progresses">
+		</div>
+	</div>
 	<div id="myfilescontent">
 	<div id="toolbar" style="padding: 4px; margin-bottom: 4px;" class="ui-widget-header">
 		<div style="float: right;">
@@ -64,6 +74,7 @@
 		var lazytimer = null;
 		var temp = null;
 		var table = null;
+		var uploads = new Array();
 		var curitem = null;
 		var curpath = null;
 		$(window).hashchange(function () {
@@ -92,6 +103,62 @@
 			console.log(ajaxOptions);
 			console.log(xhr);
 			alert(thrownError);
+		}
+		function Upload(file, path) {
+			this.File = file;
+			this.Path = path;
+			this.Start = function() {
+				$("#progresses").append('<div id="upload-' + this.File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_") + '"><div class="progressbar" style="display: inline-block; width: 100px; height: 20px; vertical-align: middle; overflow: hidden;"></div> ' + this.File.name + '</div>');
+				$("#upload-" + this.File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_") + " .progressbar").progressbar({ value: 0 });
+				if ("<%=DropZoneAccepted %>".toLowerCase().indexOf(this.File.type.toLowerCase()) == 0 && "<%=DropZoneAccepted %>" != "") {
+					alert(this.File.name + " is an restricted file type\n\n you can only select\n <%=AcceptedExtensions %>");
+				}
+				// Validate file size
+				if(this.File.size > <%=maxRequestLength%>) {
+					alert(this.File.name + " is Too Big to Upload!");
+					return false;
+				}
+
+				$.ajax({
+					type: 'GET',
+					url: '<%=ResolveUrl("~/api/MyFiles/Exists/")%>' + this.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, "") + '/' + this.File.name,
+					dataType: 'json',
+					context: this,
+					contentType: 'application/json',
+					success: function (data) {
+						if (data.Name == null || confirm("The file " + this.File.name + " already exists\n\nDo you want to overwrite it?")) this.ContinueUpload(this.File.name);
+						else { 
+							$("#upload-" + this.File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_")).remove();
+							if (uploads.length == 1) $("#uploadprogress").slideUp('slow');
+							uploads.pop(this);
+						}
+					}, error: OnError
+				});
+				return true;
+			};
+			this.ContinueUpload = function(a) {
+				var id = a.replace(/[\\'\. \[\]\(\)\-]/g, "_");
+				var xhr = new XMLHttpRequest();
+				xhr.id = id;
+				xhr.open('POST', '<%=ResolveUrl("~/api/myfiles-upload/")%>' + this.Path.replace(/\\/g, '/') + '/', true);
+				xhr.onprogress = function () {
+					var percent = parseInt(this.loaded / this.total * 100);
+					$("#upload-" + this.id + " .progressbar").progressbar("value", percent);
+				};
+				xhr.onreadystatechange = function () {
+					if (this.readyState == 4) {
+						var item = null;
+						for (var i = 0; i < uploads.length; i ++) if (uploads[i].File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_") == this.id) item = uploads[i];
+						if (this.status != 200) alert("Upload of " + item.File.name + " has Failed!");
+						$("#upload-" + this.id + " .progressbar").progressbar("value", 100 );
+						$("#upload-" + id).delay(1000).slideUp('slow', function() { $("#upload-" + id).remove(); if (uploads.length == 0) $("#uploadprogress").slideUp('slow'); });
+						if (curpath.substr(0, curpath.length - 1).replace(/\//g, "\\") == item.Path) Load();
+						uploads.pop(item);
+					}
+				};
+				xhr.setRequestHeader('X_FILENAME', this.File.name);
+				xhr.send(this.File);
+			};
 		}
 		function Drive(data) {
 			this.Data = data;
@@ -163,6 +230,19 @@
 						$("#uploadto").text("");
 						return false;
 					});
+					$("#" + this.Id)[0].ondrop = function (event) {
+						event.preventDefault();
+						$("#uploadprogress").slideDown('slow');
+						var item = null;
+						for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
+						for (var i = 0; i < (event.target.files || event.dataTransfer.files).length; i++) {
+							var file = new Upload((event.target.files || event.dataTransfer.files)[i], item.Data.Path);
+							uploads.push(file);
+							file.Start();
+						}
+						$("#uploadto").text("");
+					};
+
 				}
 				$("#" + this.Id).bind("click", this.Click).contextMenu('contextMenu', {
 					onContextMenu: function (e) {
@@ -358,6 +438,16 @@
 							$("#uploadto").text("");
 							return false;
 						});
+						$("#MyFiles")[0].ondrop = function (event) {
+							event.preventDefault();
+							$("#uploadprogress").slideDown('slow');
+							for (var i = 0; i < (event.target.files || event.dataTransfer.files).length; i++) {
+								var file = new Upload((event.target.files || event.dataTransfer.files)[i], curitem.Location.substr(0, curitem.Location.length - 1).replace(/:/g, ""));
+								uploads.push(file);
+								file.Start();
+							}
+							$("#uploadto").text("");
+						};
 					}
 				}, error: OnError
 			});
@@ -370,6 +460,7 @@
 		$(function () {
 			$("#properties").dialog({ autoOpen: false });
 			$("#preview").dialog({ autoOpen: false });
+			$("#uploaders").dialog({ autoOpen: false });
 			$("#Views").animate({ height: 'toggle' });
 			$("#Tree").dynatree({ imagePath: "../images/setup/", selectMode: 1, minExpandLevel: 1, noLink: false, children: [{ icon: "../myfiles-i.png", title: "My Drives", href: "#", isFolder: true, isLazy: true}], fx: { height: "toggle", duration: 200 },
 				onLazyRead: function (node) {
@@ -488,6 +579,28 @@
 					$("#MyFilesHeaddings").css("display", "none");
 				}
 			});
+			$("#uploadprogress").css("margin-left", $("#myfilescontent").width() - $("#uploadprogress").width()).slideUp('slow');
+			$("#upload").click(function () { $("#uploaders").dialog({ autoOpen: true, modal: true, buttons: { 
+				"Upload": function() { 
+					$("#uploadprogress").slideDown('slow');
+					if ($("#<%=uploadedfiles.ClientID %>")[0].files != null) {
+						for (var i = 0; i < $("#<%=uploadedfiles.ClientID %>")[0].files.length; i++) {
+							var file = new Upload(($("#<%=uploadedfiles.ClientID %>")[0].files)[i], curitem.Location.substr(0, curitem.Location.length - 1).replace(/:/g, ""));
+							uploads.push(file);
+							file.Start();
+						}
+						$("#<%=uploadedfiles.ClientID %>").html($("#<%=uploadedfiles.ClientID %>").html());
+					} else {
+						$("#<%=p.ClientID %>").val(curpath);
+						$("#<%=uploadbtn.ClientID %>").trigger("click");
+						$("#uploadprogress").slideDown('slow');
+						$("#uploadprogress").html("Uploading...<br />This page will refrersh when it has finished");
+					}
+					$("#uploadto").text("");
+					$(this).dialog("close");
+				}, "Close": function() { $(this).dialog("close"); } } 
+			}); });
+			$("#<%=uploadedfiles.ClientID %>").attr("accept", "<%=DropZoneAccepted.Replace("f:", "") %>");
 			$("#toolbar").css("width", $("#myfilescontent").width() - 10).css("top", $("#myfilescontent").offset().top);
 			$("#Tree").css("top", $("#myfilescontent").offset().top + $("#toolbar").height() + 10);
 			$("#MyFiles").css("margin-left", $("#Tree").width() + 5).css("padding-top", $("#toolbar").height() + 10);

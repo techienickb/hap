@@ -16,6 +16,7 @@ namespace HAP.Web.API
             RouteTable.Routes.Add(new Route("api/mycomputer/thumb/{*path}", new ThumbsHandler()));
             RouteTable.Routes.Add(new Route("api/mycomputer/{ext}.ico", new IconHandler()));
             RouteTable.Routes.Add(new Route("api/mycomputer/upload/{*path}", new UploadHandler()));
+            RouteTable.Routes.Add(new Route("api/myfiles-upload/{drive}/{*path}", new MyFiles_UploadHandler()));
             WebServiceHostFactory factory = new WebServiceHostFactory();
             RouteTable.Routes.Add(new ServiceRoute("api/setup", factory, typeof(setup)));
             RouteTable.Routes.Add(new ServiceRoute("api/bookingsystem", factory, typeof(BookingSystem)));

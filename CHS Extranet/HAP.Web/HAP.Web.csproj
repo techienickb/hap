@@ -384,6 +384,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="API\BookingSystem.cs" />
+    <Compile Include="API\MyFiles.Upload.cs" />
     <Compile Include="API\Test.cs" />
     <Compile Include="API\HelpDesk.cs" />
     <Compile Include="API\Icon.cs" />
