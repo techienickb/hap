@@ -136,16 +136,16 @@
 				});
 				return true;
 			};
+			this.xhr = new XMLHttpRequest();
 			this.ContinueUpload = function(a) {
 				var id = a.replace(/[\\'\. \[\]\(\)\-]/g, "_");
-				var xhr = new XMLHttpRequest();
-				xhr.id = id;
-				xhr.open('POST', '<%=ResolveUrl("~/api/myfiles-upload/")%>' + this.Path.replace(/\\/g, '/') + '/', true);
-				xhr.onprogress = function () {
-					var percent = parseInt(this.loaded / this.total * 100);
-					$("#upload-" + this.id + " .progressbar").progressbar("value", percent);
-				};
-				xhr.onreadystatechange = function () {
+				this.xhr = new XMLHttpRequest();
+				this.xhr.id = id;
+				this.xhr.upload.addEventListener("progress", this.onProgress, false);
+				this.xhr.addEventListener("progress", this.onProgress, false);
+				this.xhr.onprogress = this.onProgress;
+				this.xhr.open('POST', '<%=ResolveUrl("~/api/myfiles-upload/")%>' + this.Path.replace(/\\/g, '/') + '/', true);
+				this.xhr.onreadystatechange = function () {
 					if (this.readyState == 4) {
 						var item = null;
 						for (var i = 0; i < uploads.length; i ++) if (uploads[i].File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_") == this.id) item = uploads[i];
@@ -156,8 +156,15 @@
 						uploads.pop(item);
 					}
 				};
-				xhr.setRequestHeader('X_FILENAME', this.File.name);
-				xhr.send(this.File);
+				this.xhr.setRequestHeader('X_FILENAME', this.File.name);
+				this.xhr.send(this.File);
+			};
+			this.onProgress = function (e) {
+				var percent = parseInt((e.loaded / e.total) * 100);
+				for (var i = 0; i < uploads.length; i++) if (uploads[i].File.size == e.total) uploads[i].updateProgress(percent);
+			};
+			this.updateProgress = function (e) {
+				$("#upload-" + this.File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_") + " .progressbar").progressbar("value", e);
 			};
 		}
 		function Drive(data) {
@@ -242,7 +249,6 @@
 						}
 						$("#uploadto").text("");
 					};
-
 				}
 				$("#" + this.Id).bind("click", this.Click).contextMenu('contextMenu', {
 					onContextMenu: function (e) {
@@ -473,7 +479,7 @@
 							success: function (data) {
 								res = [];
 								for (var i = 0; i < data.length; i++)
-									res.push({ title: data[i].Name + " (" + data[i].Path + ")", icon: "../drive.png", href: "#" + data[i].Path, isFolder: true, isLazy: true, noLink: false, key: data[i].Path });
+									res.push({ title: data[i].Name + " (" + data[i].Path + ")", actions: data[i].Actions, icon: "../drive.png", href: "#" + data[i].Path, isFolder: true, isLazy: true, noLink: false, key: data[i].Path });
 								node.setLazyNodeStatus(DTNodeStatus_Ok);
 								node.addChild(res);
 							}, error: OnError
@@ -488,7 +494,7 @@
 								res = [];
 								for (var i = 0; i < data.length; i++)
 									if (data[i].Type == "Directory") {
-										res.push({ title: data[i].Name, href: "#" + data[i].Path, isFolder: true, isLazy: true, noLink: false, key: data[i].Path });
+										res.push({ title: data[i].Name, href: "#" + data[i].Path, actions: data[i].Actions, isFolder: true, isLazy: true, noLink: false, key: data[i].Path });
 									}
 								node.setLazyNodeStatus(DTNodeStatus_Ok);
 								node.addChild(res);
@@ -498,21 +504,50 @@
 				},
 				onRender: function (dtnode, nodeSpan) {
 					if (dtnode.data.href != "#") {
-						$(nodeSpan).children("a").attr("href", dtnode.data.href).bind("click", function () { window.location.href = $(this).attr("href"); }).droppable({ accept: '.Selectable', activeClass: 'droppable-active', hoverClass: 'droppable-hover', drop: function (ev, ui) {
+						$(nodeSpan).children("a").attr("href", dtnode.data.href).bind("click", function () { window.location.href = $(this).attr("href"); });
+						if (dtnode.data.actions != null && dtnode.data.actions == 0) {
+							$(nodeSpan).children("a").droppable({ accept: '.Selectable', activeClass: 'droppable-active', hoverClass: 'droppable-hover', drop: function (ev, ui) {
 
-						}, over: function (event, ui) {
-							$("#dragobject span").text(((keys.ctrl) ? "Copy" : "Move") + " To " + $(this).text()).show();
-							temp = $(this);
-							if (lazytimer == null) lazytimer = setTimeout(function () { $("#Tree").dynatree("getTree").getNodeByKey(temp.attr("href").substr(1)).toggleExpand(); clearTimeout(lazytimer); lazytimer = null; }, 1000);
-						}, out: function (event, ui) {
-							$("#dragobject span").text("").hide();
-							if (lazytimer != null) {
-								clearTimeout(lazytimer);
-								lazytimer = null;
-								temp = null;
+							}, over: function (event, ui) {
+								$("#dragobject span").text(((keys.ctrl) ? "Copy" : "Move") + " To " + $(this).text()).show();
+								temp = $(this);
+								if (lazytimer == null) lazytimer = setTimeout(function () { $("#Tree").dynatree("getTree").getNodeByKey(temp.attr("href").substr(1)).toggleExpand(); clearTimeout(lazytimer); lazytimer = null; }, 1000);
+							}, out: function (event, ui) {
+								$("#dragobject span").text("").hide();
+								if (lazytimer != null) {
+									clearTimeout(lazytimer);
+									lazytimer = null;
+									temp = null;
+								}
+							}
+							});
+							if (typeof (window.FileReader) != 'undefined') {
+								$(nodeSpan).children("a").attr("dropzone", "copy<%=DropZoneAccepted %>").bind("dragover", function () {
+									$("#uploadto").text("Upload To " + $(this).text());
+									return false;
+								}).bind("dragleave", function () {
+									$("#uploadto").text("");
+									return false;
+								}).bind("dragend", function () {
+									$("#uploadto").text("");
+									return false;
+								});
+								$(nodeSpan).children("a")[0].ondrop = function (event) {
+									event.preventDefault();
+									$("#uploadprogress").slideDown('slow');
+									var files;
+									if (event.target.files != null) files = event.target.files;
+									else if (event.dataTransfer != null && event.dataTransfer.files != null) files = event.dataTransfer.files;
+									if (files == null)  { $("#uploadto").text(""); return;  }
+									for (var i = 0; i < files.length; i++) {
+										var file = new Upload(files[i], $(this).attr("href").substr(1));
+										uploads.push(file);
+										file.Start();
+									}
+									$("#uploadto").text("");
+								};
 							}
 						}
-						});
 					}
 				}
 			});
