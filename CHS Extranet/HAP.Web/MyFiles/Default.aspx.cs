@@ -42,7 +42,7 @@ namespace HAP.Web.MyFiles
                     if (isAuth(f) && f.Expression == "*.*") return "";
                     else if (isAuth(f))
                         filters.Add(f.Name + " - " + f.Expression.Trim());
-                return string.Join("\n ", filters.ToArray());
+                return string.Join("\\n ", filters.ToArray());
             }
         }
 

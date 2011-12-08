@@ -68,6 +68,7 @@
 	</div>
 	<script type="text/javascript">
 		var items = new Array();
+		var subdrop = false;
 		var showView = 0;
 		var viewMode = 0;
 		var keys = { shift: false, ctrl: false };
@@ -108,17 +109,20 @@
 			this.File = file;
 			this.Path = path;
 			this.Start = function() {
-				$("#progresses").append('<div id="upload-' + this.File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_") + '"><div class="progressbar" style="display: inline-block; width: 100px; height: 20px; vertical-align: middle; overflow: hidden;"></div> ' + this.File.name + '</div>');
-				$("#upload-" + this.File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_") + " .progressbar").progressbar({ value: 0 });
-				if ("<%=DropZoneAccepted %>".toLowerCase().indexOf(this.File.type.toLowerCase()) == 0 && "<%=DropZoneAccepted %>" != "") {
-					alert(this.File.name + " is an restricted file type\n\n you can only select\n <%=AcceptedExtensions %>");
+				if ("<%=DropZoneAccepted %>".toLowerCase().indexOf(this.File.type.toLowerCase()) == -1 && "<%=DropZoneAccepted %>" != "") {
+					alert(this.File.name + " is an restricted file type\n\n\You can only upload:\n\n <%=AcceptedExtensions %>");
+					uploads.pop(this);
+					return false;
 				}
 				// Validate file size
 				if(this.File.size > <%=maxRequestLength%>) {
 					alert(this.File.name + " is Too Big to Upload!");
+					uploads.pop(this);
 					return false;
 				}
 
+				$("#progresses").append('<div id="upload-' + this.File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_") + '"><div class="progressbar" style="display: inline-block; width: 100px; height: 20px; vertical-align: middle; overflow: hidden;"></div> ' + this.File.name + '</div>');
+				$("#upload-" + this.File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_") + " .progressbar").progressbar({ value: 0 });
 				$.ajax({
 					type: 'GET',
 					url: '<%=ResolveUrl("~/api/MyFiles/Exists/")%>' + this.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, "") + '/' + this.File.name,
@@ -239,6 +243,7 @@
 					});
 					$("#" + this.Id)[0].ondrop = function (event) {
 						event.preventDefault();
+						subdrop = true;
 						$("#uploadprogress").slideDown('slow');
 						var item = null;
 						for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
@@ -247,7 +252,9 @@
 							uploads.push(file);
 							file.Start();
 						}
+						if (uploads.length == 0) $("#uploadprogress").slideUp('slow');
 						$("#uploadto").text("");
+						return false;
 					};
 				}
 				$("#" + this.Id).bind("click", this.Click).contextMenu('contextMenu', {
@@ -384,6 +391,7 @@
 		}
 		function Load() {
 			$(".context-menu").remove();
+			if (typeof (window.FileReader) != 'undefined') $("#MyFiles").unbind("dragover").unbind("dragleave").unbind("dragend").unbind("drop");
 			if (curpath == null) {
 				$.ajax({
 					type: 'GET',
@@ -446,6 +454,7 @@
 						});
 						$("#MyFiles")[0].ondrop = function (event) {
 							event.preventDefault();
+							if (subdrop) { subdrop = false; return; }
 							$("#uploadprogress").slideDown('slow');
 							for (var i = 0; i < (event.target.files || event.dataTransfer.files).length; i++) {
 								var file = new Upload((event.target.files || event.dataTransfer.files)[i], curitem.Location.substr(0, curitem.Location.length - 1).replace(/:/g, ""));
@@ -624,6 +633,7 @@
 							uploads.push(file);
 							file.Start();
 						}
+						if (uploads.length == 0) $("#uploadprogress").slideUp('slow');
 						$("#<%=uploadedfiles.ClientID %>").html($("#<%=uploadedfiles.ClientID %>").html());
 					} else {
 						$("#<%=p.ClientID %>").val(curpath);
