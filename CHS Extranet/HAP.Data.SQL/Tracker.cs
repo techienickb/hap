@@ -13,7 +13,7 @@ namespace HAP.Data.SQL
         public static void Clear(string Computer, string DomainName)
         {
             sql2linqDataContext sdc = new sql2linqDataContext(ConfigurationManager.ConnectionStrings[hapConfig.Current.Tracker.Provider].ConnectionString);
-            foreach (TrackerEvent te in sdc.TrackerEvents.Where(t => t.ComputerName == Computer && t.domainname == DomainName))
+            foreach (TrackerEvent te in sdc.TrackerEvents.Where(t => t.ComputerName == Computer && t.domainname == DomainName && !t.LogoffDateTime.HasValue))
                 te.LogoffDateTime = DateTime.Now;
             sdc.SubmitChanges();
         }
