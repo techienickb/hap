@@ -28,6 +28,7 @@
 	</div>
 	<div class="contextMenu" id="contextMenu">
 	  <ul>
+		<li id="con-open">Open</li>
 		<li id="con-preview">Preview</li>
 		<li id="con-properties">Properties</li>
 	  </ul>
@@ -277,6 +278,11 @@
 						return menu;
 					},
 					bindings: {
+						'con-open' : function (t) {
+							if (SelectedItems().length > 1) { alert("This only works on 1 item"); return false; }
+							if (SelectedItems()[0].Data.Type == 'Directory') window.location.href = "#" + SelectedItems()[0].Data.Path;
+							else window.location.href = SelectedItems()[0].Data.Path;
+						},
 						'con-properties': function (t) {
 							if (SelectedItems().length > 1) { alert("This only works on 1 item"); return false; }
 							$("#properties").dialog({ autoOpen: true, modal: true, buttons: {
