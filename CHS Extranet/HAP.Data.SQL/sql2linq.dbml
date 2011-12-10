@@ -13,4 +13,17 @@
       <Column Name="os" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
+  <Table Name="dbo.WebTrackerEvents" Member="WebTrackerEvents">
+    <Type Name="WebTrackerEvent">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="DateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Username" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="IP" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="ComputerName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="OS" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Browser" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Details" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="EventType" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
 </Database>

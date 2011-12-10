@@ -24,7 +24,7 @@ namespace HAP.Web
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (config.AD.AuthenticationMode == AuthMode.Forms)
+            if (config.AD.AuthenticationMode == Web.Configuration.AuthMode.Forms)
             {
                 if (Session["password"] == null)
                 {

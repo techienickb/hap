@@ -46,12 +46,14 @@ namespace HAP.Web.API
         {
             if (!string.IsNullOrEmpty(context.Request.Headers["X_FILENAME"]))
             {
+                
                 try
                 {
                     ADUser.ImpersonateContained();
 
                     DriveMapping m;
                     string path = Path.Combine(Converter.DriveToUNC('\\' + RoutingPath, RoutingDrive, out m, ADUser), context.Request.Headers["X_FILENAME"]);
+                    HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.Upload", ADUser.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Uploading of: " + context.Request.Headers["X_FILENAME"] + " to: " + path);
                     Stream inputStream = context.Request.InputStream;
 
                     FileStream fileStream = new FileStream(path, FileMode.OpenOrCreate);

@@ -8,5 +8,11 @@
         <elementListCompartment Id="a12d3dec-3c86-40fb-a4af-1c3354263e0b" absoluteBounds="0.88999999999999968, 1.21, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
+    <classShape Id="c97d8748-da22-4833-9f2d-afc48d52b891" absoluteBounds="4, 1.25, 2, 2.5401025390625">
+      <DataClassMoniker Name="/sql2linqDataContext/WebTrackerEvent" />
+      <nestedChildShapes>
+        <elementListCompartment Id="4b0cdea4-4afa-4354-8c40-0363ad114870" absoluteBounds="4.015, 1.71, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
   </nestedChildShapes>
 </ordesignerObjectsDiagram>

@@ -15,6 +15,7 @@ namespace HAP.Web.Tracker
         protected void Page_Load(object sender, EventArgs e)
         {
             dbup.Visible = (config.Tracker.Provider != "XML" && new DirectoryInfo(Server.MapPath("~/App_Data/")).GetFiles("tracker*xml").Length > 0);
+            weblog.Visible = config.Tracker.Provider != "XML";
         }
     }
 }
