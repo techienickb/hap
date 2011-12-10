@@ -43,39 +43,29 @@ namespace HAP.Web.API
 
         public void ProcessRequest(HttpContext context)
         {
-            HAP.AD.User u = Membership.GetUser() as HAP.AD.User;
-            u.ImpersonateContained();
+            HAP.AD.User user = Membership.GetUser() as HAP.AD.User;
+            HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MSCB.Upload", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Uploading of: " + HttpContext.Current.Request.QueryString["filename"] + " to Drive: " + RoutingDrive + " Path: " + RoutingPath);
+            user.ImpersonateContained();
             try
             {
                 context.Response.ExpiresAbsolute = DateTime.Now;
-                try
+                if (context.Request.HttpMethod == "POST")
                 {
-                    if (context.Request.HttpMethod == "POST")
-                    {
-                        UploadProcess fileUpload = new UploadProcess();
-                        fileUpload.FileUploadCompleted += new FileUploadCompletedEvent(fileUpload_FileUploadCompleted);
-                        fileUpload.ProcessRequest(context, Converter.DriveToUNC(RoutingPath, RoutingDrive));
-                    }
-                    else
-                    {
-                        context.Response.Write("You have reached this page via GET, this is NOT supported!\n");
-                        context.Response.Write("DEBUG INFO:\n");
-                        context.Response.Write(RoutingDrive + "\n");
-                        context.Response.Write(RoutingPath + "\n");
-                    }
+                    UploadProcess fileUpload = new UploadProcess();
+                    fileUpload.FileUploadCompleted += new FileUploadCompletedEvent(fileUpload_FileUploadCompleted);
+                    fileUpload.ProcessRequest(context, Converter.DriveToUNC(RoutingPath, RoutingDrive));
                 }
-                catch (Exception e)
+                else
                 {
-                    FileInfo file = new FileInfo(context.Server.MapPath("~/App_Data/log.log"));
-                    if (!file.Exists) file.Create();
-                    StreamWriter sw = file.AppendText();
-                    sw.WriteLine(e.Message);
-                    sw.Close();
+                    context.Response.Write("You have reached this page via GET, this is NOT supported!\n");
+                    context.Response.Write("DEBUG INFO:\n");
+                    context.Response.Write(RoutingDrive + "\n");
+                    context.Response.Write(RoutingPath + "\n");
                 }
             }
             finally
             {
-                u.EndContainedImpersonate();
+                user.EndContainedImpersonate();
             }
         }
 

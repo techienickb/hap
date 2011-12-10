@@ -31,17 +31,12 @@ namespace HAP.Web.API
         {
             hapConfig config = hapConfig.Current;
             User user = new User();
-
-            if (config.AD.AuthenticationMode == AuthMode.Forms)
-            {
-                HttpCookie token = HttpContext.Current.Request.Cookies["token"];
-                if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
-                user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
-            }
             user.ImpersonateContained();
             DriveMapping mapping;
             string path = Converter.DriveToUNC("/" + Path, Drive, out mapping, user);
             FileInfo file = new FileInfo(path);
+
+            HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.Preview", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Requesting preview of: " + file.FullName);
 
             string s = "";
 
@@ -118,7 +113,7 @@ namespace HAP.Web.API
             hapConfig config = hapConfig.Current;
             List<HAP.Data.MyFiles.File> Items = new List<Data.MyFiles.File>();
             User user = new User();
-            if (config.AD.AuthenticationMode == AuthMode.Forms)
+            if (config.AD.AuthenticationMode == Web.Configuration.AuthMode.Forms)
             {
                 HttpCookie token = HttpContext.Current.Request.Cookies["token"];
                 if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
@@ -161,7 +156,7 @@ namespace HAP.Web.API
             hapConfig config = hapConfig.Current;
             List<HAP.Data.MyFiles.File> Items = new List<Data.MyFiles.File>();
             User user = new User();
-            if (config.AD.AuthenticationMode == AuthMode.Forms)
+            if (config.AD.AuthenticationMode == Web.Configuration.AuthMode.Forms)
             {
                 HttpCookie token = HttpContext.Current.Request.Cookies["token"];
                 if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
@@ -172,6 +167,7 @@ namespace HAP.Web.API
             {
                 DriveMapping mapping;
                 string path = Converter.DriveToUNC(Path, Drive, out mapping, user);
+                HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.Properties", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Requesting properties of: " + path);
                 FileAttributes attr = System.IO.File.GetAttributes(path);
                 //detect whether its a directory or file
                 ret = ((attr & FileAttributes.Directory) == FileAttributes.Directory) ? new Properties(new DirectoryInfo(path), mapping, user) : new Properties(new FileInfo(path), mapping, user);
@@ -190,7 +186,7 @@ namespace HAP.Web.API
             hapConfig config = hapConfig.Current;
             List<HAP.Data.MyFiles.File> Items = new List<Data.MyFiles.File>();
             User user = new User();
-            if (config.AD.AuthenticationMode == AuthMode.Forms)
+            if (config.AD.AuthenticationMode == Web.Configuration.AuthMode.Forms)
             {
                 HttpCookie token = HttpContext.Current.Request.Cookies["token"];
                 if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
@@ -201,6 +197,7 @@ namespace HAP.Web.API
             {
                 DriveMapping mapping;
                 string path = Converter.DriveToUNC(Path, Drive, out mapping, user);
+                HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.List", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Requesting list of: " + path);
                 HAP.Data.MyFiles.AccessControlActions allowactions = isWriteAuth(mapping) ? HAP.Data.MyFiles.AccessControlActions.Change : HAP.Data.MyFiles.AccessControlActions.View;
                 DirectoryInfo dir = new DirectoryInfo(path);
                 foreach (DirectoryInfo subdir in dir.GetDirectories())
@@ -248,7 +245,7 @@ namespace HAP.Web.API
             List<Drive> drives = new List<Drive>();
             User user = new User();
             hapConfig config = hapConfig.Current;
-            if (config.AD.AuthenticationMode == AuthMode.Forms)
+            if (config.AD.AuthenticationMode == Web.Configuration.AuthMode.Forms)
             {
                 HttpCookie token = HttpContext.Current.Request.Cookies["token"];
                 if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");

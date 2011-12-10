@@ -18,5 +18,9 @@
 			<span style="background-image: url(../images/icons/white/dbup.png);"></span>
 			XML 2 SQL
 		</asp:HyperLink>
+		<asp:HyperLink ID="weblog" runat="server" Visible="false" NavigateUrl="~/Tracker/WebLogs.aspx" ToolTip="Web Logs">
+			<span style="background-image: url(../images/icons/white/tracker-historic.png");"></span>
+			Web Tracker
+		</asp:HyperLink>
 	</div>
 </asp:Content>

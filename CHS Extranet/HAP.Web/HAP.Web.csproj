@@ -369,6 +369,8 @@
     <Content Include="Tracker\logontracker.png" />
     <Content Include="Tracker\logs.aspx" />
     <Content Include="Tracker\tracker.css" />
+    <Content Include="Tracker\WebLog.aspx" />
+    <Content Include="Tracker\WebLogs.aspx" />
     <Content Include="Tracker\XML2SQL.aspx" />
     <Content Include="unauthorised.aspx" />
     <Content Include="UploadH.aspx" />
@@ -618,6 +620,20 @@
       <DependentUpon>log.aspx</DependentUpon>
     </Compile>
     <Compile Include="Tracker\trackerlog.cs" />
+    <Compile Include="Tracker\WebLog.aspx.cs">
+      <DependentUpon>WebLog.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tracker\WebLog.aspx.designer.cs">
+      <DependentUpon>WebLog.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Tracker\WebLogs.aspx.cs">
+      <DependentUpon>WebLogs.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tracker\WebLogs.aspx.designer.cs">
+      <DependentUpon>WebLogs.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Tracker\XML2SQL.aspx.cs">
       <DependentUpon>XML2SQL.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
