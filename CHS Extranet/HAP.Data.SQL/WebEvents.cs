@@ -34,7 +34,6 @@ namespace HAP.Data.SQL
             Event.Browser = Browser;
             Event.ComputerName = ComputerName;
             Event.Details = Details;
-            new Thread(new ParameterizedThreadStart(Log)).Start(Event);
             Log(Event);
         }
 
