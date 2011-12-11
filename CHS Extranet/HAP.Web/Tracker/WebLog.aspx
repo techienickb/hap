@@ -65,7 +65,6 @@
 						<div><label>Computer</label>
 							<div>
 								<asp:DropDownList ID="computerfilter" runat="server" Width="140px" onselectedindexchanged="computerfilter_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList><br />
-								(<asp:DropDownList ID="ipfilter" runat="server" Width="90px" onselectedindexchanged="computerfilter_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>)
 								<asp:LinkButton id="computersort" runat="server" oncommand="sort_Command" CommandName="ComputerName">Sort</asp:LinkButton>
 							</div>
 						</div>
@@ -105,9 +104,9 @@
 			<asp:Repeater ID="ListView1" runat="server">
 				<ItemTemplate>
 					<tr style="">
-						<td style="width: 180px"><a href="<%#ResolveClientUrl("~/tracker/web/" + ((DateTime)Eval("DateTime")).ToString("yyyy/M/d/"))%>"><%# ((DateTime)Eval("DateTime")).ToString("dd MMMM yyyy") %></a> <%# ((DateTime)Eval("DateTime")).ToString("HH:mm") %></td>
+						<td style="width: 180px"><a href="<%#ResolveClientUrl("~/tracker/web/" + ((DateTime)Eval("DateTime")).ToString("yyyy/M/") + "/d/" + ((DateTime)Eval("DateTime")).ToString("d/"))%>"><%# ((DateTime)Eval("DateTime")).ToString("dd MMMM yyyy") %></a> <%# ((DateTime)Eval("DateTime")).ToString("HH:mm") %></td>
 						<td><%# Eval("EventType") %></td>
-						<td><%# Eval("ComputerName") %> (<%# Eval("IP") %>)</td>
+						<td><%# Eval("ComputerName") %></td>
 						<td><%# Eval("Username") %></td>
 						<td><%# Eval("Browser") %></td>
 						<td><%# Eval("OS") %></td>
