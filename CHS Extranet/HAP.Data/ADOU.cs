@@ -17,7 +17,9 @@ namespace HAP.Data
         [DataMember]
         public string Name { get; set; }
         [DataMember]
-        public string Url { get; set; }
+        public string Type { get; set; }
+        [DataMember]
+        public string Path { get; set; }
         [DataMember]
         public Collection<ADOU> Items { get; set; }
     }
