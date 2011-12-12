@@ -94,3 +94,6 @@ button.back span { top: 4px; }
 
 #uploadprogress #progresses { padding: 6px; }
 #uploadprogress #progresses div { white-space: nowrap; overflow: hidden; height: 20px; line-height: 20px; text-overflow: ellipse; }
+
+#newfoldertext { background: #fff; }
+#newfoldertext.loading { background: #fff url(../images/loading.gif) no-repeat right center; }
