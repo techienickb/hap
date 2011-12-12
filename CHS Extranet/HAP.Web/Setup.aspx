@@ -125,7 +125,7 @@
                             </div>
                             <div>
                                 <asp:Label runat="server" Text="Students Group: " AssociatedControlID="sg" />
-                                <asp:TextBox runat="server" ID="sg" Text="" AutoPostBack="true" onclick="showadbrowser(this, 'group');" />
+                                <asp:TextBox runat="server" ID="sg" Text="" onclick="showadbrowser(this, 'group');" />
                             </div>
                             <h3>Active Directory User List OUs <img alt="" id="adgroupsstate" src="images/setup/266.png" /></h3>
                             <div>
@@ -1544,11 +1544,18 @@
                             if (response != null && response.GetADTreeResult != null) {
                                 try {
                                     var data = response.GetADTreeResult;
+                                    
                                     $("#treeprogress").progressbar({ value: 90 });
-                                    var t = $(processTreeNode(data)).appendTo("#tree");
+                                    var res = processTreeNode(data)
                                     $("#treeprogress").progressbar({ value: 100 });
                                     $("#<%=adstate.ClientID %>").attr("src", root + "images/setup/267.png");
-                                    $("#treecontainer").dynatree({ imagePath: root + "images/setup/", selectMode: 1, noLink: true });
+                                    $("#treecontainer").dynatree({ imagePath: root + "images/setup/", selectMode: 1, noLink: false, children: res,
+                                        onRender: function (dtnode, nodeSpan) {
+                                            if (dtnode.data.type != null && (dtnode.data.type == "organizationalUnit" || dtnode.data.type == "group")) {
+                                                $(nodeSpan).children("a").bind("click", function () { selectad($(this).parents("li")[0].dtnode.data.path, $(this).parents("li")[0].dtnode.data.type); return false; });
+                                            } else $(nodeSpan).children("a").replaceWith($(nodeSpan).children("a").text());
+                                        }
+                                    });
                                     $("#treeprogress").hide();
                                 } catch (e) { console.info(data); alert("There is something wrong connecting to your AD Infrastructure,\n\nplease review the AD settings and try again.\nThe most common cause of this is using a user not in the Domain Admins or Administrators Group"); }
                             } else {
@@ -1558,14 +1565,11 @@
                             }
                         }
                         function processTreeNode(o) {
-                            var s = "<li data=\"icon: '" + o.Icon.replace(/~\//g, root) + "'\">" + (o.Url == null ? "" : "<a href=\"" + o.Url + "\">") + o.Name + (o.Url == null ? "" : "</a>");
-                            if (o.Items.length > 0) {
-                                s += "<ul>";
-                                for (var i = 0; i < o.Items.length; i++) s += processTreeNode(o.Items[i]);
-                                s += "</ul>";
-                            }
-                            s += "</li>";
-                            return s;
+                            var res = [];
+                            var r = { title: o.Name, icon: o.Icon.replace(/~\//g, root), type: o.Type, path: o.Path, children: [] };
+                            if (o.Items.length > 0) for (var i = 0; i < o.Items.length; i++) r.children.push(processTreeNode(o.Items[i]));
+                            res.push(r);
+                            return r;
                         }
                         function selectad(path, type) {
                             if (reqtype == type) {

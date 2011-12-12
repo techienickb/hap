@@ -385,7 +385,8 @@ namespace HAP.Web.API
                 adou.Icon = (root.Name.StartsWith("DC=") ? "1" : root.SchemaClassName == "group" ? "78" : "2") + ".png";
                 if (!root.Name.StartsWith("DC="))
                 {
-                    adou.Url = "javascript:selectad('" + (root.SchemaClassName == "organizationalUnit" ? root.Path : root.Name.Remove(0, 3)) + "', '" + root.SchemaClassName + "');";
+                    adou.Path = (root.SchemaClassName == "organizationalUnit" ? root.Path : root.Name.Remove(0, 3));
+                    adou.Type = root.SchemaClassName;
                 }
 
                 foreach (DirectoryEntry de in root.Children) if ((de.SchemaClassName == "group" || de.SchemaClassName == "container" || de.SchemaClassName == "builtinDomain" || de.SchemaClassName == "organizationalUnit") && (de.Name != "CN=Program Data" && de.Name != "CN=System" && de.Name != "CN=Computers" && de.Name != "CN=Managed Service Accounts" && de.Name != "CN=ForeignSecurityPrincipals"))
