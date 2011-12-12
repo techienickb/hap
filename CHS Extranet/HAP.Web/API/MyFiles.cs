@@ -26,11 +26,81 @@ namespace HAP.Web.API
     public class MyFiles
     {
         [OperationContract]
+        [WebInvoke(Method = "DELETE", UriTemplate = "Delete", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        public string[] Delete(string[] Paths)
+        {
+            List<string> ret = new List<string>();
+            hapConfig config = hapConfig.Current;
+            User user = new User();
+            if (config.AD.AuthenticationMode == Web.Configuration.AuthMode.Forms)
+            {
+                HttpCookie token = HttpContext.Current.Request.Cookies["token"];
+                if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
+                user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
+            }
+            user.ImpersonateContained();
+            try
+            {
+                foreach (string path in Paths) 
+                {
+                    try
+                    {
+                        DriveMapping mapping;
+                        string p = Converter.DriveToUNC(path.Remove(0, 1), path.Substring(0, 1), out mapping, user);
+                        HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.Delete", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Deleting: " + path);
+                        FileAttributes attr = System.IO.File.GetAttributes(p);
+                        if ((attr & FileAttributes.Directory) == FileAttributes.Directory) Directory.Delete(p, true);
+                        else System.IO.File.Delete(p);
+                        ret.Add("Deleted " + path.Remove(0, path.LastIndexOf('/') + 1));
+                    }
+                    catch { ret.Add("I could not delete :" + path.Remove(0, path.LastIndexOf('/') + 1)); }
+                }
+            }
+            finally
+            {
+                user.EndContainedImpersonate();
+            }
+            return ret.ToArray();
+        }
+
+        [OperationContract]
+        [WebInvoke(Method="POST", UriTemplate="New/{Drive}/{*Path}", RequestFormat=WebMessageFormat.Json, ResponseFormat=WebMessageFormat.Json)]
+        public void NewFolder(string Drive, string Path)
+        {
+            hapConfig config = hapConfig.Current;
+            User user = new User();
+            if (config.AD.AuthenticationMode == Web.Configuration.AuthMode.Forms)
+            {
+                HttpCookie token = HttpContext.Current.Request.Cookies["token"];
+                if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
+                user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
+            }
+            user.ImpersonateContained();
+            try
+            {
+                DriveMapping mapping;
+                string path = Converter.DriveToUNC("/" + Path, Drive, out mapping, user);
+                HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.NewFolder", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Creating new folder: " + path);
+                Directory.CreateDirectory(path);
+            }
+            finally
+            {
+                user.EndContainedImpersonate();
+            }
+        }
+
+        [OperationContract]
         [WebGet(UriTemplate="Preview/{Drive}/{*Path}", ResponseFormat=WebMessageFormat.Json, BodyStyle=WebMessageBodyStyle.Bare)]
         public string Preview(string Drive, string Path)
         {
             hapConfig config = hapConfig.Current;
             User user = new User();
+            if (config.AD.AuthenticationMode == Web.Configuration.AuthMode.Forms)
+            {
+                HttpCookie token = HttpContext.Current.Request.Cookies["token"];
+                if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
+                user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
+            }
             user.ImpersonateContained();
             DriveMapping mapping;
             string path = Converter.DriveToUNC("/" + Path, Drive, out mapping, user);

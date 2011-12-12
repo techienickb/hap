@@ -26,9 +26,13 @@
 	<div id="preview" title="Preview" style="height: 500px; overflow: auto; width: 700px;">
 		<div id="previewcont">Loading...</div>
 	</div>
+	<div id="progressstatus" title="Progress">
+		<div class="progress"></div>
+	</div>
 	<div class="contextMenu" id="contextMenu">
 	  <ul>
 		<li id="con-open">Open</li>
+		<li id="con-delete">Delete</li>
 		<li id="con-preview">Preview</li>
 		<li id="con-properties">Properties</li>
 	  </ul>
@@ -105,6 +109,26 @@
 			console.log(ajaxOptions);
 			console.log(xhr);
 			alert(thrownError);
+		}
+		function Delete(index) {
+			temp = index;
+			var a = '"' + SelectedItems()[index].Data.Path.replace(/\\/g, "/") + '"';
+			$.ajax({
+				type: 'DELETE',
+				url: '<%=ResolveUrl("~/api/MyFiles/Delete")%>',
+				dataType: 'json',
+				data: '[' + a + ']',
+				contentType: 'application/json',
+				success: function (data) {
+					if (data[0].match(/i could not delete/gi)) alert(data[0]);
+					temp++;
+					$("#progressstatus").dialog("title", "Deleting item " + (temp + 1) + " of " + SelectedItems().length + " items");
+					$("#progressstatus .progress").progressbar({ value: (temp / SelectedItems().length) * 100 });
+					if (temp < SelectedItems().length) Delete(temp);
+					else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
+				},
+				error: OnError
+			});
 		}
 		function Upload(file, path) {
 			this.File = file;
@@ -270,6 +294,7 @@
 						return true;
 					},
 					onShowMenu: function (e, menu) {
+						if (curitem.Actions != 0) $("#con-delete", menu).remove();
 						if (SelectedItems().length > 1) { $("#con-properties", menu).remove(); $("#con-preview", menu).remove(); }
 						else {
 							if (SelectedItems()[0].Data.Extension != ".txt" && SelectedItems()[0].Data.Extension != ".xlsx" && SelectedItems()[0].Data.Extension != ".docx" && SelectedItems()[0].Data.Extension != ".xls" && SelectedItems()[0].Data.Extension != ".csv" && SelectedItems()[0].Data.Extension != ".png" && SelectedItems()[0].Data.Extension != ".gif" && SelectedItems()[0].Data.Extension != ".jpg" && SelectedItems()[0].Data.Extension != ".jpeg" && SelectedItems()[0].Data.Extension != ".bmp")
@@ -278,10 +303,17 @@
 						return menu;
 					},
 					bindings: {
-						'con-open' : function (t) {
+						'con-open': function (t) {
 							if (SelectedItems().length > 1) { alert("This only works on 1 item"); return false; }
 							if (SelectedItems()[0].Data.Type == 'Directory') window.location.href = "#" + SelectedItems()[0].Data.Path;
 							else window.location.href = SelectedItems()[0].Data.Path;
+						},
+						'con-delete': function (t) {
+							$("#progressstatus").dialog({ autoOpen: true, modal: true, title: "Deleting 1 of " + SelectedItems().length + " items" });
+							$("#progressstatus .progress").progressbar({ value: (1 / SelectedItems().length) * 100 });
+							var s = "";
+							for (var i = 0; i < SelectedItems().length; i++) s += SelectedItems()[i].Data.Name + "\n";
+							if (confirm("Are you sure you want to delete:\n\n" + s)) Delete(0);
 						},
 						'con-properties': function (t) {
 							if (SelectedItems().length > 1) { alert("This only works on 1 item"); return false; }
@@ -481,6 +513,7 @@
 		$(function () {
 			$("#properties").dialog({ autoOpen: false });
 			$("#preview").dialog({ autoOpen: false });
+			$("#progressstate").dialog({ autoOpen: false });
 			$("#uploaders").dialog({ autoOpen: false });
 			$("#Views").animate({ height: 'toggle' });
 			$("#Tree").dynatree({ imagePath: "../images/setup/", selectMode: 1, minExpandLevel: 1, noLink: false, children: [{ icon: "../myfiles-i.png", title: "My Drives", href: "#", isFolder: true, isLazy: true}], fx: { height: "toggle", duration: 200 },
@@ -574,12 +607,56 @@
 				if ($("#newfolder span").text() == "New Folder") {
 					$("#newfolder span").text("Create");
 					$("#newfoldertext").val("").css("margin", "0 4px").animate({ width: 150, opacity: 1.0 }).focus();
+				} else {
+					if (temp != null) { clearTimeout(temp); temp == null; }
+					$("#newfoldertext").addClass("loading");
+					$.ajax({
+						type: 'GET',
+						url: '<%=ResolveUrl("~/api/MyFiles/Exists/")%>' + curpath.replace(/\\/gi, "/") + $("#newfoldertext").val() + '/',
+						dataType: 'json',
+						context: this,
+						contentType: 'application/json',
+						success: function (data) {
+							if (data.Name != null) {
+								$("#newfoldertext").removeClass("loading");
+								alert("The folder " + data.Name + " already exists!")
+							} else {
+								$.ajax({
+									type: 'POST',
+									url: '<%=ResolveUrl("~/api/MyFiles/New/")%>' + curpath.replace(/\\/gi, "/") + $("#newfoldertext").val(),
+									dataType: 'json',
+									contentType: 'application/json',
+									success: function (data) {
+										$("#newfoldertext").removeClass("loading");
+										$("#newfoldertext").animate({ width: 0, opacity: 0.0 }).css("margin", "0");
+										$("#newfolder span").text("New Folder");
+										Load();
+									},
+									error: OnError
+								});
+							}
+						}, error: OnError
+					});
 				}
 			});
 			$("#newfoldertext").focusout(function () {
-				$("#newfoldertext").animate({ width: 0, opacity: 0.0 }).css("margin", "0");
-				$("#newfolder span").text("New Folder");
-			}).trigger("focusout");
+				temp = setTimeout(function () { 
+					$("#newfoldertext").removeClass("loading");
+					$("#newfoldertext").animate({ width: 0, opacity: 0.0 }).css("margin", "0");
+					$("#newfolder span").text("New Folder");
+				}, 1000);
+			}).focusin(function() {
+				if (temp != null) { clearTimeout(temp); temp == null; }
+			}).trigger("focusout").keydown(function (event) {
+				var keycode = (event.keyCode ? event.keyCode : (event.which ? event.which : event.charCode));
+				if (keycode == 13) 
+				{
+					$("#newfolder").trigger("click");
+					return false;
+				} else  {
+					return true;
+				}
+			});
 			$(".button").button();
 			$("#view").click(function () {
 				if (showView == 0) {
