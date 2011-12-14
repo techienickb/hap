@@ -29,12 +29,24 @@
 	<div id="progressstatus" title="Progress">
 		<div class="progress"></div>
 	</div>
+	<div id="googlesignin" title="Sign into Google Docs">
+		<div>
+			<label for="gUsername">Username: </label>
+			<input type="text" id="gUsername" />
+		</div>
+		<div>
+			<label for="gPassword">Password: </label>
+			<input type="password" id="gPassword" />
+		</div>
+		<div class="progress"></div>
+	</div>
 	<div class="contextMenu" id="contextMenu">
 	  <ul>
 		<li id="con-open">Open</li>
 		<li id="con-delete">Delete</li>
 		<li id="con-preview">Preview</li>
 		<li id="con-properties">Properties</li>
+		<li id="con-google">Send to Google Docs</li>
 	  </ul>
 	</div>
 	<div id="uploaders" title="Upload">
@@ -295,10 +307,14 @@
 					},
 					onShowMenu: function (e, menu) {
 						if (curitem.Actions != 0) $("#con-delete", menu).remove();
-						if (SelectedItems().length > 1) { $("#con-properties", menu).remove(); $("#con-preview", menu).remove(); }
+						if (SelectedItems().length > 1) { $("#con-properties", menu).remove(); $("#con-preview", menu).remove(); $("#con-google", menu).remove(); }
 						else {
-							if (SelectedItems()[0].Data.Extension != ".txt" && SelectedItems()[0].Data.Extension != ".xlsx" && SelectedItems()[0].Data.Extension != ".docx" && SelectedItems()[0].Data.Extension != ".xls" && SelectedItems()[0].Data.Extension != ".csv" && SelectedItems()[0].Data.Extension != ".png" && SelectedItems()[0].Data.Extension != ".gif" && SelectedItems()[0].Data.Extension != ".jpg" && SelectedItems()[0].Data.Extension != ".jpeg" && SelectedItems()[0].Data.Extension != ".bmp")
+							var remgoogle = false;
+							if (SelectedItems()[0].Data.Extension != ".txt" && SelectedItems()[0].Data.Extension != ".xlsx" && SelectedItems()[0].Data.Extension != ".docx" && SelectedItems()[0].Data.Extension != ".xls" && SelectedItems()[0].Data.Extension != ".csv" && SelectedItems()[0].Data.Extension != ".png" && SelectedItems()[0].Data.Extension != ".gif" && SelectedItems()[0].Data.Extension != ".jpg" && SelectedItems()[0].Data.Extension != ".jpeg" && SelectedItems()[0].Data.Extension != ".bmp") {
 								$("#con-preview", menu).remove();
+								if (SelectedItems()[0].Data.Extension != ".pdf" && SelectedItems()[0].Data.Extension != ".ppt" && SelectedItems()[0].Data.Extension != ".pptx" && SelectedItems()[0].Data.Extension != ".pps" && SelectedItems()[0].Data.Extension != ".doc" && SelectedItems()[0].Data.Extension != ".rtf")
+									$("#con-google", menu).remove();
+							} 
 						}
 						return menu;
 					},
@@ -370,6 +386,31 @@
 								success: function (data) {
 									$("#previewcont").html(data);
 								}, error: OnError
+							});
+						},
+						'con-google' : function (t) {
+							if (SelectedItems().length > 1) { alert("This only works on 1 item"); return false; }
+							$("#googlesignin").dialog({ autoOpen: true, modal: true, buttons: { 
+								"Signin": function() { 
+									$("#gUsername").addClass("loading");
+									$("#gPassword").addClass("loading");
+									$("#googlesignin .progress").height(16).width(16).addClass("loading");
+									$.ajax({
+										type: 'POST',
+										url: '<%=ResolveUrl("~/api/MyFiles/SendTo/Google/")%>' + SelectedItems()[0].Data.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, ""),
+										dataType: 'json',
+										data: '{ "username" : "' + $("#gUsername").val() + '", "password": "' + $("#gPassword").val() + '" }',
+										contentType: 'application/json',
+										success: function (data) {
+											$("#googlesignin").dialog("close");
+											$("#gUsername").val("").removeClass("loading");
+											$("#gPassword").val("").removeClass("loading");
+											$("#googlesignin .progress").height(0).width(0).removeClass("loading");
+											window.open(data, "googledocs");
+										},
+										error: OnError
+									});
+								}, "Close": function() { $(this).dialog("close"); } } 
 							});
 						}
 					}
@@ -515,6 +556,7 @@
 			$("#preview").dialog({ autoOpen: false });
 			$("#progressstate").dialog({ autoOpen: false });
 			$("#uploaders").dialog({ autoOpen: false });
+			$("#googlesignin").dialog({ autoOpen: false });
 			$("#Views").animate({ height: 'toggle' });
 			$("#Tree").dynatree({ imagePath: "../images/setup/", selectMode: 1, minExpandLevel: 1, noLink: false, children: [{ icon: "../myfiles-i.png", title: "My Drives", href: "#", isFolder: true, isLazy: true}], fx: { height: "toggle", duration: 200 },
 				onLazyRead: function (node) {
@@ -749,6 +791,7 @@
 				}
 			});
 			$(window).trigger("hashchange");
+			
 		});
 		$(document).bind('keydown', function (e) { keys.shift = (e.keyCode == 16); keys.ctrl = (e.keyCode == 17); });
 		$(document).bind('keyup', function (e) { keys.shift = keys.ctrl = false; });
