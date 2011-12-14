@@ -39,9 +39,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Web.Logging", "HAP.Web.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Logging.Setup", "HAP.Logging.Setup\HAP.Logging.Setup.csproj", "{121B1669-AF9B-4BD3-8300-F8665956C478}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Web.SendTo.Google", "HAP.Web.SendTo.Google\HAP.Web.SendTo.Google.csproj", "{3E5B1FF1-BD5C-4DCA-8165-813C6B5BF6B2}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 17
+		SccNumberOfProjects = 18
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs08
 		SccLocalPath0 = .
@@ -93,6 +95,9 @@ Global
 		SccProjectUniqueName16 = HAP.Logging.Setup\\HAP.Logging.Setup.csproj
 		SccProjectName16 = HAP.Logging.Setup
 		SccLocalPath16 = HAP.Logging.Setup
+		SccProjectUniqueName17 = HAP.Web.SendTo.Google\\HAP.Web.SendTo.Google.csproj
+		SccProjectName17 = HAP.Web.SendTo.Google
+		SccLocalPath17 = HAP.Web.SendTo.Google
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -301,6 +306,18 @@ Global
 		{121B1669-AF9B-4BD3-8300-F8665956C478}.Release|x64.ActiveCfg = Release|x86
 		{121B1669-AF9B-4BD3-8300-F8665956C478}.Release|x86.ActiveCfg = Release|x86
 		{121B1669-AF9B-4BD3-8300-F8665956C478}.Release|x86.Build.0 = Release|x86
+		{3E5B1FF1-BD5C-4DCA-8165-813C6B5BF6B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E5B1FF1-BD5C-4DCA-8165-813C6B5BF6B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E5B1FF1-BD5C-4DCA-8165-813C6B5BF6B2}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3E5B1FF1-BD5C-4DCA-8165-813C6B5BF6B2}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3E5B1FF1-BD5C-4DCA-8165-813C6B5BF6B2}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3E5B1FF1-BD5C-4DCA-8165-813C6B5BF6B2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3E5B1FF1-BD5C-4DCA-8165-813C6B5BF6B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E5B1FF1-BD5C-4DCA-8165-813C6B5BF6B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E5B1FF1-BD5C-4DCA-8165-813C6B5BF6B2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3E5B1FF1-BD5C-4DCA-8165-813C6B5BF6B2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{3E5B1FF1-BD5C-4DCA-8165-813C6B5BF6B2}.Release|x64.ActiveCfg = Release|Any CPU
+		{3E5B1FF1-BD5C-4DCA-8165-813C6B5BF6B2}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

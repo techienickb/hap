@@ -18,6 +18,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data.OleDb;
 using System.Data;
+using System.Net;
+using System.Collections.Specialized;
 
 namespace HAP.Web.API
 {
@@ -25,6 +27,35 @@ namespace HAP.Web.API
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
     public class MyFiles
     {
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", UriTemplate = "SendTo/Google/{Drive}/{*Path}", BodyStyle = WebMessageBodyStyle.WrappedRequest,  RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        public string GoogleUpload(string Drive, string Path, string username, string password)
+        {
+            hapConfig config = hapConfig.Current;
+            User user = new User();
+            if (config.AD.AuthenticationMode == Web.Configuration.AuthMode.Forms)
+            {
+                HttpCookie token = HttpContext.Current.Request.Cookies["token"];
+                if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
+                user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
+            }
+            HAP.Web.SendTo.Google.Client client = new SendTo.Google.Client();
+            client.Login(username, password);
+            user.ImpersonateContained();
+            try 
+            {
+                DriveMapping mapping;
+                string p = Converter.DriveToUNC('/' + Path, Drive, out mapping, user);
+                HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.Delete", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Sending to Google Docs: " + p);
+                return client.Upload(p);
+            } 
+            finally 
+            { 
+                user.EndContainedImpersonate(); 
+            }
+        }
+
         [OperationContract]
         [WebInvoke(Method = "DELETE", UriTemplate = "Delete", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         public string[] Delete(string[] Paths)
@@ -47,7 +78,7 @@ namespace HAP.Web.API
                     {
                         DriveMapping mapping;
                         string p = Converter.DriveToUNC(path.Remove(0, 1), path.Substring(0, 1), out mapping, user);
-                        HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.Delete", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Deleting: " + path);
+                        HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.Delete", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Deleting: " + p);
                         FileAttributes attr = System.IO.File.GetAttributes(p);
                         if ((attr & FileAttributes.Directory) == FileAttributes.Directory) Directory.Delete(p, true);
                         else System.IO.File.Delete(p);
