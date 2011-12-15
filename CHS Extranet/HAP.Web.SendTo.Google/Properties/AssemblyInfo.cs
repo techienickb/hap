@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("HAP.Web.SendTo.Google")]
+[assembly: AssemblyTitle("HAP.Web.SendTo")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("nb development")]
-[assembly: AssemblyProduct("HAP.Web.SendTo.Google")]
+[assembly: AssemblyProduct("HAP.Web.SendTo")]
 [assembly: AssemblyCopyright("Copyright © nb development 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

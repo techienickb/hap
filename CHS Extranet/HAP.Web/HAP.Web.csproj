@@ -697,9 +697,9 @@
       <Project>{3733B9AC-7559-4ABF-AC72-FB383030326A}</Project>
       <Name>HAP.Web.Logging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\HAP.Web.SendTo.Google\HAP.Web.SendTo.Google.csproj">
+    <ProjectReference Include="..\HAP.Web.SendTo.Google\HAP.Web.SendTo.csproj">
       <Project>{3E5B1FF1-BD5C-4DCA-8165-813C6B5BF6B2}</Project>
-      <Name>HAP.Web.SendTo.Google</Name>
+      <Name>HAP.Web.SendTo</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

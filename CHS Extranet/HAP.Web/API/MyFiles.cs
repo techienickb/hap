@@ -47,7 +47,7 @@ namespace HAP.Web.API
             {
                 DriveMapping mapping;
                 string p = Converter.DriveToUNC('/' + Path, Drive, out mapping, user);
-                HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.Delete", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Sending to Google Docs: " + p);
+                HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.SendTo.Google", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Sending to Google Docs: " + p);
                 return client.Upload(p);
             } 
             finally 
