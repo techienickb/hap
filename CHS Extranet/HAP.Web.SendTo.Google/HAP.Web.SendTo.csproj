@@ -9,8 +9,8 @@
     <ProjectGuid>{3E5B1FF1-BD5C-4DCA-8165-813C6B5BF6B2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HAP.Web.SendTo.Google</RootNamespace>
-    <AssemblyName>HAP.Web.SendTo.Google</AssemblyName>
+    <RootNamespace>HAP.Web.SendTo</RootNamespace>
+    <AssemblyName>HAP.Web.SendTo</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Nonshipping>true</Nonshipping>
@@ -38,24 +38,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Google.GData.AccessControl">
-      <HintPath>C:\Program Files (x86)\Google\Google Data API SDK\Redist\Google.GData.AccessControl.DLL</HintPath>
+      <HintPath>..\Binaries\Google.GData.AccessControl.DLL</HintPath>
     </Reference>
     <Reference Include="Google.GData.Client">
-      <HintPath>C:\Program Files (x86)\Google\Google Data API SDK\Redist\Google.GData.Client.dll</HintPath>
+      <HintPath>..\Binaries\Google.GData.Client.dll</HintPath>
     </Reference>
     <Reference Include="Google.GData.Documents">
-      <HintPath>C:\Program Files (x86)\Google\Google Data API SDK\Redist\Google.GData.Documents.dll</HintPath>
+      <HintPath>..\Binaries\Google.GData.Documents.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client.cs" />
+    <Compile Include="GoogleClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

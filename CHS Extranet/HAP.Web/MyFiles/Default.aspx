@@ -30,13 +30,14 @@
 		<div class="progress"></div>
 	</div>
 	<div id="googlesignin" title="Sign into Google Docs">
+		<div>Once you have signed into Google, HAP+ will upload the selected file to your Google Docs</div>
 		<div>
-			<label for="gUsername">Username: </label>
-			<input type="text" id="gUsername" />
+			<label for="googleuser">Username: </label>
+			<input type="text" id="googleuser" />
 		</div>
 		<div>
-			<label for="gPassword">Password: </label>
-			<input type="password" id="gPassword" />
+			<label for="googlepass">Password: </label>
+			<input type="password" id="googlepass" />
 		</div>
 		<div class="progress"></div>
 	</div>
@@ -306,7 +307,7 @@
 						return true;
 					},
 					onShowMenu: function (e, menu) {
-						if (curitem.Actions != 0) $("#con-delete", menu).remove();
+						if (curitem.Actions != 0) { $("#con-delete", menu).remove(); $("#con-google", menu).remove(); }
 						if (SelectedItems().length > 1) { $("#con-properties", menu).remove(); $("#con-preview", menu).remove(); $("#con-google", menu).remove(); }
 						else {
 							var remgoogle = false;
@@ -314,7 +315,7 @@
 								$("#con-preview", menu).remove();
 								if (SelectedItems()[0].Data.Extension != ".pdf" && SelectedItems()[0].Data.Extension != ".ppt" && SelectedItems()[0].Data.Extension != ".pptx" && SelectedItems()[0].Data.Extension != ".pps" && SelectedItems()[0].Data.Extension != ".doc" && SelectedItems()[0].Data.Extension != ".rtf")
 									$("#con-google", menu).remove();
-							} 
+							}
 						}
 						return menu;
 					},
@@ -392,19 +393,19 @@
 							if (SelectedItems().length > 1) { alert("This only works on 1 item"); return false; }
 							$("#googlesignin").dialog({ autoOpen: true, modal: true, buttons: { 
 								"Signin": function() { 
-									$("#gUsername").addClass("loading");
-									$("#gPassword").addClass("loading");
+									$("#googleuser").addClass("loading");
+									$("#googlepass").addClass("loading");
 									$("#googlesignin .progress").height(16).width(16).addClass("loading");
 									$.ajax({
 										type: 'POST',
 										url: '<%=ResolveUrl("~/api/MyFiles/SendTo/Google/")%>' + SelectedItems()[0].Data.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, ""),
 										dataType: 'json',
-										data: '{ "username" : "' + $("#gUsername").val() + '", "password": "' + $("#gPassword").val() + '" }',
+										data: '{ "username" : "' + $("#googleuser").val() + '", "password": "' + $("#googlepass").val() + '" }',
 										contentType: 'application/json',
 										success: function (data) {
 											$("#googlesignin").dialog("close");
-											$("#gUsername").val("").removeClass("loading");
-											$("#gPassword").val("").removeClass("loading");
+											$("#googleuser").val("").removeClass("loading");
+											$("#googlepass").val("").removeClass("loading");
 											$("#googlesignin .progress").height(0).width(0).removeClass("loading");
 											window.open(data, "googledocs");
 										},

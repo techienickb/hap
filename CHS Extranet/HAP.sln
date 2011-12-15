@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Silverlight", "HAP.Silv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Silverlight.Browser", "HAP.Silverlight.Browser\HAP.Silverlight.Browser.csproj", "{E1C14EF8-AD23-48F5-9EFF-9A2F4A07CCC9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{A881389B-1A30-4196-A10B-ACA9C7A96292}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP Logon Tracker", "HAP Logon Tracker\HAP Logon Tracker.csproj", "{5254C771-C9B6-4261-BC11-FED83C526CE0}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HAP Logon Tracker Installer", "HAP Logon Tracker Installer\HAP Logon Tracker Installer.vdproj", "{E10211DD-09C4-4756-AC4D-36C73A73FCEB}"
@@ -39,7 +37,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Web.Logging", "HAP.Web.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Logging.Setup", "HAP.Logging.Setup\HAP.Logging.Setup.csproj", "{121B1669-AF9B-4BD3-8300-F8665956C478}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Web.SendTo.Google", "HAP.Web.SendTo.Google\HAP.Web.SendTo.Google.csproj", "{3E5B1FF1-BD5C-4DCA-8165-813C6B5BF6B2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Web.SendTo", "HAP.Web.SendTo.Google\HAP.Web.SendTo.csproj", "{3E5B1FF1-BD5C-4DCA-8165-813C6B5BF6B2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{7F80432C-70D9-4AAA-9FE3-6398471FC04D}"
+	ProjectSection(SolutionItems) = preProject
+		binaries\AjaxControlToolkit.dll = binaries\AjaxControlToolkit.dll
+		DiskQuotaTypeLibrary.dll = DiskQuotaTypeLibrary.dll
+		Binaries\Google.GData.AccessControl.DLL = Binaries\Google.GData.AccessControl.DLL
+		Binaries\Google.GData.Client.dll = Binaries\Google.GData.Client.dll
+		Binaries\Google.GData.Documents.dll = Binaries\Google.GData.Documents.dll
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -95,7 +102,7 @@ Global
 		SccProjectUniqueName16 = HAP.Logging.Setup\\HAP.Logging.Setup.csproj
 		SccProjectName16 = HAP.Logging.Setup
 		SccLocalPath16 = HAP.Logging.Setup
-		SccProjectUniqueName17 = HAP.Web.SendTo.Google\\HAP.Web.SendTo.Google.csproj
+		SccProjectUniqueName17 = HAP.Web.SendTo.Google\\HAP.Web.SendTo.csproj
 		SccProjectName17 = HAP.Web.SendTo.Google
 		SccLocalPath17 = HAP.Web.SendTo.Google
 	EndGlobalSection
