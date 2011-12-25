@@ -10,12 +10,16 @@ namespace HAP.Web.Logging
     {
         public static void Log(string source, string message, EventLogEntryType type)
         {
-            if (!EventLog.SourceExists("Home Access Plus+")) return;
-            EventLog myLog = new EventLog("Home Access Plus+");
-            myLog.Source = "Home Access Plus+";
-            if (type == EventLogEntryType.Error)
-            myLog.WriteEntry("An error occurred in Home Access Plus+\r\n\r\nPage: " + source + "\r\n\r\n" + message, type);
-            else myLog.WriteEntry("Home Access Plus+ Info\r\n\r\nPage: " + source + "\r\n\r\n" + message, type);
+            try
+            {
+                if (!EventLog.SourceExists("Home Access Plus+")) return;
+                EventLog myLog = new EventLog("Home Access Plus+");
+                myLog.Source = "Home Access Plus+";
+                if (type == EventLogEntryType.Error)
+                    myLog.WriteEntry("An error occurred in Home Access Plus+\r\n\r\nPage: " + source + "\r\n\r\n" + message, type);
+                else myLog.WriteEntry("Home Access Plus+ Info\r\n\r\nPage: " + source + "\r\n\r\n" + message, type);
+            }
+            catch { }
         }
     }
 }

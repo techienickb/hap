@@ -97,3 +97,9 @@ button.back span { top: 4px; }
 
 #newfoldertext { background: #fff; }
 .loading { background: #fff url(../images/loading.gif) no-repeat right center; }
+
+#renamebox { position: absolute; font-size: 12px; margin-left: 56px; margin-top: 4px; display: none; }
+#renamebox.details { margin-left: 20px; margin-top: 2px; }
+#renamebox.small { margin-left: 28px; margin-top: 4px; }
+#renamebox.medium { margin-left: 0; margin-top: 44px; width: 72px; }
+#renamebox.large { margin-left: 0; margin-top: 76px; width: 96px; }

@@ -20,6 +20,7 @@
 			<img src="../images/myfiles.png" alt="My Files" />
 		</div>
 	</div>
+	<input type="text" id="renamebox" />
 	<div id="properties" title="Properties">
 		<div id="propcont">Loading...</div>
 	</div>
@@ -45,6 +46,7 @@
 	  <ul>
 		<li id="con-open">Open</li>
 		<li id="con-delete">Delete</li>
+		<li id="con-rename">Rename</li>
 		<li id="con-preview">Preview</li>
 		<li id="con-properties">Properties</li>
 		<li id="con-google">Send to Google Docs</li>
@@ -122,6 +124,66 @@
 			console.log(ajaxOptions);
 			console.log(xhr);
 			alert(thrownError);
+		}
+		function Copy(index, target) {
+			temp = { "index": index, "target": target };
+			var a = '"' + SelectedItems()[index].Data.Path + '"';
+			$.ajax({
+				type: 'POST',
+				url: '<%=ResolveUrl("~/api/MyFiles/Copy")%>',
+				dataType: 'json',
+				data: '{ "OldPath" : "' + SelectedItems()[index].Data.Path.replace(/\\/gi, '/') + '", "NewPath": "' + (target.replace(/\//gi, '\\') + '\\' + SelectedItems()[index].Data.Path.substr(SelectedItems()[index].Data.Path.lastIndexOf('\\'))).replace(/\\\\\\/gi, "\\").replace(/\\\\/gi, "\\").replace(/\\/gi, '/') + '" }',
+				contentType: 'application/json',
+				success: function (data) {
+					temp.index++;
+					$("#progressstatus").dialog("title", "Copying item " + (temp.index + 1) + " of " + SelectedItems().length + " items");
+					$("#progressstatus .progress").progressbar({ value: (temp.index / SelectedItems().length) * 100 });
+					if (temp.index < SelectedItems().length) Move(temp.index, temp.target);
+					else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					console.log(thrownError);
+					console.log(ajaxOptions);
+					console.log(xhr);
+					if (confirm("An Error has Occured While Copying " + SelectedItems()[temp.index].Data.Name + ", do you want to Continue?\n\nError Details:\n\n" + thrownError)) {
+						temp.index++;
+						$("#progressstatus").dialog("title", "Copying item " + (temp.index + 1) + " of " + SelectedItems().length + " items");
+						$("#progressstatus .progress").progressbar({ value: (temp.index / SelectedItems().length) * 100 });
+						if (temp.index < SelectedItems().length) Copy(temp.index, temp.target);
+						else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
+					} else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
+				}
+			});
+		}
+		function Move(index, target) {
+			temp = { "index": index, "target": target };
+			var a = '"' + SelectedItems()[index].Data.Path + '"';
+			$.ajax({
+				type: 'POST',
+				url: '<%=ResolveUrl("~/api/MyFiles/Move")%>',
+				dataType: 'json',
+				data: '{ "OldPath" : "' + SelectedItems()[index].Data.Path.replace(/\\/gi, '/') + '", "NewPath": "' + (target.replace(/\//gi, '\\') + '\\' + SelectedItems()[index].Data.Path.substr(SelectedItems()[index].Data.Path.lastIndexOf('\\'))).replace(/\\\\\\/gi, "\\").replace(/\\\\/gi, "\\").replace(/\\/gi, '/') + '" }',
+				contentType: 'application/json',
+				success: function (data) {
+					temp.index++;
+					$("#progressstatus").dialog("title", "Moving item " + (temp.index + 1) + " of " + SelectedItems().length + " items");
+					$("#progressstatus .progress").progressbar({ value: (temp.index / SelectedItems().length) * 100 });
+					if (temp.index < SelectedItems().length) Move(temp.index, temp.target);
+					else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					console.log(thrownError);
+					console.log(ajaxOptions);
+					console.log(xhr);
+					if (confirm("An Error has Occured While Moving " + SelectedItems()[temp.index].Data.Name + ", do you want to Continue?\n\nError Details:\n\n" + thrownError)) {
+						temp.index++;
+						$("#progressstatus").dialog("title", "Moving item " + (temp.index + 1) + " of " + SelectedItems().length + " items");
+						$("#progressstatus .progress").progressbar({ value: (temp.index / SelectedItems().length) * 100 });
+						if (temp.index < SelectedItems().length) Move(temp.index, temp.target);
+						else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
+					} else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
+				}
+			});
 		}
 		function Delete(index) {
 			temp = index;
@@ -245,7 +307,7 @@
 				else h += this.Data.Type + '</span><span class="extension">' + this.Data.Extension + '</span><span class="size">' + this.Data.Size;
 				h += '</span></a>';
 				$("#MyFiles").append(h);
-				if (this.Data.Actions == 0) $("#" + this.Id).draggable({ helper: function () { return $('<div id="dragobject"><img /><span></span></div>'); }, start: function (event, ui) {
+				if (this.Data.Actions == 0 || this.Data.Actions == 3) $("#" + this.Id).draggable({ helper: function () { return $('<div id="dragobject"><img /><span></span></div>'); }, start: function (event, ui) {
 					var item = null;
 					for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
 					if (!item.Selected) for (var x = 0; x < items.length; x++) if (items[x].Selected) { items[x].Selected = false; items[x].Refresh(); }
@@ -256,8 +318,16 @@
 					$("#dragobject span").text("").hide();
 				}
 				});
-				if (this.Data.Type == 'Directory') $("#" + this.Id).droppable({ accept: '.Selectable', activeClass: 'droppable-active', hoverClass: 'droppable-hover', drop: function (ev, ui) {
-
+				if (this.Data.Type == 'Directory' && this.Data.Actions == 0) $("#" + this.Id).droppable({ accept: '.Selectable', activeClass: 'droppable-active', hoverClass: 'droppable-hover', drop: function (ev, ui) {
+					var item = null;
+					for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
+					var s = "";
+					for (var i = 0; i < SelectedItems().length; i++) s += SelectedItems()[i].Data.Name + "\n";
+					$("#progressstatus").dialog({ autoOpen: true, modal: true, title: ((keys.ctrl) ? "Copying" : "Moving") + " 1 of " + SelectedItems().length + " items" });
+					$("#progressstatus .progress").progressbar({ value: (1 / SelectedItems().length) * 100 });
+					if (keys.ctrl) Copy(0, item.Data.Path);
+					else if (confirm("Are you sure you want to move:\n\n" + s)) Move(0, item.Data.Path);
+					else $("#progressstatus").dialog("close");
 				}, over: function (event, ui) {
 					var item = null;
 					for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
@@ -280,19 +350,21 @@
 						return false;
 					});
 					$("#" + this.Id)[0].ondrop = function (event) {
-						event.preventDefault();
-						subdrop = true;
-						$("#uploadprogress").slideDown('slow');
-						var item = null;
-						for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
-						for (var i = 0; i < (event.target.files || event.dataTransfer.files).length; i++) {
-							var file = new Upload((event.target.files || event.dataTransfer.files)[i], item.Data.Path);
-							uploads.push(file);
-							file.Start();
+						if (event.target.files != null || event.dataTransfer != null) {
+							event.preventDefault();
+							subdrop = true;
+							$("#uploadprogress").slideDown('slow');
+							var item = null;
+							for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
+							for (var i = 0; i < (event.target.files || event.dataTransfer.files).length; i++) {
+								var file = new Upload((event.target.files || event.dataTransfer.files)[i], item.Data.Path);
+								uploads.push(file);
+								file.Start();
+							}
+							if (uploads.length == 0) $("#uploadprogress").slideUp('slow');
+							$("#uploadto").text("");
+							return false;
 						}
-						if (uploads.length == 0) $("#uploadprogress").slideUp('slow');
-						$("#uploadto").text("");
-						return false;
 					};
 				}
 				$("#" + this.Id).bind("click", this.Click).contextMenu('contextMenu', {
@@ -307,13 +379,13 @@
 						return true;
 					},
 					onShowMenu: function (e, menu) {
-						if (curitem.Actions != 0) { $("#con-delete", menu).remove(); $("#con-google", menu).remove(); }
-						if (SelectedItems().length > 1) { $("#con-properties", menu).remove(); $("#con-preview", menu).remove(); $("#con-google", menu).remove(); }
+						if (curitem.Actions != 0) { $("#con-delete", menu).remove(); $("#con-google", menu).remove(); $("#con-rename", menu).remove(); }
+						if (SelectedItems().length > 1) { $("#con-open", menu).remove(); $("#con-rename", menu).remove(); $("#con-properties", menu).remove(); $("#con-preview", menu).remove(); $("#con-google", menu).remove(); }
 						else {
 							var remgoogle = false;
 							if (SelectedItems()[0].Data.Extension != ".txt" && SelectedItems()[0].Data.Extension != ".xlsx" && SelectedItems()[0].Data.Extension != ".docx" && SelectedItems()[0].Data.Extension != ".xls" && SelectedItems()[0].Data.Extension != ".csv" && SelectedItems()[0].Data.Extension != ".png" && SelectedItems()[0].Data.Extension != ".gif" && SelectedItems()[0].Data.Extension != ".jpg" && SelectedItems()[0].Data.Extension != ".jpeg" && SelectedItems()[0].Data.Extension != ".bmp") {
 								$("#con-preview", menu).remove();
-								if (SelectedItems()[0].Data.Extension != ".pdf" && SelectedItems()[0].Data.Extension != ".ppt" && SelectedItems()[0].Data.Extension != ".pptx" && SelectedItems()[0].Data.Extension != ".pps" && SelectedItems()[0].Data.Extension != ".doc" && SelectedItems()[0].Data.Extension != ".rtf")
+								if (SelectedItems()[0].Data.Extension != ".ppt" && SelectedItems()[0].Data.Extension != ".pptx" && SelectedItems()[0].Data.Extension != ".pps" && SelectedItems()[0].Data.Extension != ".doc" && SelectedItems()[0].Data.Extension != ".rtf")
 									$("#con-google", menu).remove();
 							}
 						}
@@ -331,6 +403,12 @@
 							var s = "";
 							for (var i = 0; i < SelectedItems().length; i++) s += SelectedItems()[i].Data.Name + "\n";
 							if (confirm("Are you sure you want to delete:\n\n" + s)) Delete(0);
+							else $("#progressstatus").dialog("close");
+						},
+						'con-rename': function (t) {
+							if (SelectedItems().length > 1) { alert("This only works on 1 item"); return false; }
+							var item = SelectedItems()[0];
+							$("#renamebox").val(item.Data.Name).css("display", "block").css("top", $("#" +item.Id).position().top).css("left", $("#" + item.Id).position().left).focus().select();
 						},
 						'con-properties': function (t) {
 							if (SelectedItems().length > 1) { alert("This only works on 1 item"); return false; }
@@ -533,15 +611,17 @@
 							return false;
 						});
 						$("#MyFiles")[0].ondrop = function (event) {
-							event.preventDefault();
-							if (subdrop) { subdrop = false; return; }
-							$("#uploadprogress").slideDown('slow');
-							for (var i = 0; i < (event.target.files || event.dataTransfer.files).length; i++) {
-								var file = new Upload((event.target.files || event.dataTransfer.files)[i], curitem.Location.substr(0, curitem.Location.length - 1).replace(/:/g, ""));
-								uploads.push(file);
-								file.Start();
+							if (event.target.files != null || event.dataTransfer != null) {
+								event.preventDefault();
+								if (subdrop) { subdrop = false; return; }
+								$("#uploadprogress").slideDown('slow');
+								for (var i = 0; i < (event.target.files || event.dataTransfer.files).length; i++) {
+									var file = new Upload((event.target.files || event.dataTransfer.files)[i], curitem.Location.substr(0, curitem.Location.length - 1).replace(/:/g, ""));
+									uploads.push(file);
+									file.Start();
+								}
+								$("#uploadto").text("");
 							}
-							$("#uploadto").text("");
 						};
 					}
 				}, error: OnError
@@ -598,7 +678,15 @@
 						$(nodeSpan).children("a").attr("href", dtnode.data.href).bind("click", function () { window.location.href = $(this).attr("href"); });
 						if (dtnode.data.actions != null && dtnode.data.actions == 0) {
 							$(nodeSpan).children("a").droppable({ accept: '.Selectable', activeClass: 'droppable-active', hoverClass: 'droppable-hover', drop: function (ev, ui) {
-
+								var item = null;
+								for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
+								var s = "";
+								for (var i = 0; i < SelectedItems().length; i++) s += SelectedItems()[i].Data.Name + "\n";
+								$("#progressstatus").dialog({ autoOpen: true, modal: true, title: ((keys.ctrl) ? "Copying" : "Moving") + " 1 of " + SelectedItems().length + " items" });
+								$("#progressstatus .progress").progressbar({ value: (1 / SelectedItems().length) * 100 });
+								if (keys.ctrl) Copy(0, $(this).attr("href").substr(1));
+								else if (confirm("Are you sure you want to move:\n\n" + s)) Move(0, $(this).attr("href").substr(1));
+								else $("#progressstatus").dialog("close");
 							}, over: function (event, ui) {
 								$("#dragobject span").text(((keys.ctrl) ? "Copy" : "Move") + " To " + $(this).text()).show();
 								temp = $(this);
@@ -624,18 +712,20 @@
 									return false;
 								});
 								$(nodeSpan).children("a")[0].ondrop = function (event) {
-									event.preventDefault();
-									$("#uploadprogress").slideDown('slow');
-									var files;
-									if (event.target.files != null) files = event.target.files;
-									else if (event.dataTransfer != null && event.dataTransfer.files != null) files = event.dataTransfer.files;
-									if (files == null)  { $("#uploadto").text(""); return;  }
-									for (var i = 0; i < files.length; i++) {
-										var file = new Upload(files[i], $(this).attr("href").substr(1));
-										uploads.push(file);
-										file.Start();
+									if (event.target.files != null || event.dataTransfer != null) {
+										event.preventDefault();
+										$("#uploadprogress").slideDown('slow');
+										var files;
+										if (event.target.files != null) files = event.target.files;
+										else if (event.dataTransfer != null && event.dataTransfer.files != null) files = event.dataTransfer.files;
+										if (files == null)  { $("#uploadto").text(""); return;  }
+										for (var i = 0; i < files.length; i++) {
+											var file = new Upload(files[i], $(this).attr("href").substr(1));
+											uploads.push(file);
+											file.Start();
+										}
+										$("#uploadto").text("");
 									}
-									$("#uploadto").text("");
 								};
 							}
 						}
@@ -692,13 +782,59 @@
 				if (temp != null) { clearTimeout(temp); temp == null; }
 			}).trigger("focusout").keydown(function (event) {
 				var keycode = (event.keyCode ? event.keyCode : (event.which ? event.which : event.charCode));
-				if (keycode == 13) 
-				{
-					$("#newfolder").trigger("click");
-					return false;
-				} else  {
-					return true;
+				if (keycode == 9 || keycode == 59 || keycode == 188 || keycode == 190 || keycode == 192 || keycode == 111 || keycode == 220 || keycode == 191 || keycode == 106 || (keycode == 56 && keys.shift) || (keycode == 50 && keys.shift)) { event.preventDefault(); return; }
+				else if (keycode == 27) { $("#newfoldertext").blur(); event.preventDefault(); }
+				else if (keycode == 13) { $("#newfolder").trigger("click"); return false; }
+			});
+			$("#renamebox").focusout(function() {
+				if (temp == "esc") { temp = null; return; }
+				else {
+					if (SelectedItems()[0].Data.Name == $(this).val()) { $("#renamebox").css("display", "none"); return; }
+					$("#renamebox").css("display", "none");
+					$("#progressstatus").dialog({ autoOpen: true, modal: true, title: "Checking..." });
+					$("#progressstatus .progress").progressbar({ value: 0 });
+					$.ajax({
+						type: 'GET',
+						url: '<%=ResolveUrl("~/api/MyFiles/Exists/")%>' + (SelectedItems()[0].Data.Path.substr(0, SelectedItems()[0].Data.Path.lastIndexOf('\\')) + "\\" + $("#renamebox").val() + (SelectedItems()[0].Data.Extension == null ? '\\' : SelectedItems()[0].Data.Extension)).replace(/\\\\/gi, "\\").replace(/\\/gi, "/"),
+						dataType: 'json',
+						context: this,
+						contentType: 'application/json',
+						success: function (data) {
+							if (data.Name != null) {
+								$("#progressstatus").dialog({ autoOpen: true, modal: true, title: "Waiting..." });
+								$("#progressstatus .progress").progressbar({ value: 10 });
+								confirm(data.Name + " already exists!");
+								$("#progressstatus").dialog("close");
+							} else {
+								$("#progressstatus").dialog({ autoOpen: true, modal: true, title: "Renaming..." });
+								$("#progressstatus .progress").progressbar({ value: 50 });
+								$.ajax({
+									type: 'POST',
+									url: '<%=ResolveUrl("~/api/MyFiles/Move")%>',
+									data: '{ "OldPath": "' + SelectedItems()[0].Data.Path.replace(/\\/gi, "/") + '", "NewPath": "' + (SelectedItems()[0].Data.Path.substr(0, SelectedItems()[0].Data.Path.lastIndexOf('\\')) + "\\" + $("#renamebox").val() + (SelectedItems()[0].Data.Extension == null ? '\\' : SelectedItems()[0].Data.Extension)).replace(/\\\\/gi, "\\").replace(/\\/gi, "/") + '" }',
+									dataType: 'json',
+									contentType: 'application/json',
+									success: function (data) {
+										$("#progressstatus").dialog({ autoOpen: true, modal: true, title: "Waiting..." });
+										$("#progressstatus .progress").progressbar({ value: 100 });
+										temp = null; 
+										setTimeout(function() { $("#progressstatus").dialog("close"); }, 500);
+										Load();
+									},
+									error: OnError
+								});
+							}
+						}, error: OnError
+					});
 				}
+			}).keyup(function(event) { 
+				var keycode = (event.keyCode ? event.keyCode : (event.which ? event.which : event.charCode));
+				if (keycode == 27) { temp = "esc"; $("#renamebox").css("display", "none"); event.preventDefault(); }
+				else temp = null;
+			}).keydown(function (event) {
+				var keycode = (event.keyCode ? event.keyCode : (event.which ? event.which : event.charCode));
+				if (keycode == 9 || keycode == 59 || keycode == 188 || keycode == 190 || keycode == 192 || keycode == 111 || keycode == 220 || keycode == 191 || keycode == 106 || (keycode == 56 && keys.shift) || (keycode == 50 && keys.shift)) { event.preventDefault(); return; }
+				else if (keycode == 13) { event.preventDefault(); $("#renamebox").blur(); }
 			});
 			$(".button").button();
 			$("#view").click(function () {
@@ -727,25 +863,31 @@
 					$("#MyFilesHeaddings .type").css("width", $("#MyFiles > a .type").width() + 2);
 					$("#MyFilesHeaddings .extension").css("width", $("#MyFiles > a .extension").width() + 2);
 					$("#MyFilesHeaddings .size").css("width", $("#MyFiles > a .size").width() + 2);
+
+					$("#renamebox").removeClass("small").removeClass("medium").removeClass("large").addClass("details");
 				}
 				else if ($(this).text() == "Small Icons") {
 					viewMode = 2;
 					$("#MyFiles").addClass("small").removeClass("details").removeClass("medium").removeClass("large").css("padding-top", $("#toolbar").height() + 10);
 					$("#MyFilesHeaddings").css("display", "none");
+					$("#renamebox").removeClass("details").removeClass("medium").removeClass("large").addClass("small");
 				}
 				else if ($(this).text() == "Medium Icons") {
 					viewMode = 3;
 					$("#MyFiles").addClass("medium").removeClass("small").removeClass("large").removeClass("details").css("padding-top", $("#toolbar").height() + 10);
 					$("#MyFilesHeaddings").css("display", "none");
+					$("#renamebox").removeClass("details").removeClass("small").removeClass("large").addClass("medium");
 				}
 				else if ($(this).text() == "Large Icons") {
 					viewMode = 4;
 					$("#MyFiles").addClass("large").removeClass("medium").removeClass("small").removeClass("details").css("padding-top", $("#toolbar").height() + 10);
 					$("#MyFilesHeaddings").css("display", "none");
+					$("#renamebox").removeClass("details").removeClass("small").removeClass("medium").addClass("large");
 				}
 				else {
 					viewMode = 0;
 					$("#MyFiles").removeClass("details").removeClass("small").removeClass("medium").removeClass("large").css("padding-top", $("#toolbar").height() + 10);
+					$("#renamebox").removeClass("details").removeClass("small").removeClass("medium").removeClass("large");
 					$("#MyFilesHeaddings").css("display", "none");
 				}
 			});
@@ -794,7 +936,7 @@
 			$(window).trigger("hashchange");
 			
 		});
-		$(document).bind('keydown', function (e) { keys.shift = (e.keyCode == 16); keys.ctrl = (e.keyCode == 17); });
-		$(document).bind('keyup', function (e) { keys.shift = keys.ctrl = false; });
+		$(document).bind('keydown', function (event) { var keycode = (event.keyCode ? event.keyCode : (event.which ? event.which : event.charCode)); keys.shift = (keycode == 16); keys.ctrl = (keycode == 17); });
+		$(document).bind('keyup', function (event) { keys.shift = keys.ctrl = false; });
 	</script>
 </asp:Content>
