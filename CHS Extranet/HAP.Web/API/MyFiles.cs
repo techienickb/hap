@@ -57,6 +57,77 @@ namespace HAP.Web.API
         }
 
         [OperationContract]
+        [WebInvoke(Method = "POST", UriTemplate = "Copy", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        public void Copy(string OldPath, string NewPath)
+        {
+            hapConfig config = hapConfig.Current;
+            User user = new User();
+            if (config.AD.AuthenticationMode == Web.Configuration.AuthMode.Forms)
+            {
+                HttpCookie token = HttpContext.Current.Request.Cookies["token"];
+                if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
+                user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
+            }
+            user.ImpersonateContained();
+            try
+            {
+                DriveMapping mapping;
+                string p = Converter.DriveToUNC(OldPath.Remove(0, 1), OldPath.Substring(0, 1), out mapping, user);
+                string p2 = Converter.DriveToUNC(NewPath.Remove(0, 1), NewPath.Substring(0, 1), out mapping, user);
+                HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.Copy", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Copying: " + p);
+                FileAttributes attr = System.IO.File.GetAttributes(p);
+                if ((attr & FileAttributes.Directory) == FileAttributes.Directory) copyDirectory(p, p2);
+                else System.IO.File.Copy(p, p2);
+            }
+            finally
+            {
+                user.EndContainedImpersonate();
+            }
+        }
+
+        public static void copyDirectory(string Src,string Dst)
+        {
+            string[] Files;
+
+            if( Dst[Dst.Length-1] != Path.DirectorySeparatorChar) Dst += Path.DirectorySeparatorChar;
+            if (!Directory.Exists(Dst)) Directory.CreateDirectory(Dst);
+            Files = Directory.GetFileSystemEntries(Src);
+            foreach (string Element in Files) {
+                if (Directory.Exists(Element)) copyDirectory(Element, Dst + Path.GetFileName(Element));
+                else System.IO.File.Copy(Element, Dst + Path.GetFileName(Element), true);
+            }
+        }
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", UriTemplate = "Move", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        public void Move(string OldPath, string NewPath)
+        {
+            hapConfig config = hapConfig.Current;
+            User user = new User();
+            if (config.AD.AuthenticationMode == Web.Configuration.AuthMode.Forms)
+            {
+                HttpCookie token = HttpContext.Current.Request.Cookies["token"];
+                if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
+                user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
+            }
+            user.ImpersonateContained();
+            try
+            {
+                DriveMapping mapping;
+                string p = Converter.DriveToUNC(OldPath.Remove(0, 1), OldPath.Substring(0, 1), out mapping, user);
+                string p2 = Converter.DriveToUNC(NewPath.Remove(0, 1), NewPath.Substring(0, 1), out mapping, user);
+                HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.Move", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Moving: " + p);
+                FileAttributes attr = System.IO.File.GetAttributes(p);
+                if ((attr & FileAttributes.Directory) == FileAttributes.Directory) Directory.Move(p, p2);
+                else System.IO.File.Move(p, p2);
+            }
+            finally
+            {
+                user.EndContainedImpersonate();
+            }
+        }
+
+        [OperationContract]
         [WebInvoke(Method = "DELETE", UriTemplate = "Delete", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         public string[] Delete(string[] Paths)
         {
