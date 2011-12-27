@@ -45,6 +45,7 @@
 	<div class="contextMenu" id="contextMenu">
 	  <ul>
 		<li id="con-open">Open</li>
+		<li id="con-download">Download</li>
 		<li id="con-delete">Delete</li>
 		<li id="con-rename">Rename</li>
 		<li id="con-preview">Preview</li>
@@ -120,10 +121,8 @@
 			Load();
 		});
 		function OnError(xhr, ajaxOptions, thrownError) {
-			console.log(thrownError);
-			console.log(ajaxOptions);
-			console.log(xhr);
-			alert(thrownError);
+			console.log(xhr.responseXML.documentElement.children[2]);
+			alert(xhr.responseXML.documentElement.children[1].children[0].textContent);
 		}
 		function Copy(index, target) {
 			temp = { "index": index, "target": target };
@@ -187,9 +186,9 @@
 		}
 		function Delete(index) {
 			temp = index;
-			var a = '"' + SelectedItems()[index].Data.Path.replace(/\\/g, "/") + '"';
+			var a = '"' + SelectedItems()[index].Data.Path.replace(/\.\.\/download\//gi, "").replace(/\\/g, "/") + '"';
 			$.ajax({
-				type: 'DELETE',
+				type: 'POST',
 				url: '<%=ResolveUrl("~/api/MyFiles/Delete")%>',
 				dataType: 'json',
 				data: '[' + a + ']',
@@ -256,7 +255,7 @@
 						if (this.status != 200) alert("Upload of " + item.File.name + " has Failed!");
 						$("#upload-" + this.id + " .progressbar").progressbar("value", 100 );
 						$("#upload-" + id).delay(1000).slideUp('slow', function() { $("#upload-" + id).remove(); if (uploads.length == 0) $("#uploadprogress").slideUp('slow'); });
-						if (curpath.substr(0, curpath.length - 1).replace(/\//g, "\\") == item.Path) Load();
+						if (curpath.substr(0, curpath.length - 1).replace(/\//g, "\\") == item.Path || curpath.replace(/\//g, "\\") == item.Path) Load();
 						uploads.pop(item);
 					}
 				};
@@ -307,7 +306,7 @@
 				else h += this.Data.Type + '</span><span class="extension">' + this.Data.Extension + '</span><span class="size">' + this.Data.Size;
 				h += '</span></a>';
 				$("#MyFiles").append(h);
-				if (this.Data.Actions == 0 || this.Data.Actions == 3) $("#" + this.Id).draggable({ helper: function () { return $('<div id="dragobject"><img /><span></span></div>'); }, start: function (event, ui) {
+				if (this.Data.Actions == 0) $("#" + this.Id).draggable({ helper: function () { return $('<div id="dragobject"><img /><span></span></div>'); }, start: function (event, ui) {
 					var item = null;
 					for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
 					if (!item.Selected) for (var x = 0; x < items.length; x++) if (items[x].Selected) { items[x].Selected = false; items[x].Refresh(); }
@@ -380,9 +379,11 @@
 					},
 					onShowMenu: function (e, menu) {
 						if (curitem.Actions != 0) { $("#con-delete", menu).remove(); $("#con-google", menu).remove(); $("#con-rename", menu).remove(); }
-						if (SelectedItems().length > 1) { $("#con-open", menu).remove(); $("#con-rename", menu).remove(); $("#con-properties", menu).remove(); $("#con-preview", menu).remove(); $("#con-google", menu).remove(); }
+						if (curitem.Actions == 3) { $("#con-download", menu).remove(); if (SelectedItems().length != 1 || SelectedItems()[0].Data.Type != 'Directory') ("#con-open", menu).remove(); $("#con-properties", menu).remove(); }
+						if (SelectedItems().length > 1) { $("#con-download", menu).remove(); $("#con-open", menu).remove(); $("#con-rename", menu).remove(); $("#con-properties", menu).remove(); $("#con-preview", menu).remove(); $("#con-google", menu).remove(); }
 						else {
 							var remgoogle = false;
+							if (SelectedItems()[0].Data.Extension != ".zip") $("#con-download", menu).remove();
 							if (SelectedItems()[0].Data.Extension != ".txt" && SelectedItems()[0].Data.Extension != ".xlsx" && SelectedItems()[0].Data.Extension != ".docx" && SelectedItems()[0].Data.Extension != ".xls" && SelectedItems()[0].Data.Extension != ".csv" && SelectedItems()[0].Data.Extension != ".png" && SelectedItems()[0].Data.Extension != ".gif" && SelectedItems()[0].Data.Extension != ".jpg" && SelectedItems()[0].Data.Extension != ".jpeg" && SelectedItems()[0].Data.Extension != ".bmp") {
 								$("#con-preview", menu).remove();
 								if (SelectedItems()[0].Data.Extension != ".ppt" && SelectedItems()[0].Data.Extension != ".pptx" && SelectedItems()[0].Data.Extension != ".pps" && SelectedItems()[0].Data.Extension != ".doc" && SelectedItems()[0].Data.Extension != ".rtf")
@@ -393,6 +394,12 @@
 					},
 					bindings: {
 						'con-open': function (t) {
+							if (SelectedItems().length > 1) { alert("This only works on 1 item"); return false; }
+							if (SelectedItems()[0].Data.Type == 'Directory') window.location.href = "#" + SelectedItems()[0].Data.Path;
+							else if (SelectedItems()[0].Data.Extension == ".zip") window.location.href="#" + (curitem.Location.replace(/:/gi, "").replace(/\//gi, "/") + "\\").replace(/\\\\/gi, "\\") + SelectedItems()[0].Data.Name + ".zip";
+							else window.location.href = SelectedItems()[0].Data.Path;
+						},
+						'con-download': function (t) {
 							if (SelectedItems().length > 1) { alert("This only works on 1 item"); return false; }
 							if (SelectedItems()[0].Data.Type == 'Directory') window.location.href = "#" + SelectedItems()[0].Data.Path;
 							else window.location.href = SelectedItems()[0].Data.Path;
@@ -538,6 +545,7 @@
 					}
 					item.Refresh();
 				} else {
+					if (item.Data.Type != 'Directory' && item.Data.Actions == 3) return;
 					if (item.Data.Type != 'Directory') alert("You are about to download this file, if you wish to edit this file, please remember to\nSave it to your computer, and upload it back once you have finished!");
 					var item = null;
 					for (var x = 0; x < items.length; x++)
@@ -616,7 +624,7 @@
 								if (subdrop) { subdrop = false; return; }
 								$("#uploadprogress").slideDown('slow');
 								for (var i = 0; i < (event.target.files || event.dataTransfer.files).length; i++) {
-									var file = new Upload((event.target.files || event.dataTransfer.files)[i], curitem.Location.substr(0, curitem.Location.length - 1).replace(/:/g, ""));
+									var file = new Upload((event.target.files || event.dataTransfer.files)[i], (curpath.length == 2 ? curitem.Location.substr(0, curitem.Location.length -1 ) : curitem.Location).replace(/:/g, ""));
 									uploads.push(file);
 									file.Start();
 								}
