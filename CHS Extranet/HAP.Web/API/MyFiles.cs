@@ -27,7 +27,6 @@ namespace HAP.Web.API
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
     public class MyFiles
     {
-
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "SendTo/Google/{Drive}/{*Path}", BodyStyle = WebMessageBodyStyle.WrappedRequest,  RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         public string GoogleUpload(string Drive, string Path, string username, string password)
@@ -128,7 +127,7 @@ namespace HAP.Web.API
         }
 
         [OperationContract]
-        [WebInvoke(Method = "DELETE", UriTemplate = "Delete", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "POST", UriTemplate = "Delete", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         public string[] Delete(string[] Paths)
         {
             List<string> ret = new List<string>();
@@ -296,6 +295,7 @@ namespace HAP.Web.API
             {
                 DriveMapping mapping;
                 string path = Converter.DriveToUNC(Path, Drive, out mapping, user);
+                if (path.ToLower().Contains(".zip\\")) path = path.Remove(path.ToLower().IndexOf(".zip\\") + 5);
                 FileAttributes attr = System.IO.File.GetAttributes(path);
                 //detect whether its a directory or file
                 ret = new Properties(new DirectoryInfo(path), user, mapping);
@@ -349,11 +349,71 @@ namespace HAP.Web.API
             return ret;
         }
 
+        private List<HAP.Data.MyFiles.File> ZIPList(string Drive, string Path, User user)
+        {
+            List<HAP.Data.MyFiles.File> Items = new List<Data.MyFiles.File>();
+            DriveMapping mapping;
+            string path = Converter.DriveToUNC(Path, Drive, out mapping, user);
+            string subpath = (path.Length == path.ToLower().IndexOf(".zip") + 4) ? "" : (path.Remove(0, path.ToLower().IndexOf(".zip") + 5) + "\\");
+            ICSharpCode.SharpZipLib.Zip.ZipFile zf = new ICSharpCode.SharpZipLib.Zip.ZipFile(subpath == "" ? path : path.Remove(path.ToLower().IndexOf(".zip") + 4));
+            try
+            {
+                foreach (ICSharpCode.SharpZipLib.Zip.ZipEntry ze in zf)
+                {
+                    if (ze.IsDirectory && ze.Name != "None")
+                    {
+                        Data.MyFiles.File f = new Data.MyFiles.File();
+                        f.Actions = Data.MyFiles.AccessControlActions.ZIP;
+                        f.CreationTime = f.ModifiedTime = ze.DateTime.ToShortDateString() + " " + ze.DateTime.ToString("hh:mm");
+                        f.Icon = "../images/icons/folder.png";
+                        f.Size = "";
+                        f.Description = "File Folder";
+                        f.Extension = "";
+                        f.Name = ze.Name.Replace('/', '\\');
+                        if (f.Name.EndsWith("\\")) f.Name = f.Name.Remove(f.Name.Length - 1);
+                        f.Type = "Directory";
+
+                        if (subpath == "" && f.Name.Contains('\\')) continue;
+                        else if (subpath != "" && !f.Name.StartsWith(subpath)) continue;
+                        else if (subpath != "" && f.Name.StartsWith(subpath) && f.Name.Remove(0, subpath.Length).Contains('\\')) continue;
+                        if (subpath != "") f.Name = f.Name.Replace(subpath, "");
+                        f.Path = Converter.UNCtoDrive(path + "/" + f.Name, mapping, user).Replace(":", "").Replace('/', '\\');
+                        Items.Add(f);
+                    }
+                }
+                foreach (ICSharpCode.SharpZipLib.Zip.ZipEntry ze in zf)
+                {
+                    if (ze.IsFile && ze.Name != "None")
+                    {
+                        Data.MyFiles.File f = new Data.MyFiles.File();
+                        f.Actions = Data.MyFiles.AccessControlActions.ZIP;
+                        f.CreationTime = f.ModifiedTime = ze.DateTime.ToShortDateString() + " " + ze.DateTime.ToString("hh:mm");
+                        f.Icon = "../images/icons/file.png";
+                        f.Name = ze.Name.Replace('/', '\\');
+
+                        if (subpath == "" && f.Name.Contains('\\')) continue;
+                        else if (subpath != "" && !f.Name.StartsWith(subpath)) continue;
+                        else if (subpath != "" && f.Name.StartsWith(subpath) && f.Name.Remove(0, subpath.Length + 1).Contains('\\')) continue;
+                        if (subpath != "") f.Name = f.Name.Replace(subpath, "");
+                        f.Type = "File";
+                        f.Path = Converter.UNCtoDrive(path + "/" + f.Name, mapping, user).Replace(":", "").Replace('/', '\\');
+                        f.Size = Data.MyFiles.File.parseLength(ze.Size);
+                        Items.Add(f);
+                    }
+                }
+
+            }
+            finally
+            {
+                if (zf != null) { zf.IsStreamOwner = true; zf.Close(); }
+            }
+            return Items;
+        }
+
         [OperationContract]
         [WebGet(UriTemplate="{Drive}/{*Path}")]
         public HAP.Data.MyFiles.File[] List(string Drive, string Path)
         {
-            DateTime d1 = DateTime.Now;
             Path = "/" + Path;
             hapConfig config = hapConfig.Current;
             List<HAP.Data.MyFiles.File> Items = new List<Data.MyFiles.File>();
@@ -370,39 +430,43 @@ namespace HAP.Web.API
                 DriveMapping mapping;
                 string path = Converter.DriveToUNC(Path, Drive, out mapping, user);
                 HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.List", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Requesting list of: " + path);
-                HAP.Data.MyFiles.AccessControlActions allowactions = isWriteAuth(mapping) ? HAP.Data.MyFiles.AccessControlActions.Change : HAP.Data.MyFiles.AccessControlActions.View;
-                DirectoryInfo dir = new DirectoryInfo(path);
-                foreach (DirectoryInfo subdir in dir.GetDirectories())
-                    try
-                    {
-                        bool isHidden = (subdir.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden;
-                        bool isSystem = (subdir.Attributes & FileAttributes.System) == FileAttributes.System;
-                        if (!subdir.Name.ToLower().Contains("recycle") && !isSystem && !isHidden && !subdir.Name.ToLower().Contains("system volume info"))
-                        {
-                            HAP.Data.MyFiles.AccessControlActions actions = allowactions;
-                            if (actions == HAP.Data.MyFiles.AccessControlActions.Change)
-                            {
-                                try { System.IO.File.Create(System.IO.Path.Combine(subdir.FullName, "temp.ini")).Close(); System.IO.File.Delete(System.IO.Path.Combine(subdir.FullName, "temp.ini")); }
-                                catch { actions = HAP.Data.MyFiles.AccessControlActions.View; }
-                            }
-                            try { subdir.GetDirectories(); }
-                            catch { actions = HAP.Data.MyFiles.AccessControlActions.None; }
-                            Items.Add(new Data.MyFiles.File(subdir, mapping, user, actions));
-                        }
-                    }
-                    catch { }
-                foreach (FileInfo file in dir.GetFiles())
+                if (path.ToLower().IndexOf(".zip") != -1) Items = ZIPList(Drive, Path, user);
+                else
                 {
-                    try
+                    HAP.Data.MyFiles.AccessControlActions allowactions = isWriteAuth(mapping) ? HAP.Data.MyFiles.AccessControlActions.Change : HAP.Data.MyFiles.AccessControlActions.View;
+                    DirectoryInfo dir = new DirectoryInfo(path);
+                    foreach (DirectoryInfo subdir in dir.GetDirectories())
+                        try
+                        {
+                            bool isHidden = (subdir.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden;
+                            bool isSystem = (subdir.Attributes & FileAttributes.System) == FileAttributes.System;
+                            if (!subdir.Name.ToLower().Contains("recycle") && !isSystem && !isHidden && !subdir.Name.ToLower().Contains("system volume info"))
+                            {
+                                HAP.Data.MyFiles.AccessControlActions actions = allowactions;
+                                if (actions == HAP.Data.MyFiles.AccessControlActions.Change)
+                                {
+                                    try { System.IO.File.Create(System.IO.Path.Combine(subdir.FullName, "temp.ini")).Close(); System.IO.File.Delete(System.IO.Path.Combine(subdir.FullName, "temp.ini")); }
+                                    catch { actions = HAP.Data.MyFiles.AccessControlActions.View; }
+                                }
+                                try { subdir.GetDirectories(); }
+                                catch { actions = HAP.Data.MyFiles.AccessControlActions.None; }
+                                Items.Add(new Data.MyFiles.File(subdir, mapping, user, actions));
+                            }
+                        }
+                        catch { }
+                    foreach (FileInfo file in dir.GetFiles())
                     {
-                        bool isHidden = (file.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden;
-                        bool isSystem = (file.Attributes & FileAttributes.System) == FileAttributes.System;
-                        if (!file.Name.ToLower().Contains("thumbs") && checkext(file.Extension) && !isHidden && !isSystem)
-                            Items.Add(new Data.MyFiles.File(file, mapping, user, allowactions));
-                    }
-                    catch
-                    {
-                        //Response.Redirect("unauthorised.aspx?path=" + Server.UrlPathEncode(uae.Message), true);
+                        try
+                        {
+                            bool isHidden = (file.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden;
+                            bool isSystem = (file.Attributes & FileAttributes.System) == FileAttributes.System;
+                            if (!file.Name.ToLower().Contains("thumbs") && checkext(file.Extension) && !isHidden && !isSystem)
+                                Items.Add(new Data.MyFiles.File(file, mapping, user, allowactions));
+                        }
+                        catch
+                        {
+                            //Response.Redirect("unauthorised.aspx?path=" + Server.UrlPathEncode(uae.Message), true);
+                        }
                     }
                 }
             }

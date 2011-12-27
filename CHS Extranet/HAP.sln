@@ -46,6 +46,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{7F80432C-70D
 		Binaries\Google.GData.AccessControl.DLL = Binaries\Google.GData.AccessControl.DLL
 		Binaries\Google.GData.Client.dll = Binaries\Google.GData.Client.dll
 		Binaries\Google.GData.Documents.dll = Binaries\Google.GData.Documents.dll
+		Binaries\ICSharpCode.SharpZipLib.dll = Binaries\ICSharpCode.SharpZipLib.dll
 	EndProjectSection
 EndProject
 Global

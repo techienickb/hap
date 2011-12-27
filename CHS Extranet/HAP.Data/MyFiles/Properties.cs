@@ -71,8 +71,12 @@ namespace HAP.Data.MyFiles
                 try { System.IO.File.Create(System.IO.Path.Combine(dir.FullName, "temp.ini")).Close(); System.IO.File.Delete(System.IO.Path.Combine(dir.FullName, "temp.ini")); }
                 catch { Actions = HAP.Data.MyFiles.AccessControlActions.View; }
             }
-            try { dir.GetDirectories(); }
-            catch { Actions = HAP.Data.MyFiles.AccessControlActions.None; }
+            if (dir.FullName.Contains(".zip")) Actions = AccessControlActions.ZIP;
+            else 
+            { 
+                try { dir.GetDirectories(); }
+                catch { Actions = HAP.Data.MyFiles.AccessControlActions.None; }
+            }
             Name = (dir.FullName == Converter.DriveToUNC("", mapping.Drive.ToString(), out m, user) + '\\') ? mapping.Name : dir.Name;
             Location = Converter.UNCtoDrive(dir.FullName, mapping, user);
             Type = "File Folder";

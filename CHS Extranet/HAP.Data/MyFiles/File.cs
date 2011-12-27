@@ -113,7 +113,9 @@ namespace HAP.Data.MyFiles
             }
             else
             {
-                e = ((DirectoryInfo)ExtentionOrName).Name.ToLower();
+
+                if (ExtentionOrName.GetType() == typeof(DirectoryInfo)) e = ((DirectoryInfo)ExtentionOrName).Name.ToLower();
+                else e = ExtentionOrName.ToString();
                 e = e.Replace("my ", "");
                 switch (e)
                 {
@@ -792,5 +794,5 @@ namespace HAP.Data.MyFiles
 
     }
 
-    public enum AccessControlActions { Change, View, None }
+    public enum AccessControlActions { Change, View, None, ZIP }
 }
