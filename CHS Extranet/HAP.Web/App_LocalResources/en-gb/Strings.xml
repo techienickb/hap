@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hapStrings>
+  <homeaccessplus>Home Access Plus+</homeaccessplus>
+  <home>Home</home>
+  <loading>Loading</loading>
+  <help>Help</help>
+  <name>Name</name>
+  <of>of</of>
+  <to>to</to>
+  <items>items</items>
+  <username>Username</username>
+  <search>Search</search>
+  <password>Password</password>
+  <errordetails>Error Details</errordetails>
+  <myfiles>
+    <open>Open</open>
+    <download>Download</download>
+    <rename>Rename</rename>
+    <only1>This only works on 1 item</only1>
+    <create>Create</create>
+    <mydrives>My Drives</mydrives>
+    <filefolder>File Folder</filefolder>
+    <waiting>Waiting</waiting>
+    <renaming>Renaming</renaming>
+    <folderexists1>The folder</folderexists1>
+    <checking>Checking</checking>
+    <folderexists2>already exists!</folderexists2>
+    <copy>
+      <copy>Copy</copy>
+      <copying>Copying</copying>
+      <copyingitem1>Copying item</copyingitem1>
+      <error1>An Error has occured while copying</error1>
+      <error2>do you want to Continue?</error2>
+    </copy>
+    <move>
+      <move>Move</move>
+      <moving>Moving</moving>
+      <movingitem1>Moving item</movingitem1>
+      <error1>An Error has occured while moving</error1>
+      <error2>do you want to Continue?</error2>
+      <question1>Are you sure you want to move:</question1>
+    </move>
+    <downloadwarning>You are about to download this file, if you wish to edit this file, please remember to\nSave it to your computer, and upload it back once you have finished!</downloadwarning>
+    <upload>
+      <upload>Upload</upload>
+      <uploading>Uploading</uploading>
+      <uploadprogress>Upload Progress</uploadprogress>
+      <filetypewarning>is an restricted file type\n\n\You can only upload</filetypewarning>
+      <filesizewarning>is Too Big to Upload!</filesizewarning>
+      <fileexists1>The file</fileexists1>
+      <fileexists2>already exists\n\nDo you want to overwrite it?</fileexists2>
+      <failed> has Failed!</failed>
+      <note>This page will refresh when it has finished</note>
+    </upload>
+    <delete>
+      <question1>Are you sure you want to delete:</question1>
+      <delete>Delete</delete>
+      <deletingitem1>Deleting item</deletingitem1>
+    </delete>
+    <size>Size</size>
+    <type>Type</type>
+    <locatoin>Location</locatoin>
+    <contains>Contains</contains>
+    <created>Created</created>
+    <typeoffile>Type of File</typeoffile>
+    <modified>Modified</modified>
+    <accessed>Accessed</accessed>
+    <extension>Extension</extension>
+    <newfolder>New Folder</newfolder>
+    <tiles>Tiles</tiles>
+    <smallicons>Small Icons</smallicons>
+    <mediumicons>Medium Icons</mediumicons>
+    <largeicons>Large Icons</largeicons>
+    <details>Details</details>
+    <view>View</view>
+    <properties>Properties</properties>
+    <preview>Preview</preview>
+    <progress>Progress</progress>
+    <sendto>
+      <googledocs>Send to Google Docs</googledocs>
+      <googlesignin>Sign into Google Docs</googlesignin>
+      <googlesignin2>Once you have signed into Google, HAP+ will upload the selected file to your Google Docs</googlesignin2>
+    </sendto>
+  </myfiles>
+</hapStrings>

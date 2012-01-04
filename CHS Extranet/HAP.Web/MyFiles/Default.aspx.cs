@@ -15,7 +15,20 @@ namespace HAP.Web.MyFiles
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            StreamReader sr = File.OpenText(Server.MapPath("~/app_data/myfiles-users.txt"));
+            FirstTime = !(sr.ReadToEnd().Contains(HttpContext.Current.User.Identity.Name + "\n"));
+            sr.Close();
+            sr.Dispose();
+            if (FirstTime)
+            {
+                StreamWriter sw = File.AppendText(Server.MapPath("~/app_data/myfiles-users.txt"));
+                sw.Write(HttpContext.Current.User.Identity.Name + "\n");
+                sw.Close();
+                sw.Dispose();
+            }
         }
+
+        protected bool FirstTime { get; set; }
 
         /// <summary>
         /// The max file size in bytes
@@ -24,7 +37,7 @@ namespace HAP.Web.MyFiles
         {
             get
             {
-                HttpRuntimeSection section = ConfigurationManager.GetSection("system.web/httpRuntime") as HttpRuntimeSection;
+                HttpRuntimeSection section = ConfigurationManager.GetSection("location[@path='myfiles/default.aspx']/system.web/httpRuntime") as HttpRuntimeSection;
 
                 if (section != null)
                     return section.MaxRequestLength * 1024; // Cofig Value
@@ -79,7 +92,7 @@ namespace HAP.Web.MyFiles
             ADUser.Impersonate();
             DriveMapping mapping;
             string path = HAP.Data.ComputerBrowser.Converter.DriveToUNC(p.Value, out mapping);
-            if (isAuth(uploadedfiles.PostedFile.FileName)) uploadedfiles.PostedFile.SaveAs(Path.Combine(path, uploadedfiles.PostedFile.FileName));
+            if (isAuth(Path.GetExtension(uploadedfiles.PostedFile.FileName))) uploadedfiles.PostedFile.SaveAs(Path.Combine(path, uploadedfiles.PostedFile.FileName));
             ADUser.EndImpersonate();
         }
 

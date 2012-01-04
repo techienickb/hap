@@ -13,6 +13,51 @@ namespace HAP.Web.MyFiles {
     public partial class Default {
         
         /// <summary>
+        /// properties control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::HAP.Web.Controls.WrappedLocalResource properties;
+        
+        /// <summary>
+        /// preview control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::HAP.Web.Controls.WrappedLocalResource preview;
+        
+        /// <summary>
+        /// progressstatus control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::HAP.Web.Controls.WrappedLocalResource progressstatus;
+        
+        /// <summary>
+        /// googlesignin control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::HAP.Web.Controls.WrappedLocalResource googlesignin;
+        
+        /// <summary>
+        /// uploaders control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::HAP.Web.Controls.WrappedLocalResource uploaders;
+        
+        /// <summary>
         /// uploadedfiles control.
         /// </summary>
         /// <remarks>

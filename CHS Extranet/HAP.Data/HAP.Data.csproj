@@ -80,6 +80,9 @@
     <Compile Include="MyFiles\DocXPreview.cs" />
     <Compile Include="MyFiles\Drive.cs" />
     <Compile Include="MyFiles\File.cs" />
+    <Compile Include="MyFiles\Homework\Homework.cs" />
+    <Compile Include="MyFiles\Homework\Homeworks.cs" />
+    <Compile Include="MyFiles\Homework\UserNode.cs" />
     <Compile Include="MyFiles\Properties.cs" />
     <Compile Include="MyFiles\WordVisualizer\CoreProperties.cs" />
     <Compile Include="MyFiles\WordVisualizer\DisplayModeEnumeration.cs" />

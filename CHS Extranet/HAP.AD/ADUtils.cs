@@ -41,15 +41,11 @@ namespace HAP.AD
             return users.ToArray();
         }
 
-        public static UserInfo[] FindUsers(ou ou, string subou)
+        public static UserInfo[] FindUsersIn(string OU)
         {
             hapConfig config = hapConfig.Current;
             List<UserInfo> results = new List<UserInfo>();
-
-            string cs = string.Format(ou.Path, subou);
-            DirectoryEntry usersDE = new DirectoryEntry(cs, config.AD.User, config.AD.Password);
-            //throw new Exception(usersDE1.Path);
-            //DirectoryEntry usersDE = new DirectoryEntry(ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
+            DirectoryEntry usersDE = new DirectoryEntry(OU, config.AD.User, config.AD.Password);
             DirectorySearcher ds = new DirectorySearcher(usersDE);
             ds.Filter = "(&(objectClass=user)(sAMAccountName=*))";
             ds.PropertiesToLoad.Add("sAMAccountName");
@@ -71,6 +67,11 @@ namespace HAP.AD
             catch (Exception e) { throw new Exception(usersDE.Path, e); }
             results.Sort();
             return results.ToArray();
+        }
+
+        public static UserInfo[] FindUsers(ou ou, string subou)
+        {
+            return FindUsersIn(string.Format(ou.Path, subou));
         }
 
         public static UserInfo[] FindUserInfos(string query)
