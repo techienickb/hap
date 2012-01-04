@@ -12,6 +12,7 @@ namespace HAP.Web.API
         public static void Register(RouteCollection collection)
         {
             RouteTable.Routes.Add(new Route("api/test", new TestHandler()));
+            RouteTable.Routes.Add(new Route("api/js", new JSHandler()));
             RouteTable.Routes.Add(new Route("api/mycomputer/check/{*path}", new UploadCheckerHandler()));
             RouteTable.Routes.Add(new Route("api/mycomputer/thumb/{*path}", new ThumbsHandler()));
             RouteTable.Routes.Add(new Route("api/mycomputer/{ext}.ico", new IconHandler()));
@@ -22,6 +23,8 @@ namespace HAP.Web.API
             RouteTable.Routes.Add(new ServiceRoute("api/bookingsystem", factory, typeof(BookingSystem)));
             RouteTable.Routes.Add(new ServiceRoute("api/helpdesk", factory, typeof(HelpDesk)));
             RouteTable.Routes.Add(new ServiceRoute("api/myfiles", factory, typeof(MyFiles)));
+            RouteTable.Routes.Add(new ServiceRoute("api/homework", factory, typeof(Homework)));
+            RouteTable.Routes.Add(new ServiceRoute("api/help", factory, typeof(Help)));
         }
     }
 }

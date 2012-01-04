@@ -42,20 +42,39 @@ namespace HAP.Web.API
             }
         }
 
+        private bool isAuth(string extension)
+        {
+            foreach (Filter filter in hapConfig.Current.MySchoolComputerBrowser.Filters)
+                if (filter.Expression.Contains(extension)) return true;
+            return isAuth(hapConfig.Current.MySchoolComputerBrowser.Filters.Single(fil => fil.Name == "All Files"));
+        }
+
+        private bool isAuth(Filter filter)
+        {
+            if (filter.EnableFor == "All") return true;
+            else if (filter.EnableFor != "None")
+            {
+                bool vis = false;
+                foreach (string s in filter.EnableFor.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
+                    if (!vis) vis = HttpContext.Current.User.IsInRole(s.Trim());
+                return vis;
+            }
+            return false;
+        }
+
         public void ProcessRequest(HttpContext context)
         {
             if (!string.IsNullOrEmpty(context.Request.Headers["X_FILENAME"]))
             {
-                
+
+                if (!isAuth(Path.GetExtension(context.Request.Headers["X_FILENAME"]))) throw new UnauthorizedAccessException("You have attempted to uploaded a restricted file type");
+                DriveMapping m;
+                string path = Path.Combine(Converter.DriveToUNC('\\' + RoutingPath, RoutingDrive, out m, ADUser), context.Request.Headers["X_FILENAME"]);
+                HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.Upload", ADUser.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Uploading of: " + context.Request.Headers["X_FILENAME"] + " to: " + path);
                 try
                 {
                     ADUser.ImpersonateContained();
-
-                    DriveMapping m;
-                    string path = Path.Combine(Converter.DriveToUNC('\\' + RoutingPath, RoutingDrive, out m, ADUser), context.Request.Headers["X_FILENAME"]);
-                    HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.Upload", ADUser.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Uploading of: " + context.Request.Headers["X_FILENAME"] + " to: " + path);
                     Stream inputStream = context.Request.InputStream;
-
                     FileStream fileStream = new FileStream(path, FileMode.OpenOrCreate);
 
                     inputStream.CopyTo(fileStream);

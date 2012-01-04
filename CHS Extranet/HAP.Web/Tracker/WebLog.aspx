@@ -21,7 +21,7 @@
 			</Series>
 			<ChartAreas>
 				<asp:ChartArea Name="pcchartarea">
-					<AxisY IsLabelAutoFit="False" Title="Number of Logons" TitleFont="Segoe UI, 9pt">
+					<AxisY IsLabelAutoFit="False" Title="Number of Events" TitleFont="Segoe UI, 9pt">
 						<LabelStyle Font="Segoe UI, 9pt" />
 					</AxisY>
 					<AxisX IsLabelAutoFit="False" Title="Day" TitleFont="Segoe UI, 9pt">
@@ -40,10 +40,8 @@
 			<BorderSkin PageColor="Transparent" />
 		</asp:Chart>
 	</div>
-	<asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Conditional" runat="server" ChildrenAsTriggers="true">
-		<ContentTemplate>
-			<asp:Button ID="showdata" runat="server" Text="Show Data" OnClick="showdata_Click" />
-			<table border="0" class="trackertable"<%=showtable %>>
+	<asp:Button ID="showdata" runat="server" Text="Show Data" OnClick="showdata_Click" />
+	<table border="0" class="trackertable"<%=showtable %>>
 				<tr valign="top">
 					<th style="width: 180px">
 						<div><label>Date & Time</label>
@@ -115,8 +113,6 @@
 				</ItemTemplate>
 			</asp:Repeater>
 			</table>
-		</ContentTemplate>
-	</asp:UpdatePanel>
 	<div id="loadingPopup" style="display: none;">
 		<div class="modalBackground"></div>
 		<div id="ph">

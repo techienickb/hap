@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--
+British English Help Localised Resources
+-->
+<resources>
+  <contents>
+    <![CDATA[
+    <h2>Contents</h2>
+      <ul>
+      <li><b><a href="javascript:void(hap.help.Load('homepage/contents'));">Home Page</a></b></li>
+      <li><b><a href="javascript:void(hap.help.Load('myfiles/contents'));">My Files</a></b></li>
+      <li><b><a href="javascript:void(hap.help.Load('myfiles/homework/contents'));">Homework</a></b></li>
+      <li><b><a href="javascript:void(hap.help.Load('bookingsystem/contents'));">Booking System</a></b></li>
+      <li><b><a href="javascript:void(hap.help.Load('helpdesk/contents'));">Help Desk</a></b></li>
+      </ul>
+    ]]>
+  </contents>
+  <myfiles>
+    <contents>
+    <![CDATA[
+      <h2>Contents</h2>
+      <ul>
+      <li><b><a href="javascript:void(hap.help.Load('myfiles/index'));">Welcome</a></b>
+        <ul><li><a href="javascript:void(hap.help.Load('myfiles/whats-new'));">What's New</a></li></ul>
+      </li>
+      <li><b>The Interface</b>
+        <ul>
+          <li><a href="javascript:void(hap.help.Load('myfiles/toolbar'));">The Toolbar</a></li>
+          <li><a href="javascript:void(hap.help.Load('myfiles/tree'));">The Tree</a></li>
+          <li><a href="javascript:void(hap.help.Load('myfiles/list'));">The Main List</a></li>
+          <li><a href="javascript:void(hap.help.Load('myfiles/contextmenu'));">The Right Click Menu</a></li>
+        </ul>
+      </li>
+      <li><b>Operations</b>
+        <ul>
+          <li><a href="javascript:void(hap.help.Load('myfiles/delete'));">Delete</a></li>
+          <li><a href="javascript:void(hap.help.Load('myfiles/copy-move'));">Copy/Move</a></li>
+          <li><a href="javascript:void(hap.help.Load('myfiles/properties'));">Properties</a></li>
+          <li><a href="javascript:void(hap.help.Load('myfiles/preview'));">Preview</a></li>
+          <li><a href="javascript:void(hap.help.Load('myfiles/open'));">Open</a></li>
+          <li><a href="javascript:void(hap.help.Load('myfiles/zip'));">Send to ZIP</a></li>
+          <li><a href="javascript:void(hap.help.Load('myfiles/zip'));">Extract from ZIP</a></li>
+          <li><a href="javascript:void(hap.help.Load('myfiles/googledocs'));">Sendd to Google Docs</a></li>
+          <li><a href="javascript:void(hap.help.Load('myfiles/upload'));">Upload</a></li>
+          <li><a href="javascript:void(hap.help.Load('myfiles/newfolder'));">New Folder</a></li>
+          <li><a href="javascript:void(hap.help.Load('myfiles/views'));">View</a></li>
+        </ul>
+      </li>
+      <li><b>Guides to:</b>
+        <ul>
+          <li><a href="javascript:void(hap.help.Load('myfiles/how-to-upload'));">Uploading Files</a></li>
+          <li><a href="javascript:void(hap.help.Load('myfiles/drag-and-drop'));">Dragging and Dropping</a></li>
+        </ul>
+      </ul>
+      
+    ]]></contents>
+    <index>
+      <![CDATA[<h2>Welcome to My Files Version 4.0</h2>
+      <p>This Help Document will provide some helpful details on operating My Files interfaace</p>
+      <p>If you have used the old version of My Files, please <a href="javascript:void(hap.help.Load('myfiles/whats-new'));">click here</a> to find out what's different</p>
+      <p>Home Access Plus+'s My Files allows you to transfer documents to and from your Educational Establishment by just using a web browser.</p>
+      <h3>Interface Basics</h3>
+      <img src="~/images/help/myfiles-interface.png" alt="" />
+      <p>The My Files interface contains 3 distinct areas:
+        <ol>
+          <li><b><a href="javascript:void(hap.help.Load('myfiles/toolbar'));">Toolbar</a></b><br />Shows up when you move past the drive selection page, allows you to Create a New Folder, Upload a file from your local machine, filter the current view for something, or change the View Style<br />For more information on the Toolbar <a href="javascript:void(hap.help.Load('myfiles/toolbar'));">click here</a></li>
+          <li><b><a href="javascript:void(hap.help.Load('myfiles/tree'));">Drive Tree</a></b><br />Allows you to quickly navigate to a folder in a tree layout, simular to Window Explorer's Tree.  You can drag files/folders from the list to the tree to move them (holding CTRL will copy them instead), or by Dragging a file from Windows Explorer, Upload a file to that specific Folder.<br />For more information on the Tree <a href="javascript:void(hap.help.Load('myfiles/tree'));">click here</a></li>
+          <li><b><a href="javascript:void(hap.help.Load('myfiles/list'));">Item List</a></b><br />The list (tiled/iconed/detailed) displays a list of drives/files/folders in a Windows Explorer styled interface.  You can drag files/folders around to move them (holding CTRL will copy them), <a href="javascript:void(hap.help.Load('myfiles/contextmenu'));">right click</a> to <a href="javascript:void(hap.help.Load('myfiles/rename'));">rename</a>, <a href="javascript:void(hap.help.Load('myfiles/delete'));">delete</a>, and <a href="javascript:void(hap.help.Load('myfiles/contextmenu'));">more</a>. The List also allows you to <a href="javascript:void(hap.help.Load('myfiles/drag-and-drop'));">drag</a> files from Windows Explorer to Upload them.<br />For more information on the list <a href="javascript:void(hap.help.Load('myfiles/list'));">click here</a></li>
+        </ol>
+      </p>
+      <p>To get started, close this Help Box, and give it a try.  Once you have chosen a drive (single click), opening a file/folder in the <a href="javascript:void(hap.help.Load('myfiles/list'));">List</a> is done by double clicking on them.  Single Clicking on them Selects them to allow for multiple deleting.  SHIFT and CTRL replicate there Windows Explorer Actions</p>
+      <p>For a full list of My Fieles Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a></p>]]>
+    </index>
+    <whats-new>
+     <![CDATA[
+      <h2>What's New to My Files in Version 4.0?</h2>
+      <ul>
+        <li>Completely Rewritten Interface</li>
+        <li>Works by just using HTML and Javascript, no more silverlight</li>
+        <li>Drag and Dropping files/folders around the interace**, like the old Extended Edition</li>
+        <li>Drag and Dropping of files from Windows Explorer to upload**</li>
+        <li>Ability to Multi Select Files to Upload when you click the Upload Button*</li>
+        <li>Improved Preview Mode</li>
+        <li>Folder/File Properties, displaying File/Folder Size, Creation Date & Time, and More</li>
+        <li>Improved Speed compared to both previous versions</li>
+        <li>Improved Searching/Filtering of the main list compared to both previous versions</li>
+        <li>Consumes less bandwidth (for those with limited data caps)</li>
+        <li>Ability to Copy as well as Move Files</li>
+        <li>Ability to Open a ZIP file as if it were a folder, without having to download it</li>
+        <li>Use of HTML5 and CSS3 Technologies to improve your experience</li>
+      </ul>
+      * - Except Internet Explorer 7 and below
+      ** - Except Internet Explorer 7 and Mobile Browsers
+      <p>For a full list of My Fieles Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a></p>
+    ]]></whats-new>
+</myfiles>
+</resources>

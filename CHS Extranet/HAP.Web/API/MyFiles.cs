@@ -41,12 +41,12 @@ namespace HAP.Web.API
             }
             HAP.Web.SendTo.Google.Client client = new SendTo.Google.Client();
             client.Login(username, password);
+            DriveMapping mapping;
+            string p = Converter.DriveToUNC('/' + Path, Drive, out mapping, user);
+            HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.SendTo.Google", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Sending to Google Docs: " + p);
             user.ImpersonateContained();
             try 
             {
-                DriveMapping mapping;
-                string p = Converter.DriveToUNC('/' + Path, Drive, out mapping, user);
-                HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.SendTo.Google", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Sending to Google Docs: " + p);
                 return client.Upload(p);
             } 
             finally 
@@ -67,13 +67,13 @@ namespace HAP.Web.API
                 if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
                 user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
             }
+            DriveMapping mapping;
+            string p = Converter.DriveToUNC(OldPath.Remove(0, 1), OldPath.Substring(0, 1), out mapping, user);
+            string p2 = Converter.DriveToUNC(NewPath.Remove(0, 1), NewPath.Substring(0, 1), out mapping, user);
+            HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.Copy", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Copying: " + p);
             user.ImpersonateContained();
             try
             {
-                DriveMapping mapping;
-                string p = Converter.DriveToUNC(OldPath.Remove(0, 1), OldPath.Substring(0, 1), out mapping, user);
-                string p2 = Converter.DriveToUNC(NewPath.Remove(0, 1), NewPath.Substring(0, 1), out mapping, user);
-                HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.Copy", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Copying: " + p);
                 FileAttributes attr = System.IO.File.GetAttributes(p);
                 if ((attr & FileAttributes.Directory) == FileAttributes.Directory) copyDirectory(p, p2);
                 else System.IO.File.Copy(p, p2);
@@ -109,13 +109,13 @@ namespace HAP.Web.API
                 if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
                 user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
             }
+            DriveMapping mapping;
+            string p = Converter.DriveToUNC(OldPath.Remove(0, 1), OldPath.Substring(0, 1), out mapping, user);
+            string p2 = Converter.DriveToUNC(NewPath.Remove(0, 1), NewPath.Substring(0, 1), out mapping, user);
+            HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.Move", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Moving: " + p);
             user.ImpersonateContained();
             try
             {
-                DriveMapping mapping;
-                string p = Converter.DriveToUNC(OldPath.Remove(0, 1), OldPath.Substring(0, 1), out mapping, user);
-                string p2 = Converter.DriveToUNC(NewPath.Remove(0, 1), NewPath.Substring(0, 1), out mapping, user);
-                HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.Move", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Moving: " + p);
                 FileAttributes attr = System.IO.File.GetAttributes(p);
                 if ((attr & FileAttributes.Directory) == FileAttributes.Directory) Directory.Move(p, p2);
                 else System.IO.File.Move(p, p2);
@@ -139,9 +139,7 @@ namespace HAP.Web.API
                 if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
                 user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
             }
-            user.ImpersonateContained();
-            try
-            {
+
                 foreach (string path in Paths) 
                 {
                     try
@@ -149,18 +147,18 @@ namespace HAP.Web.API
                         DriveMapping mapping;
                         string p = Converter.DriveToUNC(path.Remove(0, 1), path.Substring(0, 1), out mapping, user);
                         HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.Delete", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Deleting: " + p);
+                        user.ImpersonateContained();
                         FileAttributes attr = System.IO.File.GetAttributes(p);
                         if ((attr & FileAttributes.Directory) == FileAttributes.Directory) Directory.Delete(p, true);
                         else System.IO.File.Delete(p);
                         ret.Add("Deleted " + path.Remove(0, path.LastIndexOf('/') + 1));
                     }
                     catch { ret.Add("I could not delete :" + path.Remove(0, path.LastIndexOf('/') + 1)); }
+                    finally
+                    {
+                        user.EndContainedImpersonate();
+                    }
                 }
-            }
-            finally
-            {
-                user.EndContainedImpersonate();
-            }
             return ret.ToArray();
         }
 
@@ -176,12 +174,12 @@ namespace HAP.Web.API
                 if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
                 user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
             }
+            DriveMapping mapping;
+            string path = Converter.DriveToUNC("/" + Path, Drive, out mapping, user);
+            HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.NewFolder", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Creating new folder: " + path);
             user.ImpersonateContained();
             try
             {
-                DriveMapping mapping;
-                string path = Converter.DriveToUNC("/" + Path, Drive, out mapping, user);
-                HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.NewFolder", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Creating new folder: " + path);
                 Directory.CreateDirectory(path);
             }
             finally
@@ -202,12 +200,11 @@ namespace HAP.Web.API
                 if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
                 user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
             }
-            user.ImpersonateContained();
             DriveMapping mapping;
             string path = Converter.DriveToUNC("/" + Path, Drive, out mapping, user);
+            HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.Preview", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Requesting preview of: " + path);
+            user.ImpersonateContained();
             FileInfo file = new FileInfo(path);
-
-            HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.Preview", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Requesting preview of: " + file.FullName);
 
             string s = "";
 
@@ -334,12 +331,12 @@ namespace HAP.Web.API
                 if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
                 user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
             }
+            DriveMapping mapping;
+            string path = Converter.DriveToUNC(Path, Drive, out mapping, user);
+            HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.Properties", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Requesting properties of: " + path);
             user.ImpersonateContained();
             try
             {
-                DriveMapping mapping;
-                string path = Converter.DriveToUNC(Path, Drive, out mapping, user);
-                HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.Properties", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Requesting properties of: " + path);
                 FileAttributes attr = System.IO.File.GetAttributes(path);
                 //detect whether its a directory or file
                 ret = ((attr & FileAttributes.Directory) == FileAttributes.Directory) ? new Properties(new DirectoryInfo(path), mapping, user) : new Properties(new FileInfo(path), mapping, user);
@@ -424,12 +421,12 @@ namespace HAP.Web.API
                 if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
                 user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
             }
+            DriveMapping mapping;
+            string path = Converter.DriveToUNC(Path, Drive, out mapping, user);
+            HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.List", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Requesting list of: " + path);
             user.ImpersonateContained();
             try
             {
-                DriveMapping mapping;
-                string path = Converter.DriveToUNC(Path, Drive, out mapping, user);
-                HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.List", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Requesting list of: " + path);
                 if (path.ToLower().IndexOf(".zip") != -1) Items = ZIPList(Drive, Path, user);
                 else
                 {
@@ -487,7 +484,6 @@ namespace HAP.Web.API
                 if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
                 user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
             }
-            user.ImpersonateContained();
 
             long freeBytesForUser, totalBytes, freeBytes;
 
@@ -499,25 +495,35 @@ namespace HAP.Web.API
                 {
                     if (p.UsageMode == MappingUsageMode.DriveSpace)
                     {
+                        try
+                        {
+                            user.ImpersonateContained();
+                            if (Win32.GetDiskFreeSpaceEx(Converter.FormatMapping(p.UNC, user), out freeBytesForUser, out totalBytes, out freeBytes))
+                                space = Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
+                        }
+                        finally { user.EndContainedImpersonate(); }
+                    }
+                    else if (p.UsageMode == MappingUsageMode.HAPDriveSpace)
+                    {
                         if (Win32.GetDiskFreeSpaceEx(Converter.FormatMapping(p.UNC, user), out freeBytesForUser, out totalBytes, out freeBytes))
                             space = Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
                     }
-                    else
+                    else if (p.UsageMode == MappingUsageMode.Quota)
                     {
                         try
                         {
+                            user.ImpersonateContained();
                             HAP.Data.Quota.QuotaInfo qi = HAP.Data.ComputerBrowser.Quota.GetQuota(user.UserName, Converter.FormatMapping(p.UNC, user));
                             space = Math.Round((Convert.ToDecimal(qi.Used) / Convert.ToDecimal(qi.Total)) * 100, 2);
                             if (qi.Total == -1)
                                 if (Win32.GetDiskFreeSpaceEx(Converter.FormatMapping(p.UNC, user), out freeBytesForUser, out totalBytes, out freeBytes))
                                     space = Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);
                         }
-                        catch { }
+                        finally { user.EndContainedImpersonate(); }
                     }
                 }
                 if (isAuth(p)) drives.Add(new Drive(p.Name, "../images/icons/netdrive.png", space, p.Drive.ToString() + "\\", isWriteAuth(p) ? HAP.Data.MyFiles.AccessControlActions.Change : HAP.Data.MyFiles.AccessControlActions.View));
             }
-            user.EndContainedImpersonate();
             return drives.ToArray();
         }
 

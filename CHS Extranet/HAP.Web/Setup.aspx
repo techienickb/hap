@@ -637,7 +637,7 @@
                                         $.ajax({
                                             type: 'POST',
                                             url: 'API/Setup/AddMapping',
-                                            data: '{ "drive": "' + $("#mappingDrive").val() + '", "name": "' + $("#mappingName").val() + '", "unc": "' + $("#mappingUNC").val().replace(/\\/g, "/") + '", "enablemove": ' + ($("#mappingEnableMove").attr("checked") ? "true" : "false") + ', "enablereadto": "' + $("#mappingEnableReadTo").val() + '", "enablewriteto": "' + $("#mappingEnableWriteTo").val() + '", "usagemode": "' + ($("mappingUsageModeDriveSpace").attr("checked") ? "DriveSpace" : "Quota") + '" }',
+                                            data: '{ "drive": "' + $("#mappingDrive").val().toUpperCase() + '", "name": "' + $("#mappingName").val() + '", "unc": "' + $("#mappingUNC").val().replace(/\\/g, "/") + '", "enablemove": ' + ($("#mappingEnableMove").attr("checked") ? "true" : "false") + ', "enablereadto": "' + $("#mappingEnableReadTo").val() + '", "enablewriteto": "' + $("#mappingEnableWriteTo").val() + '", "usagemode": "' + ($("mappingUsageModeDriveSpace").attr("checked") ? "DriveSpace" : "Quota") + '" }',
                                             contentType: 'application/json',
                                             dataType: 'json',
                                             success: OnMappingAddSuccess,
@@ -658,7 +658,7 @@
                                 var data = response.AddMappingResult;
                                 if (data != 0) alert(data);
                                 else {
-                                    $("#mappings").append('<div class="homepagelink"><button title="Remove" onclick="return removemapping(this);">X</button><a href="#mapping" class="mapping" title="Edit" onclick="return editmapping(this);"><img src="<%#ResolveUrl("~/images/icons/netdrive.png") %>" alt="" /><b>' + $("#mappingDrive").val() + '</b><i>' + $("#mappingUNC").val() + '</i><span class="name">' + $("#mappingName").val() + '</span><span class="ert">' + $("#mappingEnableReadTo").val() + '</span><span class="ewt">' + $("#mappingEnableWriteTo").val() + '</span><span class="em">' + ($("mappingEnableMove").attr("checked") ? "true" : "false") + '</span><dd>' + ($("mappingUsageModeDriveSpace").attr("checked") ? "DriveSpace" : "Quota") + '</dd></a></div>');
+                                    $("#mappings").append('<div class="homepagelink"><button title="Remove" onclick="return removemapping(this);">X</button><a href="#mapping" class="mapping" title="Edit" onclick="return editmapping(this);"><img src="<%#ResolveUrl("~/images/icons/netdrive.png") %>" alt="" /><b>' + $("#mappingDrive").val().toUpperCase() + '</b><i>' + $("#mappingUNC").val() + '</i><span class="name">' + $("#mappingName").val() + '</span><span class="ert">' + $("#mappingEnableReadTo").val() + '</span><span class="ewt">' + $("#mappingEnableWriteTo").val() + '</span><span class="em">' + ($("mappingEnableMove").attr("checked") ? "true" : "false") + '</span><dd>' + ($("mappingUsageModeDriveSpace").attr("checked") ? "DriveSpace" : "Quota") + '</dd></a></div>');
                                     resetButtons();
                                 }
                             }
@@ -688,7 +688,7 @@
                                         $.ajax({
                                             type: 'POST',
                                             url: 'API/Setup/UpdateMapping',
-                                            data: '{ "origdrive": "' + tempe.children("a").children("b").html() + '", "drive": "' + $("#mappingDrive").val() + '", "name": "' + $("#mappingName").val() + '", "unc": "' + $("#mappingUNC").val().replace(/\\/g, "/") + '", "enablemove": ' + ($("#mappingEnableMove").attr("checked") ? "true" : "false") + ', "enablereadto": "' + $("#mappingEnableReadTo").val() + '", "enablewriteto": "' + $("#mappingEnableWriteTo").val() + '", "usagemode": "' + ($("mappingUsageModeDriveSpace").attr("checked") ? "DriveSpace" : "Quota") + '" }',
+                                            data: '{ "origdrive": "' + tempe.children("a").children("b").html() + '", "drive": "' + $("#mappingDrive").val().toUpperCase() + '", "name": "' + $("#mappingName").val() + '", "unc": "' + $("#mappingUNC").val().replace(/\\/g, "/") + '", "enablemove": ' + ($("#mappingEnableMove").attr("checked") ? "true" : "false") + ', "enablereadto": "' + $("#mappingEnableReadTo").val() + '", "enablewriteto": "' + $("#mappingEnableWriteTo").val() + '", "usagemode": "' + ($("mappingUsageModeDriveSpace").attr("checked") ? "DriveSpace" : "Quota") + '" }',
                                             contentType: 'application/json',
                                             dataType: 'json',
                                             success: OnMappingUpdateSuccess,
@@ -709,7 +709,7 @@
                                 var data = response.UpdateMappingResult;
                                 if (data != 0) alert(data);
                                 else {
-                                    tempe.children("a").children("b").html($("#mappingDrive").val());
+                                    tempe.children("a").children("b").html($("#mappingDrive").val().toUpperCase());
                                     tempe.children("a").children("i").html($("#mappingUNC").val());
                                     tempe.children("a").children(".name").html($("#mappingName").val());
                                     if ($("#mappingEnableMove").attr("checked")) tempe.children("a").children(".em").html() == "True";
@@ -735,8 +735,8 @@
                             });
                             return false;
                         }
-                        function OnFilterRemoveSuccess(response) {
-                            if (response != null && response.GetRemoveMappingResult != null) {
+                        function OnMappingRemoveSuccess(response) {
+                            if (response != null && response.RemoveMappingResult != null) {
                                 var data = response.RemoveMappingResult;
                                 if (data != 0) alert(data);
                                 else { tempe.remove(); tempe = null; }

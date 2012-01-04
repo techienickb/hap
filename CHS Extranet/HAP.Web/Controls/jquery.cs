@@ -19,8 +19,9 @@ namespace HAP.Web.Controls
 
         protected override void RenderContents(HtmlTextWriter output)
         {
-            output.WriteLine("<script src=\"" + ResolveClientUrl("~/Scripts/jquery-1.7.1.min.js") + "\" type=\"text/javascript\"></script>");
-            output.WriteLine("<script src=\"" + ResolveClientUrl("~/Scripts/jquery-ui-1.8.16.custom.min.js") + "\" type=\"text/javascript\"></script>");
+            output.WriteLine("<script src=\"" + ResolveUrl("~/Scripts/jquery-1.7.1.min.js") + "\" type=\"text/javascript\"></script>");
+            output.WriteLine("<script src=\"" + ResolveUrl("~/Scripts/jquery-ui-1.8.16.custom.min.js") + "\" type=\"text/javascript\"></script>");
+            output.WriteLine("<script src=\"" + ResolveUrl("~/api/js") + "\" type=\"text/javascript\"></script>");
             
         }
 

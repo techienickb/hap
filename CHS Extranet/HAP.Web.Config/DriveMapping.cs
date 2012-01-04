@@ -31,5 +31,5 @@ namespace HAP.Web.Configuration
         public MappingUsageMode UsageMode { get; set; }
     }
 
-    public enum MappingUsageMode { None, Quota, DriveSpace }
+    public enum MappingUsageMode { None, Quota, DriveSpace, HAPDriveSpace }
 }

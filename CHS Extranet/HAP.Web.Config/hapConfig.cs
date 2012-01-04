@@ -51,6 +51,12 @@ namespace HAP.Web.Configuration
             set { doc.SelectSingleNode("/hapConfig").Attributes["firstrun"].Value = value.ToString(); }
         }
 
+        public string Local
+        {
+            get { return doc.SelectSingleNode("/hapConfig").Attributes["local"].Value; }
+            set { doc.SelectSingleNode("/hapConfig").Attributes["local"].Value = value.ToString(); }
+        }
+
         public AD AD { get; private set; }
         public Homepage Homepage { get; private set; }
         public ProxyServer ProxyServer { get; private set; }
@@ -100,6 +106,12 @@ namespace HAP.Web.Configuration
                     a.Value = "All";
                     n.Attributes.Append(a);
                 }
+            }
+            if (version.CompareTo(Version.Parse("7.9.0103.1500")) == -1)
+            {//Perform v7.9 Upgrade
+                XmlAttribute a = doc.CreateAttribute("local");
+                a.Value = "en-gb";
+                doc.SelectSingleNode("/hapConfig").Attributes.Append(a);
             }
             doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             doc.Save(ConfigPath);

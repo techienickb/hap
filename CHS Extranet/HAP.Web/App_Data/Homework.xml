@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<homeworks>
+  <teacher user="nick">
+    <homework name="Test" start="28/12/2011 00:00" end="08/01/2012 00:00">
+      <description>
+        <![CDATA[Some <b>HTML</b> Description]]>
+      </description>
+      <add type="user" mode="student">Dave</add>
+    </homework>
+    <homework name="Test 2" start="28/12/2011 00:00" end="08/01/2012 00:00">
+      <description>
+        <![CDATA[<i>Another</i> <b>HTML</b> De<u>s</u>cription]]>
+      </description>
+      <add type="user" mode="student">Dave</add>
+    </homework>
+  </teacher>
+  <teacher user="dave">
+    <homework name="Test" start="28/12/2011 00:00" end="08/01/2012 00:00">
+      <description>
+        <![CDATA[Some <b>HTML</b> Description]]>
+      </description>
+      <add type="user" mode="student">Nick</add>
+    </homework>
+    <homework name="Test 2" start="28/12/2011 00:00" end="08/01/2012 00:00">
+      <description>
+        <![CDATA[<i>Another</i> <b>HTML</b> De<u>s</u>cription]]>
+      </description>
+      <add type="user" mode="student">Nick</add>
+    </homework>
+  </teacher>
+</homeworks>

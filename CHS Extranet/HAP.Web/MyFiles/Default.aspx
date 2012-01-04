@@ -5,85 +5,85 @@
 	<script src="../Scripts/jquery.ba-hashchange.min.js" type="text/javascript"></script>
 	<script src="../Scripts/jquery.dynatree.js" type="text/javascript"></script>
 	<script src="../Scripts/jquery.contextmenu.js" type="text/javascript"></script>
+	<script src="../Scripts/hap.web.js.js" type="text/javascript"></script>
 	<link href="../style/ui.dynatree.css" rel="stylesheet" type="text/css" />
 	<link href="../style/MyFiles.css" rel="stylesheet" type="text/css" />
-	<meta name="DownloadOptions" content="noopen" />
 </asp:Content>
 <asp:Content ContentPlaceHolderID="body" runat="server">
 	<div style="overflow: hidden; clear: both; position: relative; height: 120px" id="myfilesheader">
 		<div class="tiles" style="position: absolute; left: 0; margin-top: 45px;">
-			<a class="button" href="../">Home Access Plus+ Home</a>
+			<a class="button" href="../"><hap:LocalResource StringPath="homeaccessplus" runat="server" Seperator=" " StringPath2="home" /></a>
 		</div>
 		<div class="tiles" style="float: right; text-align: right; margin-top: 45px;">
+			<a class="button" id="help" href="#" onclick="return false;"><hap:LocalResource StringPath="help" runat="server" /></a>
 		</div>
 		<div style="text-align: center;">
 			<img src="../images/myfiles.png" alt="My Files" />
 		</div>
 	</div>
 	<input type="text" id="renamebox" />
-	<div id="properties" title="Properties">
-		<div id="propcont">Loading...</div>
-	</div>
-	<div id="preview" title="Preview" style="height: 500px; overflow: auto; width: 700px;">
-		<div id="previewcont">Loading...</div>
-	</div>
-	<div id="progressstatus" title="Progress">
+	<hap:WrappedLocalResource runat="server" title="#myfiles/properties" id="properties" Tag="div">
+		<div id="propcont"><hap:LocalResource StringPath="loading" runat="server" />...</div>
+	</hap:WrappedLocalResource>
+	<hap:WrappedLocalResource runat="server" title="#myfiles/preview" id="preview" style="height: 500px; overflow: auto; width: 700px;" Tag="div">
+		<div id="previewcont"><hap:LocalResource StringPath="loading" runat="server" />...</div>
+	</hap:WrappedLocalResource>
+	<hap:WrappedLocalResource runat="server" title="#myfiles/progress" id="progressstatus" Tag="div">
 		<div class="progress"></div>
-	</div>
-	<div id="googlesignin" title="Sign into Google Docs">
-		<div>Once you have signed into Google, HAP+ will upload the selected file to your Google Docs</div>
+	</hap:WrappedLocalResource>
+	<hap:WrappedLocalResource runat="server" id="googlesignin" title="#myfiles/sendto/googlesignin" Tag="div">
+		<div><hap:LocalResource StringPath="myfiles/sendto/googlesignin2" runat="server" /></div>
 		<div>
-			<label for="googleuser">Username: </label>
+			<label for="googleuser"><hap:LocalResource StringPath="username" runat="server" />: </label>
 			<input type="text" id="googleuser" />
 		</div>
 		<div>
-			<label for="googlepass">Password: </label>
+			<label for="googlepass"><hap:LocalResource StringPath="password" runat="server" />: </label>
 			<input type="password" id="googlepass" />
 		</div>
 		<div class="progress"></div>
-	</div>
+	</hap:WrappedLocalResource>
 	<div class="contextMenu" id="contextMenu">
 	  <ul>
-		<li id="con-open">Open</li>
-		<li id="con-download">Download</li>
-		<li id="con-delete">Delete</li>
-		<li id="con-rename">Rename</li>
-		<li id="con-preview">Preview</li>
-		<li id="con-properties">Properties</li>
-		<li id="con-google">Send to Google Docs</li>
+		<li id="con-open"><hap:LocalResource StringPath="myfiles/open" runat="server" /></li>
+		<li id="con-download"><hap:LocalResource StringPath="myfiles/download" runat="server" /></li>
+		<li id="con-delete"><hap:LocalResource StringPath="myfiles/delete/delete" runat="server" /></li>
+		<li id="con-rename"><hap:LocalResource StringPath="myfiles/rename" runat="server" /></li>
+		<li id="con-preview"><hap:LocalResource StringPath="myfiles/preview" runat="server" /></li>
+		<li id="con-properties"><hap:LocalResource StringPath="myfiles/properties" runat="server" /></li>
+		<li id="con-google"><hap:LocalResource StringPath="myfiles/sendto/googledocs" runat="server" /></li>
 	  </ul>
 	</div>
-	<div id="uploaders" title="Upload">
+	<hap:WrappedLocalResource runat="server" id="uploaders" title="#myfiles/upload/upload" Tag="div">
 		<input type="file" id="uploadedfiles" runat="server" multiple="multiple" />
-		<asp:Button runat="server" style="display: none;" id="uploadbtn" 
-			onclick="uploadbtn_Click" /><asp:HiddenField runat="server" id="p" />
-	</div>
+		<asp:Button runat="server" style="display: none;" id="uploadbtn" onclick="uploadbtn_Click" /><asp:HiddenField runat="server" id="p" />
+	</hap:WrappedLocalResource>
 	<div id="uploadprogress" class="tile-border-color" style="border-width: 1px; border-style: solid; border-bottom: 0;">
-		<div class="tile-color ui-widget-header">Upload Progress</div>
+		<div class="tile-color ui-widget-header"><hap:LocalResource StringPath="myfiles/upload/uploadprogress" runat="server" /></div>
 		<div id="progresses">
 		</div>
 	</div>
 	<div id="myfilescontent">
 	<div id="toolbar" style="padding: 4px; margin-bottom: 4px;" class="ui-widget-header">
 		<div style="float: right;">
-			<span style="color: #fff;" id="search">Search:
+			<span style="color: #fff;" id="search"><hap:LocalResource runat="server" StringPath="search" />:
 			<input type="text" id="filter" />
 			</span>
-			<button class="dropdown" id="view">View</button>
+			<button class="dropdown" id="view"><hap:LocalResource runat="server" StringPath="myfiles/view" /></button>
 		</div>
-		<button id="backup"></button><span id="newfolderspan"><input type="text" id="newfoldertext" style="margin-right: 6px;" /><button id="newfolder">New Folder</button></span> <button id="upload">Upload</button> <label id="uploadto" />
+		<button id="backup"></button><span id="newfolderspan"><input type="text" id="newfoldertext" style="margin-right: 6px;" /><button id="newfolder"><hap:LocalResource runat="server" StringPath="myfiles/newfolder" /></button></span> <button id="upload"><hap:LocalResource runat="server" StringPath="myfiles/upload/upload" /></button> <label id="uploadto" />
 	</div>
 	<div id="Views" class="tile-border-color">
-		<button>Tiles</button>
-		<button>Small Icons</button>
-		<button>Medium Icons</button>
-		<button>Large Icons</button>
-		<button>Details</button>
+		<button id="tiles"><hap:LocalResource runat="server" StringPath="myfiles/tiles" /></button>
+		<button id="smallicons"><hap:LocalResource runat="server" StringPath="myfiles/smallicons" /></button>
+		<button id="mediumicons"><hap:LocalResource runat="server" StringPath="myfiles/mediumicons" /></button>
+		<button id="largeicons"><hap:LocalResource runat="server" StringPath="myfiles/largeicons" /></button>
+		<button id="details"><hap:LocalResource runat="server" StringPath="myfiles/details" /></button>
 	</div>
 	<div id="Tree" class="tile-border-color">
 	</div>
 	<div id="MyFilesHeaddings">
-		<span class="name">Name</span><span class="type">Type</span><span class="extension">Extension</span><span class="size">Size</span></div>
+		<span class="name"><hap:LocalResource runat="server" StringPath="name" /></span><span class="type"><hap:LocalResource runat="server" StringPath="myfiles/type" /></span><span class="extension"><hap:LocalResource runat="server" StringPath="myfiles/extension" /></span><span class="size"><hap:LocalResource runat="server" StringPath="myfiles/size" /></span></div>
 	<div id="MyFiles" class="tiles">
 	</div>
 	</div>
@@ -120,33 +120,27 @@
 			}
 			Load();
 		});
-		function OnError(xhr, ajaxOptions, thrownError) {
-			console.log(xhr.responseXML.documentElement.children[2]);
-			alert(xhr.responseXML.documentElement.children[1].children[0].textContent);
-		}
 		function Copy(index, target) {
 			temp = { "index": index, "target": target };
 			var a = '"' + SelectedItems()[index].Data.Path + '"';
 			$.ajax({
 				type: 'POST',
-				url: '<%=ResolveUrl("~/api/MyFiles/Copy")%>',
+				url: hap.common.resolveUrl('~/api/MyFiles/Copy'),
 				dataType: 'json',
 				data: '{ "OldPath" : "' + SelectedItems()[index].Data.Path.replace(/\\/gi, '/') + '", "NewPath": "' + (target.replace(/\//gi, '\\') + '\\' + SelectedItems()[index].Data.Path.substr(SelectedItems()[index].Data.Path.lastIndexOf('\\'))).replace(/\\\\\\/gi, "\\").replace(/\\\\/gi, "\\").replace(/\\/gi, '/') + '" }',
 				contentType: 'application/json',
 				success: function (data) {
 					temp.index++;
-					$("#progressstatus").dialog("title", "Copying item " + (temp.index + 1) + " of " + SelectedItems().length + " items");
+					$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/copy/copyingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items"));
 					$("#progressstatus .progress").progressbar({ value: (temp.index / SelectedItems().length) * 100 });
 					if (temp.index < SelectedItems().length) Move(temp.index, temp.target);
 					else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
 				},
 				error: function (xhr, ajaxOptions, thrownError) {
-					console.log(thrownError);
-					console.log(ajaxOptions);
-					console.log(xhr);
-					if (confirm("An Error has Occured While Copying " + SelectedItems()[temp.index].Data.Name + ", do you want to Continue?\n\nError Details:\n\n" + thrownError)) {
+					console.log(xhr.responseXML.documentElement.children[2]);
+					if (confirm(hap.common.getLocal("myfiles/copy/error1") + " " + SelectedItems()[temp.index].Data.Name + ", " + hap.common.getLocal("myfiles/copy/error2") + "\n\n" + hap.common.getLocal("errordetails") + ":\n\n" + xhr.responseXML.documentElement.children[1].children[0].textContent)) {
 						temp.index++;
-						$("#progressstatus").dialog("title", "Copying item " + (temp.index + 1) + " of " + SelectedItems().length + " items");
+						$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/copy/copyingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items"));
 						$("#progressstatus .progress").progressbar({ value: (temp.index / SelectedItems().length) * 100 });
 						if (temp.index < SelectedItems().length) Copy(temp.index, temp.target);
 						else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
@@ -159,24 +153,22 @@
 			var a = '"' + SelectedItems()[index].Data.Path + '"';
 			$.ajax({
 				type: 'POST',
-				url: '<%=ResolveUrl("~/api/MyFiles/Move")%>',
+				url: hap.common.resolveUrl('api/MyFiles/Move'),
 				dataType: 'json',
 				data: '{ "OldPath" : "' + SelectedItems()[index].Data.Path.replace(/\\/gi, '/') + '", "NewPath": "' + (target.replace(/\//gi, '\\') + '\\' + SelectedItems()[index].Data.Path.substr(SelectedItems()[index].Data.Path.lastIndexOf('\\'))).replace(/\\\\\\/gi, "\\").replace(/\\\\/gi, "\\").replace(/\\/gi, '/') + '" }',
 				contentType: 'application/json',
 				success: function (data) {
 					temp.index++;
-					$("#progressstatus").dialog("title", "Moving item " + (temp.index + 1) + " of " + SelectedItems().length + " items");
+					$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/move/movingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items"));
 					$("#progressstatus .progress").progressbar({ value: (temp.index / SelectedItems().length) * 100 });
 					if (temp.index < SelectedItems().length) Move(temp.index, temp.target);
 					else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
 				},
 				error: function (xhr, ajaxOptions, thrownError) {
-					console.log(thrownError);
-					console.log(ajaxOptions);
-					console.log(xhr);
-					if (confirm("An Error has Occured While Moving " + SelectedItems()[temp.index].Data.Name + ", do you want to Continue?\n\nError Details:\n\n" + thrownError)) {
+					console.log(xhr.responseXML.documentElement.children[2]);
+					if (confirm(hap.common.getLocal("myfiles/move/error1") + " " + SelectedItems()[temp.index].Data.Name + ", " + hap.common.getLocal("myfiles/move/error2") + "\n\n" + hap.common.getLocal("errordetails") + ":\n\n" + xhr.responseXML.documentElement.children[1].children[0].textContent)) {
 						temp.index++;
-						$("#progressstatus").dialog("title", "Moving item " + (temp.index + 1) + " of " + SelectedItems().length + " items");
+						$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/move/movingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items"));
 						$("#progressstatus .progress").progressbar({ value: (temp.index / SelectedItems().length) * 100 });
 						if (temp.index < SelectedItems().length) Move(temp.index, temp.target);
 						else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
@@ -189,19 +181,19 @@
 			var a = '"' + SelectedItems()[index].Data.Path.replace(/\.\.\/download\//gi, "").replace(/\\/g, "/") + '"';
 			$.ajax({
 				type: 'POST',
-				url: '<%=ResolveUrl("~/api/MyFiles/Delete")%>',
+				url: hap.common.resolveUrl('api/MyFiles/Delete'),
 				dataType: 'json',
 				data: '[' + a + ']',
 				contentType: 'application/json',
 				success: function (data) {
 					if (data[0].match(/i could not delete/gi)) alert(data[0]);
 					temp++;
-					$("#progressstatus").dialog("title", "Deleting item " + (temp + 1) + " of " + SelectedItems().length + " items");
+					$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/delete/deletingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items"));
 					$("#progressstatus .progress").progressbar({ value: (temp / SelectedItems().length) * 100 });
 					if (temp < SelectedItems().length) Delete(temp);
 					else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
 				},
-				error: OnError
+				error: hap.common.jsonError
 			});
 		}
 		function Upload(file, path) {
@@ -209,13 +201,13 @@
 			this.Path = path;
 			this.Start = function() {
 				if ("<%=DropZoneAccepted %>".toLowerCase().indexOf(this.File.type.toLowerCase()) == -1 && "<%=DropZoneAccepted %>" != "") {
-					alert(this.File.name + " is an restricted file type\n\n\You can only upload:\n\n <%=AcceptedExtensions %>");
+					alert(this.File.name + " " + hap.common.getLocal("myfiles/upload/filetypewarning") + "\n\n <%=AcceptedExtensions %>");
 					uploads.pop(this);
 					return false;
 				}
 				// Validate file size
 				if(this.File.size > <%=maxRequestLength%>) {
-					alert(this.File.name + " is Too Big to Upload!");
+					alert(this.File.name + " " + hap.common.getLocal("myfiles/upload/filesizewarning"));
 					uploads.pop(this);
 					return false;
 				}
@@ -224,18 +216,18 @@
 				$("#upload-" + this.File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_") + " .progressbar").progressbar({ value: 0 });
 				$.ajax({
 					type: 'GET',
-					url: '<%=ResolveUrl("~/api/MyFiles/Exists/")%>' + this.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, "") + '/' + this.File.name,
+					url: hap.common.resolveUrl('~/api/MyFiles/Exists/') + this.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, "") + '/' + this.File.name,
 					dataType: 'json',
 					context: this,
 					contentType: 'application/json',
 					success: function (data) {
-						if (data.Name == null || confirm("The file " + this.File.name + " already exists\n\nDo you want to overwrite it?")) this.ContinueUpload(this.File.name);
+						if (data.Name == null || confirm(hap.common.getLocal("myfiles/upload/fileexists1") + " " + this.File.name + " " + hap.common.getLocal("myfiles/upload/fileexists2"))) this.ContinueUpload(this.File.name);
 						else { 
 							$("#upload-" + this.File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_")).remove();
 							if (uploads.length == 1) $("#uploadprogress").slideUp('slow');
 							uploads.pop(this);
 						}
-					}, error: OnError
+					}, error: hap.common.jsonError
 				});
 				return true;
 			};
@@ -247,12 +239,12 @@
 				this.xhr.upload.addEventListener("progress", this.onProgress, false);
 				this.xhr.addEventListener("progress", this.onProgress, false);
 				this.xhr.onprogress = this.onProgress;
-				this.xhr.open('POST', '<%=ResolveUrl("~/api/myfiles-upload/")%>' + this.Path.replace(/\\/g, '/') + '/', true);
+				this.xhr.open('POST', hap.common.resolveUrl('~/api/myfiles-upload/') + this.Path.replace(/\\/g, '/') + '/', true);
 				this.xhr.onreadystatechange = function () {
 					if (this.readyState == 4) {
 						var item = null;
 						for (var i = 0; i < uploads.length; i ++) if (uploads[i].File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_") == this.id) item = uploads[i];
-						if (this.status != 200) alert("Upload of " + item.File.name + " has Failed!");
+						if (this.status != 200) alert(hap.common.getLocal("myfiles/upload/upload") + " " + hap.common.getLocal("of") + " " + item.File.name + " " + hap.common.getLocal("myfiles/upload/failed"));
 						$("#upload-" + this.id + " .progressbar").progressbar("value", 100 );
 						$("#upload-" + id).delay(1000).slideUp('slow', function() { $("#upload-" + id).remove(); if (uploads.length == 0) $("#uploadprogress").slideUp('slow'); });
 						if (curpath.substr(0, curpath.length - 1).replace(/\//g, "\\") == item.Path || curpath.replace(/\//g, "\\") == item.Path) Load();
@@ -295,14 +287,14 @@
 			this.Show = true;
 			this.Clicks = 0;
 			this.Render = function () {
-				this.Id = (this.Data.Name + this.Data.Extension).replace(/[\\'\. \[\]\(\)\-]/g, "_");
+				this.Id = (this.Data.Name + this.Data.Extension).replace(/\s|[^a-z|^A-Z|^0-9|\-]/gi, "_");
 				var label = this.Data.Name;
 
 				var h = '<a id="' + this.Id + '" title="' + this.Data.Name + '" ';
 				if (this.Data.Type == 'Directory') h += 'class="Folder Selectable" ';
 				else h += 'class="Selectable" ';
 				h += 'href="' + (this.Data.Path.match(/\.\./i) ? this.Data.Path.replace(/\\/g, "/") : '#' + this.Data.Path) + '"><img class="icon" src="' + this.Data.Icon + '" alt="" /><span class="label">' + label + '</span><span class="type">';
-				if (this.Data.Type == 'Directory') h += 'File Folder';
+				if (this.Data.Type == 'Directory') h += hap.common.getLocal("myfiles/filefolder");
 				else h += this.Data.Type + '</span><span class="extension">' + this.Data.Extension + '</span><span class="size">' + this.Data.Size;
 				h += '</span></a>';
 				$("#MyFiles").append(h);
@@ -322,15 +314,15 @@
 					for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
 					var s = "";
 					for (var i = 0; i < SelectedItems().length; i++) s += SelectedItems()[i].Data.Name + "\n";
-					$("#progressstatus").dialog({ autoOpen: true, modal: true, title: ((keys.ctrl) ? "Copying" : "Moving") + " 1 of " + SelectedItems().length + " items" });
+					$("#progressstatus").dialog({ autoOpen: true, modal: true, title: hap.common.getLocal("myfiles/" + ((keys.ctrl) ? "copy/copying" : "move/moving")) + " 1 " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items") });
 					$("#progressstatus .progress").progressbar({ value: (1 / SelectedItems().length) * 100 });
 					if (keys.ctrl) Copy(0, item.Data.Path);
-					else if (confirm("Are you sure you want to move:\n\n" + s)) Move(0, item.Data.Path);
+					else if (confirm(hap.common.getLocal("myfiles/move/question1") + "\n\n" + s)) Move(0, item.Data.Path);
 					else $("#progressstatus").dialog("close");
 				}, over: function (event, ui) {
 					var item = null;
 					for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
-					$("#dragobject span").text(((keys.ctrl) ? "Copy" : "Move") + " To " + item.Data.Name).show();
+					$("#dragobject span").text(hap.common.getLocal("myfiles/" + ((keys.ctrl) ? "copy/copy" : "move/move")) + " " + hap.common.getLocal("to") + " " + item.Data.Name).show();
 				}, out: function (event, ui) {
 					$("#dragobject span").text("").hide();
 				}
@@ -339,7 +331,7 @@
 					$("#" + this.Id).attr("dropzone", "copy<%=DropZoneAccepted %>").bind("dragover", function () {
 						var item = null;
 						for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
-						$("#uploadto").text("Upload To " + item.Data.Name);
+						$("#uploadto").text(hap.common.getLocal("myfiles/upload/upload") + " " + hap.common.getLocal("to") + " " + item.Data.Name);
 						return false;
 					}).bind("dragleave", function () {
 						$("#uploadto").text("");
@@ -394,31 +386,31 @@
 					},
 					bindings: {
 						'con-open': function (t) {
-							if (SelectedItems().length > 1) { alert("This only works on 1 item"); return false; }
+							if (SelectedItems().length > 1) { alert(hap.common.getLocal("myfiles/only1")); return false; }
 							if (SelectedItems()[0].Data.Type == 'Directory') window.location.href = "#" + SelectedItems()[0].Data.Path;
 							else if (SelectedItems()[0].Data.Extension == ".zip") window.location.href="#" + (curitem.Location.replace(/:/gi, "").replace(/\//gi, "/") + "\\").replace(/\\\\/gi, "\\") + SelectedItems()[0].Data.Name + ".zip";
 							else window.location.href = SelectedItems()[0].Data.Path;
 						},
 						'con-download': function (t) {
-							if (SelectedItems().length > 1) { alert("This only works on 1 item"); return false; }
+							if (SelectedItems().length > 1) { alert(hap.common.getLocal("myfiles/only1")); return false; }
 							if (SelectedItems()[0].Data.Type == 'Directory') window.location.href = "#" + SelectedItems()[0].Data.Path;
 							else window.location.href = SelectedItems()[0].Data.Path;
 						},
 						'con-delete': function (t) {
-							$("#progressstatus").dialog({ autoOpen: true, modal: true, title: "Deleting 1 of " + SelectedItems().length + " items" });
+							$("#progressstatus").dialog({ autoOpen: true, modal: true, title: hap.common.getLocal("myfiles/delete/deletingitem1") + " 1 " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items") });
 							$("#progressstatus .progress").progressbar({ value: (1 / SelectedItems().length) * 100 });
 							var s = "";
 							for (var i = 0; i < SelectedItems().length; i++) s += SelectedItems()[i].Data.Name + "\n";
-							if (confirm("Are you sure you want to delete:\n\n" + s)) Delete(0);
+							if (confirm(hap.common.getLocal("myfiles/delete/question1") + ":\n\n" + s)) Delete(0);
 							else $("#progressstatus").dialog("close");
 						},
 						'con-rename': function (t) {
-							if (SelectedItems().length > 1) { alert("This only works on 1 item"); return false; }
+							if (SelectedItems().length > 1) { alert(hap.common.getLocal("myfiles/only1")); return false; }
 							var item = SelectedItems()[0];
 							$("#renamebox").val(item.Data.Name).css("display", "block").css("top", $("#" +item.Id).position().top).css("left", $("#" + item.Id).position().left).focus().select();
 						},
 						'con-properties': function (t) {
-							if (SelectedItems().length > 1) { alert("This only works on 1 item"); return false; }
+							if (SelectedItems().length > 1) { alert(hap.common.getLocal("myfiles/only1")); return false; }
 							$("#properties").dialog({ autoOpen: true, modal: true, buttons: {
 								"OK": function () {
 									$(this).dialog("close");
@@ -428,54 +420,54 @@
 							});
 							$.ajax({
 								type: 'GET',
-								url: '<%=ResolveUrl("~/api/MyFiles/Properties/")%>' + SelectedItems()[0].Data.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, ""),
+								url: hap.common.resolveUrl('~/api/MyFiles/Properties/') + SelectedItems()[0].Data.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, ""),
 								dataType: 'json',
 								contentType: 'application/json',
 								success: function (data) {
 									var s = '<div><img src="' + data.Icon + '" alt="" style="width: 32px; float: left; margin-right: 40px;" />' + data.Name + '</div>';
 									s += '<hr style="height: 1px; border-width: 1px" />';
 									if (data.Type == "File Folder") {
-										s += '<div><label>Type: </label>' + data.Type + '</div>';
-										s += '<div><label>Location: </label>' + data.Location + '</div>';
-										s += '<div><label>Size: </label>' + data.Size + '</div>';
-										s += '<div><label>Contains: </label>' + data.Contents + '</div>';
+										s += '<div><label>' + hap.common.getLocal("myfiles/type") + ': </label>' + data.Type + '</div>';
+										s += '<div><label>' + hap.common.getLocal("myfiles/location") + ': </label>' + data.Location + '</div>';
+										s += '<div><label>' + hap.common.getLocal("myfiles/size") + ': </label>' + data.Size + '</div>';
+										s += '<div><label>' + hap.common.getLocal("myfiles/contails") + ': </label>' + data.Contents + '</div>';
 										s += '<hr style="height: 1px; border-width: 1px" />';
-										s += '<div><label>Created: </label>' + data.DateCreated + '</div>';
+										s += '<div><label>' + hap.common.getLocal("myfiles/created") + ': </label>' + data.DateCreated + '</div>';
 									} else {
-										s += '<div><label>Type of file: </label>' + data.Type + ' (' + data.Extension + ')</div>';
+										s += '<div><label>' + hap.common.getLocal("myfiles/typeoffile") + ': </label>' + data.Type + ' (' + data.Extension + ')</div>';
 										s += '<hr style="height: 1px; border-width: 1px" />';
-										s += '<div><label>Location: </label>' + data.Location + '</div>';
-										s += '<div><label>Size: </label>' + data.Size + '</div>';
+										s += '<div><label>' + hap.common.getLocal("myfiles/location") + ': </label>' + data.Location + '</div>';
+										s += '<div><label>' + hap.common.getLocal("myfiles/size") + ': </label>' + data.Size + '</div>';
 										s += '<hr style="height: 1px; border-width: 1px" />';
-										s += '<div><label>Created: </label>' + data.DateCreated + '</div>';
-										s += '<div><label>Modified: </label>' + data.DateModified + '</div>';
-										s += '<div><label>Accessed: </label>' + data.DateAccessed + '</div>';
+										s += '<div><label>' + hap.common.getLocal("myfiles/created") + ': </label>' + data.DateCreated + '</div>';
+										s += '<div><label>' + hap.common.getLocal("myfiles/modified") + ': </label>' + data.DateModified + '</div>';
+										s += '<div><label>' + hap.common.getLocal("myfiles/accessed") + ': </label>' + data.DateAccessed + '</div>';
 									}
 									$("#propcont").html(s);
-								}, error: OnError
+								}, error: hap.common.jsonError
 							});
 						},
 						'con-preview': function (t) {
-							if (SelectedItems().length > 1) { alert("This only works on 1 item"); return false; }
+							if (SelectedItems().length > 1) { alert(hap.common.getLocal("myfiles/only1")); return false; }
 							$("#preview").dialog({ autoOpen: true, height: 600, width: 900, modal: true, buttons: {
 								"OK": function () {
-									$("#previewcont").html("Loading...");
+									$("#previewcont").html(hap.common.getLocal("loading") + "...");
 									$(this).dialog("close");
 								}
 							}
 							});
 							$.ajax({
 								type: 'GET',
-								url: '<%=ResolveUrl("~/api/MyFiles/Preview/")%>' + SelectedItems()[0].Data.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, ""),
+								url: hap.common.resolveUrl('~/api/MyFiles/Preview/') + SelectedItems()[0].Data.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, ""),
 								dataType: 'json',
 								contentType: 'application/json',
 								success: function (data) {
 									$("#previewcont").html(data);
-								}, error: OnError
+								}, error: hap.common.jsonError
 							});
 						},
 						'con-google' : function (t) {
-							if (SelectedItems().length > 1) { alert("This only works on 1 item"); return false; }
+							if (SelectedItems().length > 1) { alert(hap.common.getLocal("myfiles/only1")); return false; }
 							$("#googlesignin").dialog({ autoOpen: true, modal: true, buttons: { 
 								"Signin": function() { 
 									$("#googleuser").addClass("loading");
@@ -483,7 +475,7 @@
 									$("#googlesignin .progress").height(16).width(16).addClass("loading");
 									$.ajax({
 										type: 'POST',
-										url: '<%=ResolveUrl("~/api/MyFiles/SendTo/Google/")%>' + SelectedItems()[0].Data.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, ""),
+										url: hap.common.resolveUrl('~/api/MyFiles/SendTo/Google/') + SelectedItems()[0].Data.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, ""),
 										dataType: 'json',
 										data: '{ "username" : "' + $("#googleuser").val() + '", "password": "' + $("#googlepass").val() + '" }',
 										contentType: 'application/json',
@@ -494,7 +486,7 @@
 											$("#googlesignin .progress").height(0).width(0).removeClass("loading");
 											window.open(data, "googledocs");
 										},
-										error: OnError
+										error: hap.common.jsonError
 									});
 								}, "Close": function() { $(this).dialog("close"); } } 
 							});
@@ -508,7 +500,7 @@
 				else $("#" + this.Id).removeClass("Selected");
 				var label = this.Data.Name;
 				var h = '<img class="icon" src="' + this.Data.Icon + '" alt="" /><span class="label">' + label + '</span><span class="type">';
-				if (this.Data.Type == 'Directory') h += 'File Folder';
+				if (this.Data.Type == 'Directory') h += hap.common.getLocal("myfiles/filefolder");
 				else h += this.Data.Type + '</span><span class="extension">' + this.Data.Extension + '</span><span class="size">' + this.Data.Size;
 				h += '</span>';
 
@@ -546,7 +538,7 @@
 					item.Refresh();
 				} else {
 					if (item.Data.Type != 'Directory' && item.Data.Actions == 3) return;
-					if (item.Data.Type != 'Directory') alert("You are about to download this file, if you wish to edit this file, please remember to\nSave it to your computer, and upload it back once you have finished!");
+					if (item.Data.Type != 'Directory') alert(hap.common.getLocal("myfiles/downloadwarning"));
 					var item = null;
 					for (var x = 0; x < items.length; x++)
 						if (items[x].Id == $(this).attr("id")) { item = items[x]; break; }
@@ -561,7 +553,7 @@
 			if (curpath == null) {
 				$.ajax({
 					type: 'GET',
-					url: '<%=ResolveUrl("~/api/MyFiles/Drives")%>',
+					url: hap.common.resolveUrl('~/api/MyFiles/Drives'),
 					dataType: 'json',
 					contentType: 'application/json;',
 					success: function (data) {
@@ -571,12 +563,12 @@
 							items.push(new Drive(data[i]));
 						for (var i = 0; i < items.length; i++)
 							items[i].Render();
-					}, error: OnError
+					}, error: hap.common.jsonError
 				});
 			} else {
 			$.ajax({
 				type: 'GET',
-				url: '<%=ResolveUrl("~/api/MyFiles/")%>' + curpath.replace(/\\/gi, "/"),
+				url: hap.common.resolveUrl("~/api/MyFiles/") + curpath.replace(/\\/gi, "/"),
 				dataType: 'json',
 				contentType: 'application/json',
 				success: function (data) {
@@ -590,11 +582,11 @@
 					$("#MyFilesHeaddings .type").css("width", $("#MyFiles > a .type").width() + 2);
 					$("#MyFilesHeaddings .extension").css("width", $("#MyFiles > a .extension").width() + 2);
 					$("#MyFilesHeaddings .size").css("width", $("#MyFiles > a .size").width() + 2);
-				}, error: OnError
+				}, error: hap.common.jsonError
 			});
 			$.ajax({
 				type: 'GET',
-				url: '<%=ResolveUrl("~/api/MyFiles/info/")%>' + curpath.replace(/\\/gi, "/"),
+				url: hap.common.resolveUrl("~/api/MyFiles/info/") + curpath.replace(/\\/gi, "/"),
 				dataType: 'json',
 				contentType: 'application/json',
 				success: function (data) {
@@ -632,7 +624,7 @@
 							}
 						};
 					}
-				}, error: OnError
+				}, error: hap.common.jsonError
 			});
 			}
 		}
@@ -647,12 +639,12 @@
 			$("#uploaders").dialog({ autoOpen: false });
 			$("#googlesignin").dialog({ autoOpen: false });
 			$("#Views").animate({ height: 'toggle' });
-			$("#Tree").dynatree({ imagePath: "../images/setup/", selectMode: 1, minExpandLevel: 1, noLink: false, children: [{ icon: "../myfiles-i.png", title: "My Drives", href: "#", isFolder: true, isLazy: true}], fx: { height: "toggle", duration: 200 },
+			$("#Tree").dynatree({ imagePath: "../images/setup/", selectMode: 1, minExpandLevel: 1, noLink: false, children: [{ icon: "../myfiles-i.png", title: hap.common.getLocal("myfiles/mydrives"), href: "#", isFolder: true, isLazy: true}], fx: { height: "toggle", duration: 200 },
 				onLazyRead: function (node) {
 					if (node.data.href == "#") {
 						$.ajax({
 							type: 'GET',
-							url: '<%=ResolveUrl("~/api/MyFiles/Drives")%>',
+							url: hap.common.resolveUrl("~/api/MyFiles/Drives"),
 							dataType: 'json',
 							contentType: 'application/json',
 							success: function (data) {
@@ -661,12 +653,12 @@
 									res.push({ title: data[i].Name + " (" + data[i].Path + ")", actions: data[i].Actions, icon: "../drive.png", href: "#" + data[i].Path, isFolder: true, isLazy: true, noLink: false, key: data[i].Path });
 								node.setLazyNodeStatus(DTNodeStatus_Ok);
 								node.addChild(res);
-							}, error: OnError
+							}, error: hap.common.jsonError
 						});
 					} else {
 						$.ajax({
 							type: 'GET',
-							url: '<%=ResolveUrl("~/api/MyFiles/")%>' + node.data.href.substr(1).replace(/\\/g, "/"),
+							url: hap.common.resolveUrl("~/api/MyFiles/") + node.data.href.substr(1).replace(/\\/g, "/"),
 							dataType: 'json',
 							contentType: 'application/json',
 							success: function (data) {
@@ -677,7 +669,7 @@
 									}
 								node.setLazyNodeStatus(DTNodeStatus_Ok);
 								node.addChild(res);
-							}, error: OnError
+							}, error: hap.common.jsonError
 						});
 					}
 				},
@@ -690,13 +682,14 @@
 								for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
 								var s = "";
 								for (var i = 0; i < SelectedItems().length; i++) s += SelectedItems()[i].Data.Name + "\n";
-								$("#progressstatus").dialog({ autoOpen: true, modal: true, title: ((keys.ctrl) ? "Copying" : "Moving") + " 1 of " + SelectedItems().length + " items" });
+								$("#progressstatus").dialog({ autoOpen: true, modal: true, title: hap.common.getLocal("myfiles/" + ((keys.ctrl) ? "copy/copying" : "move/moving")) + " 1 " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items") });
 								$("#progressstatus .progress").progressbar({ value: (1 / SelectedItems().length) * 100 });
 								if (keys.ctrl) Copy(0, $(this).attr("href").substr(1));
-								else if (confirm("Are you sure you want to move:\n\n" + s)) Move(0, $(this).attr("href").substr(1));
+								else if (confirm(hap.common.getLocal("myfiles/move/question1") + "\n\n" + s)) Move(0, $(this).attr("href").substr(1));
 								else $("#progressstatus").dialog("close");
+
 							}, over: function (event, ui) {
-								$("#dragobject span").text(((keys.ctrl) ? "Copy" : "Move") + " To " + $(this).text()).show();
+								$("#dragobject span").text(hap.common.getLocal("myfiles/" + ((keys.ctrl) ? "copy/copy" : "move/move")) + " " + hap.common.getLocal("to") + " " + $(this).text()).show();
 								temp = $(this);
 								if (lazytimer == null) lazytimer = setTimeout(function () { $("#Tree").dynatree("getTree").getNodeByKey(temp.attr("href").substr(1)).toggleExpand(); clearTimeout(lazytimer); lazytimer = null; }, 1000);
 							}, out: function (event, ui) {
@@ -710,7 +703,7 @@
 							});
 							if (typeof (window.FileReader) != 'undefined') {
 								$(nodeSpan).children("a").attr("dropzone", "copy<%=DropZoneAccepted %>").bind("dragover", function () {
-									$("#uploadto").text("Upload To " + $(this).text());
+									$("#uploadto").text(hap.common.getLocal("myfiles/upload/upload") + " " + hap.common.getLocal("to") + " " + $(this).text());
 									return false;
 								}).bind("dragleave", function () {
 									$("#uploadto").text("");
@@ -745,38 +738,38 @@
 			$("button.dropdown").button({ icons: { secondary: "ui-icon-carat-1-s"} });
 			$("#backup").click(function () { history.go(-1); return false; }).button({ icons: { primary: "ui-icon-circle-arrow-w" }, text: false }).css("height", "26px");
 			$("#newfolder").click(function () {
-				if ($("#newfolder span").text() == "New Folder") {
-					$("#newfolder span").text("Create");
+				if ($("#newfolder span").text() == hap.common.getLocal("myfiles/newfolder")) {
+					$("#newfolder span").text(hap.common.getLocal("myfiles/create"));
 					$("#newfoldertext").val("").css("margin", "0 4px").animate({ width: 150, opacity: 1.0 }).focus();
 				} else {
 					if (temp != null) { clearTimeout(temp); temp == null; }
 					$("#newfoldertext").addClass("loading");
 					$.ajax({
 						type: 'GET',
-						url: '<%=ResolveUrl("~/api/MyFiles/Exists/")%>' + curpath.replace(/\\/gi, "/") + $("#newfoldertext").val() + '/',
+						url: hap.common.resolveUrl("~/api/MyFiles/Exists/") + curpath.replace(/\\/gi, "/") + $("#newfoldertext").val() + '/',
 						dataType: 'json',
 						context: this,
 						contentType: 'application/json',
 						success: function (data) {
 							if (data.Name != null) {
 								$("#newfoldertext").removeClass("loading");
-								alert("The folder " + data.Name + " already exists!")
+								alert(hap.common.getLocal("myfiles/folderexists1") + " " + data.Name + " " + hap.common.getLocal("myfiles/folderexists2"));
 							} else {
 								$.ajax({
 									type: 'POST',
-									url: '<%=ResolveUrl("~/api/MyFiles/New/")%>' + curpath.replace(/\\/gi, "/") + $("#newfoldertext").val(),
+									url: hap.common.resolveUrl("~/api/MyFiles/New/") + curpath.replace(/\\/gi, "/") + $("#newfoldertext").val(),
 									dataType: 'json',
 									contentType: 'application/json',
 									success: function (data) {
 										$("#newfoldertext").removeClass("loading");
 										$("#newfoldertext").animate({ width: 0, opacity: 0.0 }).css("margin", "0");
-										$("#newfolder span").text("New Folder");
+										$("#newfolder span").text(hap.common.getLocal("myfiles/newfolder"));
 										Load();
 									},
-									error: OnError
+									error: hap.common.jsonError
 								});
 							}
-						}, error: OnError
+						}, error: hap.common.jsonError
 					});
 				}
 			});
@@ -784,7 +777,7 @@
 				temp = setTimeout(function () { 
 					$("#newfoldertext").removeClass("loading");
 					$("#newfoldertext").animate({ width: 0, opacity: 0.0 }).css("margin", "0");
-					$("#newfolder span").text("New Folder");
+					$("#newfolder span").text(hap.common.getLocal("myfiles/newfolder"));
 				}, 1000);
 			}).focusin(function() {
 				if (temp != null) { clearTimeout(temp); temp == null; }
@@ -799,40 +792,40 @@
 				else {
 					if (SelectedItems()[0].Data.Name == $(this).val()) { $("#renamebox").css("display", "none"); return; }
 					$("#renamebox").css("display", "none");
-					$("#progressstatus").dialog({ autoOpen: true, modal: true, title: "Checking..." });
+					$("#progressstatus").dialog({ autoOpen: true, modal: true, title: hap.common.getLocal("myfiles/checking") + "..." });
 					$("#progressstatus .progress").progressbar({ value: 0 });
 					$.ajax({
 						type: 'GET',
-						url: '<%=ResolveUrl("~/api/MyFiles/Exists/")%>' + (SelectedItems()[0].Data.Path.substr(0, SelectedItems()[0].Data.Path.lastIndexOf('\\')) + "\\" + $("#renamebox").val() + (SelectedItems()[0].Data.Extension == null ? '\\' : SelectedItems()[0].Data.Extension)).replace(/\\\\/gi, "\\").replace(/\\/gi, "/"),
+						url: hap.common.resolveUrl("~/api/MyFiles/Exists/") + (SelectedItems()[0].Data.Path.substr(0, SelectedItems()[0].Data.Path.lastIndexOf('\\')) + "\\" + $("#renamebox").val() + (SelectedItems()[0].Data.Extension == null ? '\\' : SelectedItems()[0].Data.Extension)).replace(/\\\\/gi, "\\").replace(/\\/gi, "/"),
 						dataType: 'json',
 						context: this,
 						contentType: 'application/json',
 						success: function (data) {
 							if (data.Name != null) {
-								$("#progressstatus").dialog({ autoOpen: true, modal: true, title: "Waiting..." });
+								$("#progressstatus").dialog({ autoOpen: true, modal: true, title: hap.common.getLocal("myfiles/waiting") + "..." });
 								$("#progressstatus .progress").progressbar({ value: 10 });
-								confirm(data.Name + " already exists!");
+								confirm(data.Name + " " + hap.common.getLocal("folderexists2"));
 								$("#progressstatus").dialog("close");
 							} else {
-								$("#progressstatus").dialog({ autoOpen: true, modal: true, title: "Renaming..." });
+								$("#progressstatus").dialog({ autoOpen: true, modal: true, title: hap.common.getLocal("myfiles/renaming") + "..." });
 								$("#progressstatus .progress").progressbar({ value: 50 });
 								$.ajax({
 									type: 'POST',
-									url: '<%=ResolveUrl("~/api/MyFiles/Move")%>',
+									url: hap.common.resolveUrl("~/api/MyFiles/Move"),
 									data: '{ "OldPath": "' + SelectedItems()[0].Data.Path.replace(/\\/gi, "/") + '", "NewPath": "' + (SelectedItems()[0].Data.Path.substr(0, SelectedItems()[0].Data.Path.lastIndexOf('\\')) + "\\" + $("#renamebox").val() + (SelectedItems()[0].Data.Extension == null ? '\\' : SelectedItems()[0].Data.Extension)).replace(/\\\\/gi, "\\").replace(/\\/gi, "/") + '" }',
 									dataType: 'json',
 									contentType: 'application/json',
 									success: function (data) {
-										$("#progressstatus").dialog({ autoOpen: true, modal: true, title: "Waiting..." });
+										$("#progressstatus").dialog({ autoOpen: true, modal: true, title: hap.common.getLocal("myfiles/waiting") + "..." });
 										$("#progressstatus .progress").progressbar({ value: 100 });
 										temp = null; 
 										setTimeout(function() { $("#progressstatus").dialog("close"); }, 500);
 										Load();
 									},
-									error: OnError
+									error: hap.common.jsonError
 								});
 							}
-						}, error: OnError
+						}, error: hap.common.jsonError
 					});
 				}
 			}).keyup(function(event) { 
@@ -845,6 +838,10 @@
 				else if (keycode == 13) { event.preventDefault(); $("#renamebox").blur(); }
 			});
 			$(".button").button();
+			$("#help").button({icons: { secondary: 'ui-icon-help' }}).click(function() {
+				hap.help.Load("myfiles/index");
+				return false;
+			});
 			$("#view").click(function () {
 				if (showView == 0) {
 					showView = 1;
@@ -863,7 +860,7 @@
 				//else if (showView == 1) showView = 2;
 			});
 			$("#Views button").click(function () {
-				if ($(this).text() == "Details") {
+				if ($(this).attr("id") == "details") {
 					viewMode = 1;
 					$("#MyFiles").addClass("details").removeClass("small").removeClass("medium").removeClass("large").css("padding-top", $("#toolbar").height() + 34);
 					$("#MyFilesHeaddings").css("display", "block");
@@ -874,19 +871,19 @@
 
 					$("#renamebox").removeClass("small").removeClass("medium").removeClass("large").addClass("details");
 				}
-				else if ($(this).text() == "Small Icons") {
+				else if ($(this).attr("id") == "smallicons") {
 					viewMode = 2;
 					$("#MyFiles").addClass("small").removeClass("details").removeClass("medium").removeClass("large").css("padding-top", $("#toolbar").height() + 10);
 					$("#MyFilesHeaddings").css("display", "none");
 					$("#renamebox").removeClass("details").removeClass("medium").removeClass("large").addClass("small");
 				}
-				else if ($(this).text() == "Medium Icons") {
+				else if ($(this).attr("id") == "mediumicons") {
 					viewMode = 3;
 					$("#MyFiles").addClass("medium").removeClass("small").removeClass("large").removeClass("details").css("padding-top", $("#toolbar").height() + 10);
 					$("#MyFilesHeaddings").css("display", "none");
 					$("#renamebox").removeClass("details").removeClass("small").removeClass("large").addClass("medium");
 				}
-				else if ($(this).text() == "Large Icons") {
+				else if ($(this).attr("id") == "largeicons") {
 					viewMode = 4;
 					$("#MyFiles").addClass("large").removeClass("medium").removeClass("small").removeClass("details").css("padding-top", $("#toolbar").height() + 10);
 					$("#MyFilesHeaddings").css("display", "none");
@@ -915,7 +912,7 @@
 						$("#<%=p.ClientID %>").val(curpath);
 						$("#<%=uploadbtn.ClientID %>").trigger("click");
 						$("#uploadprogress").slideDown('slow');
-						$("#uploadprogress").html("Uploading...<br />This page will refrersh when it has finished");
+						$("#uploadprogress").html(hap.common.getLocal("myfiles/upload/uploading") + "...<br />" + hap.common.getLocal("myfiles/upload/note"));
 					}
 					$("#uploadto").text("");
 					$(this).dialog("close");
@@ -942,9 +939,9 @@
 				}
 			});
 			$(window).trigger("hashchange");
-			
 		});
 		$(document).bind('keydown', function (event) { var keycode = (event.keyCode ? event.keyCode : (event.which ? event.which : event.charCode)); keys.shift = (keycode == 16); keys.ctrl = (keycode == 17); });
 		$(document).bind('keyup', function (event) { keys.shift = keys.ctrl = false; });
 	</script>
+	<% if (FirstTime) { %> <script type="text/javascript">$(function () { $("#help").trigger("click"); });</script><%}  %>
 </asp:Content>
