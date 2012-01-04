@@ -181,7 +181,7 @@
 			var a = '"' + SelectedItems()[index].Data.Path.replace(/\.\.\/download\//gi, "").replace(/\\/g, "/") + '"';
 			$.ajax({
 				type: 'POST',
-				url: hap.common.resolveUrl('api/MyFiles/Delete'),
+				url: hap.common.resolveUrl('~/api/MyFiles/Delete'),
 				dataType: 'json',
 				data: '[' + a + ']',
 				contentType: 'application/json',

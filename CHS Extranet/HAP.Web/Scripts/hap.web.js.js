@@ -15,7 +15,7 @@ if (hap == null)
             },
             getLocal: function (e) {
                 for (var i = 0; i < hap.localization.length; i++)
-                    if (hap.localization[i].name == e) return hap.localization[i].value.replace(/\\\\/g, "\\");
+                    if (hap.localization[i].name == e) return unescape(hap.localization[i].value.replace(/\\\\/g, "\\"));
             }
         },
         help: {
