@@ -9,6 +9,7 @@
   <to>to</to>
   <items>items</items>
   <username>Username</username>
+  <close>Close</close>
   <search>Search</search>
   <password>Password</password>
   <errordetails>Error Details</errordetails>
@@ -40,15 +41,20 @@
       <error2>do you want to Continue?</error2>
       <question1>Are you sure you want to move:</question1>
     </move>
-    <downloadwarning>You are about to download this file, if you wish to edit this file, please remember to\nSave it to your computer, and upload it back once you have finished!</downloadwarning>
+    <downloadwarning>You are about to download this file, if you wish to edit this file, please remember to
+Save it to your computer, and upload it back once you have finished!</downloadwarning>
     <upload>
       <upload>Upload</upload>
       <uploading>Uploading</uploading>
       <uploadprogress>Upload Progress</uploadprogress>
-      <filetypewarning>is an restricted file type\n\n\You can only upload</filetypewarning>
+      <filetypewarning>is an restricted file type
+
+You can only upload</filetypewarning>
       <filesizewarning>is Too Big to Upload!</filesizewarning>
       <fileexists1>The file</fileexists1>
-      <fileexists2>already exists\n\nDo you want to overwrite it?</fileexists2>
+      <fileexists2>already exists
+
+Do you want to overwrite it?</fileexists2>
       <failed> has Failed!</failed>
       <note>This page will refresh when it has finished</note>
     </upload>

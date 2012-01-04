@@ -50,7 +50,7 @@ namespace HAP.Web.API
             if (node.Name != "hapStrings") _salt += "/" + node.Name;
             if (_salt.StartsWith("/")) _salt = _salt.Remove(0, 1);
             if (node.HasChildNodes && node.ChildNodes[0].Name != "#text") foreach (XmlNode n in node.ChildNodes) s.AddRange(BuildLocalization(n, _salt));
-            else s.Add("{ name: '" + _salt + "', value: '" + node.InnerText.Replace("'", "\'").Replace("\\", "\\\\") + "' }");
+            else s.Add("{ name: '" + _salt + "', value: '" + node.InnerText.Replace("'", "\'").Replace("\n", "\\n").Replace("\r", "\\r") + "' }");
             return s.ToArray();
         }
 
