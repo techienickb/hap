@@ -479,6 +479,7 @@
     <Compile Include="Controls\Announcement.ascx.designer.cs">
       <DependentUpon>Announcement.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\CompressJS.cs" />
     <Compile Include="Controls\jquery.cs" />
     <Compile Include="Controls\Delete.ascx.cs">
       <DependentUpon>Delete.ascx</DependentUpon>

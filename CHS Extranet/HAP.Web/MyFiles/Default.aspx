@@ -71,7 +71,7 @@
 			</span>
 			<button class="dropdown" id="view"><hap:LocalResource runat="server" StringPath="myfiles/view" /></button>
 		</div>
-		<button id="backup"></button><span id="newfolderspan"><input type="text" id="newfoldertext" style="margin-right: 6px;" /><button id="newfolder"><hap:LocalResource runat="server" StringPath="myfiles/newfolder" /></button></span> <button id="upload"><hap:LocalResource runat="server" StringPath="myfiles/upload/upload" /></button> <label id="uploadto" />
+		<button id="backup"></button><span id="newfolderspan"><input type="text" id="newfoldertext" style="margin-right: 6px;" /><button id="newfolder"><hap:LocalResource runat="server" StringPath="myfiles/newfolder" /></button></span> <button id="upload"><hap:LocalResource runat="server" StringPath="myfiles/upload/upload" /></button> <label id="uploadto"></label>
 	</div>
 	<div id="Views" class="tile-border-color">
 		<button id="tiles"><hap:LocalResource runat="server" StringPath="myfiles/tiles" /></button>
@@ -87,6 +87,7 @@
 	<div id="MyFiles" class="tiles">
 	</div>
 	</div>
+	<hap:CompressJS runat="server" tag="div">
 	<script type="text/javascript">
 		var items = new Array();
 		var subdrop = false;
@@ -205,7 +206,6 @@
 					uploads.pop(this);
 					return false;
 				}
-				// Validate file size
 				if(this.File.size > <%=maxRequestLength%>) {
 					alert(this.File.name + " " + hap.common.getLocal("myfiles/upload/filesizewarning"));
 					uploads.pop(this);
@@ -857,7 +857,6 @@
 			});
 			$(document).click(function () {
 				if (showView == 1) { $("#Views").animate({ height: 'toggle' }); showView = 0; }
-				//else if (showView == 1) showView = 2;
 			});
 			$("#Views button").click(function () {
 				if ($(this).attr("id") == "details") {
@@ -942,6 +941,7 @@
 		});
 		$(document).bind('keydown', function (event) { var keycode = (event.keyCode ? event.keyCode : (event.which ? event.which : event.charCode)); keys.shift = (keycode == 16); keys.ctrl = (keycode == 17); });
 		$(document).bind('keyup', function (event) { keys.shift = keys.ctrl = false; });
-	</script>
+		</script>
+	</hap:CompressJS>
 	<% if (FirstTime) { %> <script type="text/javascript">$(function () { $("#help").trigger("click"); });</script><%}  %>
 </asp:Content>
