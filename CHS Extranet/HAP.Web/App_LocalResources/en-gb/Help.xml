@@ -69,8 +69,8 @@ British English Help Localised Resources
           <li><b><a href="javascript:void(hap.help.Load('myfiles/list'));">Item List</a></b><br />The list (tiled/iconed/detailed) displays a list of drives/files/folders in a Windows Explorer styled interface.  You can drag files/folders around to move them (holding CTRL will copy them), <a href="javascript:void(hap.help.Load('myfiles/contextmenu'));">right click</a> to <a href="javascript:void(hap.help.Load('myfiles/rename'));">rename</a>, <a href="javascript:void(hap.help.Load('myfiles/delete'));">delete</a>, and <a href="javascript:void(hap.help.Load('myfiles/contents'));">more</a>. The List also allows you to <a href="javascript:void(hap.help.Load('myfiles/drag-and-drop'));">drag</a> files from Windows Explorer to Upload them.<br />For more information on the list <a href="javascript:void(hap.help.Load('myfiles/list'));">click here</a></li>
         </ol>
       <br />&nbsp;</p>
-      <p>To get started, close this Help Box, and give it a try.  Once you have chosen a drive (single click), opening a file/folder in the <a href="javascript:void(hap.help.Load('myfiles/list'));">List</a> is done by double clicking on them.  Single Clicking on them Selects them to allow for multiple deleting.  SHIFT and CTRL replicate there Windows Explorer Actions<br />&nbsp;</p>
-      <p><br />For a full list of My Fieles Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>]]>
+      <p>To get started, close this Help Box, and give it a try.  Once you have chosen a drive (single click), opening a file/folder in the <a href="javascript:void(hap.help.Load('myfiles/list'));">List</a> is done by double clicking on them.  Single Clicking on them Selects them to allow for multiple deleting.  SHIFT and CTRL replicate standard Windows Explorer Actions<br />&nbsp;</p>
+      <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>]]>
     </index>
     <whats-new>
      <![CDATA[
@@ -80,7 +80,7 @@ British English Help Localised Resources
         <li>Works by just using HTML and Javascript, no more silverlight</li>
         <li>Drag and Dropping files/folders around the interace**, like the old Extended Edition</li>
         <li>Drag and Dropping of files from Windows Explorer to upload**</li>
-        <li>Ability to Multi Select Files to Upload when you click the Upload Button*</li>
+        <li>Ability to Select Muliple Files to Upload when you click the Upload Button*</li>
         <li>Improved Preview Mode</li>
         <li>Folder/File Properties, displaying File/Folder Size, Creation Date & Time, and More</li>
         <li>Improved Speed compared to both previous versions</li>
@@ -92,7 +92,7 @@ British English Help Localised Resources
       </ul>
       * - Except Internet Explorer 7 and below
       ** - Except Internet Explorer 7 and Mobile Browsers
-      <p><br />For a full list of My Fieles Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
+      <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
     ]]></whats-new>
     <toolbar>
       <![CDATA[
@@ -111,9 +111,9 @@ British English Help Localised Resources
         <br />&nbsp;</p>
         <p>
           When you scroll down the page, the toolbar sticks to the top of the page so you can always get at the toolbar without having to scroll back to the top.<br />
-          Note: Sticking toolbar is not available on Mobile devices
+          Note: The toolbar is not sticky on Mobile devices
         <br />&nbsp;</p>
-        <p><br />For a full list of My Fieles Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
+        <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
         ]]>
     
       </toolbar>
@@ -125,7 +125,7 @@ British English Help Localised Resources
         <p>It works in the same way as the Tree you have in Windows Explorer to navigate through various folders on your PC<br />&nbsp;</p>
         <p>It also supports <b><a href="javascript:void(hap.help.Load('myfiles/draganddrop'));">Drag and Drop</a></b> interfaces allowing you to copy/move/upload files/folders directly to that folder without leaving the current location<br />&nbsp;</p>
         <p>Note: Please see <b><a href="javascript:void(hap.help.Load('myfiles/draganddrop'));">Drag and Drop</a></b> for Supported Browsers<br />&nbsp;</p>
-        <p><br />For a full list of My Fieles Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
+        <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
       ]]>
       </tree>
       <draganddrop>
@@ -158,32 +158,32 @@ British English Help Localised Resources
           <li>Android Browser 3+</li>
         </ul>
       <br />&nbsp;</p>
-      <p><br />For a full list of My Fieles Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
+      <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
       ]]>
     </draganddrop>
     <newfolder>
       <![CDATA[
       <h2>Creating a New Folder</h2>
-      <p>To create a New Folder in the current folder, simpily click the New Folder button, a text box will be shown next to it for you to type into<br />&nbsp;</p>
+      <p>To create a New Folder in the current folder, simpily click the New Folder button, a text box will appear for you to type your new folder name into<br />&nbsp;</p>
       <img src="~/images/help/myfiles-newfolder.png" />
       <p>Once you are happy with the name, either hit enter on your keyboard or click Create<br />&nbsp;</p>
-      <p>The current view will refresh once the file has been created<br />&nbsp;</p>
-      <p><br />For a full list of My Fieles Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
+      <p>The current view will refresh once the folder has been created<br />&nbsp;</p>
+      <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
       ]]>
     </newfolder>
     <delete>
       <![CDATA[
       <h2>Deleting Items</h2>
-      <p>To delete items, select the items you want, right click on them to get the <a href="javascript:void(hap.help.Load('myfiles/contextmenu'));">right click context menu</a> up, then click on Delete<br />&nbsp;</p>
-      <p><br />For a full list of My Fieles Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
+      <p>To delete items, select the items, right click on them to get the <a href="javascript:void(hap.help.Load('myfiles/contextmenu'));">right click context menu</a> up, then click on Delete<br />&nbsp;</p>
+      <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
       ]]>
     </delete>
     <contextmenu>
       <![CDATA[
       <h2>The Right Click Context Menu</h2>
       <p>This menu allows you to conduct selected actions on the currently selected items<br />&nbsp;</p>
-      <p>It is found by Right Clicking on any item, or in mobile browsers, hold down on an item until the in browser menu is displayed, cancel the in browser menu and the right click context menu will be visible<br />&nbsp;</p>
-      <p><br />For a full list of My Fieles Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
+      <p>It is found by Right Clicking on any item, or in mobile browsers, hold down on an item until the in-browser menu is displayed, cancel the in browser menu and the right click context menu will be visible<br />&nbsp;</p>
+      <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
       ]]>
     </contextmenu>
     <search>
@@ -191,16 +191,16 @@ British English Help Localised Resources
       <h2>Searching/Filtering the Current Folder</h2>
       <img src="~/images/help/myfiles-search.png" alt="" />
       <p>You can Search/Filter the current Folder to find a specific item, this is done in realtime as you type into the Search Box<br />&nbsp;</p>
-      <p><br />For a full list of My Fieles Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
+      <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
       ]]>
     </search>
     <renaming>
       <![CDATA[
         <h2>Renaming</h2>
-        <p>You can rename and item by choosing Rename from the <b><a href="javascript:void(hap.help.Load('myfiles/contextmenu'));">right click context menu</a></b><br />&nbsp;</p>
+        <p>You can rename an item by choosing Rename from the <b><a href="javascript:void(hap.help.Load('myfiles/contextmenu'));">right click context menu</a></b><br />&nbsp;</p>
         <img src="~/images/help/myfiles-rename.png" alt="" />
         <p>All you need to do is change the the text in the textbox that is shown on the current item.  This only works on 1 item at a time<br />&nbsp;</p>
-        <p><br />For a full list of My Fieles Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
+        <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
       ]]>
     </renaming>
     <properties>
@@ -208,7 +208,7 @@ British English Help Localised Resources
       <h2>Properties</h2>
       <img src="~/images/help/myfiles-properties.png" alt="" />
       <p>You can get additional information on items by choosing Properties from the <b><a href="javascript:void(hap.help.Load('myfiles/contextmenu'));">right click context menu</a></b><br />&nbsp;</p>
-      <p><br />For a full list of My Fieles Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
+      <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
       ]]>
     </properties>
     <preview>
@@ -216,7 +216,7 @@ British English Help Localised Resources
       <h2>File Preview</h2>
       <img src="~/images/help/myfiles-preview.png" alt="" />
       <p>You can get a Preview of Selected Files by choosing Preview from the <b><a href="javascript:void(hap.help.Load('myfiles/contextmenu'));">right click context menu</a></b><br />&nbsp;</p>
-      <p>Note:  The previews are a best possible rendering of the chosen document, and in no way looks excactly as the preview displays<br />&nbsp;</p>
+      <p>Note: A preview is a "best possible" quick view of the chosen document. It will not always look identical to the actual document<br />&nbsp;</p>
       <p>Supported Files are:
         <ul>
           <li>Open XML Office Word Documents - .docx</li>
@@ -225,7 +225,7 @@ British English Help Localised Resources
           <li>Images - .bmp, .png, .jpg, .gif</li>
         </ul>
       <br />&nbsp;</p>
-      <p><br />For a full list of My Fieles Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
+      <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
       ]]>
 
     </preview>
@@ -234,7 +234,7 @@ British English Help Localised Resources
       <h2>Google Docs</h2>
       <p>New in My Files is the Option to Send specific files to Google's Documents Storage System so you can edit them<br />&nbsp;</p>
       <p>You can Send a Specific file to Google Docs by choosing Send to Google Docs from the <b><a href="javascript:void(hap.help.Load('myfiles/contextmenu'));">right click context menu</a></b><br />&nbsp;</p>
-      <p>You will be asked for your Google Username and Password so we can upload the Document<br />&nbsp;</p>
+      <p>You will be asked for your Google Username and Password so the file can be uploaded<br />&nbsp;</p>
       <img src="~/images/myfiles-googledocs1.png" alt="" />
       <p>Once the document has been uploaded a new window will open directing you to your Google Docs Storage<br />&nbsp;</p>
       <p>Supported Files are:
@@ -246,7 +246,7 @@ British English Help Localised Resources
           <li>Adobe Portable Document Formatted Files - .pdf</li>
         </ul>
       <br />&nbsp;</p>
-      <p><br />For a full list of My Fieles Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
+      <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
       ]]>
     </googledocs>
     <upload>
@@ -260,13 +260,13 @@ British English Help Localised Resources
         Once you have chosen your files click Upload to Start the Upload Process.
       <br />&nbsp;</p>
       <p>
-        If you have a Supported Browser Home Access Plus+ will check to see if the file already exists, and prompt you if you want to overwrite it if it does<br />
+        If you have a supported browser Home Access Plus+ will check to see if the file already exists and prompt you to overwrite it if it does<br />
         <img src="~/images/help/myfiles-fileexists.png" alt="" /><br />
-        A progress indicator will then become visible down the bottom of the page<br />
+        A progress indicator will then appear at the bottom of the page<br />
         <img src="~/images/help/myfiles-uploadprogress.png" alt="" />
       <br />&nbsp;</p>
       <p>Once the file has been uploaded the page will reload to show the file<br />&nbsp;</p>
-      <p><br />For a full list of My Fieles Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
+      <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
       ]]>
     </upload>
     <views>
@@ -276,7 +276,7 @@ British English Help Localised Resources
       <p>My Files does this via the View button on the <b><a href="javascript:void(hap.help.Load('myfiles/toolbar'));">Toolbar</a></b>, clicking on this will show a list of possible views you can choose from<br />&nbsp;</p>
       <img src="~/images/help/myfiles-views.png" alt="" />
       <p>Selecting one will change the view<br />&nbsp;</p>
-      <p><br />For a full list of My Fieles Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
+      <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
       ]]>
     </views>
     <list>
@@ -285,9 +285,9 @@ British English Help Localised Resources
         <img src="~/images/help/myfiles-interface.PNG" alt="" />
         <p>The Main List displays the list of files/folders in your currently selected file
           <br /><br />
-          Once you are past the Drives page, selecting an item is done via Single Clicking, and navigating to that folder is done via Double Clicking it
+          Once you have opened a Drive (i.e. not at the drive selection level), selecting an item is done via Single Clicking, and navigating to that folder is done via Double Clicking it
         <br />&nbsp;</p>
-        <p><br />For a full list of My Fieles Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
+        <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
       ]]>
     </list>
   </myfiles>
