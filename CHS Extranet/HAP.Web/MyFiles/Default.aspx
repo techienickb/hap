@@ -201,7 +201,12 @@
 			this.File = file;
 			this.Path = path;
 			this.Start = function() {
-				if ("<%=DropZoneAccepted %>".toLowerCase().indexOf(this.File.type.toLowerCase()) == -1 && "<%=DropZoneAccepted %>" != "") {
+				if (this.File.name.indexOf('.') == -1) {
+					alert(hap.common.getLocal("myfiles/upload/folderwarning").replace(/\%/g, this.File.name));
+					uploads.pop(this);
+					return false;
+				}
+				else if ("<%=DropZoneAccepted %>".toLowerCase().indexOf(this.File.name.substr(this.File.name.lastIndexOf('.')).toLowerCase()) == -1 && "<%=DropZoneAccepted %>" != "") {
 					alert(this.File.name + " " + hap.common.getLocal("myfiles/upload/filetypewarning") + "\n\n <%=AcceptedExtensions %>");
 					uploads.pop(this);
 					return false;
@@ -244,7 +249,7 @@
 					if (this.readyState == 4) {
 						var item = null;
 						for (var i = 0; i < uploads.length; i ++) if (uploads[i].File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_") == this.id) item = uploads[i];
-						if (this.status != 200) alert(hap.common.getLocal("myfiles/upload/upload") + " " + hap.common.getLocal("of") + " " + item.File.name + " " + hap.common.getLocal("myfiles/upload/failed"));
+						if (this.status != 200) alert(hap.common.getLocal("myfiles/upload/upload") + " " + hap.common.getLocal("of") + " " + item.File.name + " " + hap.common.getLocal("myfiles/upload/failed") + "\n\n" + this.responseText.substr(this.responseText.indexOf('<title>') + 7, this.responseText.indexOf('</title>') - (7 + this.responseText.indexOf('<title>'))));
 						$("#upload-" + this.id + " .progressbar").progressbar("value", 100 );
 						$("#upload-" + id).delay(1000).slideUp('slow', function() { $("#upload-" + id).remove(); if (uploads.length == 0) $("#uploadprogress").slideUp('slow'); });
 						if (curpath.substr(0, curpath.length - 1).replace(/\//g, "\\") == item.Path || curpath.replace(/\//g, "\\") == item.Path) Load();

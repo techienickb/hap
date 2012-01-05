@@ -9,6 +9,7 @@ using System.Web.Security;
 using System.IO;
 using HAP.Data.ComputerBrowser;
 using HAP.Web.Configuration;
+using System.Xml;
 
 namespace HAP.Web.API
 {
@@ -62,12 +63,26 @@ namespace HAP.Web.API
             return false;
         }
 
+        protected XmlDocument _doc
+        {
+            get
+            {
+                if (HttpContext.Current.Cache.Get("hapLocal") == null)
+                {
+                    XmlDocument doc = new XmlDocument();
+                    doc.Load(HttpContext.Current.Server.MapPath("~/App_LocalResources/" + hapConfig.Current.Local + "/Strings.xml"));
+                    HttpContext.Current.Cache.Insert("hapLocal", doc, new System.Web.Caching.CacheDependency(HttpContext.Current.Server.MapPath("~/App_LocalResources/" + hapConfig.Current.Local + "/Strings.xml")));
+                }
+                return (XmlDocument)HttpContext.Current.Cache.Get("hapLocal");
+            }
+        }
+
         public void ProcessRequest(HttpContext context)
         {
             if (!string.IsNullOrEmpty(context.Request.Headers["X_FILENAME"]))
             {
 
-                if (!isAuth(Path.GetExtension(context.Request.Headers["X_FILENAME"]))) throw new UnauthorizedAccessException("You have attempted to uploaded a restricted file type");
+                if (!isAuth(Path.GetExtension(context.Request.Headers["X_FILENAME"]))) throw new UnauthorizedAccessException(_doc.SelectSingleNode("/hapStrings/myfiles/upload/filetypeerror").InnerText);
                 DriveMapping m;
                 string path = Path.Combine(Converter.DriveToUNC('\\' + RoutingPath, RoutingDrive, out m, ADUser), context.Request.Headers["X_FILENAME"]);
                 HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.Upload", ADUser.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Uploading of: " + context.Request.Headers["X_FILENAME"] + " to: " + path);

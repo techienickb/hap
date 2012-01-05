@@ -8,6 +8,7 @@ using HAP.Web.Configuration;
 using System.Web.Configuration;
 using System.Configuration;
 using System.IO;
+using System.Xml;
 
 namespace HAP.Web.MyFiles
 {
@@ -87,12 +88,27 @@ namespace HAP.Web.MyFiles
             return false;
         }
 
+        protected XmlDocument _doc
+        {
+            get
+            {
+                if (HttpContext.Current.Cache.Get("hapLocal") == null)
+                {
+                    XmlDocument doc = new XmlDocument();
+                    doc.Load(HttpContext.Current.Server.MapPath("~/App_LocalResources/" + hapConfig.Current.Local + "/Strings.xml"));
+                    HttpContext.Current.Cache.Insert("hapLocal", doc, new System.Web.Caching.CacheDependency(HttpContext.Current.Server.MapPath("~/App_LocalResources/" + hapConfig.Current.Local + "/Strings.xml")));
+                }
+                return (XmlDocument)HttpContext.Current.Cache.Get("hapLocal");
+            }
+        }
+
         protected void uploadbtn_Click(object sender, EventArgs e)
         {
             ADUser.Impersonate();
             DriveMapping mapping;
             string path = HAP.Data.ComputerBrowser.Converter.DriveToUNC(p.Value, out mapping);
             if (isAuth(Path.GetExtension(uploadedfiles.PostedFile.FileName))) uploadedfiles.PostedFile.SaveAs(Path.Combine(path, uploadedfiles.PostedFile.FileName));
+            else throw new UnauthorizedAccessException(_doc.SelectSingleNode("/hapStrings/myfiles/upload/filetypeerror").InnerText);
             ADUser.EndImpersonate();
         }
 

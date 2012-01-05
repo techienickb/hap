@@ -41,8 +41,8 @@
       <error2>do you want to Continue?</error2>
       <question1>Are you sure you want to move:</question1>
     </move>
-    <downloadwarning>You are about to download this file, if you wish to edit this file, please remember to
-Save it to your computer, and upload it back once you have finished!</downloadwarning>
+    <downloadwarning>You are about to download this file. If you wish to edit this file, remember to
+save it to your computer and upload it back once you have finished!</downloadwarning>
     <upload>
       <upload>Upload</upload>
       <uploading>Uploading</uploading>
@@ -50,6 +50,10 @@ Save it to your computer, and upload it back once you have finished!</downloadwa
       <filetypewarning>is an restricted file type
 
 You can only upload</filetypewarning>
+      <folderwarning>You cannot upload the folder %
+
+Try compressing it into a ZIP File first</folderwarning>
+      <filetypeerror>You have attempted to upload a restricted file type!</filetypeerror>
       <filesizewarning>is Too Big to Upload!</filesizewarning>
       <fileexists1>The file</fileexists1>
       <fileexists2>already exists
