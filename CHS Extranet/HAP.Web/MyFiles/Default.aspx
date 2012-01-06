@@ -809,7 +809,7 @@
 							if (data.Name != null) {
 								$("#progressstatus").dialog({ autoOpen: true, modal: true, title: hap.common.getLocal("myfiles/waiting") + "..." });
 								$("#progressstatus .progress").progressbar({ value: 10 });
-								confirm(data.Name + " " + hap.common.getLocal("folderexists2"));
+								confirm(data.Name + " " + hap.common.getLocal("myfiles/folderexists2"));
 								$("#progressstatus").dialog("close");
 							} else {
 								$("#progressstatus").dialog({ autoOpen: true, modal: true, title: hap.common.getLocal("myfiles/renaming") + "..." });
