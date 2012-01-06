@@ -25,14 +25,14 @@ namespace HAP.Web.Controls
 
         protected override void Render(HtmlTextWriter writer)
         {
-#if RELEASE
+#if DEBUG
+            base.Render(writer);
+#else
             StringWriter stringWriter = new StringWriter();
             HtmlTextWriter w = new HtmlTextWriter(stringWriter);
             base.Render(w);
             w.Close();
-            writer.Write(stringWriter.ToString().Replace(Environment.NewLine, "").Replace("\t", " "));
-#else
-            base.Render(writer);
+            writer.Write(stringWriter.ToString().Replace(Environment.NewLine, "").Replace("\t", " ")); 
 #endif
         }
 

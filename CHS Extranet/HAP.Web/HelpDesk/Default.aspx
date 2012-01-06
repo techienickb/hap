@@ -95,6 +95,7 @@
 			
 		</div>
 	</div>
+    <hap:CompressJS runat="server" Tag="div">
 	<script type="text/javascript">
 		var curticket;
 		var st = "";
@@ -104,10 +105,10 @@
 			$("#updateticket").dialog({ autoOpen: true, minWidth: 600, minHeight: 400, buttons: {
 				"Update": function () {
 					var data = '{ "Note": "' + escape($("#ticket-note").val()) + '", "State": ';
-					var url = '<%=ResolveUrl("~/api/HelpDesk/Ticket/")%>' + curticket;
+					var url = '<%=ResolveUrl("~/api/HelpDesk/Ticket/")%>' + curticket + '?' + window.JSON.stringify(new Date());
 					if (<%=User.IsInRole("Domain Admins").ToString().ToLower() %>) {
 						data += ($("#ticket-fixed").is(":checked") ? '"Fixed"' : '"With IT"') + ', "Priority": "' + $("#ticket-priority input:checked").attr("value") + '", "ShowTo": "' + $("#ticket-showto").val() + '", "FAQ": "' + ($("ticket-faq").is(":checked") ? + 'true' : 'false') + '"';
-						url = '<%=ResolveUrl("~/api/HelpDesk/AdminTicket/")%>' + curticket;
+						url = '<%=ResolveUrl("~/api/HelpDesk/AdminTicket/")%>' + curticket + '?' + window.JSON.stringify(new Date());
 					} else data += '"New"';
 					data += ' }';
 					$.ajax({
@@ -132,7 +133,7 @@
 							$("button").button();
 							$.ajax({
 								type: 'GET',
-								url: '<%=ResolveUrl("~/api/HelpDesk/Tickets/Open" + (User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName))%>',
+								url: '<%=ResolveUrl("~/api/HelpDesk/Tickets/Open" + (User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName))%>?' + window.JSON.stringify(new Date()),
 								dataType: 'json',
 								contentType: 'application/json',
 								success: function (data) {
@@ -146,7 +147,7 @@
 							});
 							$.ajax({
 								type: 'GET',
-								url: '<%=ResolveUrl("~/api/HelpDesk/Tickets/Closed" + (User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName))%>',
+								url: '<%=ResolveUrl("~/api/HelpDesk/Tickets/Closed" + (User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName))%>?' + window.JSON.stringify(new Date()),
 								dataType: 'json',
 								contentType: 'application/json',
 								success: function (data) {
@@ -160,7 +161,7 @@
 							});
 			                $.ajax({
 				                type: 'GET',
-				                url: '<%=ResolveUrl("~/api/HelpDesk/FAQs")%>',
+				                url: '<%=ResolveUrl("~/api/HelpDesk/FAQs")%>?' + window.JSON.stringify(new Date()),
 				                dataType: 'json',
 				                contentType: 'application/json',
 				                success: function (data) {
@@ -192,10 +193,10 @@
 
 		function fileTicket() {
 			var data = '{ "Subject": "' + escape($("#newticket-subject").val()) + '", "Room": "' + $("#newticket-room").val() + '", "Note": "' + escape($("#newticket-note").val()) + '"';
-			var url = '<%=ResolveUrl("~/api/HelpDesk/Ticket")%>';
+			var url = '<%=ResolveUrl("~/api/HelpDesk/Ticket")%>?' + window.JSON.stringify(new Date());
 			if (<%=User.IsInRole("Domain Admins").ToString().ToLower() %>) {
 				data += ', "Priority": "' + $("#priorityradioes input:checked").val() + '", "User": "' + $("#<%=userlist.ClientID %> option:selected").attr("value") + '", "ShowTo": "' + $("#newticket-showto").val() + '"';
-				url = '<%=ResolveUrl("~/api/HelpDesk/AdminTicket")%>';
+				url = '<%=ResolveUrl("~/api/HelpDesk/AdminTicket")%>?' + window.JSON.stringify(new Date());
 			}
 			data += ' }';
 			$.ajax({
@@ -225,7 +226,7 @@
 					$("button").button();
 					$.ajax({
 						type: 'GET',
-						url: '<%=ResolveUrl("~/api/HelpDesk/Tickets/Open" + (User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName))%>',
+						url: '<%=ResolveUrl("~/api/HelpDesk/Tickets/Open" + (User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName))%>?' + window.JSON.stringify(new Date()),
 						dataType: 'json',
 						contentType: 'application/json',
 						success: function (data) {
@@ -251,7 +252,7 @@
 				$("#tabs").tabs("select", 4);
 				$.ajax({
 					type: 'GET',
-					url: '<%=ResolveUrl("~/api/HelpDesk/Ticket/")%>' + curticket,
+					url: '<%=ResolveUrl("~/api/HelpDesk/Ticket/")%>' + curticket + '?' + window.JSON.stringify(new Date()),
 					dataType: 'json',
 					contentType: 'application/json',
 					success: function (data) {
@@ -279,7 +280,7 @@
 			$(".button").button();
 			$.ajax({
 				type: 'GET',
-				url: '<%=ResolveUrl("~/api/HelpDesk/Tickets/Open" + (User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName))%>',
+				url: '<%=ResolveUrl("~/api/HelpDesk/Tickets/Open" + (User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName))%>?' + window.JSON.stringify(new Date()),
 				dataType: 'json',
 				contentType: 'application/json',
 				success: function (data) {
@@ -293,7 +294,7 @@
 			});
 			$.ajax({
 				type: 'GET',
-				url: '<%=ResolveUrl("~/api/HelpDesk/Tickets/Closed" + (User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName))%>',
+				url: '<%=ResolveUrl("~/api/HelpDesk/Tickets/Closed" + (User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName))%>?' + window.JSON.stringify(new Date()),
 				dataType: 'json',
 				contentType: 'application/json',
 				success: function (data) {
@@ -307,7 +308,7 @@
 			});
 			$.ajax({
 				type: 'GET',
-				url: '<%=ResolveUrl("~/api/HelpDesk/FAQs")%>',
+				url: '<%=ResolveUrl("~/api/HelpDesk/FAQs")%>?' + window.JSON.stringify(new Date()),
 				dataType: 'json',
 				contentType: 'application/json',
 				success: function (data) {
@@ -324,4 +325,5 @@
 			loadTicket();
 		});
 	</script>
+    </hap:CompressJS>
 </asp:Content>

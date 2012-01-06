@@ -1,9 +1,9 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="HAP.Web.BookingSystem._new" %>
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+<asp:Content ContentPlaceHolderID="head" runat="server">
 	<script src="../Scripts/jquery.ba-hashchange.min.js" type="text/javascript"></script>
 	<link href="../style/bookingsystem.css" rel="stylesheet" type="text/css" />
 </asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
+<asp:Content ContentPlaceHolderID="body" runat="server">
 	<div style="overflow: hidden; clear: both; position: relative; height: 120px">
 		<div class="tiles" style="float: left; margin-top: 45px;">
 			<a class="button" href="../">Home Access Plus+ Home</a>
@@ -82,12 +82,11 @@
 			</div><%=BodyCode[1] %>
 		</div>
 	</div>
+    <hap:CompressJS runat="server" tag="div">
 	<script type="text/javascript">
-		var curdate;
+		var curdate, curres, curles;
 		var user = { <%=JSUser %> };
 		var resources = <%=JSResources %>;
-		var curres;
-		var curles;
 		var availbookings = [ 0, 0 ];
 		function resource(name, type){
 			this.Name = name;
@@ -118,19 +117,19 @@
 			this.Refresh = function() {
 				$.ajax({
 					type: 'GET',
-					url: '<%=ResolveUrl("~/api/BookingSystem/LoadRoom/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + this.Name,
+					url: '<%=ResolveUrl("~/api/BookingSystem/LoadRoom/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + this.Name + '?' + window.JSON.stringify(new Date()),
 					dataType: 'json',
 					context: this,
 					success: function (data) {
 						this.Data = data;
 						this.Render();
 					},
-					error: OnError
+					error: hap.common.jsonError
 				});
 			};
 		}
 		function subjectchance(box) {
-			var chosenoption = box.options[box.selectedIndex] //this refers to "selectmenu"
+			var chosenoption = box.options[box.selectedIndex];
 			if (chosenoption.value == "CUSTOM") {
 				$("#bfsubject").val("");
 				$("#bfsubject").removeAttr("style");
@@ -170,7 +169,7 @@
 			$("#val").html("Loading...");
 			$.ajax({
 				type: 'GET',
-				url: '<%=ResolveUrl("~/api/BookingSystem/Initial/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username.toLowerCase(),
+				url: '<%=ResolveUrl("~/api/BookingSystem/Initial/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username.toLowerCase() + '?' + window.JSON.stringify(new Date()),
 				dataType: 'json',
 				success: function (data) {
 					if (user.isBSAdmin) $("#val").html("This Week is a Week " + data[1]);
@@ -179,18 +178,12 @@
 						availbookings = data;
 					}
 				},
-				error: OnError
+				error: hap.common.jsonError
 			});
 			for (var i = 0; i < resources.length; i++) {
 				$("#" + resources[i].Name).html(" ");
 				resources[i].Refresh();
 			}
-		}
-		function OnError(xhr, ajaxOptions, thrownError) {
-			console.log(thrownError);
-			console.log(ajaxOptions);
-			console.log(xhr);
-			alert(thrownError);
 		}
 		$(window).hashchange(function () {
 			
@@ -220,8 +213,8 @@
 			$("#bflroomerror").css("display", "none");
 			$("#bferoomerror").css("display", "none");
 			$("#bfsubject").val("");
-			$("#bfsubjects option:selected").removeAttr("selected")
-			$("#bfsubjects option:first").attr("selected", "selected")
+			$("#bfsubjects option:selected").removeAttr("selected");
+			$("#bfsubjects option:first").attr("selected", "selected");
 			$("#bflheadphones").removeAttr("checked");
 			$("#bflroom").val("");
 			$("#bferoom").val("");
@@ -263,7 +256,7 @@
 							d += " } }";
 							$.ajax({
 								type: 'POST',
-								url: '<%=ResolveUrl("~/api/BookingSystem/Booking/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear(),
+								url: '<%=ResolveUrl("~/api/BookingSystem/Booking/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '?' + window.JSON.stringify(new Date()),
 								dataType: 'json',
 								contentType: 'application/json',
 								data: d,
@@ -272,7 +265,7 @@
 									curres.Render();
 									$.ajax({
 										type: 'GET',
-										url: '<%=ResolveUrl("~/api/BookingSystem/Initial/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username,
+										url: '<%=ResolveUrl("~/api/BookingSystem/Initial/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username + '?' + window.JSON.stringify(new Date()),
 										dataType: 'json',
 										success: function (data) {
 											if (user.isBSAdmin) $("#val").html("This Week is a Week " + data[1]);
@@ -281,10 +274,10 @@
 												availbookings = data;
 											}
 										},
-										error: OnError
+										error: hap.common.jsonError
 									});
 								},
-								error: OnError
+								error: hap.common.jsonError
 							});
 							
 							$(this).dialog("close");
@@ -306,7 +299,7 @@
 						if (resources[i].Name == res) curres = resources[i];
 					$.ajax({
 						type: 'DELETE',
-						url: '<%=ResolveUrl("~/api/BookingSystem/Booking/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear(),
+						url: '<%=ResolveUrl("~/api/BookingSystem/Booking/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '?' + window.JSON.stringify(new Date()),
 						dataType: 'json',
 						contentType: 'application/json',
 						data: '{ "booking": { "Room": "' + curres.Name + '", "Lesson": "' + curles + '", "Name": "' + name + '" } }',
@@ -315,7 +308,7 @@
 							curres.Render();
 							$.ajax({
 								type: 'GET',
-								url: '<%=ResolveUrl("~/api/BookingSystem/Initial/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username,
+								url: '<%=ResolveUrl("~/api/BookingSystem/Initial/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username + '?' + window.JSON.stringify(new Date()),
 								dataType: 'json',
 								success: function (data) {
 									if (user.isBSAdmin) $("#val").html("This Week is a Week " + data[1]);
@@ -324,10 +317,10 @@
 										availbookings = data;
 									}
 								},
-								error: OnError
+								error: hap.common.jsonError
 							});
 						},
-						error: OnError
+						error: hap.common.jsonError
 					});
 					$(this).dialog("close");
 				}, "No": function() {
@@ -376,5 +369,5 @@
 			loadDate();
 		});
 	</script>
-
+    </hap:CompressJS>
 </asp:Content>
