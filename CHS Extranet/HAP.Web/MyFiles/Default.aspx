@@ -906,7 +906,7 @@
 					$("#uploadprogress").slideDown('slow');
 					if ($("#<%=uploadedfiles.ClientID %>")[0].files != null) {
 						for (var i = 0; i < $("#<%=uploadedfiles.ClientID %>")[0].files.length; i++) {
-							var file = new Upload(($("#<%=uploadedfiles.ClientID %>")[0].files)[i], curitem.Location.substr(0, curitem.Location.length - 1).replace(/:/g, ""));
+							var file = new Upload(($("#<%=uploadedfiles.ClientID %>")[0].files)[i], (curpath.length == 2 ? curitem.Location.substr(0, curitem.Location.length -1 ) : curitem.Location).replace(/:/g, ""));
 							uploads.push(file);
 							file.Start();
 						}
