@@ -28,7 +28,7 @@ namespace HAP.Web.Configuration
             {
                 StreamWriter sw = File.CreateText(ConfigPath);
                 sw.WriteLine("<?xml version=\"1.0\"?>");
-                sw.WriteLine("<hapConfig version=\"" + Assembly.GetExecutingAssembly().GetName().Version.ToString() + "\" firstrun=\"True\" />");
+                sw.WriteLine("<hapConfig version=\"" + Assembly.GetExecutingAssembly().GetName().Version.ToString() + "\" local=\"en-GB\" firstrun=\"True\" />");
                 sw.Close();
                 sw.Dispose();
             }
