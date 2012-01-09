@@ -38,7 +38,7 @@ namespace HAP.Web.MyFiles
         {
             get
             {
-                HttpRuntimeSection section = ConfigurationManager.GetSection("location[@path='myfiles/default.aspx']/system.web/httpRuntime") as HttpRuntimeSection;
+                HttpRuntimeSection section = ConfigurationManager.GetSection("system.web/httpRuntime") as HttpRuntimeSection;
 
                 if (section != null)
                     return section.MaxRequestLength * 1024; // Cofig Value

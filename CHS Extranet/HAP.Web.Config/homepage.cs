@@ -34,7 +34,7 @@ namespace HAP.Web.Configuration
             Groups["Resources"].Add("My School Files", "Inherit", "Access your School My Files", "~/mycomputer.aspx", "~/images/icons/net.png", "");
             Groups["Resources"].Add("Remote Apps", "Inherit", "Run School Applications at Home via School", "/rdweb/", "~/images/icons/remotedesktop.png", "");
             Groups["Resources"].Add("Access My Emails", "Domain Admins, CHS Teaching Staff, CHS Non-Teach Staff", "Access Student Mail", "https://schoolmail.crickhowell-hs.powys.sch.uk/webmail/", "~/images/icons/email.png", "");
-            Groups["Resources"].Add("Access My Emails", "CHS Students", "Access Outlook Web App", "https://schoolmail.crickhowell-hs.powys.sch.uk/owa/", "~/images/icons/email.png", "");
+            Groups["Resources"].Add("Access My Webmail", "CHS Students", "Access Outlook Web App", "https://schoolmail.crickhowell-hs.powys.sch.uk/owa/", "~/images/icons/email.png", "");
             Groups.Add("Management", "CHS Teaching Staff, CHS Non-Teach Staff, Domain Admins", "");
             Groups["Management"].Add("Help Desk", "Inherit", "Log/View a Support Ticket", "~/helpdesk/", "~/images/icons/helpdesk.png", "");
             Groups["Management"].Add("Booking System", "Inherit", "Book an IT Resource", "~/bookingsystem/", "~/images/icons/bookingsystem.png", "");
