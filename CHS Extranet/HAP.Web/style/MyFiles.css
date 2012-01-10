@@ -8,7 +8,7 @@ body.bookingdisplay, body.bookingdisplay form { padding: 0; margin: 0; width: 10
 #content {
 	margin: 0; padding: 0;
 }
-#toolbar { position: absolute; }
+#toolbar { position: absolute; height: 25px; vertical-align: top!important; line-height: 25px; overflow: hidden; }
 #Tree { position: absolute; width: 188px; margin-right: 3px; font-size: 11px; overflow: auto; height: 410px; border: 0; }
 .dynatree-container { margin: 0; }
 a.dynatree-title { display: inline-block; text-decoration: none; color: #000; padding: 1px 4px; border: 0; background: #eee; }
@@ -95,7 +95,7 @@ button.back span { top: 4px; }
 #uploadprogress #progresses { padding: 6px; }
 #uploadprogress #progresses div { white-space: nowrap; overflow: hidden; height: 20px; line-height: 20px; text-overflow: ellipse; }
 
-#newfoldertext { background: #fff; }
+#newfoldertext { background: #fff; margin: 0; }
 .loading { background: #fff url(../images/loading.gif) no-repeat right center; }
 
 #renamebox { position: absolute; font-size: 12px; margin-left: 56px; margin-top: 4px; display: none; }
