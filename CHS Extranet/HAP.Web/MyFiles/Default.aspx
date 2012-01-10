@@ -71,7 +71,11 @@
 			</span>
 			<button class="dropdown" id="view"><hap:LocalResource runat="server" StringPath="myfiles/view" /></button>
 		</div>
-		<button id="backup"></button><span id="newfolderspan"><input type="text" id="newfoldertext" style="margin-right: 6px;" /><button id="newfolder"><hap:LocalResource runat="server" StringPath="myfiles/newfolder" /></button></span> <button id="upload"><hap:LocalResource runat="server" StringPath="myfiles/upload/upload" /></button> <label id="uploadto"></label>
+		<button id="backup"></button>
+		<input type="text" id="newfoldertext" />
+		<button id="newfolder"><hap:LocalResource runat="server" StringPath="myfiles/newfolder" /></button>
+		<button id="upload"><hap:LocalResource runat="server" StringPath="myfiles/upload/upload" /></button>
+		<label id="uploadto"></label>
 	</div>
 	<div id="Views" class="tile-border-color">
 		<button id="tiles"><hap:LocalResource runat="server" StringPath="myfiles/tiles" /></button>
@@ -363,7 +367,7 @@
 						}
 					};
 				}
-				$("#" + this.Id).bind("click", this.Click).contextMenu('contextMenu', {
+				$("#" + this.Id).bind("click", this.Click).bind("dblclick", this.DoubleClick).contextMenu('contextMenu', {
 					onContextMenu: function (e) {
 						var element = $(e.target);
 						if (!element.is("a")) element = element.parent("a");
@@ -515,6 +519,18 @@
 			};
 			this.Selected = false;
 			this.ClickTimer = null;
+			this.DoubleClick = function (e) {
+				$('#jqContextMenu').css("display", "none");
+				$('#jqContextMenuShadow').css("display", "none");
+				var item = null;
+				for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
+				if (item.Data.Type != 'Directory' && item.Data.Actions == 3) return;
+				if (item.Data.Type != 'Directory') alert(hap.common.getLocal("myfiles/downloadwarning"));
+				var item = null;
+				for (var x = 0; x < items.length; x++)
+					if (items[x].Id == $(this).attr("id")) { item = items[x]; break; }
+				window.location.href = (item.Data.Path.match(/\.\./i) ? item.Data.Path.replace(/\\/g, "/") : '#' + item.Data.Path);
+			}
 			this.Click = function (e) {
 				e.preventDefault();
 				$('#jqContextMenu').css("display", "none");
@@ -523,8 +539,8 @@
 				for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
 				clearTimeout(item.ClickTimer);
 				item.Clicks++;
-				item.ClickTimer = setTimeout("for (var x = 0; x < items.length; x++) if (items[x].Id == '" + item.Id + "') items[x].Clicks = 0;", 300);
-				if (item.Clicks === 1) {
+				item.ClickTimer = setTimeout("for (var x = 0; x < items.length; x++) if (items[x].Id == '" + item.Id + "') items[x].Clicks = 0;", 500);
+				if (item.Clicks == 1) {
 					var i = -1, z = -1;
 					for (var x = 0; x < items.length; x++) {
 						if (items[x].Id == $(this).attr("id")) { z = x; }
@@ -542,12 +558,7 @@
 					}
 					item.Refresh();
 				} else {
-					if (item.Data.Type != 'Directory' && item.Data.Actions == 3) return;
-					if (item.Data.Type != 'Directory') alert(hap.common.getLocal("myfiles/downloadwarning"));
-					var item = null;
-					for (var x = 0; x < items.length; x++)
-						if (items[x].Id == $(this).attr("id")) { item = items[x]; break; }
-					window.location.href = (item.Data.Path.match(/\.\./i) ? item.Data.Path.replace(/\\/g, "/") : '#' + item.Data.Path);
+
 				}
 				return false;
 			};
@@ -597,11 +608,13 @@
 				success: function (data) {
 					curitem = data;
 					if (curitem.Actions == 0) {
-						$("#newfolderspan").animate({ opacity: 1.0 }, 500, function () { $("#newfolderspan").show(); });
+						$("#newfolder").animate({ opacity: 1.0 }, 500, function () { $("#newfolder").show(); });
+						$("#newfoldertext").blur();
 						$("#upload").animate({ opacity: 1.0 }, 500, function () { $("#upload").show(); });
 					}
 					else {
-						$("#newfolderspan").animate({ opacity: 0 }, 500, function () { $("#newfolderspan").hide(); });
+						$("#newfolder").animate({ opacity: 0 }, 500, function () { $("#newfolder").hide(); });
+						$("#newfoldertext").blur();
 						$("#upload").animate({ opacity: 0 }, 500, function () { $("#upload").hide(); });
 					}
 					if (typeof (window.FileReader) != 'undefined' && curitem.Actions == 0) {
@@ -745,7 +758,7 @@
 			$("#newfolder").click(function () {
 				if ($("#newfolder span").text() == hap.common.getLocal("myfiles/newfolder")) {
 					$("#newfolder span").text(hap.common.getLocal("myfiles/create"));
-					$("#newfoldertext").val("").css("margin", "0 4px").animate({ width: 150, opacity: 1.0 }).focus();
+					$("#newfoldertext").val("").show().animate({ width: 150, opacity: 1.0 }).focus();
 				} else {
 					if (temp != null) { clearTimeout(temp); temp == null; }
 					$("#newfoldertext").addClass("loading");
@@ -781,7 +794,7 @@
 			$("#newfoldertext").focusout(function () {
 				temp = setTimeout(function () { 
 					$("#newfoldertext").removeClass("loading");
-					$("#newfoldertext").animate({ width: 0, opacity: 0.0 }).css("margin", "0");
+					$("#newfoldertext").animate({ width: 0, opacity: 0.0 }, 500, function() { $("#newfoldertext").hide() }).css("margin", "0");
 					$("#newfolder span").text(hap.common.getLocal("myfiles/newfolder"));
 				}, 1000);
 			}).focusin(function() {
