@@ -14,7 +14,8 @@
 		<div class="tiles" style="position: absolute; left: 0; margin-top: 45px;">
 			<a class="button" href="../"><hap:LocalResource StringPath="homeaccessplus" runat="server" Seperator=" " StringPath2="home" /></a>
 		</div>
-		<div class="tiles" style="float: right; text-align: right; margin-top: 45px;">
+		<div class="tiles" style="position: absolute; right: 0; text-align: right; margin-top: 45px;">
+			<a class="button" id="bug" href="#" onclick="return false;">Got an Issue?</a>
 			<a class="button" id="help" href="#" onclick="return false;"><hap:LocalResource StringPath="help" runat="server" /></a>
 		</div>
 		<div style="text-align: center;">
@@ -956,6 +957,7 @@
 				}
 			});
 			$(window).trigger("hashchange");
+			$("#bug").click(function() { hap.help.Load("myfiles/bug"); return false; });
 		});
 		$(document).bind('keydown', function (event) { var keycode = (event.keyCode ? event.keyCode : (event.which ? event.which : event.charCode)); keys.shift = (keycode == 16); keys.ctrl = (keycode == 17); });
 		$(document).bind('keyup', function (event) { keys.shift = keys.ctrl = false; });

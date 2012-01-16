@@ -101,3 +101,26 @@
 	font-family:Arial;
 	font-size:10pt;
 }
+
+#trybeta .content
+{
+	background: url(../images/myfiles-beta.png) no-repeat;
+	height: 268px;
+	width: 500px;
+	vertical-align: middle;
+	padding-top: 100px;
+}
+
+#trybeta .content a {
+	display: block;
+	margin: auto;
+	width: 350px;
+	height: 120px;
+	padding: 0 40px;
+	line-height: 120px;
+	font-size: 26px;
+	text-decoration: none;
+	background-image: url(../images/120-arrow.png);
+	background-repeat: no-repeat;
+	background-position: right top;
+}
