@@ -9,7 +9,6 @@
 
 <asp:Content runat="server" ContentPlaceHolderID="head">
 	<link href="<%=ResolveClientUrl("~/style/mycomputer.css")%>" rel="stylesheet" type="text/css" />
-	<meta name="DownloadOptions" content="noopen" />
 	<script type="text/javascript" src="<%=ResolveClientUrl("~/Scripts/rightclick.js")%>"></script>
 	<script type="text/javascript">
 		SimpleContextMenu.setup({ 'preventDefault': true, 'preventForms': false });
@@ -26,6 +25,12 @@
 </asp:Content>
 
 <asp:Content ContentPlaceHolderID="body" runat="server">
+	<div id="trybeta" title="Try the My Files Beta">
+		<div>Test the test version of My Files/My Computer to get an enhanced experience without having to install silverlight, but with all the added benifits of having it installed*</div>
+		<div class="content tiles">
+			<a href="<%=ResolveUrl("~/MyFiles/")%>" title="Test the test version of My Files/My Computer to get an enhanced experience without having to install silverlight, but with all the added benifits of having it installed*">Try the My Files Beta</a>
+		</div>
+	</div>
 	<div id="maincol">
 		<h1>My Computer</h1>
 		<a href="<%=ResolveClientUrl("~")%>">Home Access Plus+ Home</a>, <a href="<%=ResolveClientUrl("~/MyComputerSL.aspx")%>" onclick="return changeversion('sl');" id="mypcsl" title="Try the Extended silverlight version of the My School Computer Browser">Extended Version</a>
@@ -81,6 +86,11 @@
 		</div>
 		<script type="text/javascript" src="<%=Request.ApplicationPath %>/scripts/viewmode.js">
 		</script>
+	    <script type="text/javascript">
+	        if (getCookie("myfilesbeta") == null || getCookie("myfilesbeta") == "")
+	            $("#trybeta").dialog({ autoOpen: true, resizable: false, width: 528, height: 500, close: function (event, ui) { setCookie("myfilesbeta", "no", 30); }, buttons: { "No Thank You": function () { $(this).dialog("close"); } } });
+	        else $("#trybeta").remove();
+	    </script>
 		<hap:Delete runat="server" id="DeleteBox" />
 		<hap:Rename runat="server" id="RenameBox" />
 		<hap:Zip runat="server" id="ZipBox" />

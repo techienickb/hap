@@ -16,6 +16,17 @@ British English Help Localised Resources
     ]]>
   </contents>
   <myfiles>
+    <bug>
+      <![CDATA[
+      <h2>Got an Issue with the My Files Beta?</h2>
+      <p>Here's how to log it so it gets fixed:<br />&nbsp;</p>
+      <ol>
+        <li>Take a Screenshot of the Problem if you can</li>
+        <li>Log the Issue on the <a href="http://hap.codeplex.com/WorkItem/Create" target="_hap">Home Access Plus+ <b>Codeplex Site</b></a></li>
+      </ol>
+      <p>Alternatively, you can email your IT Support Department</p>
+      ]]>
+    </bug>
     <contents>
     <![CDATA[
       <h2>Contents</h2>

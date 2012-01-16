@@ -119,6 +119,7 @@
     <Content Include="App_Data\Announcement.xml" />
     <Content Include="App_Data\Tickets.xml" />
     <Content Include="HelpDesk\Default.aspx" />
+    <Content Include="images\120-arrow.png" />
     <Content Include="images\appbar.add.rest.png" />
     <Content Include="images\appbar.minus.rest.png" />
     <Content Include="images\arrow-collapse.png" />
@@ -229,6 +230,7 @@
     <Content Include="images\icons\white\xps.png" />
     <Content Include="images\icons\white\zip.png" />
     <Content Include="images\icons\winword-app.png" />
+    <Content Include="images\myfiles-beta.png" />
     <Content Include="images\myfiles.png" />
     <Content Include="images\page_white_copy.png" />
     <Content Include="images\page_white_delete.png" />
