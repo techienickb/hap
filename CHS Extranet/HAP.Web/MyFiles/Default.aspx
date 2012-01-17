@@ -56,8 +56,8 @@
 	  </ul>
 	</div>
 	<hap:WrappedLocalResource runat="server" id="uploaders" title="#myfiles/upload/upload" Tag="div">
-		<input type="file" id="uploadedfiles" runat="server" multiple="multiple" />
-		<asp:Button runat="server" style="display: none;" id="uploadbtn" onclick="uploadbtn_Click" /><asp:HiddenField runat="server" id="p" />
+		<input type="file" multiple="multiple" id="uploadedfiles" />
+		<iframe style="width: 300px; height: 180px"></iframe>
 	</hap:WrappedLocalResource>
 	<div id="uploadprogress" class="tile-border-color" style="border-width: 1px; border-style: solid; border-bottom: 0;">
 		<div class="tile-color ui-widget-header"><hap:LocalResource StringPath="myfiles/upload/uploadprogress" runat="server" /></div>
@@ -72,11 +72,15 @@
 			</span>
 			<button class="dropdown" id="view"><hap:LocalResource runat="server" StringPath="myfiles/view" /></button>
 		</div>
-		<button id="backup"></button>
-		<input type="text" id="newfoldertext" />
-		<button id="newfolder"><hap:LocalResource runat="server" StringPath="myfiles/newfolder" /></button>
-		<button id="upload"><hap:LocalResource runat="server" StringPath="myfiles/upload/upload" /></button>
-		<label id="uploadto"></label>
+		<div style="float: left;">
+			<button id="backup"></button>
+		</div>
+		<div style="float: left; margin-left: 3px;">
+			<input type="text" id="newfoldertext" />
+			<button id="newfolder"><hap:LocalResource runat="server" StringPath="myfiles/newfolder" /></button>
+			<button id="upload"><hap:LocalResource runat="server" StringPath="myfiles/upload/upload" /></button>
+			<label id="uploadto"></label>
+		</div>
 	</div>
 	<div id="Views" class="tile-border-color">
 		<button id="tiles"><hap:LocalResource runat="server" StringPath="myfiles/tiles" /></button>
@@ -438,9 +442,9 @@
 									s += '<hr style="height: 1px; border-width: 1px" />';
 									if (data.Type == "File Folder") {
 										s += '<div><label>' + hap.common.getLocal("myfiles/type") + ': </label>' + data.Type + '</div>';
-										s += '<div><label>' + hap.common.getLocal("myfiles/location") + ': </label>' + data.Location + '</div>';
+										s += '<div><label>' + hap.common.getLocal("myfiles/location") + ': </label><a href="' + hap.common.resolveUrl("~/api/myfiles-permalink/" + data.Location.replace(/\\/g, "/") + "/") + '">' + data.Location + '</a></div>';
 										s += '<div><label>' + hap.common.getLocal("myfiles/size") + ': </label>' + data.Size + '</div>';
-										s += '<div><label>' + hap.common.getLocal("myfiles/contails") + ': </label>' + data.Contents + '</div>';
+										s += '<div><label>' + hap.common.getLocal("myfiles/contains") + ': </label>' + data.Contents + '</div>';
 										s += '<hr style="height: 1px; border-width: 1px" />';
 										s += '<div><label>' + hap.common.getLocal("myfiles/created") + ': </label>' + data.DateCreated + '</div>';
 									} else {
@@ -915,28 +919,30 @@
 				}
 			});
 			$("#uploadprogress").css("margin-left", $("#myfilescontent").width() - $("#uploadprogress").width()).slideUp('slow');
-			$("#upload").click(function () { $("#uploaders").dialog({ autoOpen: true, modal: true, buttons: { 
-				"Upload": function() { 
-					$("#uploadprogress").slideDown('slow');
-					if ($("#<%=uploadedfiles.ClientID %>")[0].files != null) {
-						for (var i = 0; i < $("#<%=uploadedfiles.ClientID %>")[0].files.length; i++) {
-							var file = new Upload(($("#<%=uploadedfiles.ClientID %>")[0].files)[i], (curpath.length == 2 ? curitem.Location.substr(0, curitem.Location.length -1 ) : curitem.Location).replace(/:/g, ""));
-							uploads.push(file);
-							file.Start();
-						}
-						if (uploads.length == 0) $("#uploadprogress").slideUp('slow');
-						$("#<%=uploadedfiles.ClientID %>").html($("#<%=uploadedfiles.ClientID %>").html());
-					} else {
-						$("#<%=p.ClientID %>").val(curpath);
-						$("#<%=uploadbtn.ClientID %>").trigger("click");
-						$("#uploadprogress").slideDown('slow');
-						$("#uploadprogress").html(hap.common.getLocal("myfiles/upload/uploading") + "...<br />" + hap.common.getLocal("myfiles/upload/note"));
-					}
-					$("#uploadto").text("");
-					$(this).dialog("close");
-				}, "Close": function() { $(this).dialog("close"); } } 
-			}); });
-			$("#<%=uploadedfiles.ClientID %>").attr("accept", "<%=DropZoneAccepted.Replace("f:", "") %>");
+			$("#upload").click(function () { 
+				if ($("#uploadedfiles")[0].files != null) {
+					$("#uploaders iframe").remove();
+					$("#uploaders").dialog({ autoOpen: true, resizable: false, modal: true, buttons: { 
+						"Upload": function() { 
+							$("#uploadprogress").slideDown('slow');
+							for (var i = 0; i < $("#uploadedfiles")[0].files.length; i++) {
+								var file = new Upload(($("#uploadedfiles")[0].files)[i], (curpath.length == 2 ? curitem.Location.substr(0, curitem.Location.length -1 ) : curitem.Location).replace(/:/g, ""));
+								uploads.push(file);
+								file.Start();
+							}
+							if (uploads.length == 0) $("#uploadprogress").slideUp('slow');
+							$("#uploadedfiles").html($("#uploadedfiles").html());
+							$("#uploadto").text("");
+							$(this).dialog("close");
+						}, "Close": function() { $(this).dialog("close"); } } 
+					});
+				} else {
+					$("#uploaders iframe").attr("src", "../uploadh.aspx?path=" + curpath).css("display", "block");
+					$("#uploaders input").hide();
+					$("#uploaders").dialog({ autoOpen: true, modal: true, width: 320, height: 280, resizable: false });
+				}
+			});
+			$("#uploadedfiles").attr("accept", "<%=DropZoneAccepted.Replace("f:", "") %>");
 			$("#toolbar").css("width", $("#myfilescontent").width() - 10).css("top", $("#myfilescontent").offset().top);
 			$("#Tree").css("top", $("#myfilescontent").offset().top + $("#toolbar").height() + 10);
 			$("#MyFiles").css("margin-left", $("#Tree").width() + 5).css("padding-top", $("#toolbar").height() + 10);
@@ -961,6 +967,7 @@
 		});
 		$(document).bind('keydown', function (event) { var keycode = (event.keyCode ? event.keyCode : (event.which ? event.which : event.charCode)); keys.shift = (keycode == 16); keys.ctrl = (keycode == 17); });
 		$(document).bind('keyup', function (event) { keys.shift = keys.ctrl = false; });
+		function closeUpload() { $("#uploaders").dialog("close"); };
 		</script>
 	</hap:CompressJS>
 	<% if (FirstTime) { %> <script type="text/javascript">$(function () { $("#help").trigger("click"); });</script><%}  %>

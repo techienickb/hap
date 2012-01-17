@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head id="Head1" runat="server">
     <title>File Uploader</title>
-    <link href="~/basestyle.css" rel="stylesheet" type="text/css" />
+    <link href="~/style/basestyle.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
     <form id="form1" runat="server">
@@ -22,9 +22,13 @@
         </div>
         <script type="text/javascript">
             function done() {
-                window.opener.location.href = window.opener.location.href;
-                if (window.opener.progressWindow) window.opener.progressWindow.close();
-                window.close();
+                if (window.opener) {
+                    window.opener.location.href = window.opener.location.href;
+                    if (window.opener.progressWindow) window.opener.progressWindow.close();
+                    window.close();
+                } else {
+                    if (window.parent.hap) { window.parent.Load(); window.parent.closeUpload(); }
+                }
             }
         </script>
         <asp:Literal runat="server" ID="closeb" Visible="false">

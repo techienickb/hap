@@ -102,21 +102,6 @@ namespace HAP.Web.MyFiles
             }
         }
 
-        protected void uploadbtn_Click(object sender, EventArgs e)
-        {
-            ADUser.Impersonate();
-            DriveMapping mapping;
-            string path = HAP.Data.ComputerBrowser.Converter.DriveToUNC(p.Value, out mapping);
-            if (isAuth(Path.GetExtension(uploadedfiles.PostedFile.FileName))) uploadedfiles.PostedFile.SaveAs(Path.Combine(path, uploadedfiles.PostedFile.FileName));
-            else throw new UnauthorizedAccessException(_doc.SelectSingleNode("/hapStrings/myfiles/upload/filetypeerror").InnerText);
-            ADUser.EndImpersonate();
-        }
 
-        private bool isAuth(string extension)
-        {
-            foreach (Filter filter in config.MySchoolComputerBrowser.Filters)
-                if (filter.Expression.Contains(extension)) return true;
-            return isAuth(config.MySchoolComputerBrowser.Filters.Single(fil => fil.Name == "All Files"));
-        }
     }
 }

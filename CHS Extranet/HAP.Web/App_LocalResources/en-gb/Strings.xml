@@ -69,7 +69,7 @@ Do you want to overwrite it?</fileexists2>
     </delete>
     <size>Size</size>
     <type>Type</type>
-    <locatoin>Location</locatoin>
+    <location>Location</location>
     <contains>Contains</contains>
     <created>Created</created>
     <typeoffile>Type of File</typeoffile>

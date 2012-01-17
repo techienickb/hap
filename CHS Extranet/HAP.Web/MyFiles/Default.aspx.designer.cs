@@ -56,32 +56,5 @@ namespace HAP.Web.MyFiles {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::HAP.Web.Controls.WrappedLocalResource uploaders;
-        
-        /// <summary>
-        /// uploadedfiles control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputFile uploadedfiles;
-        
-        /// <summary>
-        /// uploadbtn control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button uploadbtn;
-        
-        /// <summary>
-        /// p control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField p;
     }
 }
