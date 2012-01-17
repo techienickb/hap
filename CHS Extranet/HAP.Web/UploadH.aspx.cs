@@ -93,15 +93,15 @@ namespace HAP.Web
             unc = config.MySchoolComputerBrowser.Mappings[p.ToCharArray()[0]];
             if (unc == null || !isWriteAuth(unc)) Response.Redirect(Request.ApplicationPath + "/unauthorised.aspx", true);
             else path = Converter.FormatMapping(unc.UNC, ADUser) + path.Replace('/', '\\');
-            if (FileUpload1.HasFile && isAuth(Path.GetExtension(FileUpload1.FileName))) FileUpload1.SaveAs(Path.Combine(path, FileUpload1.FileName));
+            if (FileUpload1.HasFile && isAuth(Path.GetExtension(FileUpload1.FileName))) { FileUpload1.SaveAs(Path.Combine(path, FileUpload1.FileName)); message.Text += FileUpload1.FileName + " has been uploaded<br />"; }
             else if (FileUpload1.HasFile) message.Text += "Error: " + FileUpload1.FileName + " is a restricted file type<br/>";
-            if (FileUpload2.HasFile && isAuth(Path.GetExtension(FileUpload2.FileName))) FileUpload2.SaveAs(Path.Combine(path, FileUpload2.FileName));
+            if (FileUpload2.HasFile && isAuth(Path.GetExtension(FileUpload2.FileName))) { FileUpload2.SaveAs(Path.Combine(path, FileUpload2.FileName)); message.Text += FileUpload2.FileName + " has been uploaded<br />"; }
             else if (FileUpload2.HasFile) message.Text += "Error: " + FileUpload2.FileName + " is a restricted file type<br/>";
-            if (FileUpload3.HasFile && isAuth(Path.GetExtension(FileUpload3.FileName))) FileUpload3.SaveAs(Path.Combine(path, FileUpload3.FileName));
+            if (FileUpload3.HasFile && isAuth(Path.GetExtension(FileUpload3.FileName))) { FileUpload3.SaveAs(Path.Combine(path, FileUpload3.FileName)); message.Text += FileUpload3.FileName + " has been uploaded<br />"; }
             else if (FileUpload3.HasFile) message.Text += "Error: " + FileUpload3.FileName + " is a restricted file type<br/>";
-            if (FileUpload4.HasFile && isAuth(Path.GetExtension(FileUpload4.FileName))) FileUpload4.SaveAs(Path.Combine(path, FileUpload4.FileName));
+            if (FileUpload4.HasFile && isAuth(Path.GetExtension(FileUpload4.FileName))) { FileUpload4.SaveAs(Path.Combine(path, FileUpload4.FileName)); message.Text += FileUpload4.FileName + " has been uploaded<br />"; }
             else if (FileUpload4.HasFile) message.Text += "Error: " + FileUpload4.FileName + " is a restricted file type<br/>";
-            if (FileUpload5.HasFile && isAuth(Path.GetExtension(FileUpload5.FileName))) FileUpload5.SaveAs(Path.Combine(path, FileUpload5.FileName));
+            if (FileUpload5.HasFile && isAuth(Path.GetExtension(FileUpload5.FileName))) { FileUpload5.SaveAs(Path.Combine(path, FileUpload5.FileName)); message.Text += FileUpload5.FileName + " has been uploaded<br />"; }
             else if (FileUpload5.HasFile) message.Text += "Error: " + FileUpload5.FileName + " is a restricted file type<br/>";
             if (!string.IsNullOrEmpty(message.Text)) message.Text = "<div style=\"padding: 4px; color: red;\">" + message.Text + "</div>";
             closeb.Visible = (((Button)sender).ID == "uploadbtnClose");

@@ -413,6 +413,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="API\BookingSystem.cs" />
+    <Compile Include="API\MyFiles.Permalink.cs" />
     <Compile Include="API\JS.cs" />
     <Compile Include="API\Help.cs" />
     <Compile Include="API\Homework.cs" />
