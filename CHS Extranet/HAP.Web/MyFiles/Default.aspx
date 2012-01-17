@@ -438,7 +438,7 @@
 								dataType: 'json',
 								contentType: 'application/json',
 								success: function (data) {
-									var s = '<div><img src="' + data.Icon + '" alt="" style="width: 32px; float: left; margin-right: 40px;" />' + data.Name + '</div>';
+									var s = '<div><img src="' + data.Icon + '" alt="" style="width: 32px; float: left; margin-right: 40px;" />' + ((data.Type == "File Folder") ? '<a href="' + hap.common.resolveUrl("~/api/myfiles-permalink/" + data.Location.replace(/\\/g, "/") + "/" + data.Name.replace(/&/g, "^")) + '">' + data.Name + '</a>' : data.Name) + '</div>';
 									s += '<hr style="height: 1px; border-width: 1px" />';
 									if (data.Type == "File Folder") {
 										s += '<div><label>' + hap.common.getLocal("myfiles/type") + ': </label>' + data.Type + '</div>';
@@ -450,7 +450,7 @@
 									} else {
 										s += '<div><label>' + hap.common.getLocal("myfiles/typeoffile") + ': </label>' + data.Type + ' (' + data.Extension + ')</div>';
 										s += '<hr style="height: 1px; border-width: 1px" />';
-										s += '<div><label>' + hap.common.getLocal("myfiles/location") + ': </label>' + data.Location + '</div>';
+										s += '<div><label>' + hap.common.getLocal("myfiles/location") + ': </label><a href="' + hap.common.resolveUrl("~/api/myfiles-permalink/" + data.Location.replace(/\\/g, "/") + "/") + '">' + data.Location + '</a></div>';
 										s += '<div><label>' + hap.common.getLocal("myfiles/size") + ': </label>' + data.Size + '</div>';
 										s += '<hr style="height: 1px; border-width: 1px" />';
 										s += '<div><label>' + hap.common.getLocal("myfiles/created") + ': </label>' + data.DateCreated + '</div>';
