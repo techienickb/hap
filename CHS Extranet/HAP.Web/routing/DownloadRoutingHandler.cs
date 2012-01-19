@@ -95,7 +95,7 @@ namespace HAP.Web.routing
 
         public static string MimeType(string Extension)
         {
-            string mime = "application/octetstream";
+            string mime = "application/octet-stream";
             if (string.IsNullOrEmpty(Extension))
                 return mime;
             string ext = Extension.ToLower();
@@ -107,7 +107,7 @@ namespace HAP.Web.routing
                 if (rk != null && rk.GetValue("Content Type") != null)
                     mime = rk.GetValue("Content Type").ToString();
             }
-            if (mime.Length == 0) mime = "application/octetstream";
+            if (mime.Length == 0) mime = "application/octet-stream";
             return mime;
 
         }
