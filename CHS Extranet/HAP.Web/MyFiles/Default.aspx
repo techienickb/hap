@@ -535,7 +535,7 @@
 				for (var x = 0; x < items.length; x++)
 					if (items[x].Id == $(this).attr("id")) { item = items[x]; break; }
 				window.location.href = (item.Data.Path.match(/\.\./i) ? item.Data.Path.replace(/\\/g, "/") : '#' + item.Data.Path);
-			}
+			};
 			this.Click = function (e) {
 				e.preventDefault();
 				$('#jqContextMenu').css("display", "none");
