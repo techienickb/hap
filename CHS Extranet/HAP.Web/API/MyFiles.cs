@@ -440,10 +440,13 @@ namespace HAP.Web.API
                             if (!subdir.Name.ToLower().Contains("recycle") && !isSystem && !isHidden && !subdir.Name.ToLower().Contains("system volume info"))
                             {
                                 HAP.Data.MyFiles.AccessControlActions actions = allowactions;
-                                if (actions == HAP.Data.MyFiles.AccessControlActions.Change)
+                                if (config.MySchoolComputerBrowser.WriteChecks)
                                 {
-                                    try { System.IO.File.Create(System.IO.Path.Combine(subdir.FullName, "temp.ini")).Close(); System.IO.File.Delete(System.IO.Path.Combine(subdir.FullName, "temp.ini")); }
-                                    catch { actions = HAP.Data.MyFiles.AccessControlActions.View; }
+                                    if (actions == HAP.Data.MyFiles.AccessControlActions.Change)
+                                    {
+                                        try { System.IO.File.Create(System.IO.Path.Combine(subdir.FullName, "temp.ini")).Close(); System.IO.File.Delete(System.IO.Path.Combine(subdir.FullName, "temp.ini")); }
+                                        catch { actions = HAP.Data.MyFiles.AccessControlActions.View; }
+                                    }
                                 }
                                 try { subdir.GetDirectories(); }
                                 catch { actions = HAP.Data.MyFiles.AccessControlActions.None; }

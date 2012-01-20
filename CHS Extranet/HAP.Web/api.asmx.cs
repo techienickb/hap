@@ -130,10 +130,13 @@ namespace HAP.Web
                     if (!subdir.Name.ToLower().Contains("recycle") && !isSystem && !isHidden && !subdir.Name.ToLower().Contains("system volume info"))
                     {
                         AccessControlActions actions = allowactions;
-                        if (actions == AccessControlActions.Change)
+                        if (hapConfig.Current.MySchoolComputerBrowser.WriteChecks)
                         {
-                            try { File.Create(Path.Combine(subdir.FullName, "temp.ini")).Close(); File.Delete(Path.Combine(subdir.FullName, "temp.ini")); }
-                            catch { actions = AccessControlActions.View; }
+                            if (actions == AccessControlActions.Change)
+                            {
+                                try { File.Create(Path.Combine(subdir.FullName, "temp.ini")).Close(); File.Delete(Path.Combine(subdir.FullName, "temp.ini")); }
+                                catch { actions = AccessControlActions.View; }
+                            }
                         }
                         try { subdir.GetDirectories(); }
                         catch { actions = AccessControlActions.None; }

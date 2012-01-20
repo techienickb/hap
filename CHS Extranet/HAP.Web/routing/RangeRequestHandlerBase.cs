@@ -349,9 +349,10 @@ public abstract class RangeRequestHandlerBase : IHttpHandler
         AddHeader(Response, HTTP_HEADER_CONTENT_TYPE, contentType);
         AddHeader(Response, HTTP_HEADER_LAST_MODIFIED, this.InternalRequestedFileInfo.LastWriteTimeUtc.ToString("r"));
         AddHeader(Response, HTTP_HEADER_ENTITY_TAG, string.Concat("\"", this.InternalRequestedFileEntityTag, "\""));
+        AddHeader(Response, "cache-control", "private");
         if (string.IsNullOrEmpty(HttpContext.Current.Request.QueryString["inline"]))
-            AddHeader(Response, "Content-Disposition", "attachment; filename=\"" + this.InternalRequestedFileInfo.Name + "\"");
-        else AddHeader(Response, "Content-Disposition", "inline; filename=\"" + this.InternalRequestedFileInfo.Name + "\"");
+            AddHeader(Response, "Content-Disposition", "attachment;filename=\"" + this.InternalRequestedFileInfo.Name + "\"");
+        else AddHeader(Response, "Content-Disposition", "inline;filename=\"" + this.InternalRequestedFileInfo.Name + "\"");
 
         if (this.EnableRangeRequests)
             AddHeader(Response, HTTP_HEADER_ACCEPT_RANGES, HTTP_HEADER_ACCEPT_RANGES_BYTES);

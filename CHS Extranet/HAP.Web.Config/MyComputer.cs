@@ -27,11 +27,22 @@ namespace HAP.Web.Configuration
             get { return doc.SelectSingleNode("/hapConfig/mscb").Attributes["hideextensions"].Value; } 
             set { doc.SelectSingleNode("/hapConfig/mscb").Attributes["hideextensions"].Value = value; } 
         }
+        public bool WriteChecks 
+        {
+            get { return doc.SelectSingleNode("/hapConfig/mscb").Attributes["writechecks"] == null ? true : bool.Parse(doc.SelectSingleNode("/hapConfig/mscb").Attributes["writechecks"].Value); }
+            set 
+            {
+                if (doc.SelectSingleNode("/hapConfig/mscb").Attributes["writechecks"] == null)
+                    doc.SelectSingleNode("/hapConfig/mscb").Attributes.Append(doc.CreateAttribute("writechecks"));
+                doc.SelectSingleNode("/hapConfig/mscb").Attributes["writechecks"].Value = value.ToString();
+            }
+        }
 
         public void Initialize()
         {
             XmlElement e = doc.CreateElement("mscb");
             e.SetAttribute("hideextensions", ".lnk,.ini");
+            e.SetAttribute("writechecks", true.ToString());
             e.AppendChild(doc.CreateElement("mappings"));
             e.AppendChild(doc.CreateElement("filters"));
             e.AppendChild(doc.CreateElement("quotaservers"));
