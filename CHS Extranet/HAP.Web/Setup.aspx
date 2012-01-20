@@ -330,6 +330,9 @@
                                 <asp:TextBox runat="server" ID="mscbExt" />
                             </div>
                             <div>
+                                <asp:CheckBox runat="server" Text="Perform Read/Write Checks: " ID="mscbWrite" TextAlign="Left" />
+                            </div>
+                            <div>
                                 <h3>Mappings <button onclick="return addmapping();" class="addbutton">Add</button></h3>
                                 <div id="mappings">
                                     <asp:Repeater runat="server" ID="mscbMappings">
@@ -1741,7 +1744,7 @@
                             $("#filterEditor").dialog({ autoOpen: false });
                             $("#ouEditor").dialog({ autoOpen: false });
                             $("#mappingEditor").dialog({ autoOpen: false });
-                            $.get("api/test", function (data) {
+                            $.get("api/test?" + window.JSON.stringify(new Date()), function (data) {
                                 if (data == "OK") {
                                     $("#iis6wildcardimg").attr("src", "images/setup/267.png");
                                     $("#appwa").attr("src", "images/setup/267.png");

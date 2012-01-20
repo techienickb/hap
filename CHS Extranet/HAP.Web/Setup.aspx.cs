@@ -91,6 +91,7 @@ namespace HAP.Web
                 mscbQuotaServers.DataSource = Config.MySchoolComputerBrowser.QuotaServers.ToArray();
                 mscbQuotaServers.DataBind();
                 mscbExt.Text = Config.MySchoolComputerBrowser.HideExtensions;
+                mscbWrite.Checked = Config.MySchoolComputerBrowser.WriteChecks;
             }
         }
 
@@ -123,6 +124,7 @@ namespace HAP.Web
             Config.BookingSystem.MaxBookingsPerWeek = int.Parse(bsmax.Text);
             Config.BookingSystem.TwoWeekTimetable = bstwoweek.Checked;
             Config.MySchoolComputerBrowser.HideExtensions = mscbExt.Text;
+            Config.MySchoolComputerBrowser.WriteChecks = mscbWrite.Checked;
             Config.Tracker.OverrideCode = trackercode.Text;
             Config.Tracker.Provider = trackerprovider.Text;
             Config.Tracker.MaxStaffLogons = int.Parse(trackerstafflogs.Text);
