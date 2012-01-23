@@ -19,7 +19,7 @@
     </head>
     <body>
         <form runat="server">
-            <div id="hapContent">
+            <div id="hapContent" data-role="page">
                 <asp:ToolkitScriptManager runat="server" EnablePartialRendering="true" />
                 <asp:LoginView runat="server">
                     <LoggedInTemplate>
