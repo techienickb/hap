@@ -65,7 +65,7 @@
 		</div>
 	</div>
 	<div id="myfilescontent">
-	<div id="toolbar" style="padding: 4px; margin-bottom: 4px;" class="ui-widget-header">
+	<div id="toolbar" style="padding: 4px; margin-bottom: 4px;" class="ui-widget-header" data-role="header">
 		<div style="float: right;">
 			<span style="color: #fff;" id="search"><hap:LocalResource runat="server" StringPath="search" />:
 			<input type="text" id="filter" />
@@ -93,7 +93,7 @@
 	</div>
 	<div id="MyFilesHeaddings">
 		<span class="name"><hap:LocalResource runat="server" StringPath="name" /></span><span class="type"><hap:LocalResource runat="server" StringPath="myfiles/type" /></span><span class="extension"><hap:LocalResource runat="server" StringPath="myfiles/extension" /></span><span class="size"><hap:LocalResource runat="server" StringPath="myfiles/size" /></span></div>
-	<div id="MyFiles" class="tiles">
+	<div id="MyFiles" class="tiles" data-role="content">
 	</div>
 	</div>
 	<hap:CompressJS runat="server" tag="div">
