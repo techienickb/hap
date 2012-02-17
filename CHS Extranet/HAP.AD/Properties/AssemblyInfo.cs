@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("nb development")]
 [assembly: AssemblyProduct("HAP.AD")]
-[assembly: AssemblyCopyright("Copyright © nb development 2011")]
+[assembly: AssemblyCopyright("Copyright © nb development 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

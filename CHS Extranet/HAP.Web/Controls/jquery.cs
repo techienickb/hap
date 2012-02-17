@@ -14,7 +14,7 @@ namespace HAP.Web.Controls
     [ToolboxData("<{0}:jQuery runat=\"server\" />")]
     public class jQuery : Control
     {
-        protected override void RenderControl(HtmlTextWriter output)
+        public override void RenderControl(HtmlTextWriter output)
         {
             output.WriteLine("<script src=\"" + ResolveUrl("~/Scripts/jquery-1.7.1.min.js") + "\" type=\"text/javascript\"></script>");
             output.WriteLine("<script src=\"" + ResolveUrl("~/Scripts/jquery-ui-1.8.16.custom.min.js") + "\" type=\"text/javascript\"></script>");
