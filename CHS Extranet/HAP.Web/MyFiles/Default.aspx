@@ -281,10 +281,10 @@
 			this.Id = "";
 			this.Render = function () {
 				this.Id = this.Data.Path.substr(0, 1);
-				$("#MyFiles").append('<a id="' + this.Id + '" href="#' + this.Data.Path + '" class="Drive"><span class="icon">' + this.Data.Path.substr(0, 1) + '</span><span class="label">' + this.Data.Name + '</span><span class="progress"><label>' + this.Data.Space + '%</label><i style="width: ' + this.Data.Space + '%"></i></span></a>');
+				$("#MyFiles").append('<a id="' + this.Id + '" href="#' + this.Data.Path + '" class="Drive"><span class="icon">' + this.Data.Path.substr(0, 1) + '</span><span class="label">' + this.Data.Name + '</span>' + (this.Data.Space < 0 ? '' : '<span class="progress"><label>' + this.Data.Space + '%</label><i style="width: ' + this.Data.Space + '%"></i></span>') + '</a>');
 			};
 			this.Refresh = function () {
-				$("#" + this.Id).attr("href", "#" + this.Data.Path).html('<span class="icon">' + this.Data.Path.substr(0, 1) + '</span><span class="label">' + this.Data.Name + '</span><span class="progress"><label>' + this.Data.Space + '%</label><i style="width: ' + this.Data.Space + '%"></i></span>');
+				$("#" + this.Id).attr("href", "#" + this.Data.Path).html('<span class="icon">' + this.Data.Path.substr(0, 1) + '</span><span class="label">' + this.Data.Name + '</span>' + (this.Data.Space < 0 ? '' : '<span class="progress"><label>' + this.Data.Space + '%</label><i style="width: ' + this.Data.Space + '%"></i></span>'));
 				$('#nav-' + this.Id + ' > a').attr("href", '#' + this.Data.Path);
 				$('#nav-' + this.Id + ' > a > span').html(this.Data.Name);
 			};
@@ -673,7 +673,7 @@
 							success: function (data) {
 								res = [];
 								for (var i = 0; i < data.length; i++)
-									res.push({ title: data[i].Name + " (" + data[i].Path + ")", actions: data[i].Actions, icon: "../drive.png", href: "#" + data[i].Path, isFolder: true, isLazy: true, noLink: false, key: data[i].Path });
+									res.push({ title: data[i].Name + " (" + data[i].Path.substr(0, 1) + ")", actions: data[i].Actions, icon: "../drive.png", href: "#" + data[i].Path, isFolder: true, isLazy: true, noLink: false, key: data[i].Path });
 								node.setLazyNodeStatus(DTNodeStatus_Ok);
 								node.addChild(res);
 							}, error: hap.common.jsonError

@@ -40,6 +40,10 @@
     <Reference Include="Microsoft.Office.DocumentFormat.OpenXml">
       <HintPath>..\HAP.Web\bin\Microsoft.Office.DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
+    <Reference Include="srmlib">
+      <HintPath>..\Binaries\srmlib.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -84,6 +88,7 @@
     <Compile Include="MyFiles\Homework\Homeworks.cs" />
     <Compile Include="MyFiles\Homework\UserNode.cs" />
     <Compile Include="MyFiles\Properties.cs" />
+    <Compile Include="MyFiles\ShellThumbnail.cs" />
     <Compile Include="MyFiles\WordVisualizer\CoreProperties.cs" />
     <Compile Include="MyFiles\WordVisualizer\DisplayModeEnumeration.cs" />
     <Compile Include="MyFiles\WordVisualizer\EmuUnit.cs" />

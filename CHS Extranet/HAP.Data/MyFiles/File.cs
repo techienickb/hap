@@ -17,6 +17,11 @@ namespace HAP.Data.MyFiles
         private DriveMapping mapping;
         private User user;
 
+        public static bool Exists(string path)
+        {
+            return System.IO.File.Exists(path);
+        }
+
         public File() { }
         public File(DirectoryInfo file, DriveMapping mapping, User user)
         {

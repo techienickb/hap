@@ -56,12 +56,21 @@ namespace HAP.Web.API
                 DriveMapping unc;
                 string path = Converter.DriveToUNC(RoutingPath.Replace('^', '&'), RoutingDrive, out unc, ((HAP.AD.User)Membership.GetUser()));
                 FileInfo file = new FileInfo(path);
-                FileStream fs = file.OpenRead();
-                Image image = Image.FromStream(fs);
-                Image thumb = FixedSize(image, 64, 64);
-                image.Dispose();
-                fs.Close();
-                fs.Dispose();
+                Image thumb;
+                try
+                {
+                    Bitmap b = new Data.MyFiles.ShellThumbnail().GetThumbnail(file.FullName);
+                     thumb = b;// FixedSize(b, 64, 64);
+                }
+                catch
+                {
+                    FileStream fs = file.OpenRead();
+                    Image image = Image.FromStream(fs);
+                    thumb = FixedSize(image, 64, 64);
+                    image.Dispose();
+                    fs.Close();
+                    fs.Dispose();
+                }
 
                 MemoryStream memstr = new MemoryStream();
                 thumb.Save(memstr, ImageFormat.Png);
