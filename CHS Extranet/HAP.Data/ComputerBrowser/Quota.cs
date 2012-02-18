@@ -5,8 +5,6 @@ using System.Text;
 using System.ServiceModel;
 using HAP.Data.Quota;
 using HAP.Web.Configuration;
-using Microsoft.Storage;
-using System.Runtime.InteropServices;
 
 namespace HAP.Data.ComputerBrowser
 {
@@ -27,37 +25,8 @@ namespace HAP.Data.ComputerBrowser
             tcpBinding.Security.Mode = SecurityMode.None; 
             EndpointAddress endpointAddress = new EndpointAddress(endPointAddr);
             ServiceClient c = new ServiceClient(tcpBinding, endpointAddress);
+            if (string.IsNullOrEmpty(username)) c.GetQuotaFromPath(share);
             return c.GetQuota(username, server.Drive.ToString() + ":");
-        }
-
-        public static HAP.Data.Quota.QuotaInfo GetQuota(string path)
-        {
-            IFsrmQuotaManager FSRMQuotaManager = new FsrmQuotaManagerClass();
-            IFsrmQuota Quota = null;
-
-            try
-            {
-                Quota = FSRMQuotaManager.GetQuota(path);
-                QuotaInfo q = new QuotaInfo();
-                q.Free = (int)Quota.QuotaLimit - (int)Quota.QuotaUsed;
-                q.Used = (int)Quota.QuotaUsed;
-                q.Total = (int)Quota.QuotaLimit;
-                return q;
-            }
-            catch (COMException e)
-            {
-                unchecked
-                {
-                    if (e.ErrorCode == (int)0x80045301)
-                    {
-                        throw new NullReferenceException("No Quota");
-                    }
-                    else
-                    {
-                        throw e;
-                    }
-                }
-            }
         }
     }
 }

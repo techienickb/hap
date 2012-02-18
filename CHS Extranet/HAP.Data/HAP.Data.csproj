@@ -40,10 +40,6 @@
     <Reference Include="Microsoft.Office.DocumentFormat.OpenXml">
       <HintPath>..\HAP.Web\bin\Microsoft.Office.DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
-    <Reference Include="srmlib">
-      <HintPath>..\Binaries\srmlib.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -137,7 +133,7 @@
     <None Include="Service References\Quota\HAPQuotaService2.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\Quota\WCFService.wsdl" />
+    <None Include="Service References\Quota\WCFService1.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\Quota\" />

@@ -5,10 +5,11 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 using DiskQuotaTypeLibrary;
+using Microsoft.Storage;
+using System.Runtime.InteropServices;
 
 namespace HAP.Data.Quota
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service" in both code and config file together.
     public class WCFService : IService
     {
         public QuotaInfo GetQuota(string username, string fileshare)
@@ -20,6 +21,25 @@ namespace HAP.Data.Quota
             qi.Used = dqc.FindUser(username).QuotaUsed;
             qi.Total = dqc.FindUser(username).QuotaLimit;
             return qi;
+        }
+
+        public QuotaInfo GetQuotaFromPath(string path)
+        {
+            IFsrmQuotaManager FSRMQuotaManager = new FsrmQuotaManagerClass();
+            IFsrmQuota Quota = null;
+            try
+            {
+                Quota = FSRMQuotaManager.GetQuota(path);
+                QuotaInfo q = new QuotaInfo();
+                q.Free = (int)Quota.QuotaLimit - (int)Quota.QuotaUsed;
+                q.Used = (int)Quota.QuotaUsed;
+                q.Total = (int)Quota.QuotaLimit;
+                return q;
+            }
+            catch (Exception)
+            {
+                return new QuotaInfo();
+            }
         }
     }
 
