@@ -18,13 +18,13 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://chs01:8011/HAPQuotaService" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://localhost:8011/HAPQuotaService" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="HAPQuotaService.xsd" MetadataType="Schema" ID="84c84925-3302-4c5d-b4e0-c332171f13b1" SourceId="1" SourceUrl="http://chs01:8011/HAPQuotaService?xsd=xsd1" />
-    <MetadataFile FileName="HAPQuotaService1.xsd" MetadataType="Schema" ID="d39207a1-635c-4236-a4ab-bbb3385ed605" SourceId="1" SourceUrl="http://chs01:8011/HAPQuotaService?xsd=xsd0" />
-    <MetadataFile FileName="HAPQuotaService2.xsd" MetadataType="Schema" ID="ab202b9d-8f78-4f98-b73e-05f889df6cac" SourceId="1" SourceUrl="http://chs01:8011/HAPQuotaService?xsd=xsd2" />
-    <MetadataFile FileName="WCFService.wsdl" MetadataType="Wsdl" ID="8d34b20a-b002-46ff-ae0b-3edad62883f8" SourceId="1" SourceUrl="http://chs01:8011/HAPQuotaService" />
+    <MetadataFile FileName="HAPQuotaService.xsd" MetadataType="Schema" ID="42bf0934-77df-444f-8486-050658a8b62d" SourceId="1" SourceUrl="http://nick-pc:8011/HAPQuotaService?xsd=xsd1" />
+    <MetadataFile FileName="WCFService1.wsdl" MetadataType="Wsdl" ID="97521f07-fbf9-49d3-866e-33554b8bd09f" SourceId="1" SourceUrl="http://localhost:8011/HAPQuotaService" />
+    <MetadataFile FileName="HAPQuotaService1.xsd" MetadataType="Schema" ID="fde15a2b-3e20-4a3f-a03c-1b892906cc41" SourceId="1" SourceUrl="http://nick-pc:8011/HAPQuotaService?xsd=xsd0" />
+    <MetadataFile FileName="HAPQuotaService2.xsd" MetadataType="Schema" ID="1bb55d6a-0c1a-4a3e-afcb-39028f6b1e97" SourceId="1" SourceUrl="http://nick-pc:8011/HAPQuotaService?xsd=xsd2" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

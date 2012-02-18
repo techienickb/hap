@@ -517,12 +517,12 @@ namespace HAP.Web.API
                         {
                             user.ImpersonateContained();
                             HAP.Data.Quota.QuotaInfo qi = new Data.Quota.QuotaInfo();
-                            try { 
-                                qi = HAP.Data.ComputerBrowser.Quota.GetQuota(Converter.FormatMapping(p.UNC, user));
+                            try
+                            {
+                                qi = HAP.Data.ComputerBrowser.Quota.GetQuota(user.UserName, Converter.FormatMapping(p.UNC, user));
+                                space = Math.Round((Convert.ToDecimal(qi.Used) / Convert.ToDecimal(qi.Total)) * 100, 2);
                             }
-                            catch (NullReferenceException) { qi.Total = -1; } //No Quota Exists
-                            catch (Exception) { qi = HAP.Data.ComputerBrowser.Quota.GetQuota(user.UserName, Converter.FormatMapping(p.UNC, user)); } //Not using new Quota Methods, use Old
-                            space = Math.Round((Convert.ToDecimal(qi.Used) / Convert.ToDecimal(qi.Total)) * 100, 2);
+                            catch (Exception) { }
                             if (qi.Total == -1)
                                 if (Win32.GetDiskFreeSpaceEx(Converter.FormatMapping(p.UNC, user), out freeBytesForUser, out totalBytes, out freeBytes))
                                     space = Math.Round(100 - ((Convert.ToDecimal(freeBytes.ToString() + ".00") / Convert.ToDecimal(totalBytes.ToString() + ".00")) * 100), 2);

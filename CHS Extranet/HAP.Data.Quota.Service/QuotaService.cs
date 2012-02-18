@@ -23,7 +23,7 @@ namespace HAP.Data.Quota.Service
         protected override void OnStart(string[] args)
         {
             host = new ServiceHost(typeof(HAP.Data.Quota.WCFService));
-            string urlService = "net.tcp://localhost:8010/HAPQuotaService";
+            string urlService = "net.tcp://" + Dns.GetHostName() + ":8010/HAPQuotaService";
 
             // Instruct the ServiceHost that the type
 
@@ -60,7 +60,7 @@ namespace HAP.Data.Quota.Service
                 // that is generated via the svcutil.exe tool
 
                 metadataBehavior = new ServiceMetadataBehavior();
-                metadataBehavior.HttpGetUrl = new Uri("http://localhost:8011/HAPQuotaService");
+                metadataBehavior.HttpGetUrl = new Uri("http://" + Dns.GetHostName() + ":8011/HAPQuotaService");
                 metadataBehavior.HttpGetEnabled = true;
                 metadataBehavior.ToString();
                 host.Description.Behaviors.Add(metadataBehavior);
