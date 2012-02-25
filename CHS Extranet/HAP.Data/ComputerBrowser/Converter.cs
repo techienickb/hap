@@ -42,7 +42,7 @@ namespace HAP.Data.ComputerBrowser
             hapConfig config = hapConfig.Current;
 
             unc = config.MySchoolComputerBrowser.Mappings[RoutingDrive.ToCharArray()[0]];
-            return (Converter.FormatMapping(unc.UNC, user) + RoutingPath).TrimEnd(new char[] { '\\' }).Replace('^', '&').Replace('/', '\\');
+            return (Converter.FormatMapping(unc.UNC, user) + HttpUtility.UrlDecode(RoutingPath.Replace('|', '%'), System.Text.Encoding.Default)).TrimEnd(new char[] { '\\' }).Replace('^', '&').Replace('/', '\\');
         }
 
         public static string DriveToUNC(string RoutingPath, string RoutingDrive, out UNCPath unc, User user)
