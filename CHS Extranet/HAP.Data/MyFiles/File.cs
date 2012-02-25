@@ -13,10 +13,6 @@ namespace HAP.Data.MyFiles
 {
     public class File : IComparable
     {
-        private DirectoryInfo subdir;
-        private DriveMapping mapping;
-        private User user;
-
         public static bool Exists(string path)
         {
             return System.IO.File.Exists(path);
@@ -37,11 +33,11 @@ namespace HAP.Data.MyFiles
             Icon = "../images/icons/" + ParseForImage(file);
             if (Icon.EndsWith(".ico")) Icon = "../api/mycomputer/" + ParseForImage(file);
             if (file.Extension.ToLower().Equals(".png") || file.Extension.ToLower().Equals(".jpg") || file.Extension.ToLower().Equals(".jpeg") || file.Extension.ToLower().Equals(".gif") || file.Extension.ToLower().Equals(".bmp") || file.Extension.ToLower().Equals(".wmf"))
-                Icon = "../api/mycomputer/thumb/" + Converter.UNCtoDrive2(file.FullName, mapping, user).Replace('&', '^');
+                Icon = "../api/mycomputer/thumb/" + HttpUtility.UrlEncode(Converter.UNCtoDrive(file.FullName, mapping, user).Replace(":", "")).Replace('+', ' ').Replace("%", "|").Replace("|2f", "/");
             CreationTime = file.CreationTime.ToShortDateString() + " " + file.CreationTime.ToString("hh:mm");
             ModifiedTime = file.LastWriteTime.ToShortDateString() + " " + file.CreationTime.ToString("hh:mm");
             Size = "";
-            Path = Converter.UNCtoDrive(file.FullName, mapping, user).Replace(":", "");
+            Path = HttpUtility.UrlEncode(Converter.UNCtoDrive(file.FullName, mapping, user).Replace(":", "")).Replace('+', ' ').Replace("%", "|").Replace("|5c", "\\");
 
         }
         public File(FileInfo file, DriveMapping mapping, User user)
@@ -76,9 +72,9 @@ namespace HAP.Data.MyFiles
             }
             else Icon = "../images/icons/file.png";
             string m = Converter.UNCtoDrive2(file.FullName, mapping, user);
-            Path = "../Download/" + m.Replace(":", "");
+            Path = "../Download/" + HttpUtility.UrlEncode(m.Replace(":", "")).Replace('+', ' ').Replace("%", "|").Replace("|2f", "/");
             if (file.Extension.ToLower().Equals(".png") || file.Extension.ToLower().Equals(".jpg") || file.Extension.ToLower().Equals(".jpeg") || file.Extension.ToLower().Equals(".gif") || file.Extension.ToLower().Equals(".bmp") || file.Extension.ToLower().Equals(".wmf"))
-                Icon = "../api/mycomputer/thumb/" + m.Replace('&', '^');
+                Icon = "../api/mycomputer/thumb/" + HttpUtility.UrlEncode(m.Replace(":", "")).Replace('+', ' ').Replace("%", "|").Replace("|2f", "/");
         }
 
         public File(FileInfo file, DriveMapping mapping, User user, AccessControlActions actions)

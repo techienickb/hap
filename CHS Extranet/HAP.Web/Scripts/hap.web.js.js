@@ -4,11 +4,13 @@ if (hap == null)
         root: "/hap/",
         common: {
             jsonError: function (xhr, ajaxOptions, thrownError) {
+                try {
                 if (xhr.responseText.match(/\<!doctype html\>/gi)) window.location.reload();
                 else {
                     console.log(xhr.responseXML.documentElement.children[2]);
                     alert(xhr.responseXML.documentElement.children[1].children[0].textContent);
                 }
+                } catch (e) { alert(thrownError); }
             },
             resolveUrl: function (virtual) {
                 return virtual.replace(/~\//g, hap.root);

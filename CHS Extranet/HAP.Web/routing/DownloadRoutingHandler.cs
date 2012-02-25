@@ -47,9 +47,9 @@ namespace HAP.Web.routing
         public override FileInfo GetRequestedFileInfo(HttpContext context)
         {
             config = hapConfig.Current;
-            string path = RoutingPath.Replace('^', '&').Replace("%20", " ");
+            string path = HttpUtility.UrlDecode(RoutingPath.Replace('^', '&').Replace("|", "%"));
             DriveMapping unc = config.MySchoolComputerBrowser.Mappings[RoutingDrive.ToCharArray()[0]];
-            if (unc == null || !isAuth(unc)) context.Response.Redirect(context.Request.ApplicationPath + "/unauthorised.aspx", true);
+            if (unc == null || !isAuth(unc)) context.Response.Redirect(VirtualPathUtility.ToAbsolute("~/unauthorised.aspx"), true);
             else path = Converter.FormatMapping(unc.UNC, ADUser) + '\\' + path.Replace('/', '\\');
             return new FileInfo(path);
         }
@@ -57,9 +57,9 @@ namespace HAP.Web.routing
         public override string GetRequestedFileMimeType(HttpContext context)
         {
             config = hapConfig.Current;
-            string path = RoutingPath.Replace('^', '&').Replace("%20", " ");
+            string path = HttpUtility.UrlDecode(RoutingPath.Replace('^', '&').Replace("|", "%"));
             DriveMapping unc = config.MySchoolComputerBrowser.Mappings[RoutingDrive.ToCharArray()[0]];
-            if (unc == null || !isAuth(unc)) context.Response.Redirect(context.Request.ApplicationPath + "/unauthorised.aspx", true);
+            if (unc == null || !isAuth(unc)) context.Response.Redirect(VirtualPathUtility.ToAbsolute("~/unauthorised.aspx"), true);
             else path = Converter.FormatMapping(unc.UNC, ADUser) + '\\' + path.Replace('/', '\\');
             return MimeType(Path.GetExtension(path));
         }
