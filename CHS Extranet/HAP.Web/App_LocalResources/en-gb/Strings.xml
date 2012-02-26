@@ -26,6 +26,7 @@
     <folderexists1>The folder</folderexists1>
     <checking>Checking</checking>
     <folderexists2>already exists!</folderexists2>
+    <merge>Do you want to merge this folder?</merge>
     <cut>Cut</cut>
     <paste>Paste</paste>
     <copy>
