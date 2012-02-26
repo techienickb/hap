@@ -103,3 +103,6 @@ button.back span { top: 4px; }
 #renamebox.small { margin-left: 28px; margin-top: 4px; }
 #renamebox.medium { margin-left: 0; margin-top: 44px; width: 72px; }
 #renamebox.large { margin-left: 0; margin-top: 76px; width: 96px; }
+
+button { overflow: hidden; text-overflow: hidden; }
+#maintools button, #maintools input { margin-right: 3px; }
