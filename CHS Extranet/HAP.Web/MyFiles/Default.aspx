@@ -75,11 +75,8 @@
 		<div style="float: left;">
 			<button id="backup"></button>
 		</div>
-		<div style="float: left; margin-left: 3px;">
-			<input type="text" id="newfoldertext" />
-			<button id="newfolder"><hap:LocalResource runat="server" StringPath="myfiles/newfolder" /></button>
-			<button id="upload"><hap:LocalResource runat="server" StringPath="myfiles/upload/upload" /></button>
-			<label id="uploadto"></label>
+		<div style="float: left; margin-left: 3px;" id="maintools">
+			<input type="text" id="newfoldertext" /><button id="newfolder"><hap:LocalResource runat="server" StringPath="myfiles/newfolder" /></button><button id="toolbar-cut"><hap:LocalResource runat="server" StringPath="myfiles/cut" /></button><button id="toolbar-copy"><hap:LocalResource runat="server" StringPath="myfiles/copy/copy" /></button><button id="toolbar-paste" style="margin: 0;"><hap:LocalResource runat="server" StringPath="myfiles/paste" /></button><button id="toolbar-clear">X</button><button id="toolbar-delete"><hap:LocalResource runat="server" StringPath="myfiles/delete/delete" /></button><button id="toolbar-open"><hap:LocalResource runat="server" StringPath="myfiles/open" /></button><button id="toolbar-download"><hap:LocalResource runat="server" StringPath="myfiles/download" /></button><button id="upload"><hap:LocalResource runat="server" StringPath="myfiles/upload/upload" /></button><label id="uploadto"></label>
 		</div>
 	</div>
 	<div id="Views" class="tile-border-color">
@@ -104,7 +101,7 @@
 		var viewMode = 0;
 		var keys = { shift: false, ctrl: false };
 		var lazytimer = null;
-		var temp = null;
+		var temp, clipboard = null;
 		var table = null;
 		var uploads = new Array();
 		var curitem = null;
@@ -158,6 +155,34 @@
 				}
 			});
 		}
+		function CopyClipboard(index, target) {
+			temp = { "index": index, "target": target };
+			var a = '"' + clipboard.items[index].Data.Path + '"';
+			$.ajax({
+				type: 'POST',
+				url: hap.common.resolveUrl('~/api/MyFiles/Copy') + '?' + window.JSON.stringify(new Date()),
+				dataType: 'json',
+				data: '{ "OldPath" : "' + clipboard.items[index].Data.Path.replace(/\\/gi, '/') + '", "NewPath": "' + (target.replace(/\//gi, '\\') + '\\' + clipboard.items[index].Data.Path.substr(clipboard.items[index].Data.Path.lastIndexOf('\\'))).replace(/\\\\\\/gi, "\\").replace(/\\\\/gi, "\\").replace(/\\/gi, '/') + '" }',
+				contentType: 'application/json',
+				success: function (data) {
+					temp.index++;
+					$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/copy/copyingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + clipboard.items.length + " " + hap.common.getLocal("items"));
+					$("#progressstatus .progress").progressbar({ value: (temp.index / clipboard.items.length) * 100 });
+					if (temp.index < clipboard.items.length) Move(temp.index, temp.target);
+					else { clipboard = null; temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					console.log(xhr.responseXML.documentElement.children[2]);
+					if (confirm(hap.common.getLocal("myfiles/copy/error1") + " " + clipboard.items.Data.Name + ", " + hap.common.getLocal("myfiles/copy/error2") + "\n\n" + hap.common.getLocal("errordetails") + ":\n\n" + xhr.responseXML.documentElement.children[1].children[0].textContent)) {
+						temp.index++;
+						$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/copy/copyingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + clipboard.items.length + " " + hap.common.getLocal("items"));
+						$("#progressstatus .progress").progressbar({ value: (temp.index / clipboard.items.length) * 100 });
+						if (temp.index < clipboard.items.length) Copy(temp.index, temp.target);
+						else { clipboard = null; temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
+					} else { clipboard = null; temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
+				}
+			});
+		}
 		function Move(index, target) {
 			temp = { "index": index, "target": target };
 			var a = '"' + SelectedItems()[index].Data.Path + '"';
@@ -183,6 +208,34 @@
 						if (temp.index < SelectedItems().length) Move(temp.index, temp.target);
 						else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
 					} else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
+				}
+			});
+		}
+		function MoveClipboard(index, target) {
+			temp = { "index": index, "target": target };
+			var a = '"' + clipboard.items[index].Data.Path + '"';
+			$.ajax({
+				type: 'POST',
+				url: hap.common.resolveUrl('api/MyFiles/Move') + '?' + window.JSON.stringify(new Date()),
+				dataType: 'json',
+				data: '{ "OldPath" : "' + clipboard.items[index].Data.Path.replace(/\\/gi, '/') + '", "NewPath": "' + (target.replace(/\//gi, '\\') + '\\' + clipboard.items[index].Data.Path.substr(clipboard.items[index].Data.Path.lastIndexOf('\\'))).replace(/\\\\\\/gi, "\\").replace(/\\\\/gi, "\\").replace(/\\/gi, '/') + '" }',
+				contentType: 'application/json',
+				success: function (data) {
+					temp.index++;
+					$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/move/movingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + clipboard.items.length + " " + hap.common.getLocal("items"));
+					$("#progressstatus .progress").progressbar({ value: (temp.index / clipboard.items.length) * 100 });
+					if (temp.index < clipboard.items.length) Move(temp.index, temp.target);
+					else { clipboard = null; temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					console.log(xhr.responseXML.documentElement.children[2]);
+					if (confirm(hap.common.getLocal("myfiles/move/error1") + " " + clipboard.items[temp.index].Data.Name + ", " + hap.common.getLocal("myfiles/move/error2") + "\n\n" + hap.common.getLocal("errordetails") + ":\n\n" + xhr.responseXML.documentElement.children[1].children[0].textContent)) {
+						temp.index++;
+						$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/move/movingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + clipboard.items.length + " " + hap.common.getLocal("items"));
+						$("#progressstatus .progress").progressbar({ value: (temp.index / clipboard.items.length) * 100 });
+						if (temp.index < clipboard.items.length) Move(temp.index, temp.target);
+						else { clipboard = null; temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
+					} else { clipboard = null; temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
 				}
 			});
 		}
@@ -294,6 +347,29 @@
 			for (var i = 0; i < items.length; i++)
 				if (items[i].Selected) val.push(items[i]);
 			return val;
+		}
+		function RefreshToolbar() {
+			var cut, copy, paste, download, open;
+			cut = copy = del = SelectedItems().length > 0;
+			paste = curitem.Actions == 0 && clipboard != null;
+			download = open = SelectedItems().length == 1;
+			for (var i = 0; i < SelectedItems().length; i++) {
+				var item = SelectedItems()[i];
+				if (item.Data.Actions == 0 && cut) cut = true;
+				else cut = false;
+				if (item.Data.Type == "Directory") download = false;
+				else open = false;
+			}
+			if (cut && $("#toolbar-cut").css("display") == "none") { $("#toolbar-cut").css("display", "").animate({ width: 30 }); $("#toolbar-delete").css("display", "").animate({ width: 51 }); }
+			if (!cut && $("#toolbar-cut").css("display") != "none") { $("#toolbar-cut").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-cut").css("display", "none") } }); $("#toolbar-delete").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-delete").css("display", "none") } }); }
+			if (copy && $("#toolbar-copy").css("display") == "none") $("#toolbar-copy").css("display", "").animate({ width: 43 });
+			if (!copy && $("#toolbar-copy").css("display") != "none") $("#toolbar-copy").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-copy").css("display", "none") } });
+			if (paste && $("#toolbar-paste").css("display") == "none") { $("#toolbar-paste").css("display", "").animate({ width: 46 }); $("#toolbar-clear").css("display", "").animate({ width: 20 }); }
+			if (!paste && $("#toolbar-paste").css("display") != "none") { $("#toolbar-paste").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-paste").css("display", "none") } }); $("#toolbar-clear").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-clear").css("display", "none") } }); }
+			if (download && $("#toolbar-download").css("display") == "none") $("#toolbar-download").css("display", "").animate({ width: 72 });
+			if (!download && $("#toolbar-download").css("display") != "none") $("#toolbar-download").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-download").css("display", "none") } });
+			if (open && $("#toolbar-open").css("display") == "none") $("#toolbar-open").css("display", "").animate({ width: 44 });
+			if (!open && $("#toolbar-open").css("display") != "none") $("#toolbar-open").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-open").css("display", "none") } });
 		}
 		function Item(data) {
 			this.Data = data;
@@ -415,7 +491,7 @@
 							$("#progressstatus .progress").progressbar({ value: (1 / SelectedItems().length) * 100 });
 							var s = "";
 							for (var i = 0; i < SelectedItems().length; i++) s += SelectedItems()[i].Data.Name + "\n";
-							if (confirm(hap.common.getLocal("myfiles/delete/question1") + ":\n\n" + s)) Delete(0);
+							if (confirm(hap.common.getLocal("myfiles/delete/question1") + "\n\n" + s)) Delete(0);
 							else $("#progressstatus").dialog("close");
 						},
 						'con-rename': function (t) {
@@ -562,6 +638,7 @@
 						}
 					}
 					item.Refresh();
+					RefreshToolbar();
 				} else {
 
 				}
@@ -647,6 +724,7 @@
 							}
 						};
 					}
+					setTimeout(function () { RefreshToolbar(); }, 500);
 				}, error: hap.common.jsonError
 			});
 			}
@@ -755,7 +833,7 @@
 						}
 					}
 				}
-			});
+			}).dynatree("getRoot").visit(function(node){ node.expand(true); });
 			$("#filter").val("");
 			$("button").button().click(function () { return false; });
 			$("button.dropdown").button({ icons: { secondary: "ui-icon-carat-1-s"} });
@@ -799,7 +877,7 @@
 			$("#newfoldertext").focusout(function () {
 				temp = setTimeout(function () { 
 					$("#newfoldertext").removeClass("loading");
-					$("#newfoldertext").animate({ width: 0, opacity: 0.0 }, 500, function() { $("#newfoldertext").hide() }).css("margin", "0");
+					$("#newfoldertext").animate({ width: 0, opacity: 0.0 }, 500, function() { $("#newfoldertext").hide() });
 					$("#newfolder span").text(hap.common.getLocal("myfiles/newfolder"));
 				}, 1000);
 			}).focusin(function() {
@@ -809,6 +887,54 @@
 				if (keycode == 9 || keycode == 59 || keycode == 188 || keycode == 190 || keycode == 192 || keycode == 111 || keycode == 220 || keycode == 191 || keycode == 106 || (keycode == 56 && keys.shift) || (keycode == 50 && keys.shift)) { event.preventDefault(); return; }
 				else if (keycode == 27) { $("#newfoldertext").blur(); event.preventDefault(); }
 				else if (keycode == 13) { $("#newfolder").trigger("click"); return false; }
+			});
+			$("#toolbar-cut").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-cut").css("display", "none") } }).click(function () {
+				var its = [];
+				for (var i = 0; i < SelectedItems().length; i++)
+					its.push(SelectedItems()[i]);
+				clipboard = { mode: "cut", items: its };
+				RefreshToolbar();
+				return false;
+			});
+			$("#toolbar-copy").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-copy").css("display", "none") } }).click(function() {
+				var its = [];
+				for (var i = 0; i < SelectedItems().length; i++)
+					its.push(SelectedItems()[i]);
+				clipboard = { mode: "copy", items: its }; 
+				RefreshToolbar();
+				return false;
+			});
+			$("#toolbar-paste").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-paste").css("display", "none") } }).click(function () {
+				var s = "";
+				for (var i = 0; i < clipboard.items.length; i++) s += clipboard.items[i].Data.Name + "\n";
+				$("#progressstatus").dialog({ autoOpen: true, modal: true, title: hap.common.getLocal("myfiles/" + ((clipboard.mode == 'copy') ? "copy/copying" : "move/moving")) + " 1 " + hap.common.getLocal("of") + " " + clipboard.items.length + " " + hap.common.getLocal("items") });
+				$("#progressstatus .progress").progressbar({ value: (1 / clipboard.items.length) * 100 });
+				if (clipboard.mode == 'copy') CopyClipboard(0, (curpath.length == 2 ? curitem.Location.substr(0, curitem.Location.length -1 ) : curitem.Location).replace(/:/g, ""));
+				else if (confirm(hap.common.getLocal("myfiles/move/question1") + "\n\n" + s)) MoveClipboard(0, (curpath.length == 2 ? curitem.Location.substr(0, curitem.Location.length -1 ) : curitem.Location).replace(/:/g, ""));
+				else $("#progressstatus").dialog("close");
+				return false;
+			});
+			$("#toolbar-clear").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-clear").css("display", "none") } }).click(function () {
+				clipboard = null;
+				RefreshToolbar();
+				return false;
+			});
+			$("#toolbar-open").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-open").css("display", "none") } }).click(function () {
+				window.location.href = "#" + SelectedItems()[0].Data.Path;
+				return false;
+			});
+			$("#toolbar-download").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-download").css("display", "none") } }).click(function () {
+				window.location.href = SelectedItems()[0].Data.Path;
+				return false;
+			});
+			$("#toolbar-delete").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-delete").css("display", "none") } }).click(function () {
+				$("#progressstatus").dialog({ autoOpen: true, modal: true, title: hap.common.getLocal("myfiles/delete/deletingitem1") + " 1 " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items") });
+				$("#progressstatus .progress").progressbar({ value: (1 / SelectedItems().length) * 100 });
+				var s = "";
+				for (var i = 0; i < SelectedItems().length; i++) s += SelectedItems()[i].Data.Name + "\n";
+				if (confirm(hap.common.getLocal("myfiles/delete/question1") + "\n\n" + s)) Delete(0);
+				else $("#progressstatus").dialog("close");
+				return false;
 			});
 			$("#renamebox").focusout(function() {
 				if (temp == "esc") { temp = null; return; }
