@@ -57,7 +57,7 @@ namespace HAP.Web.API
 
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "Copy", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public void Copy(string OldPath, string NewPath)
+        public void Copy(string OldPath, string NewPath, bool Overwrite)
         {
             hapConfig config = hapConfig.Current;
             User user = new User();
@@ -75,8 +75,16 @@ namespace HAP.Web.API
             try
             {
                 FileAttributes attr = System.IO.File.GetAttributes(p);
-                if ((attr & FileAttributes.Directory) == FileAttributes.Directory) copyDirectory(p, p2);
-                else System.IO.File.Copy(p, p2);
+                if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                {
+                    if (Directory.Exists(p2) && !Overwrite) throw new DuplicateNameException("Destination Folder Exists");
+                    else copyDirectory(p, p2);
+                }
+                else
+                {
+                    if (System.IO.File.Exists(p2) && !Overwrite) throw new DuplicateNameException("File Exits in Destination");
+                    else System.IO.File.Copy(p, p2);
+                }
             }
             finally
             {
@@ -93,13 +101,17 @@ namespace HAP.Web.API
             Files = Directory.GetFileSystemEntries(Src);
             foreach (string Element in Files) {
                 if (Directory.Exists(Element)) copyDirectory(Element, Dst + Path.GetFileName(Element));
+                else if (System.IO.File.Exists(Dst + Path.GetFileName(Element)))
+                {
+                    if (System.IO.File.GetLastWriteTime(Dst + Path.GetFileName(Element)) < System.IO.File.GetLastWriteTime(Src + Path.GetFileName(Element))) System.IO.File.Copy(Element, Dst + Path.GetFileName(Element), true);
+                }
                 else System.IO.File.Copy(Element, Dst + Path.GetFileName(Element), true);
             }
         }
 
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "Move", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public void Move(string OldPath, string NewPath)
+        public void Move(string OldPath, string NewPath, bool Overwrite)
         {
             hapConfig config = hapConfig.Current;
             User user = new User();
@@ -117,8 +129,16 @@ namespace HAP.Web.API
             try
             {
                 FileAttributes attr = System.IO.File.GetAttributes(p);
-                if ((attr & FileAttributes.Directory) == FileAttributes.Directory) Directory.Move(p, p2);
-                else System.IO.File.Move(p, p2);
+                if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                {
+                    if (Directory.Exists(p2) && !Overwrite) throw new DuplicateNameException("Destination Folder Exists");
+                    else Directory.Move(p, p2);
+                }
+                else
+                {
+                    if (System.IO.File.Exists(p2) && !Overwrite) throw new DuplicateNameException("File Exits in Destination");
+                    else System.IO.File.Move(p, p2);
+                }
             }
             finally
             {
