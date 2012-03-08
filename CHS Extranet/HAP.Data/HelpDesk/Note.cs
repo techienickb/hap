@@ -23,7 +23,11 @@ namespace HAP.Data.HelpDesk
                 Date = DateTime.Parse(node.Attributes["date"].Value + " " + node.Attributes["time"].Value).ToString("dd/MM/yy HH:mm");
             else Date = DateTime.Parse(node.Attributes["datetime"].Value).ToString("dd/MM/yy HH:mm");
             Username = node.Attributes["username"].Value;
-            DisplayName = ADUtils.FindUserInfos(node.Attributes["username"].Value)[0].DisplayName;
+            try
+            {
+                DisplayName = ADUtils.FindUserInfos(node.Attributes["username"].Value)[0].DisplayName;
+            }
+            catch { DisplayName = "UNKNOWN"; }
         }
     }
 }

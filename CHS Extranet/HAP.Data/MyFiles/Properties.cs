@@ -34,7 +34,7 @@ namespace HAP.Data.MyFiles
             DateCreated = file.CreationTime.ToString();
             DateModified = file.LastWriteTime.ToString();
             DateAccessed = file.LastAccessTime.ToString();
-            Location = Converter.UNCtoDrive(file.Directory.FullName, mapping, user).Replace(":", "");
+            Location = HttpUtility.UrlEncode(Converter.UNCtoDrive(file.Directory.FullName, mapping, user).Replace(":", "")).Replace('+', ' ').Replace("%", "|").Replace("|5c", "\\");
             Size = File.parseLength(file.Length);
             FileIcon fi;
             if (FileIcon.TryGet(Extension, out fi)) Type = fi.Type;
@@ -78,7 +78,7 @@ namespace HAP.Data.MyFiles
                 catch { Actions = HAP.Data.MyFiles.AccessControlActions.None; }
             }
             Name = (dir.FullName == Converter.DriveToUNC("", mapping.Drive.ToString(), out m, user) + '\\') ? mapping.Name : dir.Name;
-            Location = Converter.UNCtoDrive(dir.FullName, mapping, user);
+            Location = HttpUtility.UrlEncode(Converter.UNCtoDrive(dir.FullName, mapping, user).Replace(":", "")).Replace('+', ' ').Replace("%", "|").Replace("|5c", "\\");
             Type = "File Folder";
             if (Type != "File")
             {
@@ -107,7 +107,7 @@ namespace HAP.Data.MyFiles
             }
             else
             {
-                Location = Converter.UNCtoDrive(dir.Parent.FullName, mapping, user).Replace(":", "");
+                Location = HttpUtility.UrlEncode(Converter.UNCtoDrive(dir.Parent.FullName, mapping, user).Replace(":", "")).Replace('+', ' ').Replace("%", "|").Replace("|5c", "\\");
 
                 long s = 0;
                 Contents = dir.GetFiles().Length + " Files, ";
