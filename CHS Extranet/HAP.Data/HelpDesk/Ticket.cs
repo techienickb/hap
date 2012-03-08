@@ -30,9 +30,17 @@ namespace HAP.Data.HelpDesk
             if (node.SelectNodes("Note")[0].Attributes["date"] != null)
                 Date = DateTime.Parse(node.SelectNodes("Note")[0].Attributes["date"].Value + " " + node.SelectNodes("Note")[0].Attributes["time"].Value).ToString("dd/MM/yy HH:mm");
             Date = DateTime.Parse(node.SelectNodes("Note")[0].Attributes["datetime"].Value).ToString("dd/MM/yy HH:mm");
-            Username = ADUtils.FindUserInfos(node.SelectNodes("Note")[0].Attributes["username"].Value)[0].UserName;
+            try
+            {
+                Username = ADUtils.FindUserInfos(node.SelectNodes("Note")[0].Attributes["username"].Value)[0].UserName;
+            }
+            catch { Username = "UNKNOWN"; }
             ShowTo = node.Attributes["showto"] == null ? "" : node.Attributes["showto"].Value;
-            DisplayName = ADUtils.FindUserInfos(node.SelectNodes("Note")[0].Attributes["username"].Value)[0].DisplayName;
+            try 
+            {
+                DisplayName = ADUtils.FindUserInfos(node.SelectNodes("Note")[0].Attributes["username"].Value)[0].DisplayName;
+            }
+            catch { DisplayName = "UNKNOWN"; }
             FAQ = false;
             if (node.Attributes["faq"] != null) FAQ = bool.Parse(node.Attributes["faq"].Value);
         }

@@ -10,7 +10,7 @@ using System.DirectoryServices;
 using HAP.Web.Configuration;
 using System.Xml;
 using System.Runtime.InteropServices;
-using HAP.Web.UserCard;
+using HAP.Data.HelpDesk;
 using HAP.Data.ComputerBrowser;
 
 namespace HAP.Web
@@ -133,7 +133,7 @@ namespace HAP.Web
                         foreach (XmlNode node in doc.SelectNodes(xpath))
                             if (x < 4)
                             {
-                                tickets.Add(Ticket.Parse(node));
+                                tickets.Add(new Ticket(node));
                                 x++;
                             }
                         ticketslist.DataSource = tickets.ToArray();
@@ -144,7 +144,7 @@ namespace HAP.Web
                         foreach (XmlNode node in doc.SelectNodes(xpath))
                             if (node.SelectNodes("Note")[0].Attributes["username"].Value.ToLower() == ADUser.UserName.ToLower() && x < 4)
                             {
-                                tickets.Add(Ticket.Parse(node));
+                                tickets.Add(new Ticket(node));
                                 x++;
                             }
                         ticketslist.DataSource = tickets.ToArray();

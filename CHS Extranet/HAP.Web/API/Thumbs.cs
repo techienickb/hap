@@ -60,7 +60,8 @@ namespace HAP.Web.API
                 try
                 {
                     Bitmap b = new Data.MyFiles.ShellThumbnail().GetThumbnail(file.FullName);
-                     thumb = b;// FixedSize(b, 64, 64);
+                    thumb = b;// FixedSize(b, 64, 64);
+                    if (thumb == null) throw new NullReferenceException();
                 }
                 catch
                 {
@@ -71,23 +72,30 @@ namespace HAP.Web.API
                     fs.Close();
                     fs.Dispose();
                 }
+                MemoryStream m = new MemoryStream();
+                thumb.Save(m, ImageFormat.Png);
 
-                MemoryStream memstr = new MemoryStream();
-                thumb.Save(memstr, ImageFormat.Png);
                 context.Response.Clear();
                 context.Response.ExpiresAbsolute = DateTime.Now;
                 context.Response.ContentType = Converter.MimeType(".png");
                 context.Response.Buffer = true;
                 context.Response.AppendHeader("Content-Disposition", "inline; filename=\"" + file.Name + "\"");
-                context.Response.AddHeader("Content-Length", memstr.Length.ToString());
+                context.Response.AppendHeader("Content-Length", m.Length.ToString());
                 context.Response.Clear();
-                memstr.WriteTo(context.Response.OutputStream);
+                m.WriteTo(context.Response.OutputStream);
                 context.Response.Flush();
                 file = null;
-            }
-            finally
-            {
                 u.EndContainedImpersonate();
+            }
+            catch
+            {
+                DriveMapping unc;
+                string path = Converter.DriveToUNC(RoutingPath.Replace('^', '&'), RoutingDrive, out unc, ((HAP.AD.User)Membership.GetUser()));
+                FileInfo file = new FileInfo(path);
+                string Icon = HAP.Data.MyFiles.File.ParseForImage(file);
+                u.EndContainedImpersonate();
+                if (Icon.EndsWith(".ico")) context.Response.Redirect(VirtualPathUtility.ToAbsolute("~/api/mycomputer/" + Icon));
+                else context.Response.Redirect(VirtualPathUtility.ToAbsolute("~/images/icons/" + Icon));
             }
         }
 
