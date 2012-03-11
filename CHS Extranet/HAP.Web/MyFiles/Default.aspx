@@ -26,6 +26,9 @@
 	<hap:WrappedLocalResource runat="server" title="#myfiles/properties" id="properties" Tag="div">
 		<div id="propcont"><hap:LocalResource StringPath="loading" runat="server" />...</div>
 	</hap:WrappedLocalResource>
+	<hap:WrappedLocalResource runat="server" title="#myfiles/zip/question1" id="zipquestion" Tag="div">
+		<div id="zipcont"><hap:LocalResource StringPath="myfiles/zip/question2" runat="server" /> <input type="text" id="zipfilename" />.zip</div>
+	</hap:WrappedLocalResource>
 	<hap:WrappedLocalResource runat="server" title="#myfiles/preview" id="preview" style="height: 500px; overflow: auto; width: 700px;" Tag="div">
 		<div id="previewcont"><hap:LocalResource StringPath="loading" runat="server" />...</div>
 	</hap:WrappedLocalResource>
@@ -52,6 +55,8 @@
 		<li id="con-rename"><hap:LocalResource StringPath="myfiles/rename" runat="server" /></li>
 		<li id="con-preview"><hap:LocalResource StringPath="myfiles/preview" runat="server" /></li>
 		<li id="con-properties"><hap:LocalResource StringPath="myfiles/properties" runat="server" /></li>
+		<li id="con-unzip"><hap:LocalResource ID="LocalResource1" StringPath="myfiles/unzip/unzip" runat="server" /></li>
+		<li id="con-zip"><hap:LocalResource ID="LocalResource2" StringPath="myfiles/zip/zip" runat="server" /></li>
 		<li id="con-google"><hap:LocalResource StringPath="myfiles/sendto/googledocs" runat="server" /></li>
 	  </ul>
 	</div>
@@ -76,7 +81,7 @@
 			<button id="backup"></button>
 		</div>
 		<div style="float: left; margin-left: 3px;" id="maintools">
-			<input type="text" id="newfoldertext" /><button id="newfolder"><hap:LocalResource runat="server" StringPath="myfiles/newfolder" /></button><button id="toolbar-cut"><hap:LocalResource runat="server" StringPath="myfiles/cut" /></button><button id="toolbar-copy"><hap:LocalResource runat="server" StringPath="myfiles/copy/copy" /></button><button id="toolbar-paste" style="margin: 0;"><hap:LocalResource runat="server" StringPath="myfiles/paste" /></button><button id="toolbar-clear">X</button><button id="toolbar-delete"><hap:LocalResource runat="server" StringPath="myfiles/delete/delete" /></button><button id="toolbar-open"><hap:LocalResource runat="server" StringPath="myfiles/open" /></button><button id="toolbar-download"><hap:LocalResource runat="server" StringPath="myfiles/download" /></button><button id="upload"><hap:LocalResource runat="server" StringPath="myfiles/upload/upload" /></button><label id="uploadto"></label>
+			<input type="text" id="newfoldertext" /><button id="newfolder"><hap:LocalResource runat="server" StringPath="myfiles/newfolder" /></button><button id="toolbar-cut"><hap:LocalResource runat="server" StringPath="myfiles/cut" /></button><button id="toolbar-copy"><hap:LocalResource runat="server" StringPath="myfiles/copy/copy" /></button><button id="toolbar-paste" style="margin: 0;"><hap:LocalResource runat="server" StringPath="myfiles/paste" /></button><button id="toolbar-clear">X</button><button id="toolbar-delete"><hap:LocalResource runat="server" StringPath="myfiles/delete/delete" /></button><button id="toolbar-zip"><hap:LocalResource runat="server" StringPath="myfiles/zip/zip" /></button><button id="toolbar-unzip"><hap:LocalResource runat="server" StringPath="myfiles/unzip/unzip" /></button><button id="toolbar-open"><hap:LocalResource runat="server" StringPath="myfiles/open" /></button><button id="toolbar-download"><hap:LocalResource runat="server" StringPath="myfiles/download" /></button><button id="upload"><hap:LocalResource runat="server" StringPath="myfiles/upload/upload" /></button><label id="uploadto"></label>
 		</div>
 	</div>
 	<div id="Views" class="tile-border-color">
@@ -127,6 +132,85 @@
 			}
 			Load();
 		});
+		function Zip(zipfile, index) {
+			temp = { Index: index, File: zipfile };
+			var a = '"' + SelectedItems()[index].Data.Path.replace(/\.\.\/download\//gi, "").replace(/\\/g, "/") + '"';
+			$.ajax({
+				type: 'POST',
+				url: hap.common.resolveUrl('~/api/MyFiles/Zip') + '?' + window.JSON.stringify(new Date()),
+				dataType: 'json',
+				data: '{ "Zip": "' + zipfile + '", "Paths": [' + a + '] }',
+				contentType: 'application/json',
+				success: function (data) {
+					temp++;
+					$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/zip/zipingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items"));
+					$("#progressstatus .progress").progressbar({ value: (temp.index / SelectedItems().length) * 100 });
+					if (temp < SelectedItems().length) Zip(temp.File, temp.index);
+					else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
+				},
+				error: hap.common.jsonError
+			});
+		}
+		function UnZip(overwrite) {
+			if (overwrite == null) overwrite = false;
+			var a = SelectedItems()[0].Data.Path.replace(/\.\.\/download\//gi, "").replace(/\//gi, "\\\\");
+			a = (a.match(/\.zip\\/gi) ? (a.split(/\.zip\\/gi)[0] + ".zip") : a);
+			a = '"' + a + '"';
+			$.ajax({
+				type: 'POST',
+				url: hap.common.resolveUrl('~/api/MyFiles/UnZip') + '?' + window.JSON.stringify(new Date()),
+				dataType: 'json',
+				data: '{ "ZipFile" : ' + a + ', "Overwrite": "' + overwrite + '" }',
+				contentType: 'application/json',
+				success: function (data) {
+					$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/unzip/unzipping") + " " + SelectedItems()[0].Data.Name);
+					$("#progressstatus .progress").progressbar({ value: 80 });
+					temp = null; 
+					Load(); 
+					setTimeout(function() { $("#progressstatus").dialog("close"); }, 500);
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					if (xhr.responseXML.documentElement.children[1].children[0].textContent == "Destination Folder Exists")
+					{
+						if (confirm(hap.common.getLocal("myfiles/folderexists1") + " " + SelectedItems()[0].Data.Name + " " + hap.common.getLocal("myfiles/folderexists2") + "\n" + hap.common.getLocal("myfiles/merge")))
+							Unzip(true);
+						else {
+							$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/unzip/unzipping") + " " + SelectedItems()[0].Data.Name);
+							$("#progressstatus .progress").progressbar({ value: 50 });
+							temp = null; 
+							Load(); 
+							setTimeout(function() { $("#progressstatus").dialog("close"); }, 500);
+						}
+					}
+					else if (xhr.responseXML.documentElement.children[1].children[0].textContent == "File Exits in Destination")
+					{
+						if (confirm(hap.common.getLocal("myfiles/fileexists1") + " " + SelectedItems()[0].Data.Name + " " + hap.common.getLocal("myfiles/fileexists2")))
+							Unzip(true);
+						else {
+							$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/unzip/unzipping") + " " + SelectedItems()[0].Data.Name);
+							$("#progressstatus .progress").progressbar({ value: 50 });
+							temp = null; 
+							Load(); 
+							setTimeout(function() { $("#progressstatus").dialog("close"); }, 500);
+						}
+					}
+					else if (confirm(hap.common.getLocal("myfiles/unzip/error1") + " " + SelectedItems()[0].Data.Name + ", " + hap.common.getLocal("myfiles/unzip/error2") + "\n\n" + hap.common.getLocal("errordetails") + ":\n\n" + xhr.responseXML.documentElement.children[1].children[0].textContent)) {
+						$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/unzip/unzipping") + " " + SelectedItems()[0].Data.Name);
+						$("#progressstatus .progress").progressbar({ value: 50 });
+						temp = null; 
+						Load(); 
+						setTimeout(function() { $("#progressstatus").dialog("close"); }, 500);
+					} else { 
+						console.log(xhr.responseXML.documentElement.children[2]); 
+						$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/unzip/unzipping") + " " + SelectedItems()[0].Data.Name);
+						$("#progressstatus .progress").progressbar({ value: 50 });
+						temp = null; 
+						Load(); 
+						setTimeout(function() { $("#progressstatus").dialog("close"); }, 500);
+					}
+				}
+			});
+		}
 		function Copy(index, target, overwrite) {
 			temp = { "index": index, "target": target };
 			if (overwrite == null) overwrite = false;
@@ -445,17 +529,22 @@
 			return val;
 		}
 		function RefreshToolbar() {
-			var cut, copy, paste, download, open;
-			cut = copy = del = SelectedItems().length > 0;
+			var cut, copy, paste, download, open, unzip, zip;
+			zip = cut = copy = del = SelectedItems().length > 0;
 			paste = curitem.Actions == 0 && clipboard != null;
-			download = open = SelectedItems().length == 1;
+			zip = zip ? curitem.Actions == 0 : zip;
+			unzip = download = open = SelectedItems().length == 1;
+			unzip = unzip ? curitem.Actions == 0 : unzip;
 			for (var i = 0; i < SelectedItems().length; i++) {
 				var item = SelectedItems()[i];
 				if (item.Data.Actions == 0 && cut) cut = true;
 				else cut = false;
 				if (item.Data.Type == "Directory") download = false;
 				else open = false;
+				if (item.Data.Path.match(/\.zip/gi)) unzip = true;
+				else unzip = false;
 			}
+			if (curpath.match(/\.zip/gi)) { cut = copy = pase = del = download = zip = unzip = false; }
 			if (cut && $("#toolbar-cut").css("display") == "none") { $("#toolbar-cut").css("display", "").animate({ width: 30 }); $("#toolbar-delete").css("display", "").animate({ width: 51 }); }
 			if (!cut && $("#toolbar-cut").css("display") != "none") { $("#toolbar-cut").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-cut").css("display", "none") } }); $("#toolbar-delete").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-delete").css("display", "none") } }); }
 			if (copy && $("#toolbar-copy").css("display") == "none") $("#toolbar-copy").css("display", "").animate({ width: 43 });
@@ -466,6 +555,10 @@
 			if (!download && $("#toolbar-download").css("display") != "none") $("#toolbar-download").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-download").css("display", "none") } });
 			if (open && $("#toolbar-open").css("display") == "none") $("#toolbar-open").css("display", "").animate({ width: 44 });
 			if (!open && $("#toolbar-open").css("display") != "none") $("#toolbar-open").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-open").css("display", "none") } });
+			if (unzip && $("#toolbar-unzip").css("display") == "none") $("#toolbar-unzip").css("display", "").animate({ width: 48 });
+			if (!unzip && $("#toolbar-unzip").css("display") != "none") $("#toolbar-unzip").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-unzip").css("display", "none") } });
+			if (zip && $("#toolbar-zip").css("display") == "none") $("#toolbar-zip").css("display", "").animate({ width: 30 });
+			if (!zip && $("#toolbar-zip").css("display") != "none") $("#toolbar-zip").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-zip").css("display", "none") } });
 		}
 		function Item(data) {
 			this.Data = data;
@@ -557,12 +650,11 @@
 						return true;
 					},
 					onShowMenu: function (e, menu) {
-						if (curitem.Actions != 0) { $("#con-delete", menu).remove(); $("#con-google", menu).remove(); $("#con-rename", menu).remove(); }
-						if (curitem.Actions == 3) { $("#con-download", menu).remove(); if (SelectedItems().length != 1 || SelectedItems()[0].Data.Type != 'Directory') ("#con-open", menu).remove(); $("#con-properties", menu).remove(); }
-						if (SelectedItems().length > 1) { $("#con-download", menu).remove(); $("#con-open", menu).remove(); $("#con-rename", menu).remove(); $("#con-properties", menu).remove(); $("#con-preview", menu).remove(); $("#con-google", menu).remove(); }
+						if (curitem.Actions != 0) { $("#con-delete", menu).remove(); $("#con-google", menu).remove(); $("#con-rename", menu).remove(); $("#con-zip", menu).remove(); $("#con-unzip", menu).remove(); }
+						if (curitem.Actions == 3) { $("#con-download", menu).remove(); if (SelectedItems().length != 1 || SelectedItems()[0].Data.Type != 'Directory') ("#con-open", menu).remove(); $("#con-properties", menu).remove(); $("#con-zip", menu).remove(); $("#con-unzip", menu).remove(); }
+						if (SelectedItems().length > 1) { $("#con-unzip", menu).remove(); $("#con-download", menu).remove(); $("#con-open", menu).remove(); $("#con-rename", menu).remove(); $("#con-properties", menu).remove(); $("#con-preview", menu).remove(); $("#con-google", menu).remove(); }
 						else {
 							var remgoogle = false;
-							if (SelectedItems()[0].Data.Extension != ".zip") $("#con-download", menu).remove();
 							if (SelectedItems()[0].Data.Extension != ".txt" && SelectedItems()[0].Data.Extension != ".xlsx" && SelectedItems()[0].Data.Extension != ".docx" && SelectedItems()[0].Data.Extension != ".xls" && SelectedItems()[0].Data.Extension != ".csv" && SelectedItems()[0].Data.Extension != ".png" && SelectedItems()[0].Data.Extension != ".gif" && SelectedItems()[0].Data.Extension != ".jpg" && SelectedItems()[0].Data.Extension != ".jpeg" && SelectedItems()[0].Data.Extension != ".bmp") {
 								$("#con-preview", menu).remove();
 								if (SelectedItems()[0].Data.Extension != ".ppt" && SelectedItems()[0].Data.Extension != ".pptx" && SelectedItems()[0].Data.Extension != ".pps" && SelectedItems()[0].Data.Extension != ".doc" && SelectedItems()[0].Data.Extension != ".rtf")
@@ -652,6 +744,22 @@
 									$("#previewcont").html(data);
 								}, error: hap.common.jsonError
 							});
+						},
+						'con-unzip' : function (t) {
+							$("#progressstatus").dialog({ autoOpen: true, modal: true, title: hap.common.getLocal("myfiles/unzip/unzipping") + ": " + SelectedItems()[0].Data.Name });
+							$("#progressstatus .progress").progressbar({ value: 10 });
+							UnZip();
+						},
+						'con-zip' : function (t) {
+							$("#zipquestion").dialog({ autoOpen: true, modal: true, buttons: { 
+								"ZIP": function() { 
+									$(this).dialog("close");
+									$("#progressstatus").dialog({ autoOpen: true, modal: true, title: hap.common.getLocal("myfiles/zip/zipping") + " 1 " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items") });
+									$("#progressstatus .progress").progressbar({ value: 1 });
+									Zip(curpath + "\\" + $("#zipfilename").val() + ".zip", 0);
+								}, "Close": function() { $(this).dialog("close"); } } 
+							}); 
+							$("#zipfilename").val(SelectedItems()[0].Data.Name).focus();
 						},
 						'con-google' : function (t) {
 							if (SelectedItems().length > 1) { alert(hap.common.getLocal("myfiles/only1")); return false; }
@@ -833,6 +941,7 @@
 		$(function () {
 			$("#properties").dialog({ autoOpen: false });
 			$("#preview").dialog({ autoOpen: false });
+			$("#zipquestion").dialog({ autoOpen: false });
 			$("#progressstate").dialog({ autoOpen: false });
 			$("#uploaders").dialog({ autoOpen: false });
 			$("#googlesignin").dialog({ autoOpen: false });
@@ -1011,6 +1120,24 @@
 				else $("#progressstatus").dialog("close");
 				return false;
 			});
+			$("#toolbar-unzip").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-unzip").css("display", "none") } }).click(function () {
+				$("#progressstatus").dialog({ autoOpen: true, modal: true, title: hap.common.getLocal("myfiles/unzip/unzipping") + ": " + SelectedItems()[0].Data.Name });
+				$("#progressstatus .progress").progressbar({ value: 10 });
+				UnZip();
+				return false;
+			});
+			$("#toolbar-zip").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-zip").css("display", "none") } }).click(function () {
+				$("#zipquestion").dialog({ autoOpen: true, modal: true, buttons: { 
+					"ZIP": function() { 
+						$(this).dialog("close");
+						$("#progressstatus").dialog({ autoOpen: true, modal: true, title: hap.common.getLocal("myfiles/zip/zipping") + " 1 " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items") });
+						$("#progressstatus .progress").progressbar({ value: 1 });
+						Zip(curpath + "\\" + $("#zipfilename").val() + ".zip", 0);
+					}, "Close": function() { $(this).dialog("close"); } } 
+				}); 
+				$("#zipfilename").val(SelectedItems()[0].Data.Name).focus();
+				return false;
+			});
 			$("#toolbar-clear").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-clear").css("display", "none") } }).click(function () {
 				clipboard = null;
 				RefreshToolbar();
@@ -1021,7 +1148,8 @@
 				return false;
 			});
 			$("#toolbar-download").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-download").css("display", "none") } }).click(function () {
-				window.location.href = SelectedItems()[0].Data.Path;
+				if (SelectedItems()[0].Data.Path.match(/\.zip\//gi)) window.location.href = SelectedItems()[0].Data.Path.split(/\.zip\//gi)[0] + ".zip";
+				else window.location.href = SelectedItems()[0].Data.Path;
 				return false;
 			});
 			$("#toolbar-delete").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-delete").css("display", "none") } }).click(function () {
