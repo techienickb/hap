@@ -20,6 +20,7 @@ using System.Data.OleDb;
 using System.Data;
 using System.Net;
 using System.Collections.Specialized;
+using ICSharpCode.SharpZipLib.Zip;
 
 namespace HAP.Web.API
 {
@@ -52,6 +53,75 @@ namespace HAP.Web.API
             finally 
             { 
                 user.EndContainedImpersonate(); 
+            }
+        }
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", UriTemplate = "Zip", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle=WebMessageBodyStyle.WrappedRequest)]
+        public void Zip(string Zip, string[] Paths)
+        {
+            hapConfig config = hapConfig.Current;
+            User user = new User();
+            if (config.AD.AuthenticationMode == Web.Configuration.AuthMode.Forms)
+            {
+                HttpCookie token = HttpContext.Current.Request.Cookies["token"];
+                if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
+                user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
+            }
+            DriveMapping mapping;
+            string z = Converter.DriveToUNC(Zip.Remove(0, 1), Zip.Substring(0, 1), out mapping, user);
+            HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.Zip", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Zip: " + z);
+            user.ImpersonateContained();
+            try
+            {
+                ZipFile zip = System.IO.File.Exists(z) ? new ZipFile(z) : ZipFile.Create(z);
+                zip.BeginUpdate();
+                foreach (string path in Paths)
+                {
+                    try
+                    {
+                        string p = Converter.DriveToUNC(path.Remove(0, 1), path.Substring(0, 1), out mapping, user);
+                        FileAttributes attr = System.IO.File.GetAttributes(p);
+                        if ((attr & FileAttributes.Directory) == FileAttributes.Directory) zip.AddDirectory(p);
+                        else zip.Add(p);
+                    }
+                    catch { }
+                }
+                zip.CommitUpdate();
+                zip.Close();
+            }
+            finally
+            {
+                user.EndContainedImpersonate();
+            }
+        }
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", UriTemplate = "Unzip", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        public void Unzip(string ZipFile, bool Overwrite)
+        {
+            hapConfig config = hapConfig.Current;
+            User user = new User();
+            if (config.AD.AuthenticationMode == Web.Configuration.AuthMode.Forms)
+            {
+                HttpCookie token = HttpContext.Current.Request.Cookies["token"];
+                if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
+                user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
+            }
+            DriveMapping mapping;
+            string p = Converter.DriveToUNC(ZipFile.Remove(0, 1), ZipFile.Substring(0, 1), out mapping, user);
+            HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.UnZIP", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Unzipping: " + p);
+            user.ImpersonateContained();
+            string p2 = Path.Combine(new FileInfo(p).Directory.FullName, Path.GetFileNameWithoutExtension(p));
+            try
+            {
+                if (Directory.Exists(p2) && !Overwrite) throw new DuplicateNameException("Destination Folder Exists");
+                else Directory.CreateDirectory(p2);
+                new FastZip().ExtractZip(p, p2, "");
+            }
+            finally
+            {
+                user.EndContainedImpersonate();
             }
         }
 
@@ -160,25 +230,25 @@ namespace HAP.Web.API
                 user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
             }
 
-                foreach (string path in Paths) 
+            foreach (string path in Paths) 
+            {
+                try
                 {
-                    try
-                    {
-                        DriveMapping mapping;
-                        string p = Converter.DriveToUNC(path.Remove(0, 1), path.Substring(0, 1), out mapping, user);
-                        HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.Delete", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Deleting: " + p);
-                        user.ImpersonateContained();
-                        FileAttributes attr = System.IO.File.GetAttributes(p);
-                        if ((attr & FileAttributes.Directory) == FileAttributes.Directory) Directory.Delete(p, true);
-                        else System.IO.File.Delete(p);
-                        ret.Add("Deleted " + path.Remove(0, path.LastIndexOf('/') + 1));
-                    }
-                    catch { ret.Add("I could not delete :" + path.Remove(0, path.LastIndexOf('/') + 1)); }
-                    finally
-                    {
-                        user.EndContainedImpersonate();
-                    }
+                    DriveMapping mapping;
+                    string p = Converter.DriveToUNC(path.Remove(0, 1), path.Substring(0, 1), out mapping, user);
+                    HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.Delete", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Deleting: " + p);
+                    user.ImpersonateContained();
+                    FileAttributes attr = System.IO.File.GetAttributes(p);
+                    if ((attr & FileAttributes.Directory) == FileAttributes.Directory) Directory.Delete(p, true);
+                    else System.IO.File.Delete(p);
+                    ret.Add("Deleted " + path.Remove(0, path.LastIndexOf('/') + 1));
                 }
+                catch { ret.Add("I could not delete :" + path.Remove(0, path.LastIndexOf('/') + 1)); }
+                finally
+                {
+                    user.EndContainedImpersonate();
+                }
+            }
             return ret.ToArray();
         }
 

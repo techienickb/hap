@@ -22,6 +22,15 @@ namespace HAP.Web.MyFiles {
         protected global::HAP.Web.Controls.WrappedLocalResource properties;
         
         /// <summary>
+        /// zipquestion control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::HAP.Web.Controls.WrappedLocalResource zipquestion;
+        
+        /// <summary>
         /// preview control.
         /// </summary>
         /// <remarks>
@@ -47,6 +56,24 @@ namespace HAP.Web.MyFiles {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::HAP.Web.Controls.WrappedLocalResource googlesignin;
+        
+        /// <summary>
+        /// LocalResource1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::HAP.Web.Controls.LocalResource LocalResource1;
+        
+        /// <summary>
+        /// LocalResource2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::HAP.Web.Controls.LocalResource LocalResource2;
         
         /// <summary>
         /// uploaders control.

@@ -70,6 +70,19 @@ Do you want to overwrite it?</fileexists2>
       <delete>Delete</delete>
       <deletingitem1>Deleting item</deletingitem1>
     </delete>
+    <zip>
+      <zipingitem1>Zipping item</zipingitem1>
+      <question1>What do you want to call your Zip File?</question1>
+      <question2>FileName:</question2>
+      <zip>ZIP</zip>
+    </zip>
+    <unzip>
+      <unzipping>Unzipping</unzipping>
+      <error1>An Error has occured while unzipping</error1>
+      <error2>do you want to Continue?</error2>
+      <question1>Are you sure you want to unzip:</question1>
+      <unzip>UnZIP</unzip>
+    </unzip>
     <size>Size</size>
     <type>Type</type>
     <location>Location</location>
