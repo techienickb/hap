@@ -31,6 +31,24 @@ namespace HAP.Data.BookingSystem
             if (node.Attributes["uid"] != null) this.uid = node.Attributes["uid"].Value;
         }
 
+        public Booking(XmlNode node, bool Static)
+        {
+            //nt.Parse(node.Attributes["room"].Value), node.Attributes["bookingfor"].Value, node.Attributes["bookingby"].Value, true)
+            if (node.Attributes["date"] != null) this.Date = DateTime.Parse(node.Attributes["date"].Value);
+            if (node.Attributes["day"] != null) this.Day = int.Parse(node.Attributes["day"].Value);
+            this.Lesson = node.Attributes["lesson"].Value;
+            this.Room = node.Attributes["room"].Value;
+            this.Name = node.Attributes["name"].Value;
+            this.Username = node.Attributes["username"].Value;
+            this.Static = Static;
+            if (node.Attributes["ltcount"] != null) this.LTCount = int.Parse(node.Attributes["ltcount"].Value);
+            if (node.Attributes["ltroom"] != null) this.LTRoom = node.Attributes["ltroom"].Value;
+            if (node.Attributes["ltheadphones"] != null) this.LTHeadPhones = bool.Parse(node.Attributes["ltheadphones"].Value);
+            else this.LTHeadPhones = false;
+            if (node.Attributes["equiproom"] != null) this.EquipRoom = node.Attributes["equiproom"].Value;
+            if (node.Attributes["uid"] != null) this.uid = node.Attributes["uid"].Value;
+        }
+
         public Booking(XmlNode node, int day)
         {
             //nt.Parse(node.Attributes["room"].Value), node.Attributes["bookingfor"].Value, node.Attributes["bookingby"].Value, true)
@@ -91,7 +109,7 @@ namespace HAP.Data.BookingSystem
         }
     }
 
-    public class JSONBooking
+    public class JSONBooking : IComparable
     {
         public JSONBooking() {}
         public JSONBooking(Booking b)
@@ -106,6 +124,7 @@ namespace HAP.Data.BookingSystem
             }
             catch { this.DisplayName = b.Username; }
             this.Static = b.Static;
+            this.Date = b.Static ? b.Day.ToString() : b.Date.ToShortDateString();
             try
             {
                 this.LTCount = b.LTCount;
@@ -114,6 +133,21 @@ namespace HAP.Data.BookingSystem
                 this.EquipRoom = b.EquipRoom;
             }
             catch { }
+            if (this.Date.Length == 1) this.Date = "0" + this.Date;
+            if (this.Date.Length <= 2)
+                switch (int.Parse(this.Date))
+                {
+                    case 1: this.Date += "Monday 1"; break;
+                    case 2: this.Date += "Tuesday 1"; break;
+                    case 3: this.Date += "Wednesday 1"; break;
+                    case 4: this.Date += "Thursday 1"; break;
+                    case 5: this.Date += "Friday 1"; break;
+                    case 6: this.Date += "Monday 2"; break;
+                    case 7: this.Date += "Tuesday 2"; break;
+                    case 8: this.Date += "Wednesday 2"; break;
+                    case 9: this.Date += "Thursday 2"; break;
+                    case 10: this.Date += "Friday 2"; break;
+                }
         }
         public string Room { get; set; }
         public string Lesson { get; set; }
@@ -125,5 +159,12 @@ namespace HAP.Data.BookingSystem
         public int LTCount { get; set; }
         public bool Static { get; set; }
         public string Username { get; set; }
+        public string Date { get; set; }
+
+        public int CompareTo(object obj)
+        {
+            if (Date.CompareTo(((JSONBooking)obj).Date) == 0) return Lesson.CompareTo(((JSONBooking)obj).Lesson);
+            return Date.CompareTo(((JSONBooking)obj).Date);
+        }
     }
 }

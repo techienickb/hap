@@ -21,7 +21,44 @@
 		<span id="val">Loading...</span>
 	</p>
 	<div id="overviewcalendar" title="Overview Calendar">
-		<iframe src="OverviewCalendar.aspx" style="border: 0; margin: 0; padding: 0; width: 100%; height: 400px;"></iframe>
+		<label for="overviewsearch"><hap:LocalResource runat="server" StringPath="bookingsystem/quicksearch" /></label><input type="text" id="overviewsearch" />
+		<iframe src="OverviewCalendar.aspx" style="border: 0; margin: 0; padding: 0; width: 100%; height: 440px;"></iframe>
+		<div id="searchresults" style="height: 440px; overflow: auto;"></div>
+		<hap:CompressJS runat="server" Tag="div">
+			<script type="text/javascript">
+			    $(function () {
+			        $('#searchresults').hide();
+			        $('#overviewsearch').keyup(function (e) {
+			            if ($('#overviewsearch').val().length == 0) {
+			                $('#searchresults').hide();
+			                $("#overviewcalendar iframe").show();
+			            } else {
+			                $('#searchresults').html("Searching...").show();
+			                $("#overviewcalendar iframe").hide();
+
+			                $.ajax({
+			                    type: 'POST',
+			                    url: '<%=ResolveUrl("~/api/BookingSystem/Search")%>?' + window.JSON.stringify(new Date()),
+			                    dataType: 'json',
+			                    data: '{ "Query": "' + $('#overviewsearch').val() + '" }',
+			                    contentType: 'application/json',
+			                    success: function (data) {
+			                        $('#searchresults').html("");
+			                        var d = "";
+			                        for (var i = 0; i < data.length; i++) {
+			                            var item = data[i];
+			                            var h = "<div" + (d != (item.Date.match(/[0|1][0-9]\w\w\w/g) ? item.Date.substr(2, item.Date.length - 2) : item.Date) ? ' class="newline"><span class="date">' + (item.Date.match(/[0|1][0-9]\w\w\w/g) ? item.Date.substr(2, item.Date.length - 2) : item.Date) : '><span class="date">') + "</span><span>" + item.Room + "</span><span>" + item.Username + "</span><span>" + item.Name + "</span></div>";
+			                            d = item.Date.match(/[0|1][0-9]\w\w\w/g) ? item.Date.substr(2, item.Date.length - 2) : item.Date;
+			                            $('#searchresults').append(h);
+			                        }
+			                    },
+			                    error: hap.common.jsonError
+			                });
+			            }
+			        });
+			    });
+			</script>
+		</hap:CompressJS>
 	</div>
 	<div id="questionbox" title="Question"><span></span></div>
 	<div id="bookingform" title="Booking Form">
@@ -82,7 +119,7 @@
 			</div><%=BodyCode[1] %>
 		</div>
 	</div>
-    <hap:CompressJS runat="server" tag="div">
+	<hap:CompressJS runat="server" tag="div">
 	<script type="text/javascript">
 		var curdate, curres, curles;
 		var user = { <%=JSUser %> };
@@ -102,7 +139,7 @@
 						else if (this.Data[x].Static == false && (this.Data[x].Username.toLowerCase() == user.username.toLowerCase() || $.inArray(this.Name, user.isAdminOf) != -1)) h += "doRemove('" + this.Name + "', '" + this.Data[x].Lesson + "', '" + this.Data[x].Name + "');";
 						else h += "false;";
 					}
-					h += '" href="#' + this.Name + '-' + this.Data[x].Lesson.toLowerCase().replace(/ /g, "") + '" class="' + ($.inArray(this.Name, user.isAdminOf) == -1 ? '' : 'admin') + ((this.Data[x].Username.toLowerCase() == user.username.toLowerCase() && $.inArray(this.Name, user.isAdminOf) == -1) ? ' bookie' : '') + ((this.Data[x].Name == "FREE") ? ' free' : '') + '">';
+					h += '" href="#' + this.Name + '-' + this.Data[x].Lesson.toLowerCase().replace(/ /g, "") + '" class="' + (this.Data[x].Static ? 'static ' : '') + ($.inArray(this.Name, user.isAdminOf) == -1 ? '' : 'admin') + ((this.Data[x].Username.toLowerCase() == user.username.toLowerCase() && $.inArray(this.Name, user.isAdminOf) == -1) ? ' bookie' : '') + ((this.Data[x].Name == "FREE") ? ' free' : ' booked') + '">';
 					h += (this.Data[x].Static ? '<span class="state static" title="Timetabled Lesson"><i></i><span>Override</span></span>' : (this.Data[x].Name == "FREE" ? '<span class="state book" title="Book"><i></i><span>Book</span></span>' : '<span class="state remove" title="Remove"><i></i><span>Remove</span></span>'));
 					h += this.Data[x].Name + '<span>' + this.Data[x].DisplayName;
 					if (this.Data[x].Name == "FREE" || this.Data[x].Name == "UNAVAILABLE" || this.Data[x].Name == "CHARGING") { }
@@ -369,5 +406,5 @@
 			loadDate();
 		});
 	</script>
-    </hap:CompressJS>
+	</hap:CompressJS>
 </asp:Content>

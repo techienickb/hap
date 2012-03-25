@@ -13,6 +13,9 @@
   <search>Search</search>
   <password>Password</password>
   <errordetails>Error Details</errordetails>
+  <bookingsystem>
+    <quicksearch>Search for: </quicksearch>
+  </bookingsystem>
   <myfiles>
     <open>Open</open>
     <download>Download</download>
