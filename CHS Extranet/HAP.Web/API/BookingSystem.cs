@@ -22,6 +22,25 @@ namespace HAP.Web.API
     public class BookingSystem
     {
         [OperationContract]
+        [WebInvoke(Method="POST", UriTemplate="/Search", BodyStyle=WebMessageBodyStyle.WrappedRequest, RequestFormat=WebMessageFormat.Json, ResponseFormat=WebMessageFormat.Json)]
+        public JSONBooking[] Search(string Query)
+        {
+            List<JSONBooking> bookings = new List<JSONBooking>();
+            XmlDocument doc = HAP.Data.BookingSystem.BookingSystem.BookingsDoc;
+            foreach (XmlNode n in doc.SelectNodes("/Bookings/Booking"))
+            {
+                Booking b = new Booking(n, false);
+                if (b.Username.ToLower().StartsWith(Query.ToLower()))
+                    bookings.Add(new JSONBooking(b));
+            }
+            foreach (Booking sb in HAP.Data.BookingSystem.BookingSystem.StaticBookings.Values)
+                if (sb.Username.ToLower().StartsWith(Query.ToLower()))
+                    bookings.Add(new JSONBooking(sb));
+            bookings.Sort();
+            return bookings.ToArray();
+        }
+
+        [OperationContract]
         [WebInvoke(Method = "DELETE", UriTemplate = "/Booking/{Date}", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         public JSONBooking[] RemoveBooking(string Date, JSONBooking booking)
         {
@@ -184,7 +203,7 @@ namespace HAP.Web.API
                 XmlDocument doc = HAP.Data.BookingSystem.BookingSystem.BookingsDoc;
                 int max = hapConfig.Current.BookingSystem.MaxBookingsPerWeek;
                 foreach (AdvancedBookingRight right in HAP.Data.BookingSystem.BookingSystem.BookingRights)
-                    if (right.Username == Username)
+                    if (right.Username.ToLower() == Username.ToLower())
                         max = right.Numperweek;
                 int x = 0;
                 foreach (DateTime d in getWeekDates(DateTime.Parse(Date)))
@@ -241,6 +260,7 @@ namespace HAP.Web.API
         {
             foreach (string s in hapConfig.Current.BookingSystem.Admins.Split(new char[] { ',' }))
                 if (s.Trim().ToLower().Equals(Username.ToLower())) return true;
+                else if (HttpContext.Current.User.IsInRole(s.Trim())) return true;
             return false;
         }
     }

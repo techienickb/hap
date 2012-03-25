@@ -124,12 +124,11 @@ namespace HAP.Web.BookingSystem
                 int maxbookings = config.BookingSystem.MaxBookingsPerWeek;
                 if (User.IsInRole("Domain Admins") || isBSAdmin) maxbookings = -1;
                 foreach (AdvancedBookingRight right in HAP.Data.BookingSystem.BookingSystem.BookingRights)
-                    if (right.Username == User.Identity.Name)
+                    if (right.Username.ToLower() == User.Identity.Name.ToLower())
                     {
                         maxday = 7 * right.Weeksahead;
                         maxbookings = right.Numperweek;
                     }
-
 
                 Terms terms = new Terms();
                 if (Terms.getTerm(DateTime.Now).Name == null)
@@ -149,8 +148,7 @@ namespace HAP.Web.BookingSystem
                     for (int x = 0; x < terms.Count; x++)
                         if (terms[x].Equals(term)) y = x + 1;
                     if (y == terms.Count) y = terms.Count - 1;
-                    if (DateTime.Now.AddDays(maxday) < terms[y].StartDate && DateTime.Now.AddDays(maxday) > term.EndDate)
-                        maxday += (terms[y].StartDate - DateTime.Now).Days - 7;
+
                     int dow = 0;
                     switch (DateTime.Now.DayOfWeek)
                     {
@@ -163,10 +161,18 @@ namespace HAP.Web.BookingSystem
                         case DayOfWeek.Sunday: maxday += 1; dow = 1; break;
                     }
 
-                    if (DateTime.Now.AddDays(dow) >= term.HalfTerm.StartDate && DateTime.Now.AddDays(dow) <= term.HalfTerm.EndDate)
-                        maxday += 7;
-                    if (DateTime.Now.AddDays(7 + dow) >= term.HalfTerm.StartDate && DateTime.Now.AddDays(7 + dow) <= term.HalfTerm.EndDate)
-                        maxday += 7;
+                    for (int x = 1; x < maxday / 7; x++)
+                        if (DateTime.Now.AddDays(dow).AddDays(7 * x) < terms[y].StartDate && DateTime.Now.AddDays(dow).AddDays(7 * x) > term.EndDate)
+                        {
+                            maxday += (terms[y].StartDate - DateTime.Now.AddDays(dow)).Days - (7 * x);
+                            break;
+                        }
+
+                    if (DateTime.Now.AddDays(dow) >= term.HalfTerm.StartDate && DateTime.Now.AddDays(dow) <= term.HalfTerm.EndDate) maxday += 7;
+
+                    for (int x = 1; x < maxday / 7; x++)
+                        if (DateTime.Now.AddDays((7 * x) + dow) >= term.HalfTerm.StartDate && DateTime.Now.AddDays(7 + dow) <= term.HalfTerm.EndDate)
+                            maxday += 7;
                 }
 
                 List<string> ss = new List<string>();
@@ -188,6 +194,7 @@ namespace HAP.Web.BookingSystem
             {
                 foreach (string s in config.BookingSystem.Admins.Split(new char[] { ',' }))
                     if (s.Trim().ToLower().Equals(ADUser.UserName.ToLower())) return true;
+                    else if (User.IsInRole(s.Trim())) return true;
                 return false;
             }
         }

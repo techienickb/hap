@@ -44,6 +44,9 @@ body.bookingdisplay, body.bookingdisplay form { padding: 0; margin: 0; width: 10
 #bookingday .body .col a.admin:hover, #bookingday .body .col a.bookie:hover, #bookingday .body .col a.free:hover { background-color: #dedede; }
 #bookingday .body .col a.admin:active, #bookingday .body .col a.bookie:hover, #bookingday .body .col a.free:hove { background-color: #ccc; }
 #datepicker .ui-corner-all { border-radius: 0; }
+#searchresults .date { width: 100px; display:inline-block; }
+#searchresults span { min-width: 60px; display: inline-block; }
+#searchresults .newline { border-top: solid 1px #ddd; }
 
 
 /*

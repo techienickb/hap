@@ -81,7 +81,7 @@ namespace HAP.Data.BookingSystem
             return new Booking(DayNumber, lesson, room, "FREE", "Not Booked");
         }
 
-        public Dictionary<BookingKey, Booking> StaticBookings
+        public static Dictionary<BookingKey, Booking> StaticBookings
         {
             get
             {
