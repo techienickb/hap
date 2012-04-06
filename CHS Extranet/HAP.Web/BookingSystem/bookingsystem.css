@@ -1,12 +1,4 @@
-﻿#access { display: none; }
-#container {
-	float: none;
-	margin: 0;
-	width: 100%;
-}
-#content {
-	margin: 0; position: relative;
-}
+﻿
 #daylist { border: solid 1px #7da2ce; overflow: auto; border-bottom: 0; width: 912px; margin: 0; font-size: 13px; }
 #daylist h1, .popupContent h1 { height: 30px; text-align: center; background: url(../images/bar.gif) repeat-x; line-height: 30px; color: #1f3976; font-size: 15px; margin: 0; font-weight: normal; padding: 0; overflow: hidden; }
 #daylist h1 a { display: block; margin: 4px; line-height: 21px; height: 21px; text-decoration: none; }

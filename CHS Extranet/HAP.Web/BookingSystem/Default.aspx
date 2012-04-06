@@ -86,7 +86,7 @@
 				<div style="float: left;">
 					<label for="bflroom">Room Required In: </label><input type="text" id="bflroom" style="width: 60px" /> <span id="bflroomerror" style="display: none;">*</span>
 					<label for="bflheadphones">Headphones?: </label><input type="checkbox" id="bflheadphones" />
-					<label for="bflquant">Quantity: </label>
+					<label for="bflquant">Quantity:&nbsp;</label>
 				</div>
 				<div id="bflquant" style="float: left;">
 					<input type="radio" name="bflquant" id="bflquant-16" value="16" /><label for="bflquant-16">16</label>

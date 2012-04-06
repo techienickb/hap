@@ -69,7 +69,7 @@ namespace HAP.Web.BookingSystem
                                 else if (date.DayOfWeek == DayOfWeek.Sunday) date = date.AddDays(1);
                             }
                         }
-                    if (!found) for (int i = 0; i < terms.Count - 2; i++)
+                    if (!found) for (int i = 0; i < terms.Count - 1; i++)
                         {
                             if (date > terms[i].EndDate && date < terms[i + 1].StartDate)
                                 date = terms[i + 1].StartDate;
