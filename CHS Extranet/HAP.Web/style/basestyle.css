@@ -6,7 +6,8 @@
 .tiles a:hover { background-color: #3286C1; border-color: #3286C1; }
 .tiles a:active { background-color: #004577; border-color: #004577; }
 
-html, #hapContent {font-family: Segoe UI, Tahoma; font-size: 13px; }
+#form1, #hapContent, .ui-widget {font-family: Segoe UI, Tahoma; font-size: 13px; }
+#hapContent input, #hapContent select, #hapContent input { font-size: 13px; }
 a img { border: 0; }
 
 input[type=text], input[type=password] { border: solid 2px #d9d9d9; background: #fff; }

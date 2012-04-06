@@ -6,6 +6,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head runat="server">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
         <title>Home Access Plus+ - Setup</title>
         <link rel="shortcut icon" href="~/favicon.ico" />
         <script src="Scripts/jquery-1.7.1.min.js" type="text/javascript"></script>
@@ -1395,7 +1396,7 @@
                         function editgroup(e) {
                             $("#groupName").val($("#linkgroup" + e + " > h4 > .lgName").html());
                             $("#groupShowTo").val($("#linkgroup" + e + " > h4 > .lgST").html());
-                            $("#groupSubTitle").valueOf($("#linkgroup" + e + " > p").html());
+                            $("#groupSubTitle").val($("#linkgroup" + e + " > p").html());
                             tempe = e;
                             $("#linkgroupEditor").dialog({
                                 autoOpen: true,

@@ -1,13 +1,6 @@
-﻿#access { display: none; }
-#container {
-	float: none;
-	margin: 0;
-	width: 100%;
-}
+﻿#access { position: absolute; }
 body.bookingdisplay, body.bookingdisplay form { padding: 0; margin: 0; width: 100%; height: 100%; }
-#content {
-	margin: 0; padding: 0;
-}
+
 #toolbar { position: absolute; height: 25px; vertical-align: top!important; line-height: 25px; overflow: hidden; }
 #Tree { position: absolute; width: 188px; margin-right: 3px; font-size: 11px; overflow: auto; height: 410px; border: 0; }
 .dynatree-container { margin: 0; }
@@ -69,7 +62,7 @@ a.dynatree-title:active { border-color: #333; background: #333; color: #fff; }
 #MyFiles a.Selected:active .label { color: #000; }
 #MyFiles a.Selected:active .type { color: #666; }
 
-#Views { position: absolute; border-width: 1px; border-style: solid; float: right; overflow: hidden; white-space: nowrap; width: 100px; z-index: 1000; }
+#Views { position: absolute; border-width: 1px; border-style: solid; overflow: hidden; white-space: nowrap; width: 100px; z-index: 1000; }
 #Views button { display: block; width: 100px;  }
 
 button.back span { top: 4px; }
@@ -106,3 +99,5 @@ button.back span { top: 4px; }
 
 button { overflow: hidden; text-overflow: hidden; }
 #maintools button, #maintools input { margin-right: 3px; }
+
+#jqContextMenu { font-size: 13px; }

@@ -21,7 +21,7 @@ namespace HAP.AD
 
         public User(string username)
         {
-            this.UserName = username;
+            this.UserName = username.Contains('\\') ? username.Remove(0, username.IndexOf('\\')) : username;
             this.DomainName = HAP.Web.Configuration.hapConfig.Current.AD.UPN;
             UserPrincipal userp = UserPa;
             this.UserName = userp.SamAccountName;
@@ -40,7 +40,7 @@ namespace HAP.AD
         
         public void Authenticate(string username, string password)
         {
-            this.UserName = username;
+            this.UserName = username.Contains('\\') ? username.Remove(0, username.IndexOf('\\')) : username;
             this.Password = password;
             this.DomainName = HAP.Web.Configuration.hapConfig.Current.AD.UPN;
             UserPrincipal userp = HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Web.Configuration.AuthMode.Forms ? UserP : UserPa;

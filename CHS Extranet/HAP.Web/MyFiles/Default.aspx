@@ -660,6 +660,7 @@
 								if (SelectedItems()[0].Data.Extension != ".ppt" && SelectedItems()[0].Data.Extension != ".pptx" && SelectedItems()[0].Data.Extension != ".pps" && SelectedItems()[0].Data.Extension != ".doc" && SelectedItems()[0].Data.Extension != ".rtf")
 									$("#con-google", menu).remove();
 							}
+							if (SelectedItems()[0].Data.Extension != ".zip") $("#con-unzip", menu).remove();
 						}
 						return menu;
 					},
@@ -1219,7 +1220,7 @@
 			$("#view").click(function () {
 				if (showView == 0) {
 					showView = 1;
-					$("#Views").animate({ height: 'toggle' });
+					$("#Views").animate({ height: 'toggle' }).css("left", $("#view").position().left);
 				}
 				return false;
 			});
@@ -1297,7 +1298,7 @@
 			$("#toolbar").css("width", $("#myfilescontent").width() - 10).css("top", $("#myfilescontent").offset().top);
 			$("#Tree").css("top", $("#myfilescontent").offset().top + $("#toolbar").height() + 10);
 			$("#MyFiles").css("margin-left", $("#Tree").width() + 5).css("padding-top", $("#toolbar").height() + 10);
-			$("#Views").css("top", $("#view").offset().top + $("#view").parent().height()).css("left", $("#view").offset().left - ($("#Views").width() - $("#view").width()) + 1);
+			$("#Views").css("top", $("#view").offset().top + $("#view").parent().height());
 			$("#MyFilesHeaddings").css("margin-left", $("#Tree").width() + 5).css("top", $("#myfilescontent").offset().top + $("#toolbar").height() + 10);
 			$(window).scroll(function (event) {
 				if ($(this).scrollTop() >= $("#myfilesheader").offset().top + $("#myfilesheader").height()) {
