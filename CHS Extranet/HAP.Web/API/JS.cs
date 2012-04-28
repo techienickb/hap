@@ -38,6 +38,8 @@ namespace HAP.Web.API
             }
             sr.Close();
             s = s.Replace("root: \"/hap/\",", "root: \"" + VirtualPathUtility.ToAbsolute("~/") + "\",");
+            if (HttpContext.Current.User.Identity.IsAuthenticated)
+                s = s.Replace("user: \"\",", "user: \"" + HttpContext.Current.User.Identity.Name + "\",");
             s = s.Replace("\t", "").Replace("  ", " ").Replace("  ", " ");
             s = s.Replace("localization: []", "localization: [" + string.Join(", ", BuildLocalization(_locals.SelectSingleNode("/hapStrings"), "")) + "]");
             context.Response.Write(s);

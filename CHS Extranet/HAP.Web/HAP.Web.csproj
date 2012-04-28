@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -20,6 +21,15 @@
     <TargetFrameworkProfile />
     <SilverlightApplicationList>{9DCDBB22-ECEB-4220-A0FE-E786189F0B08}|..\HAP.Silverlight\HAP.Silverlight.csproj|ClientBin|False,{E1C14EF8-AD23-48F5-9EFF-9A2F4A07CCC9}|..\HAP.Silverlight.Browser\HAP.Silverlight.Browser.csproj|ClientBin|False</SilverlightApplicationList>
     <UseIISExpress>false</UseIISExpress>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -421,6 +431,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="API\BookingSystem.cs" />
+    <Compile Include="API\LiveTiles.cs" />
     <Compile Include="API\MyFiles.Permalink.cs" />
     <Compile Include="API\JS.cs" />
     <Compile Include="API\Help.cs" />
@@ -742,6 +753,10 @@
       <Project>{1F2CFBBF-1C06-4CAC-BB4B-5551BF6A398C}</Project>
       <Name>HAP.Web.Configuration</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HAP.Web.LiveTiles\HAP.Web.LiveTiles.csproj">
+      <Project>{02914446-48ef-4af0-b4e7-016d668e5350}</Project>
+      <Name>HAP.Web.LiveTiles</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HAP.Web.Logging\HAP.Web.Logging.csproj">
       <Project>{3733B9AC-7559-4ABF-AC72-FB383030326A}</Project>
       <Name>HAP.Web.Logging</Name>
@@ -790,8 +805,13 @@
     <Content Include="images\icons\knownicons.xml" />
     <None Include="MyComputerSLSplash.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </None>
     <Content Include="style\Web.config" />
+    <None Include="Properties\PublishProfiles\Pack.pubxml" />
+    <None Include="Properties\PublishProfiles\Profile1.pubxml" />
+    <None Include="Properties\PublishProfiles\Profile2.pubxml" />
     <None Include="Thanks.rtf" />
     <Content Include="Tracker\Web.config" />
     <Content Include="UserCard\Web.config" />
@@ -800,8 +820,13 @@
     <Folder Include="App_Data\homework\" />
     <Folder Include="App_Data\temp\" />
   </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
