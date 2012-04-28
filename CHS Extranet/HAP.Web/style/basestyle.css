@@ -39,11 +39,19 @@ input[type=text], input[type=password] { border: solid 2px #d9d9d9; background: 
 #loginform .base { padding-top: 60px; padding-left: 60px; padding-bottom: 0; }
 #loginform .copyright { padding-left: 60px; font-size: 11px; }
 
-#HomeButtons { margin-top: 6px; }
-#HomeButtons, #HomeButtons div div { padding-bottom: 1px; overflow: hidden; }
-#HomeButtons div { }
-#HomeButtons div div { margin: 0; padding: 0; border-top: 0; position: static; }
-#HomeButtons h1 { font-weight: lighter; }
+#HomeButtonsContainer { position: relative; clear: both; }
+#HomeButtonsOutter { overflow: hidden; padding: 0 20px; }
+#HomeButtons { margin-top: 6px; overflow: hidden; }
+#HomeButtons .panel { float: left; }
+#HomeButtonsHeader h1 { font-weight: lighter; float: left; margin-right: 10px; }
+#HomeButtonsHeader h1.active { font-weight: normal; }
+#HomeButtonsHeader h1 a { text-decoration: none; color: #666; }
+#HomeButtonsHeader h1 a:hover { color: #222; }
+#HomeButtonsHeader h1.active a { color: #000; }
+#HomeButtonsHeader { clear: both; overflow: hidden; }
+#leftscroll, #rightscoll { position: absolute; top: 0; bottom: 0; font-size: 30px; width: 20px; background: #fff; }
+#rightscoll { right: 0; }
+#leftscroll { left: 0; }
 
 h1.Announcement { background: #fceb80; font-family: Segoe Print, Comic Sans MS; font-size: 12px; color: Red; border: solid 1px #fff; border-radius: 8px; -moz-border-radius: 8px; padding: 4px 10px; }
 h1.Announcement b { font-size: 16px; }
@@ -52,8 +60,25 @@ h1.Announcement b { font-size: 16px; }
 #EditAnn a.EditAnnLink img { vertical-align: middle; text-decoration: none; height: 48px; }
 
 #HomeButtons a { float: left; margin: 3px 3px 0 0; padding: 8px; height: 108px; width: 108px; font-size: 11px; text-decoration: none; }
-#HomeButtons a span { display: block; text-align: center; width: 108px; height: 90px; line-height: 90px; vertical-align: middle; background: transparent no-repeat center center; }
+#HomeButtons a span { display: block; text-align: center; width: 108px; height: 90px; vertical-align: middle; overflow: hidden; }
+#HomeButtons a span i { float: left; width: 108px; font-style: normal; height: 90px; vertical-align: middle; background: transparent no-repeat center center; }
+#HomeButtons a span label { float: left; cursor: pointer; line-height: 80px; font-size: 32px; padding-left: 5px; }
 #HomeButtons a:hover { text-decoration: none; }
+#HomeButtons a.large, #HomeButtons a.large span, #HomeButtons a.large span i { width: 235px; }
+
+#HomeButtons .appointment span { text-align: left; overflow: visible; }
+#HomeButtons .appointment span i { text-transform: none; font-style: normal; overflow: hidden; }
+#HomeButtons .appointment span label { float: right; line-height: normal; font-size: 11px; height: 24px; position: relative; margin-top: -14px; padding: 0; }
+#HomeButtons .appointment span label b { font-size: 24px; font-weight: normal; }
+
+#HomeButtons .me span label { line-height: normal; font-size: 11px; padding: 0; }
+#HomeButtons .me span { text-align: left; }
+#HomeButtons .me .progress { display: block; background: #fff; height: 14px; overflow: hidden; white-space: nowrap; position: relative; }
+#HomeButtons .me .progress u { background: green; display: block; height: 12px; margin: 1px 1px 0 1px; }
+#HomeButtons .me .progress label { cursor: pointer; position: absolute; display: block; height: 12px; line-height: 12px; font-size: 11px; color: #ccc; top: 0; left: 0; right: 0; text-align: center; }
+
+#me-password h1 { font-weight: normal; font-size: 15px; }
+#me-password label { display: inline-block; width: 120px; text-align: right; padding-right: 5px; }
 
 #hometabs { height: 200px; border-radius: 0; }
 #homepageiwt { float: right; margin-left: 6px; padding: 0; height: 202px; width: 264px; overflow: hidden; }

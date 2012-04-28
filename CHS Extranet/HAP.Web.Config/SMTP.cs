@@ -67,5 +67,10 @@ namespace HAP.Web.Configuration
             get { return el.GetAttribute("fromaddress"); }
             set { el.SetAttribute("fromaddress", value); }
         }
+        public string Exchange
+        {
+            get { if (el.GetAttribute("exchange") == null) return ""; return el.GetAttribute("exchange"); }
+            set { el.SetAttribute("exchange", value); }
+        }
     }
 }

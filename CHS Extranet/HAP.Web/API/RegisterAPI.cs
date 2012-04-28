@@ -20,6 +20,7 @@ namespace HAP.Web.API
             RouteTable.Routes.Add(new Route("api/myfiles-upload/{drive}/{*path}", new MyFiles_UploadHandler()));
             RouteTable.Routes.Add(new Route("api/myfiles-permalink/{drive}/{*path}", new MyFiles_PermaLinkHandler()));
             WebServiceHostFactory factory = new WebServiceHostFactory();
+            RouteTable.Routes.Add(new ServiceRoute("api/livetiles", factory, typeof(LiveTiles)));
             RouteTable.Routes.Add(new ServiceRoute("api/setup", factory, typeof(setup)));
             RouteTable.Routes.Add(new ServiceRoute("api/bookingsystem", factory, typeof(BookingSystem)));
             RouteTable.Routes.Add(new ServiceRoute("api/helpdesk", factory, typeof(HelpDesk)));
