@@ -9,9 +9,9 @@ if (hap == null)
                     if (xhr.responseText.match(/\<!doctype html\>/gi)) window.location.reload();
                     else {
                         console.log(xhr.responseXML.documentElement.children[2]);
-                        alert(xhr.responseXML.documentElement.children[1].children[0].textContent);
+                        if (xhr.responseXML.documentElement.children[1].children[0].textContent != "") alert(xhr.responseXML.documentElement.children[1].children[0].textContent);
                     }
-                } catch (e) { alert(thrownError); }
+                } catch (e) { if (thrownError != "") alert(thrownError); }
             },
             resolveUrl: function (virtual) {
                 return virtual.replace(/~\//g, hap.root);
