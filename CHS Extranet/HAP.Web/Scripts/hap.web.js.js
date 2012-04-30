@@ -184,7 +184,7 @@ if (hap == null)
                 $.ajax({
                     url: "api/livetiles/uptime/" + server, type: 'GET', context: con, dataType: "json", contentType: 'application/JSON', success: function (data) {
                         $("#" + this.tile + " span i").html(data);
-                        setTimeout("hap.livetiles.UpdateUptime('" + this.tile + "', '" + this.server + "');", 1000);
+                        setTimeout("hap.livetiles.UpdateUptime('" + this.tile + "', '" + this.server + "');", 5000);
                     }, error: hap.common.jsonError
                 });
             }
