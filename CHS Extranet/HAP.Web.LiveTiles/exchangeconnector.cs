@@ -25,7 +25,7 @@ namespace HAP.Web.LiveTiles
             HttpCookie token = HttpContext.Current.Request.Cookies["token"];
             if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
  
-            ExchangeService service = new ExchangeService();
+            ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
             service.Url = new Uri("https://" + HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange + "/ews/exchange.asmx");
             service.Credentials = new NetworkCredential(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value), HAP.Web.Configuration.hapConfig.Current.AD.UPN);
             Folder inbox = Folder.Bind(service, WellKnownFolderName.Inbox);
@@ -47,7 +47,7 @@ namespace HAP.Web.LiveTiles
             HttpCookie token = HttpContext.Current.Request.Cookies["token"];
             if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
 
-            ExchangeService service = new ExchangeService();
+            ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
             service.Url = new Uri("https://" + HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange + "/ews/exchange.asmx");
             service.Credentials = new NetworkCredential(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value), HAP.Web.Configuration.hapConfig.Current.AD.UPN);
             List<string> s = new List<string>();
