@@ -22,9 +22,6 @@ namespace HAP.Web
             this.SectionTitle = "Home";
         }
 
-        protected string Department { get; set; }
-        protected decimal space { get; set; }
-
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!Page.IsPostBack)
@@ -59,12 +56,6 @@ namespace HAP.Web
                 s.Add(s1);
             }
             return string.Join(", \n", s.ToArray());
-        }
-
-        internal static class Win32
-        {
-            [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-            internal static extern bool GetDiskFreeSpaceEx(string drive, out long freeBytesForUser, out long totalBytes, out long freeBytes);
         }
 
         protected void ChangePass_Click(object sender, EventArgs e)
