@@ -1,11 +1,6 @@
 ﻿<%@ Page Title="Crickhowell High School - IT - Home Access Plus+" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="HAP.Web.Default" %>
 <%@ Register TagName="announcement" TagPrefix="hap" Src="~/Controls/Announcement.ascx" %>
 <%@ Register TagName="version" TagPrefix="hap" Src="~/Controls/UpdateChecker.ascx" %>
-<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
-
-<asp:Content runat="server" ContentPlaceHolderID="head">
-    <link href="style/mycomputer.css" rel="stylesheet" type="text/css" />
-</asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
     
@@ -42,7 +37,7 @@
         </div>
         <script type="text/javascript">
             var scrollpos = 0;
-            $("#HomeButtons").css("width", ($("#HomeButtons > div").length * $("#HomeButtonsOutter").width()) + "px");
+            $("#HomeButtons").css("width", (($("#HomeButtons > div").length * $("#HomeButtonsOutter").width()) + 200) + "px");
             if ($("#HomeButtons > div").length == 1) $("#rightscoll, #leftscroll").hide();
             $("#HomeButtons .panel").css("width", $("#HomeButtonsOutter").width() + "px");
             $("#leftscroll").click(function () {
@@ -63,6 +58,11 @@
                 }
                 return false;
             });
+            $(window).resize(function() {
+                $("#HomeButtons").css("width", (($("#HomeButtons > div").length * $("#HomeButtonsOutter").width()) + 200) + "px");
+                $("#HomeButtons .panel").css("width", $("#HomeButtonsOutter").width() + "px");
+                $("#HomeButtonsOutter").animate({ scrollLeft: (scrollpos * ($("#HomeButtonsOutter").width() - 20) + (scrollpos * 20)) });
+            });
             $(document).ready(function () {
                 $("#HomeButtonsHeader h1 a").click(function () {
                     scrollpos = $(this).parent().index();
@@ -75,7 +75,6 @@
                 $("#HomeButtonsHeader h1:first").addClass("active");
                 $('input[type=submit]').button();
                 $("#rightscoll, #leftscroll").css("height", $("#HomeButtonsOutter").height() + "px").css("line-height", $("#HomeButtonsOutter").height() + "px");
-                
             });
         </script>
     </div>
