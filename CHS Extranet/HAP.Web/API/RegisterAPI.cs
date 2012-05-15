@@ -13,6 +13,7 @@ namespace HAP.Web.API
         {
             RouteTable.Routes.Add(new Route("api/test", new TestHandler()));
             RouteTable.Routes.Add(new Route("api/js", new JSHandler()));
+            RouteTable.Routes.Add(new Route("api/tiles/icons/{width}/{height}/{*path}", new TileIconHandler()));
             RouteTable.Routes.Add(new Route("api/mycomputer/check/{*path}", new UploadCheckerHandler()));
             RouteTable.Routes.Add(new Route("api/mycomputer/thumb/{*path}", new ThumbsHandler()));
             RouteTable.Routes.Add(new Route("api/mycomputer/{ext}.ico", new IconHandler()));

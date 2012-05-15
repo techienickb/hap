@@ -19,6 +19,7 @@ using System.Drawing.Imaging;
 using HAP.Data.ComputerBrowser;
 using System.Drawing.Drawing2D;
 using System.Web.SessionState;
+using HAP.AD;
 
 namespace HAP.Web.API
 {
@@ -33,9 +34,9 @@ namespace HAP.Web.API
         }
     }
 
-    public class Thumbs : IHttpHandler, IRequiresSessionState
+    public class Thumbs : IHttpHandler
     {
-        public bool IsReusable { get { return true; } }
+        public bool IsReusable { get { return false; } }
 
         public Thumbs(string path, string drive)
         {
@@ -47,8 +48,15 @@ namespace HAP.Web.API
 
         public void ProcessRequest(HttpContext context)
         {
-            HAP.AD.User u = Membership.GetUser() as HAP.AD.User;
-            u.ImpersonateContained();
+            hapConfig config = hapConfig.Current;
+            User user = new User();
+            if (config.AD.AuthenticationMode == Web.Configuration.AuthMode.Forms)
+            {
+                HttpCookie token = HttpContext.Current.Request.Cookies["token"];
+                if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
+                user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
+            }
+            user.ImpersonateContained();
             try
             {
                 Context = context;
@@ -85,7 +93,7 @@ namespace HAP.Web.API
                 m.WriteTo(context.Response.OutputStream);
                 context.Response.Flush();
                 file = null;
-                u.EndContainedImpersonate();
+                user.EndContainedImpersonate();
             }
             catch
             {
@@ -93,7 +101,7 @@ namespace HAP.Web.API
                 string path = Converter.DriveToUNC(RoutingPath.Replace('^', '&'), RoutingDrive, out unc, ((HAP.AD.User)Membership.GetUser()));
                 FileInfo file = new FileInfo(path);
                 string Icon = HAP.Data.MyFiles.File.ParseForImage(file);
-                u.EndContainedImpersonate();
+                user.EndContainedImpersonate();
                 if (Icon.EndsWith(".ico")) context.Response.Redirect(VirtualPathUtility.ToAbsolute("~/api/mycomputer/" + Icon));
                 else context.Response.Redirect(VirtualPathUtility.ToAbsolute("~/images/icons/" + Icon));
             }
