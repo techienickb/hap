@@ -23,7 +23,7 @@ namespace HAP.Web.API
 
     public class Test : IHttpHandler, IRequiresSessionState
     {
-        public bool IsReusable { get { return true; } }
+        public bool IsReusable { get { return false; } }
 
         public void ProcessRequest(HttpContext context)
         {

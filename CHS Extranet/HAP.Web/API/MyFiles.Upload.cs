@@ -10,6 +10,7 @@ using System.IO;
 using HAP.Data.ComputerBrowser;
 using HAP.Web.Configuration;
 using System.Xml;
+using HAP.AD;
 
 namespace HAP.Web.API
 {
@@ -38,7 +39,17 @@ namespace HAP.Web.API
         {
             get
             {
-                if (_ADUser == null) _ADUser = ((HAP.AD.User)Membership.GetUser());
+                if (_ADUser == null)
+                {
+                    hapConfig config = hapConfig.Current;
+                    _ADUser = new User();
+                    if (config.AD.AuthenticationMode == Web.Configuration.AuthMode.Forms)
+                    {
+                        HttpCookie token = HttpContext.Current.Request.Cookies["token"];
+                        if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
+                        _ADUser.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
+                    }
+                }
                 return _ADUser;
             }
         }

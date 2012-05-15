@@ -30,7 +30,7 @@ namespace HAP.Web.API
 
     public class Icon : IHttpHandler
     {
-        public bool IsReusable { get { return true; } }
+        public bool IsReusable { get { return false; } }
 
         public Icon(string extension)
         {
