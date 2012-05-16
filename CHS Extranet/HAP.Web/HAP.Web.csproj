@@ -189,6 +189,7 @@
     <Content Include="images\icons\metro\Applications\Aimp.png" />
     <Content Include="images\icons\metro\Applications\AppStore.png" />
     <Content Include="images\icons\metro\Applications\AppStorealt.png" />
+    <Content Include="images\icons\metro\Applications\Audacity.png" />
     <Content Include="images\icons\metro\Applications\Bluetooth.png" />
     <Content Include="images\icons\metro\Applications\Bluetoothalt.png" />
     <Content Include="images\icons\metro\Applications\Calculator.png" />
