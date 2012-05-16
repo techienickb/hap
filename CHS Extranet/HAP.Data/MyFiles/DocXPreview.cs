@@ -6,7 +6,7 @@ using System.Configuration;
 using System.DirectoryServices.AccountManagement;
 using System.Security.Authentication;
 using HAP.Data.MyFiles.WordVisualizer.Core.Extensions;
-using Microsoft.Office.DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Packaging;
 using HAP.Data.MyFiles.WordVisualizer.Core;
 using System.IO;
 using System.Xml;
@@ -49,9 +49,6 @@ namespace HAP.Data.MyFiles
         public const string RelationshipsNamespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships";
 
         #endregion
-
-        private string path;
-        private HAP.Web.Configuration.hapConfig config;
 
         public static string Render(string Path)
         {

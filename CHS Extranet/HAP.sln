@@ -3,6 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 11
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{7F80432C-70D9-4AAA-9FE3-6398471FC04D}"
 	ProjectSection(SolutionItems) = preProject
+		Binaries\DocumentFormat.OpenXml.dll = Binaries\DocumentFormat.OpenXml.dll
 		Binaries\Google.GData.AccessControl.DLL = Binaries\Google.GData.AccessControl.DLL
 		Binaries\Google.GData.Client.dll = Binaries\Google.GData.Client.dll
 		Binaries\Google.GData.Documents.dll = Binaries\Google.GData.Documents.dll
