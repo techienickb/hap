@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Office.DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Packaging;
 using System.Xml;
 
 namespace HAP.Data.MyFiles.WordVisualizer.Core
