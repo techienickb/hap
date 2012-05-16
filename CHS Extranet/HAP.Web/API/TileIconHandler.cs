@@ -35,12 +35,12 @@ namespace HAP.Web.API
         public TileIcon(Size size, string icon)
         {
             Size = size;
-            Icon = icon;
+            Icon = "~/" + icon;
         }
         public TileIcon(string width, string height, string icon)
         {
             Size = new Size(int.Parse(width), int.Parse(height));
-            Icon = icon;
+            Icon = "~/" + icon;
         }
         public string Icon { get; set; }
         public Size Size { get; set; }
@@ -49,7 +49,7 @@ namespace HAP.Web.API
         {
             context.Response.ContentType = "image/png";
             MemoryStream m = new MemoryStream();
-            Image.FromFile(context.Server.MapPath(HAP.Web.LiveTiles.IconCache.GetIcon(Icon, Size))).Save(m, ImageFormat.Png);
+            Image.FromFile(HAP.Web.LiveTiles.IconCache.GetIcon(Icon, Size)).Save(m, ImageFormat.Png);
             m.WriteTo(context.Response.OutputStream);
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Web;
 using System.Xml;
@@ -74,9 +75,14 @@ namespace HAP.Web.LiveTiles
         public static string GetColour(string icon)
         {
             if (ColourCache.ContainsKey(icon)) return ColourCache[icon];
-            Bitmap b = new Bitmap(HttpContext.Current.Server.MapPath(icon));
-            Save(icon, System.Drawing.ColorTranslator.ToHtml(b.GetPixel(0, 0)));
-            return System.Drawing.ColorTranslator.ToHtml(b.GetPixel(0, 0));
+            Bitmap b;
+            try
+            {
+                b = new Bitmap(HttpContext.Current.Server.MapPath(icon));
+            }
+            catch (Exception e) { throw new Exception(icon, e); }
+            Save(icon, (b.GetPixel(1, 1).A.ToString() == "6" || b.GetPixel(1, 1).A.ToString() == "0" ? "" : System.Drawing.ColorTranslator.ToHtml(b.GetPixel(1, 1))));
+            return (b.GetPixel(1, 1).A.ToString() == "6" || b.GetPixel(1, 1).A.ToString() == "0" ? "" : System.Drawing.ColorTranslator.ToHtml(b.GetPixel(1, 1)));
         }
 
         public static string GetIcon(string icon, Size size)
@@ -84,7 +90,9 @@ namespace HAP.Web.LiveTiles
             string name = icon.Remove(icon.LastIndexOf('.')).Remove(0, icon.LastIndexOf("/"));
             if (!File.Exists(HttpContext.Current.Server.MapPath("~/app_data/iconcache/" + name + "-" + size.Width + "x" + size.Height + ".png")))
             {
-                resizeImage(Image.FromFile(HttpContext.Current.Server.MapPath(icon)), size).Save(HttpContext.Current.Server.MapPath("~/app_data/iconcache/" + name + "-" + size.Width + "x" + size.Height + ".png"), System.Drawing.Imaging.ImageFormat.Png);
+                Bitmap b = new Bitmap(HttpContext.Current.Server.MapPath(icon));
+                if (b.GetPixel(1, 1) != Color.Transparent) b.MakeTransparent(b.GetPixel(1, 1));
+                resizeImage(b, size).Save(HttpContext.Current.Server.MapPath("~/app_data/iconcache/" + name + "-" + size.Width + "x" + size.Height + ".png"), System.Drawing.Imaging.ImageFormat.Png);
             }
             return HttpContext.Current.Server.MapPath("~/app_data/iconcache/" + name + "-" + size.Width + "x" + size.Height + ".png");
         }
