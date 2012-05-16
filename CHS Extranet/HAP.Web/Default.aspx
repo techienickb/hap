@@ -22,9 +22,11 @@
                                 <%#Eval("SubTitle").ToString() == "#me" ? "" : Eval("SubTitle").ToString() %>
                                 <div <%#Eval("SubTitle").ToString() == "#me" ? "class=\"me\" " : "" %>id="<%#((string)Eval("Name")).Replace(" ", "").Replace("'", "").Replace(",", "").Replace(".", "").Replace("*", "").Replace("&", "").Replace("/", "").Replace("\\", "") %>">
                                     <script type="text/javascript">
-                                        hap.livetiles.Init([
+                                        $(function () {
+                                            hap.livetiles.Init([
                                             <%#gettiles((HAP.Web.Configuration.LinkGroup)Container.DataItem)%>
-                                        ]);
+                                            ]);
+                                        });
                                     </script>
                                 </div>
                             </div>
@@ -37,33 +39,33 @@
         </div>
         <script type="text/javascript">
             var scrollpos = 0;
-            $("#HomeButtons").css("width", (($("#HomeButtons > div").length * $("#HomeButtonsOutter").width()) + 200) + "px");
-            if ($("#HomeButtons > div").length == 1) $("#rightscoll, #leftscroll").hide();
-            $("#HomeButtons .panel").css("width", $("#HomeButtonsOutter").width() + "px");
-            $("#leftscroll").click(function () {
-                if (scrollpos > 0) {
-                    scrollpos--;
-                    $("#HomeButtonsOutter").animate({ scrollLeft: (scrollpos * ($("#HomeButtonsOutter").width() - 20) + (scrollpos * 20)) });
-                    $("#HomeButtonsHeader h1").removeClass("active");
-                    $("#HomeButtonsHeader h1")[scrollpos].className = "active";
-                }
-                return false;
-            });
-            $("#rightscoll").click(function () {
-                if (scrollpos < ($("#HomeButtons > div").length - 1)) {
-                    scrollpos++;
-                    $("#HomeButtonsOutter").animate({ scrollLeft: (scrollpos * ($("#HomeButtonsOutter").width() - 20) + (scrollpos * 20)) });
-                    $("#HomeButtonsHeader h1").removeClass("active");
-                    $("#HomeButtonsHeader h1")[scrollpos].className = "active";
-                }
-                return false;
-            });
-            $(window).resize(function() {
-                $("#HomeButtons").css("width", (($("#HomeButtons > div").length * $("#HomeButtonsOutter").width()) + 200) + "px");
-                $("#HomeButtons .panel").css("width", $("#HomeButtonsOutter").width() + "px");
-                $("#HomeButtonsOutter").animate({ scrollLeft: (scrollpos * ($("#HomeButtonsOutter").width() - 20) + (scrollpos * 20)) });
-            });
             $(document).ready(function () {
+                $("#HomeButtons").css("width", (($("#HomeButtons > div").length * $("#HomeButtonsOutter").width()) + 200) + "px");
+                if ($("#HomeButtons > div").length == 1) $("#rightscoll, #leftscroll").hide();
+                $("#HomeButtons .panel").css("width", $("#HomeButtonsOutter").width() + "px");
+                $("#leftscroll").click(function () {
+                    if (scrollpos > 0) {
+                        scrollpos--;
+                        $("#HomeButtonsOutter").animate({ scrollLeft: (scrollpos * ($("#HomeButtonsOutter").width() - 20) + (scrollpos * 20)) });
+                        $("#HomeButtonsHeader h1").removeClass("active");
+                        $("#HomeButtonsHeader h1")[scrollpos].className = "active";
+                    }
+                    return false;
+                });
+                $("#rightscoll").click(function () {
+                    if (scrollpos < ($("#HomeButtons > div").length - 1)) {
+                        scrollpos++;
+                        $("#HomeButtonsOutter").animate({ scrollLeft: (scrollpos * ($("#HomeButtonsOutter").width() - 20) + (scrollpos * 20)) });
+                        $("#HomeButtonsHeader h1").removeClass("active");
+                        $("#HomeButtonsHeader h1")[scrollpos].className = "active";
+                    }
+                    return false;
+                });
+                $(window).resize(function() {
+                    $("#HomeButtons").css("width", (($("#HomeButtons > div").length * $("#HomeButtonsOutter").width()) + 200) + "px");
+                    $("#HomeButtons .panel").css("width", $("#HomeButtonsOutter").width() + "px");
+                    $("#HomeButtonsOutter").animate({ scrollLeft: (scrollpos * ($("#HomeButtonsOutter").width() - 20) + (scrollpos * 20)) });
+                });
                 $("#HomeButtonsHeader h1 a").click(function () {
                     scrollpos = $(this).parent().index();
                     $("#HomeButtonsOutter").animate({ scrollLeft: (scrollpos * ($("#HomeButtonsOutter").width() - 20) + (scrollpos * 20)) });

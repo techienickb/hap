@@ -12,6 +12,7 @@ using System.Xml;
 using System.Runtime.InteropServices;
 using HAP.Data.HelpDesk;
 using HAP.Data.ComputerBrowser;
+using System.Drawing;
 
 namespace HAP.Web
 {
@@ -52,7 +53,8 @@ namespace HAP.Web
                 s1 += "\", Name: \"" + link.Name + "\", Url: \"" + link.Url;
                 s1 += "\", Target: \"" + link.Target;
                 s1 += "\", Description: \"" + link.Description;
-                s1 += "\", Icon: \"" + link.Icon + "\" } }";
+                s1 += "\", Icon: \"" + (string.IsNullOrEmpty(link.Icon) || link.Icon.StartsWith("#") ? "" : string.Format("api/tiles/icons/{0}/{1}/{2}", 64, 64, link.Icon.Remove(0, 2)));
+                s1 += "\", Color: \"" + (string.IsNullOrEmpty(link.Icon) || link.Icon.StartsWith("#") ? "" : HAP.Web.LiveTiles.IconCache.GetColour(link.Icon)) + "\" } }";
                 s.Add(s1);
             }
             return string.Join(", \n", s.ToArray());
