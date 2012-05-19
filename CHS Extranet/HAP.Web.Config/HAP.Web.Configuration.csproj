@@ -48,6 +48,7 @@
     <Compile Include="ad.cs" />
     <Compile Include="AnnouncementBox.cs" />
     <Compile Include="bookingsystem.cs" />
+    <Compile Include="IAPI.cs" />
     <Compile Include="QuotaServers.cs" />
     <Compile Include="DriveMapping.cs" />
     <Compile Include="DriveMappings.cs" />

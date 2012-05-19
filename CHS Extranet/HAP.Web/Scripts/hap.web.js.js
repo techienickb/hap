@@ -63,7 +63,12 @@ if (hap == null)
                         $("#" + data[i].Data.Group).append('<div id="me-password"><h1>Change My Password</h1><div><label for="me-password-current">Current Password: </label><input type="password" id="me-password-current" value="" /></div><div><label for="me-password-new">New Password: </label><input type="password" id="me-password-new" value="" /></div><div><label for="me-password-confirm">Confirm Password: </label><input type="password" id="me-password-confirm" value="" /></div><input type="button" id="me-setpassword" value="Change Password" /></div>');
                         $("#me-setpassword").button().click(function () {
                             if ($("#me-password-current").val().length == 0 || $("#me-password-new").val().length == 0 || $("#me-password-confirm").val().length == 0 || $("#me-password-confirm").val() != $("#me-password-new").val()) return false;
-                            alert("Feature Coming Soon...");
+                            $.ajax({
+                                url: "api/livetiles/me/password", type: 'POST', dataType: "json", contentType: 'application/JSON', data: '{ "oldpassword": "' + $("#me-password-current").val() + '", "newpassword": "' + $("#me-password-new").val() + '" }', success: function (data) {
+                                    alert("Password Updated");
+                                    $("#me-password-current, #me-password-new, #me-password-confirm").val("");
+                                }, error: hap.common.jsonError
+                            });
                             return false;
                         });
                     }
@@ -71,7 +76,7 @@ if (hap == null)
             LiveTile: function (type, initdata, size) {
                 this.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
                 if (type == "exchange.appointments" || type == "bookings" || type == "helpdesk") size = "large";
-                this.html = '<a id="' + this.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + (size == 'large' ? ' class="large"' : '') + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color + ';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
+                this.html = '<a id="' + this.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + (size == 'large' ? ' class="large"' : '') + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
                 $("#" + initdata.Group).append(this.html);
                 if (type == "exchange.unread") {
                     setTimeout("hap.livetiles.UpdateExchangeMail('" + this.id + "');", 100);
@@ -124,6 +129,7 @@ if (hap == null)
                         for (var i = 0; i < data.length; i++)
                             s += data[i] + "<br />";
                         $("#" + this + " span i").html(s);
+                        if (data.length > 0) $("#" + this + " span i").attr("style", "background-image: url();");
                         setTimeout("hap.livetiles.UpdateExchangeAppointments('" + this + "');", 100000);
                     }, error: hap.common.jsonError
                 });
@@ -142,7 +148,7 @@ if (hap == null)
                             var item = data[i];
                             d += (item.Date.match(/[0|1][0-9]\w\w\w/g) ? item.Date.substr(2, item.Date.length - 2) : item.Date) + ": " + item.Name + " in " + item.Room + "<br />";
                         }
-                        if (data.length == 0) $("#" + this + " span i").attr("style", "background-image: url(" + hap.common.resolveUrl('~/images/icons/white/bookingsystem.png') + ");");
+                        if (data.length > 0) $("#" + this + " span i").attr("style", "background-image: url();");
                         $('#' + this + " span i").html(d);
                         setTimeout("hap.livetiles.UpdateBookings('" + this + "');", 110000);
                     },

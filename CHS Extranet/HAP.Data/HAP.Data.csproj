@@ -40,6 +40,7 @@
     <Reference Include="DocumentFormat.OpenXml, Version=2.0.5022.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Binaries\DocumentFormat.OpenXml.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -59,13 +60,6 @@
   <ItemGroup>
     <Compile Include="ADOU.cs" />
     <Compile Include="Base64.cs" />
-    <Compile Include="BookingSystem\AdvancedBookingRight.cs" />
-    <Compile Include="BookingSystem\Booking.cs" />
-    <Compile Include="BookingSystem\BookingKey.cs" />
-    <Compile Include="BookingSystem\BookingSystem.cs" />
-    <Compile Include="BookingSystem\Template.cs" />
-    <Compile Include="BookingSystem\Templates.cs" />
-    <Compile Include="BookingSystem\Term.cs" />
     <Compile Include="ComputerBrowser\ComputerBrowserAPIItem.cs" />
     <Compile Include="ComputerBrowser\Converter.cs" />
     <Compile Include="ComputerBrowser\FileCheckResponse.cs" />
@@ -77,8 +71,6 @@
     <Compile Include="ComputerBrowser\CBFile.cs" />
     <Compile Include="ComputerBrowser\UNCPath.cs" />
     <Compile Include="ComputerBrowser\UploadFilter.cs" />
-    <Compile Include="HelpDesk\Note.cs" />
-    <Compile Include="HelpDesk\Ticket.cs" />
     <Compile Include="MyFiles\DocXPreview.cs" />
     <Compile Include="MyFiles\Drive.cs" />
     <Compile Include="MyFiles\File.cs" />

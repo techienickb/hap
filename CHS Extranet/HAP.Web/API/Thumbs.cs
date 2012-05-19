@@ -156,7 +156,6 @@ namespace HAP.Web.API
             return bmPhoto;
         }
 
-        private hapConfig config;
         private HttpContext Context;
     }
 }

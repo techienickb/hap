@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using HAP.Web.Configuration;
-using HAP.Data.BookingSystem;
+using HAP.BookingSystem;
 
 namespace HAP.Web.BookingSystem
 {
@@ -20,7 +20,7 @@ namespace HAP.Web.BookingSystem
             if (context.Request.QueryString["op"] == "getBookings")
             {
                 DateTime date = DateTime.Parse(context.Request.QueryString["d"]);
-                HAP.Data.BookingSystem.BookingSystem bs = new HAP.Data.BookingSystem.BookingSystem(date);
+                HAP.BookingSystem.BookingSystem bs = new HAP.BookingSystem.BookingSystem(date);
                 string format = "{0}:{1}:{2}:{3}";
 
                 List<string> bookings = new List<string>();

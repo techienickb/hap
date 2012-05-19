@@ -19,7 +19,8 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
-    <SilverlightApplicationList>{9DCDBB22-ECEB-4220-A0FE-E786189F0B08}|..\HAP.Silverlight\HAP.Silverlight.csproj|ClientBin|False,{E1C14EF8-AD23-48F5-9EFF-9A2F4A07CCC9}|..\HAP.Silverlight.Browser\HAP.Silverlight.Browser.csproj|ClientBin|False</SilverlightApplicationList>
+    <SilverlightApplicationList>
+    </SilverlightApplicationList>
     <UseIISExpress>false</UseIISExpress>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -69,10 +70,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>\\chs03\wwwroot\Extranet\bin\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Office.DocumentFormat.OpenXml, Version=1.0.531.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>\\chs03\wwwroot\Extranet\bin\Microsoft.Office.DocumentFormat.OpenXml.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
@@ -97,14 +94,12 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="api.asmx" />
     <Content Include="App_Data\abr.xml" />
     <Content Include="App_Data\Bookings.xml" />
     <Content Include="App_Data\BookingTemplates.xml" />
     <Content Include="App_Data\Homework.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="App_Data\iconcache\placeholder.txt" />
     <Content Include="App_Data\myfiles-users.txt" />
     <Content Include="App_Data\StaticBookings.xml" />
     <Content Include="App_Data\temp\placeholder.txt" />
@@ -125,11 +120,10 @@
     <Content Include="BookingSystem\OverviewCalendar.ascx" />
     <Content Include="BookingSystem\OverviewCalendar.aspx" />
     <Content Include="BookingSystem\WeekView.aspx" />
-    <Content Include="ClientBin\HAP.Silverlight.Browser.xap" />
-    <Content Include="ClientBin\HAP.Silverlight.xap" />
     <Content Include="Controls\Announcement.ascx" />
     <Content Include="App_Data\Announcement.xml" />
     <Content Include="App_Data\Tickets.xml" />
+    <Content Include="Controls\UpdateChecker.ascx" />
     <Content Include="HelpDesk\Default.aspx" />
     <Content Include="images\120-arrow.png" />
     <Content Include="images\ajax-loader.png" />
@@ -693,12 +687,6 @@
     <Content Include="Scripts\jquery.dataTables.js" />
     <Content Include="style\jquery.mobile-1.0.css" />
     <Content Include="style\basestyle.css" />
-    <Content Include="Controls\Delete.ascx" />
-    <Content Include="Controls\Rename.ascx" />
-    <Content Include="Controls\Unzip.ascx" />
-    <Content Include="Controls\UpdateChecker.ascx" />
-    <Content Include="Controls\Upload.ascx" />
-    <Content Include="Controls\Zip.ascx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="haplogo-icon.ico" />
@@ -762,8 +750,6 @@
     <Content Include="images\statusicons\priority_normal.png" />
     <Content Include="images\statusicons\withit.png" />
     <Content Include="images\table-head-bg.gif" />
-    <Content Include="move.aspx" />
-    <Content Include="Controls\NewFolder.ascx" />
     <Content Include="Default.aspx" />
     <Content Include="images\arrow.gif" />
     <Content Include="images\bar-a-hover.gif" />
@@ -800,12 +786,7 @@
     <Content Include="images\icons\bmp.png" />
     <Content Include="images\icons\exe.png" />
     <Content Include="images\icons\zip.png" />
-    <Content Include="mycomputer.aspx" />
     <Content Include="style\mycomputer.css" />
-    <Content Include="MyComputerSL.aspx" />
-    <Content Include="Scripts\rightclick.js" />
-    <Content Include="Scripts\viewmode.js" />
-    <Content Include="Scripts\Silverlight.js" />
     <Content Include="Tracker\Default.aspx" />
     <Content Include="Tracker\live.aspx" />
     <Content Include="Tracker\logontracker.png" />
@@ -820,30 +801,21 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="xls.aspx" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="api.asmx.cs">
-      <DependentUpon>api.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="API\BookingSystem.cs" />
+    <Compile Include="API\api.cs" />
     <Compile Include="API\TileIconHandler.cs" />
-    <Compile Include="API\LiveTiles.cs" />
     <Compile Include="API\MyFiles.Permalink.cs" />
     <Compile Include="API\JS.cs" />
     <Compile Include="API\Help.cs" />
     <Compile Include="API\Homework.cs" />
     <Compile Include="API\MyFiles.Upload.cs" />
     <Compile Include="API\Test.cs" />
-    <Compile Include="API\HelpDesk.cs" />
     <Compile Include="API\Icon.cs" />
     <Compile Include="API\MyFiles.cs" />
     <Compile Include="API\Setup.cs" />
     <Compile Include="API\Thumbs.cs" />
     <Compile Include="API\RegisterAPI.cs" />
-    <Compile Include="API\Upload.cs" />
-    <Compile Include="API\UploadChecker.cs" />
     <Compile Include="BookingSystem\admin\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -862,7 +834,6 @@
     <Compile Include="BookingSystem\Display.aspx.designer.cs">
       <DependentUpon>Display.aspx</DependentUpon>
     </Compile>
-    <Compile Include="BookingSystem\iCalGenerator.cs" />
     <Compile Include="BookingSystem\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -901,31 +872,10 @@
     </Compile>
     <Compile Include="Controls\CompressJS.cs" />
     <Compile Include="Controls\jquery.cs" />
-    <Compile Include="Controls\Delete.ascx.cs">
-      <DependentUpon>Delete.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\Delete.ascx.designer.cs">
-      <DependentUpon>Delete.ascx</DependentUpon>
-    </Compile>
     <Compile Include="Controls\HAPTag.cs" />
     <Compile Include="Controls\LocalResource.cs" />
     <Compile Include="Controls\Page.cs">
       <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\Rename.ascx.cs">
-      <DependentUpon>Rename.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\Rename.ascx.designer.cs">
-      <DependentUpon>Rename.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Unzip.ascx.cs">
-      <DependentUpon>Unzip.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\Unzip.ascx.designer.cs">
-      <DependentUpon>Unzip.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\UpdateChecker.ascx.cs">
       <DependentUpon>UpdateChecker.ascx</DependentUpon>
@@ -934,21 +884,7 @@
     <Compile Include="Controls\UpdateChecker.ascx.designer.cs">
       <DependentUpon>UpdateChecker.ascx</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Upload.ascx.cs">
-      <DependentUpon>Upload.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\Upload.ascx.designer.cs">
-      <DependentUpon>Upload.ascx</DependentUpon>
-    </Compile>
     <Compile Include="Controls\WrappedLocalResource.cs" />
-    <Compile Include="Controls\Zip.ascx.cs">
-      <DependentUpon>Zip.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\Zip.ascx.designer.cs">
-      <DependentUpon>Zip.ascx</DependentUpon>
-    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -965,27 +901,6 @@
     </Compile>
     <Compile Include="Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="move.aspx.cs">
-      <DependentUpon>move.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="move.aspx.designer.cs">
-      <DependentUpon>move.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\NewFolder.ascx.cs">
-      <DependentUpon>NewFolder.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\NewFolder.ascx.designer.cs">
-      <DependentUpon>NewFolder.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="MyComputerSL.aspx.cs">
-      <DependentUpon>MyComputerSL.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="MyComputerSL.aspx.designer.cs">
-      <DependentUpon>MyComputerSL.aspx</DependentUpon>
     </Compile>
     <Compile Include="MyFiles\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
@@ -1011,26 +926,12 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
-    <Compile Include="mycomputer.aspx.cs">
-      <DependentUpon>mycomputer.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="mycomputer.aspx.designer.cs">
-      <DependentUpon>mycomputer.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="routing\BookingSystemDisplayRoutingHandler.cs" />
-    <Compile Include="routing\DocXPreviewHandler.cs" />
     <Compile Include="routing\DownloadRoutingHandler.cs" />
     <Compile Include="routing\IBookingSystemDisplay.cs" />
     <Compile Include="routing\IMyComputerDisplay.cs" />
-    <Compile Include="routing\MyComputerRoutingHandler.cs" />
-    <Compile Include="routing\PreviewRoutingHandler.cs" />
     <Compile Include="routing\RangeRequestHandlerBase.cs" />
-    <Compile Include="routing\UploadCheckerHandler.cs" />
-    <Compile Include="routing\UploadHandler.cs" />
-    <Compile Include="routing\UploadProcess.cs" />
-    <Compile Include="routing\UploadTransferHandler.cs" />
     <Compile Include="Setup.aspx.cs">
       <DependentUpon>Setup.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1117,19 +1018,6 @@
       <DependentUpon>api.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="WordVisualizer\CoreProperties.cs" />
-    <Compile Include="WordVisualizer\DisplayModeEnumeration.cs" />
-    <Compile Include="WordVisualizer\EmuUnit.cs" />
-    <Compile Include="WordVisualizer\Extensions\HttpResponseExtensions.cs" />
-    <Compile Include="WordVisualizer\Extensions\IEnumerableExtensions.cs" />
-    <Compile Include="WordVisualizer\GlobalSuppressions.cs" />
-    <Compile Include="xls.aspx.cs">
-      <DependentUpon>xls.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="xls.aspx.designer.cs">
-      <DependentUpon>xls.aspx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="masterpage.master" />
@@ -1139,6 +1027,10 @@
       <Project>{36468E14-F8AF-4794-AB76-25571A54682F}</Project>
       <Name>HAP.AD</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HAP.BookingSystem\HAP.BookingSystem.csproj">
+      <Project>{ae604fd8-9641-4203-9014-19a1a07e5bf2}</Project>
+      <Name>HAP.BookingSystem</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HAP.Data.SQL\HAP.Data.SQL.csproj">
       <Project>{D7498641-1837-480E-8AA0-4466CDB5FB12}</Project>
       <Name>HAP.Data.SQL</Name>
@@ -1146,6 +1038,10 @@
     <ProjectReference Include="..\HAP.Data\HAP.Data.csproj">
       <Project>{66768D2F-2190-4B13-BB6C-7195A342DB9A}</Project>
       <Name>HAP.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HAP.HelpDesk\HAP.HelpDesk.csproj">
+      <Project>{89ff514f-a7c3-410a-9250-8e79b6cfd993}</Project>
+      <Name>HAP.HelpDesk</Name>
     </ProjectReference>
     <ProjectReference Include="..\HAP.Web.Config\HAP.Web.Configuration.csproj">
       <Project>{1F2CFBBF-1C06-4CAC-BB4B-5551BF6A398C}</Project>
@@ -1201,11 +1097,6 @@
   <ItemGroup>
     <Content Include="BookingSystem\api.ashx" />
     <Content Include="images\icons\knownicons.xml" />
-    <None Include="MyComputerSLSplash.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </None>
     <Content Include="style\Web.config" />
     <None Include="Properties\PublishProfiles\Pack.pubxml" />
     <None Include="Properties\PublishProfiles\Profile1.pubxml" />

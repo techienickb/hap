@@ -7,7 +7,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using HAP.Web.Configuration;
-using HAP.Data.BookingSystem;
+using HAP.BookingSystem;
 
 namespace HAP.Web.BookingSystem
 {
@@ -30,7 +30,7 @@ namespace HAP.Web.BookingSystem
         protected override void RenderContents(HtmlTextWriter writer)
         {
             hapConfig config = hapConfig.Current;
-            HAP.Data.BookingSystem.BookingSystem bs = new HAP.Data.BookingSystem.BookingSystem(Date);
+            HAP.BookingSystem.BookingSystem bs = new HAP.BookingSystem.BookingSystem(Date);
             writer.WriteLine("<div class=\"lessoncol\" style=\"border-left-width: 1px;\">");
             writer.Write("<h2>");
             writer.Write("Lesson");

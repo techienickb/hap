@@ -9,7 +9,7 @@ using HAP.Web.Configuration;
 using System.Text;
 using System.DirectoryServices.AccountManagement;
 using System.IO;
-using HAP.Data.BookingSystem;
+using HAP.BookingSystem;
 
 namespace HAP.Web.BookingSystem
 {
@@ -23,7 +23,7 @@ namespace HAP.Web.BookingSystem
 
             this.SelectionMode = CalendarSelectionMode.Day;
             this.maxday = config.BookingSystem.MaxDays;
-            foreach (AdvancedBookingRight right in HAP.Data.BookingSystem.BookingSystem.BookingRights)
+            foreach (AdvancedBookingRight right in HAP.BookingSystem.BookingSystem.BookingRights)
                 if (right.Username == HttpContext.Current.User.Identity.Name)
                     this.maxday = 7 * right.Weeksahead;
 
@@ -113,7 +113,7 @@ namespace HAP.Web.BookingSystem
                 {
                     cell.Controls.Clear();
                     cell.Controls.Add(new LiteralControl(string.Format("<a target=\"_top\" href=\"./#" + day.Date.ToShortDateString() + "\" id=\"" + day.Date.ToShortDateString().Replace('/', '-') + "\">" + day.DayNumberText + "</a>")));
-                    HAP.Data.BookingSystem.BookingSystem bs = new HAP.Data.BookingSystem.BookingSystem(day.Date.Date);
+                    HAP.BookingSystem.BookingSystem bs = new HAP.BookingSystem.BookingSystem(day.Date.Date);
                     cell.CssClass += " " + s;
                     LiteralControl lc = new LiteralControl("<div class=\"QuickView\">");
                     foreach (Resource resource in config.BookingSystem.Resources.Values)
