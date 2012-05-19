@@ -10,8 +10,6 @@ using System.DirectoryServices;
 using HAP.Web.Configuration;
 using System.Xml;
 using System.Runtime.InteropServices;
-using HAP.Data.HelpDesk;
-using HAP.Data.ComputerBrowser;
 using System.Drawing;
 
 namespace HAP.Web
@@ -54,27 +52,10 @@ namespace HAP.Web
                 s1 += "\", Target: \"" + link.Target;
                 s1 += "\", Description: \"" + link.Description;
                 s1 += "\", Icon: \"" + (string.IsNullOrEmpty(link.Icon) || link.Icon.StartsWith("#") ? "" : string.Format("api/tiles/icons/{0}/{1}/{2}", 64, 64, link.Icon.Remove(0, 2)));
-                s1 += "\", Color: \"" + (string.IsNullOrEmpty(link.Icon) || link.Icon.StartsWith("#") ? "" : HAP.Web.LiveTiles.IconCache.GetColour(link.Icon)) + "\" } }";
+                s1 += "\", Color: " + (string.IsNullOrEmpty(link.Icon) || link.Icon.StartsWith("#") ? "\"\"" : HAP.Web.LiveTiles.IconCache.GetColour(link.Icon)) + " } }";
                 s.Add(s1);
             }
             return string.Join(", \n", s.ToArray());
-        }
-
-        protected void ChangePass_Click(object sender, EventArgs e)
-        {
-            //try
-            //{
-            //    ADUser.ChangePassword(currentpass.Text, newpass.Text);
-            //    hapConfig config = hapConfig.Current;
-            //    errormess.Text = "Password Changed";
-            //    Session["password"] = newpass.Text;
-            //    HttpCookie c = Request.Cookies["token"];
-            //    c.Value = newpass.Text;
-            //    Response.SetCookie(c);
-            //}
-            //catch (Exception ex) { errormess.Text = ex.Message; }
-            //savepass.Enabled = true;
-            //currentpass.Text = newpass.Text = confpass.Text = "";
         }
     }
 }

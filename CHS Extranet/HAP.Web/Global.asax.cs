@@ -16,12 +16,7 @@ namespace HAP.Web
         protected void Application_Start(object sender, EventArgs e)
         {
             API.APIRoutes.Register(RouteTable.Routes);
-            RouteTable.Routes.Add(new Route("mycomputer/{drive}", new MyComputerRoutingHandler(true)));
-            RouteTable.Routes.Add(new Route("mycomputer/{drive}/{*path}", new MyComputerRoutingHandler(false)));
             RouteTable.Routes.Add(new Route("download/{drive}/{*path}", new DownloadRoutingHandler()));
-            RouteTable.Routes.Add(new Route("upload/check/{drive}/{*path}", new UploadHandler("check")));
-            RouteTable.Routes.Add(new Route("upload/transfer/{*path}", new UploadHandler("transfer")));
-            RouteTable.Routes.Add(new Route("preview/{drive}/{*path}", new PreviewRoutingHandler()));
             RouteTable.Routes.Add(new Route("bookingsystem/{room}/display", new BookingSystemDislayRoutingHandler()));
             RouteTable.Routes.Add(new Route("tracker/web/{year}/{month}/", new PageRouteHandler("~/tracker/weblog.aspx", true)));
             RouteTable.Routes.Add(new Route("tracker/web/{year}/{month}/d/{day}", new PageRouteHandler("~/tracker/weblog.aspx", true)));

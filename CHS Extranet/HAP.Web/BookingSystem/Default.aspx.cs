@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using HAP.Web.Configuration;
-using HAP.Data.BookingSystem;
+using HAP.BookingSystem;
 using HAP.AD;
 
 namespace HAP.Web.BookingSystem
@@ -104,7 +104,7 @@ namespace HAP.Web.BookingSystem
             get
             {
                 List<string> terms = new List<string>();
-                foreach (Term t in new HAP.Data.BookingSystem.Terms())
+                foreach (Term t in new HAP.BookingSystem.Terms())
                     terms.Add("{ " + string.Format(" name: '{0}', start: new Date({1}, {2}, {3}), end: new Date({4}, {5}, {6})",
                         t.Name,
                         t.StartDate.Year, t.StartDate.Month - 1, t.StartDate.Day,
@@ -123,7 +123,7 @@ namespace HAP.Web.BookingSystem
                 int maxday = config.BookingSystem.MaxDays;
                 int maxbookings = config.BookingSystem.MaxBookingsPerWeek;
                 if (User.IsInRole("Domain Admins") || isBSAdmin) maxbookings = -1;
-                foreach (AdvancedBookingRight right in HAP.Data.BookingSystem.BookingSystem.BookingRights)
+                foreach (AdvancedBookingRight right in HAP.BookingSystem.BookingSystem.BookingRights)
                     if (right.Username.ToLower() == User.Identity.Name.ToLower())
                     {
                         maxday = 7 * right.Weeksahead;
@@ -182,7 +182,7 @@ namespace HAP.Web.BookingSystem
                     else foreach (string s in r.Admins.Split(new char[] { ',' }))
                             if (s.Trim().ToLower().Equals(ADUser.UserName.ToLower())) ss.Add("'" + r.Name + "'");
                 }
-                if (User.IsInRole("Domain Admins") || isBSAdmin) return string.Format("username: '{0}', isAdminOf: [ {1} ], isBSAdmin: {2}, minDate: new Date({3}, {4}, {5}), maxDate: new Date({6}, {7}, {8}), maxBookings: {9}", ADUser.UserName, string.Join(", ", ss.ToArray()), (User.IsInRole("Domain Admins") || isBSAdmin).ToString().ToLower(), DateTime.Now.Year, DateTime.Now.Month - 1, DateTime.Now.Day, new HAP.Data.BookingSystem.Terms()[new HAP.Data.BookingSystem.Terms().Count - 1].EndDate.Year, new HAP.Data.BookingSystem.Terms()[new HAP.Data.BookingSystem.Terms().Count - 1].EndDate.Month - 1, new HAP.Data.BookingSystem.Terms()[new HAP.Data.BookingSystem.Terms().Count - 1].EndDate.Day, maxbookings);
+                if (User.IsInRole("Domain Admins") || isBSAdmin) return string.Format("username: '{0}', isAdminOf: [ {1} ], isBSAdmin: {2}, minDate: new Date({3}, {4}, {5}), maxDate: new Date({6}, {7}, {8}), maxBookings: {9}", ADUser.UserName, string.Join(", ", ss.ToArray()), (User.IsInRole("Domain Admins") || isBSAdmin).ToString().ToLower(), DateTime.Now.Year, DateTime.Now.Month - 1, DateTime.Now.Day, new HAP.BookingSystem.Terms()[new HAP.BookingSystem.Terms().Count - 1].EndDate.Year, new HAP.BookingSystem.Terms()[new HAP.BookingSystem.Terms().Count - 1].EndDate.Month - 1, new HAP.BookingSystem.Terms()[new HAP.BookingSystem.Terms().Count - 1].EndDate.Day, maxbookings);
                 return string.Format("username: '{0}', isAdminOf: [ {1} ], isBSAdmin: {2}, minDate: new Date({3}, {4}, {5}), maxDate: new Date({6}, {7}, {8}), maxBookings: {9}", ADUser.UserName, string.Join(", ", ss.ToArray()), (User.IsInRole("Domain Admins") || isBSAdmin).ToString().ToLower(), DateTime.Now.Year, DateTime.Now.Month - 1, DateTime.Now.Day, DateTime.Now.AddDays(maxday).Year, DateTime.Now.AddDays(maxday).Month - 1, DateTime.Now.AddDays(maxday).Day - 1, maxbookings);
             }
         }

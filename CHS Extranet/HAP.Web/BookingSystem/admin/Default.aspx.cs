@@ -8,7 +8,7 @@ using HAP.Web.Configuration;
 using System.Configuration;
 using HAP.Web.HelpDesk;
 using HAP.AD;
-using HAP.Data.BookingSystem;
+using HAP.BookingSystem;
 using System.IO;
 using System.Xml;
 
@@ -25,7 +25,7 @@ namespace HAP.Web.BookingSystem.admin
 
         void ListView1_ItemDeleting(object sender, ListViewDeleteEventArgs e)
         {
-            new HAP.Data.BookingSystem.BookingSystem().deleteStaticBooking1(e.Values[1].ToString(), e.Values[2].ToString(), int.Parse(e.Values[0].ToString()));
+            new HAP.BookingSystem.BookingSystem().deleteStaticBooking1(e.Values[1].ToString(), e.Values[2].ToString(), int.Parse(e.Values[0].ToString()));
         }
 
         public Default()

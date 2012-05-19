@@ -117,6 +117,7 @@
 						dataType: 'json',
 						data: data,
 						contentType: 'application/json',
+						error: hap.common.jsonError,
 						success: function (data) {
 							$("#ticket-note").val("");
 							if (<%=User.IsInRole("Domain Admins").ToString().ToLower() %>) {
@@ -143,7 +144,7 @@
 									}
 									if (data.length == 0) x = "No Tickets";
 									$("#opentickets").html(x);
-								}
+                                },  error: hap.common.jsonError
 							});
 							$.ajax({
 								type: 'GET',
@@ -157,7 +158,7 @@
 									}
 									if (data.length == 0) x = "No Tickets";
 									$("#closedtickets").html(x);
-								}
+                                },  error: hap.common.jsonError
 							});
 			                $.ajax({
 				                type: 'GET',
@@ -171,7 +172,7 @@
 					                }
 					                if (data.length == 0) x = "No FAQs";
 					                $("#faqs").html(x);
-				                }
+                                },  error: hap.common.jsonError
 			                });
 						}
 					});
@@ -236,9 +237,9 @@
 							}
 							if (data.length == 0) x = "No Tickets";
 							$("#opentickets").html(x);
-						}
+                        },  error: hap.common.jsonError
 					});
-				}
+	            },  error: hap.common.jsonError
 			});
 			return false;
 		}
@@ -263,7 +264,7 @@
 						h += '</div>';
 						$("#ticket-" + curticket).html(h);
 						$("button").button();
-					}
+                    },  error: hap.common.jsonError
 				});
 			}
 		}
@@ -290,7 +291,7 @@
 					}
 					if (data.length == 0) x = "No Tickets";
 					$("#opentickets").html(x);
-				}
+                },  error: hap.common.jsonError
 			});
 			$.ajax({
 				type: 'GET',
@@ -304,7 +305,7 @@
 					}
 					if (data.length == 0) x = "No Tickets";
 					$("#closedtickets").html(x);
-				}
+                },  error: hap.common.jsonError
 			});
 			$.ajax({
 				type: 'GET',
@@ -318,7 +319,7 @@
 					}
 					if (data.length == 0) x = "No FAQs";
 					$("#faqs").html(x);
-				}
+                },  error: hap.common.jsonError
 			});
 			if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curticket = window.location.href.split('#')[1].substr(7);
 			else curticket = null;

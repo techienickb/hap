@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("HAP.AD")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Home Access Plus+ Active Directory Membership Interfaces")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("nb development")]
 [assembly: AssemblyProduct("HAP.AD")]

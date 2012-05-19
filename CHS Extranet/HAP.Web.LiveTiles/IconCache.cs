@@ -14,14 +14,19 @@ namespace HAP.Web.LiveTiles
         {
             get
             {
+                if (!Directory.Exists(HttpContext.Current.Server.MapPath("~/app_data/iconcache/"))) Directory.CreateDirectory(HttpContext.Current.Server.MapPath("~/app_data/iconcache/"));
                 if (!File.Exists(HttpContext.Current.Server.MapPath("~/app_data/iconcache/colors.xml"))) Save(new Dictionary<string, string>());
                 if (HttpContext.Current.Cache["hap-colorcache"] == null)
                 {
                     Dictionary<string, string> d = new Dictionary<string, string>();
                     XmlDocument doc = new XmlDocument();
                     doc.Load(HttpContext.Current.Server.MapPath("~/app_data/iconcache/colors.xml"));
-                    foreach (XmlNode n in doc.SelectNodes("/colorcache/colors"))
-                        d.Add(n.Attributes["icon"].Value, n.InnerText);
+                    foreach (XmlNode n in doc.SelectNodes("/colorcache/color"))
+                        try
+                        {
+                            d.Add(n.Attributes["icon"].Value, n.InnerText);
+                        }
+                        catch (Exception e) { throw new Exception(n.Attributes["icon"].Value, e); }
                     HttpContext.Current.Cache.Insert("hap-colorcache", d);
                 }
                 return HttpContext.Current.Cache["hap-colorcache"] as Dictionary<string, string>;
@@ -74,15 +79,37 @@ namespace HAP.Web.LiveTiles
 
         public static string GetColour(string icon)
         {
-            if (ColourCache.ContainsKey(icon)) return ColourCache[icon];
+            if (ColourCache.ContainsKey(icon.ToLower()))
+            {
+                Color c = System.Drawing.ColorTranslator.FromHtml(ColourCache[icon.ToLower()]);
+                return (c.A.ToString() == "6" || c.A.ToString() == "0" ? "\"\"" : (" { Base: '" + System.Drawing.ColorTranslator.ToHtml(c) + "', Light: '" + System.Drawing.ColorTranslator.ToHtml(Lighten(c, 0.1)) + "', Dark: '" + System.Drawing.ColorTranslator.ToHtml(Darken(c, 0.1)) + "' }"));
+            }
             Bitmap b;
             try
             {
                 b = new Bitmap(HttpContext.Current.Server.MapPath(icon));
             }
             catch (Exception e) { throw new Exception(icon, e); }
-            Save(icon, (b.GetPixel(1, 1).A.ToString() == "6" || b.GetPixel(1, 1).A.ToString() == "0" ? "" : System.Drawing.ColorTranslator.ToHtml(b.GetPixel(1, 1))));
-            return (b.GetPixel(1, 1).A.ToString() == "6" || b.GetPixel(1, 1).A.ToString() == "0" ? "" : System.Drawing.ColorTranslator.ToHtml(b.GetPixel(1, 1)));
+            Save(icon.ToLower(), (b.GetPixel(1, 1).A.ToString() == "6" || b.GetPixel(1, 1).A.ToString() == "0" ? "" : System.Drawing.ColorTranslator.ToHtml(b.GetPixel(1, 1))));
+            return (b.GetPixel(1, 1).A.ToString() == "6" || b.GetPixel(1, 1).A.ToString() == "0" ? "\"\"" : (" { Base: '" + System.Drawing.ColorTranslator.ToHtml(b.GetPixel(1, 1)) + "', Light: '" + System.Drawing.ColorTranslator.ToHtml(Lighten(b.GetPixel(1, 1), 0.1)) + "', Dark: '" + System.Drawing.ColorTranslator.ToHtml(Darken(b.GetPixel(1, 1), 0.1)) + "' }"));
+        }
+
+        public static Color Lighten(Color inColor, double inAmount)
+        {
+          return Color.FromArgb(
+            inColor.A,
+            (int) Math.Min(255, inColor.R + 255 * inAmount),
+            (int) Math.Min(255, inColor.G + 255 * inAmount),
+            (int) Math.Min(255, inColor.B + 255 * inAmount) );
+        }
+
+        public static Color Darken(Color inColor, double inAmount)
+        {
+          return Color.FromArgb(
+            inColor.A,
+            (int) Math.Max(0, inColor.R - 255 * inAmount),
+            (int) Math.Max(0, inColor.G - 255 * inAmount),
+            (int) Math.Max(0, inColor.B - 255 * inAmount) );
         }
 
         public static string GetIcon(string icon, Size size)
