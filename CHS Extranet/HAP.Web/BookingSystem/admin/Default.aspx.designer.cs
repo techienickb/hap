@@ -13,15 +13,6 @@ namespace HAP.Web.BookingSystem.admin {
     public partial class Default {
         
         /// <summary>
-        /// termdates control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater termdates;
-        
-        /// <summary>
         /// termdatesDataSource control.
         /// </summary>
         /// <remarks>
@@ -29,6 +20,15 @@ namespace HAP.Web.BookingSystem.admin {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ObjectDataSource termdatesDataSource;
+        
+        /// <summary>
+        /// termdates control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater termdates;
         
         /// <summary>
         /// SaveButton control.
