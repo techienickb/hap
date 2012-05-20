@@ -59,6 +59,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.HelpDesk", "HAP.HelpDes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.BookingSystem", "HAP.BookingSystem\HAP.BookingSystem.csproj", "{AE604FD8-9641-4203-9014-19A1A07E5BF2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.MyFiles", "HAP.MyFiles\HAP.MyFiles.csproj", "{ED1514FF-9E76-4FC3-9238-68653B50F9C4}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
@@ -77,6 +79,7 @@ Global
 		SccLocalPath2 = HAP\u0020Logon\u0020Tracker
 		SccLocalPath20 = HAP.HelpDesk
 		SccLocalPath21 = HAP.BookingSystem
+		SccLocalPath22 = HAP.MyFiles
 		SccLocalPath3 = HAP\u0020Logon\u0020Tracker\u0020Installer
 		SccLocalPath4 = HAP\u0020User\u0020Card
 		SccLocalPath5 = HAP\u0020User\u0020Card\u0020Installer
@@ -84,7 +87,7 @@ Global
 		SccLocalPath7 = HAP.Data
 		SccLocalPath8 = HAP.Data.Quota
 		SccLocalPath9 = HAP.Data.Quota.Service
-		SccNumberOfProjects = 22
+		SccNumberOfProjects = 23
 		SccProjectName1 = HAP.Web
 		SccProjectName10 = HAP.AD
 		SccProjectName11 = HAP.Web.Config
@@ -99,6 +102,7 @@ Global
 		SccProjectName2 = HAP\u0020Logon\u0020Tracker
 		SccProjectName20 = HAP.HelpDesk
 		SccProjectName21 = HAP.BookingSystem
+		SccProjectName22 = HAP.MyFiles
 		SccProjectName3 = HAP\u0020Logon\u0020Tracker\u0020Installer
 		SccProjectName4 = HAP\u0020User\u0020Card
 		SccProjectName5 = HAP\u0020User\u0020Card\u0020Installer
@@ -128,6 +132,7 @@ Global
 		SccProjectUniqueName2 = HAP\u0020Logon\u0020Tracker\\HAP\u0020Logon\u0020Tracker.csproj
 		SccProjectUniqueName20 = HAP.HelpDesk\\HAP.HelpDesk.csproj
 		SccProjectUniqueName21 = HAP.BookingSystem\\HAP.BookingSystem.csproj
+		SccProjectUniqueName22 = HAP.MyFiles\\HAP.MyFiles.csproj
 		SccProjectUniqueName3 = HAP\u0020Logon\u0020Tracker\u0020Installer\\HAP\u0020Logon\u0020Tracker\u0020Installer.vdproj
 		SccProjectUniqueName4 = HAP\u0020User\u0020Card\\HAP\u0020User\u0020Card.csproj
 		SccProjectUniqueName5 = HAP\u0020User\u0020Card\u0020Installer\\HAP\u0020User\u0020Card\u0020Installer.vdproj
@@ -427,6 +432,18 @@ Global
 		{E10211DD-09C4-4756-AC4D-36C73A73FCEB}.Release|x64.ActiveCfg = Release
 		{E10211DD-09C4-4756-AC4D-36C73A73FCEB}.Release|x64.Build.0 = Release
 		{E10211DD-09C4-4756-AC4D-36C73A73FCEB}.Release|x86.ActiveCfg = Release
+		{ED1514FF-9E76-4FC3-9238-68653B50F9C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED1514FF-9E76-4FC3-9238-68653B50F9C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED1514FF-9E76-4FC3-9238-68653B50F9C4}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{ED1514FF-9E76-4FC3-9238-68653B50F9C4}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{ED1514FF-9E76-4FC3-9238-68653B50F9C4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{ED1514FF-9E76-4FC3-9238-68653B50F9C4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{ED1514FF-9E76-4FC3-9238-68653B50F9C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED1514FF-9E76-4FC3-9238-68653B50F9C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED1514FF-9E76-4FC3-9238-68653B50F9C4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{ED1514FF-9E76-4FC3-9238-68653B50F9C4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{ED1514FF-9E76-4FC3-9238-68653B50F9C4}.Release|x64.ActiveCfg = Release|Any CPU
+		{ED1514FF-9E76-4FC3-9238-68653B50F9C4}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

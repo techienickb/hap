@@ -23,8 +23,6 @@ namespace HAP.Web.API
             WebServiceHostFactory factory = new WebServiceHostFactory();
             //RouteTable.Routes.Add(new ServiceRoute("api/livetiles", factory, typeof(HAP.Web.LiveTiles.API)));
             RouteTable.Routes.Add(new ServiceRoute("api/setup", factory, typeof(setup)));
-            RouteTable.Routes.Add(new ServiceRoute("api/myfiles", factory, typeof(MyFiles)));
-            RouteTable.Routes.Add(new ServiceRoute("api/homework", factory, typeof(Homework)));
             RouteTable.Routes.Add(new ServiceRoute("api/help", factory, typeof(Help)));
 
 

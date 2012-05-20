@@ -62,14 +62,6 @@
     <Reference Include="AjaxControlToolkit">
       <HintPath>..\Binaries\AjaxControlToolkit.dll</HintPath>
     </Reference>
-    <Reference Include="Excel, Version=2.0.1.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>\\chs03\wwwroot\Extranet\bin\Excel.dll</HintPath>
-    </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.5.452, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>\\chs03\wwwroot\Extranet\bin\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
@@ -808,11 +800,9 @@
     <Compile Include="API\MyFiles.Permalink.cs" />
     <Compile Include="API\JS.cs" />
     <Compile Include="API\Help.cs" />
-    <Compile Include="API\Homework.cs" />
     <Compile Include="API\MyFiles.Upload.cs" />
     <Compile Include="API\Test.cs" />
     <Compile Include="API\Icon.cs" />
-    <Compile Include="API\MyFiles.cs" />
     <Compile Include="API\Setup.cs" />
     <Compile Include="API\Thumbs.cs" />
     <Compile Include="API\RegisterAPI.cs" />
@@ -1043,6 +1033,10 @@
       <Project>{89ff514f-a7c3-410a-9250-8e79b6cfd993}</Project>
       <Name>HAP.HelpDesk</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HAP.MyFiles\HAP.MyFiles.csproj">
+      <Project>{ed1514ff-9e76-4fc3-9238-68653b50f9c4}</Project>
+      <Name>HAP.MyFiles</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HAP.Web.Config\HAP.Web.Configuration.csproj">
       <Project>{1F2CFBBF-1C06-4CAC-BB4B-5551BF6A398C}</Project>
       <Name>HAP.Web.Configuration</Name>
@@ -1055,24 +1049,9 @@
       <Project>{3733B9AC-7559-4ABF-AC72-FB383030326A}</Project>
       <Name>HAP.Web.Logging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\HAP.Web.SendTo.Google\HAP.Web.SendTo.csproj">
-      <Project>{3E5B1FF1-BD5C-4DCA-8165-813C6B5BF6B2}</Project>
-      <Name>HAP.Web.SendTo</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="p.ashx" />
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="Microsoft.Office.Core">
-      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
-      <VersionMajor>2</VersionMajor>
-      <VersionMinor>5</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
