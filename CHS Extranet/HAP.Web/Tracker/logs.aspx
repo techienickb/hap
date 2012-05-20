@@ -1,16 +1,14 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true" CodeBehind="logs.aspx.cs" Inherits="HAP.Web.Tracker.logs" %>
-<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="tracker.css" rel="stylesheet" type="text/css" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
     <div style="text-align: center;">Historic <a href="./"><img src="logontracker-small.png" style="vertical-align: middle;" alt="Logon Tracker" /></a> <asp:Button runat="server" ID="archive" Text="Archive Logs" /></div>
-    <asp:ModalPopupExtender runat="server" TargetControlID="archive" PopupControlID="archivelogs" BackgroundCssClass="modalBackground" OkControlID="ok_btn" />
     <asp:Panel runat="server" ID="archivelogs" style="display: none;" CssClass="modalPopup" Width="300px">
         <h1>Archive Logs</h1>
         <ul style="list-style-type: none;">
-            <li><b>Logoff Start Date: </b><asp:TextBox ID="startdate" runat="server" Width="100px" ValidationGroup="archiveg" /><asp:CalendarExtender Format="dd/MM/yyyy" TargetControlID="startdate" runat="server" /><asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="startdate" ValidationGroup="archiveg" ErrorMessage="*" /></li>
-            <li><b>Logoff End Date: </b><asp:TextBox ID="enddate" runat="server" Width="100px" ValidationGroup="archiveg" /><asp:CalendarExtender Format="dd/MM/yyyy" TargetControlID="enddate" runat="server" /><asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="enddate" ValidationGroup="archiveg" ErrorMessage="*" /></li>
+            <li><b>Logoff Start Date: </b><asp:TextBox ID="startdate" runat="server" Width="100px" ValidationGroup="archiveg" /><asp:RequiredFieldValidator runat="server" ControlToValidate="startdate" ValidationGroup="archiveg" ErrorMessage="*" /></li>
+            <li><b>Logoff End Date: </b><asp:TextBox ID="enddate" runat="server" Width="100px" ValidationGroup="archiveg" /><asp:RequiredFieldValidator runat="server" ControlToValidate="enddate" ValidationGroup="archiveg" ErrorMessage="*" /></li>
         </ul>
         <div style="font-size: small;">
             <b>Why Archive?</b><br />

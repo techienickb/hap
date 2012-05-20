@@ -1,5 +1,4 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true" CodeBehind="WebLog.aspx.cs" Inherits="HAP.Web.Tracker.WebLog" %>
-<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <%@ Register Assembly="System.Web.DataVisualization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Namespace="System.Web.UI.DataVisualization.Charting" TagPrefix="asp" %>
 <asp:Content ContentPlaceHolderID="head" runat="server">
 	<link href="<%=ResolveClientUrl("~/tracker/tracker.css")%>" rel="stylesheet" type="text/css" />
@@ -113,33 +112,11 @@
 				</ItemTemplate>
 			</asp:Repeater>
 			</table>
-	<div id="loadingPopup" style="display: none;">
-		<div class="modalBackground"></div>
-		<div id="ph">
-			<div class="popupContent" style="width: 220px">
-				<h1>Loading</h1>
-				<asp:Image ID="Image1" runat="server" ImageUrl="~/bookingsystem/loading.gif" AlternateText="" />
-			</div>
-		</div>
-	</div>
 	<script type="text/javascript">
 	    $(function () {
 	        $("button").button();
 	        $("input[type=submit]").button();
 	        $(".button").button();
 	    });
-		Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(beginRequestHandler);
-		Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandler);
-		function endRequestHandler(sender, args) {
-			$get('loadingPopup').style.display = "none";
-			var error = args.get_error();
-			if (error != undefined) {
-				alert(error.message);
-				args.set_errorHandled(true);
-			}
-		}
-		function beginRequestHandler(sender, args) {
-			$get('loadingPopup').style.display = "block";
-		}
 	</script>
 </asp:Content>

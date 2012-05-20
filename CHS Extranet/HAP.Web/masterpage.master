@@ -1,14 +1,17 @@
 ﻿<%@ Master Language="C#" %>
 <%@ Register Assembly="HAP.Web" Namespace="HAP.Web.Controls" TagPrefix="hap" %>
-<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
-
 <!DOCTYPE html>
 
 <html>
-    <head id="Head1" runat="server">
+    <head runat="server">
         <title>Home Access Plus</title>
         <link rel="shortcut icon" href="~/favicon.ico" />
-        <hap:jQuery runat="server" />
+        <script src="<%: ResolveClientUrl("~/scripts/jquery-1.7.2.min.js") %>"></script>
+        <script src="<%: ResolveClientUrl("~/scripts/jquery-ui-1.8.16.custom.min.js") %>"></script>
+        <script src="<%: ResolveClientUrl("~/api/js") %>"></script>
+        <%if (false) { %>
+        <script src="<%: ResolveClientUrl("~/Scripts/hap.web.js.js") %>"></script>
+        <%} %>
         <link href="~/style/jquery-ui.css" rel="stylesheet" type="text/css" />
         <link href="~/style/basestyle.css" rel="stylesheet" type="text/css" />
         <link rel="icon" type="image/vnd.microsoft.icon" href="~/favicon.ico" />
@@ -16,11 +19,11 @@
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
         <hap:HAPTag runat="server" />
         <asp:ContentPlaceHolder id="head" runat="server" />
+        <meta name="viewport" content="width=device-width" />
     </head>
     <body>
         <form runat="server">
             <div id="hapContent" data-role="page">
-                <asp:ToolkitScriptManager runat="server" EnablePartialRendering="true" />
                 <asp:LoginView runat="server">
                     <LoggedInTemplate>
                         <div id="usertop">Logged in as <asp:LoginName runat="server" /> | <asp:LoginStatus runat="server" /></div>

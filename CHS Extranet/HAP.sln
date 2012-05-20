@@ -10,7 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{7F80432C-70D
 		Binaries\ICSharpCode.SharpZipLib.dll = Binaries\ICSharpCode.SharpZipLib.dll
 		Binaries\srmlib.dll = Binaries\srmlib.dll
 		DiskQuotaTypeLibrary.dll = DiskQuotaTypeLibrary.dll
-		binaries\AjaxControlToolkit.dll = binaries\AjaxControlToolkit.dll
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installers", "Installers", "{9A28C64F-CA1C-4D4C-A26C-907F9B8269EB}"

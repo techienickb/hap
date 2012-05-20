@@ -15,7 +15,7 @@ namespace HAP.Web
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (User.Identity.IsAuthenticated) Response.Redirect("unauthorised.aspx");
         }
 
         protected override void OnPreInit(EventArgs e)

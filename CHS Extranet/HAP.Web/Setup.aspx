@@ -9,7 +9,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
         <title>Home Access Plus+ - Setup</title>
         <link rel="shortcut icon" href="~/favicon.ico" />
-        <script src="Scripts/jquery-1.7.1.min.js" type="text/javascript"></script>
+        <script src="Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
         <script src="Scripts/jquery-ui-1.8.16.custom.min.js" type="text/javascript"></script>
         <script src="Scripts/jquery.dynatree.js" type="text/javascript"></script>
         <script src="Scripts/jquery-Gtimepicker.js" type="text/javascript"></script>
@@ -24,7 +24,6 @@
     <body>
         <form runat="server">
             <div id="hapContent">
-                <asp:ToolkitScriptManager runat="server" EnablePartialRendering="true" />
                 <asp:LoginView runat="server">
                     <LoggedInTemplate>
                         <div id="usertop">Logged in as <asp:LoginName runat="server" /> | <asp:LoginStatus runat="server" /></div>
