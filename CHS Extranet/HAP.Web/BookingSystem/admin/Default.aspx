@@ -6,6 +6,7 @@
 	<script src="../../Scripts/jquery.dataTables.js" type="text/javascript"></script>
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="body" runat="server">
+    <script type="text/javascript">$(function () { $(".selector").datepicker({ dateFormat: "dd/mm/yy" }); });</script>
 	<div style="overflow: hidden; clear: both; position: relative;">
 		<div class="tiles" style="float: left; margin-top: 45px;">
 			<a class="button" href="../../">Home Access Plus+ Home</a>
@@ -53,7 +54,7 @@
 							<strong><asp:Label AssociatedControlID="termstartdate" runat="server">Term Starts: </asp:Label></strong>
 						</td>
 						<td class="CommonFormField">
-							<asp:TextBox runat="server" ID="termstartdate" Text='<%#((DateTime)Eval("StartDate")).ToString("dd/MM/yyyy") %>' Width="100px" />
+							<asp:TextBox runat="server" CssClass="selector" ID="termstartdate" Text='<%#((DateTime)Eval("StartDate")).ToString("dd/MM/yyyy") %>' Width="100px" />
 						</td>
 					</tr>
 					<tr>
@@ -61,7 +62,7 @@
 							<strong><asp:Label AssociatedControlID="termenddate" runat="server">Term Ends: </asp:Label></strong>
 						</td>
 						<td class="CommonFormField">
-							<asp:TextBox runat="server" ID="termenddate" Text='<%#((DateTime)Eval("EndDate")).ToString("dd/MM/yyyy") %>' Width="100px" />
+							<asp:TextBox runat="server" CssClass="selector" ID="termenddate" Text='<%#((DateTime)Eval("EndDate")).ToString("dd/MM/yyyy") %>' Width="100px" />
 						</td>
 					</tr>
 					<tr>
@@ -81,9 +82,9 @@
 						</td>
 						<td class="CommonFormField">
 							From:
-							<asp:TextBox runat="server" ID="halftermstart" Text='<%#((DateTime)Eval("HalfTerm.StartDate")).ToString("dd/MM/yyyy") %>' Width="100px" />
+							<asp:TextBox runat="server" ID="halftermstart" CssClass="selector" Text='<%#((DateTime)Eval("HalfTerm.StartDate")).ToString("dd/MM/yyyy") %>' Width="100px" />
 							To:
-							<asp:TextBox runat="server" ID="halftermend" Text='<%#((DateTime)Eval("HalfTerm.EndDate")).ToString("dd/MM/yyyy") %>' Width="100px" />
+							<asp:TextBox runat="server" ID="halftermend" CssClass="selector" Text='<%#((DateTime)Eval("HalfTerm.EndDate")).ToString("dd/MM/yyyy") %>' Width="100px" />
 						</td>
 					</tr>
 				</ItemTemplate>
