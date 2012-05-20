@@ -625,6 +625,8 @@
     <Content Include="images\icons\white\xps.png" />
     <Content Include="images\icons\white\zip.png" />
     <Content Include="images\icons\winword-app.png" />
+    <Content Include="images\jquery.wysiwyg.bg.png" />
+    <Content Include="images\jquery.wysiwyg.gif" />
     <Content Include="images\myfiles-beta.png" />
     <Content Include="images\myfiles.png" />
     <Content Include="images\page_white_copy.png" />
@@ -674,7 +676,9 @@
     <Content Include="Scripts\jquery.ba-hashchange.min.js" />
     <Content Include="Scripts\jquery.contextMenu.js" />
     <Content Include="Scripts\jquery.dataTables.js" />
+    <Content Include="Scripts\jquery.wysiwyg.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="style\editor.css" />
     <Content Include="style\jquery.mobile-1.0.css" />
     <Content Include="style\basestyle.css" />
     <Content Include="favicon.ico" />
@@ -722,6 +726,7 @@
     <Content Include="style\bookingsystem.css" />
     <Content Include="style\helpdesk.css" />
     <Content Include="style\jquery-ui.css" />
+    <Content Include="style\jquery.wysiwyg.css" />
     <Content Include="style\MyFiles.css" />
     <Content Include="style\setup.css" />
     <Content Include="style\timetable.css" />
@@ -793,6 +798,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\Announcement.cs" />
     <Compile Include="API\api.cs" />
     <Compile Include="API\TileIconHandler.cs" />
     <Compile Include="API\MyFiles.Permalink.cs" />

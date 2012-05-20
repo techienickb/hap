@@ -24,6 +24,7 @@ namespace HAP.Web.API
             //RouteTable.Routes.Add(new ServiceRoute("api/livetiles", factory, typeof(HAP.Web.LiveTiles.API)));
             RouteTable.Routes.Add(new ServiceRoute("api/setup", factory, typeof(setup)));
             RouteTable.Routes.Add(new ServiceRoute("api/help", factory, typeof(Help)));
+            RouteTable.Routes.Add(new ServiceRoute("api/announcement", factory, typeof(Announcement)));
 
 
             //load apis in the bin folder
