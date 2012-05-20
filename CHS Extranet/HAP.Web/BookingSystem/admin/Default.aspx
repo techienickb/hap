@@ -25,6 +25,8 @@
 			<li><a href="#email-templates">Email Templates</a></li>
 		</ul>
 		<div id="term-dates">
+			<asp:ObjectDataSource ID="termdatesDataSource" runat="server" SelectMethod="ToArray"
+				TypeName="HAP.BookingSystem.Terms"></asp:ObjectDataSource>
 			<asp:Repeater ID="termdates" runat="server" DataSourceID="termdatesDataSource">
 				<HeaderTemplate>
 					<table style="width: 100%">
@@ -88,8 +90,6 @@
 				<FooterTemplate>
 					</table></FooterTemplate>
 			</asp:Repeater>
-			<asp:ObjectDataSource ID="termdatesDataSource" runat="server" SelectMethod="ToArray"
-				TypeName="HAP.Data.BookingSystem.Terms"></asp:ObjectDataSource>
 			<p class="PanelSaveButton" style="text-align: right;">
 				<asp:Button ID="SaveButton" runat="server" Text="Save" />
 			</p>
@@ -228,9 +228,9 @@
 							style="font-size: 130%" onclick="importSIMS_Click" />
 						<p>CAUTION: The Teacher's Name from the SIMS Export (Title Initial Surname) needs to equal the Notes/Display Name field in AD for that user, or the Notes/Display name only has one person with that surname</p>
 					</div>
-					<asp:ObjectDataSource ID="StaticBookingsDS" runat="server" DataObjectTypeName="HAP.Data.BookingSystem.Booking"
+					<asp:ObjectDataSource ID="StaticBookingsDS" runat="server" DataObjectTypeName="HAP.BookingSystem.Booking"
 						DeleteMethod="deleteStaticBooking" InsertMethod="addStaticBooking" SelectMethod="getStaticBookingsArray"
-						TypeName="HAP.Data.BookingSystem.BookingSystem" UpdateMethod="updateStaticBooking" />
+						TypeName="HAP.BookingSystem.BookingSystem" UpdateMethod="updateStaticBooking" />
 					<asp:DetailsView ID="DetailsView1" runat="server" AutoGenerateRows="False" DataSourceID="StaticBookingsDS"
 						DefaultMode="Insert" EnableModelValidation="True" GridLines="None" CssClass="tile-border-color" style="border-width: 1px; border-style: solid; border-top: 0;">
 						<Fields>
@@ -406,8 +406,8 @@
 							</table>
 						</LayoutTemplate>
 					</asp:ListView>
-					<asp:ObjectDataSource ID="ABRDS" runat="server" DataObjectTypeName="HAP.Data.BookingSystem.AdvancedBookingRight"
-						InsertMethod="addBookingRights" SelectMethod="getBookingRights" TypeName="HAP.Data.BookingSystem.BookingSystem"
+					<asp:ObjectDataSource ID="ABRDS" runat="server" DataObjectTypeName="HAP.BookingSystem.AdvancedBookingRight"
+						InsertMethod="addBookingRights" SelectMethod="getBookingRights" TypeName="HAP.BookingSystem.BookingSystem"
 						UpdateMethod="updateBookingRights" DeleteMethod="deleteBookingRights" />>
 		</div>
 		<div id="email-templates">
