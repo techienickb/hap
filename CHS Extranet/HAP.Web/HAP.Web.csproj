@@ -59,9 +59,6 @@
     <ApplicationIcon>haplogo-icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AjaxControlToolkit">
-      <HintPath>..\Binaries\AjaxControlToolkit.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
@@ -669,14 +666,15 @@
     <Content Include="Login.aspx" />
     <Content Include="MyFiles\Default.aspx" />
     <Content Include="MyFiles\Homework.aspx" />
-    <Content Include="Scripts\hap.web.js.mobile.js" />
+    <Content Include="Scripts\jquery-1.7.2-vsdoc.js" />
     <Content Include="Scripts\jquery.mobile-1.0.min.js" />
     <Content Include="Scripts\hap.web.js.js" />
-    <Content Include="Scripts\jquery-1.7.1.min.js" />
+    <Content Include="Scripts\jquery-1.7.2.min.js" />
     <Content Include="Scripts\jquery-ui-1.8.16.custom.min.js" />
     <Content Include="Scripts\jquery.ba-hashchange.min.js" />
     <Content Include="Scripts\jquery.contextMenu.js" />
     <Content Include="Scripts\jquery.dataTables.js" />
+    <Content Include="Scripts\_references.js" />
     <Content Include="style\jquery.mobile-1.0.css" />
     <Content Include="style\basestyle.css" />
     <Content Include="favicon.ico" />
@@ -861,7 +859,6 @@
       <DependentUpon>Announcement.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\CompressJS.cs" />
-    <Compile Include="Controls\jquery.cs" />
     <Compile Include="Controls\HAPTag.cs" />
     <Compile Include="Controls\LocalResource.cs" />
     <Compile Include="Controls\Page.cs">

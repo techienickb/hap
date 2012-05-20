@@ -1,7 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true"
 	CodeBehind="Default.aspx.cs" Inherits="HAP.Web.BookingSystem.admin.Default" %>
 <%@ Import Namespace="HAP.Web.BookingSystem" %>
-<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
 	<link href="../../style/bookingsystem.css" rel="stylesheet" type="text/css" />
 	<script src="../../Scripts/jquery.dataTables.js" type="text/javascript"></script>
@@ -53,7 +52,6 @@
 						</td>
 						<td class="CommonFormField">
 							<asp:TextBox runat="server" ID="termstartdate" Text='<%#((DateTime)Eval("StartDate")).ToString("dd/MM/yyyy") %>' Width="100px" />
-							<asp:CalendarExtender Animated="true" TargetControlID="termstartdate" Format="dd/MM/yyyy" runat="server" />
 						</td>
 					</tr>
 					<tr>
@@ -62,7 +60,6 @@
 						</td>
 						<td class="CommonFormField">
 							<asp:TextBox runat="server" ID="termenddate" Text='<%#((DateTime)Eval("EndDate")).ToString("dd/MM/yyyy") %>' Width="100px" />
-							<asp:CalendarExtender Animated="true" TargetControlID="termenddate" Format="dd/MM/yyyy" runat="server" />
 						</td>
 					</tr>
 					<tr>
@@ -83,10 +80,8 @@
 						<td class="CommonFormField">
 							From:
 							<asp:TextBox runat="server" ID="halftermstart" Text='<%#((DateTime)Eval("HalfTerm.StartDate")).ToString("dd/MM/yyyy") %>' Width="100px" />
-							<asp:CalendarExtender Animated="true" TargetControlID="halftermstart" Format="dd/MM/yyyy" runat="server" />
 							To:
 							<asp:TextBox runat="server" ID="halftermend" Text='<%#((DateTime)Eval("HalfTerm.EndDate")).ToString("dd/MM/yyyy") %>' Width="100px" />
-							<asp:CalendarExtender Animated="true" TargetControlID="halftermend" Format="dd/MM/yyyy" runat="server" />
 						</td>
 					</tr>
 				</ItemTemplate>
@@ -100,11 +95,6 @@
 			</p>
 		</div>
 		<div id="static-bookings">
-			<asp:UpdatePanel runat="server" ChildrenAsTriggers="true">
-				<Triggers>
-					<asp:PostBackTrigger ControlID="importSIMS" />
-				</Triggers>
-				<ContentTemplate>
 					<table id="staticbookingstable">
 						<thead><tr><th width="120"></th><th width="70"><label>Room</label></th><th width="60"><label>Day</label></th><th width="100">Lesson</th><th width="200">Name</th><th width="140">Username</th></tr></thead>
 						<tbody>
@@ -287,12 +277,8 @@
 					<asp:ObjectDataSource ID="lessonsds" runat="server" SelectMethod="getLessons" TypeName="HAP.Web.BookingSystem.admin.Default" />
 					<asp:ObjectDataSource ID="dayds" runat="server" SelectMethod="getDays" TypeName="HAP.Web.BookingSystem.admin.Default" />
 					<asp:ObjectDataSource ID="usersds" runat="server" SelectMethod="getUsers" TypeName="HAP.Web.BookingSystem.admin.Default" />
-			</ContentTemplate>
-			</asp:UpdatePanel>
 		</div>
 		<div id="abr">
-			<asp:UpdatePanel ID="UpdatePanel2" runat="server" ChildrenAsTriggers="true" RenderMode="Block">
-				<ContentTemplate>
 					<asp:ListView ID="ABR" runat="server" DataSourceID="ABRDS" EnableModelValidation="True"
 						InsertItemPosition="LastItem">
 						<EditItemTemplate>
@@ -422,9 +408,7 @@
 					</asp:ListView>
 					<asp:ObjectDataSource ID="ABRDS" runat="server" DataObjectTypeName="HAP.Data.BookingSystem.AdvancedBookingRight"
 						InsertMethod="addBookingRights" SelectMethod="getBookingRights" TypeName="HAP.Data.BookingSystem.BookingSystem"
-						UpdateMethod="updateBookingRights" DeleteMethod="deleteBookingRights" />
-				</ContentTemplate>
-			</asp:UpdatePanel>
+						UpdateMethod="updateBookingRights" DeleteMethod="deleteBookingRights" />>
 		</div>
 		<div id="email-templates">
 			<p>{0} = Username, {1} = Display Name, {2} = Room, {3} = Booking Name, {4} = Date, {5} = Day, {6} = Lesson, {7} = LTRoom or EquipRoom, {8} = LTCount</p>
@@ -459,28 +443,4 @@
 		</div>
 	</div>
 	<asp:Literal runat="server" ID="message" />
-	<div id="modalBackground" class="modalBackground" style="display: none;">
-	</div>
-	<div id="loadingPopup" style="display: none;">
-		<div class="popupContent" style="width: 220px">
-			<h1>
-				Loading</h1>
-			<img src="../loading.gif" alt="" />
-		</div>
-	</div>
-	<script type="text/javascript">
-		function endRequestHandler(sender, args) {
-			var error = args.get_error();
-			if (error != undefined) {
-				alert(error.message);
-				args.set_errorHandled(true);
-			}
-			$('#loadingPopup').dialog("close");
-		}
-		function beginRequestHandler(sender, args) {
-			$('#loadingPopup').dialog({ autoShow: true, modal: true });
-		}
-		Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(beginRequestHandler);
-		Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandler);
-	</script>
 </asp:Content>
