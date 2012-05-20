@@ -20,6 +20,7 @@ using HAP.Data.ComputerBrowser;
 using System.Drawing.Drawing2D;
 using System.Web.SessionState;
 using HAP.AD;
+using HAP.MyFiles;
 
 namespace HAP.Web.API
 {
@@ -67,7 +68,7 @@ namespace HAP.Web.API
                 Image thumb;
                 try
                 {
-                    Bitmap b = new Data.MyFiles.ShellThumbnail().GetThumbnail(file.FullName);
+                    Bitmap b = new ShellThumbnail().GetThumbnail(file.FullName);
                     thumb = b;// FixedSize(b, 64, 64);
                     if (thumb == null) throw new NullReferenceException();
                 }
@@ -100,7 +101,7 @@ namespace HAP.Web.API
                 DriveMapping unc;
                 string path = Converter.DriveToUNC(RoutingPath.Replace('^', '&'), RoutingDrive, out unc, ((HAP.AD.User)Membership.GetUser()));
                 FileInfo file = new FileInfo(path);
-                string Icon = HAP.Data.MyFiles.File.ParseForImage(file);
+                string Icon = HAP.MyFiles.File.ParseForImage(file);
                 user.EndContainedImpersonate();
                 if (Icon.EndsWith(".ico")) context.Response.Redirect(VirtualPathUtility.ToAbsolute("~/api/mycomputer/" + Icon));
                 else context.Response.Redirect(VirtualPathUtility.ToAbsolute("~/images/icons/" + Icon));

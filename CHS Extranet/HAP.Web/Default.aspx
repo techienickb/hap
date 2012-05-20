@@ -22,7 +22,7 @@
                                 <%#Eval("SubTitle").ToString() == "#me" ? "" : Eval("SubTitle").ToString() %>
                                 <div <%#Eval("SubTitle").ToString() == "#me" ? "class=\"me\" " : "" %>id="<%#((string)Eval("Name")).Replace(" ", "").Replace("'", "").Replace(",", "").Replace(".", "").Replace("*", "").Replace("&", "").Replace("/", "").Replace("\\", "") %>">
                                     <script type="text/javascript">
-                                        $(function () {
+                                        $(document).ready(function () {
                                             hap.livetiles.Init([
                                             <%#gettiles((HAP.Web.Configuration.LinkGroup)Container.DataItem)%>
                                             ]);

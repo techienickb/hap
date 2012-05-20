@@ -69,7 +69,7 @@ namespace HAP.Web.MyFiles
                     if (isAuth(f) && f.Expression == "*.*") return "";
                     else if (isAuth(f))
                         foreach (string s in f.Expression.Split(new char[] { ';' }))
-                            filters.Add("f:" + HAP.Data.MyFiles.File.GetMimeType(s.Trim().ToLower().Remove(0, 1)));
+                            filters.Add("f:" + HAP.MyFiles.File.GetMimeType(s.Trim().ToLower().Remove(0, 1)));
                 return " " + string.Join(" ", filters.ToArray());
             }
         }
