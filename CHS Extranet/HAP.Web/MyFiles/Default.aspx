@@ -961,7 +961,8 @@
 			return data.match(re);
 		}
 		$(function () {
-			$("#properties").dialog({ autoOpen: false });
+		    $("#properties").dialog({ autoOpen: false });
+		    $("#loadingbox").dialog({ autoOpen: false });
 			$("#preview").dialog({ autoOpen: false });
 			$("#zipquestion").dialog({ autoOpen: false });
 			$("#progressstate").dialog({ autoOpen: false });
