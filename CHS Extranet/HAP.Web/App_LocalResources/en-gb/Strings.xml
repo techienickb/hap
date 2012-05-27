@@ -109,6 +109,7 @@ Do you want to overwrite it?</fileexists2>
       <googledocs>Send to Google Docs</googledocs>
       <googlesignin>Sign into Google Docs</googlesignin>
       <googlesignin2>Once you have signed into Google, HAP+ will upload the selected file to your Google Docs</googlesignin2>
+      <skydrive>Send to SkyDrive</skydrive>
     </sendto>
   </myfiles>
 </hapStrings>

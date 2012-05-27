@@ -668,6 +668,7 @@
     <Content Include="Login.aspx" />
     <Content Include="MyFiles\Default.aspx" />
     <Content Include="MyFiles\Homework.aspx" />
+    <Content Include="MyFiles\oauth.aspx" />
     <Content Include="Scripts\jquery-1.7.2-vsdoc.js" />
     <Content Include="Scripts\jquery.mobile-1.0.min.js" />
     <Content Include="Scripts\hap.web.js.js" />
@@ -908,6 +909,13 @@
     </Compile>
     <Compile Include="MyFiles\Homework.aspx.designer.cs">
       <DependentUpon>Homework.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MyFiles\oauth.aspx.cs">
+      <DependentUpon>oauth.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MyFiles\oauth.aspx.designer.cs">
+      <DependentUpon>oauth.aspx</DependentUpon>
     </Compile>
     <Compile Include="p.ashx.cs">
       <DependentUpon>p.ashx</DependentUpon>

@@ -52,6 +52,20 @@ namespace HAP.Web.Configuration
             doc.SelectSingleNode("/hapConfig/Homepage/Links/Group[@name='" + this.Name + "']").AppendChild(e);
             base.Add(new Link(e));
         }
+        public void Add(string Name, string ShowTo, string Description, string Url, string Icon, string Target, string Type)
+        {
+            XmlElement e = doc.CreateElement("Link");
+            e.SetAttribute("name", Name);
+            e.SetAttribute("showto", ShowTo);
+            e.SetAttribute("description", Description);
+            e.SetAttribute("url", Url);
+            e.SetAttribute("icon", Icon);
+            e.SetAttribute("target", Target);
+            e.SetAttribute("type", Type);
+            doc.SelectSingleNode("/hapConfig/Homepage/Links/Group[@name='" + this.Name + "']").AppendChild(e);
+            base.Add(new Link(e));
+        }
+
         private Link get(string name)
         {
             return this.Single(l => l.Name == name);

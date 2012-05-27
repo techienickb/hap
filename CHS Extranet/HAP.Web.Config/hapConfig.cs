@@ -113,6 +113,32 @@ namespace HAP.Web.Configuration
                 a.Value = "en-gb";
                 doc.SelectSingleNode("/hapConfig").Attributes.Append(a);
             }
+            if (version.CompareTo(Version.Parse("8.0.0527.1300")) == -1)
+            {//Perform v8 Upgrade
+                XmlAttribute a = doc.CreateAttribute("local");
+                a.Value = "en-gb";
+                doc.SelectSingleNode("/hapConfig/Homepage").RemoveChild(doc.SelectSingleNode("/hapConfig/Homepage/Tabs"));
+                XmlElement e = doc.CreateElement("Group");
+                e.SetAttribute("showto", "All");
+                e.SetAttribute("subtitle", "#me");
+                XmlElement e1 = doc.CreateElement("Link");
+                e1.SetAttribute("name", "Me");
+                e1.SetAttribute("showto", "Inerhit");
+                e1.SetAttribute("description", "");
+                e1.SetAttribute("url", "");
+                e1.SetAttribute("icon", "");
+                e1.SetAttribute("target", "");
+                e.AppendChild(e1);
+                e1 = doc.CreateElement("Link");
+                e1.SetAttribute("name", "Password");
+                e1.SetAttribute("showto", "Inerhit");
+                e1.SetAttribute("description", "");
+                e1.SetAttribute("url", "");
+                e1.SetAttribute("icon", "");
+                e1.SetAttribute("target", "");
+                e.AppendChild(e1);
+                doc.SelectSingleNode("/hapConfig/Homepage/Links").AppendChild(e);
+            }
             doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             doc.Save(ConfigPath);
         }

@@ -17,13 +17,14 @@ namespace HAP.Web.MyFiles
         protected void Page_Load(object sender, EventArgs e)
         {
             StreamReader sr = File.OpenText(Server.MapPath("~/app_data/myfiles-users.txt"));
-            FirstTime = !(sr.ReadToEnd().Contains(HttpContext.Current.User.Identity.Name + "\n"));
+            string s;
+            while ((s = sr.ReadLine()) != null) if (s.ToLower() == HttpContext.Current.User.Identity.Name.ToLower()) FirstTime = false;
             sr.Close();
             sr.Dispose();
             if (FirstTime)
             {
                 StreamWriter sw = File.AppendText(Server.MapPath("~/app_data/myfiles-users.txt"));
-                sw.Write(HttpContext.Current.User.Identity.Name + "\n");
+                sw.WriteLine(HttpContext.Current.User.Identity.Name);
                 sw.Close();
                 sw.Dispose();
             }

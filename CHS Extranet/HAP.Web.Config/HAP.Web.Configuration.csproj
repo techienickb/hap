@@ -72,8 +72,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProxyServer.cs" />
     <Compile Include="SMTP.cs" />
-    <Compile Include="tab.cs" />
-    <Compile Include="Tabs.cs" />
     <Compile Include="tracker.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

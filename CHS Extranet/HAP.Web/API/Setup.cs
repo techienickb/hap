@@ -247,15 +247,6 @@ namespace HAP.Web.API
             return 0;
         }
 
-        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/UpdateTabOrder", BodyStyle = WebMessageBodyStyle.Wrapped)]
-        [OperationContract]
-        public int UpdateTabOrder(string tabs)
-        {
-            hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
-            Config.Homepage.Tabs.ReOrder(tabs.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries));
-            return 0;
-        }
-
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/UpdateLinkGroup", BodyStyle = WebMessageBodyStyle.Wrapped)]
         [OperationContract]
         public int UpdateLinkGroup(string origname, string name, string showto, string subtitle)
@@ -337,29 +328,6 @@ namespace HAP.Web.API
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
             Config.Homepage.Groups[group.Remove(0, 9).Replace('_', ' ')].ReOrder(links.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries));
             return 0;
-        }
-
-        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/UpdateTab", BodyStyle = WebMessageBodyStyle.Wrapped)]
-        [OperationContract]
-        public int UpdateTab(string tab)
-        {
-            string[] t = tab.Split(new char[] { '@' }, StringSplitOptions.RemoveEmptyEntries);
-            hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
-            TabType tt;
-            if (Enum.TryParse<TabType>(t[0], out tt))
-            {
-                Tab Tab = Config.Homepage.Tabs[tt];
-                Tab.Name = t[1];
-                Tab.ShowTo = t[2];
-                if (Tab.Type == TabType.Me)
-                {
-                    Tab.AllowUpdateTo = t[3];
-                    Tab.ShowSpace = bool.Parse(t[4]);
-                }
-                Config.Homepage.Tabs.UpdateTab(tt, Tab);
-                return 0;
-            }
-            else return 1;
         }
 
         [WebInvoke(RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/GetADTree", BodyStyle=WebMessageBodyStyle.Wrapped)]

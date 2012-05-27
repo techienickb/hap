@@ -57,6 +57,32 @@ namespace HAP.MyFiles
         }
 
         [OperationContract]
+        [WebInvoke(Method = "POST", UriTemplate = "SendTo/SkyDrive/{Drive}/{*Path}", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        public void SkyDrive(string Drive, string Path, string accessToken)
+        {
+            hapConfig config = hapConfig.Current;
+            User user = new User();
+            if (config.AD.AuthenticationMode == Web.Configuration.AuthMode.Forms)
+            {
+                HttpCookie token = HttpContext.Current.Request.Cookies["token"];
+                if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
+                user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
+            }
+            DriveMapping mapping;
+            string p = Converter.DriveToUNC('/' + Path, Drive, out mapping, user);
+            HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.SendTo.SkyDrive", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Sending to SkyDrive: " + p);
+            user.ImpersonateContained();
+            try
+            {
+                HAP.Web.SendTo.SkyDrive.UploadFileToSkydrive(new FileInfo(p), accessToken);
+            }
+            finally
+            {
+                user.EndContainedImpersonate();
+            }
+        }
+
+        [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "Zip", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle=WebMessageBodyStyle.WrappedRequest)]
         public void Zip(string Zip, string[] Paths)
         {
