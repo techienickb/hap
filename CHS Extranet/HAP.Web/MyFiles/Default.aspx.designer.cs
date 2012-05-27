@@ -49,6 +49,15 @@ namespace HAP.Web.MyFiles {
         protected global::HAP.Web.Controls.WrappedLocalResource progressstatus;
         
         /// <summary>
+        /// loadingbox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::HAP.Web.Controls.WrappedLocalResource loadingbox;
+        
+        /// <summary>
         /// googlesignin control.
         /// </summary>
         /// <remarks>

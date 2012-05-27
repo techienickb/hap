@@ -22,6 +22,16 @@ namespace HAP.Web.Configuration
         public DriveMappings Mappings { get { return new DriveMappings(ref doc); } }
         public QuotaServers QuotaServers { get { return new QuotaServers(ref doc); } }
         public XmlDocument KnownIcons { get; private set; }
+        public string LiveAppId
+        {
+            get { return doc.SelectSingleNode("/hapConfig/mscb").Attributes["LiveAppId"] == null ? "" : doc.SelectSingleNode("/hapConfig/mscb").Attributes["LiveAppId"].Value; } 
+            set 
+            { 
+                if (doc.SelectSingleNode("/hapConfig/mscb").Attributes["LiveAppId"] == null)
+                    doc.SelectSingleNode("/hapConfig/mscb").Attributes.Append(doc.CreateAttribute("LiveAppId"));
+                doc.SelectSingleNode("/hapConfig/mscb").Attributes["LiveAppId"].Value = value;
+            }
+        }
         public string HideExtensions 
         { 
             get { return doc.SelectSingleNode("/hapConfig/mscb").Attributes["hideextensions"].Value; } 

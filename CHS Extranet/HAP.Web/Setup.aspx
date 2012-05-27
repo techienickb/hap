@@ -1,6 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Setup.aspx.cs" Inherits="HAP.Web.Setup" %>
 <%@ Register Assembly="HAP.Web" Namespace="HAP.Web.Controls" TagPrefix="hap" %>
-<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -201,30 +200,6 @@
                                 </div>
                             </div>
                             <div>
-                                <h3>Tabs</h3>
-                                <div id="homepagetabs">
-                                <ul>
-                                    <asp:Repeater ID="homepageTabs" runat="server"><ItemTemplate>
-                                    <li class="ui-state-default" id="id_<%# Eval("Type") %>"><a href="#homepagetabs-<%#Eval("Type") %>"><%# Eval("Type")%></a></li>
-                                    </ItemTemplate></asp:Repeater>
-                                </ul>
-                                <asp:Repeater ID="homepageTabs2" runat="server"><ItemTemplate>
-                                    <div id="homepagetabs-<%#Eval("Type") %>">
-                                        <div style="overflow: hidden; clear: both;">
-                                        <label for="homepagetabs-<%#Eval("Type") %>-Name">Name: </label>
-                                        <input type="text" id="homepagetabs-<%#Eval("Type") %>-Name" value="<%#Eval("Name") %>" onchange="updatetab('<%#Eval("Type") %>');" />
-                                        </div>
-                                        <div style="overflow: hidden; clear: both;">
-                                        <label for="homepagetabs-<%#Eval("Type") %>-ShowTo">Show To: </label>
-                                        <input type="text" id="homepagetabs-<%#Eval("Type") %>-ShowTo" value="<%#Eval("ShowTo") %>" onclick="showadbuilder(this, false);"  onchange="updatetab('<%#Eval("Type") %>');" />
-                                        </div>
-                                        <%#((HAP.Web.Configuration.TabType)Eval("Type")) == HAP.Web.Configuration.TabType.Me ? "<div style=\"overflow: hidden; clear: both;\"><label for=\"homepagetabs-" + Eval("Type").ToString() + "-allowupdateto\">Allow Update To: </label><input type=\"text\" id=\"homepagetabs-" + Eval("Type").ToString() + "-allowupdateto\" value=\"" + Eval("AllowUpdateTo").ToString() + "\" onclick=\"showadbuilder(this, false);\" onchange=\"updatetab('" + Eval("Type").ToString() + "');\" /></div>" : "" %>
-                                        <%#((HAP.Web.Configuration.TabType)Eval("Type")) == HAP.Web.Configuration.TabType.Me ? "<div style=\"overflow: hidden; clear: both;\"><label for=\"homepagetabs-" + Eval("Type").ToString() + "-showspace\">Show Space: </label><input type=\"checkbox\" id=\"homepagetabs-" + Eval("Type").ToString() + "-showspace\"" + (((Nullable<bool>)Eval("ShowSpace")).Value ? " checked=\"checked\"" : "") + " onchange=\"updatetab('" + Eval("Type").ToString() + "');\" /></div>" : ""%>
-                                    </div>
-                                </ItemTemplate></asp:Repeater>
-                                </div>
-                            </div>
-                            <div>
                                 <h3>Links <button class="addbutton" onclick="return addgroup();">Add Group</button></h3>
                                 <div class="sortablegroup">
                                 <asp:Repeater runat="server" ID="homepageLinkGroups">
@@ -328,6 +303,10 @@
                             <div>
                                 <asp:Label runat="server" Text="Hidden Extensions: " AssociatedControlID="mscbExt" />
                                 <asp:TextBox runat="server" ID="mscbExt" />
+                            </div>
+                            <div>
+                                <asp:Label runat="server" Text="Live Client ID: " AssociatedControlID="liveid" />
+                                <asp:TextBox runat="server" ID="liveid" />
                             </div>
                             <div>
                                 <asp:CheckBox runat="server" Text="Perform Read/Write Checks: " ID="mscbWrite" TextAlign="Left" />
@@ -1496,36 +1475,6 @@
                                 else $("#<%=proxystate.ClientID %>").attr("src", root + "images/setup/266.png");
                             } else $("#<%=proxystate.ClientID %>").attr("src", root + "images/setup/267.png");
                         }
-                        function updatetab(e) {
-                            var d = e + "@" + $("#homepagetabs-" + e + "-Name").val() + "@" + $("#homepagetabs-" + e + "-ShowTo").val();
-                            if (e == "Me") d += "@" + $("#homepagetabs-" + e + "-allowupdateto").val() + "@" + (($("#homepagetabs-" + e + "-showspace").attr("checked") && $("#homepagetabs-" + e + "-showspace").attr("checked") == "checked") ? "true" : "false");
-                            $.ajax({
-                                type: 'POST',
-                                url: 'API/Setup/UpdateTab',
-                                data: '{ "tab": "' + d + '" }',
-                                contentType: 'application/json',
-                                dataType: 'json',
-                                success: OnTabUpdateSuccess,
-                                error: OnUpdateError
-                            });
-                        }
-                        function OnTabUpdateSuccess(response) {
-                            if (response != null && response.UpdateTabResult != null) {
-                                var data = response.UpdateTabResult;
-                                if (data != 0) alert(data);
-                            }
-                        }
-                        function OnGroupOrderUpdateSuccess(response) {
-                            if (response != null) {
-                                if (response.UpdateLinkGroupOrderResult != null) {
-                                    var data = response.UpdateLinkGroupOrderResult;
-                                    if (data != 0) alert(data);
-                                } else if (response.UpdateLinkOrderResult != null) {
-                                    var data = response.UpdateLinkOrderResult;
-                                    if (data != 0) alert(data);
-                                }
-                            }
-                        }
                         function checkad() {
                             $("#treeprogress").progressbar({ value: 0 });
                             $("#treeprogress").show();
@@ -1649,7 +1598,6 @@
                                 }
                             });
                         }
-                        Sys.Application.add_load(resetButtons);
                         function resetButtons(sender, args) {
                             $("input:submit,input:button,a.button,button").button();
                             $(".checkbutton").button({ icons: { primary: "ui-icon-check"} });
@@ -1663,6 +1611,7 @@
                             $("#lessonStart").timePkr();
                             $("#lessonEnd").timePkr();
                         }
+                        resetButtons();
                         function generalchange() {
                             var i = "266.png";
                             if ($("#<%=name.ClientID %>").val().length > 2 && $("#<%=schoolurl.ClientID %>").val().length > 2) i = "267.png";
@@ -1670,7 +1619,6 @@
                         }
                         $(function () {
                             $('#maintabs').tabs();
-                            $('#homepagetabs').tabs();
                             $("#<%=sg.ClientID %>").keyup(function () {
                                 if ($("#<%=sg.ClientID %>").val().length > 2) $("#adgroupsstate").attr("src", root + "images/setup/267.png");
                                 else $("#adgroupsstate").attr("src", root + "images/setup/266.png");

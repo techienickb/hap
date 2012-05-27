@@ -65,8 +65,6 @@ namespace HAP.Web
                 trackerstudentlogs.Text = Config.Tracker.MaxStudentLogons.ToString();
                 adorgs.DataSource = Config.AD.OUs.Values;
                 adorgs.DataBind();
-                homepageTabs.DataSource = homepageTabs2.DataSource = Config.Homepage.Tabs.Values;
-                homepageTabs.DataBind(); homepageTabs2.DataBind();
                 homepageLinkGroups.DataSource = Config.Homepage.Groups.Values;
                 homepageLinkGroups.DataBind();
                 bsclean.Checked = Config.BookingSystem.KeepXmlClean;
@@ -92,6 +90,7 @@ namespace HAP.Web
                 mscbQuotaServers.DataBind();
                 mscbExt.Text = Config.MySchoolComputerBrowser.HideExtensions;
                 mscbWrite.Checked = Config.MySchoolComputerBrowser.WriteChecks;
+                liveid.Text = Config.MySchoolComputerBrowser.LiveAppId;
             }
         }
 
@@ -133,6 +132,7 @@ namespace HAP.Web
             Config.BookingSystem.TwoWeekTimetable = bstwoweek.Checked;
             Config.BookingSystem.MaxBookingsPerWeek = int.Parse(bsmax.Text);
             Config.BookingSystem.MaxDays = int.Parse(bsdays.Text);
+            Config.MySchoolComputerBrowser.LiveAppId = liveid.Text;
             Config.Save();
             Response.Redirect("~/Setup.aspx?Saved=1");
         }

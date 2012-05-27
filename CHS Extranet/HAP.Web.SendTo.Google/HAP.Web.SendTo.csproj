@@ -46,6 +46,9 @@
     <Reference Include="Google.GData.Documents">
       <HintPath>..\Binaries\Google.GData.Documents.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Http">
+      <HintPath>C:\Program Files (x86)\Microsoft WCF REST\WCF REST Starter Kit Preview 2\Assemblies\Microsoft.Http.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -55,6 +58,7 @@
   <ItemGroup>
     <Compile Include="GoogleClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SkyDrive.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HAP.Web.Config\HAP.Web.Configuration.csproj">

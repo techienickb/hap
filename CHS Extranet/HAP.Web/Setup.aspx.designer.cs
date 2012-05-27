@@ -274,24 +274,6 @@ namespace HAP.Web {
         protected global::System.Web.UI.WebControls.TextBox hp_ab_adt;
         
         /// <summary>
-        /// homepageTabs control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater homepageTabs;
-        
-        /// <summary>
-        /// homepageTabs2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater homepageTabs2;
-        
-        /// <summary>
         /// homepageLinkGroups control.
         /// </summary>
         /// <remarks>
@@ -380,6 +362,15 @@ namespace HAP.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox mscbExt;
+        
+        /// <summary>
+        /// liveid control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox liveid;
         
         /// <summary>
         /// mscbWrite control.

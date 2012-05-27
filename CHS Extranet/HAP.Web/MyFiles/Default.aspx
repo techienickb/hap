@@ -1,13 +1,11 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="HAP.Web.MyFiles.Default" %>
 <asp:Content ContentPlaceHolderID="head" runat="server">
-	<script src="../Scripts/jquery-1.7.1.min.js" type="text/javascript"></script>
-	<script src="../Scripts/jquery-ui-1.8.16.custom.min.js" type="text/javascript"></script>
 	<script src="../Scripts/jquery.ba-hashchange.min.js" type="text/javascript"></script>
 	<script src="../Scripts/jquery.dynatree.js" type="text/javascript"></script>
 	<script src="../Scripts/jquery.contextmenu.js" type="text/javascript"></script>
-	<script src="../Scripts/hap.web.js.js" type="text/javascript"></script>
 	<link href="../style/ui.dynatree.css" rel="stylesheet" type="text/css" />
 	<link href="../style/MyFiles.css" rel="stylesheet" type="text/css" />
+    <script src="//js.live.net/v5.0/wl.js"></script>
 </asp:Content>
 <asp:Content ContentPlaceHolderID="body" runat="server">
 	<div style="overflow: hidden; clear: both; position: relative; height: 120px" id="myfilesheader">
@@ -35,6 +33,9 @@
 	<hap:WrappedLocalResource runat="server" title="#myfiles/progress" id="progressstatus" Tag="div">
 		<div class="progress"></div>
 	</hap:WrappedLocalResource>
+    <hap:WrappedLocalResource runat="server" ID="loadingbox" title="#myfiles/sendto/skydrive" Tag="div">
+		<hap:LocalResource StringPath="myfiles/upload/uploading" runat="server" />...
+	</hap:WrappedLocalResource>
 	<hap:WrappedLocalResource runat="server" id="googlesignin" title="#myfiles/sendto/googlesignin" Tag="div">
 		<div><hap:LocalResource StringPath="myfiles/sendto/googlesignin2" runat="server" /></div>
 		<div>
@@ -48,17 +49,20 @@
 		<div class="progress"></div>
 	</hap:WrappedLocalResource>
 	<div class="contextMenu" id="contextMenu">
-	  <ul>
-		<li id="con-open"><hap:LocalResource StringPath="myfiles/open" runat="server" /></li>
-		<li id="con-download"><hap:LocalResource StringPath="myfiles/download" runat="server" /></li>
-		<li id="con-delete"><hap:LocalResource StringPath="myfiles/delete/delete" runat="server" /></li>
-		<li id="con-rename"><hap:LocalResource StringPath="myfiles/rename" runat="server" /></li>
-		<li id="con-preview"><hap:LocalResource StringPath="myfiles/preview" runat="server" /></li>
-		<li id="con-properties"><hap:LocalResource StringPath="myfiles/properties" runat="server" /></li>
-		<li id="con-unzip"><hap:LocalResource ID="LocalResource1" StringPath="myfiles/unzip/unzip" runat="server" /></li>
-		<li id="con-zip"><hap:LocalResource ID="LocalResource2" StringPath="myfiles/zip/zip" runat="server" /></li>
-		<li id="con-google"><hap:LocalResource StringPath="myfiles/sendto/googledocs" runat="server" /></li>
-	  </ul>
+        <ul>
+            <li id="con-open"><hap:LocalResource StringPath="myfiles/open" runat="server" /></li>
+            <li id="con-download"><hap:LocalResource StringPath="myfiles/download" runat="server" /></li>
+            <li id="con-delete"><hap:LocalResource StringPath="myfiles/delete/delete" runat="server" /></li>
+            <li id="con-rename"><hap:LocalResource StringPath="myfiles/rename" runat="server" /></li>
+            <li id="con-preview"><hap:LocalResource StringPath="myfiles/preview" runat="server" /></li>
+            <li id="con-properties"><hap:LocalResource StringPath="myfiles/properties" runat="server" /></li>
+            <li id="con-unzip"><hap:LocalResource ID="LocalResource1" StringPath="myfiles/unzip/unzip" runat="server" /></li>
+            <li id="con-zip"><hap:LocalResource ID="LocalResource2" StringPath="myfiles/zip/zip" runat="server" /></li>
+            <li id="con-google"><hap:LocalResource StringPath="myfiles/sendto/googledocs" runat="server" /></li>
+            <% if (!string.IsNullOrEmpty(config.MySchoolComputerBrowser.LiveAppId)) { %>
+            <li id="con-skydrive"><hap:LocalResource StringPath="myfiles/sendto/skydrive" runat="server" /></li>
+            <% } %>
+        </ul>
 	</div>
 	<hap:WrappedLocalResource runat="server" id="uploaders" title="#myfiles/upload/upload" Tag="div">
 		<input type="file" multiple="multiple" id="uploadedfiles" />
@@ -650,15 +654,14 @@
 						return true;
 					},
 					onShowMenu: function (e, menu) {
-						if (curitem.Actions != 0) { $("#con-delete", menu).remove(); $("#con-google", menu).remove(); $("#con-rename", menu).remove(); $("#con-zip", menu).remove(); $("#con-unzip", menu).remove(); }
+					    if (curitem.Actions != 0) { $("#con-delete", menu).remove(); $("#con-skydrive", menu).remove(); $("#con-google", menu).remove(); $("#con-rename", menu).remove(); $("#con-zip", menu).remove(); $("#con-unzip", menu).remove(); }
 						if (curitem.Actions == 3) { $("#con-download", menu).remove(); if (SelectedItems().length != 1 || SelectedItems()[0].Data.Type != 'Directory') ("#con-open", menu).remove(); $("#con-properties", menu).remove(); $("#con-zip", menu).remove(); $("#con-unzip", menu).remove(); }
-						if (SelectedItems().length > 1) { $("#con-unzip", menu).remove(); $("#con-download", menu).remove(); $("#con-open", menu).remove(); $("#con-rename", menu).remove(); $("#con-properties", menu).remove(); $("#con-preview", menu).remove(); $("#con-google", menu).remove(); }
+						if (SelectedItems().length > 1) { $("#con-unzip", menu).remove(); $("#con-download", menu).remove(); $("#con-open", menu).remove(); $("#con-rename", menu).remove(); $("#con-properties", menu).remove(); $("#con-preview", menu).remove(); $("#con-google", menu).remove(); $("#con-skydrive", menu).remove(); }
 						else {
 							var remgoogle = false;
 							if (SelectedItems()[0].Data.Extension != ".txt" && SelectedItems()[0].Data.Extension != ".xlsx" && SelectedItems()[0].Data.Extension != ".docx" && SelectedItems()[0].Data.Extension != ".xls" && SelectedItems()[0].Data.Extension != ".csv" && SelectedItems()[0].Data.Extension != ".png" && SelectedItems()[0].Data.Extension != ".gif" && SelectedItems()[0].Data.Extension != ".jpg" && SelectedItems()[0].Data.Extension != ".jpeg" && SelectedItems()[0].Data.Extension != ".bmp") {
 								$("#con-preview", menu).remove();
-								if (SelectedItems()[0].Data.Extension != ".ppt" && SelectedItems()[0].Data.Extension != ".pptx" && SelectedItems()[0].Data.Extension != ".pps" && SelectedItems()[0].Data.Extension != ".doc" && SelectedItems()[0].Data.Extension != ".rtf")
-									$("#con-google", menu).remove();
+								if (SelectedItems()[0].Data.Extension != ".ppt" && SelectedItems()[0].Data.Extension != ".pptx" && SelectedItems()[0].Data.Extension != ".pps" && SelectedItems()[0].Data.Extension != ".doc" && SelectedItems()[0].Data.Extension != ".rtf") $("#con-google", menu).remove();
 							}
 							if (SelectedItems()[0].Data.Extension != ".zip") $("#con-unzip", menu).remove();
 						}
@@ -786,6 +789,24 @@
 									});
 								}, "Close": function() { $(this).dialog("close"); } } 
 							});
+						},
+						'con-skydrive' : function (t) {
+						    if (SelectedItems().length > 1) { alert(hap.common.getLocal("myfiles/only1")); return false; }
+						    WL.init({ client_id: '<%=config.MySchoolComputerBrowser.LiveAppId%>', redirect_uri: hap.common.resolveUrl("~/myfiles/oauth.aspx"), scope: 'wl.skydrive_update', response_type: 'token' });
+						    WL.login({scope: 'wl.skydrive_update' }, function () { console.log("Windows Live Logged In");
+						        $("#loadingbox").dialog({ autoOpen: true, modal: true });
+						        $.ajax({
+						            type: 'POST',
+						            url: hap.common.resolveUrl('~/api/MyFiles/SendTo/SkyDrive/') + SelectedItems()[0].Data.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, "") + '?' + window.JSON.stringify(new Date()),
+						            dataType: 'json',
+						            data: '{ "accessToken" : "' + WL.getSession().access_token + '" }',
+						            contentType: 'application/json',
+						            success: function (data) {
+						                $("#loadingbox").dialog("close");
+						            },
+						            error: hap.common.jsonError
+                                });
+						    });
 						}
 					}
 				});
@@ -1229,7 +1250,7 @@
 				else {
 					for (var x = 0; x < items.length; x++) { if (searchres(items[x].Data.Name + items[x].Data.Extension)) items[x].Show = true; else items[x].Show = false; items[x].Refresh(); }
 				}
-			});
+            });
 			$(document).click(function () {
 				if (showView == 1) { $("#Views").animate({ height: 'toggle' }); showView = 0; }
 			});
