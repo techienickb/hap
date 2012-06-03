@@ -3,7 +3,6 @@
 <%@ Import Namespace="HAP.Web.BookingSystem" %>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
 	<link href="../../style/bookingsystem.css" rel="stylesheet" type="text/css" />
-	<script src="../../Scripts/jquery.dataTables.js" type="text/javascript"></script>
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="body" runat="server">
     <script type="text/javascript">$(function () { $(".selector").datepicker({ dateFormat: "dd/mm/yy" }); });</script>
@@ -96,320 +95,233 @@
 			</p>
 		</div>
 		<div id="static-bookings">
-					<table id="staticbookingstable">
-						<thead><tr><th width="120"></th><th width="70"><label>Room</label></th><th width="60"><label>Day</label></th><th width="100">Lesson</th><th width="200">Name</th><th width="140">Username</th></tr></thead>
-						<tbody>
-						<asp:ListView ID="ListView1" runat="server" DataSourceID="StaticBookingsDS" DataKeyNames="Day,Lesson,Room">
-							<AlternatingItemTemplate>
-								<tr style="">
-									<td>
-										<asp:Button ID="DeleteButton" runat="server" CommandName="Delete" 
-											Text="Delete" />
-										<asp:Button ID="EditButton" runat="server" CommandName="Edit" Text="Edit" />
-									</td>
-									<td>
-										<asp:Label ID="RoomLabel" runat="server" Text='<%# Eval("Room") %>' />
-									</td>
-									<td>
-										<asp:Label ID="DayLabel" runat="server" Text='<%# Eval("Day") %>' />
-									</td>
-									<td>
-										<asp:Label ID="LessonLabel" runat="server" Text='<%# Eval("Lesson") %>' />
-									</td>
-									<td>
-										<asp:Label ID="NameLabel" runat="server" Text='<%# Eval("Name") %>' />
-									</td>
-									<td>
-										<asp:Label ID="UsernameLabel" runat="server" Text='<%# Eval("Username") %>' />
-									</td>
-								</tr>
-							</AlternatingItemTemplate>
-							<EditItemTemplate>
-								<tr style="">
-									<td>
-										<asp:Button ID="UpdateButton" runat="server" CommandName="Update" 
-											Text="Update" />
-										<asp:Button ID="CancelButton" runat="server" CommandName="Cancel" 
-											Text="Cancel" />
-									</td>
-									<td>
-										<asp:Label ID="RoomLabel" runat="server" Text='<%# Eval("Room") %>' />
-									</td>
-									<td>
-										<asp:Label ID="DayLabel" runat="server" Text='<%# Eval("Day") %>' />
-									</td>
-									<td>
-										<asp:Label ID="LessonLabel" runat="server" Text='<%# Eval("Lesson") %>' />
-									</td>
-									<td>
-										<asp:TextBox ID="NameTextBox" runat="server" Text='<%# Bind("Name") %>' />
-									</td>
-									<td>
-										<asp:TextBox ID="UsernameTextBox" runat="server" 
-											Text='<%# Bind("Username") %>' />
-									</td>
-								</tr>
-							</EditItemTemplate>
-							<EmptyDataTemplate>
-								<table runat="server" style="">
-									<tr>
-										<td>
-											No data was returned.</td>
-									</tr>
-								</table>
-							</EmptyDataTemplate>
-							<ItemTemplate>
-								<tr style="">
-									<td>
-										<asp:Button ID="DeleteButton" runat="server" CommandName="Delete" 
-											Text="Delete" />
-										<asp:Button ID="EditButton" runat="server" CommandName="Edit" Text="Edit" />
-									</td>
-									<td>
-										<asp:Label ID="RoomLabel" runat="server" Text='<%# Eval("Room") %>' />
-									</td>
-									<td>
-										<asp:Label ID="DayLabel" runat="server" Text='<%# Eval("Day") %>' />
-									</td>
-									<td>
-										<asp:Label ID="LessonLabel" runat="server" Text='<%# Eval("Lesson") %>' />
-									</td>
-									<td>
-										<asp:Label ID="NameLabel" runat="server" Text='<%# Eval("Name") %>' />
-									</td>
-									<td>
-										<asp:Label ID="UsernameLabel" runat="server" Text='<%# Eval("Username") %>' />
-									</td>
-								</tr>
-							</ItemTemplate>
-							<LayoutTemplate>
-								<tr ID="itemPlaceholder" runat="server">
-								</tr>
-							</LayoutTemplate>
-							<SelectedItemTemplate>
-								<tr style="">
-									<td>
-										<asp:Button ID="DeleteButton" runat="server" CommandName="Delete" 
-											Text="Delete" />
-										<asp:Button ID="EditButton" runat="server" CommandName="Edit" Text="Edit" />
-									</td>
-									<td>
-										<asp:Label ID="RoomLabel" runat="server" Text='<%# Eval("Room") %>' />
-									</td>
-									<td>
-										<asp:Label ID="DayLabel" runat="server" Text='<%# Eval("Day") %>' />
-									</td>
-									<td>
-										<asp:Label ID="LessonLabel" runat="server" Text='<%# Eval("Lesson") %>' />
-									</td>
-									<td>
-										<asp:Label ID="NameLabel" runat="server" Text='<%# Eval("Name") %>' />
-									</td>
-									<td>
-										<asp:Label ID="UsernameLabel" runat="server" Text='<%# Eval("Username") %>' />
-									</td>
-								</tr>
-							</SelectedItemTemplate>
-						</asp:ListView>
-						</tbody>
-					</table>
-			
-					<script type="text/javascript">
-						$(function () { $("#tabs").tabs(); $("input[type=submit]").button(); $(".button").button(); $("input[type=button]").button(); });
-						function endReq(sender, args) {
-							$("#tabs").tabs(); $("input[type=submit]").button(); $(".button").button(); $("input[type=button]").button();
-							$("#staticbookingstable").dataTable({ "bJQueryUI": true, "sPaginationType": "full_numbers" });
-						} 
-						Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
-						$(function () { $("#staticbookingstable").dataTable({ "bJQueryUI": true, "sPaginationType": "full_numbers" }); });
-					</script>
-					<div style="float: right; padding: 10px; width: 50%">
-						<p>Save the SIMS export to <%=Server.MapPath("~/app_data/sims-bookings.xml") %> then click the button:</p>
-						<asp:Button runat="server" ID="importSIMS" Text="Import SIMS" CausesValidation="false"
-							style="font-size: 130%" onclick="importSIMS_Click" />
-						<p>CAUTION: The Teacher's Name from the SIMS Export (Title Initial Surname) needs to equal the Notes/Display Name field in AD for that user, or the Notes/Display name only has one person with that surname</p>
-					</div>
-					<asp:ObjectDataSource ID="StaticBookingsDS" runat="server" DataObjectTypeName="HAP.BookingSystem.Booking"
-						DeleteMethod="deleteStaticBooking" InsertMethod="addStaticBooking" SelectMethod="getStaticBookingsArray"
-						TypeName="HAP.BookingSystem.BookingSystem" UpdateMethod="updateStaticBooking" />
-					<asp:DetailsView ID="DetailsView1" runat="server" AutoGenerateRows="False" DataSourceID="StaticBookingsDS"
-						DefaultMode="Insert" EnableModelValidation="True" GridLines="None" CssClass="tile-border-color" style="border-width: 1px; border-style: solid; border-top: 0;">
-						<Fields>
-							<asp:TemplateField HeaderText="Day" SortExpression="Day">
-								<InsertItemTemplate>
-									<asp:DropDownList ID="dayDDL" runat="server" SelectedValue='<%# Bind("Day") %>' DataSourceID="dayds"
-										DataTextField="Name" DataValueField="Value" />
-								</InsertItemTemplate>
-								<ItemTemplate>
-									<asp:Label runat="server" ID="day" Text='<%# Bind("Day") %>'></asp:Label></ItemTemplate>
-							</asp:TemplateField>
-							<asp:TemplateField HeaderText="Lesson" SortExpression="Lesson">
-								<InsertItemTemplate>
-									<asp:DropDownList ID="LessonDDL" runat="server" SelectedValue='<%# Bind("Lesson") %>'
-										DataSourceID="lessonsds" DataTextField="Name" DataValueField="Name" />
-								</InsertItemTemplate>
-								<ItemTemplate>
-									<asp:Label runat="server" ID="room" Text='<%# Bind("Lesson") %>'></asp:Label></ItemTemplate>
-							</asp:TemplateField>
-							<asp:TemplateField HeaderText="Room" SortExpression="Room">
-								<InsertItemTemplate>
-									<asp:DropDownList ID="ResourceDDL" runat="server" SelectedValue='<%# Bind("Room") %>'
-										DataSourceID="resourcesds" DataTextField="Name" DataValueField="Name">
-									</asp:DropDownList>
-								</InsertItemTemplate>
-								<ItemTemplate>
-									<asp:Label runat="server" ID="room" Text='<%# Bind("Room") %>'></asp:Label></ItemTemplate>
-							</asp:TemplateField>
-							<asp:BoundField DataField="Name" HeaderText="Lesson Name" SortExpression="Name" />
-							<asp:TemplateField HeaderText="Username" SortExpression="Username">
-								<InsertItemTemplate>
-									<asp:DropDownList ID="UsernameDDL" runat="server" SelectedValue='<%# Bind("Username") %>'
-										DataSourceID="usersds" DataTextField="Key" DataValueField="Value">
-									</asp:DropDownList>
-								</InsertItemTemplate>
-								<ItemTemplate>
-									<asp:Label runat="server" ID="username" Text='<%# Bind("Username") %>'></asp:Label></ItemTemplate>
-							</asp:TemplateField>
-							<asp:CommandField ButtonType="Button" ShowCancelButton="False" ShowInsertButton="True" />
-						</Fields>
-					</asp:DetailsView>
-					<asp:ObjectDataSource ID="resourcesds" runat="server" SelectMethod="getResources"
-						TypeName="HAP.Web.BookingSystem.admin.Default" />
-					<asp:ObjectDataSource ID="lessonsds" runat="server" SelectMethod="getLessons" TypeName="HAP.Web.BookingSystem.admin.Default" />
-					<asp:ObjectDataSource ID="dayds" runat="server" SelectMethod="getDays" TypeName="HAP.Web.BookingSystem.admin.Default" />
-					<asp:ObjectDataSource ID="usersds" runat="server" SelectMethod="getUsers" TypeName="HAP.Web.BookingSystem.admin.Default" />
-		</div>
-		<div id="abr">
-					<asp:ListView ID="ABR" runat="server" DataSourceID="ABRDS" EnableModelValidation="True"
-						InsertItemPosition="LastItem">
-						<EditItemTemplate>
-							<tr>
-								<td colspan="2">
-									<div class="CommonFormSubTitle" style="text-align: right;">
-										<asp:Button ID="UpdateButton" runat="server" CommandName="Update" Text="Update" />
-										<asp:Button ID="DeleteButton" runat="server" CommandName="Delete" Text="Delete" />
-										<asp:Button ID="CancelButton" runat="server" CommandName="Cancel" Text="Cancel" />
-										<div style="float: left;">EDIT MODE</div>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td class="CommonFormFieldName" style="width: 350px;">
-									<strong>Username: </strong>
-								</td>
-								<td class="CommonFormField">
-									<asp:TextBox ID="UsernameTextBox" runat="server" Text='<%# Bind("Username") %>' ReadOnly="true" />
-								</td>
-							</tr>
-							<tr>
-								<td class="CommonFormFieldName" style="width: 350px;">
-									<strong>Weeks in Advanced: </strong>
-								</td>
-								<td class="CommonFormField">
-									<asp:TextBox ID="WeeksaheadTextBox" runat="server" Text='<%# Bind("Weeksahead") %>'
-										Columns="2" />
-								</td>
-							</tr>
-							<tr>
-								<td class="CommonFormFieldName" style="width: 350px;">
-									<strong>Bookings per Week: </strong>
-								</td>
-								<td class="CommonFormField">
-									<asp:TextBox ID="NumperweekTextBox" runat="server" Text='<%# Bind("Numperweek") %>'
-										Columns="2" />
-								</td>
-							</tr>
-						</EditItemTemplate>
-						<EmptyDataTemplate>
-							<table id="Table1" runat="server" style="width: 100%;">
-								<tr>
-									<td>
-										No data was returned.
-									</td>
-								</tr>
-							</table>
-						</EmptyDataTemplate>
+            <div id="bookingday" class="tile-border-color"><div class="body">
+			    <asp:Repeater runat="server" DataSourceID="StaticBookingsDS">
+				    <ItemTemplate>
+                        <a href="#" class="admin free">
+                            <span class="daytitle">Day&nbsp;</span><span class="day"><%# Eval("Day") %></span>
+                            <span class="lesson"><%# Eval("Lesson") %></span><span class="daytitle">&nbsp;in</span>
+                            <span class="room"><%# Eval("Room") %></span>
+						    <span class="name"><%# Eval("Name") %></span>
+                            <span class="username"><%# Eval("Username") %></span>
+                            <span class="state book"><i></i><span>Edit</span></span>
+					    </a>
+				    </ItemTemplate>
+                </asp:Repeater>
+            </div></div>
+            <div id="booking-editor" style="position: fixed; top: 20%; left: 40%; background: #fff; z-index: 1058; padding: 20px; border-width: 1px; border-style: solid;" class="tile-border-color">
+                <asp:Label runat="server" AssociatedControlID="Edit_dayDDL">Day: </asp:Label><asp:DropDownList ID="Edit_dayDDL" runat="server" DataSourceID="dayds" DataTextField="Name" DataValueField="Value" /><br />
+                <asp:Label runat="server" AssociatedControlID="Edit_LessonDDL">Lesson: </asp:Label><asp:DropDownList ID="Edit_LessonDDL" runat="server" DataSourceID="lessonsds" DataTextField="Name" DataValueField="Name" /><br />
+                <asp:Label runat="server" AssociatedControlID="Edit_ResourceDDL">Resource: </asp:Label><asp:DropDownList ID="Edit_ResourceDDL" runat="server" DataSourceID="resourcesds" DataTextField="Name" DataValueField="Name" /><br />
+                <asp:Label runat="server" AssociatedControlID="Edit_lessonName">Lesson Name: </asp:Label><asp:TextBox runat="server" ID="Edit_lessonName" /><br />
+                <asp:Label runat="server" AssociatedControlID="Edit_UsernameDDL">User: </asp:Label><asp:DropDownList ID="Edit_UsernameDDL" runat="server" DataSourceID="usersds" DataTextField="Key" DataValueField="Value" /><br />
+                <asp:Button runat="server" ID="Edit_Save" Text="Update" OnClick="Edit_Save_Click" />
+                <asp:Button runat="server" ID="Edit_Delete" Text="Delete" OnClick="Edit_Delete_Click" />
+                <button onclick="$('#booking-editor').css('display', 'none'); return false;">Cancel</button>
+            </div>
+            <asp:HiddenField runat="server" ID="Edit_id" />
+            <script type="text/javascript">
+                $("#bookingday a").click(function () {
+                    var a = $(this);
+                    $("#<%=Edit_id.ClientID%>").val($(this).children(".day").text() + ":" + $(this).children(".lesson").text() + ":" + $(this).children(".room").text());
+                    $("#<%=Edit_dayDDL.ClientID%>").val($(this).children(".day").text());
+                    $("#<%=Edit_LessonDDL.ClientID%>").val($(this).children(".lesson").text());
+                    $("#<%=Edit_ResourceDDL.ClientID%>").val($(this).children(".room").text());
+                    $("#<%=Edit_lessonName.ClientID%>").val($(this).children(".name").text());
+                    $("#<%=Edit_UsernameDDL.ClientID%>").val($(this).children(".username").text());
+                    $("#booking-editor").css("display", "block");
+                    return false;
+                });
+                $(function () {
+                    $("#booking-editor").css("display", "none");
+                });
+            </script>
+			<div style="float: right; padding: 10px; width: 50%">
+				<p>Save the SIMS export to <%=Server.MapPath("~/app_data/sims-bookings.xml") %> then click the button:</p>
+				<asp:Button runat="server" ID="importSIMS" Text="Import SIMS" CausesValidation="false" style="font-size: 130%" onclick="importSIMS_Click" />
+				<p>CAUTION: The Teacher's Name from the SIMS Export (Title Initial Surname) needs to equal the Notes/Display Name field in AD for that user, or the Notes/Display name only has one person with that surname</p>
+			</div>
+			<asp:ObjectDataSource ID="StaticBookingsDS" runat="server" DataObjectTypeName="HAP.BookingSystem.Booking"
+				DeleteMethod="deleteStaticBooking" InsertMethod="addStaticBooking" SelectMethod="getStaticBookingsArray"
+				TypeName="HAP.BookingSystem.BookingSystem" UpdateMethod="updateStaticBooking" />
+			<asp:DetailsView ID="DetailsView1" runat="server" AutoGenerateRows="False" DataSourceID="StaticBookingsDS"
+				DefaultMode="Insert" EnableModelValidation="True" GridLines="None" CssClass="tile-border-color" style="border-width: 1px; border-style: solid; border-top: 0;">
+				<Fields>
+					<asp:TemplateField HeaderText="Day" SortExpression="Day">
 						<InsertItemTemplate>
-							<tr>
-								<td colspan="2">
-									<h3 class="CommonFormSubTitle" style="text-align: right;">
-										<asp:Button ID="InsertButton" runat="server" CommandName="Insert" Text="Insert" />
-										<asp:Button ID="CancelButton" runat="server" CommandName="Cancel" Text="Clear" />
-										<div style="float: left;">
-											NEW</div>
-									</h3>
-								</td>
-							</tr>
-							<tr>
-								<td class="CommonFormFieldName" style="width: 350px;">
-									<strong>Username: </strong>
-								</td>
-								<td class="CommonFormField">
-									<asp:TextBox ID="UsernameTextBox" runat="server" Text='<%# Bind("Username") %>' />
-								</td>
-							</tr>
-							<tr>
-								<td class="CommonFormFieldName" style="width: 350px;">
-									<strong>Weeks in Advanced: </strong>
-								</td>
-								<td class="CommonFormField">
-									<asp:TextBox ID="WeeksaheadTextBox" runat="server" Text='<%# Bind("Weeksahead") %>'
-										Columns="2" />
-									(Default: 2)
-								</td>
-							</tr>
-							<tr>
-								<td class="CommonFormFieldName" style="width: 350px;">
-									<strong>Bookings per Week: </strong>
-								</td>
-								<td class="CommonFormField">
-									<asp:TextBox ID="NumperweekTextBox" runat="server" Text='<%# Bind("Numperweek") %>'
-										Columns="2" />
-									(Default: 3)
-								</td>
-							</tr>
+							<asp:DropDownList ID="dayDDL" runat="server" SelectedValue='<%# Bind("Day") %>' DataSourceID="dayds"
+								DataTextField="Name" DataValueField="Value" />
 						</InsertItemTemplate>
 						<ItemTemplate>
-							<tr>
-								<td colspan="2">
-									<h3 class="CommonFormSubTitle" style="text-align: right;">
-										<asp:Button ID="EditButton" runat="server" CommandName="Edit" Text="Edit" />
-										<div style="float: left;">
-											<asp:Label ID="UsernameLabel" runat="server" Text='<%# Eval("Username") %>' /></div>
-									</h3>
-								</td>
-							</tr>
-							<tr>
-								<td class="CommonFormFieldName" style="width: 350px;">
-									<strong>Weeks in Advanced: </strong>
-								</td>
-								<td class="CommonFormField">
-									<asp:Label ID="WeeksaheadLabel" runat="server" Text='<%# Eval("Weeksahead") %>' />
-								</td>
-							</tr>
-							<tr>
-								<td class="CommonFormFieldName" style="width: 350px;">
-									<strong>Bookings per Week: </strong>
-								</td>
-								<td class="CommonFormField">
-									<asp:Label ID="NumperweekLabel" runat="server" Text='<%# Eval("Numperweek") %>' />
-								</td>
-							</tr>
-						</ItemTemplate>
-						<LayoutTemplate>
-							<table id="Table2" style="width: 100%" runat="server">
-								<tr id="itemPlaceholder" runat="server">
-								</tr>
-								<tr id="Tr3" runat="server">
-									<td id="Td2" runat="server" style="">
-									</td>
-								</tr>
-							</table>
-						</LayoutTemplate>
-					</asp:ListView>
-					<asp:ObjectDataSource ID="ABRDS" runat="server" DataObjectTypeName="HAP.BookingSystem.AdvancedBookingRight"
-						InsertMethod="addBookingRights" SelectMethod="getBookingRights" TypeName="HAP.BookingSystem.BookingSystem"
-						UpdateMethod="updateBookingRights" DeleteMethod="deleteBookingRights" />>
+							<asp:Label runat="server" ID="day" Text='<%# Bind("Day") %>'></asp:Label></ItemTemplate>
+					</asp:TemplateField>
+					<asp:TemplateField HeaderText="Lesson" SortExpression="Lesson">
+						<InsertItemTemplate>
+							<asp:DropDownList ID="LessonDDL" runat="server" SelectedValue='<%# Bind("Lesson") %>'
+								DataSourceID="lessonsds" DataTextField="Name" DataValueField="Name" />
+						</InsertItemTemplate>
+						<ItemTemplate>
+							<asp:Label runat="server" ID="room" Text='<%# Bind("Lesson") %>'></asp:Label></ItemTemplate>
+					</asp:TemplateField>
+					<asp:TemplateField HeaderText="Room" SortExpression="Room">
+						<InsertItemTemplate>
+							<asp:DropDownList ID="ResourceDDL" runat="server" SelectedValue='<%# Bind("Room") %>'
+								DataSourceID="resourcesds" DataTextField="Name" DataValueField="Name">
+							</asp:DropDownList>
+						</InsertItemTemplate>
+						<ItemTemplate>
+							<asp:Label runat="server" ID="room" Text='<%# Bind("Room") %>'></asp:Label></ItemTemplate>
+					</asp:TemplateField>
+					<asp:BoundField DataField="Name" HeaderText="Lesson Name" SortExpression="Name" />
+					<asp:TemplateField HeaderText="Username" SortExpression="Username">
+						<InsertItemTemplate>
+							<asp:DropDownList ID="UsernameDDL" runat="server" SelectedValue='<%# Bind("Username") %>'
+								DataSourceID="usersds" DataTextField="Key" DataValueField="Value">
+							</asp:DropDownList>
+						</InsertItemTemplate>
+						<ItemTemplate>
+							<asp:Label runat="server" ID="username" Text='<%# Bind("Username") %>'></asp:Label></ItemTemplate>
+					</asp:TemplateField>
+					<asp:CommandField ButtonType="Button" ShowCancelButton="False" ShowInsertButton="True" />
+				</Fields>
+			</asp:DetailsView>
+			<asp:ObjectDataSource ID="resourcesds" runat="server" SelectMethod="getResources"
+				TypeName="HAP.Web.BookingSystem.admin.Default" />
+			<asp:ObjectDataSource ID="lessonsds" runat="server" SelectMethod="getLessons" TypeName="HAP.Web.BookingSystem.admin.Default" />
+			<asp:ObjectDataSource ID="dayds" runat="server" SelectMethod="getDays" TypeName="HAP.Web.BookingSystem.admin.Default" />
+			<asp:ObjectDataSource ID="usersds" runat="server" SelectMethod="getUsers" TypeName="HAP.Web.BookingSystem.admin.Default" />
+		</div>
+		<div id="abr">
+		    <asp:ListView ID="ABR" runat="server" DataSourceID="ABRDS" EnableModelValidation="True"
+			    InsertItemPosition="LastItem">
+			    <EditItemTemplate>
+				    <tr>
+					    <td colspan="2">
+						    <div class="CommonFormSubTitle" style="text-align: right;">
+							    <asp:Button ID="UpdateButton" runat="server" CommandName="Update" Text="Update" />
+							    <asp:Button ID="DeleteButton" runat="server" CommandName="Delete" Text="Delete" />
+							    <asp:Button ID="CancelButton" runat="server" CommandName="Cancel" Text="Cancel" />
+							    <div style="float: left;">EDIT MODE</div>
+						    </div>
+					    </td>
+				    </tr>
+				    <tr>
+					    <td class="CommonFormFieldName" style="width: 350px;">
+						    <strong>Username: </strong>
+					    </td>
+					    <td class="CommonFormField">
+						    <asp:TextBox ID="UsernameTextBox" runat="server" Text='<%# Bind("Username") %>' ReadOnly="true" />
+					    </td>
+				    </tr>
+				    <tr>
+					    <td class="CommonFormFieldName" style="width: 350px;">
+						    <strong>Weeks in Advanced: </strong>
+					    </td>
+					    <td class="CommonFormField">
+						    <asp:TextBox ID="WeeksaheadTextBox" runat="server" Text='<%# Bind("Weeksahead") %>'
+							    Columns="2" />
+					    </td>
+				    </tr>
+				    <tr>
+					    <td class="CommonFormFieldName" style="width: 350px;">
+						    <strong>Bookings per Week: </strong>
+					    </td>
+					    <td class="CommonFormField">
+						    <asp:TextBox ID="NumperweekTextBox" runat="server" Text='<%# Bind("Numperweek") %>'
+							    Columns="2" />
+					    </td>
+				    </tr>
+			    </EditItemTemplate>
+			    <EmptyDataTemplate>
+				    <table id="Table1" runat="server" style="width: 100%;">
+					    <tr>
+						    <td>
+							    No data was returned.
+						    </td>
+					    </tr>
+				    </table>
+			    </EmptyDataTemplate>
+			    <InsertItemTemplate>
+				    <tr>
+					    <td colspan="2">
+						    <h3 class="CommonFormSubTitle" style="text-align: right;">
+							    <asp:Button ID="InsertButton" runat="server" CommandName="Insert" Text="Insert" />
+							    <asp:Button ID="CancelButton" runat="server" CommandName="Cancel" Text="Clear" />
+							    <div style="float: left;">
+								    NEW</div>
+						    </h3>
+					    </td>
+				    </tr>
+				    <tr>
+					    <td class="CommonFormFieldName" style="width: 350px;">
+						    <strong>Username: </strong>
+					    </td>
+					    <td class="CommonFormField">
+						    <asp:TextBox ID="UsernameTextBox" runat="server" Text='<%# Bind("Username") %>' />
+					    </td>
+				    </tr>
+				    <tr>
+					    <td class="CommonFormFieldName" style="width: 350px;">
+						    <strong>Weeks in Advanced: </strong>
+					    </td>
+					    <td class="CommonFormField">
+						    <asp:TextBox ID="WeeksaheadTextBox" runat="server" Text='<%# Bind("Weeksahead") %>'
+							    Columns="2" />
+						    (Default: 2)
+					    </td>
+				    </tr>
+				    <tr>
+					    <td class="CommonFormFieldName" style="width: 350px;">
+						    <strong>Bookings per Week: </strong>
+					    </td>
+					    <td class="CommonFormField">
+						    <asp:TextBox ID="NumperweekTextBox" runat="server" Text='<%# Bind("Numperweek") %>'
+							    Columns="2" />
+						    (Default: 3)
+					    </td>
+				    </tr>
+			    </InsertItemTemplate>
+			    <ItemTemplate>
+				    <tr>
+					    <td colspan="2">
+						    <h3 class="CommonFormSubTitle" style="text-align: right;">
+							    <asp:Button ID="EditButton" runat="server" CommandName="Edit" Text="Edit" />
+							    <div style="float: left;">
+								    <asp:Label ID="UsernameLabel" runat="server" Text='<%# Eval("Username") %>' /></div>
+						    </h3>
+					    </td>
+				    </tr>
+				    <tr>
+					    <td class="CommonFormFieldName" style="width: 350px;">
+						    <strong>Weeks in Advanced: </strong>
+					    </td>
+					    <td class="CommonFormField">
+						    <asp:Label ID="WeeksaheadLabel" runat="server" Text='<%# Eval("Weeksahead") %>' />
+					    </td>
+				    </tr>
+				    <tr>
+					    <td class="CommonFormFieldName" style="width: 350px;">
+						    <strong>Bookings per Week: </strong>
+					    </td>
+					    <td class="CommonFormField">
+						    <asp:Label ID="NumperweekLabel" runat="server" Text='<%# Eval("Numperweek") %>' />
+					    </td>
+				    </tr>
+			    </ItemTemplate>
+			    <LayoutTemplate>
+				    <table id="Table2" style="width: 100%" runat="server">
+					    <tr id="itemPlaceholder" runat="server">
+					    </tr>
+					    <tr id="Tr3" runat="server">
+						    <td id="Td2" runat="server" style="">
+						    </td>
+					    </tr>
+				    </table>
+			    </LayoutTemplate>
+		    </asp:ListView>
+		    <asp:ObjectDataSource ID="ABRDS" runat="server" DataObjectTypeName="HAP.BookingSystem.AdvancedBookingRight"
+			    InsertMethod="addBookingRights" SelectMethod="getBookingRights" TypeName="HAP.BookingSystem.BookingSystem"
+			    UpdateMethod="updateBookingRights" DeleteMethod="deleteBookingRights" />>
 		</div>
 		<div id="email-templates">
 			<p>{0} = Username, {1} = Display Name, {2} = Room, {3} = Booking Name, {4} = Date, {5} = Day, {6} = Lesson, {7} = LTRoom or EquipRoom, {8} = LTCount</p>
@@ -443,5 +355,8 @@
 			</script>
 		</div>
 	</div>
+	<script type="text/javascript">
+		$(function () { $("#tabs").tabs(); $("input[type=submit]").button(); $(".button").button(); $("input[type=button]").button(); });
+	</script>
 	<asp:Literal runat="server" ID="message" />
 </asp:Content>
