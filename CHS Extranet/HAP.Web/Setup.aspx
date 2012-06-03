@@ -545,6 +545,7 @@
                         </div>
                     </div>
                     <script type="text/javascript">
+                        if (<%=HAP.Web.Configuration.hapConfig.Current.FirstRun.ToString().ToLower() %>) $("#<%=Save.ClientID%>").attr("disabled", "disabled");
                         var tempe = null;
                         function addou() {
                             $("#ouname").val("");
@@ -1618,7 +1619,11 @@
                             $("#<%=generalstate.ClientID %>").attr("src", root + "images/setup/" + i);
                         }
                         $(function () {
-                            $('#maintabs').tabs();
+                            $('#maintabs').tabs({ select: function (event, ui) {
+                                if (<%=HAP.Web.Configuration.hapConfig.Current.FirstRun.ToString().ToLower() %> && ui.index > 1) {
+                                    $("#<%=Save.ClientID%>").removeAttr("disabled").removeClass("ui-state-disabled")[0].disabled = false;
+                                }
+                            }});
                             $("#<%=sg.ClientID %>").keyup(function () {
                                 if ($("#<%=sg.ClientID %>").val().length > 2) $("#adgroupsstate").attr("src", root + "images/setup/267.png");
                                 else $("#adgroupsstate").attr("src", root + "images/setup/266.png");
