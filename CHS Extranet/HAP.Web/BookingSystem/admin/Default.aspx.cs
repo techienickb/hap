@@ -19,13 +19,7 @@ namespace HAP.Web.BookingSystem.admin
         protected void Page_Load(object sender, EventArgs e)
         {
             SaveButton.Click += new EventHandler(SaveButton_Click);
-            ListView1.ItemDeleting += new EventHandler<ListViewDeleteEventArgs>(ListView1_ItemDeleting);
             ABR.ItemDeleting += new EventHandler<ListViewDeleteEventArgs>(ABR_ItemDeleting);
-        }
-
-        void ListView1_ItemDeleting(object sender, ListViewDeleteEventArgs e)
-        {
-            new HAP.BookingSystem.BookingSystem().deleteStaticBooking1(e.Values[1].ToString(), e.Values[2].ToString(), int.Parse(e.Values[0].ToString()));
         }
 
         public Default()
@@ -233,6 +227,26 @@ namespace HAP.Web.BookingSystem.admin
             for (int i = 0; i < s.Length; i++)
                 if (s[i].ToLower() == day.ToLower()) return i + 1;
             return -1;
+        }
+
+        protected void Edit_Delete_Click(object sender, EventArgs e)
+        {
+            new HAP.BookingSystem.BookingSystem().deleteStaticBooking1(Edit_id.Value.Split(new char[] { ':' })[1], Edit_id.Value.Split(new char[] { ':' })[2], int.Parse(Edit_id.Value.Split(new char[] { ':' })[0]));
+            Page.DataBind();
+        }
+
+        protected void Edit_Save_Click(object sender, EventArgs e)
+        {
+            XmlDocument sb = new XmlDocument();
+            sb.Load(Server.MapPath("~/app_data/StaticBookings.xml"));
+            XmlElement el = sb.SelectSingleNode("/Bookings/Booking[@day='" + Edit_id.Value.Split(new char[] { ':' })[0] + "' and @lesson='" + Edit_id.Value.Split(new char[] { ':' })[1] + "' and @room='" + Edit_id.Value.Split(new char[] { ':' })[2] + "']") as XmlElement;
+            el.SetAttribute("day", Edit_dayDDL.SelectedValue);
+            el.SetAttribute("lesson", Edit_LessonDDL.SelectedValue);
+            el.SetAttribute("room", Edit_ResourceDDL.SelectedValue);
+            el.SetAttribute("name", Edit_lessonName.Text);
+            el.SetAttribute("username", Edit_UsernameDDL.SelectedValue);
+            sb.Save(Server.MapPath("~/app_data/StaticBookings.xml"));
+            Page.DataBind();
         }
     }
 
