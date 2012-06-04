@@ -28,8 +28,12 @@
             $("#<%=login.ClientID %>").button();
             $("#<%=username.ClientID %>").focus();
         });
+        $("#<%=username.ClientID%>").focusout(function () {
+            $("#<%=username.ClientID%>").val($.trim($("#<%=username.ClientID%>").val()));
+        });
         $('input[type=text]').keyup(function (e) {
             if (e.keyCode == 13) {
+                $("#<%=username.ClientID%>").val($.trim($("#<%=username.ClientID%>").val()));
                 $("#<%=login.ClientID %>").trigger('click');
             }
         });

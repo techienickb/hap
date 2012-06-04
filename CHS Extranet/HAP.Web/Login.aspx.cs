@@ -31,18 +31,13 @@ namespace HAP.Web
             {
                 HAP.Web.Logging.EventViewer.Log("HAP+ Logon", "Home Access Plus+ Logon\n\nUsername: " + username.Text, System.Diagnostics.EventLogEntryType.Information);
                 HAP.Data.SQL.WebEvents.Log(DateTime.Now, "Logon", username.Text, Request.UserHostAddress, Request.Browser.Platform, Request.Browser.Browser + " " + Request.Browser.Version, Request.UserHostName, Request.UserAgent);
-                Session.Add("password", password.Text);
                 FormsAuthentication.SetAuthCookie(username.Text, false);
                 HttpCookie tokenCookie = new HttpCookie("token", TokenGenerator.ConvertToToken(password.Text));
                 if (Request.Cookies["token"] == null) Response.AppendCookie(tokenCookie);
                 else Response.SetCookie(tokenCookie);
                 FormsAuthentication.RedirectFromLoginPage(username.Text, false);
             }
-            else // Fail to login
-            {
-                string invalidLogin = "Invalid Login.";
-                message.Text = invalidLogin;
-            }
+            else message.Text = "<div class=\"ui-state-error ui-corner-all\" style=\" padding: 5px 10px\"><span class=\"ui-icon ui-icon-alert\" style=\"float: left; margin-right: 5px;\"></span>Either your Username or Password was Incorrect.</div>";
         }
     }
 }
