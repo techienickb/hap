@@ -10,7 +10,7 @@
 #hapContent input, #hapContent select, #hapContent input { font-size: 13px; }
 a img { border: 0; }
 
-input[type=text], input[type=password] { border: solid 2px #d9d9d9; background: #fff; }
+input[type=text], input[type=password], input[type=date], input[type=time], textarea { border: solid 2px #d9d9d9; background: #fff; }
 
 #hapContent { padding-top: 20px; }
 
