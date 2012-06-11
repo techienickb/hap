@@ -452,7 +452,7 @@
 					uploads.pop(this);
 					return false;
 				}
-				else if ("<%=DropZoneAccepted %>".toLowerCase().indexOf(this.File.name.substr(this.File.name.lastIndexOf('.')).toLowerCase()) == -1 && "<%=DropZoneAccepted %>" != "") {
+				else if ("<%=AcceptedExtensions %>".toLowerCase().indexOf(this.File.name.substr(this.File.name.lastIndexOf('.')).toLowerCase()) == -1 && "<%=DropZoneAccepted %>" != "") {
 					alert(this.File.name + " " + hap.common.getLocal("myfiles/upload/filetypewarning") + "\n\n <%=AcceptedExtensions %>");
 					uploads.pop(this);
 					return false;
