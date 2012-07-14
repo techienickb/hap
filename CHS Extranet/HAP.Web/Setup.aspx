@@ -32,7 +32,18 @@
                     <div style="text-align: center;"><a href="http://hap.codeplex.com"><img src="images/haplogo.png" alt="Home Access Plus+" style="width: 485px; height: 80px;" /></a></div>
                     <script type="text/javascript">
                         function OnUpdateError(xhr, ajaxOptions, thrownError) {
-                            alert(thrownError);
+                            try {
+                                if (xhr.responseText.match(/\<!doctype html\>/gi)) window.location.reload();
+                                else {
+                                    console.log(xhr.responseText);
+                                    if (document.getElementById("errorlist") == null) $("#hapContent").append('<div id="errorlist"></div>');
+                                    $("<div class=\"ui-state-error ui-corner-all\" style=\"padding: 3px 10px 3px 10px\"><span class=\"ui-icon ui-icon-alert\" style=\"float: left; margin-right: 5px; margin-top: 2px;\"></span><a href=\"#\" onclick=\"this.nextSibling.className = (this.nextSibling.className == 'cont') ? '' : 'cont'; return false;\">" + jQuery.parseJSON(xhr.responseText).Message + "</a><div class=\"cont\">This error has been logged on the server's event log</div></div>").appendTo("#errorlist");
+                                    setTimeout("clearError();", 10000);
+                                }
+                            } catch (e) { if (thrownError != "") alert(thrownError); }
+                        }
+                        function clearError() {
+                            $($("#errorlist").children()[0]).animate({ height: 0 }, 500, function () { $(this).remove(); });
                         }
                         var root = "<%=ResolveUrl("~/") %>";
                         var reqtype = "group"
@@ -277,7 +288,8 @@
                                                 <div class="resource" style="float: left;">
                                                     <span><%#Eval("Name") %></span>
                                                     (<i><%#Eval("Type") %></i>) [<b class="enabled"><%#((bool)Eval("Enabled")) ? "Enabled" : "Disabled" %></b>|<b class="charging"><%#((bool)Eval("EnableCharging")) ? "Charging" : "N"%></b>|<b class="email"><%#((bool)Eval("EmailAdmins")) ? "Email Admins" : "N" %></b>]<br />
-                                                    Admins: <b class="admins"><%#Eval("Admins") %></b>, Show To: <b class="showto"><%#Eval("ShowTo") %></b>
+                                                    Admins: <b class="admins"><%#Eval("Admins") %></b>, Years: <b class="years"><%#Eval("Years") %></b>, Quantities: <b class="quantities"><%#Eval("Quantities") %></b><br />Show To: <b class="showto"><%#Eval("ShowTo") %></b><br />Hide From: <b class="hidefrom"><%#Eval("HideFrom") %></b>
+                                                    Read Only: <b class="readonly"><%#Eval("ReadOnlyTo")%></b>, Read/Write: <b class="readwrite"><%#Eval("ReadWriteTo") %></b>
                                                 </div>
                                                 <div class="cbuttonset"><button onclick="return editres(this);" title="Edit">Edit</button><button onclick="return removeres(this);" title="Delete">Delete</button></div>
                                             </div>
@@ -497,6 +509,21 @@
                         </div>
                         <div>
                             <label for="resShowTo">Show To: </label><input type="text" id="resShowTo" /><br />(Comma Seperated Usernames)
+                        </div>
+                        <div>
+                            <label for="resHideFrom">Hide From: </label><input type="text" id="resHideFrom" /><br />(Comma Seperated Usernames)
+                        </div>
+                        <div>
+                            <label for="resQuantities">Laptop Quantities: </label><input type="text" id="resQuantities" /><br />(Comma Seperated Numbers)
+                        </div>
+                        <div>
+                            <label for="resYears">Years to allow bookings: </label><input type="text" id="resYears" /><br />(Comma Seperated Year Groups, i.e. Year 9,Year10)
+                        </div>
+                        <div>
+                            <label for="resReadOnlyTo">Read Only To: </label><input type="text" id="resReadOnlyTo" /><br />(Comma Seperated Usernames, default is blank)
+                        </div>
+                        <div>
+                            <label for="resReadWriteTo">Read/Write To: </label><input type="text" id="resReadWriteTo" /><br />(Comma Seperated Usernames, default is blank)
                         </div>
                     </div>
                     <div id="qserverEditor" title="Quota Server Editor">
@@ -930,6 +957,11 @@
                             $("#resAdmins").val("");
                             $("#resShowTo").val("");
                             $("#resEmail").attr("checked", "checked");
+                            $("#resHideFrom").val("");
+                            $("#resQuantities").val("");
+                            $("#resReadOnlyTo").val("");
+                            $("#resReadWriteTo").val("");
+                            $("#resYears").val("Inherit");
                             $("#addres").dialog({
                                 autoOpen: true,
                                 width: 500,
@@ -938,7 +970,7 @@
                                         $.ajax({
                                             type: 'POST',
                                             url: 'API/Setup/AddResource',
-                                            data: '{ "name": "' + $("#resName").val() + '", "type": "' + $("#resType").val() + '", "enabled": ' + ($("#resEnabled").attr("checked") ? 'true' : 'false') + ', "charging": ' + ($("#resCharging").attr("checked") ? 'true' : 'false') + ', "admins": "' + $("#resAdmins").val() + '", "emailadmins": ' + ($("#resEmail").attr("checked") ? 'true' : 'false') + ', "showto": "' + $("#resShowTo").val() + '" }',
+                                            data: '{ "name": "' + $("#resName").val() + '", "type": "' + $("#resType").val() + '", "enabled": ' + ($("#resEnabled").attr("checked") ? 'true' : 'false') + ', "charging": ' + ($("#resCharging").attr("checked") ? 'true' : 'false') + ', "admins": "' + $("#resAdmins").val() + '", "emailadmins": ' + ($("#resEmail").attr("checked") ? 'true' : 'false') + ', "showto": "' + $("#resShowTo").val() + '", "hidefrom": "' + $("#resHideFrom").val() + '", "quantities": "' + $("#resQuantities").val() + '", "years": "' + $("#resYears").val() + '", "readwriteto": "' + $("#resReadWriteTo").val() + '", "readonlyto": "' + $("#resReadOnlyTo").val() + '" }',
                                             contentType: 'application/json',
                                             dataType: 'json',
                                             success: OnResourceAddSuccess,
@@ -959,7 +991,7 @@
                                 var data = response.AddResourceResult;
                                 if (data != 0) alert(data);
                                 else {
-                                    $("#resources").append('<div><div class="resource" style="float: left;"><span>' + $("#resName").val() + '</span> (<i>' + $("#resType").val() + '</i>) [<b class="enabled">' + ($("#resEnabled").attr("checked") ? "Enabled" : "Disabled") + '</b>|<b class="charging">' + ($("#resCharging").attr("checked") ? "Charging" : "N") + '</b>|<b class="email">' + ($("#resEmail").attr("checked") ? "Email Admins" : "N") + '</b>]<br />Admins: <b class="admins">' + $("#resAdmins").val() + '</b>, Show To: <b class="showto">' + $("#resShowTo").val() + '</b></div><div class="cbuttonset"><button onclick="return editres(this);" title="Edit">Edit</button><button onclick="return removeres(this);" title="Delete">Delete</button></div></div>');
+                                    $("#resources").append('<div><div class="resource" style="float: left;"><span>' + $("#resName").val() + '</span> (<i>' + $("#resType").val() + '</i>) [<b class="enabled">' + ($("#resEnabled").attr("checked") ? "Enabled" : "Disabled") + '</b>|<b class="charging">' + ($("#resCharging").attr("checked") ? "Charging" : "N") + '</b>|<b class="email">' + ($("#resEmail").attr("checked") ? "Email Admins" : "N") + '</b>]<br />Admins: <b class="admins">' + $("#resAdmins").val() + '</b>, Quantities: <b class="quantities">' + $("#resQuantities").val() + '</b>, Years: <b class="years">' + $("#resYears").val() + '</b><br />Show To: <b class="showto">' + $("#resShowTo").val() + '</b><br />Hide From: <b class="hidefrom">' + $("#resHideFrom").val() + '</b><br />Read Only: <b class="readonly">' + $("#resReadOnlyTo").val() + '</b>, Read/Write: <b class="readwrite">' + $("#resReadWriteTo").val() + '</b></div><div class="cbuttonset"><button onclick="return editres(this);" title="Edit">Edit</button><button onclick="return removeres(this);" title="Delete">Delete</button></div></div>');
                                     resetButtons();
                                 }
                             }
@@ -976,6 +1008,11 @@
                             else $("#resEmail").attr("checked", "checked");
                             $("#resAdmins").val(tempe.children(".resource").children(".admins").html());
                             $("#resShowTo").val(tempe.children(".resource").children(".showto").html());
+                            $("#resReadOnlyTo").val(tempe.children(".resource").children(".readonly").html());
+                            $("#resReadWriteTo").val(tempe.children(".resource").children(".readwrite").html());
+                            $("#resHideFrom").val(tempe.children(".resource").children(".hidefrom").html());
+                            $("#resQuantities").val(tempe.children(".resource").children(".quantities").html());
+                            $("#resYears").val(tempe.children(".resource").children(".years").html());
                             $("#addres").dialog({
                                 autoOpen: true,
                                 width: 500,
@@ -984,7 +1021,7 @@
                                         $.ajax({
                                             type: 'POST',
                                             url: 'API/Setup/UpdateResource',
-                                            data: '{ "origname": "' + tempe.children(".resource").children("span").html() + '", "name": "' + $("#resName").val() + '", "type": "' + $("#resType").val() + '", "enabled": ' + ($("#resEnabled").attr("checked") == "checked" ? 'true' : 'false') + ', "charging": ' + ($("#resCharging").attr("checked") ? 'true' : 'false') + ', "admins": "' + $("#resAdmins").val() + '", "emailadmins": ' + ($("#resEmail").attr("checked") ? 'true' : 'false') + ', "showto": "' + $("#resShowTo").val() + '" }',
+                                            data: '{ "origname": "' + tempe.children(".resource").children("span").html() + '", "name": "' + $("#resName").val() + '", "type": "' + $("#resType").val() + '", "enabled": ' + ($("#resEnabled").attr("checked") == "checked" ? 'true' : 'false') + ', "charging": ' + ($("#resCharging").attr("checked") ? 'true' : 'false') + ', "admins": "' + $("#resAdmins").val() + '", "emailadmins": ' + ($("#resEmail").attr("checked") ? 'true' : 'false') + ', "showto": "' + $("#resShowTo").val() + '", "hidefrom": "' + $("#resHideFrom").val() + '", "quantities": "' + $("#resQuantities").val() + '", "years": "' + $("#resYears").val() + '", "readwriteto": "' + $("#resReadWriteTo").val() + '", "readonlyto": "' + $("#resReadOnlyTo").val() + '" }',
                                             contentType: 'application/json',
                                             dataType: 'json',
                                             success: OnResourceUpdateSuccess,
@@ -1005,7 +1042,7 @@
                                 var data = response.UpdateResourceResult;
                                 if (data != 0) alert(data);
                                 else {
-                                    $(tempe).children(".resource").replaceWith('<div class="resource" style="float: left;"><span>' + $("#resName").val() + '</span> (<i>' + $("#resType").val() + '</i>) [<b class="enabled">' + ($("#resEnabled").attr("checked") ? "Enabled" : "Disabled") + '</b>|<b class="charging">' + ($("#resCharging").attr("checked") ? "Charging" : "N") + '</b>|<b class="email">' + ($("#resEmail").attr("checked") ? "Email Admins" : "N") + '</b>]<br />Admins: <b class="admins">' + $("#resAdmins").val() + '</b>, Show To: <b class="showto">' + $("#resShowTo").val() + '</b></div>');
+                                    $(tempe).children(".resource").replaceWith('<div class="resource" style="float: left;"><span>' + $("#resName").val() + '</span> (<i>' + $("#resType").val() + '</i>) [<b class="enabled">' + ($("#resEnabled").attr("checked") ? "Enabled" : "Disabled") + '</b>|<b class="charging">' + ($("#resCharging").attr("checked") ? "Charging" : "N") + '</b>|<b class="email">' + ($("#resEmail").attr("checked") ? "Email Admins" : "N") + '</b>]<br />Admins: <b class="admins">' + $("#resAdmins").val() + '</b>, Quantities: <b class="quantities">' + $("#resQuantities").val() + '</b>, Years: <b class="years">' + $("#resYears").val() + '</b><br />Show To: <b class="showto">' + $("#resShowTo").val() + '</b><br />Hide From: <b class="hidefrom">' + $("#resHideFrom").val() + '</b></div>');
                                     tempe = null;
                                 }
                             }

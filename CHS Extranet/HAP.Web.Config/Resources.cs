@@ -17,7 +17,7 @@ namespace HAP.Web.Configuration
             this.node = doc.SelectSingleNode("/hapConfig/bookingsystem/resources");
             foreach (XmlNode n in node.ChildNodes) base.Add(n.Attributes["name"].Value, new Resource(n));
         }
-        public void Add(string Name, ResourceType Type, string Admins, bool Enabled, bool EmailAdmins, bool EnableCharging, string showto)
+        public void Add(string Name, ResourceType Type, string Admins, bool Enabled, bool EmailAdmins, bool EnableCharging, string showto, string hidefrom, string years, string quantities, string readonlyto, string readwriteto)
         {
             XmlElement e = doc.CreateElement("resource");
             e.SetAttribute("name", Name);
@@ -27,6 +27,11 @@ namespace HAP.Web.Configuration
             e.SetAttribute("emailadmins", EmailAdmins.ToString());
             e.SetAttribute("enablecharging", EnableCharging.ToString());
             e.SetAttribute("showto", showto);
+            e.SetAttribute("hidefrom", hidefrom);
+            e.SetAttribute("years", years);
+            e.SetAttribute("quantities", quantities);
+            e.SetAttribute("readonlyto", readonlyto);
+            e.SetAttribute("readwriteto", readwriteto);
             doc.SelectSingleNode("/hapConfig/bookingsystem/resources").AppendChild(e);
             base.Add(Name, new Resource(e));
         }
@@ -46,6 +51,11 @@ namespace HAP.Web.Configuration
             e.Attributes["emailadmins"].Value = r.EmailAdmins.ToString();
             e.Attributes["enablecharging"].Value = r.EnableCharging.ToString();
             e.Attributes["showto"].Value = r.ShowTo;
+            e.Attributes["hidefrom"].Value = r.HideFrom;
+            e.Attributes["years"].Value = r.Years;
+            e.Attributes["quantities"].Value = r.Quantities;
+            e.Attributes["readonlyto"].Value = r.ReadOnlyTo;
+            e.Attributes["readwriteto"].Value = r.ReadWriteTo;
             base.Add(r.Name, new Resource(e));
         }
 
