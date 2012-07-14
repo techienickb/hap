@@ -90,7 +90,7 @@ namespace HAP.Logon.Tracker
         {
             if (Override)
             {
-                if (new OverrideCode(code).ShowDialog(this) == System.Windows.Forms.DialogResult.OK) { this.KeepOpen = false; this.Close(); }
+                if (new OverrideCode(code).ShowDialog(this) == System.Windows.Forms.DialogResult.OK) { this.KeepOpen = false; Close(); return; }
                 else this.KeepOpen = true;
             }
             else if (MessageBox.Show(this, "Clicking this button will result in the system logging you off.", "Logoff?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.OK)

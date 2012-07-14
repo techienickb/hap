@@ -14,7 +14,7 @@ namespace HAP.Logon.Tracker
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            if (args.Length == 0) Application.Run(new Loading(Action.Logon, "https://folders.crickhowell-hs.powys.sch.uk/extranet/"));
+            if (args.Length == 0) Application.Run(new Loading(Action.Logon, "https://folders.crickhowell-hs.powys.sch.uk/hap/"));
             else if (args[0].StartsWith("http")) Application.Run(new Loading(Action.Clear, args[0]));
             else Application.Run(new Loading(Action.Logon, args[1]));
         }
