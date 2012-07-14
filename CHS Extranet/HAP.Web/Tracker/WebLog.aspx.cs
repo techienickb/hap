@@ -19,6 +19,7 @@ namespace HAP.Web.Tracker
         protected void Page_Load(object sender, EventArgs e)
         {
             this.Mode = RouteData.Values["day"] == null ? mode.month : mode.day;
+            Dictionary<DateTime, int> data = new Dictionary<DateTime, int>();
             if (!IsPostBack)
             {
                 computerfilter.Items.Add("All");
@@ -36,38 +37,6 @@ namespace HAP.Web.Tracker
                     if (!eventfilter.Items.Contains(new ListItem(entry.EventType))) eventfilter.Items.Add(new ListItem(entry.EventType));
                     if (!osfilter.Items.Contains(new ListItem(entry.OS))) osfilter.Items.Add(new ListItem(entry.OS));
                     if (!browserfilter.Items.Contains(new ListItem(entry.Browser))) browserfilter.Items.Add(new ListItem(entry.Browser));
-                }
-                int dim = 30;
-                if (Mode == mode.month) dim = DateTime.DaysInMonth(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")));
-                else dim = 24;
-                if (Mode == mode.month)
-                {
-                    pcchart.Titles[0].Text = "Web Tracker Data for " + new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), 1).ToString("MMMM yyyy");
-                    pcchart.ChartAreas[0].AxisX.Title = "Day";
-                }
-                else
-                {
-                    pcchart.Titles[0].Text = "Web Tracker Data for " + new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), int.Parse(RouteData.GetRequiredString("day"))).ToString("dd MMMM yyyy");
-                    pcchart.ChartAreas[0].AxisX.Title = "Hour";
-                }
-                for (int x = 0; x < dim; x++)
-                {
-                    int y = 0;
-                    if (Mode == mode.month)
-                    {
-                        y = tlog.Count(t => t.DateTime >= new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), x + 1, 0, 0, 0) && t.DateTime <= new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), x + 1, 23, 59, 59));
-                        DataPoint p = new DataPoint(x + 1, y);
-                        p.Url = string.Format("~/tracker/web/{0}/{1}/d/{2}/", RouteData.GetRequiredString("year"), RouteData.GetRequiredString("month"), x + 1);
-                        p.ToolTip = y + " Click to view more info for " + new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), x + 1).ToLongDateString();
-                        pcchart.Series[0].Points.Add(p);
-                    }
-                    else if (Mode == mode.day)
-                    {
-                        y = tlog.Count(t => t.DateTime >= new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), int.Parse(RouteData.GetRequiredString("day")), x, 0, 0) && t.DateTime <= new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), int.Parse(RouteData.GetRequiredString("day")), x, 59, 59));
-                        DataPoint p = new DataPoint(x, y);
-                        p.ToolTip = y + " Events";
-                        pcchart.Series[0].Points.Add(p);
-                    }
                 }
             }
             else
@@ -90,39 +59,33 @@ namespace HAP.Web.Tracker
                     tlog = tlog.Where(w => w.Browser == browserfilter.SelectedValue).ToArray();
                 ListView1.DataSource = tlog.ToArray();
                 ListView1.DataBind();
-                int dim = 30;
-                if (Mode == mode.month) dim = DateTime.DaysInMonth(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")));
-                else dim = 24;
+            }
+            int dim = 30;
+            if (Mode == mode.month) dim = DateTime.DaysInMonth(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")));
+            else dim = 24;
+            for (int x = 0; x < dim; x++)
+            {
+                int y = 0;
                 if (Mode == mode.month)
                 {
-                    pcchart.Titles[0].Text = "Web Tracker Data for " + new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), 1).ToString("MMMM yyyy");
-                    pcchart.ChartAreas[0].AxisX.Title = "Day";
+                    y = tlog.Count(t => t.DateTime >= new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), x + 1, 0, 0, 0) && t.DateTime <= new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), x + 1, 23, 59, 59));
+                    DateTime dt = new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), x + 1, 0, 0, 0);
+                    data.Add(dt, y);
                 }
-                else
+                else if (Mode == mode.day)
                 {
-                    pcchart.Titles[0].Text = "Web Tracker Data for " + new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), int.Parse(RouteData.GetRequiredString("day"))).ToString("dd MMMM yyyy");
-                    pcchart.ChartAreas[0].AxisX.Title = "Hour";
-                }
-                for (int x = 0; x < dim; x++)
-                {
-                    int y = 0;
-                    if (Mode == mode.month)
+                    for (int m = 0; m < 60; m++)
                     {
-                        y = tlog.Count(t => t.DateTime >= new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), x + 1, 0, 0, 0) && t.DateTime <= new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), x + 1, 23, 59, 59));
-                        DataPoint p = new DataPoint(x + 1, y);
-                        p.Url = string.Format("~/tracker/web/{0}/{1}/d/{2}/", RouteData.GetRequiredString("year"), RouteData.GetRequiredString("month"), x + 1);
-                        p.ToolTip = y + " Click to view more info for " + new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), x + 1).ToLongDateString();
-                        pcchart.Series[0].Points.Add(p);
-                    }
-                    else if (Mode == mode.day)
-                    {
-                        y = tlog.Count(t => t.DateTime >= new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), int.Parse(RouteData.GetRequiredString("day")), x, 0, 0) && t.DateTime <= new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), int.Parse(RouteData.GetRequiredString("day")), x, 59, 59));
-                        DataPoint p = new DataPoint(x, y);
-                        p.ToolTip = y + " Events";
-                        pcchart.Series[0].Points.Add(p);
+                        y = tlog.Count(t => t.DateTime >= new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), int.Parse(RouteData.GetRequiredString("day")), x, m, 0) && t.DateTime <= new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), int.Parse(RouteData.GetRequiredString("day")), x, m, 59));
+                        DateTime dt = new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), int.Parse(RouteData.GetRequiredString("day")), x, m, 0);
+                        data.Add(dt, y);
                     }
                 }
             }
+            List<string> s = new List<string>();
+            foreach (DateTime dt2 in data.Keys)
+                s.Add(string.Format("['{0}', {1}]", dt2.ToString("yyyy-MM-dd h:mmtt"), data[dt2]));
+            Data = string.Join(", ", s.ToArray());
         }
         private WebTrackerEvent[] tlog;
         protected string showtable = " style=\"display: none;\"";
@@ -139,8 +102,11 @@ namespace HAP.Web.Tracker
             showtable = "";
         }
 
+        protected string Data { get; set; }
+
         protected void sort_Command(object sender, CommandEventArgs e)
         {
+            Dictionary<DateTime, int> data = new Dictionary<DateTime, int>();
             showdata.Visible = false;
             showtable = "";
             if (tlog == null)
@@ -176,35 +142,29 @@ namespace HAP.Web.Tracker
             int dim = 30;
             if (Mode == mode.month) dim = DateTime.DaysInMonth(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")));
             else dim = 24;
-            if (Mode == mode.month)
-            {
-                pcchart.Titles[0].Text = "Web Tracker Data for " + new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), 1).ToString("MMMM yyyy");
-                pcchart.ChartAreas[0].AxisX.Title = "Day";
-            }
-            else
-            {
-                pcchart.Titles[0].Text = "Web Tracker Data for " + new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), int.Parse(RouteData.GetRequiredString("day"))).ToString("dd MMMM yyyy");
-                pcchart.ChartAreas[0].AxisX.Title = "Hour";
-            }
             for (int x = 0; x < dim; x++)
             {
                 int y = 0;
                 if (Mode == mode.month)
                 {
                     y = tlog.Count(t => t.DateTime >= new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), x + 1, 0, 0, 0) && t.DateTime <= new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), x + 1, 23, 59, 59));
-                    DataPoint p = new DataPoint(x + 1, y);
-                    p.Url = string.Format("~/tracker/web/{0}/{1}/d/{2}/", RouteData.GetRequiredString("year"), RouteData.GetRequiredString("month"), x + 1);
-                    p.ToolTip = y + " Click to view more info for " + new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), x + 1).ToLongDateString();
-                    pcchart.Series[0].Points.Add(p);
+                    DateTime dt = new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), x + 1, 0, 0, 0);
+                    data.Add(dt, y);
                 }
                 else if (Mode == mode.day)
                 {
-                    y = tlog.Count(t => t.DateTime >= new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), int.Parse(RouteData.GetRequiredString("day")), x, 0, 0) && t.DateTime <= new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), int.Parse(RouteData.GetRequiredString("day")), x, 59, 59));
-                    DataPoint p = new DataPoint(x, y);
-                    p.ToolTip = y + " Events";
-                    pcchart.Series[0].Points.Add(p);
+                    for (int m = 0; m < 60; m++)
+                    {
+                        y = tlog.Count(t => t.DateTime >= new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), int.Parse(RouteData.GetRequiredString("day")), x, m, 0) && t.DateTime <= new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), int.Parse(RouteData.GetRequiredString("day")), x, m, 59));
+                        DateTime dt = new DateTime(int.Parse(RouteData.GetRequiredString("year")), int.Parse(RouteData.GetRequiredString("month")), int.Parse(RouteData.GetRequiredString("day")), x, m, 0);
+                        data.Add(dt, y);
+                    }
                 }
             }
+            List<string> s = new List<string>();
+            foreach (DateTime dt2 in data.Keys)
+                s.Add(string.Format("['{0}', {1}]", dt2.ToString("yyyy-MM-dd h:mmtt"), data[dt2]));
+            Data = string.Join(", ", s.ToArray());
         }
     }
 }
