@@ -139,6 +139,27 @@ namespace HAP.Web.Configuration
                 e.AppendChild(e1);
                 doc.SelectSingleNode("/hapConfig/Homepage/Links").AppendChild(e);
             }
+            if (version.CompareTo(Version.Parse("8.0.0714.1945")) == -1)
+            {//Perform v8.0714 Update
+                foreach (XmlNode n in doc.SelectNodes("/hapConfig/bookingsystem/resources/resource"))
+                {
+                    n.Attributes.Append(doc.CreateAttribute("hidefrom"));
+                    n.Attributes.Append(doc.CreateAttribute("years"));
+                    n.Attributes.Append(doc.CreateAttribute("quantities"));
+                    n.Attributes["hidefrom"].Value = "";
+                    n.Attributes["quantities"].Value = "";
+                    n.Attributes["years"].Value = "Inherit";
+                }
+            }
+            if (version.CompareTo(Version.Parse("8.0.0714.2010")) == -1)
+            {//Perform v8.0714.2010 Update
+                foreach (XmlNode n in doc.SelectNodes("/hapConfig/bookingsystem/resources/resource"))
+                {
+                    n.Attributes.Append(doc.CreateAttribute("readonlyto"));
+                    n.Attributes.Append(doc.CreateAttribute("readwriteto"));
+                    n.Attributes["readwriteto"].Value = n.Attributes["readonlyto"].Value = "";
+                }
+            }
             doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             doc.Save(ConfigPath);
         }

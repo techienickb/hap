@@ -16,7 +16,7 @@ namespace HAP.Web.BookingSystem
         {
             List<Resource> rez = new List<Resource>();
             foreach (Resource r in config.BookingSystem.Resources.Values)
-                if (isVisible(r.ShowTo)) rez.Add(r);
+                if (isVisible(r.ShowTo, r.HideFrom)) rez.Add(r);
             resources1.DataSource = resources2.DataSource = rez.ToArray();
             resources1.DataBind(); resources2.DataBind();
             lessons.DataSource = config.BookingSystem.Lessons;
@@ -86,16 +86,42 @@ namespace HAP.Web.BookingSystem
             {
                 List<string> s = new List<string>();
                 foreach (Resource r in config.BookingSystem.Resources.Values)
-                    if (isVisible(r.ShowTo)) s.Add(string.Format("new resource(\"{0}\", \"{1}\")", r.Name, r.Type));
+                {
+                    if (isVisible(r.ShowTo, r.HideFrom))
+                    {
+                        string years = r.Years;
+                        if (string.IsNullOrEmpty(years) || years == "Inherit") years = "Year 7, Year 8, Year 9, Year 10, Year 11, Year 12, Year 13, A-Level";
+                        List<string> years1 = new List<string>();
+                        List<string> quant = new List<string>();
+                        foreach (string y in years.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                            years1.Add("\"" + y.Trim() + "\"");
+                        foreach (string q in r.Quantities.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                            quant.Add("\"" + q.Trim() + "\"");
+                        s.Add(string.Format("new resource(\"{0}\", \"{1}\", [ {2} ], [ {3} ], {4})", r.Name, r.Type, string.Join(", ", years1.ToArray()), string.Join(", ", quant.ToArray()), isReadOnly(r.ReadOnlyTo, r.ReadWriteTo).ToString().ToLower()));
+                    }
+                }
                 return "[" + string.Join(", ", s.ToArray()) + "]";
             }
         }
 
-        private bool isVisible(string showto)
+        private bool isVisible(string showto, string hidefrom)
         {
             if (showto == "All" || isBSAdmin || User.IsInRole("Domain Admins")) return true;
+            foreach (string s in hidefrom.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                if (ADUser.UserName.ToLower().Equals(s.ToLower().Trim())) return false;
             foreach (string s in showto.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 if (ADUser.UserName.ToLower().Equals(s.ToLower().Trim())) return true;
+            return false;
+        }
+
+        private bool isReadOnly(string readonlyto, string readwriteto)
+        {
+            if ((readonlyto == "" && readwriteto == "") || isBSAdmin || User.IsInRole("Domain Admins")) return false;
+            foreach (string s in readonlyto.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                if (ADUser.UserName.ToLower().Equals(s.ToLower().Trim())) return true;
+            foreach (string s in readwriteto.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                if (ADUser.UserName.ToLower().Equals(s.ToLower().Trim())) return false;
+            if (readonlyto == "" && readwriteto != "") return true;
             return false;
         }
 

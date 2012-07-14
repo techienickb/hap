@@ -67,7 +67,7 @@
 				<span class="ui-icon ui-icon-info" style="float: left; margin-right: 5px;"></span>
 				New Booking for <span id="bfdate"></span> <span id="bfres"></span> during <span id="bflesson"></span>
 			</p>
-			<label for="bfyear">Year: </label><select id="bfyear"><option value="">---</option><option value="Year 7">Year 7</option><option value="Year 8">Year 8</option><option value="Year 9">Year 9</option><option value="Year 10">Year 10</option><option value="Year 11">Year 11</option><option value="Year 12">Year 12</option><option value="Year 13">Year 13</option><option value="A-Level">A-Level</option></select>
+			<label for="bfyear">Year: </label><select id="bfyear"></select>
 			<label for="bfsubject">Subject: </label>
 			<select id="bfsubjects" onchange="subjectchance(this)">
 				<option value="" selected="selected">- Subject -</option>
@@ -125,21 +125,25 @@
 		var user = { <%=JSUser %> };
 		var resources = <%=JSResources %>;
 		var availbookings = [ 0, 0 ];
-		function resource(name, type){
+		function resource(name, type, years, quantities, readonly){
 			this.Name = name;
 			this.Type = type;
+			this.Years = years;
+			this.Quantities = quantities;
 			this.Data;
+			this.ReadOnly = readonly;
 			this.Render = function() {
 				var h = "";
 				for (var x = 0; x < this.Data.length; x++) {
-					h += '<a onclick="return ';
-					if (this.Data[x].Name == "FREE") h += "doBooking('" +  this.Name + "', '" + this.Data[x].Lesson + "');";
+				    h += '<a onclick="return ';
+				    if (this.ReadOnly) h += "false";
+					else if (this.Data[x].Name == "FREE") h += "doBooking('" +  this.Name + "', '" + this.Data[x].Lesson + "');";
 					else {
 						if (this.Data[x].Static && $.inArray(this.Name, user.isAdminOf) != -1) h += "doBooking('" + this.Name + "', '" + this.Data[x].Lesson + "');";
 						else if (this.Data[x].Static == false && (this.Data[x].Username.toLowerCase() == user.username.toLowerCase() || $.inArray(this.Name, user.isAdminOf) != -1)) h += "doRemove('" + this.Name + "', '" + this.Data[x].Lesson + "', '" + this.Data[x].Name + "');";
 						else h += "false;";
 					}
-					h += '" href="#' + this.Name + '-' + this.Data[x].Lesson.toLowerCase().replace(/ /g, "") + '" class="' + (this.Data[x].Static ? 'static ' : '') + ($.inArray(this.Name, user.isAdminOf) == -1 ? '' : 'admin') + ((this.Data[x].Username.toLowerCase() == user.username.toLowerCase() && $.inArray(this.Name, user.isAdminOf) == -1) ? ' bookie' : '') + ((this.Data[x].Name == "FREE") ? ' free' : ' booked') + '">';
+					h += '" href="#' + this.Name + '-' + this.Data[x].Lesson.toLowerCase().replace(/ /g, "") + '" class="' + (this.Data[x].Static ? 'static ' : '') + ($.inArray(this.Name, user.isAdminOf) == -1 ? '' : 'admin') + ((this.Data[x].Username.toLowerCase() == user.username.toLowerCase() && $.inArray(this.Name, user.isAdminOf) == -1) ? ' bookie' : '') + ((this.Data[x].Name == "FREE" && !this.ReadOnly) ? ' free' : ' booked') + '">';
 					h += (this.Data[x].Static ? '<span class="state static" title="Timetabled Lesson"><i></i><span>Override</span></span>' : (this.Data[x].Name == "FREE" ? '<span class="state book" title="Book"><i></i><span>Book</span></span>' : '<span class="state remove" title="Remove"><i></i><span>Remove</span></span>'));
 					h += this.Data[x].Name + '<span>' + this.Data[x].DisplayName;
 					if (this.Data[x].Name == "FREE" || this.Data[x].Name == "UNAVAILABLE" || this.Data[x].Name == "CHARGING") { }
@@ -255,11 +259,19 @@
 			$("#bflheadphones").removeAttr("checked");
 			$("#bflroom").val("");
 			$("#bferoom").val("");
+			$("#bfyear option").remove();
+			$("#bfyear").append('<option value="">---</option>');
+			for (var i = 0; i < curres.Years.length; i++)
+			    $("#bfyear").append('<option value="' + curres.Years[i] + '">' + curres.Years[i] + '</option>');
+			$("#bflquant input, #bflquant label").remove();
+			for (var i = 0; i < curres.Quantities.length; i++)
+			    $("#bflquant").append('<input type="radio" name="bflquant" id="bflquant-' + curres.Quantities[i] + '" value="' + curres.Quantities[i] + '" /><label for="bflquant-' + curres.Quantities[i] + '">' + curres.Quantities[i] + '</label>');
+			$("#bflquant").buttonset();
 			$("#bflesson").html(lesson);
 			$("#bookingform").dialog({ 
 					modal: true, 
 					autoOpen: true,
-					minWidth: 450,
+					minWidth: 500,
 					buttons: {
 						"Book": function () {
 							var abort = false;

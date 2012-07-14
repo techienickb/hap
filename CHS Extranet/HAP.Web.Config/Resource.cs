@@ -19,6 +19,11 @@ namespace HAP.Web.Configuration
             Admins = node.Attributes["admins"].Value != "" ? node.Attributes["admins"].Value : "Inherit";
             EmailAdmins = bool.Parse(node.Attributes["emailadmins"].Value);
             ShowTo = node.Attributes["showto"].Value;
+            HideFrom = node.Attributes["hidefrom"].Value;
+            Years = node.Attributes["years"].Value;
+            Quantities = node.Attributes["quantities"].Value;
+            ReadOnlyTo = node.Attributes["readonlyto"].Value;
+            ReadWriteTo = node.Attributes["readwriteto"].Value;
         }
 
         public string Name { get; set; }
@@ -28,6 +33,11 @@ namespace HAP.Web.Configuration
         public bool EnableCharging { get; set; }
         public bool Enabled { get; set; }
         public string ShowTo { get; set; }
+        public string HideFrom { get; set; }
+        public string Years { get; set; }
+        public string Quantities { get; set; }
+        public string ReadOnlyTo { get; set; }
+        public string ReadWriteTo { get; set; }
     }
 
     public enum ResourceType { Room, Laptops, Equipment, Other }

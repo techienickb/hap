@@ -96,3 +96,7 @@ h1.Announcement b { font-size: 16px; }
 .l1 { float: right; margin-top: 1px; height: 16px; width: 16px; background-position: -32px 0; background-image: url(../images/ui-icons_228ef1_256x240.png); }
 
 th span { float: right; }
+
+#errorlist { position: absolute; position: fixed; top: 100px; left: 10px; }
+#errorlist div { margin-bottom: 3px; }
+#errorlist div .cont { display: none; }
