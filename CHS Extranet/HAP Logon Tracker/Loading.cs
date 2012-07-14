@@ -9,6 +9,7 @@ using System.Net;
 using System.IO;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
+using System.Diagnostics;
 
 namespace HAP.Logon.Tracker
 {
@@ -39,13 +40,22 @@ namespace HAP.Logon.Tracker
 
         void  api_ClearCompleted(object sender, AsyncCompletedEventArgs e)
         {
-            if (e.Error != null) MessageBox.Show(e.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (e.Error != null)
+            {
+                if (!EventLog.SourceExists("Home Access Plus"))
+                    EventLog.CreateEventSource("Home Access Plus+", "Application");
+                EventLog.WriteEntry("Home Access Plus+", "An error occurred in the Logon Tracker\r\n\r\nError: " + e.Error.Message, EventLogEntryType.Error);
+            }
             Close();
         }
 
         void  api_LogonCompleted(object sender, api.LogonCompletedEventArgs e)
         {
-            if (e.Error != null) MessageBox.Show(e.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (e.Error != null) {
+                if (!EventLog.SourceExists("Home Access Plus"))
+                    EventLog.CreateEventSource("Home Access Plus+", "Application");
+                EventLog.WriteEntry("Home Access Plus+", "An error occurred in the Logon Tracker\r\n\r\nError: " + e.Error.Message, EventLogEntryType.Error);
+            }
             else
             {
                 if (e.Result.Logons.Length > 0)
