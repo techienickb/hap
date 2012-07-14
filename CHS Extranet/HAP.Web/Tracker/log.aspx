@@ -1,37 +1,32 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true" CodeBehind="log.aspx.cs" Inherits="HAP.Web.Tracker.log" %>
-<%@ Register Assembly="System.Web.DataVisualization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Namespace="System.Web.UI.DataVisualization.Charting" TagPrefix="asp" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="<%=ResolveClientUrl("~/tracker/tracker.css")%>" rel="stylesheet" type="text/css" />
+    <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="<%:ResolveClientUrl("~/scripts/excanvas.js") %>"></script><![endif]-->
+    <script type="text/javascript" src="<%:ResolveClientUrl("~/scripts/jquery.jqplot.min.js") %>"></script>
+    <script type="text/javascript" src="<%:ResolveClientUrl("~/scripts/jqplot.dateAxisRenderer.min.js") %>"></script>
+    <script type="text/javascript" src="<%:ResolveClientUrl("~/scripts/jqplot.highlighter.min.js") %>"></script>
+    <script type="text/javascript" src="<%:ResolveClientUrl("~/Scripts/jqplot.cursor.min.js") %>"></script>
+    <link rel="stylesheet" type="text/css" href="<%:ResolveClientUrl("~/style/jquery.jqplot.css") %>" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server"> 
     <div style="text-align: center;" id="logheader">Historic <asp:Hyperlink runat="server" ImageUrl="~/tracker/logontracker-small.png" Text="Logon Tracker" NavigateUrl="~/tracker/" /></div>
-    <div style="text-align: center; margin-bottom: 10px;">
-        <asp:Chart ID="pcchart" runat="server" Width="880px" BorderlineColor="Silver" BorderlineDashStyle="Solid" Palette="Excel">
-            <Series>
-                <asp:Series Name="pcseries">
-                </asp:Series>
-            </Series>
-            <ChartAreas>
-                <asp:ChartArea Name="pcchartarea">
-                    <AxisY IsLabelAutoFit="False" Title="Number of Logons" TitleFont="Segoe UI, 9pt">
-                        <LabelStyle Font="Segoe UI, 9pt" />
-                    </AxisY>
-                    <AxisX IsLabelAutoFit="False" Title="Day" TitleFont="Segoe UI, 9pt">
-                        <MajorGrid Enabled="False" />
-                        <MinorTickMark Enabled="True" />
-                        <LabelStyle Font="Segoe UI, 9pt" />
-                    </AxisX>
-                    <AxisY2 IsInterlaced="True">
-                    </AxisY2>
-                </asp:ChartArea>
-            </ChartAreas>
-            <Titles>
-                <asp:Title Font="Segoe UI, 18pt" Name="Title1">
-                </asp:Title>
-            </Titles>
-            <BorderSkin PageColor="Transparent" />
-        </asp:Chart>
-    </div>
+    <div id="chartdiv" style="height:300px;width:99%; "></div>
+    <button onclick="plot1.resetZoom(); return false;">Reset Zoom</button>
+    <script type="text/javascript">
+        var line1 = [<%=Data%>];
+    </script>
+    <script type="text/javascript">
+        var plot1;
+        $(document).ready(function(){
+            plot1 = $.jqplot('chartdiv', [line1], {
+                title:'Tracker Results',
+                axes:{yaxis: { min: 0 }, xaxis:{ renderer:$.jqplot.DateAxisRenderer}},
+                series:[{lineWidth:2, markerOptions:{ style: 'filledCircle', lineWidth: 1, size: 4 }}],
+                highlighter: { show: true }, 
+                cursor: { show: true, zoom: true }
+            });
+        });
+    </script>
     <asp:Button ID="showdata" runat="server" Text="Show Data" OnClick="showdata_Click" />
     <table border="0" class="trackertable"<%=showtable %>>
         <tr valign="top">
@@ -103,28 +98,4 @@
         </ItemTemplate>
     </asp:Repeater>
     </table>
-    <div id="loadingPopup" style="display: none;">
-        <div class="modalBackground"></div>
-        <div id="ph">
-            <div class="popupContent" style="width: 220px">
-                <h1>Loading</h1>
-                <asp:Image runat="server" ImageUrl="~/bookingsystem/loading.gif" AlternateText="" />
-            </div>
-        </div>
-    </div>
-    <script type="text/javascript">
-        Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(beginRequestHandler);
-        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandler);
-        function endRequestHandler(sender, args) {
-            $get('loadingPopup').style.display = "none";
-            var error = args.get_error();
-            if (error != undefined) {
-                alert(error.message);
-                args.set_errorHandled(true);
-            }
-        }
-        function beginRequestHandler(sender, args) {
-            $get('loadingPopup').style.display = "block";
-        }
-    </script>
 </asp:Content>
