@@ -1,11 +1,10 @@
 ﻿<%@ Page Title="{0} - Home Access Plus+ - Login" Language="C#" MasterPageFile="~/Masterpage.master" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="HAP.Web.Login" %>
 <asp:Content ContentPlaceHolderID="body" runat="server">
     <div id="logincontainer">
-        <div id="loginformside" class="tile-color">
-
-        </div>
+        <div id="loginformside" class="tile-color"></div>
         <div id="loginform">
-            <img src="images/haplogo.png" alt="Home Access Plus+ - Access your school from Home" />
+            <h1><a href="https://hap.codeplex.com/" target="_blank"><hap:LocalResource StringPath="homeaccessplus" runat="server" /></a></h1>
+            <h2>Access your School From Home</h2>
             <div>
                 <asp:Label runat="server" AssociatedControlID="username">Username: </asp:Label>
                 <asp:TextBox runat="server" ID="username" Width="300px" />
@@ -19,9 +18,6 @@
             <asp:Literal runat="server" ID="message" />
             <div class="submit">
                 <asp:LinkButton runat="server" UseSubmitBehavior="true" ID="login" Text="Login" onclick="login_Click" Font-Size="200%" />
-            </div>
-            <div class="base">
-                Connected to <%=HAP.Web.Configuration.hapConfig.Current.School.Name %>
             </div>
             <div class="copyright">
                 &copy; <%=DateTime.Now.Year %> nb development. All rights reserved.

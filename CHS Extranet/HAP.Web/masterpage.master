@@ -19,7 +19,7 @@
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
         <hap:HAPTag runat="server" />
         <asp:ContentPlaceHolder id="head" runat="server" />
-        <meta name="viewport" content="width=device-width" />
+        <meta name="viewport" content="width=992px" />
     </head>
     <body>
         <form runat="server">
@@ -33,6 +33,14 @@
                     <asp:ContentPlaceHolder id="body" runat="server" />
                 </div>
             </div>
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $("#hapContent").css("min-height", document.documentElement.clientHeight + "px");
+                });
+                $(window).resize(function () {
+                    $("#hapContent").css("min-height", document.documentElement.clientHeight + "px");
+                });
+            </script>
         </form>
     </body>
 </html>
