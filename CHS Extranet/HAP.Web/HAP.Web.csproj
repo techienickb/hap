@@ -679,6 +679,7 @@
     <Content Include="Scripts\jquery.ba-hashchange.min.js" />
     <Content Include="Scripts\jquery.contextMenu.js" />
     <Content Include="Scripts\jquery.dataTables.js" />
+    <Content Include="Scripts\jquery.mousewheel.js" />
     <Content Include="Scripts\jquery.wysiwyg.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="style\editor.css" />
