@@ -1,4 +1,8 @@
-﻿.tile-color, .ui-widget-header { background: #0060a6; border-color: #0060a6; }
+﻿@font-face { font-family: '☺Segoe'; src: url("segoe_ui.eot"); src: local("Segoe UI"),local("Segoe"),local("Segoe WP"),url("segoe_ui.eot?#iefix") format("embedded-opentype"),url("segoe_ui.woff") format("woff"),url("segoe_ui.ttf") format("truetype"); font-weight: normal; font-style: normal; }
+@font-face { font-family: '☺SegoeLight'; src: url("segoe_ui_light.eot"); src: local("Segoe UI Light"),local("Segoe WP Light"),url("segoe_ui_light.eot?#iefix") format("embedded-opentype"),url("segoe_ui_light.woff") format("woff"),url("segoe_ui_light.ttf") format("truetype"); font-weight: normal; font-style: normal; }
+@font-face { font-family: 'MSHPIconsRegular'; src: url("icons.eot"); src: url("icons.eot?#iefix") format("embedded-opentype"),url("icons.woff") format("woff"),url("icons.ttf") format("truetype"); font-weight: normal; font-style: normal; }
+
+.tile-color, .ui-widget-header { background: #0060a6; border-color: #0060a6; }
 .tile-border-color, .ui-widget-content { border-color: #0060a6; }
 .ui-widget-header a, .ui-widget-header { color: #fff; }
 .tile-color-font, .ui-tabs .ui-tabs-nav li.ui-tabs-selected a, .ui-tabs .ui-tabs-nav li.ui-tabs-selected a:hover { color: #0060a6; }
@@ -29,7 +33,10 @@ input[type=text], input[type=password], input[type=date], input[type=time], text
 .bookingtable td { font-size: 100%; padding: 0 2px; }
 .bookingtable.tickets td { font-size: 94%; text-align: center; }
 
-#loginform { width: 485px; margin: 40px auto; padding: 20px; border: solid 1px gray; border-radius: 10px; box-shadow: 5px 5px 5px #dedede }
+
+#logincontainer { position: absolute; left: 0; right: 0; top: 0; bottom: 0; background: #fff; }
+#loginformside { position: absolute; left: 0; width: 30%; top: 0; bottom: 0; background-image: url(../images/icons/metro/hap-logo.png); background-repeat: no-repeat; background-position: center center; }
+#loginform { position: absolute; top: 10%; bottom: 0; right: 0; left: 30%; }
 #loginform img { margin-bottom: 60px; }
 #loginform div { padding: 5px 0; }
 #loginform input { font-size: 150%; }
