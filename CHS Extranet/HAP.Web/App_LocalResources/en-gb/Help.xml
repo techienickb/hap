@@ -302,4 +302,35 @@ British English Help Localised Resources
       ]]>
     </list>
   </myfiles>
+  <bookingsystem>
+    <contents>
+      <![CDATA[
+      <h2>Contents</h2>
+      <ul>
+      <li><b><a href="javascript:void(hap.help.Load('bookingsystem/index'));">Welcome</a></b>
+      </li>
+      <li><b>The Interface</b>
+      </li>
+      <li><b>Operations</b>
+      </li>
+      <li><b>Guides to:</b>
+      </ul>
+      
+    ]]>
+    </contents>
+    <index>
+      <![CDATA[<h2>Welcome to the Booking System</h2>
+      <p>This Help Document will provide some helpful details on operating the Booking System interface<br />
+      Home Access Plus+'s Booking System allows you to book IT resources in your Educational Establishment by just using a web browser.</p>
+      <h3>Interface Basics</h3>
+      <p>The Booking System interface contains 3 distinct areas:
+        <ol>
+          <li><b>The Calendar</b> - This is a calendar which is shown when you clock on the Date in the top left of the Booking Grid.  It allows you to change the date that is shown in The Bookings Grid.  It is limited to what the administrator has decided is the most advanced date you can book (usually 2 weeks from the beginning of the week).</li>
+          <li><b>The Bookings Grid</b> - This is a grid containing all of your Establishment's Resources which you can book.  You can also remove your booking from this interface if you have made a mistake.</li>
+          <li><b>The Booking Form</b> - This form allows you to book a resource for a specific time and date</li>
+        </ol>
+      <br />&nbsp;</p>
+      <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('bookingsystem/contents'));">click here</a><br />&nbsp;</p>]]>
+    </index>
+  </bookingsystem>
 </resources>

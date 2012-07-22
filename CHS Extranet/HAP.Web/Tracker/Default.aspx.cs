@@ -11,7 +11,7 @@ namespace HAP.Web.Tracker
 {
     public partial class Default : HAP.Web.Controls.Page
     {
-        public Default() { this.SectionTitle = "Logon Tracker"; }
+        public Default() { this.SectionTitle = Localize("tracker/logontracker"); }
         protected void Page_Load(object sender, EventArgs e)
         {
             dbup.Visible = (config.Tracker.Provider != "XML" && new DirectoryInfo(Server.MapPath("~/App_Data/")).GetFiles("tracker*xml").Length > 0);

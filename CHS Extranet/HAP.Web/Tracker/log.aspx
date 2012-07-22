@@ -8,8 +8,12 @@
     <script type="text/javascript" src="<%:ResolveClientUrl("~/Scripts/jqplot.cursor.min.js") %>"></script>
     <link rel="stylesheet" type="text/css" href="<%:ResolveClientUrl("~/style/jquery.jqplot.css") %>" />
 </asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server"> 
-    <div style="text-align: center;" id="logheader">Historic <asp:Hyperlink runat="server" ImageUrl="~/tracker/logontracker-small.png" Text="Logon Tracker" NavigateUrl="~/tracker/" /></div>
+<asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
+	<header>
+		<div>
+			<a href="<%:ResolveClientUrl("~/tracker") %>"><hap:LocalResource StringPath="tracker/historiclogs" runat="server" /></a>
+		</div>
+	</header>
     <div id="chartdiv" style="height:300px;width:99%; "></div>
     <button onclick="plot1.resetZoom(); return false;">Reset Zoom</button>
     <script type="text/javascript">

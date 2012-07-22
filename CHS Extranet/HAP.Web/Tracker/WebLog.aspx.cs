@@ -13,7 +13,7 @@ namespace HAP.Web.Tracker
     {
         public WebLog()
         {
-            this.SectionTitle = "HAP+ Web Logon Tracker - Logs";
+            this.SectionTitle = Localize("tracker/webtracker") + " - " + Localize("tracker/weblogs");
         }
         private mode Mode;
         protected void Page_Load(object sender, EventArgs e)

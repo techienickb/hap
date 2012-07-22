@@ -1,5 +1,5 @@
 ﻿/*HAP.Web.JS.js - Copyright © 2012 nb development - Version 1 */
-if (hap == null)
+if (hap == null) {
     var hap = {
         root: "/hap/",
         user: "",
@@ -48,7 +48,31 @@ if (hap == null)
             }
         },
         localization: [],
-        livetiles : {
+        sidebar: {
+            Open: false,
+            Init: function () {
+                if (window.location.pathname.toLowerCase() != hap.root.toLowerCase() && window.location.pathname.toLowerCase() != hap.common.resolveUrl('~/login.aspx'))
+                    $.ajax({
+                        url: hap.common.resolveUrl('~/api/livetiles/'), type: 'GET', dataType: "json", contentType: 'application/JSON', success: function (data) {
+                            $("#hapContent").append('<a href="#" id="sidebarOpener" class="tile-color-font"><span>' + hap.common.getLocal('openmenu') + '</span></a><div id="hapSidebar" class="tile-color"><a href="' + hap.common.resolveUrl("~/") + '">' + hap.common.getLocal('homeaccessplus') + ' ' + hap.common.getLocal('home') + '</a><div class="tiles"></div></div>');
+                            $("#hapSidebar").mouseleave(function () { $("#hapSidebar").animate({ width: 0 }, 1000); hap.sidebar.Open = false; });
+                            $("#sidebarOpener").click(function () { $('html, body').animate({ scrollTop: 0 }); hap.sidebar.Open = true; $("#hapSidebar").animate({ width: 200 }, 1000); return false; });
+                            for (var i = 0; i < data.length; i++) {
+                                if (data[i].Group == 'Me') continue;
+                                var s = "<div>" + data[i].Group + "<div>";
+                                for (var i2 = 0; i2 < data[i].Tiles.length; i2++) {
+                                    if (data[i].Tiles[i2].Url.substr(0, 1) != "#")
+                                        s += '<a href="' + hap.common.resolveUrl(data[i].Tiles[i2].Url) + '" style="' + (data[i].Tiles[i2].Icon == "" ? "" : 'background-image: url(' + hap.common.resolveUrl(data[i].Tiles[i2].Icon) + '); ') + (data[i].Tiles[i2].Color.substr(0, 1) == " " ? ('background-color: ' + $.parseJSON(data[i].Tiles[i2].Color).Base + ';" onmouseover="this.style.backgroundColor = \'' + $.parseJSON(data[i].Tiles[i2].Color).Light + '\';" onmousedown="this.style.backgroundColor = \'' + $.parseJSON(data[i].Tiles[i2].Color).Dark + '\';"') : '"') + (data[i].Tiles[i2].Target == "" ? "" : ' target="' + data[i].Tiles[i2].Target + '"') + ' title="' + data[i].Tiles[i2].Description + '">' + data[i].Tiles[i2].Name + '</a>';
+                                    if (i2 == 5 || i2 == 11 || i2 == 17 || i2 == 23) s += '<br />';
+                                }
+                                s += "</div></div>";
+                                $("#hapSidebar > .tiles").append(s);
+                            }
+                        }, error: hap.common.jsonError
+                    });
+            }
+        },
+        livetiles: {
             Init: function (data) {
                 if ($("#" + data[0].Data.Group).is(".me")) this.ShowMe(data);
                 else for (var i = 0; i < data.length; i++) this.Tiles.push(new this.LiveTile(data[i].Type, data[i].Data));
@@ -108,7 +132,7 @@ if (hap == null)
                     $.ajax({
                         url: "api/myfiles/drives", type: 'GET', context: this.id, dataType: "json", contentType: 'application/JSON', success: function (data) {
                             var s = "";
-                            for (var i = 0; i < (data.length > 3 ? 3 : data.length); i++)
+                            for (var i = 0; i < (data.length > 3 ? 3 : data.length) ; i++)
                                 s += "<b>" + data[i].Name + "</b>" + (data[i].Space == -1 ? "<br /><br />" : '<br /><span class="progress"><label>' + data[i].Space + '%</label><u style="width: ' + data[i].Space + '%"></u></span>');
                             $("#" + this + " span label").html(s);
                             setInterval("$('#" + this + " > span > i').animate({ height: 'toggle' });", 6000);
@@ -169,7 +193,7 @@ if (hap == null)
                     contentType: 'application/json',
                     success: function (data) {
                         var x = "";
-                        for (var i = 0; i < data.length; i++) x += '<b>' + (i + 1) + '</b>:' + data[i].Subject + '<br />'; 
+                        for (var i = 0; i < data.length; i++) x += '<b>' + (i + 1) + '</b>:' + data[i].Subject + '<br />';
                         if (data.length == 0) x = "No Open Tickets";
                         $("#" + this + " span label").html(x);
                         setTimeout("hap.livetiles.UpdateTickets('" + this + "');", 500000);
@@ -201,4 +225,5 @@ if (hap == null)
             }
         }
     };
-$(function () { hap.help.Init(); });
+    $(function () { hap.help.Init(); hap.sidebar.Init(); });
+}

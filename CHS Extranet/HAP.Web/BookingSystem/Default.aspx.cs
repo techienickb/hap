@@ -12,6 +12,11 @@ namespace HAP.Web.BookingSystem
 {
     public partial class _new : HAP.Web.Controls.Page
     {
+        public _new()
+        {
+            this.SectionTitle = Localize("bookingsystem/bookingsystem");
+        }
+        
         protected void Page_Load(object sender, EventArgs e)
         {
             List<Resource> rez = new List<Resource>();
@@ -52,16 +57,16 @@ namespace HAP.Web.BookingSystem
                 Terms terms = new Terms();
                 if (date.DayOfWeek == DayOfWeek.Saturday) date = date.AddDays(2);
                 else if (date.DayOfWeek == DayOfWeek.Sunday) date = date.AddDays(1);
-                if (date < terms[0].StartDate) date = terms[0].StartDate;
-                else if (date > terms[terms.Count - 1].EndDate) throw new ArgumentOutOfRangeException("Current Date", "The Current Date is After the Last Date in the Term!");
+                if (date.Date <= terms[0].StartDate.Date) date = terms[0].StartDate;
+                else if (date.Date > terms[terms.Count - 1].EndDate.Date) throw new ArgumentOutOfRangeException("Current Date", "The Current Date is After the Last Date in the Term!");
                 else
                 {
                     bool found = false;
                     foreach (Term t in terms)
-                        if (date >= t.StartDate && date <= t.EndDate)
+                        if (date.Date >= t.StartDate.Date && date.Date <= t.EndDate.Date)
                         {
                             found = true;
-                            if (date >= t.HalfTerm.StartDate && date <= t.HalfTerm.EndDate)
+                            if (date.Date >= t.HalfTerm.StartDate.Date && date.Date <= t.HalfTerm.EndDate.Date)
                             {
                                 date = t.HalfTerm.EndDate;
                                 if (date.DayOfWeek == DayOfWeek.Friday) date = date.AddDays(3);

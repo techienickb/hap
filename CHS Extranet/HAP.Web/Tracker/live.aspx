@@ -3,7 +3,11 @@
     <link href="tracker.css" rel="stylesheet" type="text/css" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
-    <div style="text-align: center; font-size: 140%">Live <a href="./"><img src="logontracker-small.png" alt="Logon Tracker" style="vertical-align: middle;" /></a></div>
+    <header>
+		<div>
+			<a href="<%:ResolveClientUrl("~/tracker") %>"><hap:LocalResource StringPath="tracker/livelogons" runat="server" /></a>
+		</div>
+	</header>
     <asp:ListView ID="ListView1" runat="server" onitemcommand="ListView1_ItemCommand">
         <EmptyDataTemplate>
             <table runat="server" style="">

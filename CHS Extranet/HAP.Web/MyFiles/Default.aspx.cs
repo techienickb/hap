@@ -14,6 +14,11 @@ namespace HAP.Web.MyFiles
 {
     public partial class Default : HAP.Web.Controls.Page
     {
+        public Default()
+        {
+            this.SectionTitle = Localize("myfiles/myfiles");
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             StreamReader sr = File.OpenText(Server.MapPath("~/app_data/myfiles-users.txt"));

@@ -61,6 +61,7 @@
     <Compile Include="Me.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerUptime.cs" />
+    <Compile Include="Tiles.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HAP.AD\HAP.AD.csproj">

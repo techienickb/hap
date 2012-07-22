@@ -10,6 +10,8 @@ namespace HAP.Web.HelpDesk
 {
     public partial class New : HAP.Web.Controls.Page
     {
+        public New() { this.SectionTitle = Localize("helpdesk/helpdesk"); }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             adminbookingpanel.Visible = adminupdatepanel.Visible = User.IsInRole("Domain Admins");

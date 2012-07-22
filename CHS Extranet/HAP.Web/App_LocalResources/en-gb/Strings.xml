@@ -10,13 +10,43 @@
   <items>items</items>
   <username>Username</username>
   <close>Close</close>
+  <openmenu>Open Menu</openmenu>
   <search>Search</search>
   <password>Password</password>
   <errordetails>Error Details</errordetails>
   <bookingsystem>
+    <bookingsystem>Booking System</bookingsystem>
     <quicksearch>Search for: </quicksearch>
   </bookingsystem>
+  <helpdesk>
+    <helpdesk>Help Desk</helpdesk>
+    <priority>Priority</priority>
+    <high>High</high>
+    <low>Low</low>
+    <normal>Normal</normal>
+    <makeaware>Make aware</makeaware>
+    <csloun>(comma seperated list of usernames)</csloun>
+    <markasfaq>Mark as FAQ</markasfaq>
+    <fixed>Fixed</fixed>
+    <note>Note</note>
+    <faqs>FAQs</faqs>
+    <opentickets>Open Tickets</opentickets>
+    <newtickets>New Ticket</newtickets>
+    <closedtickets>Closed Tickets</closedtickets>
+    <issue>Issue</issue>
+    <room>Room</room>
+  </helpdesk>
+  <tracker>
+    <archive>Archive</archive>
+    <logontracker>Logon Tracker</logontracker>
+    <webtracker>Web Tracker</webtracker>
+    <livelogons>Live Logons</livelogons>
+    <weblogs>Web Logs</weblogs>
+    <historiclogs>Historic Logs</historiclogs>
+    <logs>Logs</logs>
+  </tracker>
   <myfiles>
+    <myfiles>My Files</myfiles>
     <open>Open</open>
     <download>Download</download>
     <rename>Rename</rename>
