@@ -17,6 +17,13 @@ namespace HAP.Web.LiveTiles
     public class API
     {
         [OperationContract]
+        [WebGet(UriTemplate = "")]
+        public TileGroup[] Tiles()
+        {
+            return HAP.Web.LiveTiles.Tiles.Current;
+        }
+
+        [OperationContract]
         [WebGet(UriTemplate = "Exchange/Unread")]
         public int ExchangeUnread()
         {

@@ -8,18 +8,15 @@
     <script src="//js.live.net/v5.0/wl.js"></script>
 </asp:Content>
 <asp:Content ContentPlaceHolderID="body" runat="server">
-	<div style="overflow: hidden; clear: both; position: relative; height: 120px" id="myfilesheader">
-		<div class="tiles" style="position: absolute; left: 0; margin-top: 45px;">
-			<a class="button" href="../"><hap:LocalResource StringPath="homeaccessplus" runat="server" Seperator=" " StringPath2="home" /></a>
-		</div>
-		<div class="tiles" style="position: absolute; right: 0; text-align: right; margin-top: 45px;">
+	<header id="myfilesheader">
+		<nav class="tiles right">
 			<a class="button" id="bug" href="#" onclick="return false;">Got an Issue?</a>
 			<a class="button" id="help" href="#" onclick="return false;"><hap:LocalResource StringPath="help" runat="server" /></a>
+		</nav>
+		<div>
+			<hap:LocalResource StringPath="myfiles/myfiles" runat="server" />
 		</div>
-		<div style="text-align: center;">
-			<img src="../images/myfiles.png" alt="My Files" />
-		</div>
-	</div>
+	</header>
 	<input type="text" id="renamebox" />
 	<hap:WrappedLocalResource runat="server" title="#myfiles/properties" id="properties" Tag="div">
 		<div id="propcont"><hap:LocalResource StringPath="loading" runat="server" />...</div>

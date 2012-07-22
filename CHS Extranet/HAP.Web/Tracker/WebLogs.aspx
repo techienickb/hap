@@ -9,14 +9,11 @@
     <link rel="stylesheet" type="text/css" href="../style/jquery.jqplot.css" />
 </asp:Content>
 <asp:Content ContentPlaceHolderID="body" runat="server">
-	<div style="overflow: hidden; clear: both; position: relative; height: 120px">
-		<div class="tiles" style="position: absolute; left: 0; margin-top: 45px;">
-			<a class="button" href="../">Home Access Plus+ Home</a>
+    <header>
+		<div>
+			<a href="<%:ResolveClientUrl("~/tracker") %>"><hap:LocalResource StringPath="tracker/webtracker" runat="server" /></a>
 		</div>
-		<div style="text-align: center; margin-left: 60px;">
-			<a href="./">HAP+ Web <img src="logontracker-small.png" style="vertical-align: middle;" alt="Logon Tracker" /></a>
-		</div>
-	</div>
+	</header>
     <div id="chartdiv" style="height:300px;width:99%; "></div>
     <button onclick="plot1.resetZoom(); return false;">Reset Zoom</button>
     <script type="text/javascript">

@@ -12,6 +12,7 @@ body.bookingdisplay, body.bookingdisplay form { padding: 0; margin: 0; width: 10
 .bookingdisplay #statebar { position: absolute; top: 50px; height: 0; left: 0; right: 0; background: #dedede; z-index: 99; }
 .bookingdisplay { overflow: hidden; }
 
+#bookingsystemcontent { margin: 0 auto; }
 #datepicker { z-index: 9999; }
 #bookingday { overflow: auto; border-width: 1px; border-style: solid; }
 #bookingday .head { height: 30px; line-height: 30px; color: #fff; margin: 0; padding: 0; overflow: hidden; white-space: nowrap; }
@@ -20,14 +21,14 @@ body.bookingdisplay, body.bookingdisplay form { padding: 0; margin: 0; width: 10
 #bookingday .head #picker:hover { background-color: #3286C1; }
 #bookingday .head #picker:active { background-color: #004577; }
 #bookingday .body { overflow: hidden; }
-#bookingday .body .col { height: 60px; overflow: hidden; white-space: nowrap; text-overflow: ellipse; }
-#bookingday .body .col div { text-align: center; height: 60px; line-height: 60px; white-space: nowrap; text-overflow: ellipse; }
+#bookingday .body .col { height: 60px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+#bookingday .body .col div { text-align: center; height: 60px; line-height: 60px; white-space: nowrap; text-overflow: ellipsis; }
 #bookingday #resources { height: auto; color: #fff; padding: 0 0 2px 0; float: left; width: 156px; }
-#bookingday .body a { display: block; position: relative; z-index: 10; margin: 2px 0 0 2px; float: left; font-size: 12px; width: 134px; padding: 10px 10px; height: 38px; background-color: #eee; text-decoration: none; color: #666; cursor: default; white-space: nowrap; text-overflow: ellipse; }
+#bookingday .body a { display: block; position: relative; z-index: 10; margin: 2px 0 0 2px; float: left; font-size: 12px; width: 134px; padding: 10px 10px; height: 38px; background-color: #eee; text-decoration: none; color: #666; cursor: default; white-space: nowrap; text-overflow: ellipsis; }
 #bookingday .body a.admin, #bookingday .body a.bookie, #bookingday .body a.free { cursor: pointer; }
 #bookingday .body a span { display: block; font-size: 10px; line-height: 12px; }
 #bookingday .body a span.state { position: absolute; float: right; top: 0; right: 0; line-height: 16px; height: 14px; overflow: hidden; }
-#bookingday .body a span.state span { float: right; display: block; line-height: 16px; height: 14px; width: 0; text-align: right; overflow: hidden; text-overflow: ellipse; white-space: nowrap; transition: all 0.3s ease-in-out; -moz-transition: all 0.3s ease-in-out; -webkit-transition: all 0.3s ease-in-out; -o-transition: all 0.3s ease-in-out; }
+#bookingday .body a span.state span { float: right; display: block; line-height: 16px; height: 14px; width: 0; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: all 0.3s ease-in-out; -moz-transition: all 0.3s ease-in-out; -webkit-transition: all 0.3s ease-in-out; -o-transition: all 0.3s ease-in-out; }
 #bookingday .body a.admin:hover span.state span, #bookingday .body a.bookie:hover span.state span, #bookingday .body a.free:hover span.state span { width: 60px; transition: width 0.3s ease-in-out; -moz-transition: width 0.3s ease-in-out; -webkit-transition: width 0.3s; -o-transition: width 0.3s; }
 #bookingday .body a span.state i { float: right; height: 14px; width: 14px; }
 #bookingday .body a span.static i { background: transparent url(../images/ui-icons_454545_256x240.png) no-repeat -66px -80px; }

@@ -4,48 +4,45 @@
 	<link href="../style/helpdesk.css" rel="stylesheet" type="text/css" />
 </asp:Content>
 <asp:Content ContentPlaceHolderID="body" runat="server">
-	<div style="overflow: hidden; clear: both; position: relative; height: 120px">
-		<div class="tiles" style="position: absolute; left: 0; margin-top: 45px;">
-			<a class="button" href="../">Home Access Plus+ Home</a>
+    <header>
+		<div>
+			<hap:LocalResource StringPath="helpdesk/helpdesk" runat="server" />
 		</div>
-		<div style="text-align: center; margin-left: 60px;">
-			<img src="../images/helpdesk.png" alt="Help Desk" />
-		</div>
-	</div>
+	</header>
 	<div id="updateticket" title="Update Ticket">
 		<asp:PlaceHolder runat="server" id="adminupdatepanel">
 		<div>
-			<label for="ticket-priority">Priority: </label>
+			<label for="ticket-priority"><hap:LocalResource StringPath="helpdesk/Priority" runat="server" />: </label>
 			<div id="ticket-priority">
-				<input type="radio" value="Low" id="ticket-priority-low" name="ticket-priority" /><label for="ticket-priority-low">Low</label>
-				<input type="radio" value="Normal" id="ticket-priority-normal" name="ticket-priority" /><label for="ticket-priority-normal">Normal</label>
-				<input type="radio" value="High" id="ticket-priority-high" name="ticket-priority" /><label for="ticket-priority-high">High</label>
+				<input type="radio" value="Low" id="ticket-priority-low" name="ticket-priority" /><label for="ticket-priority-low"><hap:LocalResource StringPath="helpdesk/low" runat="server" /></label>
+				<input type="radio" value="Normal" id="ticket-priority-normal" name="ticket-priority" /><label for="ticket-priority-normal"><hap:LocalResource StringPath="helpdesk/normal" runat="server" /></label>
+				<input type="radio" value="High" id="ticket-priority-high" name="ticket-priority" /><label for="ticket-priority-high"><hap:LocalResource StringPath="helpdesk/high" runat="server" /></label>
 			</div>
 		</div>
 		<div>
-			<label for="ticket-showto">Make aware: </label>
-			<input type="text" id="ticket-showto" /> (comma seperated list of usernames)
+			<label for="ticket-showto"><hap:LocalResource StringPath="helpdesk/makeaware" runat="server" />: </label>
+			<input type="text" id="ticket-showto" /> <hap:LocalResource StringPath="helpdesk/csloun" runat="server" />
 		</div>
 		<div>
-			<label for="ticket-fixed">Fixed: </label>
+			<label for="ticket-fixed"><hap:LocalResource StringPath="helpdesk/fixed" runat="server" />: </label>
 			<input type="checkbox" id="ticket-fixed" />
 		</div>
 		<div>
-			<label for="ticket-faq">Mark as FAQ: </label>
+			<label for="ticket-faq"><hap:LocalResource StringPath="helpdesk/markasfaq" runat="server" />: </label>
 			<input type="checkbox" id="ticket-faq" />
 		</div>
 		</asp:PlaceHolder>
 		<div>
-			<label for="ticket-note">Note: </label>
+			<label for="ticket-note"><hap:LocalResource StringPath="helpdesk/note" runat="server" />: </label>
 		</div>
 		<textarea id="ticket-note" style="width: 100%; height: 200px;" rows="8" cols="10"></textarea>
 	</div>
 	<div id="tabs">
 		<ul>
-			<li><a href="#opentickets">Open Tickets</a></li>
-			<li><a href="#closedtickets">Closed Tickets</a></li>
-			<li><a href="#newticket">New Ticket</a></li>
-			<li><a href="#faqs">FAQs</a></li>
+			<li><a href="#opentickets"><hap:LocalResource StringPath="helpdesk/opentickets" runat="server" /></a></li>
+			<li><a href="#closedtickets"><hap:LocalResource StringPath="helpdesk/closedtickets" runat="server" /></a></li>
+			<li><a href="#newticket"><hap:LocalResource StringPath="helpdesk/newtickets" runat="server" /></a></li>
+			<li><a href="#faqs"><hap:LocalResource StringPath="helpdesk/faqs" runat="server" /></a></li>
 		</ul>
 		<div id="opentickets">
 			
@@ -55,15 +52,15 @@
 		</div>
 		<div id="newticket">
 			<div>
-				<label for="newticket-subject">Issue: </label>
+				<label for="newticket-subject"><hap:LocalResource StringPath="helpdesk/issue" runat="server" />: </label>
 				<input type="text" id="newticket-subject" style="width: 400px;" />
 			</div>
 			<div>
-				<label for="newticket-room">Room: </label>
+				<label for="newticket-room"><hap:LocalResource StringPath="helpdesk/room" runat="server" />: </label>
 				<input type="text" id="newticket-room" />
 			</div>
 			<div>
-				<label for="newticket-note">Note: </label>
+				<label for="newticket-note"><hap:LocalResource StringPath="helpdesk/note" runat="server" />: </label>
 			</div>
 			<textarea id="newticket-note" style="width: 100%; height: 200px;" rows="8" cols="10"></textarea>
 			<asp:PlaceHolder runat="server" ID="adminbookingpanel">
@@ -72,11 +69,11 @@
 				<asp:DropDownList runat="server" ID="userlist" />
 			</div>
 			<div>
-				<label for="newticket-priority">Priority: </label>
+				<label for="newticket-priority"><hap:LocalResource StringPath="helpdesk/priority" runat="server" />: </label>
 				<div id="priorityradioes">
-					<input type="radio" value="Low" id="newticket-priority-low" name="newticket-priority" /><label for="newticket-priority-low">Low</label>
-					<input type="radio" value="Normal" id="newticket-priority-normal" name="newticket-priority" /><label for="newticket-priority-normal">Normal</label>
-					<input type="radio" value="High" id="newticket-priority-high" name="newticket-priority" /><label for="newticket-priority-high">High</label>
+					<input type="radio" value="Low" id="newticket-priority-low" name="newticket-priority" /><label for="newticket-priority-low"><hap:LocalResource StringPath="helpdesk/low" runat="server" /></label>
+					<input type="radio" value="Normal" id="newticket-priority-normal" name="newticket-priority" /><label for="newticket-priority-normal"><hap:LocalResource StringPath="helpdesk/normal" runat="server" /></label>
+					<input type="radio" value="High" id="newticket-priority-high" name="newticket-priority" /><label for="newticket-priority-high"><hap:LocalResource StringPath="helpdesk/high" runat="server" /></label>
 				</div>
 				<script type="text/javascript">
 					$(function () {
@@ -85,8 +82,8 @@
 				</script>
 			</div>
 			<div>
-				<label for="newticket-showto">Make aware: </label>
-				<input type="text" id="newticket-showto" /> (comma seperated list of usernames)
+				<label for="newticket-showto"><hap:LocalResource StringPath="helpdesk/makeaware" runat="server" />: </label>
+				<input type="text" id="newticket-showto" /> <hap:LocalResource StringPath="helpdesk/note" runat="server" />
 			</div>
 			</asp:PlaceHolder>
 			<input type="submit" value="File Ticket" onclick="return fileTicket()" />

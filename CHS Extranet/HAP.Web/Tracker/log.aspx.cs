@@ -18,7 +18,7 @@ namespace HAP.Web.Tracker
     {
         public log()
         {
-            this.SectionTitle = "Logon Tracker - Historic Logs";
+            this.SectionTitle = Localize("tracker/logontracker") + " - " + Localize("tracker/historiclogs");
         }
         private mode Mode;
         protected void Page_Load(object sender, EventArgs e)

@@ -4,22 +4,16 @@
 	<link href="../style/bookingsystem.css" rel="stylesheet" type="text/css" />
 </asp:Content>
 <asp:Content ContentPlaceHolderID="body" runat="server">
-	<div style="overflow: hidden; clear: both; position: relative; height: 120px">
-		<div class="tiles" style="float: left; margin-top: 45px;">
-			<a class="button" href="../">Home Access Plus+ Home</a>
-		</div>
-		<div class="tiles" style="float: right; text-align: right; margin-top: 45px;">
+	<header>
+		<nav class="tiles right">
 			<asp:HyperLink CssClass="button" runat="server" NavigateUrl="Admin/" ID="adminlink" Text="Control Panel" />
 			<a href="OverviewCalendar.aspx" id="overview" class="button">Overview</a>
+			<a class="button" id="help" href="#" onclick="hap.help.Load('bookingsystem/index'); return false;"><hap:LocalResource StringPath="help" runat="server" /></a>
+		</nav>
+		<div>
+			<hap:LocalResource StringPath="bookingsystem/bookingsystem" runat="server" />
 		</div>
-		<div style="text-align: center;">
-			<img src="../images/booking-system.png" alt="Booking System" />
-		</div>
-	</div>
-	<p class="ui-state-highlight ui-corner-all" style="padding: 2px 6px">
-		<span class="ui-icon ui-icon-info" style="float: left; margin-right: 5px;"></span>
-		<span id="val">Loading...</span>
-	</p>
+	</header>
 	<div id="overviewcalendar" title="Overview Calendar">
 		<label for="overviewsearch"><hap:LocalResource runat="server" StringPath="bookingsystem/quicksearch" /></label><input type="text" id="overviewsearch" />
 		<iframe src="OverviewCalendar.aspx" style="border: 0; margin: 0; padding: 0; width: 100%; height: 440px;"></iframe>
@@ -38,7 +32,7 @@
 
 			                $.ajax({
 			                    type: 'POST',
-			                    url: '<%=ResolveUrl("~/api/BookingSystem/Search")%>?' + window.JSON.stringify(new Date()),
+			                    url: hap.common.resolveUrl('~/api/BookingSystem/Search?') + window.JSON.stringify(new Date()),
 			                    dataType: 'json',
 			                    data: '{ "Query": "' + $('#overviewsearch').val() + '" }',
 			                    contentType: 'application/json',
@@ -62,62 +56,79 @@
 	</div>
 	<div id="questionbox" title="Question"><span></span></div>
 	<div id="bookingform" title="Booking Form">
+		<p class="ui-state-highlight ui-corner-all" style="margin-bottom: 4px; padding: 4px 6px">
+			<span class="ui-icon ui-icon-info" style="float: left; margin-right: 5px;"></span>
+			New Booking for <span id="bfdate"></span> <span id="bfres"></span> during <span id="bflesson"></span>
+		</p>
+		<label for="bfyear">Year: </label><select id="bfyear"></select>
+		<label for="bfsubject">Subject: </label>
+		<select id="bfsubjects" onchange="subjectchance(this)">
+			<option value="" selected="selected">- Subject -</option>
+			<asp:Repeater runat="server" ID="subjects"><ItemTemplate><option value="<%#Container.DataItem %>"><%#Container.DataItem %></option></ItemTemplate></asp:Repeater>
+			<option value="CUSTOM">Custom</option>
+		</select>
+		<input type="text" id="bfsubject" />
+		<span id="subjecterror" style="display: none; color: red;">*</span>
+		<asp:PlaceHolder runat="server" ID="adminbookingpanel">
 		<div>
-			<p class="ui-state-highlight ui-corner-all" style="margin-bottom: 4px; padding: 4px 6px">
-				<span class="ui-icon ui-icon-info" style="float: left; margin-right: 5px;"></span>
-				New Booking for <span id="bfdate"></span> <span id="bfres"></span> during <span id="bflesson"></span>
-			</p>
-			<label for="bfyear">Year: </label><select id="bfyear"></select>
-			<label for="bfsubject">Subject: </label>
-			<select id="bfsubjects" onchange="subjectchance(this)">
-				<option value="" selected="selected">- Subject -</option>
-				<asp:Repeater runat="server" ID="subjects"><ItemTemplate><option value="<%#Container.DataItem %>"><%#Container.DataItem %></option></ItemTemplate></asp:Repeater>
-				<option value="CUSTOM">Custom</option>
-			</select>
-			<input type="text" id="bfsubject" />
-			<span id="subjecterror" style="display: none; color: red;">*</span>
-			<asp:PlaceHolder runat="server" ID="adminbookingpanel">
-			<div>
-				<asp:Label runat="server" AssociatedControlID="userlist" Text="User To Book For: " />
-				<asp:DropDownList runat="server" ID="userlist" />
+			<asp:Label runat="server" AssociatedControlID="userlist" Text="User To Book For: " />
+			<asp:DropDownList runat="server" ID="userlist" />
+		</div>
+		</asp:PlaceHolder>
+		<div id="bfLaptops" class="bfType">
+			<div style="float: left;">
+				<label for="bflroom">Room Required In: </label><input type="text" id="bflroom" style="width: 60px" /> <span id="bflroomerror" style="display: none;">*</span>
+				<label for="bflheadphones">Headphones?: </label><input type="checkbox" id="bflheadphones" />
+				<label for="bflquant">Quantity:&nbsp;</label>
 			</div>
-			</asp:PlaceHolder>
-			<div id="bfLaptops" class="bfType">
-				<div style="float: left;">
-					<label for="bflroom">Room Required In: </label><input type="text" id="bflroom" style="width: 60px" /> <span id="bflroomerror" style="display: none;">*</span>
-					<label for="bflheadphones">Headphones?: </label><input type="checkbox" id="bflheadphones" />
-					<label for="bflquant">Quantity:&nbsp;</label>
-				</div>
-				<div id="bflquant" style="float: left;">
-					<input type="radio" name="bflquant" id="bflquant-16" value="16" /><label for="bflquant-16">16</label>
-					<input type="radio" name="bflquant" id="bflquant-32" value="32" /><label for="bflquant-32">32</label>
-				</div>
+			<div id="bflquant" style="float: left;">
+				<input type="radio" name="bflquant" id="bflquant-16" value="16" /><label for="bflquant-16">16</label>
+				<input type="radio" name="bflquant" id="bflquant-32" value="32" /><label for="bflquant-32">32</label>
 			</div>
-			<div id="bfEquipment" class="bfType">
-					<label for="bferoom">Room Required In: </label><input type="text" id="bferoom" style="width: 60px" /> <span id="bferoomerror" style="display: none;">*</span>
-			</div>
+		</div>
+		<div id="bfEquipment" class="bfType">
+				<label for="bferoom">Room Required In: </label><input type="text" id="bferoom" style="width: 60px" /> <span id="bferoomerror" style="display: none;">*</span>
 		</div>
 	</div>
-	<div id="datepicker" style="position: absolute;"></div>
 	<div id="bookingsystemcontent">
-		<div id="bookingday" class="tile-border-color">
-			<div class="head tile-color" style="width: <%=(156 * (config.BookingSystem.Lessons.Count + 1)) + 2 %>px">
-				<h1><input type="button" id="picker" onclick="return showDatePicker();" /></h1>
-				<asp:Repeater runat="server" ID="lessons"><ItemTemplate><h1><%#Eval("Name") %></h1></ItemTemplate></asp:Repeater>
-			</div>
+	    <p class="ui-state-highlight ui-corner-all" style="padding: 2px 6px">
+		    <span class="ui-icon ui-icon-info" style="float: left; margin-right: 5px;"></span>
+		    <span id="val">Loading...</span>
+	    </p>
+        <div id="datepicker" style="position: absolute;"></div>
+        <div id="bscontent">
+		    <div id="bookingday" class="tile-border-color">
+			    <div class="head tile-color" style="width: <%=(156 * (config.BookingSystem.Lessons.Count + 1)) + 2 %>px">
+				    <h1><input type="button" id="picker" onclick="return showDatePicker();" /></h1>
+				    <asp:Repeater runat="server" ID="lessons"><ItemTemplate><h1><%#Eval("Name") %></h1></ItemTemplate></asp:Repeater>
+			    </div>
 			
-			<div class="body"<%=BodyCode[0] %> style="width: <%=(156 * (config.BookingSystem.Lessons.Count + 1)) + 2 %>px">
-				<div id="resources" class="col tile-color">
-					<asp:Repeater runat="server" ID="resources1"><ItemTemplate><div><%#Eval("Name") %></div></ItemTemplate></asp:Repeater>
-				</div>
-				<asp:Repeater runat="server" ID="resources2">
-					<ItemTemplate>
-						<div id="<%#Eval("Name").ToString().Replace(" ", "_") %>" class="col">
-						</div>
-					</ItemTemplate>
-				</asp:Repeater>
-			</div><%=BodyCode[1] %>
-		</div>
+			    <div class="body"<%=BodyCode[0] %> style="width: <%=(156 * (config.BookingSystem.Lessons.Count + 1)) + 2 %>px">
+				    <div id="resources" class="col tile-color">
+					    <asp:Repeater runat="server" ID="resources1"><ItemTemplate><div><%#Eval("Name") %></div></ItemTemplate></asp:Repeater>
+				    </div>
+				    <asp:Repeater runat="server" ID="resources2">
+					    <ItemTemplate>
+						    <div id="<%#Eval("Name").ToString().Replace(" ", "_") %>" class="col">
+						    </div>
+					    </ItemTemplate>
+				    </asp:Repeater>
+			    </div><%=BodyCode[1] %>
+		    </div>
+            <script type="text/javascript">
+                $(document).ready(function () { 
+                    if ($("#bookingsystemcontent").width() > $("#bookingday > .head").width() + 2)
+                        $("#bookingsystemcontent").css("width", $("#bookingday > .head").width() + 2 + "px");
+                    else $("#bookingsystemcontent").removeAttr("style");
+                });
+                $(window).resize(function () {
+                    $("#bookingsystemcontent").removeAttr("style");
+                    if ($("#bookingsystemcontent").width() > $("#bookingday > .head").width() + 2)
+                        $("#bookingsystemcontent").css("width", $("#bookingday > .head").width() + 2 + "px");
+                    else $("#bookingsystemcontent").removeAttr("style");
+                });
+            </script>
+        </div>
 	</div>
 	<hap:CompressJS runat="server" tag="div">
 	<script type="text/javascript">
@@ -158,7 +169,7 @@
 			this.Refresh = function() {
 				$.ajax({
 					type: 'GET',
-					url: '<%=ResolveUrl("~/api/BookingSystem/LoadRoom/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + this.Name + '?' + window.JSON.stringify(new Date()),
+					url: hap.common.resolveUrl('~/api/BookingSystem/LoadRoom/') + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + this.Name + '?' + window.JSON.stringify(new Date()),
 					dataType: 'json',
 					context: this,
 					success: function (data) {
@@ -210,7 +221,7 @@
 			$("#val").html("Loading...");
 			$.ajax({
 				type: 'GET',
-				url: '<%=ResolveUrl("~/api/BookingSystem/Initial/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username.toLowerCase() + '?' + window.JSON.stringify(new Date()),
+				url: hap.common.resolveUrl('~/api/BookingSystem/Initial/') + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username.toLowerCase() + '?' + window.JSON.stringify(new Date()),
 				dataType: 'json',
 				success: function (data) {
 					if (user.isBSAdmin) $("#val").html("This Week is a Week " + data[1]);
@@ -305,7 +316,7 @@
 							d += " } }";
 							$.ajax({
 								type: 'POST',
-								url: '<%=ResolveUrl("~/api/BookingSystem/Booking/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '?' + window.JSON.stringify(new Date()),
+								url: hap.common.resolveUrl('~/api/BookingSystem/Booking/') + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '?' + window.JSON.stringify(new Date()),
 								dataType: 'json',
 								contentType: 'application/json',
 								data: d,
@@ -314,7 +325,7 @@
 									curres.Render();
 									$.ajax({
 										type: 'GET',
-										url: '<%=ResolveUrl("~/api/BookingSystem/Initial/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username + '?' + window.JSON.stringify(new Date()),
+										url: hap.common.resolveUrl("~/api/BookingSystem/Initial/") + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username + '?' + window.JSON.stringify(new Date()),
 										dataType: 'json',
 										success: function (data) {
 											if (user.isBSAdmin) $("#val").html("This Week is a Week " + data[1]);
@@ -348,7 +359,7 @@
 						if (resources[i].Name == res) curres = resources[i];
 					$.ajax({
 						type: 'DELETE',
-						url: '<%=ResolveUrl("~/api/BookingSystem/Booking/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '?' + window.JSON.stringify(new Date()),
+						url: hap.common.resolveUrl("~/api/BookingSystem/Booking/") + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '?' + window.JSON.stringify(new Date()),
 						dataType: 'json',
 						contentType: 'application/json',
 						data: '{ "booking": { "Room": "' + curres.Name + '", "Lesson": "' + curles + '", "Name": "' + name + '" } }',
@@ -357,7 +368,7 @@
 							curres.Render();
 							$.ajax({
 								type: 'GET',
-								url: '<%=ResolveUrl("~/api/BookingSystem/Initial/")%>' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username + '?' + window.JSON.stringify(new Date()),
+								url: hap.common.resolveUrl("~/api/BookingSystem/Initial/") + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username + '?' + window.JSON.stringify(new Date()),
 								dataType: 'json',
 								success: function (data) {
 									if (user.isBSAdmin) $("#val").html("This Week is a Week " + data[1]);
@@ -411,10 +422,11 @@
 			$("#datepicker").css("top", $("#picker").position().top + 29);
 			$("#datepicker").animate({ height: 'toggle' });
 			$("#bflquant").buttonset();
-			$("#bookingsystemcontent").click(function() {
+			$("#hapContent").click(function() {
 				if (showCal == 2) { $("#datepicker").animate({ height: 'toggle' }); showCal = 0; }
 				else if (showCal == 1) showCal = 2;
 			});
+			$("#datepicker").click(function () { return false; });
 			loadDate();
 		});
 	</script>

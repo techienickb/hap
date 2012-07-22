@@ -13,7 +13,7 @@ namespace HAP.Web.Tracker
 {
     public partial class live : HAP.Web.Controls.Page
     {
-        public live() { this.SectionTitle = "Logon Tracker - Live"; }
+        public live() { this.SectionTitle = Localize("tracker/logontracker") + " - " + Localize("tracker/livelogons"); }
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!Page.IsPostBack)

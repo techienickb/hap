@@ -2,7 +2,11 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
-    <div style="text-align: center;"><a href="./" target="_blank"><img src="logontracker.png" alt="Logon Tracker" /></a></div>
+        <header>
+		<div>
+			<a href="<%:ResolveClientUrl("~/tracker") %>"><hap:LocalResource StringPath="tracker/logontracker" runat="server" /></a>
+		</div>
+	</header>
     <div>
         <h1>XML2SQL Upgrade</h1>
         <p>Warning, this page will move the logon tracker events from the XML Store to a SQL Server you have Set in the Web.Config</p>

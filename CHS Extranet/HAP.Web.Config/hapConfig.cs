@@ -117,6 +117,7 @@ namespace HAP.Web.Configuration
             {//Perform v8 Upgrade
                 XmlAttribute a = doc.CreateAttribute("local");
                 a.Value = "en-gb";
+                doc.SelectSingleNode("/hapConfig").Attributes.Append(a);
                 doc.SelectSingleNode("/hapConfig/Homepage").RemoveChild(doc.SelectSingleNode("/hapConfig/Homepage/Tabs"));
                 XmlElement e = doc.CreateElement("Group");
                 e.SetAttribute("showto", "All");
