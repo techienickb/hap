@@ -8,7 +8,7 @@
     <script src="//js.live.net/v5.0/wl.js"></script>
 </asp:Content>
 <asp:Content ContentPlaceHolderID="body" runat="server">
-	<header id="myfilesheader">
+	<header id="myfilesheader" class="commonheader">
 		<nav class="tiles right">
 			<a class="button" id="bug" href="#" onclick="return false;">Got an Issue?</a>
 			<a class="button" id="help" href="#" onclick="return false;"><hap:LocalResource StringPath="help" runat="server" /></a>

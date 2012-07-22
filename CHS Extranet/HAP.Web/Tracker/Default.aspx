@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="HAP.Web.Tracker.Default" %>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
-    <header>
+    <header class="commonheader">
 		<div>
 			<a href="http://hap.codeplex.com" target="_blank"><hap:LocalResource StringPath="tracker/logontracker" runat="server" /></a>
 		</div>

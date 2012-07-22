@@ -3,7 +3,7 @@
     <link href="tracker.css" rel="stylesheet" type="text/css" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
-    <header>
+    <header class="commonheader">
 		<div>
 			<a href="<%:ResolveClientUrl("~/tracker") %>"><hap:LocalResource StringPath="tracker/livelogons" runat="server" /></a>
 		</div>

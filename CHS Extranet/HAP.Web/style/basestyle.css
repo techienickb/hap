@@ -22,12 +22,12 @@ input[type=button]:focus, input[type=submit]:focus, button:focus { outline: #edc
 
 
 #hapContent { background: #f3f3f3; position: relative; }
-#hapContent header { overflow: hidden; clear: both; position: relative; height: 80px; }
-#hapContent header nav { position: absolute; }
-#hapContent header nav.left { left: 0; text-align: left; }
-#hapContent header nav.right { right: 0; text-align: right; }
-#hapContent header div { text-align: center; font-size: 3em; font-family: '☺SegoeLight'; line-height: 80px; font-weight: 300; }
-#hapContent header div a { color: #000; text-decoration: none; }
+#hapContent .commonheader { overflow: hidden; clear: both; position: relative; height: 80px; }
+#hapContent .commonheader nav { position: absolute; }
+#hapContent .commonheader .left { left: 0; text-align: left; }
+#hapContent .commonheader .right { right: 0; text-align: right; }
+#hapContent .commonheader div { text-align: center; font-size: 3em; font-family: '☺SegoeLight'; line-height: 80px; font-weight: 300; }
+#hapContent .commonheader div a { color: #000; text-decoration: none; }
 
 #useroutter { overflow: hidden; }
 
