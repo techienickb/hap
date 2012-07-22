@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="../style/jquery.jqplot.css" />
 </asp:Content>
 <asp:Content ContentPlaceHolderID="body" runat="server">
-    <header>
+    <header class="commonheader">
 		<div>
 			<a href="<%:ResolveClientUrl("~/tracker") %>"><hap:LocalResource StringPath="tracker/webtracker" runat="server" /></a>
 		</div>

@@ -6,17 +6,14 @@
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="body" runat="server">
     <script type="text/javascript">$(function () { $(".selector").datepicker({ dateFormat: "dd/mm/yy" }); });</script>
-	<div style="overflow: hidden; clear: both; position: relative;">
-		<div class="tiles" style="float: left; margin-top: 45px;">
-			<a class="button" href="../../">Home Access Plus+ Home</a>
+	<header class="commonheader">
+		<nav class="tiles left">
+			<a href="../"><hap:LocalResource StringPath="bookingsystem/bookingsystem" StringPath2="home" runat="server" /></a>
+		</nav>
+		<div>
+			<hap:LocalResource StringPath="bookingsystem/bookingsystem" runat="server" />
 		</div>
-		<div class="tiles" style="float: right; text-align: right; margin-top: 45px;">
-			<a class="button" href="../">Booking System Home</a>
-		</div>
-		<div style="text-align: center;">
-			<img src="../../images/booking-system.png" alt="Booking System" />
-		</div>
-	</div>
+	</header>
 	<div id="tabs">
 		<ul>
 			<li><a href="#term-dates">Term Dates</a></li>

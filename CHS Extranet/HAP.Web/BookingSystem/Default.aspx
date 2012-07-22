@@ -4,7 +4,7 @@
 	<link href="../style/bookingsystem.css" rel="stylesheet" type="text/css" />
 </asp:Content>
 <asp:Content ContentPlaceHolderID="body" runat="server">
-	<header>
+	<header class="commonheader">
 		<nav class="tiles right">
 			<asp:HyperLink CssClass="button" runat="server" NavigateUrl="Admin/" ID="adminlink" Text="Control Panel" />
 			<a href="OverviewCalendar.aspx" id="overview" class="button">Overview</a>
