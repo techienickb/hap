@@ -102,7 +102,7 @@ namespace HAP.Web.BookingSystem
                             years1.Add("\"" + y.Trim() + "\"");
                         foreach (string q in r.Quantities.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                             quant.Add("\"" + q.Trim() + "\"");
-                        s.Add(string.Format("new resource(\"{0}\", \"{1}\", [ {2} ], [ {3} ], {4})", r.Name, r.Type, string.Join(", ", years1.ToArray()), string.Join(", ", quant.ToArray()), isReadOnly(r.ReadOnlyTo, r.ReadWriteTo).ToString().ToLower()));
+                        s.Add(string.Format("new resource(\"{0}\", \"{1}\", [ {2} ], [ {3} ], {4}, {5})", r.Name, r.Type, string.Join(", ", years1.ToArray()), string.Join(", ", quant.ToArray()), isReadOnly(r.ReadOnlyTo, r.ReadWriteTo).ToString().ToLower(), isMultiLesson(r.MultiLessonTo, r.Admins).ToString().ToLower()));
                     }
                 }
                 return "[" + string.Join(", ", s.ToArray()) + "]";
@@ -127,6 +127,24 @@ namespace HAP.Web.BookingSystem
             foreach (string s in readwriteto.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 if (ADUser.UserName.ToLower().Equals(s.ToLower().Trim())) return false;
             if (readonlyto == "" && readwriteto != "") return true;
+            return false;
+        }
+
+        private bool isMultiLesson(string mutlilesson, string resadmins)
+        {
+            if (!config.BookingSystem.MultiLesson) return false;
+            if (mutlilesson == "All" || isBSAdmin || User.IsInRole("Domain Admins") || isResAdmin(resadmins)) return true;
+            foreach (string s in mutlilesson.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                if (ADUser.UserName.ToLower().Equals(s.ToLower().Trim())) return true;
+                else if (User.IsInRole(s.Trim())) return true;
+            return false;
+        }
+
+        private bool isResAdmin(string admins)
+        {
+            foreach (string s in admins.Split(new char[] { ',' }))
+                if (s.Trim().ToLower().Equals(ADUser.UserName.ToLower())) return true;
+                else if (User.IsInRole(s.Trim())) return true;
             return false;
         }
 
@@ -212,6 +230,7 @@ namespace HAP.Web.BookingSystem
                     if (User.IsInRole("Domain Admins") || isBSAdmin) ss.Add("'" + r.Name + "'");
                     else foreach (string s in r.Admins.Split(new char[] { ',' }))
                             if (s.Trim().ToLower().Equals(ADUser.UserName.ToLower())) ss.Add("'" + r.Name + "'");
+                            else if (User.IsInRole(s.Trim())) ss.Add("'" + r.Name + "'");
                 }
                 if (User.IsInRole("Domain Admins") || isBSAdmin) return string.Format("username: '{0}', isAdminOf: [ {1} ], isBSAdmin: {2}, minDate: new Date({3}, {4}, {5}), maxDate: new Date({6}, {7}, {8}), maxBookings: {9}", ADUser.UserName, string.Join(", ", ss.ToArray()), (User.IsInRole("Domain Admins") || isBSAdmin).ToString().ToLower(), DateTime.Now.Year, DateTime.Now.Month - 1, DateTime.Now.Day, new HAP.BookingSystem.Terms()[new HAP.BookingSystem.Terms().Count - 1].EndDate.Year, new HAP.BookingSystem.Terms()[new HAP.BookingSystem.Terms().Count - 1].EndDate.Month - 1, new HAP.BookingSystem.Terms()[new HAP.BookingSystem.Terms().Count - 1].EndDate.Day, maxbookings);
                 return string.Format("username: '{0}', isAdminOf: [ {1} ], isBSAdmin: {2}, minDate: new Date({3}, {4}, {5}), maxDate: new Date({6}, {7}, {8}), maxBookings: {9}", ADUser.UserName, string.Join(", ", ss.ToArray()), (User.IsInRole("Domain Admins") || isBSAdmin).ToString().ToLower(), DateTime.Now.Year, DateTime.Now.Month - 1, DateTime.Now.Day, DateTime.Now.AddDays(maxday).Year, DateTime.Now.AddDays(maxday).Month - 1, DateTime.Now.AddDays(maxday).Day - 1, maxbookings);

@@ -74,7 +74,7 @@ namespace HAP.BookingSystem
             XmlDocument doc = BookingsDoc;
             if (!islessonFree(room, lesson))
             {
-                XmlNode node = doc.SelectSingleNode("/Bookings/Booking[@date='" + Date.ToShortDateString() + "' and @lesson='" + lesson + "' and @room='" + room + "']");
+                XmlNode node = doc.SelectSingleNode("/Bookings/Booking[@date='" + Date.ToShortDateString() + "' and @lesson[contains(.,'" + lesson + "')] and @room='" + room + "']");
                 return new Booking(node, DayNumber);
             }
             else if (isStatic(room, lesson)) return StaticBookings[BookingKey.parseBooking(DayNumber, lesson, room)];
@@ -105,13 +105,23 @@ namespace HAP.BookingSystem
 
         public bool isStatic(string room, string lesson)
         {
-            return StaticBookings.ContainsKey(new BookingKey(DayNumber, lesson, room));
+            if (!StaticBookings.ContainsKey(new BookingKey(DayNumber, lesson, room))) return false;
+            else
+            {
+                if (StaticBookings[new BookingKey(DayNumber, lesson, room)].StartDate.HasValue && StaticBookings[new BookingKey(DayNumber, lesson, room)].EndDate.HasValue)
+                    return (StaticBookings[new BookingKey(DayNumber, lesson, room)].StartDate.Value.Date <= DateTime.Now.Date && StaticBookings[new BookingKey(DayNumber, lesson, room)].EndDate >= DateTime.Now.Date);
+                else if (StaticBookings[new BookingKey(DayNumber, lesson, room)].StartDate.HasValue && !StaticBookings[new BookingKey(DayNumber, lesson, room)].EndDate.HasValue)
+                    return (StaticBookings[new BookingKey(DayNumber, lesson, room)].StartDate.Value.Date <= DateTime.Now.Date);
+                else if (!StaticBookings[new BookingKey(DayNumber, lesson, room)].StartDate.HasValue && StaticBookings[new BookingKey(DayNumber, lesson, room)].EndDate.HasValue)
+                    return (StaticBookings[new BookingKey(DayNumber, lesson, room)].EndDate.Value.Date >= DateTime.Now.Date);
+                else return true;
+            }
         }
 
         public bool islessonFree(string room, string lesson)
         {
             XmlDocument doc = BookingsDoc;
-            if (doc.SelectSingleNode("/Bookings/Booking[@date='" + Date.ToShortDateString() + "' and @lesson='" + lesson + "' and @room='" + room + "']") != null)
+            if (doc.SelectSingleNode("/Bookings/Booking[@date='" + Date.ToShortDateString() + "' and @lesson[contains(.,'" + lesson + "')] and @room='" + room + "']") != null)
                 return false;
             return true;
         }

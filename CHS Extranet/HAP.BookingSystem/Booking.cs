@@ -29,6 +29,8 @@ namespace HAP.BookingSystem
             else this.LTHeadPhones = false;
             if (node.Attributes["equiproom"] != null) this.EquipRoom = node.Attributes["equiproom"].Value;
             if (node.Attributes["uid"] != null) this.uid = node.Attributes["uid"].Value;
+            if (node.Attributes["startdate"] != null) this.StartDate = DateTime.Parse(node.Attributes["startdate"].Value);
+            if (node.Attributes["enddate"] != null) this.EndDate = DateTime.Parse(node.Attributes["enddate"].Value);
         }
 
         public Booking(XmlNode node, bool Static)
@@ -47,6 +49,8 @@ namespace HAP.BookingSystem
             else this.LTHeadPhones = false;
             if (node.Attributes["equiproom"] != null) this.EquipRoom = node.Attributes["equiproom"].Value;
             if (node.Attributes["uid"] != null) this.uid = node.Attributes["uid"].Value;
+            if (node.Attributes["startdate"] != null) this.StartDate = DateTime.Parse(node.Attributes["startdate"].Value);
+            if (node.Attributes["enddate"] != null) this.EndDate = DateTime.Parse(node.Attributes["enddate"].Value);
         }
 
         public Booking(XmlNode node, int day)
@@ -89,6 +93,8 @@ namespace HAP.BookingSystem
         public bool Static { get; set; }
         public string uid { get; set; }
         public DateTime Date { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public UserInfo User
         {
             get

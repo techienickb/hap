@@ -12,6 +12,10 @@
 	<div id="updateticket" title="Update Ticket">
 		<asp:PlaceHolder runat="server" id="adminupdatepanel">
 		<div>
+			<label for="ticket-subject"><hap:LocalResource StringPath="helpdesk/subject" runat="server" />: </label>
+			<input type="text" id="ticket-subject" />
+		</div>
+		<div>
 			<label for="ticket-priority"><hap:LocalResource StringPath="helpdesk/Priority" runat="server" />: </label>
 			<div id="ticket-priority">
 				<input type="radio" value="Low" id="ticket-priority-low" name="ticket-priority" /><label for="ticket-priority-low"><hap:LocalResource StringPath="helpdesk/low" runat="server" /></label>
@@ -26,6 +30,10 @@
 		<div>
 			<label for="ticket-fixed"><hap:LocalResource StringPath="helpdesk/fixed" runat="server" />: </label>
 			<input type="checkbox" id="ticket-fixed" />
+		</div>
+		<div>
+			<label for="ticket-userinter"><hap:LocalResource StringPath="helpdesk/userinter" runat="server" />: </label>
+			<input type="checkbox" id="ticket-userinter" />
 		</div>
 		<div>
 			<label for="ticket-faq"><hap:LocalResource StringPath="helpdesk/markasfaq" runat="server" />: </label>
@@ -98,13 +106,17 @@
 		var st = "";
 		function updateTicket() {
 			$("#ticket-showto").val(st);
-			if ($("#ticket-priority") != null) $("#ticket-priority").buttonset();
+			if ($("#ticket-priority") != null) { 
+			    $("#ticket-priority").buttonset();
+			    $("#newticket-priority-normal").attr("checked", "checked");
+			}
+			$("#ticket-subject").val($("#sub").text());
 			$("#updateticket").dialog({ autoOpen: true, minWidth: 600, minHeight: 400, buttons: {
 				"Update": function () {
 					var data = '{ "Note": "' + escape($("#ticket-note").val()) + '", "State": ';
 					var url = '<%=ResolveUrl("~/api/HelpDesk/Ticket/")%>' + curticket + '?' + window.JSON.stringify(new Date());
 					if (<%=User.IsInRole("Domain Admins").ToString().ToLower() %>) {
-						data += ($("#ticket-fixed").is(":checked") ? '"Fixed"' : '"With IT"') + ', "Priority": "' + $("#ticket-priority input:checked").attr("value") + '", "ShowTo": "' + $("#ticket-showto").val() + '", "FAQ": "' + ($("ticket-faq").is(":checked") ? + 'true' : 'false') + '"';
+						data += ($("#ticket-fixed").is(":checked") ? '"Fixed"' : ('"' + $("#ticket-userinter").is(":checked") ? hap.common.getLocal("helpdesk/userinter") : "With IT") + '"') + ', "Priority": "' + $("#ticket-priority input:checked").attr("value") + '", "ShowTo": "' + $("#ticket-showto").val() + '", "FAQ": "' + ($("ticket-faq").is(":checked") ? + 'true' : 'false') + '", "Subject": "' $("ticket-subject").val() + '"';
 						url = '<%=ResolveUrl("~/api/HelpDesk/AdminTicket/")%>' + curticket + '?' + window.JSON.stringify(new Date());
 					} else data += '"New"';
 					data += ' }';
@@ -255,7 +267,7 @@
 					contentType: 'application/json',
 					success: function (data) {
 						$(".ui-tabs-selected a span").html("Ticket: " + data.Subject);
-						var h = '<button style="float: right;" onclick="return updateTicket();">Update</button><div><label>Ticket ' + curticket + ': </label>' + data.Subject + '</div><div><label>Opened By: </label>' + data.DisplayName + ' (' + data.Username + ')</div><div><label>Opened on: </label>' + data.Date + '</div><div><label>Priority: </label>' + data.Priority + '</div><div><label>Status: </label>' + data.Status + '</div><div class="notes tile-border-color">';
+						var h = '<button style="float: right;" onclick="return updateTicket();">Update</button><div><label>Ticket ' + curticket + ': </label><span id="sub">' + data.Subject + '</span></div><div><label>Opened By: </label>' + data.DisplayName + ' (' + data.Username + ')</div><div><label>Opened on: </label>' + data.Date + '</div><div><label>Priority: </label>' + data.Priority + '</div><div><label>Status: </label>' + data.Status + '</div><div class="notes tile-border-color">';
 						for (var i = 0; i < data.Notes.length; i++)
 							h += data.Notes[i].DisplayName + ' ' + data.Notes[i].Date + '<br /><pre>' + unescape(data.Notes[i].NoteText).replace(/\+/g, ' ') + '</pre>';
 						h += '</div>';

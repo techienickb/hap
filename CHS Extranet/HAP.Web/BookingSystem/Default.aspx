@@ -89,6 +89,9 @@
 		<div id="bfEquipment" class="bfType">
 				<label for="bferoom">Room Required In: </label><input type="text" id="bferoom" style="width: 60px" /> <span id="bferoomerror" style="display: none;">*</span>
 		</div>
+        <div id="bfmultilesson">
+            <label for="bfmultiroom">Length: </label><select id="bfmultiroom"></select>
+        </div>
 	</div>
 	<div id="bookingsystemcontent">
 	    <p class="ui-state-highlight ui-corner-all" style="padding: 2px 6px">
@@ -136,13 +139,15 @@
 		var user = { <%=JSUser %> };
 		var resources = <%=JSResources %>;
 		var availbookings = [ 0, 0 ];
-		function resource(name, type, years, quantities, readonly){
+		var canmulti = false;
+		function resource(name, type, years, quantities, readonly, multiroom){
 			this.Name = name;
 			this.Type = type;
 			this.Years = years;
 			this.Quantities = quantities;
 			this.Data;
 			this.ReadOnly = readonly;
+			this.MultiRoom = multiroom;
 			this.Render = function() {
 				var h = "";
 				for (var x = 0; x < this.Data.length; x++) {
@@ -270,13 +275,40 @@
 			$("#bflheadphones").removeAttr("checked");
 			$("#bflroom").val("");
 			$("#bferoom").val("");
-			$("#bfyear option").remove();
-			$("#bfyear").append('<option value="">---</option>');
-			for (var i = 0; i < curres.Years.length; i++)
-			    $("#bfyear").append('<option value="' + curres.Years[i] + '">' + curres.Years[i] + '</option>');
-			$("#bflquant input, #bflquant label").remove();
-			for (var i = 0; i < curres.Quantities.length; i++)
-			    $("#bflquant").append('<input type="radio" name="bflquant" id="bflquant-' + curres.Quantities[i] + '" value="' + curres.Quantities[i] + '" /><label for="bflquant-' + curres.Quantities[i] + '">' + curres.Quantities[i] + '</label>');
+		    try {
+		        $("#bfyear option").remove();
+		        $("#bfyear").append('<option value="">---</option>');
+		        for (var i = 0; i < curres.Years.length; i++)
+		            $("#bfyear").append('<option value="' + curres.Years[i] + '">' + curres.Years[i] + '</option>');
+		    } catch { }
+		    try {
+		        $("#bflquant input, #bflquant label").remove();
+		        for (var i = 0; i < curres.Quantities.length; i++)
+		            $("#bflquant").append('<input type="radio" name="bflquant" id="bflquant-' + curres.Quantities[i] + '" value="' + curres.Quantities[i] + '" /><label for="bflquant-' + curres.Quantities[i] + '">' + curres.Quantities[i] + '</label>');
+		    } catch { }
+		    try {
+		        if (curres.MultiRoom) {
+		            $("#bfmultilesson").show();
+		            $("#bfmultilesson option").remove();
+		            var l1 = false;
+		            var l2 = "";
+		            var l3 = 0;
+		            for (var i = 0; i < curres.Data.length; i++)
+		            {
+		                if (!l1) l1 = (curres.Data[i].Lesson == lesson);
+		                if (l1) {
+		                    l3++;
+		                    $("#bfmultilesson").append('<option value="' + l2 + curres.Data[i].Lesson + '">' + l3 + ' Lesson' + (l3 == 1 ? '' : 's') + '</option>');
+		                    l2 += curres.Data[i].Lesson + ',';
+		                }
+		            }
+		            canmulti = true;
+		        }
+		        else {
+		            $("#bfmultilesson").hide();
+		            canmulti = false;
+		        }
+		    } catch { }
 			$("#bflquant").buttonset();
 			$("#bflesson").html(lesson);
 			$("#bookingform").dialog({ 
@@ -306,7 +338,7 @@
 							if (n1 != "") n1 += " ";
 							n1 += $("#bfsubject").val();
 							if (abort) return;
-							var d = '{ "booking": { "Room": "' + curres.Name + '", "Lesson": "' + curles + '", "Username": "' + (user.isBSAdmin ? $("#<%=userlist.ClientID %> option:selected").val() : user.username) + '", "Name": "' + n1 + '"';
+							var d = '{ "booking": { "Room": "' + curres.Name + '", "Lesson": "' + (canmulti ? $("#bfmultilesson").val() : curles) + '", "Username": "' + (user.isBSAdmin ? $("#<%=userlist.ClientID %> option:selected").val() : user.username) + '", "Name": "' + n1 + '"';
 							if (curres.Type == "Laptops") {
 								d += ', "LTCount": ' + $("#bflquant input:checked").attr("value") + ', "LTRoom": "' + $("#bflroom").val() + '", "LTHeadPhones": ' + (($('#bflheadphones:checked').val() !== undefined) ? 'true' : 'false');
 							}

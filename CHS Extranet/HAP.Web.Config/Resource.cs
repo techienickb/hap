@@ -24,6 +24,7 @@ namespace HAP.Web.Configuration
             Quantities = node.Attributes["quantities"].Value;
             ReadOnlyTo = node.Attributes["readonlyto"].Value;
             ReadWriteTo = node.Attributes["readwriteto"].Value;
+            MultiLessonTo = node.Attributes["multilessonto"].Value;
         }
 
         public string Name { get; set; }
@@ -38,6 +39,7 @@ namespace HAP.Web.Configuration
         public string Quantities { get; set; }
         public string ReadOnlyTo { get; set; }
         public string ReadWriteTo { get; set; }
+        public string MultiLessonTo { get; set; }
     }
 
     public enum ResourceType { Room, Laptops, Equipment, Other }

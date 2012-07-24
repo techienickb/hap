@@ -23,6 +23,8 @@ namespace HAP.Web.Configuration
         public bool KeepXmlClean { get { return bool.Parse(doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["keepxmlclean"].Value); } set { doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["keepxmlclean"].Value = value.ToString(); } }
         public bool TwoWeekTimetable { get { return bool.Parse(doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["twoweektimetable"].Value); } set { doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["twoweektimetable"].Value = value.ToString(); } }
         public string Admins { get { return doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["admins"].Value; } set { doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["admins"].Value = value; } }
+        public bool MultiLesson { get { return bool.Parse(doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["enablemultilesson"].Value); } set { doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["enablemultilesson"].Value = value.ToString(); } }
+
 
         public void Initialize()
         {
@@ -39,6 +41,7 @@ namespace HAP.Web.Configuration
             e.SetAttribute("admins", "");
             e.SetAttribute("keepxmlclean", "true");
             e.SetAttribute("twoweektimetable", "true");
+            e.SetAttribute("enablemultilesson", "false");
             doc.SelectSingleNode("/hapConfig").AppendChild(e);
         }
     }

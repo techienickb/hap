@@ -74,12 +74,13 @@ namespace HAP.HelpDesk
 
         [OperationContract]
         [WebInvoke(Method = "PUT", UriTemplate = "/AdminTicket/{Id}", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public FullTicket UpdateAdminTicket(string Id, string Note, string State, string Priority, string ShowTo, string FAQ)
+        public FullTicket UpdateAdminTicket(string Id, string Note, string State, string Priority, string ShowTo, string FAQ, string Subject)
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
             XmlNode ticket = doc.SelectSingleNode("/Tickets/Ticket[@id='" + Id + "']");
             ticket.Attributes["status"].Value = "New";
+            ticket.Attributes["subject"].Value = Subject;
             XmlElement node = doc.CreateElement("Note");
             node.SetAttribute("datetime", DateTime.Now.ToString("u"));
             node.SetAttribute("username", HttpContext.Current.User.Identity.Name);
@@ -103,6 +104,14 @@ namespace HAP.HelpDesk
             writer.Flush();
             writer.Close();
 
+            string emailnote = "";
+            doc = new XmlDocument();
+            doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
+            FullTicket ft = new FullTicket(doc.SelectSingleNode("/Tickets/Ticket[@id='" + Id + "']"));
+            foreach (Note not in ft.Notes)
+                emailnote += not.DisplayName + " on " + not.Date.ToString() + "<br />" + not.NoteText + "<hr />";
+            
+
             UserInfo user = ADUtils.FindUserInfos(ticket.SelectNodes("Note")[0].Attributes["username"].Value)[0];
             UserInfo currentuser = ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0];
             if (hapConfig.Current.SMTP.Enabled && user.Email != null && !string.IsNullOrEmpty(user.Email))
@@ -121,9 +130,9 @@ namespace HAP.HelpDesk
 
                 mes.Body = fs.ReadToEnd().Replace("{0}", Id).Replace("{1}",
                     (State == "Fixed" ? "Closed" : "Updated")).Replace("{2}",
-                    HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />")).Replace("{3}",
+                    emailnote).Replace("{3}",
                     (State == "Fixed" ? "reopen" : "update")).Replace("{4}",
-                    HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath).Replace("{5}", HttpContext.Current.User.Identity.Name).Replace("{6}", user.DisplayName).Replace("{7}", currentuser.DisplayName);
+                    HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath).Replace("{5}", HttpContext.Current.User.Identity.Name).Replace("{6}", user.DisplayName).Replace("{7}", currentuser.DisplayName).Replace("{8}", ft.Subject);
 
                 SmtpClient smtp = new SmtpClient(hapConfig.Current.SMTP.Server, hapConfig.Current.SMTP.Port);
                 if (!string.IsNullOrEmpty(hapConfig.Current.SMTP.User))
@@ -150,9 +159,9 @@ namespace HAP.HelpDesk
 
                     mes.Body = fs.ReadToEnd().Replace("{0}", Id).Replace("{1}",
                         (State == "Fixed" ? "Closed" : "Updated")).Replace("{2}",
-                        HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />")).Replace("{3}",
+                        emailnote).Replace("{3}",
                         (State == "Fixed" ? "reopen" : "update")).Replace("{4}",
-                        HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath);
+                        HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath).Replace("{8}", ft.Subject);
 
                     SmtpClient smtp = new SmtpClient(hapConfig.Current.SMTP.Server, hapConfig.Current.SMTP.Port);
                     if (!string.IsNullOrEmpty(hapConfig.Current.SMTP.User))

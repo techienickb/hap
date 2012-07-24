@@ -161,6 +161,16 @@ namespace HAP.Web.Configuration
                     n.Attributes["readwriteto"].Value = n.Attributes["readonlyto"].Value = "";
                 }
             }
+            if (version.CompareTo(Version.Parse("8.0.0724.2145")) == -1)
+            {//Perform v8.0714.2010 Update
+                doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes.Append(doc.CreateAttribute("enablemultilesson"));
+                doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["enablemultilesson"].Value = "false";
+                foreach (XmlNode n in doc.SelectNodes("/hapConfig/bookingsystem/resources/resource"))
+                {
+                    n.Attributes.Append(doc.CreateAttribute("multilessonto"));
+                    n.Attributes["multilessonto"].Value = "None";
+                }
+            }
             doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             doc.Save(ConfigPath);
         }
