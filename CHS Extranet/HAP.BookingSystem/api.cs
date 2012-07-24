@@ -70,11 +70,11 @@ namespace HAP.Web.API
 #if DEBUG
             HAP.Web.Logging.EventViewer.Log("Booking System JSON API", "Remove XML Element from XML Datasource", System.Diagnostics.EventLogEntryType.Information);
 #endif
-            doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + DateTime.Parse(Date).ToShortDateString() + "' and @lesson='" + booking.Lesson + "' and @room='" + booking.Room + "']"));
+            doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + DateTime.Parse(Date).ToShortDateString() + "' and @lesson[contains(., '" + booking.Lesson + "')] and @room='" + booking.Room + "']"));
 #if DEBUG
             HAP.Web.Logging.EventViewer.Log("Booking System JSON API", "Checking to see if the Room has a Charging Flag", System.Diagnostics.EventLogEntryType.Information);
 #endif
-            if (hapConfig.Current.BookingSystem.Resources[booking.Room].EnableCharging)
+            if (hapConfig.Current.BookingSystem.Resources[booking.Room].EnableCharging && !booking.Lesson.Contains(','))
             {
 #if DEBUG
                 HAP.Web.Logging.EventViewer.Log("Booking System JSON API", "Removing the Charging and Unavailable Items", System.Diagnostics.EventLogEntryType.Information);
@@ -128,7 +128,7 @@ namespace HAP.Web.API
                 node.SetAttribute("name", booking.Name);
                 doc.SelectSingleNode("/Bookings").AppendChild(node);
                 #region Charging
-                if (config.BookingSystem.Resources[booking.Room].EnableCharging)
+                if (config.BookingSystem.Resources[booking.Room].EnableCharging && !booking.Lesson.Contains(','))
                 {
                     HAP.BookingSystem.BookingSystem bs = new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date));
                     int index = config.BookingSystem.Lessons.FindIndex(l => l.Name == booking.Lesson);

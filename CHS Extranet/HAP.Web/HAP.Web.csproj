@@ -623,6 +623,7 @@
     <Content Include="Scripts\jquery.dataTables.js" />
     <Content Include="Scripts\jquery.mousewheel.js" />
     <Content Include="Scripts\jquery.wysiwyg.js" />
+    <Content Include="Scripts\modernizer.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="style\editor.css" />
     <Content Include="style\jquery.mobile-1.0.css" />

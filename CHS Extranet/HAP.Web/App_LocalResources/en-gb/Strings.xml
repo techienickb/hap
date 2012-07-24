@@ -35,6 +35,8 @@
     <closedtickets>Closed Tickets</closedtickets>
     <issue>Issue</issue>
     <room>Room</room>
+    <subject>Subject</subject>
+    <userinter>User Interaction Requested</userinter>
   </helpdesk>
   <tracker>
     <archive>Archive</archive>
