@@ -58,12 +58,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_62E89CD389F0E256E0B84BB216615F13"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_DCE56C29339D447DBB59AFBBA918215D"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -77,6 +71,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_9C4DE419E275BBD444108BA753C29E72"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_62E89CD389F0E256E0B84BB216615F13"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -161,59 +161,59 @@
     {
         "CustomAction"
         {
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_375074B8464E4742ADFE8E9C65E62B89"
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_1CCFBD62455845A8BC57C319967B0514"
             {
             "Name" = "8:Primary output from HAP Quota Service (Active)"
             "Condition" = "8:"
-            "Object" = "8:"
-            "FileType" = "3:2"
-            "InstallAction" = "3:1"
-            "Arguments" = "8:"
-            "EntryPoint" = "8:"
-            "Sequence" = "3:1"
-            "Identifier" = "8:_008256E2_DB56_4089_81F9_8BE33BBBFED0"
-            "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:"
-            }
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_48C390E42BE148EA992D9975033709F4"
-            {
-            "Name" = "8:Primary output from HAP Quota Service (Active)"
-            "Condition" = "8:"
-            "Object" = "8:"
-            "FileType" = "3:2"
-            "InstallAction" = "3:2"
-            "Arguments" = "8:"
-            "EntryPoint" = "8:"
-            "Sequence" = "3:1"
-            "Identifier" = "8:_6865F60F_6753_4737_B150_3130B9883FC8"
-            "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:"
-            }
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_922E06854C934ED69286612BF05CEE41"
-            {
-            "Name" = "8:Primary output from HAP Quota Service (Active)"
-            "Condition" = "8:"
-            "Object" = "8:"
-            "FileType" = "3:2"
-            "InstallAction" = "3:4"
-            "Arguments" = "8:"
-            "EntryPoint" = "8:"
-            "Sequence" = "3:1"
-            "Identifier" = "8:_E023E636_4E77_48F8_8647_3EC9853852E0"
-            "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:"
-            }
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_A61B024337504543B628B71A4F62768A"
-            {
-            "Name" = "8:Primary output from HAP Quota Service (Active)"
-            "Condition" = "8:"
-            "Object" = "8:"
+            "Object" = "8:_DCE56C29339D447DBB59AFBBA918215D"
             "FileType" = "3:2"
             "InstallAction" = "3:3"
             "Arguments" = "8:"
             "EntryPoint" = "8:"
             "Sequence" = "3:1"
-            "Identifier" = "8:_961DCD36_B738_4AF1_AF00_A213454410B3"
+            "Identifier" = "8:_8831E930_AA4D_4D4D_80B9_B481148EB64F"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:"
+            }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_8D9C67720AE04662ABE8E6958C9DA47A"
+            {
+            "Name" = "8:Primary output from HAP Quota Service (Active)"
+            "Condition" = "8:"
+            "Object" = "8:_DCE56C29339D447DBB59AFBBA918215D"
+            "FileType" = "3:2"
+            "InstallAction" = "3:2"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_21782844_47AC_49A3_9F10_73BC89C3052A"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:"
+            }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_B2989B583715498AA09C69F7AFF756E9"
+            {
+            "Name" = "8:Primary output from HAP Quota Service (Active)"
+            "Condition" = "8:"
+            "Object" = "8:_DCE56C29339D447DBB59AFBBA918215D"
+            "FileType" = "3:2"
+            "InstallAction" = "3:4"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_4E557F6B_E8BA_499E_A9B0_D571B3795A1A"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:"
+            }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_CF4292BF741146729E119D2B1E35C504"
+            {
+            "Name" = "8:Primary output from HAP Quota Service (Active)"
+            "Condition" = "8:"
+            "Object" = "8:_DCE56C29339D447DBB59AFBBA918215D"
+            "FileType" = "3:2"
+            "InstallAction" = "3:1"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_9874B31B_95E4_4E95_B32C_430AC7C80081"
             "InstallerClass" = "11:TRUE"
             "CustomActionData" = "8:"
             }
@@ -387,15 +387,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HAP Quota Service x86"
-        "ProductCode" = "8:{BE62870C-4A5D-4E25-AD4B-38560E08BBEA}"
-        "PackageCode" = "8:{0C877B4C-8261-4A4D-B264-094D0A75CE0C}"
+        "ProductCode" = "8:{7C86EEF3-3191-4CBF-8E2A-CCD5E0A45890}"
+        "PackageCode" = "8:{32210C5F-F7AF-4B33-BC6E-279D1447F234}"
         "UpgradeCode" = "8:{55C8129E-4F05-41B8-A23E-1AE6A8DC351D}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:3.0.0"
+        "ProductVersion" = "8:3.1.0"
         "Manufacturer" = "8:nb development"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
