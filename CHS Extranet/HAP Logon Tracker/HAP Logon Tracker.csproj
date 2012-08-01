@@ -37,7 +37,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>haplogo-icon.ico</ApplicationIcon>
+    <ApplicationIcon>trackerlogo.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -143,6 +143,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="haplogo-icon.ico" />
+    <Content Include="trackerlogo.ico" />
     <None Include="Resources\History.png" />
     <None Include="Web References\api\api.disco" />
   </ItemGroup>
