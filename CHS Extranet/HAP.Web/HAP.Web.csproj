@@ -88,6 +88,7 @@
     <Content Include="App_Data\abr.xml" />
     <Content Include="App_Data\Bookings.xml" />
     <Content Include="App_Data\BookingTemplates.xml" />
+    <Content Include="App_Data\hap.sql" />
     <Content Include="App_Data\Homework.xml">
       <SubType>Designer</SubType>
     </Content>
