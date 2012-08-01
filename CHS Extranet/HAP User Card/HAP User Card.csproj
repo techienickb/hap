@@ -134,7 +134,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="Service References\Web\api.wsdl" />
+    <None Include="Service References\Web\api1.wsdl" />
     <None Include="Service References\Web\HAP.UserCard.Web.Init.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -144,9 +144,6 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\Web\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\Web\api.disco" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\Web\configuration91.svcinfo" />
@@ -203,6 +200,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\normal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\Web\api1.disco" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

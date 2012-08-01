@@ -143,8 +143,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="haplogo-icon.ico" />
+    <None Include="Resources\History.png" />
     <None Include="Web References\api\api.disco" />
-    <None Include="Resources\logontracker.png" />
   </ItemGroup>
   <ItemGroup>
     <WebReferences Include="Web References\" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://hap.codeplex.com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://hap.codeplex.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://hap.codeplex.com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://hap.codeplex.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <s:schema elementFormDefault="qualified" targetNamespace="http://hap.codeplex.com/">
       <s:element name="getInit">
@@ -458,10 +458,10 @@
   </wsdl:binding>
   <wsdl:service name="api">
     <wsdl:port name="apiSoap" binding="tns:apiSoap">
-      <soap:address location="https://folders.crickhowell-hs.powys.sch.uk/extranet/usercard/api.asmx" />
+      <soap:address location="https://folders.crickhowell-hs.powys.sch.uk/hap/usercard/api.asmx" />
     </wsdl:port>
     <wsdl:port name="apiSoap12" binding="tns:apiSoap12">
-      <soap12:address location="https://folders.crickhowell-hs.powys.sch.uk/extranet/usercard/api.asmx" />
+      <soap12:address location="https://folders.crickhowell-hs.powys.sch.uk/hap/usercard/api.asmx" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

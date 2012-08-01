@@ -151,7 +151,7 @@
                                 <GridViewColumn Width="34">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Image Source="{Binding Path=Status, Converter={StaticResource ic}}" />
+                                            <TextBlock Text="{Binding Path=Status}" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
