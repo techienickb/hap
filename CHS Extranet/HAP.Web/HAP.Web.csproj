@@ -1022,6 +1022,9 @@
     <Content Include="BookingSystem\api.ashx" />
     <Content Include="images\icons\knownicons.xml" />
     <Content Include="style\Web.config" />
+    <Content Include="Documentation.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\PublishProfiles\Pack.pubxml" />
     <None Include="Properties\PublishProfiles\Profile1.pubxml" />
     <None Include="Properties\PublishProfiles\Profile2.pubxml" />
