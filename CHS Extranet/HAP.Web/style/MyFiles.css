@@ -2,16 +2,17 @@
 body.bookingdisplay, body.bookingdisplay form { padding: 0; margin: 0; width: 100%; height: 100%; }
 
 #toolbar { position: absolute; height: 25px; left: 0; right: 0; vertical-align: top!important; line-height: 25px; overflow: hidden; }
-#Tree { position: absolute; width: 188px; margin-right: 3px; font-size: 11px; overflow: auto; height: 410px; border: 0; }
+#Tree { position: absolute; width: 188px; font-size: 11px; overflow: auto; bottom: 0; top: 113px; left: 0; background: #eee; }
 .dynatree-container { margin: 0; }
-a.dynatree-title { display: inline-block; text-decoration: none; color: #000; padding: 1px 4px; border: 0; background: #eee; }
-a.dynatree-title:hover { border-color: #dedede; background: #dedede; }
-a.dynatree-title:active { border-color: #333; background: #333; color: #fff; }
+.dynatree-node { display: block; }
+a.dynatree-title { display: inline-block; text-decoration: none; color: #000; padding: 1px 4px; border: 0; }
+a.dynatree-title:hover, .dynatree-node:hover { border-color: #dedede; background: #dedede; }
+a.dynatree-title:active, .dynatree-node:active, .dynatree-node:active > a { border-color: #333; background: #333; color: #fff; }
 #MyFiles { min-height: 410px; overflow: hidden; }
 #MyFiles a { float: left; margin: 0 3px 3px 0; padding: 0; border-width: 8px; border-style: solid; height: 40px; width: 230px; font-size: 11px; text-decoration: none; overflow: hidden; text-overflow: ellipsis; }
 #MyFiles a.Selectable { background-color: #eee; color: #666; border-color: #eee; }
 #MyFiles a.Selectable:hover, .droppable-hover { background-color: #dedede; border-color: #dedede; }
-#MyFiles a.Selectable:active, .droppable-active { background-color: #333; border-color: #333; color: #fff; }
+#MyFiles a.Selectable:active { background-color: #333; border-color: #333; color: #fff; }
 #MyFiles a.Drive { height: 70px; }
 #MyFiles a .icon { float: left; text-align: center; margin-right: 10px; width: 40px; height: 40px; background: transparent no-repeat center center; font-size: 36px; line-height: 40px; }
 #MyFiles a.Drive .icon { height: 64px; width: 64px; font-size: 60px; line-height: 64px; }

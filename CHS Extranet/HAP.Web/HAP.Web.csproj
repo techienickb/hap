@@ -41,11 +41,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <FilesToIncludeForPublish>OnlyFilesToRunTheApp</FilesToIncludeForPublish>
-    <DeployIisAppPath>RM/Extranet</DeployIisAppPath>
+    <DeployIisAppPath>Default Web Site/HAP</DeployIisAppPath>
     <PackageLocation>obj\Debug\Package\CHS Extranet.zip</PackageLocation>
     <PackageAsSingleFile>true</PackageAsSingleFile>
     <ExcludeApp_Data>false</ExcludeApp_Data>
     <DeployEncryptKey>crickhowell</DeployEncryptKey>
+    <PrecompileBeforePublish>false</PrecompileBeforePublish>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -56,7 +57,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>haplogo-icon.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -113,6 +115,7 @@
     <Content Include="App_Data\Announcement.xml" />
     <Content Include="App_Data\Tickets.xml" />
     <Content Include="Controls\UpdateChecker.ascx" />
+    <Content Include="haplogo-icon.ico" />
     <Content Include="HelpDesk\Default.aspx" />
     <Content Include="images\120-arrow.png" />
     <Content Include="images\ajax-loader.png" />
@@ -373,6 +376,7 @@
     <Content Include="images\icons\metro\Folders-OS\Windowsalt.png" />
     <Content Include="images\icons\metro\Folders-OS\WindowsUpdate.png" />
     <Content Include="images\icons\metro\hap-logo-128.png" />
+    <Content Include="images\icons\metro\hap-logo.jpg" />
     <Content Include="images\icons\metro\hap-logo.png" />
     <Content Include="images\icons\metro\Internet-Shortcuts-Manufacturers\Acer.png" />
     <Content Include="images\icons\metro\Internet-Shortcuts-Manufacturers\Amazon.png" />
@@ -630,7 +634,6 @@
     <Content Include="style\basestyle.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="haplogo-icon.ico" />
     <Content Include="HelpDesk\newusernote.htm" />
     <Content Include="HelpDesk\newadminnote.htm" />
     <Content Include="HelpDesk\newadminticket.htm" />
@@ -731,6 +734,7 @@
   <ItemGroup>
     <Compile Include="API\Announcement.cs" />
     <Compile Include="API\api.cs" />
+    <Compile Include="API\Homework.Upload.cs" />
     <Compile Include="API\TileIconHandler.cs" />
     <Compile Include="API\MyFiles.Permalink.cs" />
     <Compile Include="API\JS.cs" />
@@ -1021,7 +1025,6 @@
     <None Include="Properties\PublishProfiles\Pack.pubxml" />
     <None Include="Properties\PublishProfiles\Profile1.pubxml" />
     <None Include="Properties\PublishProfiles\Profile2.pubxml" />
-    <None Include="Thanks.rtf" />
     <Content Include="Tracker\Web.config" />
     <Content Include="UserCard\Web.config" />
   </ItemGroup>

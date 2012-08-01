@@ -1322,13 +1322,13 @@
 			$(window).scroll(function (event) {
 				if ($(this).scrollTop() >= $("#myfilesheader").offset().top + $("#myfilesheader").height()) {
 					$("#toolbar").css("position", "fixed").css("top", 0);
-					$("#Tree").css("position", "fixed").css("top", $("#toolbar").height() + 10);
+					$("#Tree").css("position", "fixed").css("top", $("#toolbar").height() + 8);
 					$("#MyFilesHeaddings").css("position", "fixed").css("top", $("#toolbar").height() + 8);
 					$("#Views").css("position", "fixed").css("top", $("#toolbar").height() + 4);
 				}
 				else {
 					$("#toolbar").css("position", "absolute").css("top", $("#myfilesheader").height());
-					$("#Tree").css("position", "absolute").css("top", $("#myfilesheader").height() + $("#toolbar").height() + 10);
+					$("#Tree").css("position", "absolute").css("top", $("#myfilesheader").height() + $("#toolbar").height() + 8);
 					$("#Views").css("position", "absolute").css("top", $("#myfilesheader").height() + $("#toolbar").height() + 4);
 					$("#MyFilesHeaddings").css("position", "absolute").css("top", $("#myfilesheader").height() + $("#toolbar").height() + 8);
 				}

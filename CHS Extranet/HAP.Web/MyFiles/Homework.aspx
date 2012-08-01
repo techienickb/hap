@@ -10,18 +10,15 @@
     </style>
 </asp:Content>
 <asp:Content ContentPlaceHolderID="body" runat="server">
-	<div style="overflow: hidden; clear: both; position: relative; height: 120px" id="myfilesheader">
-		<div class="tiles" style="position: absolute; left: 0; margin-top: 45px;">
-			<a class="button" href="../">Home Access Plus+ Home</a>
+	<header id="myfilesheader" class="commonheader">
+		<nav class="tiles right">
+            <a class="button" id="new" href="#" onclick="return false;"><hap:LocalResource StringPath="myfiles/homework/new" runat="server" /></a>
+			<a class="button" id="help" href="#" onclick="return false;"><hap:LocalResource StringPath="help" runat="server" /></a>
+		</nav>
+		<div>
+			<hap:LocalResource StringPath="myfiles/homework/homework" runat="server" />
 		</div>
-		<div class="tiles" style="float: right; text-align: right; margin-top: 45px;">
-            <a class="button" id="new" href="#">New</a>
-			<a class="button" href="./">My Files</a>
-		</div>
-		<div style="text-align: center;">
-			<img src="../images/myfiles.png" alt="My Files" />
-		</div>
-	</div>
+	</header>
 	<div id="o" style="overflow: hidden;">
 		<div id="tree" style="float: left;"></div>
 	</div>
@@ -45,7 +42,7 @@
 	                    active = null;
 	                    if (!node.data.isFolder) {
 	                        active = node.data.d;
-	                        $("#o").append('<div class="homework" style="overflow: hidden;"><h1>' + node.data.title + '</h1><div>Valid from: ' + node.data.d.Start + ' until: ' + node.data.d.End + ' issue by: ' + node.data.d.TeacherName + '</div><div>' + node.data.d.Description + '</div><button onclick="return false; showuploader();">Upload Homework</button></div>');
+	                        $("#o").append('<div class="homework" style="overflow: hidden;"><h1>' + node.data.title + '</h1><div>Valid from: ' + node.data.d.Start + ' until: ' + node.data.d.End + ' issue by: ' + node.data.d.TeacherName + '</div><div>' + node.data.d.Description + '</div><button onclick="showuploader(); return false;">Upload Homework</button>' + (node.data.d.Mine ? ('<button onclick="showedit(); return false; ">' + hap.common.getLocal("myfiles/homework/edit") + '</button><button onclick="doRemove(); return false;">' + hap.common.getLocal("myfiles/homework/remove") + '</button>') : '') + '</div>');
 	                    }
 	                }
 	            });
@@ -56,22 +53,136 @@
 	        load();
 	    });
 	</script>
+    <hap:WrappedLocalResource runat="server" Tag="div" title="#myfiles/homework/upload" ID="uploadhomework">
+        <div id="dropzone">
 
+        </div>
+		<input type="file" multiple="multiple" id="uploadedfiles" />
+		<iframe style="width: 300px; height: 180px"></iframe>
+    </hap:WrappedLocalResource>
+	<hap:WrappedLocalResource runat="server" title="#myfiles/progress" id="progressstatus" Tag="div">
+		<div class="progress"></div>
+	</hap:WrappedLocalResource>
+	<div id="uploadprogress" class="tile-border-color" style="border-width: 1px; border-style: solid; border-bottom: 0;">
+		<div class="tile-color ui-widget-header"><hap:LocalResource StringPath="myfiles/upload/uploadprogress" runat="server" /></div>
+		<div id="progresses">
+		</div>
+	</div>
+    <script type="text/javascript">
+        function showuploader() {
+            if ($("#uploadedfiles")[0].files != null) {
+                $("#uploadhomework iframe").remove();
+                $("#uploadhomework").dialog({
+                    autoOpen: true, resizable: false, modal: true, buttons: {
+                        "Upload": function () {
+                            $("#uploadprogress").slideDown('slow');
+                            for (var i = 0; i < $("#uploadedfiles")[0].files.length; i++) {
+                                var file = new Upload(($("#uploadedfiles")[0].files)[i], (active.Path.length == 2 ? active.Path.substr(0, active.Path.length - 1) : active.Path).replace(/:/g, ""));
+                                uploads.push(file);
+                                file.Start();
+                            }
+                            if (uploads.length == 0) $("#uploadprogress").slideUp('slow');
+                            $("#uploadedfiles").html($("#uploadedfiles").html());
+                            $("#uploadto").text("");
+                            $(this).dialog("close");
+                        }, "Close": function () { $(this).dialog("close"); }
+                    }
+                });
+            } else {
+                $("#uploadhomework iframe").attr("src", "../uploadh.aspx?path=" + active.Path + "&teacher=" + active.Teacher + "&name=" + active.name + "&start=" + active.Start + "&end=" + active.End).css("display", "block");
+                $("#uploadhomework input").hide();
+                $("#uploadhomework").dialog({ autoOpen: true, modal: true, width: 320, height: 280, resizable: false });
+            }
+        }
+        $("#uploadprogress").css("margin-left", $("#myfilescontent").width() - $("#uploadprogress").width()).slideUp('slow');
+        $("#uploaders").dialog({ autoOpen: false });
+
+        function Upload(file, path) {
+            this.File = file;
+            this.Path = path;
+            this.Start = function() {
+                if (this.File.name.indexOf('.') == -1) {
+                    alert(hap.common.getLocal("myfiles/upload/folderwarning").replace(/\%/g, this.File.name));
+                    uploads.pop(this);
+                    return false;
+                }
+                else if ("<%=AcceptedExtensions %>".toLowerCase().indexOf(this.File.name.substr(this.File.name.lastIndexOf('.')).toLowerCase()) == -1 && "<%=DropZoneAccepted %>" != "") {
+                    alert(this.File.name + " " + hap.common.getLocal("myfiles/upload/filetypewarning") + "\n\n <%=AcceptedExtensions %>");
+                    uploads.pop(this);
+                    return false;
+                }
+                if(this.File.size > <%=maxRequestLength%>) {
+					alert(this.File.name + " " + hap.common.getLocal("myfiles/upload/filesizewarning"));
+                uploads.pop(this);
+                return false;
+            }
+
+            $("#progresses").append('<div id="upload-' + this.File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_") + '"><div class="progressbar" style="display: inline-block; width: 100px; height: 20px; vertical-align: middle; overflow: hidden;"></div> ' + this.File.name + '</div>');
+            $("#upload-" + this.File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_") + " .progressbar").progressbar({ value: 0 });
+            $.ajax({
+                type: 'GET',
+                url: hap.common.resolveUrl('~/api/Homework/Exists/') + active.Teacher + "/" + active.Name + "/" + active.Start + "/" + active.End + "/" + this.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, "") + '/' + hap.user + " - " + this.File.name + '?' + window.JSON.stringify(new Date()),
+                dataType: 'json',
+                context: this,
+                contentType: 'application/json',
+                success: function (data) {
+                    if (data.Name == null || confirm(hap.common.getLocal("myfiles/upload/fileexists1") + " " + this.File.name + " " + hap.common.getLocal("myfiles/upload/fileexists2"))) this.ContinueUpload(this.File.name);
+                    else { 
+                        $("#upload-" + this.File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_")).remove();
+                        if (uploads.length == 1) $("#uploadprogress").slideUp('slow');
+                        uploads.pop(this);
+                    }
+                }, error: hap.common.jsonError
+            });
+            return true;
+        };
+        this.xhr = new XMLHttpRequest();
+        this.ContinueUpload = function(a) {
+            var id = a.replace(/[\\'\. \[\]\(\)\-]/g, "_");
+            this.xhr = new XMLHttpRequest();
+            this.xhr.id = id;
+            this.xhr.upload.addEventListener("progress", this.onProgress, false);
+            this.xhr.addEventListener("progress", this.onProgress, false);
+            this.xhr.onprogress = this.onProgress;
+            this.xhr.open('POST', hap.common.resolveUrl('~/api/homework-upload/') + active.Teacher + "/" + active.Name + "/" + active.Start + "/" + active.End + "/" + this.Path.replace(/\\/g, '/') + '/', true);
+            this.xhr.onreadystatechange = function () {
+                if (this.readyState == 4) {
+                    var item = null;
+                    for (var i = 0; i < uploads.length; i ++) if (uploads[i].File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_") == this.id) item = uploads[i];
+                    if (this.status != 200) alert(hap.common.getLocal("myfiles/upload/upload") + " " + hap.common.getLocal("of") + " " + item.File.name + " " + hap.common.getLocal("myfiles/upload/failed") + "\n\n" + this.responseText.substr(this.responseText.indexOf('<title>') + 7, this.responseText.indexOf('</title>') - (7 + this.responseText.indexOf('<title>'))));
+                    $("#upload-" + this.id + " .progressbar").progressbar("value", 100 );
+                    $("#upload-" + id).delay(1000).slideUp('slow', function() { $("#upload-" + id).remove(); if (uploads.length == 0) $("#uploadprogress").slideUp('slow'); });
+                    Load();
+                    uploads.pop(item);
+                }
+            };
+            this.xhr.setRequestHeader('X_FILENAME', this.File.name);
+            this.xhr.send(this.File);
+        };
+        this.onProgress = function (e) {
+            var percent = parseInt((e.loaded / e.total) * 100);
+            for (var i = 0; i < uploads.length; i++) if (uploads[i].File.size == e.total) uploads[i].updateProgress(percent);
+        };
+        this.updateProgress = function (e) {
+            $("#upload-" + this.File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_") + " .progressbar").progressbar("value", e);
+        };
+        }
+    </script>
     <div id="addhomework" title="Add Homework">
-        <label for="title">Title:</label><input type="text" id="title" required="required" /><br />
-        <label for="start">Start:</label><input type="date" id="start" style="width: 105px" required="required" /><input type="time" id="starttime" maxlength="5" style="width: 40px;" required="required" /><br />
-        <label for="end">End:</label><input type="date" id="end" style="width: 105px" required="required" /><input type="time" id="endtime" maxlength="5" style="width: 40px;" required="required" /><br />
-        <label for="description">Description:</label>
+        <label for="title"><hap:LocalResource runat="server" StringPath="myfiles/homework/title" />:</label><input type="text" id="title" required="required" /><br />
+        <label for="start"><hap:LocalResource runat="server" StringPath="myfiles/homework/start" />:</label><input type="date" id="start" style="width: 105px" required="required" /><input type="time" id="starttime" maxlength="5" style="width: 40px;" required="required" /><br />
+        <label for="end"><hap:LocalResource runat="server" StringPath="myfiles/homework/end" />:</label><input type="date" id="end" style="width: 105px" required="required" /><input type="time" id="endtime" maxlength="5" style="width: 40px;" required="required" /><br />
+        <label for="description"><hap:LocalResource runat="server" StringPath="myfiles/homework/description" />:</label>
         <textarea id="description" cols="60" rows="6"></textarea>
         <div style="display: inline-block; width: 49%; clear:both;">
-            <label for="students">Students</label><br />
+            <label for="students"><hap:LocalResource runat="server" StringPath="myfiles/homework/students" /></label><br />
             <select id="students" multiple="multiple" style="float:left;">
             </select>
             <button id="add" class="students">+</button><br />
             <button id="del" class="students">-</button>
         </div>
         <div style="display:inline-block; width: 49%; clear:both;">
-            <label for="teachers">Additional Teachers</label><br />
+            <label for="teachers"><hap:LocalResource runat="server" StringPath="myfiles/homework/teachers" /></label><br />
             <select id="teachers" multiple="multiple" style="float:left;">
             </select>
             <button id="add1" class="teachers">+</button><br />
@@ -100,6 +211,10 @@
                 return false;
             });
         </script>
+        <div>
+            <label for="path"><hap:LocalResource runat="server" StringPath="myfiles/homework/path" /></label><br />
+            <input type="text" id="path" />
+        </div>
     </div>
     <div id="userfinder" title="User Finder">
         <label for="userquery" style="text-align:center;">Enter a Username, part of a Username, or Name to begin your Search</label><br />
@@ -136,7 +251,7 @@
                         "Save": function () {
                             $.ajax({
                                 url: "api/homework/add1", type: 'POST',
-                                data: '{ "name": "' + escape($("#title").val()) + '", "description": "' + escape($("textarea").wysiwyg("getContent")) + '", "start": "' + $("#start").val() + " " + $("#starttime").val() + '", "end": "' + $("#end").val() + " " + $("#endtime").val() + '" }',
+                                data: '{ "name": "' + escape($("#title").val()) + '", "description": "' + escape($("textarea").wysiwyg("getContent")) + '", "start": "' + $("#start").val() + " " + $("#starttime").val() + '", "end": "' + $("#end").val() + " " + $("#endtime").val() + '", "path": "' + $("#path").val() + '" }',
                                 dataType: "json", contentType: 'application/JSON',
                                 success: function (data) {
                                     $("#addhomework").dialog("close");
@@ -152,8 +267,47 @@
                 $("textarea").wysiwyg("setContent", "Initial Content");
                 $("#starttime, #endtime").val("09:00");
                 $("#start").val($.datepicker.formatDate('dd/mm/yy', new Date()));
+                $("#path").val("N:\\HAP+ Homeworks\\");
                 return false;
             });
         });
+        function showedit() {
+            $("#addhomework").dialog({
+                autoOpen: true, modal: true, buttons: {
+                    "Save": function () {
+                        $.ajax({
+                            url: "api/homework/edit", type: 'POST',
+                            data: '{ "teacher": "' + active.Teacher + '", "name": "' + active.Name + '", "start": "' + active.Start + '", "end": "' + active.end + '", "newname": "' + escape($("#title").val()) + '", "description": "' + escape($("textarea").wysiwyg("getContent")) + '", "newstart": "' + $("#start").val() + " " + $("#starttime").val() + '", "newend": "' + $("#end").val() + " " + $("#endtime").val() + '", "path": "' + $("#path").val() + '" }',
+                            dataType: "json", contentType: 'application/JSON',
+                            success: function (data) {
+                                $("#addhomework").dialog("close");
+                                load();
+                            }, error: hap.common.jsonError
+                        });
+                        $(this).dialog("close");
+                        return false;
+                    },
+                    "Cancel": function () { $(this).dialog("close"); return false; }
+                }, width: 500
+            });
+            $("textarea").wysiwyg("setContent", node.data.d.Description);
+            $("#starttime").val(node.data.d.Start.split(" ")[1]);
+            $("#start").val(node.data.d.Start.split(" ")[0]);
+            $("#end").val(node.data.d.End.split(" ")[0]);
+            $("#endtime").val(node.data.d.End.split(" ")[1]);
+            $("#path").val(node.data.d.Path);
+        }
+
+        function doRemove() {
+            if (!confirm(hap.common.getLocal('myfiles/homework/confirmremove'))) return;
+            $.ajax({
+                url: "api/homework/remove", type: 'POST',
+                data: '{ "teacher": "' + active.Teacher + '", "name": "' + active.Name + '", "start": "' + active.Start + '", "end": "' + active.end + '" }',
+                dataType: "json", contentType: 'application/JSON',
+                success: function (data) {
+                    load();
+                }, error: hap.common.jsonError
+            });
+        }
     </script>
 </asp:Content>
