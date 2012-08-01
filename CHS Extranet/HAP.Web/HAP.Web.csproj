@@ -45,8 +45,9 @@
     <PackageLocation>obj\Debug\Package\CHS Extranet.zip</PackageLocation>
     <PackageAsSingleFile>true</PackageAsSingleFile>
     <ExcludeApp_Data>false</ExcludeApp_Data>
-    <DeployEncryptKey>crickhowell</DeployEncryptKey>
+    <DeployEncryptKey>Encryption password is used only if any deployment setting is marked as secure</DeployEncryptKey>
     <PrecompileBeforePublish>false</PrecompileBeforePublish>
+    <DesktopBuildPackageLocation>obj\Debug\Package\HAP.zip</DesktopBuildPackageLocation>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -57,8 +58,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>haplogo-icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -1027,6 +1027,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Properties\PublishProfiles\Pack.pubxml" />
+    <None Include="Properties\PublishProfiles\Package.pubxml" />
     <None Include="Properties\PublishProfiles\Profile1.pubxml" />
     <None Include="Properties\PublishProfiles\Profile2.pubxml" />
     <Content Include="Tracker\Web.config" />
