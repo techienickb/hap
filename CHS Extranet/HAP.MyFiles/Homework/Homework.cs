@@ -26,6 +26,8 @@ namespace HAP.MyFiles.Homework
         [DataMember()]
         public string Teacher { get; set; }
         [DataMember()]
+        public string Path { get; set; }
+        [DataMember()]
         public string TeacherName
         {
             get
@@ -34,14 +36,19 @@ namespace HAP.MyFiles.Homework
             }
             private set { }
         }
+        [DataMember()]
+        public bool Mine { get; set; }
         [IgnoreDataMember()]
         public List<UserNode> UserNodes { get; set; }
+        [IgnoreDataMember()]
+        public string Token { get; set; }
         public Homework(string Teacher)
         {
             this.Teacher = Teacher;
             Name = Description = "";
             Start = End = DateTime.Now.ToString("dd/MM/yyyy hh:mm");
             UserNodes = new List<UserNode>();
+            Mine = (IsVisible() == UserNodeMode.Admin || IsVisible() == UserNodeMode.Teacher);
         }
 
         public Homework(XmlNode node, string Teacher) : this(Teacher)
@@ -50,6 +57,8 @@ namespace HAP.MyFiles.Homework
             Description = node.SelectSingleNode("description").InnerText;
             Start = node.Attributes["start"].Value;
             End = node.Attributes["end"].Value;
+            Token = node.Attributes["token"].Value;
+            Path = node.Attributes["path"].Value;
             foreach (XmlNode n in node.ChildNodes)
                 if (n.Name == "add" || n.Name == "remove") UserNodes.Add(UserNode.Parse(n));
         }

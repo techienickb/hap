@@ -143,5 +143,19 @@ Do you want to overwrite it?</fileexists2>
       <googlesignin2>Once you have signed into Google, HAP+ will upload the selected file to your Google Docs</googlesignin2>
       <skydrive>Send to SkyDrive</skydrive>
     </sendto>
+    <homework>
+      <homework>My Files - Homework</homework>
+      <new>New</new>
+      <edit>Edit</edit>
+      <remove>Remove</remove>
+      <title>Title</title>
+      <description>Description</description>
+      <start>Start</start>
+      <end>End</end>
+      <students>Students</students>
+      <teachers>Additional Teachers</teachers>
+      <confirmremove>Are you sure you want to remove this homework?</confirmremove>
+      <upload>Upload Homework</upload>
+    </homework>
   </myfiles>
 </hapStrings>

@@ -8,6 +8,9 @@ using System.ServiceModel.Web;
 using HAP.MyFiles.Homework;
 using HAP.Web.Configuration;
 using System.DirectoryServices;
+using HAP.AD;
+using HAP.Data.ComputerBrowser;
+using System.IO;
 namespace HAP.MyFiles
 {
     [ServiceAPI("api/homework")]
@@ -38,14 +41,14 @@ namespace HAP.MyFiles
 
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "add1", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public void Add1(string name, string start, string end, string description, UserNode[] nodes)
+        public void Add1(string name, string start, string end, string description, string path, UserNode[] nodes)
         {
-            Add(HttpContext.Current.User.Identity.Name, name, start, end, description, nodes);
+            Add(HttpContext.Current.User.Identity.Name, name, start, end, path, description, nodes);
         }
 
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "add", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public void Add(string teacher, string name, string start, string end, string description, UserNode[] nodes)
+        public void Add(string teacher, string name, string start, string end, string path, string description, UserNode[] nodes)
         {
             MyFiles.Homework.Homework h = new MyFiles.Homework.Homework(teacher);
             h.Name = name;
@@ -53,11 +56,57 @@ namespace HAP.MyFiles
             h.End = end;
             h.Description = HttpUtility.UrlDecode(description, System.Text.Encoding.Default);
             h.UserNodes.AddRange(nodes);
+            h.Path = path;
+            User u = new User();
+            u.Authenticate(h.Teacher, TokenGenerator.ConvertToPlain(h.Token));
+            DriveMapping mapping;
+            string p = Converter.DriveToUNC(h.Path.Substring(0, 1), h.Path.Remove(0, 1), out mapping, u);
+            u.ImpersonateContained();
+            try
+            {
+                if (!Directory.Exists(p)) Directory.CreateDirectory(p);
+                if (!Directory.Exists(Path.Combine(p, h.Name))) Directory.CreateDirectory(Path.Combine(p, h.Name));
+            }
+            finally
+            {
+                u.EndContainedImpersonate();
+            }
             new MyFiles.Homework.Homeworks().Add(h);
         }
 
         [OperationContract]
-        [WebInvoke(Method = "POST", UriTemplate = "{teacher}/{start}/{end}/{name}", BodyStyle = WebMessageBodyStyle.Bare, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "POST", UriTemplate = "edit", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        public void Edit(string teacher, string name, string start, string end, string newname, string newstart, string newend, string description, string path, UserNode[] nodes)
+        {
+            Homeworks h = new Homeworks();
+            Homework.Homework orig = h.Homework.Single(hw => hw.Teacher == teacher && hw.Name == name && hw.Start == start.Replace('.', ':') && hw.End == end.Replace('.', ':'));
+            Homework.Homework updated = orig;
+            updated.Name = name;
+            updated.Start = start;
+            updated.End = end;
+            updated.Path = path;
+            updated.Description = HttpUtility.UrlDecode(description, System.Text.Encoding.Default);
+            updated.UserNodes.AddRange(nodes);
+            User u = new User();
+            u.Authenticate(updated.Teacher, TokenGenerator.ConvertToPlain(updated.Token));
+            DriveMapping mapping;
+            string p = Converter.DriveToUNC(updated.Path.Substring(0, 1), updated.Path.Remove(0, 1), out mapping, u);
+            u.ImpersonateContained();
+            try
+            {
+                if (!Directory.Exists(p)) Directory.CreateDirectory(p);
+                if (!Directory.Exists(Path.Combine(p, updated.Name))) Directory.CreateDirectory(Path.Combine(p, updated.Name));
+            }
+            finally
+            {
+                u.EndContainedImpersonate();
+            }
+            h.Update(orig, updated);
+        }
+
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", UriTemplate = "remove", BodyStyle = WebMessageBodyStyle.Bare, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         public void Remove(string teacher, string name, string start, string end)
         {
             Homeworks h = new Homeworks();
@@ -98,6 +147,49 @@ namespace HAP.MyFiles
                 res.Add(r.Properties["cn"][0].ToString() + "|" + r.Properties["displayName"][0].ToString());
             }
             return res.ToArray();
+        }
+
+        [OperationContract]
+        [WebGet(UriTemplate = "Exists/{teacher}/{start}/{end}/{name}/{Drive}/{*Path}")]
+        public Properties Exists(string Drive, string Path, string teacher, string name, string start, string end)
+        {
+            try
+            {
+                return Properties(teacher, name, start, end, Drive, Path);
+            }
+            catch
+            {
+                return new Properties();
+            }
+        }
+
+        [OperationContract]
+        [WebGet(UriTemplate = "Properties/{teacher}/{start}/{end}/{name}/{Drive}/{*Path}")]
+        public Properties Properties(string teacher, string name, string start, string end, string Drive, string Path)
+        {
+            Properties ret = new Properties();
+            Path = "/" + Path;
+            hapConfig config = hapConfig.Current;
+            List<File> Items = new List<File>();
+            Homework.Homework i = Item(teacher, name, start, end);
+            User user = new User();
+            if (config.AD.AuthenticationMode == Web.Configuration.AuthMode.Forms)
+            {
+                user.Authenticate(i.Teacher, TokenGenerator.ConvertToPlain(i.Token));
+            }
+            DriveMapping mapping;
+            string path = Converter.DriveToUNC(Path, Drive, out mapping, user);
+            HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.Properties", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Requesting properties of: " + path);
+            user.ImpersonateContained();
+            try
+            {
+                FileAttributes attr = System.IO.File.GetAttributes(path);
+                //detect whether its a directory or file
+                ret = ((attr & FileAttributes.Directory) == FileAttributes.Directory) ? new Properties(new DirectoryInfo(path), mapping, user) : new Properties(new FileInfo(path), mapping, user);
+            }
+            finally { user.EndContainedImpersonate(); }
+
+            return ret;
         }
     }
 }

@@ -35,6 +35,7 @@ namespace HAP.MyFiles.Homework
             h.SetAttribute("name", homework.Name);
             h.SetAttribute("start", homework.Start);
             h.SetAttribute("end", homework.End);
+            h.SetAttribute("token", HttpContext.Current.Request.Cookies["token"].Value);
             XmlElement d = _doc.CreateElement("description");
             d.InnerText = "<![CDATA[" + homework.Description + "]]>";
             h.AppendChild(d);
@@ -57,6 +58,7 @@ namespace HAP.MyFiles.Homework
             h.SetAttribute("name", homework.Name);
             h.SetAttribute("start", homework.Start);
             h.SetAttribute("end", homework.End);
+            h.SetAttribute("token", HttpContext.Current.Request.Cookies["token"].Value);
             XmlElement d = _doc.CreateElement("description");
             d.InnerText = "<![CDATA[" + homework.Description + "]]>";
             h.AppendChild(d);
