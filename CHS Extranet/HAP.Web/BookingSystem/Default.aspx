@@ -245,7 +245,7 @@
 		$(window).hashchange(function () {
 			
 			if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curdate = new Date(window.location.href.split('#')[1].split('/')[2], window.location.href.split('#')[1].split('/')[1] - 1, window.location.href.split('#')[1].split('/')[0]);
-			else curdate = new Date(<%try { %><%=CurrentDate.Year %>, <%=CurrentDate.Month - 1 %>, <%=CurrentDate.Day %> <% } catch { } %>);
+			else curdate = new Date(<%try { %><%=CurrentDate.Year %>, <%=CurrentDate.Month - 1 %>, <%=CurrentDate.Day %> <% } catch (e) { } %>);
 			$('#datepicker').datepicker("setDate", curdate);
 			$("#picker").val($.datepicker.formatDate('d MM yy', curdate));
 			loadDate();
@@ -280,12 +280,12 @@
 		        $("#bfyear").append('<option value="">---</option>');
 		        for (var i = 0; i < curres.Years.length; i++)
 		            $("#bfyear").append('<option value="' + curres.Years[i] + '">' + curres.Years[i] + '</option>');
-		    } catch { }
+		    } catch (e) { }
 		    try {
 		        $("#bflquant input, #bflquant label").remove();
 		        for (var i = 0; i < curres.Quantities.length; i++)
 		            $("#bflquant").append('<input type="radio" name="bflquant" id="bflquant-' + curres.Quantities[i] + '" value="' + curres.Quantities[i] + '" /><label for="bflquant-' + curres.Quantities[i] + '">' + curres.Quantities[i] + '</label>');
-		    } catch { }
+		    } catch (e) { }
 		    try {
 		        if (curres.MultiRoom) {
 		            $("#bfmultilesson").show();
@@ -308,7 +308,7 @@
 		            $("#bfmultilesson").hide();
 		            canmulti = false;
 		        }
-		    } catch { }
+		    } catch (e) { }
 			$("#bflquant").buttonset();
 			$("#bflesson").html(lesson);
 			$("#bookingform").dialog({ 
@@ -424,7 +424,7 @@
 		$(function () {
 			try {
 				if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curdate = new Date(window.location.href.split('#')[1].split('/')[2], window.location.href.split('#')[1].split('/')[1] - 1, window.location.href.split('#')[1].split('/')[0]);
-				else curdate = new Date(<%try { %><%=CurrentDate.Year %>, <%=CurrentDate.Month - 1 %>, <%=CurrentDate.Day %><% } catch { } %>);
+				else curdate = new Date(<%try { %><%=CurrentDate.Year %>, <%=CurrentDate.Month - 1 %>, <%=CurrentDate.Day %><% } catch (e) { } %>);
 			} catch (ex) { alert(ex); }
 			$("#datepicker").datepicker({ 
 				minDate: user.minDate,

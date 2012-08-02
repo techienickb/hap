@@ -182,7 +182,7 @@ namespace HAP.Web.Configuration
                     a.Value = "me";
                     n.Attributes.Append(a);
                 }
-                foreach (XmlNode n in doc.SelectNodes("/hapConfig/Homepage/Links/Group/Link[@url='~/helpdesk/']"))
+                foreach (XmlNode n in doc.SelectNodes("/hapConfig/Homepage/Links/Group/Link[@url='~/myfiles/']"))
                 {
                     n.Attributes["icon"].Value = "~/images/icons/metro/folders-os/DocumentsFolder.png";
                     XmlAttribute a = doc.CreateAttribute("type");
