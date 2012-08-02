@@ -245,7 +245,7 @@
 		$(window).hashchange(function () {
 			
 			if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curdate = new Date(window.location.href.split('#')[1].split('/')[2], window.location.href.split('#')[1].split('/')[1] - 1, window.location.href.split('#')[1].split('/')[0]);
-			else curdate = new Date(<%try { %><%=CurrentDate.Year %>, <%=CurrentDate.Month - 1 %>, <%=CurrentDate.Day %> <% } catch (e) { } %>);
+			else curdate = new Date(<%try { %><%=CurrentDate.Year %>, <%=CurrentDate.Month - 1 %>, <%=CurrentDate.Day %> <% } catch { } %>);
 			$('#datepicker').datepicker("setDate", curdate);
 			$("#picker").val($.datepicker.formatDate('d MM yy', curdate));
 			loadDate();
@@ -424,7 +424,7 @@
 		$(function () {
 			try {
 				if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curdate = new Date(window.location.href.split('#')[1].split('/')[2], window.location.href.split('#')[1].split('/')[1] - 1, window.location.href.split('#')[1].split('/')[0]);
-				else curdate = new Date(<%try { %><%=CurrentDate.Year %>, <%=CurrentDate.Month - 1 %>, <%=CurrentDate.Day %><% } catch (e) { } %>);
+				else curdate = new Date(<%try { %><%=CurrentDate.Year %>, <%=CurrentDate.Month - 1 %>, <%=CurrentDate.Day %><% } catch { } %>);
 			} catch (ex) { alert(ex); }
 			$("#datepicker").datepicker({ 
 				minDate: user.minDate,
