@@ -117,7 +117,13 @@ namespace HAP.Web.LiveTiles
             string name = icon.Remove(icon.LastIndexOf('.')).Remove(0, icon.LastIndexOf("/"));
             if (!File.Exists(HttpContext.Current.Server.MapPath("~/app_data/iconcache/" + name + "-" + size.Width + "x" + size.Height + ".png")))
             {
-                Bitmap b = new Bitmap(HttpContext.Current.Server.MapPath(icon));
+                Bitmap b;
+                if (File.Exists(HttpContext.Current.Server.MapPath(icon))) b = new Bitmap(HttpContext.Current.Server.MapPath(icon));
+                else {
+                    b = new Bitmap(1, 1);
+                    Graphics g = Graphics.FromImage(b);
+                    g.Clear(Color.Transparent);
+                }
                 if (b.GetPixel(1, 1) != Color.Transparent) b.MakeTransparent(b.GetPixel(1, 1));
                 resizeImage(b, size).Save(HttpContext.Current.Server.MapPath("~/app_data/iconcache/" + name + "-" + size.Width + "x" + size.Height + ".png"), System.Drawing.Imaging.ImageFormat.Png);
             }
