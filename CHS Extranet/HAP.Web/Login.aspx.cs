@@ -21,7 +21,7 @@ namespace HAP.Web
         protected override void OnPreInit(EventArgs e)
         {
             base.OnPreInit(e);
-            if (hapConfig.Current.FirstRun) Response.Redirect(new Uri(new Uri(Request.Url.ToString().Replace("http", "https")), "setup.aspx").ToString());
+            if (hapConfig.Current.FirstRun) Response.Redirect(new Uri(new Uri((Request.Url.Scheme == Uri.UriSchemeHttp ? Request.Url.ToString().Replace("http", "https") : Request.Url.ToString())), "setup.aspx").ToString());
             Title = string.Format(Title, HAP.Web.Configuration.hapConfig.Current.School.Name);
         }
 

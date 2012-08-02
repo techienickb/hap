@@ -24,7 +24,7 @@ namespace HAP.Web.Configuration
             Quantities = node.Attributes["quantities"].Value;
             ReadOnlyTo = node.Attributes["readonlyto"].Value;
             ReadWriteTo = node.Attributes["readwriteto"].Value;
-            MultiLessonTo = node.Attributes["multilessonto"].Value;
+            MultiLessonTo = node.Attributes["multilessonto"] == null ? "" : node.Attributes["multilessonto"].Value;
         }
 
         public string Name { get; set; }

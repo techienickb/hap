@@ -42,12 +42,12 @@
     <WarningLevel>4</WarningLevel>
     <FilesToIncludeForPublish>OnlyFilesToRunTheApp</FilesToIncludeForPublish>
     <DeployIisAppPath>Default Web Site/HAP</DeployIisAppPath>
-    <PackageLocation>obj\Debug\Package\CHS Extranet.zip</PackageLocation>
+    <PackageLocation>obj\Debug\Package\HAP.Web.zip</PackageLocation>
     <PackageAsSingleFile>true</PackageAsSingleFile>
     <ExcludeApp_Data>false</ExcludeApp_Data>
     <DeployEncryptKey>Encryption password is used only if any deployment setting is marked as secure</DeployEncryptKey>
     <PrecompileBeforePublish>false</PrecompileBeforePublish>
-    <DesktopBuildPackageLocation>obj\Debug\Package\HAP.zip</DesktopBuildPackageLocation>
+    <DesktopBuildPackageLocation>obj\Debug\Package\HAP.Web.zip</DesktopBuildPackageLocation>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -1023,9 +1023,7 @@
     <Content Include="BookingSystem\api.ashx" />
     <Content Include="images\icons\knownicons.xml" />
     <Content Include="style\Web.config" />
-    <Content Include="Documentation.pdf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Documentation.pdf" />
     <None Include="Properties\PublishProfiles\Pack.pubxml" />
     <None Include="Properties\PublishProfiles\Package.pubxml" />
     <None Include="Properties\PublishProfiles\Profile1.pubxml" />
