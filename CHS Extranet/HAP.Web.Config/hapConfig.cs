@@ -173,6 +173,41 @@ namespace HAP.Web.Configuration
                     n.Attributes["multilessonto"].Value = "None";
                 }
             }
+            if (version.CompareTo(Version.Parse("8.0.0802.2000")) < 0)
+            {//Perform v8.0.0802.2000 Update
+                foreach (XmlNode n in doc.SelectNodes("/hapConfig/Homepage/Links/Group/Link[@url='#me']"))
+                {
+                    n.Attributes["icon"].Value = "~/images/icons/metro/folders-os/UserNo-Frame.png";
+                    XmlAttribute a = doc.CreateAttribute("type");
+                    a.Value = "me";
+                    n.Attributes.Append(a);
+                }
+                foreach (XmlNode n in doc.SelectNodes("/hapConfig/Homepage/Links/Group/Link[@url='~/helpdesk/']"))
+                {
+                    n.Attributes["icon"].Value = "~/images/icons/metro/folders-os/DocumentsFolder.png";
+                    XmlAttribute a = doc.CreateAttribute("type");
+                    a.Value = "myfiles";
+                    n.Attributes.Append(a);
+                }
+                foreach (XmlNode n in doc.SelectNodes("/hapConfig/Homepage/Links/Group/Link[@url='~/helpdesk/']"))
+                {
+                    n.Attributes["icon"].Value = "~/images/icons/metro/folders-os/help.png";
+                    XmlAttribute a = doc.CreateAttribute("type");
+                    a.Value = "helpdesk";
+                    n.Attributes.Append(a);
+                }
+                foreach (XmlNode n in doc.SelectNodes("/hapConfig/Homepage/Links/Group/Link[@url='~/bookingsystem/']"))
+                {
+                    n.Attributes["icon"].Value = "~/images/icons/metro/applications/calendar.png";
+                    XmlAttribute a = doc.CreateAttribute("type");
+                    a.Value = "bookings";
+                    n.Attributes.Append(a);
+                }
+                foreach (XmlNode n in doc.SelectNodes("/hapConfig/Homepage/Links/Group/Link[@url='~/tracker/']"))
+                    n.Attributes["icon"].Value = "~/images/icons/metro/other/History.png";
+                foreach (XmlNode n in doc.SelectNodes("/hapConfig/Homepage/Links/Group/Link[@url='~/setup.aspx']"))
+                    n.Attributes["icon"].Value = "~/images/icons/metro/folders-os/Configurealt1.png";
+            }
             doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             doc.Save(ConfigPath);
         }
