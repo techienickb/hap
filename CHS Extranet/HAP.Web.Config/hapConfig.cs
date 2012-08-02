@@ -119,12 +119,14 @@ namespace HAP.Web.Configuration
                 a.Value = "en-gb";
                 doc.SelectSingleNode("/hapConfig").Attributes.Append(a);
                 doc.SelectSingleNode("/hapConfig/Homepage").RemoveChild(doc.SelectSingleNode("/hapConfig/Homepage/Tabs"));
+                if (doc.SelectNodes("/hapConfig/Homepage/Group[@name='Me']").Count > 0) doc.SelectSingleNode("/hapConfig/Homepage").RemoveChild(doc.SelectSingleNode("/hapConfig/Homepage/Group[@name='Me']"));
                 XmlElement e = doc.CreateElement("Group");
                 e.SetAttribute("showto", "All");
+                e.SetAttribute("name", "Me");
                 e.SetAttribute("subtitle", "#me");
                 XmlElement e1 = doc.CreateElement("Link");
                 e1.SetAttribute("name", "Me");
-                e1.SetAttribute("showto", "Inerhit");
+                e1.SetAttribute("showto", "Inherit");
                 e1.SetAttribute("description", "");
                 e1.SetAttribute("url", "");
                 e1.SetAttribute("icon", "");
