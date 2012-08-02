@@ -35,8 +35,8 @@ namespace HAP.Web.Configuration
             Groups["Management"].Add("Logon Tracker", "Domain Admins", "View the Logon History", "~/tracker/", "~/images/icons/metro/other/History.png", "");
             Groups["Management"].Add("HAP+ Config", "Domain Admins", "Home Access Plus+ Config", "~/setup.aspx", "~/images/icons/metro/folders-os/Configurealt1.png", "");
             Groups.Add("Me", "All", "#me");
-            Groups["Management"].Add("Me", "Inherit", "", "", "", "");
-            Groups["Management"].Add("Password", "Inherit", "", "", "", "");
+            Groups["Me"].Add("Me", "Inherit", "", "", "", "");
+            Groups["Me"].Add("Password", "Inherit", "", "", "", "");
         }
     }
 }

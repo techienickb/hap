@@ -2,6 +2,8 @@
 @font-face { font-family: '☺SegoeLight'; src: url("segoe_ui_light.eot"); src: local("Segoe UI Light"),local("Segoe WP Light"),url("segoe_ui_light.eot?#iefix") format("embedded-opentype"),url("segoe_ui_light.woff") format("woff"),url("segoe_ui_light.ttf") format("truetype"); font-weight: normal; font-style: normal; }
 @font-face { font-family: 'MSHPIconsRegular'; src: url("icons.eot"); src: url("icons.eot?#iefix") format("embedded-opentype"),url("icons.woff") format("woff"),url("icons.ttf") format("truetype"); font-weight: normal; font-style: normal; }
 
+html, body { padding: 0; margin: 0; }
+
 .tile-color, .ui-widget-header { background: #0060a6; border-color: #0060a6; }
 .tile-border-color, .ui-widget-content { border-color: #0060a6; }
 .ui-widget-header a, .ui-widget-header { color: #fff; }
