@@ -631,6 +631,7 @@
     <Content Include="Scripts\modernizer.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="style\editor.css" />
+    <Content Include="style\jquery.jqplot.css" />
     <Content Include="style\jquery.mobile-1.0.css" />
     <Content Include="style\basestyle.css" />
     <Content Include="favicon.ico" />
@@ -1030,6 +1031,15 @@
     <None Include="Properties\PublishProfiles\Profile2.pubxml" />
     <Content Include="Tracker\Web.config" />
     <Content Include="UserCard\Web.config" />
+    <Content Include="style\icons.eot" />
+    <Content Include="style\icons.ttf" />
+    <Content Include="style\icons.woff" />
+    <Content Include="style\segoe_ui.eot" />
+    <Content Include="style\segoe_ui.ttf" />
+    <Content Include="style\segoe_ui.woff" />
+    <Content Include="style\segoe_ui_light.eot" />
+    <Content Include="style\segoe_ui_light.ttf" />
+    <Content Include="style\segoe_ui_light.woff" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\homework\" />
