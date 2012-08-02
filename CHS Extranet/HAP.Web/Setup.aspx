@@ -29,7 +29,10 @@
                     </LoggedInTemplate>
                 </asp:LoginView>
                 <div id="baseContent">
-                    <div style="text-align: center;"><a href="http://hap.codeplex.com"><img src="images/haplogo.png" alt="Home Access Plus+" style="width: 485px; height: 80px;" /></a></div>
+                    <div id="title">
+                        <h1 style="padding-top: 0; margin: 0; text-align: center;"><a href="http://hap.codeplex.com" target="_blank">Home Access Plus+</a></h1>
+                        <h2 style="padding: 0; margin: 0; text-align: center;">Access your School from Home</h2>
+                    </div>
                     <script type="text/javascript">
                         function OnUpdateError(xhr, ajaxOptions, thrownError) {
                             try {
@@ -572,7 +575,7 @@
                         </div>
                     </div>
                     <script type="text/javascript">
-                        if (<%=HAP.Web.Configuration.hapConfig.Current.FirstRun.ToString().ToLower() %>) $("#<%=Save.ClientID%>").attr("disabled", "disabled");
+                        if (<%=HAP.Web.Configuration.hapConfig.Current.FirstRun.ToString().ToLower() %>) $("#<%=Save.ClientID%>").css("display", "none");
                         var tempe = null;
                         function addou() {
                             $("#ouname").val("");
@@ -1658,7 +1661,7 @@
                         $(function () {
                             $('#maintabs').tabs({ select: function (event, ui) {
                                 if (<%=HAP.Web.Configuration.hapConfig.Current.FirstRun.ToString().ToLower() %> && ui.index > 1) {
-                                    $("#<%=Save.ClientID%>").removeAttr("disabled").removeClass("ui-state-disabled")[0].disabled = false;
+                                    $("#<%=Save.ClientID%>").css("display", "");
                                 }
                             }});
                             $("#<%=sg.ClientID %>").keyup(function () {

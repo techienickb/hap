@@ -89,7 +89,7 @@ namespace HAP.Web.Configuration
                     n.Attributes.Append(a);
                 }
             }
-            if (version.CompareTo(Version.Parse("7.7")) == -1)
+            if (version.CompareTo(Version.Parse("7.7")) < 0)
             {//Perform v7.7 Upgrade
                 foreach (XmlNode n in doc.SelectNodes("/hapConfig/AD/OUs/OU")) {
                     XmlAttribute a = doc.CreateAttribute("visibility");
@@ -98,7 +98,7 @@ namespace HAP.Web.Configuration
                     n.Attributes.Remove(n.Attributes["ignore"]);
                 }
             }
-            if (version.CompareTo(Version.Parse("7.7.1128.2200")) == -1)
+            if (version.CompareTo(Version.Parse("7.7.1128.2200")) < 0)
             {//Perform v7.7 Upgrade
                 foreach (XmlNode n in doc.SelectNodes("/hapConfig/bookingsystem/resources/resource"))
                 {
@@ -107,13 +107,13 @@ namespace HAP.Web.Configuration
                     n.Attributes.Append(a);
                 }
             }
-            if (version.CompareTo(Version.Parse("7.9.0103.1500")) == -1)
+            if (version.CompareTo(Version.Parse("7.9.0103.1500")) < 0)
             {//Perform v7.9 Upgrade
                 XmlAttribute a = doc.CreateAttribute("local");
                 a.Value = "en-gb";
                 doc.SelectSingleNode("/hapConfig").Attributes.Append(a);
             }
-            if (version.CompareTo(Version.Parse("8.0.0527.1300")) == -1)
+            if (version.CompareTo(Version.Parse("8.0.0527.1300")) < 0)
             {//Perform v8 Upgrade
                 XmlAttribute a = doc.CreateAttribute("local");
                 a.Value = "en-gb";
@@ -140,7 +140,7 @@ namespace HAP.Web.Configuration
                 e.AppendChild(e1);
                 doc.SelectSingleNode("/hapConfig/Homepage/Links").AppendChild(e);
             }
-            if (version.CompareTo(Version.Parse("8.0.0714.1945")) == -1)
+            if (version.CompareTo(Version.Parse("8.0.0714.1945")) < 0)
             {//Perform v8.0714 Update
                 foreach (XmlNode n in doc.SelectNodes("/hapConfig/bookingsystem/resources/resource"))
                 {
@@ -152,7 +152,7 @@ namespace HAP.Web.Configuration
                     n.Attributes["years"].Value = "Inherit";
                 }
             }
-            if (version.CompareTo(Version.Parse("8.0.0714.2010")) == -1)
+            if (version.CompareTo(Version.Parse("8.0.0714.2010")) < 0)
             {//Perform v8.0714.2010 Update
                 foreach (XmlNode n in doc.SelectNodes("/hapConfig/bookingsystem/resources/resource"))
                 {
@@ -161,8 +161,8 @@ namespace HAP.Web.Configuration
                     n.Attributes["readwriteto"].Value = n.Attributes["readonlyto"].Value = "";
                 }
             }
-            if (version.CompareTo(Version.Parse("8.0.0724.2145")) == -1)
-            {//Perform v8.0714.2010 Update
+            if (version.CompareTo(Version.Parse("8.0.0801.2359")) < 0)
+            {//Perform v8.0.0801.2359 Update
                 doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes.Append(doc.CreateAttribute("enablemultilesson"));
                 doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["enablemultilesson"].Value = "false";
                 foreach (XmlNode n in doc.SelectNodes("/hapConfig/bookingsystem/resources/resource"))
