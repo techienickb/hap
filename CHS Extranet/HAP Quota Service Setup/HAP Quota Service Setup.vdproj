@@ -15,6 +15,12 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_6168530980174EB986773E0EB9ED18C1"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_62E89CD389F0E256E0B84BB216615F13"
         "OwnerKey" = "8:_BDCFDDFA0F6DF17AF1A6899F9B098F23"
         "MsmSig" = "8:_UNDEFINED"
@@ -52,6 +58,12 @@
         "Entry"
         {
         "MsmKey" = "8:_DCE56C29339D447DBB59AFBBA918215D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EDB221A84C354B9788DE9463AC787AED"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -161,62 +173,6 @@
     {
         "CustomAction"
         {
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_1CCFBD62455845A8BC57C319967B0514"
-            {
-            "Name" = "8:Primary output from HAP Quota Service (Active)"
-            "Condition" = "8:"
-            "Object" = "8:_DCE56C29339D447DBB59AFBBA918215D"
-            "FileType" = "3:2"
-            "InstallAction" = "3:3"
-            "Arguments" = "8:"
-            "EntryPoint" = "8:"
-            "Sequence" = "3:1"
-            "Identifier" = "8:_8831E930_AA4D_4D4D_80B9_B481148EB64F"
-            "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:"
-            }
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_8D9C67720AE04662ABE8E6958C9DA47A"
-            {
-            "Name" = "8:Primary output from HAP Quota Service (Active)"
-            "Condition" = "8:"
-            "Object" = "8:_DCE56C29339D447DBB59AFBBA918215D"
-            "FileType" = "3:2"
-            "InstallAction" = "3:2"
-            "Arguments" = "8:"
-            "EntryPoint" = "8:"
-            "Sequence" = "3:1"
-            "Identifier" = "8:_21782844_47AC_49A3_9F10_73BC89C3052A"
-            "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:"
-            }
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_B2989B583715498AA09C69F7AFF756E9"
-            {
-            "Name" = "8:Primary output from HAP Quota Service (Active)"
-            "Condition" = "8:"
-            "Object" = "8:_DCE56C29339D447DBB59AFBBA918215D"
-            "FileType" = "3:2"
-            "InstallAction" = "3:4"
-            "Arguments" = "8:"
-            "EntryPoint" = "8:"
-            "Sequence" = "3:1"
-            "Identifier" = "8:_4E557F6B_E8BA_499E_A9B0_D571B3795A1A"
-            "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:"
-            }
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_CF4292BF741146729E119D2B1E35C504"
-            {
-            "Name" = "8:Primary output from HAP Quota Service (Active)"
-            "Condition" = "8:"
-            "Object" = "8:_DCE56C29339D447DBB59AFBBA918215D"
-            "FileType" = "3:2"
-            "InstallAction" = "3:1"
-            "Arguments" = "8:"
-            "EntryPoint" = "8:"
-            "Sequence" = "3:1"
-            "Identifier" = "8:_9874B31B_95E4_4E95_B32C_430AC7C80081"
-            "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:"
-            }
         }
         "DefaultFeature"
         {
@@ -240,6 +196,26 @@
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6168530980174EB986773E0EB9ED18C1"
+            {
+            "SourcePath" = "8:register.vbs"
+            "TargetName" = "8:register.vbs"
+            "Tag" = "8:"
+            "Folder" = "8:_7E1444332F30452BA4B4CF811F9B6B8D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_62E89CD389F0E256E0B84BB216615F13"
             {
             "AssemblyRegister" = "3:1"
@@ -353,6 +329,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EDB221A84C354B9788DE9463AC787AED"
+            {
+            "SourcePath" = "8:remove.vbs"
+            "TargetName" = "8:remove.vbs"
+            "Tag" = "8:"
+            "Folder" = "8:_7E1444332F30452BA4B4CF811F9B6B8D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
@@ -386,9 +382,9 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:HAP Quota Service x86"
+        "ProductName" = "8:HAP Quota Service"
         "ProductCode" = "8:{7C86EEF3-3191-4CBF-8E2A-CCD5E0A45890}"
-        "PackageCode" = "8:{32210C5F-F7AF-4B33-BC6E-279D1447F234}"
+        "PackageCode" = "8:{BDDA17EB-E559-469C-AB5A-A745A397322F}"
         "UpgradeCode" = "8:{55C8129E-4F05-41B8-A23E-1AE6A8DC351D}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -399,13 +395,13 @@
         "Manufacturer" = "8:nb development"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:HAP Quota Service x86"
+        "Title" = "8:HAP Quota Service"
         "Subject" = "8:"
         "ARPCONTACT" = "8:Nick Brown"
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
         "ARPURLINFOABOUT" = "8:"
-        "ARPPRODUCTICON" = "8:"
+        "ARPPRODUCTICON" = "8:_DCE56C29339D447DBB59AFBBA918215D"
         "ARPIconIndex" = "3:32512"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"

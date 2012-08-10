@@ -8,6 +8,8 @@ using DiskQuotaTypeLibrary;
 using Microsoft.Storage;
 using System.Runtime.InteropServices;
 using System.Management;
+using System.Diagnostics;
+using System.IO;
 
 namespace HAP.Data.Quota
 {
@@ -28,34 +30,48 @@ namespace HAP.Data.Quota
         {
             IFsrmQuotaManager FSRMQuotaManager = new FsrmQuotaManagerClass();
             IFsrmQuota Quota = null;
+            QuotaInfo q = new QuotaInfo();
+            Decimal qFree = 0;
+            Decimal qTotal = 0;
+            Decimal qUsed = 0;
             try
             {
                 Quota = FSRMQuotaManager.GetQuota(path);
-                QuotaInfo q = new QuotaInfo();
-                q.Free = (int)Quota.QuotaLimit - (int)Quota.QuotaUsed;
-                q.Used = (int)Quota.QuotaUsed;
-                q.Total = (int)Quota.QuotaLimit;
-                return q;
+                if (!EventLog.SourceExists("HAP+ Quota Service")) EventLog.CreateEventSource("HAP+ Quota Service", "Application");
+                qFree = Math.Round((Decimal)Quota.QuotaLimit - (Decimal)Quota.QuotaUsed, 0);
+                qUsed = (Decimal)Quota.QuotaUsed;
+                qTotal = (Decimal)Quota.QuotaLimit;
+                EventLog.WriteEntry("HAP+ Quota Service", path + "\nFREE: " + qFree + "\nUSED: " + qUsed + "\nTOTAL: " + qTotal, EventLogEntryType.Information);
+                q.Free = Convert.ToDouble(qFree.ToString());
+                q.Total = Convert.ToDouble(qTotal.ToString());
+                q.Used = Convert.ToDouble(qUsed.ToString());
             }
-            catch
+            catch (Exception ex)
             {
+                if (!EventLog.SourceExists("HAP+ Quota Service")) EventLog.CreateEventSource("HAP+ Quota Service", "Application");
+                EventLog.WriteEntry("HAP+ Quota Service", path + "\n\n" + ex.ToString() + "\n\n" + ex.Message + "\n\n" + ex.StackTrace, EventLogEntryType.Error);
+                path = GetPath(path);
                 try
                 {
-                    Quota = FSRMQuotaManager.GetQuota(GetPath(path));
-                    QuotaInfo q = new QuotaInfo();
-                    q.Free = (int)Quota.QuotaLimit - (int)Quota.QuotaUsed;
-                    q.Used = (int)Quota.QuotaUsed;
-                    q.Total = (int)Quota.QuotaLimit;
-                    return q;
+                    Quota = FSRMQuotaManager.GetQuota(path);
+                    EventLog.WriteEntry("HAP+ Quota Service", "Type: " + Quota.QuotaLimit.GetType().ToString(), EventLogEntryType.Information);
+                    qFree = (Decimal)Quota.QuotaLimit - (Decimal)Quota.QuotaUsed;
+                    qUsed = (Decimal)Quota.QuotaUsed;
+                    qTotal = (Decimal)Quota.QuotaLimit;
+                    q.Free = Convert.ToDouble(qFree.ToString());
+                    q.Total = Convert.ToDouble(qTotal.ToString());
+                    q.Used = Convert.ToDouble(qUsed.ToString());
+                    EventLog.WriteEntry("HAP+ Quota Service", path + "\nFREE: " + qFree + "\nUSED: " + qUsed + "\nTOTAL: " + qTotal, EventLogEntryType.Information);
                 }
-                catch
+                catch (Exception e)
                 {
+                    EventLog.WriteEntry("HAP+ Quota Service", path + "\n\n" + e.ToString() + "\n\n" + e.Message + "\n\n" + e.StackTrace, EventLogEntryType.Error);
                 }
-                return new QuotaInfo();
             }
+            return q;
         }
 
-        string GetPath(string uncPath)
+        public static string GetPath(string uncPath)
         {
             try
             {
@@ -63,13 +79,13 @@ namespace HAP.Data.Quota
                 uncPath = uncPath.Replace(@"\\", "");
                 string[] uncParts = uncPath.Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries);
                 if (uncParts.Length < 2)
-                    return "[UNRESOLVED UNC PATH: " + uncPath + "]";
+                    return "UNRESOLVED UNC PATH: " + uncPath;
                 // Get a connection to the server as found in the UNC path
                 ManagementScope scope = new ManagementScope(@"\\" + uncParts[0] + @"\root\cimv2");
                 // Query the server for the share name
                 SelectQuery query = new SelectQuery("Select * From Win32_Share Where Name = '" + uncParts[1] + "'");
                 ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
-
+                Console.WriteLine("Here tom");
                 // Get the path
                 string path = string.Empty;
                 foreach (ManagementObject obj in searcher.Get())
@@ -88,7 +104,9 @@ namespace HAP.Data.Quota
             }
             catch (Exception ex)
             {
-                return "[ERROR RESOLVING UNC PATH: " + uncPath + ": " + ex.Message + "]";
+                if (!EventLog.SourceExists("HAP+ Quota Service")) EventLog.CreateEventSource("HAP+ Quota Service", "Application");
+                EventLog.WriteEntry("HAP+ Quota Service", "Error Resolving Path: " + uncPath + "\n\n" + ex.Message + "\n\n" + ex.StackTrace, EventLogEntryType.Error);
+                return "ERROR WITH UNC PATH: " + uncPath;
             }
         }
 
