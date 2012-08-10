@@ -18,6 +18,9 @@
     <bookingsystem>Booking System</bookingsystem>
     <quicksearch>Search for: </quicksearch>
   </bookingsystem>
+  <timetable>
+    <my>My Timetable</my>
+  </timetable>
   <helpdesk>
     <helpdesk>Help Desk</helpdesk>
     <priority>Priority</priority>
