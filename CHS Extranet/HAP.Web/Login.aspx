@@ -31,10 +31,10 @@
             $("#<%=username.ClientID%>").focusout(function () {
                 $("#<%=username.ClientID%>").val($.trim($("#<%=username.ClientID%>").val()));
             });
-            $('input[type=text]').keyup(function (e) {
+            $('input[type=text],input[type=password]').keyup(function (e) {
                 if (e.keyCode == 13) {
                     $("#<%=username.ClientID%>").val($.trim($("#<%=username.ClientID%>").val()));
-                    $("#<%=login.ClientID %>").trigger('click');
+                    location.href = $("#<%=login.ClientID %>").attr("href");
                 }
             });
         </script>
