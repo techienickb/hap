@@ -96,45 +96,170 @@ namespace HAP.Web
 
         protected void Save_Click(object sender, EventArgs e)
         {
+            error.Visible = false;
             Config = Cache["tempConfig"] as hapConfig;
-            Config.School.Name = name.Text;
-            Config.School.WebSite = schoolurl.Text;
-            Config.AD.UPN = upn.Text;
-            Config.AD.User = un.Text;
+            try
+            {
+                Config.School.Name = name.Text;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the School Name"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.School.WebSite = schoolurl.Text;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the School Url"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.AD.UPN = upn.Text;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the AD UPN"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.AD.User = un.Text;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the AD Username"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
             if (up.Text.Length > 0) Config.AD.Password = up.Text;
-            Config.AD.StudentsGroup = sg.Text;
-            Config.SMTP.Server=smtpaddress.Text;
-            Config.SMTP.Enabled = smtpenabled.Checked;
-            Config.SMTP.FromEmail = smtpfromemail.Text;
-            Config.SMTP.FromUser = smtpfromname.Text;
-            Config.SMTP.Port = int.Parse(smtpport.Text);
-            Config.SMTP.SSL = smtpssl.Checked;
-            adorgs.DataSource = Config.AD.OUs.Values;
-            Config.Homepage.AnnouncementBox.ShowTo = hp_ab_st.Text;
-            Config.Homepage.AnnouncementBox.EnableEditTo = hp_ab_adt.Text;
-            Config.ProxyServer.Address = proxyaddress.Text;
-            Config.ProxyServer.Enabled = proxyenabled.Checked;
-            Config.ProxyServer.Port = int.Parse(proxyport.Text);
-            Config.BookingSystem.KeepXmlClean = bsclean.Checked;
-            Config.BookingSystem.Admins = bsadmins.Text;
-            Config.SMTP.User = smtpuser.Text;
-            Config.SMTP.Password = smtppassword.Text;
-            Config.BookingSystem.MaxDays =  int.Parse(bsdays.Text);
-            Config.BookingSystem.MaxBookingsPerWeek = int.Parse(bsmax.Text);
-            Config.BookingSystem.TwoWeekTimetable = bstwoweek.Checked;
-            Config.MySchoolComputerBrowser.HideExtensions = mscbExt.Text;
-            Config.MySchoolComputerBrowser.WriteChecks = mscbWrite.Checked;
-            Config.Tracker.OverrideCode = trackercode.Text;
-            Config.Tracker.Provider = trackerprovider.Text;
-            Config.Tracker.MaxStaffLogons = int.Parse(trackerstafflogs.Text);
-            Config.Tracker.MaxStudentLogons = int.Parse(trackerstudentlogs.Text);
-            Config.BookingSystem.KeepXmlClean = bsclean.Checked;
-            Config.BookingSystem.TwoWeekTimetable = bstwoweek.Checked;
-            Config.BookingSystem.MaxBookingsPerWeek = int.Parse(bsmax.Text);
-            Config.BookingSystem.MaxDays = int.Parse(bsdays.Text);
-            Config.MySchoolComputerBrowser.LiveAppId = liveid.Text;
-            Config.Save();
-            Response.Redirect("~/Setup.aspx?Saved=1");
+            try
+            {
+                Config.AD.StudentsGroup = sg.Text;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the AD Students Group"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.SMTP.Server = smtpaddress.Text;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the SMTP Server Address"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.SMTP.Enabled = smtpenabled.Checked;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the SMTP Enabled Checkbox"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.SMTP.FromEmail = smtpfromemail.Text;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the SMTP From Address"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.SMTP.FromUser = smtpfromname.Text;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the SMTP From User"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.SMTP.Port = int.Parse(smtpport.Text);
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the SMTP Port"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.SMTP.SSL = smtpssl.Checked;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the SMTP Server SSL Checkbox"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.SMTP.User = smtpuser.Text;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the SMTP User"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.SMTP.Password = smtppassword.Text;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the SMTP Password"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                adorgs.DataSource = Config.AD.OUs.Values;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the AD OUs"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.Homepage.AnnouncementBox.ShowTo = hp_ab_st.Text;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the Home Page Announcement Box Show To "; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.Homepage.AnnouncementBox.EnableEditTo = hp_ab_adt.Text;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the Home Page Announcement Box Enable Edit To"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.ProxyServer.Address = proxyaddress.Text;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the Proxy Server Address"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.ProxyServer.Enabled = proxyenabled.Checked;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the Proxy Server Enable Box"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.ProxyServer.Port = int.Parse(proxyport.Text);
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the Proxy Server Port"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.BookingSystem.KeepXmlClean = bsclean.Checked;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the Booking System Keep XML Clean Option"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.BookingSystem.Admins = bsadmins.Text;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the Booking System Admins"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.BookingSystem.MaxDays = int.Parse(bsdays.Text);
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the Booking System Max Days"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.BookingSystem.MaxBookingsPerWeek = int.Parse(bsmax.Text);
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the Booking System Max Bookings Per Week"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.BookingSystem.TwoWeekTimetable = bstwoweek.Checked;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the Booking System Two Week Timetable Option"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.MySchoolComputerBrowser.HideExtensions = mscbExt.Text;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the My Files Hidden Extensions"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.MySchoolComputerBrowser.WriteChecks = mscbWrite.Checked;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the My Files Write Checks Option"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.Tracker.OverrideCode = trackercode.Text;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the Logon Tracker Override Code"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.Tracker.Provider = trackerprovider.Text;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the Logon Tracker Provider"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.Tracker.MaxStaffLogons = int.Parse(trackerstafflogs.Text);
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the Logon Tracker Max Staff Logons"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.Tracker.MaxStudentLogons = int.Parse(trackerstudentlogs.Text);
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the Logon Tracker Max Student Logons"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.MySchoolComputerBrowser.LiveAppId = liveid.Text;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the Live App Id"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.Save();
+                Response.Redirect("~/Setup.aspx?Saved=1");
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error Saving the Configuration"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
         }
     }
 }

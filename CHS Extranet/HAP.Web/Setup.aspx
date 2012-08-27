@@ -54,6 +54,17 @@
                         var obj2 = null;
                     </script>
                     <div id="adbrowserwrapper" title="Active Directory Browser"><div id="treeprogress"></div><div id="treecontainer"><ul id="tree"></ul></div></div>
+                    <asp:PlaceHolder runat="server" ID="error" Visible="false">
+                        <div class="ui-state-error ui-corner-all" style=" padding: 5px 10px">
+                            <span class="ui-icon ui-icon-alert" style="float: left; margin-right: 5px;"></span>
+                            <b>A Error has occured: </b>
+                            <div><asp:Literal runat="server" ID="errormessage" /></div>
+                            <a href="#" onclick="$('#errormore').css('display', 'block'); $(this).hide();">More...</a>
+                            <div id="errormore" style="display: none;">
+                                <asp:Literal runat="server" ID="errormessagemore" />
+                            </div>
+                        </div>
+                    </asp:PlaceHolder>
                     <% if (Request.QueryString.Count == 1 && Request.QueryString["saved"] == "1")
                        { %>
                        <p class="ui-state-highlight ui-corner-all" style=" padding: 5px 10px"><span class="ui-icon ui-icon-circle-check" style="float: left; margin-right: 5px;"></span>Config Saved! <span style="display: block; text-align: center;"><button style="font-size: 20px;" onclick="location.href='./'; return false;">Start Using HAP+</button></span></p> 
@@ -65,8 +76,10 @@
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;allow users="*" /&gt;<br />
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/authorization&gt;<br />
                             &nbsp;&nbsp;&nbsp;&nbsp;&lt;/system.web&gt;<br />
-                            &lt;/location&gt;<br />
-                        to<br />
+                            &lt;/location&gt;
+                        </code>
+                        to
+                        <code>
                             &lt;location path="setup.aspx"&gt;<br />
                             &nbsp;&nbsp;&nbsp;&nbsp;&lt;system.web&gt;<br />
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;authorization&gt;<br />
@@ -1663,7 +1676,7 @@
                                 if (<%=HAP.Web.Configuration.hapConfig.Current.FirstRun.ToString().ToLower() %> && ui.index > 1) {
                                     $("#<%=Save.ClientID%>").css("display", "");
                                 }
-                            }});
+                            }, disabled: [1, 2, 3, 4, 5, 6] });
                             $("#<%=sg.ClientID %>").keyup(function () {
                                 if ($("#<%=sg.ClientID %>").val().length > 2) $("#adgroupsstate").attr("src", root + "images/setup/267.png");
                                 else $("#adgroupsstate").attr("src", root + "images/setup/266.png");
@@ -1750,13 +1763,19 @@
                                     $("#iis6wildcardimg").attr("src", "images/setup/266.png");
                                     $("#appwa").attr("src", "images/setup/267.png");
                                 }
-                                if ($("#iis6wildcardimg").attr("src") == "images/setup/267.png" && $("#servicesactivated").attr("src") == "images/setup/267.png" && $("#appwa").attr("src") == "images/setup/267.png") $("#checksstate").attr("src", "images/setup/267.png");
+                                if ($("#iis6wildcardimg").attr("src") == "images/setup/267.png" && $("#servicesactivated").attr("src") == "images/setup/267.png" && $("#appwa").attr("src") == "images/setup/267.png") { 
+                                    $("#checksstate").attr("src", "images/setup/267.png");
+                                    $('#maintabs').tabs('option', 'disabled', [])
+                                }
                                 else $("#checksstate").attr("src", "images/setup/266.png");
                             });
                             $.get("api/setup/help", function (data, status) {
                                 if (status == "error") $("#servicesactivated").attr("src", "images/setup/266.png");
                                 else $("#servicesactivated").attr("src", "images/setup/267.png");
-                                if ($("#iis6wildcardimg").attr("src") == "images/setup/267.png" && $("#servicesactivated").attr("src") == "images/setup/267.png" && $("#appwa").attr("src") == "images/setup/267.png") $("#checksstate").attr("src", "images/setup/267.png");
+                                if ($("#iis6wildcardimg").attr("src") == "images/setup/267.png" && $("#servicesactivated").attr("src") == "images/setup/267.png" && $("#appwa").attr("src") == "images/setup/267.png") {
+                                    $("#checksstate").attr("src", "images/setup/267.png");
+                                    $('#maintabs').tabs('option', 'disabled', [])
+                                }
                                 else $("#checksstate").attr("src", "images/setup/266.png");
                             });
                         });
