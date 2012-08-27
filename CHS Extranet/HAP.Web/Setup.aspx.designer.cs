@@ -13,6 +13,33 @@ namespace HAP.Web {
     public partial class Setup {
         
         /// <summary>
+        /// error control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder error;
+        
+        /// <summary>
+        /// errormessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal errormessage;
+        
+        /// <summary>
+        /// errormessagemore control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal errormessagemore;
+        
+        /// <summary>
         /// iisversion control.
         /// </summary>
         /// <remarks>
