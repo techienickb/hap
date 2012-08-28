@@ -15,38 +15,44 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_023366B39FAFBB99B44DF9F85AC204F3"
-        "OwnerKey" = "8:_334CEEA78D2B4EE2AD665CC9409A3CAD"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_023366B39FAFBB99B44DF9F85AC204F3"
-        "OwnerKey" = "8:_5781C81D617DD8D171AC7F54E5215156"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_334CEEA78D2B4EE2AD665CC9409A3CAD"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_5781C81D617DD8D171AC7F54E5215156"
+        "MsmKey" = "8:_3A1D5F157709F4B1A58764846AAECD82"
         "OwnerKey" = "8:_334CEEA78D2B4EE2AD665CC9409A3CAD"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_58F2A161B6DEFE51CE7BA9B5F6FF9851"
+        "OwnerKey" = "8:_3A1D5F157709F4B1A58764846AAECD82"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_58F2A161B6DEFE51CE7BA9B5F6FF9851"
+        "OwnerKey" = "8:_334CEEA78D2B4EE2AD665CC9409A3CAD"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CAE335AE88AB4497B7CCA60DBD728AE4"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D9DC5507832C4D4FB3CCE87F0C7B501E"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_FC5BC31FF6CCD7C2AC7D5662E7DF0F5E"
-        "OwnerKey" = "8:_023366B39FAFBB99B44DF9F85AC204F3"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_5781C81D617DD8D171AC7F54E5215156"
+        "OwnerKey" = "8:_58F2A161B6DEFE51CE7BA9B5F6FF9851"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -58,7 +64,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_023366B39FAFBB99B44DF9F85AC204F3"
+        "OwnerKey" = "8:_3A1D5F157709F4B1A58764846AAECD82"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_58F2A161B6DEFE51CE7BA9B5F6FF9851"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -143,62 +155,6 @@
     {
         "CustomAction"
         {
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_1C46EA89A5574156A2CB74CA853E80EF"
-            {
-            "Name" = "8:Primary output from HAP Quota Service x86 (Active)"
-            "Condition" = "8:"
-            "Object" = "8:_334CEEA78D2B4EE2AD665CC9409A3CAD"
-            "FileType" = "3:2"
-            "InstallAction" = "3:4"
-            "Arguments" = "8:"
-            "EntryPoint" = "8:"
-            "Sequence" = "3:1"
-            "Identifier" = "8:_78CE57DA_FF22_4BCC_AA6B_152F870DD1DA"
-            "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:"
-            }
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_B695517D3817471596C7785A29BB6453"
-            {
-            "Name" = "8:Primary output from HAP Quota Service x86 (Active)"
-            "Condition" = "8:"
-            "Object" = "8:_334CEEA78D2B4EE2AD665CC9409A3CAD"
-            "FileType" = "3:2"
-            "InstallAction" = "3:1"
-            "Arguments" = "8:"
-            "EntryPoint" = "8:"
-            "Sequence" = "3:1"
-            "Identifier" = "8:_D2F605A7_A575_47C4_A5CC_907BA19623D5"
-            "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:"
-            }
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_B8C78F5737B54DF4A40815AED3B9035C"
-            {
-            "Name" = "8:Primary output from HAP Quota Service x86 (Active)"
-            "Condition" = "8:"
-            "Object" = "8:_334CEEA78D2B4EE2AD665CC9409A3CAD"
-            "FileType" = "3:2"
-            "InstallAction" = "3:3"
-            "Arguments" = "8:"
-            "EntryPoint" = "8:"
-            "Sequence" = "3:1"
-            "Identifier" = "8:_12C5655E_1F33_4702_B951_9535FBD15B25"
-            "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:"
-            }
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_E640FB8079B24725863B05D1B20D3D9C"
-            {
-            "Name" = "8:Primary output from HAP Quota Service x86 (Active)"
-            "Condition" = "8:"
-            "Object" = "8:_334CEEA78D2B4EE2AD665CC9409A3CAD"
-            "FileType" = "3:2"
-            "InstallAction" = "3:2"
-            "Arguments" = "8:"
-            "EntryPoint" = "8:"
-            "Sequence" = "3:1"
-            "Identifier" = "8:_3672C09B_AD93_4F06_B554_11730D094923"
-            "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:"
-            }
         }
         "DefaultFeature"
         {
@@ -222,14 +178,45 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_023366B39FAFBB99B44DF9F85AC204F3"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_3A1D5F157709F4B1A58764846AAECD82"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Interop.DiskQuotaTypeLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:HAP.Data.Quota.x86, Version=2.0.0.0, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
-                    "_023366B39FAFBB99B44DF9F85AC204F3"
+                    "_3A1D5F157709F4B1A58764846AAECD82"
+                    {
+                    "Name" = "8:HAP.Data.Quota.x86.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:HAP.Data.Quota.x86.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_96DFC81F6F0E40E58D8ADAF386C79D6D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_58F2A161B6DEFE51CE7BA9B5F6FF9851"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Interop.DiskQuotaTypeLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86"
+                "ScatterAssemblies"
+                {
+                    "_58F2A161B6DEFE51CE7BA9B5F6FF9851"
                     {
                     "Name" = "8:Interop.DiskQuotaTypeLibrary.dll"
                     "Attributes" = "3:512"
@@ -253,21 +240,10 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5781C81D617DD8D171AC7F54E5215156"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CAE335AE88AB4497B7CCA60DBD728AE4"
             {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:HAP.Data.Quota.x86, Version=2.0.0.0, Culture=neutral, processorArchitecture=x86"
-                "ScatterAssemblies"
-                {
-                    "_5781C81D617DD8D171AC7F54E5215156"
-                    {
-                    "Name" = "8:HAP.Data.Quota.x86.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:HAP.Data.Quota.x86.dll"
-            "TargetName" = "8:"
+            "SourcePath" = "8:remove.vbs"
+            "TargetName" = "8:remove.vbs"
             "Tag" = "8:"
             "Folder" = "8:_96DFC81F6F0E40E58D8ADAF386C79D6D"
             "Condition" = "8:"
@@ -281,7 +257,27 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D9DC5507832C4D4FB3CCE87F0C7B501E"
+            {
+            "SourcePath" = "8:register.vbs"
+            "TargetName" = "8:register.vbs"
+            "Tag" = "8:"
+            "Folder" = "8:_96DFC81F6F0E40E58D8ADAF386C79D6D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FC5BC31FF6CCD7C2AC7D5662E7DF0F5E"
@@ -339,7 +335,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HAP Quota Service Setup x86"
         "ProductCode" = "8:{3810D2CE-D899-4D9F-BE64-FF82DB16A31F}"
-        "PackageCode" = "8:{EE0ADA1B-1E10-44C3-BC35-E56580686264}"
+        "PackageCode" = "8:{6D525804-BACB-4EAB-A1DE-1B97DBC58C74}"
         "UpgradeCode" = "8:{B462A528-0909-464F-8C0D-CE6F506F770A}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -723,8 +719,8 @@
                             "Type" = "3:15"
                             "ContextData" = "8:"
                             "Attributes" = "3:0"
-                            "Setting" = "3:1"
-                            "Value" = "8:#1258"
+                            "Setting" = "3:2"
+                            "Value" = "8:Please run the VBS Script to Register the Service, then start the service from services.msc."
                             "DefaultValue" = "8:#1258"
                             "UsePlugInResources" = "11:TRUE"
                             }
@@ -860,7 +856,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_334CEEA78D2B4EE2AD665CC9409A3CAD"
             {
-            "SourcePath" = "8:..\\HAP.Data.Quota.Service x86\\obj\\x86\\Debug\\HAP Quota Service.exe"
+            "SourcePath" = "8:..\\HAP.Data.Quota.Service x86\\obj\\x86\\Release\\HAP Quota Service.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_96DFC81F6F0E40E58D8ADAF386C79D6D"
