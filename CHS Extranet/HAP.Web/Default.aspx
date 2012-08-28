@@ -46,6 +46,7 @@
             </div>
             <script type="text/javascript">
                 var scrollpos = 0;
+                hap.load = hap.loadtypes.help;
                 $(document).ready(function () {
                     $("#HomeButtons").mousewheel(function(event, delta) {
                         if (delta > 0) {
