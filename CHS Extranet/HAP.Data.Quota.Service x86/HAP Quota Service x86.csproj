@@ -117,6 +117,12 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HAP.Data.Quota x86\HAP.Data.Quota x86.csproj">
+      <Project>{A991E5B1-BA49-4FF3-9155-4FC79412131C}</Project>
+      <Name>HAP.Data.Quota x86</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
