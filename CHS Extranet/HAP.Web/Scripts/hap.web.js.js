@@ -26,6 +26,12 @@ if (hap == null) {
                     if (hap.localization[i].name == e) return unescape(hap.localization[i].value.replace(/\\\\/g, "\\"));
             }
         },
+        loadtypes : {
+            none: 0,
+            help: 1,
+            full: 2
+        },
+        load: 2,
         help: {
             Init: function () {
                 if (document.getElementById("helpbox") != null) return;
@@ -51,7 +57,7 @@ if (hap == null) {
         sidebar: {
             Open: false,
             Init: function () {
-                if (window.location.pathname.toLowerCase() != hap.root.toLowerCase() && window.location.pathname.toLowerCase() != hap.common.resolveUrl('~/login.aspx'))
+                if (window.location.pathname.toLowerCase() != hap.root.toLowerCase() && window.location.pathname.toLowerCase() != hap.common.resolveUrl('~/login.aspx').toLowerCase())
                     $.ajax({
                         url: hap.common.resolveUrl('~/api/livetiles/'), type: 'GET', dataType: "json", contentType: 'application/JSON', success: function (data) {
                             $("#hapContent").append('<a href="#" id="sidebarOpener" class="tile-color-font"><span>' + hap.common.getLocal('openmenu') + '</span></a><div id="hapSidebar" class="tile-color"><a href="' + hap.common.resolveUrl("~/") + '">' + hap.common.getLocal('homeaccessplus') + ' ' + hap.common.getLocal('home') + '</a><div class="tiles"></div></div>');
@@ -225,5 +231,8 @@ if (hap == null) {
             }
         }
     };
-    $(function () { hap.help.Init(); hap.sidebar.Init(); });
+    $(function () {
+        if (hap.load == hap.loadtypes.full) hap.sidebar.Init();
+        if (hap.load > hap.loadtypes.none) hap.help.Init();
+    });
 }

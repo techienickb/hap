@@ -24,6 +24,7 @@
             </div>
         </div>
         <script type="text/javascript">
+            hap.load = hap.loadtypes.none;
             $(document).ready(function () {
                 $("#<%=login.ClientID %>").button();
                 $("#<%=username.ClientID %>").focus();
