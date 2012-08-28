@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{7F80432C-70D9-4AAA-9FE3-6398471FC04D}"
 	ProjectSection(SolutionItems) = preProject
 		DiskQuotaTypeLibrary.dll = DiskQuotaTypeLibrary.dll
@@ -44,8 +44,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Web.Logging", "HAP.Web.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Web.SendTo", "HAP.Web.SendTo.Google\HAP.Web.SendTo.csproj", "{3E5B1FF1-BD5C-4DCA-8165-813C6B5BF6B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP Quota Service x86", "HAP.Data.Quota.Service x86\HAP Quota Service x86.csproj", "{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9}"
-EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HAP Quota Service Setup", "HAP Quota Service Setup\HAP Quota Service Setup.vdproj", "{4D363196-D7E0-45A3-951A-DF52E8FD84AC}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HAP Quota Service Setup x86", "HAP Quota Service Setup x86\HAP Quota Service Setup x86.vdproj", "{2F65911E-3C0E-4CE0-86FD-C733F6444B49}"
@@ -59,6 +57,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.MyFiles", "HAP.MyFiles\HAP.MyFiles.csproj", "{ED1514FF-9E76-4FC3-9238-68653B50F9C4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Data.Quota x86", "HAP.Data.Quota x86\HAP.Data.Quota x86.csproj", "{A991E5B1-BA49-4FF3-9155-4FC79412131C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP Quota Service x86", "HAP.Data.Quota.Service x86\HAP Quota Service x86.csproj", "{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -109,34 +109,34 @@ Global
 		SccProjectUniqueName13 = HAP.Web.SendTo.Google\\HAP.Web.SendTo.csproj
 		SccProjectName13 = HAP.Web.SendTo.Google
 		SccLocalPath13 = HAP.Web.SendTo.Google
-		SccProjectUniqueName14 = HAP.Data.Quota.Service\u0020x86\\HAP\u0020Quota\u0020Service\u0020x86.csproj
+		SccProjectUniqueName14 = HAP\u0020Quota\u0020Service\u0020Setup\\HAP\u0020Quota\u0020Service\u0020Setup.vdproj
 		SccProjectTopLevelParentUniqueName14 = HAP.sln
-		SccProjectName14 = HAP.Data.Quota.Service\u0020x86
-		SccLocalPath14 = HAP.Data.Quota.Service\u0020x86
-		SccProjectUniqueName15 = HAP\u0020Quota\u0020Service\u0020Setup\\HAP\u0020Quota\u0020Service\u0020Setup.vdproj
+		SccProjectName14 = HAP\u0020Quota\u0020Service\u0020Setup
+		SccLocalPath14 = HAP\u0020Quota\u0020Service\u0020Setup
+		SccProjectUniqueName15 = HAP\u0020Quota\u0020Service\u0020Setup\u0020x86\\HAP\u0020Quota\u0020Service\u0020Setup\u0020x86.vdproj
 		SccProjectTopLevelParentUniqueName15 = HAP.sln
-		SccProjectName15 = HAP\u0020Quota\u0020Service\u0020Setup
-		SccLocalPath15 = HAP\u0020Quota\u0020Service\u0020Setup
-		SccProjectUniqueName16 = HAP\u0020Quota\u0020Service\u0020Setup\u0020x86\\HAP\u0020Quota\u0020Service\u0020Setup\u0020x86.vdproj
-		SccProjectTopLevelParentUniqueName16 = HAP.sln
-		SccProjectName16 = HAP\u0020Quota\u0020Service\u0020Setup\u0020x86
-		SccLocalPath16 = HAP\u0020Quota\u0020Service\u0020Setup\u0020x86
-		SccProjectUniqueName17 = HAP.Web.LiveTiles\\HAP.Web.LiveTiles.csproj
-		SccProjectName17 = HAP.Web.LiveTiles
-		SccLocalPath17 = HAP.Web.LiveTiles
-		SccProjectUniqueName18 = HAP.HelpDesk\\HAP.HelpDesk.csproj
-		SccProjectName18 = HAP.HelpDesk
-		SccLocalPath18 = HAP.HelpDesk
-		SccProjectUniqueName19 = HAP.BookingSystem\\HAP.BookingSystem.csproj
-		SccProjectName19 = HAP.BookingSystem
-		SccLocalPath19 = HAP.BookingSystem
-		SccProjectUniqueName20 = HAP.MyFiles\\HAP.MyFiles.csproj
-		SccProjectName20 = HAP.MyFiles
-		SccLocalPath20 = HAP.MyFiles
-		SccProjectUniqueName21 = HAP.Data.Quota\u0020x86\\HAP.Data.Quota\u0020x86.csproj
+		SccProjectName15 = HAP\u0020Quota\u0020Service\u0020Setup\u0020x86
+		SccLocalPath15 = HAP\u0020Quota\u0020Service\u0020Setup\u0020x86
+		SccProjectUniqueName16 = HAP.Web.LiveTiles\\HAP.Web.LiveTiles.csproj
+		SccProjectName16 = HAP.Web.LiveTiles
+		SccLocalPath16 = HAP.Web.LiveTiles
+		SccProjectUniqueName17 = HAP.HelpDesk\\HAP.HelpDesk.csproj
+		SccProjectName17 = HAP.HelpDesk
+		SccLocalPath17 = HAP.HelpDesk
+		SccProjectUniqueName18 = HAP.BookingSystem\\HAP.BookingSystem.csproj
+		SccProjectName18 = HAP.BookingSystem
+		SccLocalPath18 = HAP.BookingSystem
+		SccProjectUniqueName19 = HAP.MyFiles\\HAP.MyFiles.csproj
+		SccProjectName19 = HAP.MyFiles
+		SccLocalPath19 = HAP.MyFiles
+		SccProjectUniqueName20 = HAP.Data.Quota\u0020x86\\HAP.Data.Quota\u0020x86.csproj
+		SccProjectTopLevelParentUniqueName20 = HAP.sln
+		SccProjectName20 = HAP.Data.Quota\u0020x86
+		SccLocalPath20 = HAP.Data.Quota\u0020x86
+		SccProjectUniqueName21 = HAP.Data.Quota.Service\u0020x86\\HAP\u0020Quota\u0020Service\u0020x86.csproj
 		SccProjectTopLevelParentUniqueName21 = HAP.sln
-		SccProjectName21 = HAP.Data.Quota\u0020x86
-		SccLocalPath21 = HAP.Data.Quota\u0020x86
+		SccProjectName21 = HAP.Data.Quota.Service\u0020x86
+		SccLocalPath21 = HAP.Data.Quota.Service\u0020x86
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -327,19 +327,6 @@ Global
 		{3E5B1FF1-BD5C-4DCA-8165-813C6B5BF6B2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{3E5B1FF1-BD5C-4DCA-8165-813C6B5BF6B2}.Release|x64.ActiveCfg = Release|Any CPU
 		{3E5B1FF1-BD5C-4DCA-8165-813C6B5BF6B2}.Release|x86.ActiveCfg = Release|Any CPU
-		{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9}.Debug|Any CPU.Build.0 = Debug|x86
-		{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9}.Debug|x64.ActiveCfg = Debug|x86
-		{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9}.Debug|x86.ActiveCfg = Debug|x86
-		{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9}.Debug|x86.Build.0 = Debug|x86
-		{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9}.Release|Any CPU.ActiveCfg = Release|x86
-		{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9}.Release|Mixed Platforms.Build.0 = Release|x86
-		{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9}.Release|x64.ActiveCfg = Release|x86
-		{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9}.Release|x86.ActiveCfg = Release|x86
-		{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9}.Release|x86.Build.0 = Release|x86
 		{4D363196-D7E0-45A3-951A-DF52E8FD84AC}.Debug|Any CPU.ActiveCfg = Debug
 		{4D363196-D7E0-45A3-951A-DF52E8FD84AC}.Debug|Any CPU.Build.0 = Debug
 		{4D363196-D7E0-45A3-951A-DF52E8FD84AC}.Debug|Mixed Platforms.ActiveCfg = Debug
@@ -416,16 +403,28 @@ Global
 		{A991E5B1-BA49-4FF3-9155-4FC79412131C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A991E5B1-BA49-4FF3-9155-4FC79412131C}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{A991E5B1-BA49-4FF3-9155-4FC79412131C}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{A991E5B1-BA49-4FF3-9155-4FC79412131C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A991E5B1-BA49-4FF3-9155-4FC79412131C}.Debug|x64.ActiveCfg = Debug|x86
 		{A991E5B1-BA49-4FF3-9155-4FC79412131C}.Debug|x86.ActiveCfg = Debug|x86
 		{A991E5B1-BA49-4FF3-9155-4FC79412131C}.Debug|x86.Build.0 = Debug|x86
 		{A991E5B1-BA49-4FF3-9155-4FC79412131C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A991E5B1-BA49-4FF3-9155-4FC79412131C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A991E5B1-BA49-4FF3-9155-4FC79412131C}.Release|Mixed Platforms.ActiveCfg = Release|x86
 		{A991E5B1-BA49-4FF3-9155-4FC79412131C}.Release|Mixed Platforms.Build.0 = Release|x86
-		{A991E5B1-BA49-4FF3-9155-4FC79412131C}.Release|x64.ActiveCfg = Release|Any CPU
+		{A991E5B1-BA49-4FF3-9155-4FC79412131C}.Release|x64.ActiveCfg = Release|x86
 		{A991E5B1-BA49-4FF3-9155-4FC79412131C}.Release|x86.ActiveCfg = Release|x86
 		{A991E5B1-BA49-4FF3-9155-4FC79412131C}.Release|x86.Build.0 = Release|x86
+		{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9}.Debug|x64.ActiveCfg = Debug|x86
+		{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9}.Debug|x86.ActiveCfg = Debug|x86
+		{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9}.Debug|x86.Build.0 = Debug|x86
+		{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9}.Release|Any CPU.ActiveCfg = Release|x86
+		{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9}.Release|Mixed Platforms.Build.0 = Release|x86
+		{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9}.Release|x64.ActiveCfg = Release|x86
+		{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9}.Release|x86.ActiveCfg = Release|x86
+		{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -437,8 +436,8 @@ Global
 		{2F65911E-3C0E-4CE0-86FD-C733F6444B49} = {9A28C64F-CA1C-4D4C-A26C-907F9B8269EB}
 		{335B9841-60EA-49CD-A32B-5866902330F5} = {7B73919E-D6DA-4B3E-A9BC-CDBCACD84EEA}
 		{A06C244E-4136-4A30-97AD-F0717974A5D0} = {7B73919E-D6DA-4B3E-A9BC-CDBCACD84EEA}
-		{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9} = {7B73919E-D6DA-4B3E-A9BC-CDBCACD84EEA}
 		{A991E5B1-BA49-4FF3-9155-4FC79412131C} = {7B73919E-D6DA-4B3E-A9BC-CDBCACD84EEA}
+		{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9} = {7B73919E-D6DA-4B3E-A9BC-CDBCACD84EEA}
 	EndGlobalSection
 	GlobalSection(SharpSetup) = preSolution
 		Version = 1.2
