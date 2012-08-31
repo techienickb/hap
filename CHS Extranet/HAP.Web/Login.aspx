@@ -7,7 +7,7 @@
             <h2>Access your School From Home</h2>
             <div>
                 <asp:Label runat="server" AssociatedControlID="username">Username: </asp:Label>
-                <asp:TextBox runat="server" ID="username" Width="300px" />
+                <asp:TextBox runat="server" ID="username" Width="300px" AutoCompleteType="None" />
                 <asp:RequiredFieldValidator runat="server" ControlToValidate="username" ErrorMessage="*" ForeColor="Red" />
             </div>
             <div>
