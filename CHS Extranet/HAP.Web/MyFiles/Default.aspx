@@ -1073,7 +1073,7 @@
 					$("#newfoldertext").addClass("loading");
 					$.ajax({
 						type: 'GET',
-						url: hap.common.resolveUrl("~/api/MyFiles/Exists/") + curpath.replace(/\\/gi, "/") + $("#newfoldertext").val() + '/' + '?' + window.JSON.stringify(new Date()),
+						url: hap.common.resolveUrl("~/api/MyFiles/Exists/") + curpath.replace(/\\/gi, "/") + (curpath.replace(/\\/gi, "/").match(/\\$/g) ? '' : '/') + $("#newfoldertext").val() + '/' + '?' + window.JSON.stringify(new Date()),
 						dataType: 'json',
 						context: this,
 						contentType: 'application/json',
@@ -1084,7 +1084,7 @@
 							} else {
 								$.ajax({
 									type: 'POST',
-									url: hap.common.resolveUrl("~/api/MyFiles/New/") + curpath.replace(/\\/gi, "/") + $("#newfoldertext").val() + '?' + window.JSON.stringify(new Date()),
+									url: hap.common.resolveUrl("~/api/MyFiles/New/") + curpath.replace(/\\/gi, "/") + (curpath.replace(/\\/gi, "/").match(/\\$/g) ? '' : '/') + $("#newfoldertext").val() + '?' + window.JSON.stringify(new Date()),
 									dataType: 'json',
 									contentType: 'application/json',
 									success: function (data) {
@@ -1186,7 +1186,7 @@
 				else {
 					if (SelectedItems()[0].Data.Name == $(this).val()) { $("#renamebox").css("display", "none"); return; }
 					$("#renamebox").css("display", "none");
-					$("#progressstatus").dialog({ autoOpen: true, modal: true, title: hap.common.getLocal("myfiles/checking") + "..." });
+					$("#progressstatus").dialog({ autoOpen: true, modal: false, title: hap.common.getLocal("myfiles/checking") + "..." });
 					$("#progressstatus .progress").progressbar({ value: 0 });
 					$.ajax({
 						type: 'GET',
@@ -1196,12 +1196,12 @@
 						contentType: 'application/json',
 						success: function (data) {
 							if (data.Name != null) {
-								$("#progressstatus").dialog({ autoOpen: true, modal: true, title: hap.common.getLocal("myfiles/waiting") + "..." });
+							    $("#progressstatus").dialog({ autoOpen: true, modal: false, title: hap.common.getLocal("myfiles/waiting") + "..." });
 								$("#progressstatus .progress").progressbar({ value: 10 });
 								confirm(data.Name + " " + hap.common.getLocal("myfiles/folderexists2"));
 								$("#progressstatus").dialog("close");
 							} else {
-								$("#progressstatus").dialog({ autoOpen: true, modal: true, title: hap.common.getLocal("myfiles/renaming") + "..." });
+							    $("#progressstatus").dialog({ autoOpen: true, modal: false, title: hap.common.getLocal("myfiles/renaming") + "..." });
 								$("#progressstatus .progress").progressbar({ value: 50 });
 								$.ajax({
 									type: 'POST',
@@ -1210,7 +1210,7 @@
 									dataType: 'json',
 									contentType: 'application/json',
 									success: function (data) {
-										$("#progressstatus").dialog({ autoOpen: true, modal: true, title: hap.common.getLocal("myfiles/waiting") + "..." });
+										$("#progressstatus").dialog({ autoOpen: true, modal: false, title: hap.common.getLocal("myfiles/waiting") + "..." });
 										$("#progressstatus .progress").progressbar({ value: 100 });
 										temp = null; 
 										setTimeout(function() { $("#progressstatus").dialog("close"); }, 500);
