@@ -1184,13 +1184,17 @@
 			$("#renamebox").focusout(function() {
 				if (temp == "esc") { temp = null; return; }
 				else {
+				    temp = "esc";
 					if (SelectedItems()[0].Data.Name == $(this).val()) { $("#renamebox").css("display", "none"); return; }
 					$("#renamebox").css("display", "none");
 					$("#progressstatus").dialog({ autoOpen: true, modal: false, title: hap.common.getLocal("myfiles/checking") + "..." });
 					$("#progressstatus .progress").progressbar({ value: 0 });
+					var p = SelectedItems()[0].Data.Path;
+					if (p.match(/^..\/download\//gi)) p = p.split(/^..\/download\//gi)[1].replace(/\//g, '\\');
+
 					$.ajax({
 						type: 'GET',
-						url: hap.common.resolveUrl("~/api/MyFiles/Exists/") + (SelectedItems()[0].Data.Path.substr(0, SelectedItems()[0].Data.Path.lastIndexOf('\\')) + "\\" + $("#renamebox").val() + (SelectedItems()[0].Data.Extension == null ? '\\' : SelectedItems()[0].Data.Extension)).replace(/\\\\/gi, "\\").replace(/\\/gi, "/") + '?' + window.JSON.stringify(new Date()),
+						url: hap.common.resolveUrl("~/api/MyFiles/Exists/") + (p.substr(0, p.lastIndexOf('\\')) + "\\" + $("#renamebox").val() + (SelectedItems()[0].Data.Extension == null ? '\\' : SelectedItems()[0].Data.Extension)).replace(/\\\\/gi, "\\").replace(/\\/gi, "/") + '?' + window.JSON.stringify(new Date()),
 						dataType: 'json',
 						context: this,
 						contentType: 'application/json',
@@ -1206,7 +1210,7 @@
 								$.ajax({
 									type: 'POST',
 									url: hap.common.resolveUrl("~/api/MyFiles/Move") + '?' + window.JSON.stringify(new Date()),
-									data: '{ "OldPath": "' + SelectedItems()[0].Data.Path.replace(/\\/gi, "/") + '", "NewPath": "' + (SelectedItems()[0].Data.Path.substr(0, SelectedItems()[0].Data.Path.lastIndexOf('\\')) + "\\" + $("#renamebox").val() + (SelectedItems()[0].Data.Extension == null ? '\\' : SelectedItems()[0].Data.Extension)).replace(/\\\\/gi, "\\").replace(/\\/gi, "/") + '" }',
+									data: '{ "OldPath": "' + p.replace(/\\/gi, "/") + '", "NewPath": "' + (p.substr(0, p.lastIndexOf('\\')) + "\\" + $("#renamebox").val() + (SelectedItems()[0].Data.Extension == null ? '\\' : SelectedItems()[0].Data.Extension)).replace(/\\\\/gi, "\\").replace(/\\/gi, "/") + '" }',
 									dataType: 'json',
 									contentType: 'application/json',
 									success: function (data) {
