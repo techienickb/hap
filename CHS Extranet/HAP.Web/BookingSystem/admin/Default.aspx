@@ -7,8 +7,8 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="body" runat="server">
     <script type="text/javascript">$(function () { $(".selector").datepicker({ dateFormat: "dd/mm/yy" }); });</script>
 	<header class="commonheader">
-		<nav class="tiles left">
-			<a href="../"><hap:LocalResource StringPath="bookingsystem/bookingsystem" StringPath2="home" runat="server" /></a>
+		<nav class="tiles right">
+			<a href="../" class="button"><hap:LocalResource StringPath="bookingsystem/bookingsystem" Seperator=" " StringPath2="home" runat="server" /></a>
 		</nav>
 		<div>
 			<hap:LocalResource StringPath="bookingsystem/bookingsystem" runat="server" />
