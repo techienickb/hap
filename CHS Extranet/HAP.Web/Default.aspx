@@ -41,8 +41,8 @@
                         </asp:Repeater>
                     </div>
                 </div>
-                <a id="rightscoll" href="#right">></a>
-                <a id="leftscroll" href="#left"><</a>
+                <a id="rightscoll" href="#right"></a>
+                <a id="leftscroll" href="#left"></a>
             </div>
             <script type="text/javascript">
                 var scrollpos = 0;

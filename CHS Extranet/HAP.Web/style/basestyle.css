@@ -50,7 +50,7 @@ input[type=button]:focus, input[type=submit]:focus, button:focus { outline: #edc
 
 #logincontainer, #hapHomeContainer { background: #f3f3f3; }
 #loginformside, #hapHomeSide, #hapSidebar { position: absolute; left: 0; width: 30%; top: 0; bottom: 0; background-image: url(../images/icons/metro/hap-logo-128.png); background-repeat: no-repeat; background-position: center 30%; }
-#hapSidebar { width: 0; overflow: hidden; background-image: none; overflow-y: auto; }
+#hapSidebar { width: 0; overflow: hidden; background-image: none; overflow-y: auto; z-index: 2000; }
 #hapSidebar > a { display: block; padding-top: 130px; margin-top: 50px; color: #f3f3f3; text-decoration: none; text-align: center; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; background-color: #0060a6; background-position: center top; background-image: url(../images/icons/metro/hap-logo-128.png); background-repeat: no-repeat; }
 #hapSidebar > a:hover { color: #fff; background-color: #3286C1; }
 #hapSidebar > a:active { background-color: #004577; }
@@ -59,7 +59,7 @@ input[type=button]:focus, input[type=submit]:focus, button:focus { outline: #edc
 #hapSidebar .tiles div div { vertical-align: text-top; padding-top: 2px; white-space: nowrap; }
 #hapSidebar .tiles div div a { display: inline-block; white-space: normal; background-position: center top; background-repeat: no-repeat; padding-top: 32px; height: 2px; width: 32px; font-size: 0; vertical-align: text-top; }
 #hapSidebar .tiles div div a:hover { position: relative; margin: -6px; width: 44px; background-position: center 6px; padding-top: 38px; margin-bottom: -44px; max-height: 44px; overflow: hidden; text-align: center; overflow: hidden; text-overflow: ellipsis; height: auto; font-size: .8em; color: #fff; text-decoration: none; }
-#sidebarOpener { position: fixed; display: block; background: #f3f3f3; top: 50px; left: 3px; height: 32px; line-height: 32px; font-family: MSHPIconsRegular; text-decoration: none; font-size: 2em; text-align: center; line-height: 32px; margin-right: 20px; -ms-transition: left 0.5s ease; -moz-transition: left 0.5s ease; -o-transition: left 0.5s ease; -webkit-transition: left 0.5s ease; transition: left 0.5s ease; vertical-align: text-bottom; }
+#sidebarOpener { position: fixed; z-index: 1999; display: block; background: #f3f3f3; top: 50px; left: 3px; height: 32px; line-height: 32px; font-family: MSHPIconsRegular; text-decoration: none; font-size: 2em; text-align: center; line-height: 32px; margin-right: 20px; -ms-transition: left 0.5s ease; -moz-transition: left 0.5s ease; -o-transition: left 0.5s ease; -webkit-transition: left 0.5s ease; transition: left 0.5s ease; vertical-align: text-bottom; }
 #page #sidebarOpener { top: 80px; }
 #sidebarOpener span { font-size: .8em; line-height: normal; width: 0; overflow: hidden; white-space: nowrap; font-family: ☺Segoe, 'Segoe UI', Segoe, Arial, sans-serif; display: inline-block; -ms-transition: width 0.5s ease; -moz-transition: width 0.5s ease; -o-transition: width 0.5s ease; -webkit-transition: width 0.5s ease; transition: width 0.5s ease; vertical-align: text-bottom; }
 #sidebarOpener:hover { left: 6px; }
@@ -96,7 +96,7 @@ input[type=button]:focus, input[type=submit]:focus, button:focus { outline: #edc
 #HomeButtonsHeader h1 a:hover { color: #222; }
 #HomeButtonsHeader h1.active a { color: #0060a6; }
 #HomeButtonsHeader { clear: both; overflow: hidden; padding-left: 20px; }
-#leftscroll, #rightscoll { position: absolute; top: 0; bottom: 0; font-size: 30px; width: 20px; background: #f3f3f3; }
+#leftscroll, #rightscoll { position: absolute; top: 0; bottom: 0; font-size: 20px; width: 20px; font-family: #0060a6; background: #f3f3f3; font-family: MSHPIconsRegular; text-decoration: none; }
 #rightscoll { right: 0; }
 #leftscroll { left: 0; }
 
