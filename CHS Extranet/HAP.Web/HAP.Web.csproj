@@ -671,6 +671,7 @@
     <Content Include="style\helpdesk.css" />
     <Content Include="style\jquery-ui.css" />
     <Content Include="style\jquery.wysiwyg.css" />
+    <Content Include="style\mobile-base.css" />
     <Content Include="style\MyFiles.css" />
     <Content Include="style\setup.css" />
     <Content Include="style\timetable.css" />

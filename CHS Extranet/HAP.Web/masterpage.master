@@ -5,8 +5,8 @@
 <html>
     <head runat="server">
         <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-        <meta name="viewport" content="width=992px" />
         <title>Home Access Plus</title>
+        <asp:ContentPlaceHolder runat="server" ID="viewport"><meta name="viewport" content="width=992px" /></asp:ContentPlaceHolder>
         <link rel="shortcut icon" href="~/favicon.ico" />
         <script src="<%: ResolveClientUrl("~/scripts/jquery-1.7.2.min.js") %>"></script>
         <script src="<%: ResolveClientUrl("~/scripts/jquery-ui-1.8.16.custom.min.js") %>"></script>
@@ -16,6 +16,8 @@
         <%} %>
         <link href="~/style/jquery-ui.css" rel="stylesheet" type="text/css" />
         <link href="~/style/basestyle.css" rel="stylesheet" type="text/css" />
+        <link href="~/style/mobile-base.css" rel="stylesheet" type="text/css" media="handheld" />
+        <link href="~/style/mobile-base.css" rel="stylesheet" type="text/css" media="screen and (max-device-width: 480px)" />
         <link rel="icon" type="image/vnd.microsoft.icon" href="~/favicon.ico" />
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
         <hap:HAPTag runat="server" />

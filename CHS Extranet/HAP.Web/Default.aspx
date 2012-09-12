@@ -5,6 +5,7 @@
     <link rel="stylesheet" type="text/css" href="style/jquery.wysiwyg.css" />
     <script type="text/javascript" src="Scripts/jquery.mousewheel.js"></script>
 </asp:Content>
+<asp:Content runat="server" ContentPlaceHolderID="viewport"><meta name="viewport" content="width=device-width" /></asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
     <div id="hapHomeContainer">
         <div id="hapHomeSide" class="tile-color"></div>
@@ -45,7 +46,7 @@
                 <a id="leftscroll" href="#left"></a>
             </div>
             <script type="text/javascript">
-                var scrollpos = 0;
+                var scrollpos = sliding = startClientX = startPixelOffset = pixelOffset = 0;
                 hap.load = hap.loadtypes.help;
                 $(document).ready(function () {
                     $("#HomeButtons").mousewheel(function(event, delta) {
@@ -66,6 +67,27 @@
                             }
                         }
                         return false;
+                    }).on('touchstart', function(event) { if (event.originalEvent.touches) event = event.originalEvent.touches[0]; if (sliding == 0) { sliding = 1; startClientX = event.clientX; } 
+                    }).on('touchend', function (event) {
+                        if (sliding == 2) {
+                            sliding = 0;
+                            scrollpos = pixelOffset < startPixelOffset ? scrollpos + 1 : scrollpos - 1;
+                            scrollpos = Math.min(Math.max(scrollpos, 0), $("#HomeButtons > div").length - 1);
+                            $("#HomeButtonsOutter").animate({ scrollLeft: (scrollpos * ($("#HomeButtonsOutter").width() - 20) + (scrollpos * 20)) });
+                            $("#HomeButtonsHeader h1").removeClass("active");
+                            $("#HomeButtonsHeader h1")[scrollpos].className = "active";
+                        }
+                    }).on('touchmove', function(event) {
+                        event.preventDefault();
+                        if (event.originalEvent.touches)
+                            event = event.originalEvent.touches[0];
+                        var deltaSlide = event.clientX - startClientX;
+                        if (sliding == 2) {
+                            var touchPixelRatio = 1;
+                            if ((scrollpos == 0 && event.clientX > startClientX) || (scrollpos == $("#HomeButtons > div").length - 1 && event.clientX < startClientX))
+                                touchPixelRatio = 3;
+                            pixelOffset = startPixelOffset + deltaSlide / touchPixelRatio;
+                        }
                     });
                     $("#HomeButtons").css("width", (($("#HomeButtons > div").length * $("#HomeButtonsOutter").width()) + 200) + "px");
                     if ($("#HomeButtons > div").length == 1) $("#rightscoll, #leftscroll").hide();

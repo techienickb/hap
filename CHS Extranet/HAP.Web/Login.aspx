@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="{0} - Home Access Plus+ - Login" Language="C#" MasterPageFile="~/Masterpage.master" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="HAP.Web.Login" %>
+<asp:Content runat="server" ContentPlaceHolderID="viewport"><meta name="viewport" content="width=device-width" /></asp:Content>
 <asp:Content ContentPlaceHolderID="body" runat="server">
     <div id="logincontainer">
         <div id="loginformside" class="tile-color"></div>
