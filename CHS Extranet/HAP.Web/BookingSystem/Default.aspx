@@ -289,7 +289,7 @@
 		    try {
 		        if (curres.MultiRoom) {
 		            $("#bfmultilesson").show();
-		            $("#bfmultilesson option").remove();
+		            $("#bfmultiroom option").remove();
 		            var l1 = false;
 		            var l2 = "";
 		            var l3 = 0;
@@ -298,7 +298,7 @@
 		                if (!l1) l1 = (curres.Data[i].Lesson == lesson);
 		                if (l1) {
 		                    l3++;
-		                    $("#bfmultilesson").append('<option value="' + l2 + curres.Data[i].Lesson + '">' + l3 + ' Lesson' + (l3 == 1 ? '' : 's') + '</option>');
+		                    $("#bfmultiroom").append('<option value="' + l2 + curres.Data[i].Lesson + '">' + l3 + ' Lesson' + (l3 == 1 ? '' : 's') + '</option>');
 		                    l2 += curres.Data[i].Lesson + ',';
 		                }
 		            }
@@ -338,7 +338,7 @@
 							if (n1 != "") n1 += " ";
 							n1 += $("#bfsubject").val();
 							if (abort) return;
-							var d = '{ "booking": { "Room": "' + curres.Name + '", "Lesson": "' + (canmulti ? $("#bfmultilesson").val() : curles) + '", "Username": "' + (user.isBSAdmin ? $("#<%=userlist.ClientID %> option:selected").val() : user.username) + '", "Name": "' + n1 + '"';
+							var d = '{ "booking": { "Room": "' + curres.Name + '", "Lesson": "' + (canmulti ? $("#bfmultiroom").val() : curles) + '", "Username": "' + (user.isBSAdmin ? $("#<%=userlist.ClientID %> option:selected").val() : user.username) + '", "Name": "' + n1 + '"';
 							if (curres.Type == "Laptops") {
 								d += ', "LTCount": ' + $("#bflquant input:checked").attr("value") + ', "LTRoom": "' + $("#bflroom").val() + '", "LTHeadPhones": ' + (($('#bflheadphones:checked').val() !== undefined) ? 'true' : 'false');
 							}
