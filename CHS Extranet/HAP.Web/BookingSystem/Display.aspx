@@ -1,13 +1,11 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true"  CodeBehind="Display.aspx.cs" Inherits="HAP.Web.BookingSystem.Display" %>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" style="padding: 0; margin: 0; height: 100%;">
+<!DOCTYPE html>
+<html style="padding: 0; margin: 0; height: 100%;">
 <head runat="server">
     <title>Display Board System</title>
-    <link href="../style/basestyle.css" rel="stylesheet" type="text/css" />
-    <script src="<%=ResolveClientUrl("~/Scripts/jquery-1.7.1.min.js")%>" type="text/javascript"></script>
-    <link href="../style/bookingsystem.css" rel="stylesheet" type="text/css" />
+    <link href="<%: ResolveClientUrl("~/style/basestyle.css") %>" rel="stylesheet" type="text/css" />
+    <script src="<%: ResolveClientUrl("~/scripts/jquery-1.7.2.min.js") %>"></script>
+    <link href="<%: ResolveClientUrl("~/style/bookingsystem.css") %>" rel="stylesheet" type="text/css" />
 </head>
 <body class="bookingdisplay">
     <form id="form1" runat="server">
