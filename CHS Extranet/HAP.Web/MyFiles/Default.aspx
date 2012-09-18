@@ -140,7 +140,7 @@
 				type: 'POST',
 				url: hap.common.resolveUrl('~/api/MyFiles/Zip') + '?' + window.JSON.stringify(new Date()),
 				dataType: 'json',
-				data: '{ "Zip": "' + zipfile + '", "Paths": [' + a + '] }',
+				data: '{ "Zip": "' + zipfile.replace(/\\/g, "/") + '", "Paths": [' + a.replace(/\\/g, "/") + '] }',
 				contentType: 'application/json',
 				success: function (data) {
 					temp++;
@@ -154,7 +154,7 @@
 		}
 		function UnZip(overwrite) {
 			if (overwrite == null) overwrite = false;
-			var a = SelectedItems()[0].Data.Path.replace(/\.\.\/download\//gi, "").replace(/\//gi, "\\\\");
+			var a = SelectedItems()[0].Data.Path.replace(/\.\.\/download\//gi, "").replace(/\\/gi, "/");
 			a = (a.match(/\.zip\\/gi) ? (a.split(/\.zip\\/gi)[0] + ".zip") : a);
 			a = '"' + a + '"';
 			$.ajax({
