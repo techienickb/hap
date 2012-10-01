@@ -24,6 +24,7 @@ namespace HAP.Web.Configuration
         public bool TwoWeekTimetable { get { return bool.Parse(doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["twoweektimetable"].Value); } set { doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["twoweektimetable"].Value = value.ToString(); } }
         public string Admins { get { return doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["admins"].Value; } set { doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["admins"].Value = value; } }
         public bool MultiLesson { get { return bool.Parse(doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["enablemultilesson"].Value); } set { doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["enablemultilesson"].Value = value.ToString(); } }
+        public int MaxMultiLesson { get { return int.Parse(doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["maxmultilesson"].Value); } set { doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["maxmultilesson"].Value = value.ToString(); } }
 
 
         public void Initialize()
@@ -42,6 +43,7 @@ namespace HAP.Web.Configuration
             e.SetAttribute("keepxmlclean", "true");
             e.SetAttribute("twoweektimetable", "true");
             e.SetAttribute("enablemultilesson", "false");
+            e.SetAttribute("maxmultilesson", "0");
             doc.SelectSingleNode("/hapConfig").AppendChild(e);
         }
     }

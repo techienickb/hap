@@ -25,6 +25,7 @@ namespace HAP.Web.Configuration
             ReadOnlyTo = node.Attributes["readonlyto"].Value;
             ReadWriteTo = node.Attributes["readwriteto"].Value;
             MultiLessonTo = node.Attributes["multilessonto"] == null ? "" : node.Attributes["multilessonto"].Value;
+            MaxMultiLesson = node.Attributes["maxmultilesson"] == null ? 0 : int.Parse(node.Attributes["maxmultilesson"].Value);
         }
 
         public string Name { get; set; }
@@ -40,6 +41,7 @@ namespace HAP.Web.Configuration
         public string ReadOnlyTo { get; set; }
         public string ReadWriteTo { get; set; }
         public string MultiLessonTo { get; set; }
+        public int MaxMultiLesson { get; set; }
     }
 
     public enum ResourceType { Room, Laptops, Equipment, Other }

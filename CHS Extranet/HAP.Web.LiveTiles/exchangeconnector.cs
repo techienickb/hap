@@ -8,6 +8,8 @@ using System.Text;
 using System.Web;
 using HAP.AD;
 using Microsoft.Exchange.WebServices.Data;
+using System.Security.Principal;
+using System.Web.Security;
 
 namespace HAP.Web.LiveTiles
 {
@@ -21,13 +23,22 @@ namespace HAP.Web.LiveTiles
                 // Replace this line with code to validate server certificate.
                 return true;
             };
-
-            HttpCookie token = HttpContext.Current.Request.Cookies["token"];
-            if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
  
             ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
             service.Url = new Uri("https://" + HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange + "/ews/exchange.asmx");
-            service.Credentials = new NetworkCredential(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value), HAP.Web.Configuration.hapConfig.Current.AD.UPN);
+            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Configuration.AuthMode.Forms)
+            {
+                HttpCookie token = HttpContext.Current.Request.Cookies["token"];
+                if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
+                service.Credentials = new NetworkCredential(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value), HAP.Web.Configuration.hapConfig.Current.AD.UPN);
+            }
+            else
+            {
+                HAP.AD.User u = ((HAP.AD.User)Membership.GetUser());
+                u.Impersonate();
+                service.Credentials = (NetworkCredential)CredentialCache.DefaultCredentials;
+            }
+            
             Folder inbox = Folder.Bind(service, WellKnownFolderName.Inbox);
             SearchFilter sf = new SearchFilter.SearchFilterCollection(LogicalOperator.And, new SearchFilter.IsEqualTo(EmailMessageSchema.IsRead, false));
             ItemView view = new ItemView(10);
@@ -44,12 +55,20 @@ namespace HAP.Web.LiveTiles
                 return true;
             };
 
-            HttpCookie token = HttpContext.Current.Request.Cookies["token"];
-            if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
-
             ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
             service.Url = new Uri("https://" + HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange + "/ews/exchange.asmx");
-            service.Credentials = new NetworkCredential(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value), HAP.Web.Configuration.hapConfig.Current.AD.UPN);
+            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Configuration.AuthMode.Forms)
+            {
+                HttpCookie token = HttpContext.Current.Request.Cookies["token"];
+                if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
+                service.Credentials = new NetworkCredential(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value), HAP.Web.Configuration.hapConfig.Current.AD.UPN);
+            }
+            else
+            {
+                HAP.AD.User u = ((HAP.AD.User)Membership.GetUser());
+                u.Impersonate();
+                service.Credentials = (NetworkCredential)CredentialCache.DefaultCredentials;
+            }
             List<string> s = new List<string>();
             foreach (Appointment a in service.FindAppointments(WellKnownFolderName.Calendar, new CalendarView(DateTime.Now, DateTime.Now.AddDays(1))))
                 s.Add(a.Subject + "<br />" + (a.Start.Date > DateTime.Now.Date ? "Tomorrow: " : "") + a.Start.ToShortTimeString() + " - " + a.End.ToShortTimeString());
