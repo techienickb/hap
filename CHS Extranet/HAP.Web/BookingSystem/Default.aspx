@@ -140,7 +140,7 @@
 		var resources = <%=JSResources %>;
 		var availbookings = [ 0, 0 ];
 		var canmulti = false;
-		function resource(name, type, years, quantities, readonly, multiroom){
+		function resource(name, type, years, quantities, readonly, multiroom, maxlessons){
 			this.Name = name;
 			this.Type = type;
 			this.Years = years;
@@ -148,6 +148,7 @@
 			this.Data;
 			this.ReadOnly = readonly;
 			this.MultiRoom = multiroom;
+			this.MaxLessons = maxlessons;
 			this.Render = function() {
 				var h = "";
 				for (var x = 0; x < this.Data.length; x++) {
@@ -298,6 +299,9 @@
 		                if (!l1) l1 = (curres.Data[i].Lesson == lesson);
 		                if (l1) {
 		                    l3++;
+		                    if ( l3 > curres.MaxLessons ) {
+		                        break;
+		                    }
 		                    $("#bfmultiroom").append('<option value="' + l2 + curres.Data[i].Lesson + '">' + l3 + ' Lesson' + (l3 == 1 ? '' : 's') + '</option>');
 		                    l2 += curres.Data[i].Lesson + ',';
 		                }
