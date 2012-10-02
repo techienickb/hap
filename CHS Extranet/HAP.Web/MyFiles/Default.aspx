@@ -183,7 +183,7 @@
 							setTimeout(function() { $("#progressstatus").dialog("close"); }, 500);
 						}
 					}
-				    else if (jQuery.parseJSON(xhr.responseText).Message == "File Exits in Destination")
+				    else if (jQuery.parseJSON(xhr.responseText).Message == "File Exists in Destination")
 					{
 						if (confirm(hap.common.getLocal("myfiles/fileexists1") + " " + SelectedItems()[0].Data.Name + " " + hap.common.getLocal("myfiles/fileexists2")))
 							Unzip(true);
@@ -215,12 +215,11 @@
 		function Copy(index, target, overwrite) {
 			temp = { "index": index, "target": target };
 			if (overwrite == null) overwrite = false;
-			var a = '"' + SelectedItems()[index].Data.Path + '"';
 			$.ajax({
 				type: 'POST',
 				url: hap.common.resolveUrl('~/api/MyFiles/Copy') + '?' + window.JSON.stringify(new Date()),
 				dataType: 'json',
-				data: '{ "OldPath" : "' + SelectedItems()[index].Data.Path.replace(/\.\.\/download\//gi, "").replace(/\\/gi, "/") + '", "NewPath": "' + (target.replace(/\//gi, '\\') + '\\' + SelectedItems()[index].Data.Path.substr(SelectedItems()[index].Data.Path.lastIndexOf('\\'))).replace(/\\\\\\/gi, "\\").replace(/\\\\/gi, "\\").replace(/\\/gi, '/') + '", "Overwrite": "' + overwrite + '" }',
+				data: '{ "OldPath" : "' + SelectedItems()[index].Data.Path.replace(/\.\.\/download\//gi, "").replace(/\\/gi, "/") + '", "NewPath": "' + (target.replace(/\\/gi, "/") + '/' + SelectedItems()[index].Data.Path.replace(/\\/gi, "/").substr(SelectedItems()[index].Data.Path.replace(/\\/gi, "/").lastIndexOf('/')).replace(/\//gi, "")) + '", "Overwrite": "' + overwrite + '" }',
 				contentType: 'application/json',
 				success: function (data) {
 					temp.index++;
@@ -242,7 +241,7 @@
 							else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
 						}
 					}
-					else if (jQuery.parseJSON(xhr.responseText).Message == "File Exits in Destination")
+					else if (jQuery.parseJSON(xhr.responseText).Message == "File Exists in Destination")
 					{
 						if (confirm(hap.common.getLocal("myfiles/upload/fileexists1") + " " + SelectedItems()[temp.index].Data.Name + " " + hap.common.getLocal("myfiles/upload/fileexists2")))
 							Copy(temp.index, temp.target, true);
@@ -272,7 +271,7 @@
 				type: 'POST',
 				url: hap.common.resolveUrl('~/api/MyFiles/Copy') + '?' + window.JSON.stringify(new Date()),
 				dataType: 'json',
-				data: '{ "OldPath" : "' + clipboard.items[index].Data.Path.replace(/\.\.\/download\//gi, "").replace(/\\/gi, "/") + '", "NewPath": "' + (target.replace(/\//gi, '\\') + '\\' + clipboard.items[index].Data.Path.substr(clipboard.items[index].Data.Path.lastIndexOf('\\'))).replace(/\\\\\\/gi, "\\").replace(/\\\\/gi, "\\").replace(/\\/gi, '/') + '", "Overwrite": "' + overwrite + '" }',
+				data: '{ "OldPath" : "' + clipboard.items[index].Data.Path.replace(/\.\.\/download\//gi, "").replace(/\\/gi, "/") + '", "NewPath": "' + (target.replace(/\\/gi, '/') + '/' + clipboard.items[index].Data.Path.replace(/\\/gi, "/").substr(clipboard.items[index].Data.Path.replace(/\\/gi, "/").lastIndexOf('/')).replace(/\//gi, '')) + '", "Overwrite": "' + overwrite + '" }',
 				contentType: 'application/json',
 				success: function (data) {
 					temp.index++;
@@ -294,7 +293,7 @@
 				            else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
 				        }
 				    }
-				    else if (jQuery.parseJSON(xhr.responseText).Message == "File Exits in Destination")
+				    else if (jQuery.parseJSON(xhr.responseText).Message == "File Exists in Destination")
 				    {
 				        if (confirm(hap.common.getLocal("myfiles/upload/fileexists1") + " " + clipboard.items[temp.index].Data.Name + " " + hap.common.getLocal("myfiles/upload/fileexists2")))
 				            CopyClipboard(temp.index, temp.target, true);
@@ -323,8 +322,8 @@
 			$.ajax({
 				type: 'POST',
 				url: hap.common.resolveUrl('~/api/MyFiles/Move') + '?' + window.JSON.stringify(new Date()),
-				dataType: 'json',
-				data: '{ "OldPath" : "' + SelectedItems()[index].Data.Path.replace(/\.\.\/download\//gi, "").replace(/\\/gi, "/") + '", "NewPath": "' + (target.replace(/\//gi, '\\') + '\\' + SelectedItems()[index].Data.Path.substr(SelectedItems()[index].Data.Path.lastIndexOf('\\'))).replace(/\\\\\\/gi, "\\").replace(/\\\\/gi, "\\").replace(/\\/gi, '/') + '", "Overwrite": "' + overwrite + '" }',
+				dataType: 'json', 
+				data: '{ "OldPath" : "' + SelectedItems()[index].Data.Path.replace(/\.\.\/download\//gi, "").replace(/\\/gi, "/") + '", "NewPath": "' + (target.replace(/\\/gi, '/') + '/' + SelectedItems()[index].Data.Path.replace(/\\/gi, "/").substr(SelectedItems()[index].Data.Path.replace(/\\/gi, "/").lastIndexOf('/')).replace(/\//gi, '')) + '", "Overwrite": "' + overwrite + '" }',
 				contentType: 'application/json',
 				success: function (data) {
 					temp.index++;
@@ -346,7 +345,7 @@
 				                else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
 				            }
 				        }
-				    else if (jQuery.parseJSON(xhr.responseText).Message == "File Exits in Destination")
+				    else if (jQuery.parseJSON(xhr.responseText).Message == "File Exists in Destination")
 				        {
 				            if (confirm(hap.common.getLocal("myfiles/fileexists1") + " " + SelectedItems()[temp.index].Data.Name + " " + hap.common.getLocal("myfiles/fileexists2")))
 				                Move(temp.index, temp.target, true);
@@ -376,7 +375,7 @@
 				type: 'POST',
 				url: hap.common.resolveUrl('~/api/MyFiles/Move') + '?' + window.JSON.stringify(new Date()),
 				dataType: 'json',
-				data: '{ "OldPath" : "' + clipboard.items[index].Data.Path.replace(/\.\.\/download\//gi, "").replace(/\\/gi, "/") + '", "NewPath": "' + (target.replace(/\//gi, '\\') + '\\' + clipboard.items[index].Data.Path.substr(clipboard.items[index].Data.Path.lastIndexOf('\\'))).replace(/\\\\\\/gi, "\\").replace(/\\\\/gi, "\\").replace(/\\/gi, '/') + '", "Overwrite": "' + overwrite + '" }',
+				data: '{ "OldPath" : "' + clipboard.items[index].Data.Path.replace(/\.\.\/download\//gi, "").replace(/\\/gi, "/") + '", "NewPath": "' + (target.replace(/\//gi, '/') + '/' + clipboard.items[index].Data.Path.replace(/\\/gi, "/").substr(clipboard.items[index].Data.Path.replace(/\\/gi, "/").lastIndexOf('/')).replace(/\//gi, '')) + '", "Overwrite": "' + overwrite + '" }',
 				contentType: 'application/json',
 				success: function (data) {
 					temp.index++;
@@ -398,7 +397,7 @@
 							else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
 						}
 					}
-				    else if (jQuery.parseJSON(xhr.responseText).Message == "File Exits in Destination")
+				    else if (jQuery.parseJSON(xhr.responseText).Message == "File Exists in Destination")
 					{
 						if (confirm(hap.common.getLocal("myfiles/fileexists1") + " " + clipboard.items[temp.index].Data.Name + " " + hap.common.getLocal("myfiles/fileexists2")))
 							MoveClipboard(temp.index, temp.target, true);
