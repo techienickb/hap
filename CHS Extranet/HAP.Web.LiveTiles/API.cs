@@ -38,6 +38,13 @@ namespace HAP.Web.LiveTiles
         }
 
         [OperationContract]
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "Exchange/Calendar")]
+        public string[] ExchangeCalendar(string Mailbox)
+        {
+            return HAP.Web.LiveTiles.ExchangeConnector.Appointments(Mailbox);
+        }
+
+        [OperationContract]
         [WebGet(UriTemplate = "Me")]
         public HAP.Web.LiveTiles.Me Me()
         {

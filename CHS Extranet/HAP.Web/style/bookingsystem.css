@@ -37,6 +37,7 @@ body.bookingdisplay, body.bookingdisplay form { padding: 0; margin: 0; width: 10
 #bookingday .body a:hover span.book i { background: transparent url(../images/ui-icons_454545_256x240.png) no-repeat -66px -112px; }
 #bookingday .body a.admin:hover, #bookingday .body a.bookie:hover, #bookingday .body a.free:hover { background-color: #dedede; }
 #bookingday .body a.admin:active, #bookingday .body a.bookie:hover, #bookingday .body a.free:hover { background-color: #ccc; }
+#bookingday #resources a { background-color: transparent; display: inline; margin: 0; float: none; position: static; font-size: 14px; width: auto; padding: 0; height: auto; line-height: normal; color: #fff; cursor: pointer;  }
 #datepicker .ui-corner-all { border-radius: 0; }
 #searchresults .date { width: 100px; display:inline-block; }
 #searchresults span { min-width: 60px; display: inline-block; }

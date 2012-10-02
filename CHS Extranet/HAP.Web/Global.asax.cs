@@ -17,6 +17,8 @@ namespace HAP.Web
         {
             API.APIRoutes.Register(RouteTable.Routes);
             RouteTable.Routes.Add(new Route("download/{drive}/{*path}", new DownloadRoutingHandler()));
+            RouteTable.Routes.Add(new Route("bookingsystem/r-{resource}", new PageRouteHandler("~/bookingsystem/default.aspx", true)));
+            RouteTable.Routes.Add(new Route("bookingsystem/t-{type}", new PageRouteHandler("~/bookingsystem/default.aspx", true)));
             RouteTable.Routes.Add(new Route("bookingsystem/{room}/display", new BookingSystemDislayRoutingHandler()));
             RouteTable.Routes.Add(new Route("tracker/web/{year}/{month}/", new PageRouteHandler("~/tracker/weblog.aspx", true)));
             RouteTable.Routes.Add(new Route("tracker/web/{year}/{month}/d/{day}", new PageRouteHandler("~/tracker/weblog.aspx", true)));

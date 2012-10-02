@@ -108,7 +108,7 @@
 			
 			    <div class="body"<%=BodyCode[0] %> style="width: <%=(156 * (config.BookingSystem.Lessons.Count + 1)) + 2 %>px">
 				    <div id="resources" class="col tile-color">
-					    <asp:Repeater runat="server" ID="resources1"><ItemTemplate><div><%#Eval("Name") %></div></ItemTemplate></asp:Repeater>
+					    <asp:Repeater runat="server" ID="resources1"><ItemTemplate><div><a href="<%#ResolveClientUrl("~/bookingsystem/r-" + Eval("Name").ToString()) %>"><%#Eval("Name") %></a></div></ItemTemplate></asp:Repeater>
 				    </div>
 				    <asp:Repeater runat="server" ID="resources2">
 					    <ItemTemplate>

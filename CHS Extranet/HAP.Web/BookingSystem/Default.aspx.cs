@@ -20,8 +20,28 @@ namespace HAP.Web.BookingSystem
         protected void Page_Load(object sender, EventArgs e)
         {
             List<Resource> rez = new List<Resource>();
-            foreach (Resource r in config.BookingSystem.Resources.Values)
-                if (isVisible(r.ShowTo, r.HideFrom)) rez.Add(r);
+            if (RouteData.Values.Count == 0)
+                foreach (Resource r in config.BookingSystem.Resources.Values)
+                {
+                    if (isVisible(r.ShowTo, r.HideFrom)) rez.Add(r);
+                }
+            else if (RouteData.Values.ContainsKey("resource"))
+            {
+                foreach (string s in RouteData.GetRequiredString("resource").Split(new char[] { ',' }))
+                    foreach (Resource r in config.BookingSystem.Resources.Values)
+                    {
+                        if (isVisible(r.ShowTo, r.HideFrom) && r.Name.ToLower() == s.Trim().ToLower()) rez.Add(r);
+                    }
+            }
+            else if (RouteData.Values.ContainsKey("type"))
+            {
+                foreach (string s in RouteData.GetRequiredString("type").Split(new char[] { ',' }))
+                    foreach (Resource r in config.BookingSystem.Resources.Values)
+                    {
+                        if (isVisible(r.ShowTo, r.HideFrom) && r.Type == (ResourceType)Enum.Parse(typeof(ResourceType), s.Trim())) rez.Add(r);
+                    }
+            }
+            if (rez.Count == 0 && !isBSAdmin) Response.Redirect("~/unauthorised.aspx");
             resources1.DataSource = resources2.DataSource = rez.ToArray();
             resources1.DataBind(); resources2.DataBind();
             lessons.DataSource = config.BookingSystem.Lessons;

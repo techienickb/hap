@@ -80,7 +80,7 @@ namespace HAP.HelpDesk
             doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
             XmlNode ticket = doc.SelectSingleNode("/Tickets/Ticket[@id='" + Id + "']");
             ticket.Attributes["status"].Value = "New";
-            ticket.Attributes["subject"].Value = Subject;
+            if (!string.IsNullOrEmpty(Subject)) ticket.Attributes["subject"].Value = Subject;
             XmlElement node = doc.CreateElement("Note");
             node.SetAttribute("datetime", DateTime.Now.ToString("u"));
             node.SetAttribute("username", HttpContext.Current.User.Identity.Name);
@@ -89,6 +89,7 @@ namespace HAP.HelpDesk
             ticket.AppendChild(node);
 
             ticket.Attributes["status"].Value = State;
+
             ticket.Attributes["priority"].Value = Priority;
             if (ticket.Attributes["showto"] == null) ticket.Attributes.Append(doc.CreateAttribute("showto"));
             ticket.Attributes["showto"].Value = ShowTo;
