@@ -6,7 +6,7 @@ if (hap == null) {
         common: {
             jsonError: function (xhr, ajaxOptions, thrownError) {
                 try {
-                    if (xhr.responseText.match(/\<!doctype html\>/gi)) window.location.reload();
+                    if (xhr.responseText.match(/\<!doctype html/gi)) window.location.reload();
                     else {
                         if (document.getElementById("errorlist") == null) $("#hapContent").append('<div id="errorlist"></div>');
                         $("<div class=\"ui-state-error ui-corner-all\" style=\"padding: 3px 10px 3px 10px\"><span class=\"ui-icon ui-icon-alert\" style=\"float: left; margin-right: 5px; margin-top: 2px;\"></span><a href=\"#\" onclick=\"this.nextSibling.className = (this.nextSibling.className == 'cont') ? '' : 'cont'; return false;\">" + jQuery.parseJSON(xhr.responseText).Message + "</a><div class=\"cont\">This error has been logged on the server's event log</div></div>").appendTo("#errorlist");
