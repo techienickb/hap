@@ -74,5 +74,24 @@ namespace HAP.Web.LiveTiles
                 s.Add(a.Subject + "<br />" + (a.Start.Date > DateTime.Now.Date ? "Tomorrow: " : "") + a.Start.ToShortTimeString() + " - " + a.End.ToShortTimeString());
             return s.ToArray();
         }
+
+        public static string[] Appointments(string mailbox)
+        {
+            ServicePointManager.ServerCertificateValidationCallback =
+            delegate(Object obj, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
+            {
+                // Replace this line with code to validate server certificate.
+                return true;
+            };
+
+            ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
+            service.Url = new Uri("https://" + HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange + "/ews/exchange.asmx");
+            service.Credentials = new NetworkCredential(HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password, HAP.Web.Configuration.hapConfig.Current.AD.UPN);
+            FolderId fid = new FolderId(WellKnownFolderName.Calendar, new Mailbox(mailbox));
+            List<string> s = new List<string>();
+            foreach (Appointment a in service.FindAppointments(fid, new CalendarView(DateTime.Now, DateTime.Now.AddDays(1))))
+                s.Add(a.Subject + "<br />" + (a.Start.Date > DateTime.Now.Date ? "Tomorrow: " : "") + a.Start.ToShortTimeString() + " - " + a.End.ToShortTimeString());
+            return s.ToArray();
+        }
     }
 }

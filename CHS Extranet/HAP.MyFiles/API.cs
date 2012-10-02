@@ -178,7 +178,8 @@ namespace HAP.MyFiles
                 }
                 else
                 {
-                    if (System.IO.File.Exists(p2) && !Overwrite) throw new DuplicateNameException("File Exits in Destination");
+                    if (System.IO.File.Exists(p2) && !Overwrite) throw new DuplicateNameException("File Exists in Destination");
+                    else if (System.IO.File.Exists(p2) && Overwrite) { System.IO.File.Delete(p2); System.IO.File.Copy(p, p2); }
                     else System.IO.File.Copy(p, p2);
                 }
             }
@@ -232,7 +233,8 @@ namespace HAP.MyFiles
                 }
                 else
                 {
-                    if (System.IO.File.Exists(p2) && !Overwrite) throw new DuplicateNameException("File Exits in Destination");
+                    if (System.IO.File.Exists(p2) && !Overwrite) throw new DuplicateNameException("File Exists in Destination");
+                    else if (System.IO.File.Exists(p2) && Overwrite) { System.IO.File.Delete(p2); System.IO.File.Move(p, p2); }
                     else System.IO.File.Move(p, p2);
                 }
             }
