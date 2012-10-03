@@ -3,6 +3,7 @@ if (hap == null) {
     var hap = {
         root: "/hap/",
         user: "",
+        admin: false,
         common: {
             jsonError: function (xhr, ajaxOptions, thrownError) {
                 try {
@@ -59,10 +60,10 @@ if (hap == null) {
             Init: function () {
                 if (window.location.pathname.toLowerCase() != hap.root.toLowerCase() && window.location.pathname.toLowerCase() != hap.common.resolveUrl('~/login.aspx').toLowerCase())
                     $.ajax({
-                        url: hap.common.resolveUrl('~/api/livetiles/'), type: 'GET', dataType: "json", contentType: 'application/JSON', success: function (data) {
+                        url: hap.common.resolveUrl('~/api/livetiles/') + '?' + window.JSON.stringify(new Date()), type: 'GET', dataType: "json", contentType: 'application/JSON', success: function (data) {
                             $("#hapContent").append('<a href="#" id="sidebarOpener" class="tile-color-font"><span>' + hap.common.getLocal('openmenu') + '</span></a><div id="hapSidebar" class="tile-color"><a href="' + hap.common.resolveUrl("~/") + '">' + hap.common.getLocal('homeaccessplus') + ' ' + hap.common.getLocal('home') + '</a><div class="tiles"></div></div>');
-                            $("#hapSidebar").mouseleave(function () { $("#hapSidebar").animate({ width: 0 }, 1000); hap.sidebar.Open = false; });
-                            $("#sidebarOpener").click(function () { $('html, body').animate({ scrollTop: 0 }); hap.sidebar.Open = true; $("#hapSidebar").animate({ width: 200 }, 1000); return false; });
+                            $("#hapSidebar").mouseleave(function () { $("#hapSidebar").animate({ width: 0 }, 1000); hap.sidebar.Open = false; }).css("overflow", "hidden");
+                            $("#sidebarOpener").click(function () { $('html, body').animate({ scrollTop: 0 }); hap.sidebar.Open = true; $("#hapSidebar").animate({ width: 200 }, 1000); return false; }).css("overflow", "auto");
                             for (var i = 0; i < data.length; i++) {
                                 if (data[i].Group == 'Me') continue;
                                 var s = "<div>" + data[i].Group + "<div>";
@@ -130,7 +131,7 @@ if (hap == null) {
                         return false;
                     });
                     $.ajax({
-                        url: "api/livetiles/me", type: 'GET', context: this.id, dataType: "json", contentType: 'application/JSON', success: function (data) {
+                        url: "api/livetiles/me" + '?' + window.JSON.stringify(new Date()), type: 'GET', context: this.id, dataType: "json", contentType: 'application/JSON', success: function (data) {
                             $("#" + this + " span label").html("<b>" + data.Name + "</b><br />" + data.Email);
                             if (data.Photo != "" && data.Photo != null) $("#" + this + " span i").css("background-image", "url(" + hap.common.resolveUrl(data.Photo) + ")");
                             setInterval("$('#" + this + " span i').animate({ height: 'toggle' });", 8000);
@@ -162,7 +163,7 @@ if (hap == null) {
             UpdateExchangeCalendar: function (tileid, mailbox) {
                 $("#" + tileid + " span label").html($.datepicker.formatDate('D <b>d</b>', new Date()));
                 $.ajax({
-                    url: "api/livetiles/exchange/calendar", type: 'POST', dataType: 'json', data: '{ "Mailbox" : "' + mailbox + '" }', context: { tile: tileid, mb: mailbox }, contentType: 'application/JSON', success: function (data) {
+                    url: "api/livetiles/exchange/calendar" + '?' + window.JSON.stringify(new Date()), type: 'POST', dataType: 'json', data: '{ "Mailbox" : "' + mailbox + '" }', context: { tile: tileid, mb: mailbox }, contentType: 'application/JSON', success: function (data) {
                         var s = "";
                         for (var i = 0; i < data.length; i++)
                             s += data[i] + "<br />";
@@ -175,7 +176,7 @@ if (hap == null) {
             UpdateExchangeAppointments: function (tileid) {
                 $("#" + tileid + " span label").html($.datepicker.formatDate('D <b>d</b>', new Date()));
                 $.ajax({
-                    url: "api/livetiles/exchange/appointments", type: 'GET', context: tileid, dataType: "json", contentType: 'application/JSON', success: function (data) {
+                    url: "api/livetiles/exchange/appointments" + '?' + window.JSON.stringify(new Date()), type: 'GET', context: tileid, dataType: "json", contentType: 'application/JSON', success: function (data) {
                         var s = "";
                         for (var i = 0; i < data.length; i++)
                             s += data[i] + "<br />";
@@ -209,7 +210,7 @@ if (hap == null) {
             UpdateTickets: function (tileid) {
                 $.ajax({
                     type: 'GET',
-                    url: hap.common.resolveUrl("~/api/HelpDesk/Tickets/Open") + '?' + window.JSON.stringify(new Date()),
+                    url: hap.common.resolveUrl("~/api/HelpDesk/Tickets/Open") + (hap.admin ? '' : ('/' + hap.user)) + '?' + window.JSON.stringify(new Date()),
                     dataType: 'json',
                     context: tileid,
                     contentType: 'application/json',
@@ -225,7 +226,7 @@ if (hap == null) {
             },
             UpdateExchangeMail: function (tileid) {
                 $.ajax({
-                    url: "api/livetiles/exchange/unread", type: 'GET', context: tileid, dataType: "json", contentType: 'application/JSON', success: function (data) {
+                    url: "api/livetiles/exchange/unread" + '?' + window.JSON.stringify(new Date()), type: 'GET', context: tileid, dataType: "json", contentType: 'application/JSON', success: function (data) {
                         if (data > 0) {
                             $("#" + this + " span i").animate({ width: 60 }, 500, function () { $(this).parent().children("label").html(data); });
                         } else {

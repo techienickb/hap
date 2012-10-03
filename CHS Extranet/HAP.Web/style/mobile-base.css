@@ -6,3 +6,4 @@
 #loginform label { font-size: large; }
 #HomeButtonsHeader { padding-left: 0; line-height: 0; }
 #usertop { top: 0; left: 0; right: 0; }
+#loginform .copyright { position: static; text-align: right; right: auto; top: auto; bottom: auto; left: auto; }

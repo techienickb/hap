@@ -1321,7 +1321,7 @@
 			$("#Tree").css("top", $("#myfilesheader").height() + $("#toolbar").height() + 10);
 			$("#MyFiles").css("margin-left", $("#Tree").width() + 5).css("padding-top", $("#toolbar").height() + 10);
 			$("#Views").css("top", $("#myfilesheader").height() + $("#toolbar").height() + 4);
-			$("#MyFilesHeaddings").css("margin-left", $("#Tree").width() + 5).css("top", $("#myfilescontent").offset().top + $("#toolbar").height() + 10);
+			$("#MyFilesHeaddings").css("margin-left", $("#Tree").width() + 5).css("top", $("#myfilesheader").height() + $("#toolbar").height() + 8);
 			$(window).scroll(function (event) {
 				if ($(this).scrollTop() >= $("#myfilesheader").offset().top + $("#myfilesheader").height()) {
 					$("#toolbar").css("position", "fixed").css("top", 0);

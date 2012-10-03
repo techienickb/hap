@@ -36,7 +36,7 @@ a.dynatree-title:active, .dynatree-node:active, .dynatree-node:active > a { bord
 #MyFiles.details a .label { border-left: solid 2px #fff; margin-left: 2px; }
 #MyFiles.details a img { height: 17px; display: table-cell; width: 17px; padding: 0; margin: 0; float: none; line-height: 17px; font-size: 17px; vertical-align: middle; border-bottom: solid 2px #fff; }
 #MyFiles.details a { display: table-row; float: none; width: auto; line-height: 20px; height: 20px; }
-#MyFiles.details { display: table; vertical-align: middle; }
+#MyFiles.details { vertical-align: middle; }
 
 #MyFiles.small a span { display: none; }
 #MyFiles.small a .label { display: block; height: 16px; line-height: 16px; margin: 0; padding: 0; }
