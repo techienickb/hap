@@ -35,14 +35,20 @@ namespace HAP.Web.LiveTiles
             else
             {
                 HAP.AD.User u = ((HAP.AD.User)Membership.GetUser());
-                u.Impersonate();
-                service.Credentials = (NetworkCredential)CredentialCache.DefaultCredentials;
+                u.ImpersonateContained();
+                service.UseDefaultCredentials = true;
+                //service.Credentials = CredentialCache.DefaultNetworkCredentials;
             }
             
             Folder inbox = Folder.Bind(service, WellKnownFolderName.Inbox);
             SearchFilter sf = new SearchFilter.SearchFilterCollection(LogicalOperator.And, new SearchFilter.IsEqualTo(EmailMessageSchema.IsRead, false));
             ItemView view = new ItemView(10);
             FindItemsResults<Item> findResults = service.FindItems(WellKnownFolderName.Inbox, sf, view);
+            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Configuration.AuthMode.Windows)
+            {
+                HAP.AD.User u = ((HAP.AD.User)Membership.GetUser());
+                u.EndContainedImpersonate();
+            }
             return findResults.TotalCount;
         }
 
@@ -66,12 +72,18 @@ namespace HAP.Web.LiveTiles
             else
             {
                 HAP.AD.User u = ((HAP.AD.User)Membership.GetUser());
-                u.Impersonate();
-                service.Credentials = (NetworkCredential)CredentialCache.DefaultCredentials;
+                u.ImpersonateContained();
+                service.UseDefaultCredentials = true;
+                //service.Credentials = CredentialCache.DefaultNetworkCredentials;
             }
             List<string> s = new List<string>();
             foreach (Appointment a in service.FindAppointments(WellKnownFolderName.Calendar, new CalendarView(DateTime.Now, DateTime.Now.AddDays(1))))
                 s.Add(a.Subject + "<br />" + (a.Start.Date > DateTime.Now.Date ? "Tomorrow: " : "") + a.Start.ToShortTimeString() + " - " + a.End.ToShortTimeString());
+            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Configuration.AuthMode.Windows)
+            {
+                HAP.AD.User u = ((HAP.AD.User)Membership.GetUser());
+                u.EndContainedImpersonate();
+            }
             return s.ToArray();
         }
 
