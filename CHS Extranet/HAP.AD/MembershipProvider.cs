@@ -145,7 +145,6 @@ namespace HAP.AD
             try
             {
                 new User().Authenticate(username, password);
-                HttpContext.Current.Session.Add("password", password);
                 return true;
             }
             catch { return false; }
