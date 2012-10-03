@@ -718,7 +718,6 @@
     <Content Include="images\icons\bmp.png" />
     <Content Include="images\icons\exe.png" />
     <Content Include="images\icons\zip.png" />
-    <Content Include="style\mycomputer.css" />
     <Content Include="Tracker\Default.aspx" />
     <Content Include="Tracker\live.aspx" />
     <Content Include="Tracker\logontracker.png" />
