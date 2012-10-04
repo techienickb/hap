@@ -17,22 +17,24 @@ namespace HAP.Logon.Tracker
     {
         private Action action;
         private api.api api;
+        private bool silent;
 
         private static bool ValidateRemoteCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors policyErrors)
         {
             return true;
         }
 
-        public Loading(Action action, string baseurl)
+        public Loading(Action action, string baseurl, bool silent)
         {
             ServicePointManager.ServerCertificateValidationCallback += new RemoteCertificateValidationCallback(ValidateRemoteCertificate);
-
             InitializeComponent();
             this.api = new api.api();
+            this.silent = silent;
             this.api.Url = new Uri(new Uri(baseurl), "tracker/api.asmx").ToString();
             this.api.LogonCompleted += new Tracker.api.LogonCompletedEventHandler(api_LogonCompleted);
             this.api.ClearCompleted += new Tracker.api.ClearCompletedEventHandler(api_ClearCompleted);
             this.action = action;
+            this.Hide();
             if (action == Action.Clear) label1.Text = "Refreshing the Tracker...";
             else label1.Text = "Registering your Logon...";
             this.Text = "Logon Tracker - " + label1.Text;
@@ -42,9 +44,13 @@ namespace HAP.Logon.Tracker
         {
             if (e.Error != null)
             {
-                if (!EventLog.SourceExists("Home Access Plus"))
-                    EventLog.CreateEventSource("Home Access Plus+", "Application");
-                EventLog.WriteEntry("Home Access Plus+", "An error occurred in the Logon Tracker\r\n\r\nError: " + e.Error.Message, EventLogEntryType.Error);
+                try
+                {
+                    if (!EventLog.SourceExists("Home Access Plus"))
+                        EventLog.CreateEventSource("Home Access Plus+", "Application");
+                    EventLog.WriteEntry("Home Access Plus+", "An error occurred in the Logon Tracker\r\n\r\nError: " + e.Error.Message, EventLogEntryType.Error);
+                }
+                catch { }
             }
             Close();
         }
@@ -52,9 +58,13 @@ namespace HAP.Logon.Tracker
         void  api_LogonCompleted(object sender, api.LogonCompletedEventArgs e)
         {
             if (e.Error != null) {
-                if (!EventLog.SourceExists("Home Access Plus"))
-                    EventLog.CreateEventSource("Home Access Plus+", "Application");
-                EventLog.WriteEntry("Home Access Plus+", "An error occurred in the Logon Tracker\r\n\r\nError: " + e.Error.Message, EventLogEntryType.Error);
+                try
+                {
+                    if (!EventLog.SourceExists("Home Access Plus"))
+                        EventLog.CreateEventSource("Home Access Plus+", "Application");
+                    EventLog.WriteEntry("Home Access Plus+", "An error occurred in the Logon Tracker\r\n\r\nError: " + e.Error.Message, EventLogEntryType.Error);
+                }
+                catch { }
             }
             else
             {
