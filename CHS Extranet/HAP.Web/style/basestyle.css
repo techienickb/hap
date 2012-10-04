@@ -147,3 +147,6 @@ th span { float: right; }
 #errorlist { position: absolute; position: fixed; top: 100px; left: 10px; }
 #errorlist div { margin-bottom: 3px; }
 #errorlist div .cont { display: none; }
+
+@media only print {
+}
