@@ -46,5 +46,6 @@ body.bookingdisplay, body.bookingdisplay form { padding: 0; margin: 0; width: 10
 #bookingday .body a .day, #bookingday .body a .daytitle, #bookingday .body a .lesson, #bookingday .body a .room { display: inline-block; }
 
 @media only print {
-    #bookingsystemcontent { width: 100%!important; }
+    #bookingsystemcontent { width: auto!important; }
+    #bookingday { overflow: hidden; }
 }
