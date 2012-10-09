@@ -106,7 +106,7 @@ namespace HAP.MyFiles
 
 
         [OperationContract]
-        [WebInvoke(Method = "POST", UriTemplate = "remove", BodyStyle = WebMessageBodyStyle.Bare, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "POST", UriTemplate = "remove", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         public void Remove(string teacher, string name, string start, string end)
         {
             Homeworks h = new Homeworks();
