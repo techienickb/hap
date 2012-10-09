@@ -13,7 +13,6 @@
 	<header id="myfilesheader" class="commonheader">
 		<nav class="tiles right">
             <a class="button" id="new" href="#" onclick="return false;"><hap:LocalResource StringPath="myfiles/homework/new" runat="server" /></a>
-			<a class="button" id="help" href="#" onclick="return false;"><hap:LocalResource StringPath="help" runat="server" /></a>
 		</nav>
 		<div>
 			<hap:LocalResource StringPath="myfiles/homework/homework" runat="server" />
@@ -25,8 +24,9 @@
 	<script type="text/javascript">
 	    var active;
 	    function load() {
+	        $("#uploadhomework").dialog({ autoOpen: false });
 	        $.getJSON("../api/homework/my", function (data) {
-	            var c = [], a = { title: data[0].TeacherName, isFolder: true, children: [] };
+	            var c = [], a = data.length > 0 ? { title: data[0].TeacherName, isFolder: true, children: [] } : null;
 	            for (var i = 0; i < data.length; i++) {
 	                if (a.title != data[i].TeacherName) {
 	                    c.push(a);
@@ -34,18 +34,20 @@
 	                }
 	                a.children.push({ title: data[i].Name, isFolder: false, d: data[i], key: data[i].Teacher + "/" + data[i].Start.replace(/\:/gi, ".") + "/" + data[i].End.replace(/\:/gi, ".") + "/" + data[i].Name });
 	            }
-	            c.push(a);
-	            $("#tree").dynatree({
-	                imagePath: "../images/setup/", selectMode: 1, isLazy: false, minExpandLevel: 1, children: c, fx: { height: "toggle", duration: 200 },
-	                onActivate: function (node) {
-	                    $("#o .homework").remove();
-	                    active = null;
-	                    if (!node.data.isFolder) {
-	                        active = node.data.d;
-	                        $("#o").append('<div class="homework" style="overflow: hidden;"><h1>' + node.data.title + '</h1><div>Valid from: ' + node.data.d.Start + ' until: ' + node.data.d.End + ' issue by: ' + node.data.d.TeacherName + '</div><div>' + node.data.d.Description + '</div><button onclick="showuploader(); return false;">Upload Homework</button>' + (node.data.d.Mine ? ('<button onclick="showedit(); return false; ">' + hap.common.getLocal("myfiles/homework/edit") + '</button><button onclick="doRemove(); return false;">' + hap.common.getLocal("myfiles/homework/remove") + '</button>') : '') + '</div>');
+	            if (a != null) {
+	                c.push(a);
+	                $("#tree").dynatree({
+	                    imagePath: "../images/setup/", selectMode: 1, isLazy: false, minExpandLevel: 1, children: c, fx: { height: "toggle", duration: 200 },
+	                    onActivate: function (node) {
+	                        $("#o .homework").remove();
+	                        active = null;
+	                        if (!node.data.isFolder) {
+	                            active = node.data.d;
+	                            $("#o").append('<div class="homework" style="overflow: hidden;"><h1>' + node.data.title + '</h1><div>Valid from: ' + node.data.d.Start + ' until: ' + node.data.d.End + ' issue by: ' + node.data.d.TeacherName + '</div><div>' + node.data.d.Description + '</div><button onclick="showuploader(); return false;">Upload Homework</button>' + (node.data.d.Mine ? ('<button onclick="showedit(); return false; ">' + hap.common.getLocal("myfiles/homework/edit") + '</button><button onclick="doRemove(); return false;">' + hap.common.getLocal("myfiles/homework/remove") + '</button>') : '') + '</div>');
+	                        }
 	                    }
-	                }
-	            });
+	                });
+	            }
 	        });
 	    }
 	    $(function () {
@@ -113,59 +115,59 @@
                 }
                 if(this.File.size > <%=maxRequestLength%>) {
 					alert(this.File.name + " " + hap.common.getLocal("myfiles/upload/filesizewarning"));
-                uploads.pop(this);
-                return false;
-            }
-
-            $("#progresses").append('<div id="upload-' + this.File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_") + '"><div class="progressbar" style="display: inline-block; width: 100px; height: 20px; vertical-align: middle; overflow: hidden;"></div> ' + this.File.name + '</div>');
-            $("#upload-" + this.File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_") + " .progressbar").progressbar({ value: 0 });
-            $.ajax({
-                type: 'GET',
-                url: hap.common.resolveUrl('~/api/Homework/Exists/') + active.Teacher + "/" + active.Name + "/" + active.Start + "/" + active.End + "/" + this.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, "") + '/' + hap.user + " - " + this.File.name + '?' + window.JSON.stringify(new Date()),
-                dataType: 'json',
-                context: this,
-                contentType: 'application/json',
-                success: function (data) {
-                    if (data.Name == null || confirm(hap.common.getLocal("myfiles/upload/fileexists1") + " " + this.File.name + " " + hap.common.getLocal("myfiles/upload/fileexists2"))) this.ContinueUpload(this.File.name);
-                    else { 
-                        $("#upload-" + this.File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_")).remove();
-                        if (uploads.length == 1) $("#uploadprogress").slideUp('slow');
-                        uploads.pop(this);
-                    }
-                }, error: hap.common.jsonError
-            });
-            return true;
-        };
-        this.xhr = new XMLHttpRequest();
-        this.ContinueUpload = function(a) {
-            var id = a.replace(/[\\'\. \[\]\(\)\-]/g, "_");
-            this.xhr = new XMLHttpRequest();
-            this.xhr.id = id;
-            this.xhr.upload.addEventListener("progress", this.onProgress, false);
-            this.xhr.addEventListener("progress", this.onProgress, false);
-            this.xhr.onprogress = this.onProgress;
-            this.xhr.open('POST', hap.common.resolveUrl('~/api/homework-upload/') + active.Teacher + "/" + active.Name + "/" + active.Start + "/" + active.End + "/" + this.Path.replace(/\\/g, '/') + '/', true);
-            this.xhr.onreadystatechange = function () {
-                if (this.readyState == 4) {
-                    var item = null;
-                    for (var i = 0; i < uploads.length; i ++) if (uploads[i].File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_") == this.id) item = uploads[i];
-                    if (this.status != 200) alert(hap.common.getLocal("myfiles/upload/upload") + " " + hap.common.getLocal("of") + " " + item.File.name + " " + hap.common.getLocal("myfiles/upload/failed") + "\n\n" + this.responseText.substr(this.responseText.indexOf('<title>') + 7, this.responseText.indexOf('</title>') - (7 + this.responseText.indexOf('<title>'))));
-                    $("#upload-" + this.id + " .progressbar").progressbar("value", 100 );
-                    $("#upload-" + id).delay(1000).slideUp('slow', function() { $("#upload-" + id).remove(); if (uploads.length == 0) $("#uploadprogress").slideUp('slow'); });
-                    Load();
-                    uploads.pop(item);
+                    uploads.pop(this);
+                    return false;
                 }
+
+                $("#progresses").append('<div id="upload-' + this.File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_") + '"><div class="progressbar" style="display: inline-block; width: 100px; height: 20px; vertical-align: middle; overflow: hidden;"></div> ' + this.File.name + '</div>');
+                $("#upload-" + this.File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_") + " .progressbar").progressbar({ value: 0 });
+                $.ajax({
+                    type: 'GET',
+                    url: hap.common.resolveUrl('~/api/Homework/Exists/') + active.Teacher + "/" + active.Name + "/" + active.Start + "/" + active.End + "/" + this.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, "") + '/' + hap.user + " - " + this.File.name + '?' + window.JSON.stringify(new Date()),
+                    dataType: 'json',
+                    context: this,
+                    contentType: 'application/json',
+                    success: function (data) {
+                        if (data.Name == null || confirm(hap.common.getLocal("myfiles/upload/fileexists1") + " " + this.File.name + " " + hap.common.getLocal("myfiles/upload/fileexists2"))) this.ContinueUpload(this.File.name);
+                        else { 
+                            $("#upload-" + this.File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_")).remove();
+                            if (uploads.length == 1) $("#uploadprogress").slideUp('slow');
+                            uploads.pop(this);
+                        }
+                    }, error: hap.common.jsonError
+                });
+                return true;
             };
-            this.xhr.setRequestHeader('X_FILENAME', this.File.name);
-            this.xhr.send(this.File);
-        };
-        this.onProgress = function (e) {
-            var percent = parseInt((e.loaded / e.total) * 100);
-            for (var i = 0; i < uploads.length; i++) if (uploads[i].File.size == e.total) uploads[i].updateProgress(percent);
-        };
-        this.updateProgress = function (e) {
-            $("#upload-" + this.File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_") + " .progressbar").progressbar("value", e);
-        };
+            this.xhr = new XMLHttpRequest();
+            this.ContinueUpload = function(a) {
+                var id = a.replace(/[\\'\. \[\]\(\)\-]/g, "_");
+                this.xhr = new XMLHttpRequest();
+                this.xhr.id = id;
+                this.xhr.upload.addEventListener("progress", this.onProgress, false);
+                this.xhr.addEventListener("progress", this.onProgress, false);
+                this.xhr.onprogress = this.onProgress;
+                this.xhr.open('POST', hap.common.resolveUrl('~/api/homework-upload/') + active.Teacher + "/" + active.Name + "/" + active.Start + "/" + active.End + "/" + this.Path.replace(/\\/g, '/') + '/', true);
+                this.xhr.onreadystatechange = function () {
+                    if (this.readyState == 4) {
+                        var item = null;
+                        for (var i = 0; i < uploads.length; i ++) if (uploads[i].File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_") == this.id) item = uploads[i];
+                        if (this.status != 200) alert(hap.common.getLocal("myfiles/upload/upload") + " " + hap.common.getLocal("of") + " " + item.File.name + " " + hap.common.getLocal("myfiles/upload/failed") + "\n\n" + this.responseText.substr(this.responseText.indexOf('<title>') + 7, this.responseText.indexOf('</title>') - (7 + this.responseText.indexOf('<title>'))));
+                        $("#upload-" + this.id + " .progressbar").progressbar("value", 100 );
+                        $("#upload-" + id).delay(1000).slideUp('slow', function() { $("#upload-" + id).remove(); if (uploads.length == 0) $("#uploadprogress").slideUp('slow'); });
+                        Load();
+                        uploads.pop(item);
+                    }
+                };
+                this.xhr.setRequestHeader('X_FILENAME', this.File.name);
+                this.xhr.send(this.File);
+            };
+            this.onProgress = function (e) {
+                var percent = parseInt((e.loaded / e.total) * 100);
+                for (var i = 0; i < uploads.length; i++) if (uploads[i].File.size == e.total) uploads[i].updateProgress(percent);
+            };
+            this.updateProgress = function (e) {
+                $("#upload-" + this.File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_") + " .progressbar").progressbar("value", e);
+            };
         }
     </script>
     <div id="addhomework" title="Add Homework">

@@ -147,6 +147,7 @@ Do you want to overwrite it?</fileexists2>
       <skydrive>Send to SkyDrive</skydrive>
     </sendto>
     <homework>
+      <path>Path:</path>
       <homework>My Files - Homework</homework>
       <new>New</new>
       <edit>Edit</edit>

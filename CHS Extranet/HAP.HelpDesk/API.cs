@@ -110,7 +110,7 @@ namespace HAP.HelpDesk
             doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
             FullTicket ft = new FullTicket(doc.SelectSingleNode("/Tickets/Ticket[@id='" + Id + "']"));
             foreach (Note not in ft.Notes)
-                emailnote += not.DisplayName + " on " + not.Date.ToString() + "<br />" + not.NoteText + "<hr />";
+                emailnote += not.DisplayName + " on " + not.Date.ToString() + "<br />" + HttpUtility.UrlDecode(not.NoteText, System.Text.Encoding.Default).Replace("\n", "<br />") + "<hr />";
             
 
             UserInfo user = ADUtils.FindUserInfos(ticket.SelectNodes("Note")[0].Attributes["username"].Value)[0];
