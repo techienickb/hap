@@ -24,7 +24,7 @@ namespace HAP.Web.API
             else myu.RoutingPath = string.Empty;
             myu.RoutingDrive = requestContext.RouteData.Values["drive"] as string;
             myu.RoutingDrive = myu.RoutingDrive.ToUpper();
-            myu.Homework = new Homeworks().Homework.Single(hw => hw.Teacher == requestContext.RouteData.Values["teacher"].ToString() && hw.Name == requestContext.RouteData.Values["name"].ToString() && hw.Start == requestContext.RouteData.Values["start"].ToString().Replace('.', ':') && hw.End == requestContext.RouteData.Values["end"].ToString().Replace('.', ':'));
+            myu.Homework = new Homeworks().Homework.Single(hw => hw.Teacher == requestContext.RouteData.Values["teacher"].ToString() && hw.Name == requestContext.RouteData.Values["name"].ToString() && hw.Start == requestContext.RouteData.Values["start"].ToString().Replace('.', ':').Replace('-', '/') && hw.End == requestContext.RouteData.Values["end"].ToString().Replace('.', ':').Replace('-', '/'));
             return myu;
         }
     }
@@ -95,7 +95,7 @@ namespace HAP.Web.API
 
                 if (!isAuth(Path.GetExtension(context.Request.Headers["X_FILENAME"]))) throw new UnauthorizedAccessException(_doc.SelectSingleNode("/hapStrings/myfiles/upload/filetypeerror").InnerText);
                 DriveMapping m;
-                string path = Path.Combine(Converter.DriveToUNC('\\' + RoutingPath, RoutingDrive, out m, ADUser), context.User.Identity.Name + " - " + context.Request.Headers["X_FILENAME"]);
+                string path = Path.Combine(Converter.DriveToUNC('\\' + RoutingPath, RoutingDrive, out m, ADUser), Homework.Name, context.User.Identity.Name + " - " + context.Request.Headers["X_FILENAME"]);
                 HAP.Data.SQL.WebEvents.Log(DateTime.Now, "Homework.Upload", HttpContext.Current.User.Identity.Name, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Uploading of: " + context.Request.Headers["X_FILENAME"] + " to: " + path + " (impersonating: " + ADUser.UserName + ")");
                 try
                 {
