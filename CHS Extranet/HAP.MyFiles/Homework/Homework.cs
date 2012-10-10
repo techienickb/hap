@@ -40,6 +40,11 @@ namespace HAP.MyFiles.Homework
         public bool Mine { get; set; }
         [IgnoreDataMember()]
         public List<UserNode> UserNodes { get; set; }
+        [DataMember()]
+        public UserNode[] Nodes
+        {
+            get { return UserNodes.ToArray(); }
+        }
         [IgnoreDataMember()]
         public string Token { get; set; }
         public Homework(string Teacher)
@@ -48,7 +53,7 @@ namespace HAP.MyFiles.Homework
             Name = Description = "";
             Start = End = DateTime.Now.ToString("dd/MM/yyyy hh:mm");
             UserNodes = new List<UserNode>();
-            Mine = (IsVisible() == UserNodeMode.Admin || IsVisible() == UserNodeMode.Teacher);
+            Mine = (IsVisible() == "Admin" || IsVisible() == "Teacher");
         }
 
         public Homework(XmlNode node, string Teacher) : this(Teacher)
@@ -63,24 +68,24 @@ namespace HAP.MyFiles.Homework
                 if (n.Name == "add" || n.Name == "remove") UserNodes.Add(UserNode.Parse(n));
         }
 
-        public UserInfo[] getMembers(UserNodeMode UserType)
+        public UserInfo[] getMembers(string UserType)
         {
             List<UserInfo> results = new List<UserInfo>();
-            if (UserType == UserNodeMode.Teacher) results.Add(ADUtils.FindUserInfos(Teacher)[0]);
+            if (UserType == "Teacher") results.Add(ADUtils.FindUserInfos(Teacher)[0]);
             UserNodes.Reverse();
             foreach (UserNode n in UserNodes)
             {
-                if (n.Method == UserNodeMethod.Add)
+                if (n.Method == "Add")
                 {
                     switch (n.Type)
                     {
-                        case UserNodeType.User:
+                        case "User":
                             results.Add(ADUtils.FindUserInfos(n.Value)[0]);
                             break;
-                        case UserNodeType.Role:
+                        case "Role":
                             foreach (string s in ADUtils.GetUsersInRole(ADUtils.DirectoryRoot, hapConfig.Current.AD.UPN, n.Value, true)) results.Add(ADUtils.FindUserInfos(s)[0]);
                             break;
-                        case UserNodeType.OU:
+                        case "OU":
                             results.AddRange(ADUtils.FindUsersIn(n.Value));
                             break;
                     }
@@ -89,13 +94,13 @@ namespace HAP.MyFiles.Homework
                 {
                     switch (n.Type)
                     {
-                        case UserNodeType.User:
+                        case "User":
                             results.RemoveAll(ui => ui.UserName.ToLower() == n.Value.ToLower());
                             break;
-                        case UserNodeType.Role:
+                        case "Role":
                             foreach (string s in ADUtils.GetUsersInRole(ADUtils.DirectoryRoot, hapConfig.Current.AD.UPN, n.Value, true)) results.RemoveAll(ui => ui.UserName.ToLower() == s.ToLower());
                             break;
-                        case UserNodeType.OU:
+                        case "OU":
                             foreach (UserInfo i in ADUtils.FindUsersIn(n.Value))
                                 results.RemoveAll(ui => ui.UserName.ToLower() == i.UserName.ToLower());
                             break;
@@ -106,24 +111,24 @@ namespace HAP.MyFiles.Homework
             return results.ToArray();
         }
 
-        public UserNodeMode IsVisible()
+        public string IsVisible()
         { 
-            if (HttpContext.Current.User.IsInRole("Domain Admins")) return UserNodeMode.Admin;
-            if (HttpContext.Current.User.Identity.Name.ToLower().Equals(Teacher.ToLower())) return UserNodeMode.Teacher;
+            if (HttpContext.Current.User.IsInRole("Domain Admins")) return "Admin";
+            if (HttpContext.Current.User.Identity.Name.ToLower().Equals(Teacher.ToLower())) return "Teacher";
             UserNodes.Reverse();
             foreach (UserNode n in UserNodes)
             {
-                if (n.Method == UserNodeMethod.Add)
+                if (n.Method == "Add")
                 {
                     switch (n.Type)
                     {
-                        case UserNodeType.User:
+                        case "User":
                             if (HttpContext.Current.User.Identity.Name.ToLower().Equals(n.Value.ToLower())) return n.Mode;
                             break;
-                        case UserNodeType.Role:
+                        case "Role":
                             if (HttpContext.Current.User.IsInRole(n.Value)) return n.Mode;
                             break;
-                        case UserNodeType.OU:
+                        case "OU":
                             if (ADUtils.FindUsersIn(n.Value).Count(ui => ui.UserName.ToLower().Equals(HttpContext.Current.User.Identity.Name.ToLower())) == 1) return n.Mode;
                             break;
                     }
@@ -132,20 +137,20 @@ namespace HAP.MyFiles.Homework
                 {
                     switch (n.Type)
                     {
-                        case UserNodeType.User:
-                            if (HttpContext.Current.User.Identity.Name.ToLower().Equals(n.Value.ToLower())) return UserNodeMode.None;
+                        case "User":
+                            if (HttpContext.Current.User.Identity.Name.ToLower().Equals(n.Value.ToLower())) return "None";
                             break;
-                        case UserNodeType.Role:
-                            if (HttpContext.Current.User.IsInRole(n.Value)) return UserNodeMode.None;
+                        case "Role":
+                            if (HttpContext.Current.User.IsInRole(n.Value)) return "None";
                             break;
-                        case UserNodeType.OU:
-                            if (ADUtils.FindUsersIn(n.Value).Count(ui => ui.UserName.ToLower().Equals(HttpContext.Current.User.Identity.Name.ToLower())) == 1) return UserNodeMode.None;
+                        case "OU":
+                            if (ADUtils.FindUsersIn(n.Value).Count(ui => ui.UserName.ToLower().Equals(HttpContext.Current.User.Identity.Name.ToLower())) == 1) return "None";
                             break;
                     }
                 }
             }
             UserNodes.Reverse();
-            return UserNodeMode.None;
+            return "None";
         }
     }
 }

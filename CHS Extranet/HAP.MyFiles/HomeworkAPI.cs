@@ -29,7 +29,7 @@ namespace HAP.MyFiles
         [WebGet(UriTemplate = "my", BodyStyle = WebMessageBodyStyle.Bare, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         public MyFiles.Homework.Homework[] My()
         {
-            return new MyFiles.Homework.Homeworks().Homework.Where(h => h.IsVisible() != MyFiles.Homework.UserNodeMode.None && DateTime.Parse(h.End) < DateTime.Now).OrderBy(h => h.Teacher).ToArray();
+            return new MyFiles.Homework.Homeworks().Homework.Where(h => h.IsVisible() != "None" && DateTime.Parse(h.End) > DateTime.Now).OrderBy(h => h.Teacher).ToArray();
         }
 
         [OperationContract]
@@ -56,11 +56,12 @@ namespace HAP.MyFiles
             h.End = end;
             h.Description = HttpUtility.UrlDecode(description, System.Text.Encoding.Default);
             h.UserNodes.AddRange(nodes);
+            h.Token = HttpContext.Current.Request.Cookies["token"].Value;
             h.Path = path;
             User u = new User();
             u.Authenticate(h.Teacher, TokenGenerator.ConvertToPlain(h.Token));
             DriveMapping mapping;
-            string p = Converter.DriveToUNC(h.Path.Substring(0, 1), h.Path.Remove(0, 1), out mapping, u);
+            string p = Converter.DriveToUNC(h.Path.Remove(0, 1), h.Path.Substring(0, 1), out mapping, u);
             u.ImpersonateContained();
             try
             {
@@ -86,11 +87,12 @@ namespace HAP.MyFiles
             updated.End = end;
             updated.Path = path;
             updated.Description = HttpUtility.UrlDecode(description, System.Text.Encoding.Default);
+            updated.UserNodes.Clear();
             updated.UserNodes.AddRange(nodes);
             User u = new User();
             u.Authenticate(updated.Teacher, TokenGenerator.ConvertToPlain(updated.Token));
             DriveMapping mapping;
-            string p = Converter.DriveToUNC(updated.Path.Substring(0, 1), updated.Path.Remove(0, 1), out mapping, u);
+            string p = Converter.DriveToUNC(updated.Path.Remove(0, 1), updated.Path.Substring(0, 1), out mapping, u);
             u.ImpersonateContained();
             try
             {
@@ -110,14 +112,14 @@ namespace HAP.MyFiles
         public void Remove(string teacher, string name, string start, string end)
         {
             Homeworks h = new Homeworks();
-            h.Remove(h.Homework.Single(hw => hw.Teacher == teacher && hw.Name == name && hw.Start == start.Replace('.', ':') && hw.End == end.Replace('.', ':')));
+            h.Remove(h.Homework.Single(hw => hw.Teacher == teacher && hw.Name == name && hw.Start == start.Replace('-', '/').Replace('.', ':') && hw.End == end.Replace('-', '/').Replace('.', ':')));
         }
 
         [OperationContract]
         [WebGet(UriTemplate = "{teacher}/{start}/{end}/{name}", BodyStyle = WebMessageBodyStyle.Bare, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         public MyFiles.Homework.Homework Item(string teacher, string name, string start, string end)
         {
-            return new MyFiles.Homework.Homeworks().Homework.Single(h => h.Teacher == teacher && h.Name == name && h.Start == start.Replace('.', ':') && h.End == end.Replace('.', ':'));
+            return new MyFiles.Homework.Homeworks().Homework.Single(h => h.Teacher == teacher && h.Name == name && h.Start == start.Replace('-', '/').Replace('.', ':') && h.End == end.Replace('-', '/').Replace('.', ':'));
         }
 
         [OperationContract]
@@ -150,12 +152,12 @@ namespace HAP.MyFiles
         }
 
         [OperationContract]
-        [WebGet(UriTemplate = "Exists/{teacher}/{start}/{end}/{name}/{Drive}/{*Path}")]
+        [WebGet(UriTemplate = "Exists/{teacher}/{name}/{start}/{end}/{Drive}/{*Path}")]
         public Properties Exists(string Drive, string Path, string teacher, string name, string start, string end)
         {
             try
             {
-                return Properties(teacher, name, start, end, Drive, Path);
+                return Properties(teacher, name, start.Replace('-', '/').Replace('.', ':'), end.Replace('-', '/').Replace('.', ':'), Drive, Path);
             }
             catch
             {

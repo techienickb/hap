@@ -47,6 +47,9 @@
 	                        }
 	                    }
 	                });
+	            } else { 
+	                $("#tree").hide();
+	                $("#o .homework").remove();
 	            }
 	        });
 	    }
@@ -57,7 +60,7 @@
 	</script>
     <hap:WrappedLocalResource runat="server" Tag="div" title="#myfiles/homework/upload" ID="uploadhomework">
         <div id="dropzone">
-
+            Drop File Here or use the file chooser
         </div>
 		<input type="file" multiple="multiple" id="uploadedfiles" />
 		<iframe style="width: 300px; height: 180px"></iframe>
@@ -71,6 +74,7 @@
 		</div>
 	</div>
     <script type="text/javascript">
+        var uploads = new Array();
         function showuploader() {
             if ($("#uploadedfiles")[0].files != null) {
                 $("#uploadhomework iframe").remove();
@@ -123,7 +127,7 @@
                 $("#upload-" + this.File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_") + " .progressbar").progressbar({ value: 0 });
                 $.ajax({
                     type: 'GET',
-                    url: hap.common.resolveUrl('~/api/Homework/Exists/') + active.Teacher + "/" + active.Name + "/" + active.Start + "/" + active.End + "/" + this.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, "") + '/' + hap.user + " - " + this.File.name + '?' + window.JSON.stringify(new Date()),
+                    url: hap.common.resolveUrl('~/api/Homework/Exists/') + active.Teacher + "/" + active.Name + "/" + active.Start.replace(/\:/gi, ".").replace(/\//gi, '-') + "/" + active.End.replace(/\:/gi, ".").replace(/\//gi, '-') + "/" + active.Path.replace(/\\/g, '/') + active.Name + '/' + hap.user + " - " + this.File.name,
                     dataType: 'json',
                     context: this,
                     contentType: 'application/json',
@@ -146,7 +150,7 @@
                 this.xhr.upload.addEventListener("progress", this.onProgress, false);
                 this.xhr.addEventListener("progress", this.onProgress, false);
                 this.xhr.onprogress = this.onProgress;
-                this.xhr.open('POST', hap.common.resolveUrl('~/api/homework-upload/') + active.Teacher + "/" + active.Name + "/" + active.Start + "/" + active.End + "/" + this.Path.replace(/\\/g, '/') + '/', true);
+                this.xhr.open('POST', hap.common.resolveUrl('~/api/homework-upload/') + active.Teacher + "/" + active.Name + "/" + active.Start.replace(/\:/gi, ".").replace(/\//gi, '-') + "/" + active.End.replace(/\:/gi, ".").replace(/\//gi, '-') + "/" + this.Path.replace(/\\/g, '/'), true);
                 this.xhr.onreadystatechange = function () {
                     if (this.readyState == 4) {
                         var item = null;
@@ -154,7 +158,7 @@
                         if (this.status != 200) alert(hap.common.getLocal("myfiles/upload/upload") + " " + hap.common.getLocal("of") + " " + item.File.name + " " + hap.common.getLocal("myfiles/upload/failed") + "\n\n" + this.responseText.substr(this.responseText.indexOf('<title>') + 7, this.responseText.indexOf('</title>') - (7 + this.responseText.indexOf('<title>'))));
                         $("#upload-" + this.id + " .progressbar").progressbar("value", 100 );
                         $("#upload-" + id).delay(1000).slideUp('slow', function() { $("#upload-" + id).remove(); if (uploads.length == 0) $("#uploadprogress").slideUp('slow'); });
-                        Load();
+                        load();
                         uploads.pop(item);
                     }
                 };
@@ -215,7 +219,7 @@
         </script>
         <div>
             <label for="path"><hap:LocalResource runat="server" StringPath="myfiles/homework/path" /></label><br />
-            <input type="text" id="path" />
+            <input type="text" id="path" style="width: 100%;" />
         </div>
     </div>
     <div id="userfinder" title="User Finder">
@@ -251,9 +255,17 @@
                 $("#addhomework").dialog({
                     autoOpen: true, modal: true, buttons: {
                         "Save": function () {
+                            var nodes = [];
+                            for (var i = 0; i < $("#students option").size(); i++) {
+                                nodes.push('{ "Value": "' + $($("#students option")[i]).val() + '", "Type": "User", "Mode": "Student", "Method": "Add" }');
+                            }
+                            for (var i = 0; i < $("#teachers option").size(); i++) {
+                                nodes.push('{ "Value": "' + $($("#teachers option")[i]).val() + '", "Type": "User", "Mode": "Teacher", "Method": "Add" }');
+                            }
+                            nodes = '[' + nodes.join() + ']';
                             $.ajax({
-                                url: "api/homework/add1", type: 'POST',
-                                data: '{ "name": "' + escape($("#title").val()) + '", "description": "' + escape($("textarea").wysiwyg("getContent")) + '", "start": "' + $("#start").val() + " " + $("#starttime").val() + '", "end": "' + $("#end").val() + " " + $("#endtime").val() + '", "path": "' + $("#path").val() + '" }',
+                                url: hap.common.resolveUrl("~/api/homework/add1"), type: 'POST',
+                                data: '{ "name": "' + escape($("#title").val()) + '", "description": "' + escape($("textarea").wysiwyg("getContent")) + '", "start": "' + $("#start").val() + " " + $("#starttime").val() + '", "end": "' + $("#end").val() + " " + $("#endtime").val() + '", "path": "' + $("#path").val().replace(/\\/gi, "/").replace(/\:/gi, "") + '", "nodes":' + nodes + '}',
                                 dataType: "json", contentType: 'application/JSON',
                                 success: function (data) {
                                     $("#addhomework").dialog("close");
@@ -264,12 +276,16 @@
                             return false;
                         },
                         "Cancel": function () { $(this).dialog("close"); return false; }
-                    }, width: 500
+                    }, width: 500, title: "Add Homework", minWidth: 500
                 });
                 $("textarea").wysiwyg("setContent", "Initial Content");
                 $("#starttime, #endtime").val("09:00");
                 $("#start").val($.datepicker.formatDate('dd/mm/yy', new Date()));
-                $("#path").val("N:\\HAP+ Homeworks\\");
+                $("#path").val("N:\\HAP Homeworks\\");
+                $("#end").val("");
+                $("#title").val("");
+                $("#students option").remove();
+                $("#teachers option").remove();
                 return false;
             });
         });
@@ -277,8 +293,16 @@
             $("#addhomework").dialog({
                 autoOpen: true, modal: true, buttons: {
                     "Save": function () {
+                        var nodes = [];
+                        for (var i = 0; i < $("#students option").size(); i++) {
+                            nodes.push('{ "Value": "' + $($("#students option")[i]).val() + '", "Type": "User", "Mode": "Student", "Method": "Add" }');
+                        }
+                        for (var i = 0; i < $("#teachers option").size(); i++) {
+                            nodes.push('{ "Value": "' + $($("#teachers option")[i]).val() + '", "Type": "User", "Mode": "Teacher", "Method": "Add" }');
+                        }
+                        nodes = '[' + nodes.join() + ']';
                         $.ajax({
-                            url: "api/homework/edit", type: 'POST',
+                            url: hap.common.resolveUrl("~/api/homework/edit"), type: 'POST',
                             data: '{ "teacher": "' + active.Teacher + '", "name": "' + active.Name + '", "start": "' + active.Start + '", "end": "' + active.end + '", "newname": "' + escape($("#title").val()) + '", "description": "' + escape($("textarea").wysiwyg("getContent")) + '", "newstart": "' + $("#start").val() + " " + $("#starttime").val() + '", "newend": "' + $("#end").val() + " " + $("#endtime").val() + '", "path": "' + $("#path").val() + '" }',
                             dataType: "json", contentType: 'application/JSON',
                             success: function (data) {
@@ -290,26 +314,36 @@
                         return false;
                     },
                     "Cancel": function () { $(this).dialog("close"); return false; }
-                }, width: 500
+                }, width: 500, title: "Edit Homework", minWidth: 500
             });
-            $("textarea").wysiwyg("setContent", node.data.d.Description);
-            $("#starttime").val(node.data.d.Start.split(" ")[1]);
-            $("#start").val(node.data.d.Start.split(" ")[0]);
-            $("#end").val(node.data.d.End.split(" ")[0]);
-            $("#endtime").val(node.data.d.End.split(" ")[1]);
-            $("#path").val(node.data.d.Path);
+            $("textarea").wysiwyg("setContent", active.Description);
+            $("#starttime").val(active.Start.split(" ")[1]);
+            $("#start").val(active.Start.split(" ")[0]);
+            $("#end").val(active.End.split(" ")[0]);
+            $("#endtime").val(active.End.split(" ")[1]);
+            $("#path").val(active.Path);
+            $("#title").val(active.Name);
+            for (var i = 0; i < active.Nodes.length; i++) {
+                var x = '<option value="' + active.Nodes[i].Value + '">' + active.Nodes[i].Value + '</option>';
+                if (active.Nodes[i].Type == "User" && active.Nodes[i].Method == 'add' && active.Nodes[i].Mode == 'Student')                
+                    $("#students").append(x);
+                else if (active.Nodes[i].Type == "User" && active.Nodes[i].Method == 'add' && active.Nodes[i].Mode == 'Teacher') 
+                    $("#teachers").append(x);
+            }
+            return false;
         }
 
         function doRemove() {
             if (!confirm(hap.common.getLocal('myfiles/homework/confirmremove'))) return;
             $.ajax({
-                url: "api/homework/remove", type: 'POST',
-                data: '{ "teacher": "' + active.Teacher + '", "name": "' + active.Name + '", "start": "' + active.Start + '", "end": "' + active.end + '" }',
+                url: hap.common.resolveUrl("~/api/homework/remove"), type: 'POST',
+                data: '{ "teacher": "' + active.Teacher + '", "name": "' + active.Name + '", "start": "' + active.Start + '", "end": "' + active.End + '" }',
                 dataType: "json", contentType: 'application/JSON',
                 success: function (data) {
                     load();
                 }, error: hap.common.jsonError
             });
+            return false;
         }
     </script>
 </asp:Content>

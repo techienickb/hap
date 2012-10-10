@@ -29,21 +29,22 @@ namespace HAP.MyFiles.Homework
             {
                 XmlElement e = _doc.CreateElement("teacher");
                 e.SetAttribute("user", homework.Teacher);
-                teacher = _doc.AppendChild(e);
+                teacher = _doc.SelectSingleNode("/homeworks").AppendChild(e);
             }
             XmlElement h = _doc.CreateElement("homework");
             h.SetAttribute("name", homework.Name);
             h.SetAttribute("start", homework.Start);
             h.SetAttribute("end", homework.End);
+            h.SetAttribute("path", homework.Path);
             h.SetAttribute("token", HttpContext.Current.Request.Cookies["token"].Value);
             XmlElement d = _doc.CreateElement("description");
-            d.InnerText = "<![CDATA[" + homework.Description + "]]>";
+            d.InnerXml = "<![CDATA[" + homework.Description + "]]>";
             h.AppendChild(d);
             foreach (UserNode u in homework.UserNodes)
             {
-                XmlElement un = _doc.CreateElement(u.Method == UserNodeMethod.Add ? "add" : "remove");
+                XmlElement un = _doc.CreateElement(u.Method == "Add" ? "add" : "remove");
                 un.SetAttribute("type", u.Type.ToString());
-                if (u.Method == UserNodeMethod.Add) un.SetAttribute("mode", u.Mode.ToString());
+                if (u.Method == "Add") un.SetAttribute("mode", u.Mode);
                 un.InnerText = u.Value;
                 h.AppendChild(un);
             }
@@ -58,15 +59,16 @@ namespace HAP.MyFiles.Homework
             h.SetAttribute("name", homework.Name);
             h.SetAttribute("start", homework.Start);
             h.SetAttribute("end", homework.End);
+            h.SetAttribute("path", homework.Path);
             h.SetAttribute("token", HttpContext.Current.Request.Cookies["token"].Value);
             XmlElement d = _doc.CreateElement("description");
             d.InnerText = "<![CDATA[" + homework.Description + "]]>";
             h.AppendChild(d);
             foreach (UserNode u in homework.UserNodes)
             {
-                XmlElement un = _doc.CreateElement(u.Method == UserNodeMethod.Add ? "add" : "remove");
+                XmlElement un = _doc.CreateElement(u.Method == "Add" ? "add" : "remove");
                 un.SetAttribute("type", u.Type.ToString());
-                if (u.Method == UserNodeMethod.Add) un.SetAttribute("mode", u.Mode.ToString());
+                if (u.Method == "Add") un.SetAttribute("mode", u.Mode.ToString());
                 un.InnerText = u.Value;
                 h.AppendChild(un);
             }
@@ -76,7 +78,10 @@ namespace HAP.MyFiles.Homework
         public void Remove(Homework homework)
         {
             XmlNode teacher = _doc.SelectSingleNode("/homeworks/teacher[@user='" + homework.Teacher + "']");
-            teacher.RemoveChild(teacher.SelectSingleNode("homework[@name='" + homework.Name + "' AND @start='" + homework.Start + "' AND @end='" + homework.End + "']"));
+            XmlNode node = null;
+            foreach (XmlNode n in teacher.SelectNodes("homework"))
+                if (n.Attributes["name"].Value == homework.Name && n.Attributes["start"].Value == homework.Start && n.Attributes["end"].Value == homework.End) node = n;
+            teacher.RemoveChild(node);
             _doc.Save(HttpContext.Current.Server.MapPath("~/App_Data/Homework.xml"));
         }
 
