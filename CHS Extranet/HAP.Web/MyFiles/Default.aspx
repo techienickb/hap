@@ -133,25 +133,25 @@
 			}
 			Load();
 		});
-		function Zip(zipfile, index) {
-			temp = { Index: index, File: zipfile };
-			var a = '"' + SelectedItems()[index].Data.Path.replace(/\.\.\/download\//gi, "").replace(/\\/g, "/") + '"';
-			$.ajax({
-				type: 'POST',
-				url: hap.common.resolveUrl('~/api/MyFiles/Zip') + '?' + window.JSON.stringify(new Date()),
-				dataType: 'json',
-				data: '{ "Zip": "' + zipfile.replace(/\\/g, "/") + '", "Paths": [' + a.replace(/\\/g, "/") + '] }',
-				contentType: 'application/json',
-				success: function (data) {
-					temp++;
-					$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/zip/zipingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items"));
-					$("#progressstatus .progress").progressbar({ value: (temp.index / SelectedItems().length) * 100 });
-					if (temp < SelectedItems().length) Zip(temp.File, temp.index);
-					else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
-				},
-				error: hap.common.jsonError
-			});
-		}
+	    function Zip(zipfile, index) {
+	        temp = { Index: index, File: zipfile };
+	        var a = '"' + SelectedItems()[index].Data.Path.replace(/\.\.\/download\//gi, "").replace(/\\/g, "/") + '"';
+	        $.ajax({
+	            type: 'POST',
+	            url: hap.common.resolveUrl('~/api/MyFiles/Zip') + '?' + window.JSON.stringify(new Date()),
+	            dataType: 'json',
+	            data: '{ "Zip": "' + zipfile.replace(/\\/g, "/").replace("//", "/") + '", "Paths": [' + a.replace(/\\/g, "/") + '] }',
+	            contentType: 'application/json',
+	            success: function (data) {
+	                temp.Index++;
+	                $("#progressstatus").dialog("title", hap.common.getLocal("myfiles/zip/zipingitem1") + " " + (temp.Index + 1) + " " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items"));
+	                $("#progressstatus .progress").progressbar({ value: (temp.Index / SelectedItems().length) * 100 });
+	                if (temp.Index < SelectedItems().length) Zip(temp.File, temp.Index);
+	                else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
+	            },
+	            error: hap.common.jsonError
+	        });
+	    }
 		function UnZip(overwrite) {
 			if (overwrite == null) overwrite = false;
 			var a = SelectedItems()[0].Data.Path.replace(/\.\.\/download\//gi, "").replace(/\\/gi, "/");
@@ -754,7 +754,7 @@
 							$("#zipquestion").dialog({ autoOpen: true, modal: true, buttons: { 
 								"ZIP": function() { 
 									$(this).dialog("close");
-									$("#progressstatus").dialog({ autoOpen: true, modal: true, title: hap.common.getLocal("myfiles/zip/zipping") + " 1 " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items") });
+									$("#progressstatus").dialog({ autoOpen: true, modal: true, title: hap.common.getLocal("myfiles/zip/zipingitem1") + " 1 " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items") });
 									$("#progressstatus .progress").progressbar({ value: 1 });
 									Zip(curpath + "\\" + $("#zipfilename").val() + ".zip", 0);
 								}, "Close": function() { $(this).dialog("close"); } } 
@@ -1149,7 +1149,7 @@
 				$("#zipquestion").dialog({ autoOpen: true, modal: true, buttons: { 
 					"ZIP": function() { 
 						$(this).dialog("close");
-						$("#progressstatus").dialog({ autoOpen: true, modal: true, title: hap.common.getLocal("myfiles/zip/zipping") + " 1 " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items") });
+						$("#progressstatus").dialog({ autoOpen: true, modal: true, title: hap.common.getLocal("myfiles/zip/zipingitem1") + " 1 " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items") });
 						$("#progressstatus .progress").progressbar({ value: 1 });
 						Zip(curpath + "\\" + $("#zipfilename").val() + ".zip", 0);
 					}, "Close": function() { $(this).dialog("close"); } } 
