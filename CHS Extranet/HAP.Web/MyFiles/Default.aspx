@@ -95,7 +95,7 @@
 	<div id="Tree" class="tile-border-color">
 	</div>
 	<div id="MyFilesHeaddings">
-		<span class="name"><hap:LocalResource runat="server" StringPath="name" /></span><span class="type"><hap:LocalResource runat="server" StringPath="myfiles/type" /></span><span class="extension"><hap:LocalResource runat="server" StringPath="myfiles/extension" /></span><span class="size"><hap:LocalResource runat="server" StringPath="myfiles/size" /></span></div>
+		<a class="name" href="javascript:void(Load('Default', Sortorder == 'Default' ? (Sortdirection == 1 ? 2 : 1) : 1));"><hap:LocalResource runat="server" StringPath="name" /></a><a class="modified" href="javascript:void(Load('ModifiedTime', Sortorder == 'ModifiedTime' ? (Sortdirection == 1 ? 2 : 1) : 1));"><hap:LocalResource runat="server" StringPath="myfiles/modified" /></a><a class="type" href="javascript:void(Load('Type', Sortorder == 'ModifiedTime' ? (Sortdirection == 1 ? 2 : 1) : 1));"><hap:LocalResource runat="server" StringPath="myfiles/type" /></a><a class="extension" href="javascript:void(Load('Extension', Sortorder == 'ModifiedTime' ? (Sortdirection == 1 ? 2 : 1) : 1));"><hap:LocalResource runat="server" StringPath="myfiles/extension" /></a><span class="size"><hap:LocalResource runat="server" StringPath="myfiles/size" /></span></div>
 	<div id="MyFiles" class="tiles" data-role="content">
 	</div>
 	</div>
@@ -107,11 +107,8 @@
 		var viewMode = 0;
 		var keys = { shift: false, ctrl: false };
 		var lazytimer = null;
-		var temp, clipboard = null;
-		var table = null;
+		var temp, clipboard, table, curitem, curpath, Sortorder, Sortdirection = null;
 		var uploads = new Array();
-		var curitem = null;
-		var curpath = null;
 		$(window).hashchange(function () {
 			$("#filter").val("");
 			if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) {
@@ -572,7 +569,7 @@
 				var h = '<a id="' + this.Id + '" title="' + this.Data.Name + '" ';
 				if (this.Data.Type == 'Directory') h += 'class="Folder Selectable" ';
 				else h += 'class="Selectable" ';
-				h += 'href="' + (this.Data.Path.match(/\.\./i) ? this.Data.Path.replace(/\\/g, "/") : '#' + this.Data.Path) + '"><img class="icon" src="' + this.Data.Icon + '" alt="" /><span class="label">' + label + '</span><span class="type">';
+				h += 'href="' + (this.Data.Path.match(/\.\./i) ? this.Data.Path.replace(/\\/g, "/") : '#' + this.Data.Path) + '"><img class="icon" src="' + this.Data.Icon + '" alt="" /><span class="label">' + label + '</span><span class="modified">' + this.Data.ModifiedTime + '</span><span class="type">';
 				if (this.Data.Type == 'Directory') h += hap.common.getLocal("myfiles/filefolder");
 				else h += this.Data.Type + '</span><span class="extension">' + this.Data.Extension + '</span><span class="size">' + this.Data.Size;
 				h += '</span></a>';
@@ -868,7 +865,10 @@
 				return false;
 			};
 		}
-		function Load() {
+	    function Load(sortorder, sortdirection) {
+	        Sortorder = sortorder;
+	        Sortdirection = sortorder == null ? 1 : sortdirection;
+	        var sort = (sortorder == null ? '' : ('Sort/' + sortorder + '/' + sortdirection + '/'));
 			$(".context-menu").remove();
 			if (typeof (window.FileReader) != 'undefined') $("#MyFiles").unbind("dragover").unbind("dragleave").unbind("dragend").unbind("drop");
 			if (curpath == null) {
@@ -889,7 +889,7 @@
 			} else {
 			$.ajax({
 				type: 'GET',
-				url: hap.common.resolveUrl("~/api/MyFiles/") + curpath.replace(/\\/gi, "/") + '?' + window.JSON.stringify(new Date()),
+				url: hap.common.resolveUrl("~/api/MyFiles/") + sort + curpath.replace(/\\/gi, "/") + '?' + window.JSON.stringify(new Date()),
 				dataType: 'json',
 				contentType: 'application/json',
 				success: function (data) {
@@ -902,6 +902,7 @@
 					$("#MyFilesHeaddings .name").css("width", $("#MyFiles > a .label").width() + $("#MyFiles > a img").width() + 4);
 					$("#MyFilesHeaddings .type").css("width", $("#MyFiles > a .type").width() + 2);
 					$("#MyFilesHeaddings .extension").css("width", $("#MyFiles > a .extension").width() + 2);
+					$("#MyFilesHeaddings .modified").css("width", $("#MyFiles > a .modified").width() + 2);
 					$("#MyFilesHeaddings .size").css("width", $("#MyFiles > a .size").width() + 2);
 				}, error: hap.common.jsonError
 			});
@@ -1262,6 +1263,7 @@
 					$("#MyFilesHeaddings").css("display", "block");
 					$("#MyFilesHeaddings .name").css("width", $("#MyFiles > a .label").width() + $("#MyFiles > a img").width() + 4);
 					$("#MyFilesHeaddings .type").css("width", $("#MyFiles > a .type").width() + 2);
+					$("#MyFilesHeaddings .modified").css("width", $("#MyFiles > a .modified").width() + 2);
 					$("#MyFilesHeaddings .extension").css("width", $("#MyFiles > a .extension").width() + 2);
 					$("#MyFilesHeaddings .size").css("width", $("#MyFiles > a .size").width() + 2);
 

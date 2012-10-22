@@ -41,7 +41,7 @@ namespace HAP.Web.API
             if (HttpContext.Current.User.Identity.IsAuthenticated)
             {
                 s = s.Replace("user: \"\",", "user: \"" + HttpContext.Current.User.Identity.Name + "\",");
-                s = s.Replace("admin: false,", "admin: " + HttpContext.Current.User.IsInRole("Domain Admins").ToString() + "\",");
+                s = s.Replace("admin: false,", "admin: " + HttpContext.Current.User.IsInRole("Domain Admins").ToString().ToLower() + ",");
             }
             s = s.Replace("\t", "").Replace("  ", " ").Replace("  ", " ");
             s = s.Replace("localization: []", "localization: [" + string.Join(", ", BuildLocalization(_locals.SelectSingleNode("/hapStrings"), "")) + "]");
