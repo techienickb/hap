@@ -526,8 +526,8 @@ namespace HAP.MyFiles
         }
 
         [OperationContract]
-        [WebGet(UriTemplate="{Drive}/{*Path}")]
-        public File[] List(string Drive, string Path)
+        [WebGet(UriTemplate = "Sort/{SortOrder}/{Direction}/{Drive}/{*Path}")]
+        public File[] SortedList(string Drive, string Path, string SortOrder, string Direction)
         {
             Path = "/" + Path;
             hapConfig config = hapConfig.Current;
@@ -589,7 +589,21 @@ namespace HAP.MyFiles
                 }
             }
             finally { user.EndContainedImpersonate(); }
+            if (SortOrder != "Default")
+            {
+                var items = from f in Items orderby f.GetType().GetProperty(SortOrder).GetValue(f, null) select f;
+                if (Direction == "2") return items.Reverse().ToArray();
+                return items.ToArray();
+            }
+            if (Direction == "2") Items.Reverse();
             return Items.ToArray();
+        }
+
+        [OperationContract]
+        [WebGet(UriTemplate="{Drive}/{*Path}")]
+        public File[] List(string Drive, string Path)
+        {
+            return SortedList(Drive, Path, "Default", "1");
         }
 
         [OperationContract]

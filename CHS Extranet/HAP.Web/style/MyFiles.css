@@ -23,6 +23,7 @@ a.dynatree-title:active, .dynatree-node:active, .dynatree-node:active > a { bord
 #MyFiles a .type { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 13px; }
 #MyFiles a .size { display: block; line-height: 13px; }
 #MyFiles a .extension { display: none; line-height: 13px; }
+#MyFiles a .modified { display: none; line-height: 13px; }
 #MyFiles a.Selectable:active .type { color: #bbb; }
 #MyFiles a.Selected:active { color: #666; }
 #MyFiles a.Selectable .label { color: #000; }
@@ -31,7 +32,7 @@ a.dynatree-title:active, .dynatree-node:active, .dynatree-node:active > a { bord
 #MyFiles a .progress label { cursor: pointer; position: absolute; display: block; height: 15px; line-height: 15px; font-size: 11px; color: #ccc; top: 0; left: 0; right: 0; text-align: center; }
 #MyFiles a:hover { text-decoration: none; }
 
-#MyFiles.details .extension { display: block; }
+#MyFiles.details .extension, #MyFiles.details .modified { display: block; }
 #MyFiles.details a span { display: table-cell; border-right: solid 2px #fff; line-height: 20px; padding: 0; padding-right: 2px; height: 20px; border-bottom: solid 2px #fff; }
 #MyFiles.details a .label { border-left: solid 2px #fff; margin-left: 2px; }
 #MyFiles.details a img { height: 17px; display: table-cell; width: 17px; padding: 0; margin: 0; float: none; line-height: 17px; font-size: 17px; vertical-align: middle; border-bottom: solid 2px #fff; }
@@ -54,7 +55,7 @@ a.dynatree-title:active, .dynatree-node:active, .dynatree-node:active > a { bord
 #MyFiles.large a { line-height: 17px; height: auto; width: 84px; white-space: normal; text-overflow: none; overflow: hidden; }
 
 #MyFilesHeaddings { position: absolute; display: none; border-top: solid 2px #fff; border-bottom: solid 2px #fff; }
-#MyFilesHeaddings span { display: inline-block; height: 22px; line-height: 22px; background: #333; color: #fff; border-right: solid 2px #fff; }
+#MyFilesHeaddings a, #MyFilesHeaddings span { display: inline-block; height: 22px; line-height: 22px; background: #333; color: #fff; border-right: solid 2px #fff; }
 
 #MyFiles a.Selected { background-color: #333; border-color: #333; color: #bbb; }
 #MyFiles a.Selected:hover { background-color: #666; border-color: #666; }
