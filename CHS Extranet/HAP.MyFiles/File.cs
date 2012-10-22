@@ -8,6 +8,7 @@ using HAP.AD;
 using Microsoft.Win32;
 using System.Web;
 using HAP.Data.ComputerBrowser;
+using System.Runtime.Serialization;
 
 namespace HAP.MyFiles
 {
@@ -35,19 +36,31 @@ namespace HAP.MyFiles
             if (file.Extension.ToLower().Equals(".png") || file.Extension.ToLower().Equals(".jpg") || file.Extension.ToLower().Equals(".jpeg") || file.Extension.ToLower().Equals(".gif") || file.Extension.ToLower().Equals(".bmp") || file.Extension.ToLower().Equals(".wmf"))
                 Icon = "../api/mycomputer/thumb/" + HttpUtility.UrlEncode(Converter.UNCtoDrive(file.FullName, mapping, user).Replace(":", "")).Replace('+', ' ').Replace("%", "|").Replace("|2f", "/");
             CreationTime = file.CreationTime.ToShortDateString() + " " + file.CreationTime.ToString("hh:mm");
-            ModifiedTime = file.LastWriteTime.ToShortDateString() + " " + file.CreationTime.ToString("hh:mm");
+            UnderlyingCreation = file.CreationTime;
+            ModifiedTime = file.LastWriteTime.ToShortDateString() + " " + file.LastWriteTime.ToString("hh:mm");
+            UnderlyingModified = file.LastWriteTime;
+            UnderlyingSize = 0;
             Size = "";
             Path = HttpUtility.UrlEncode(Converter.UNCtoDrive(file.FullName, mapping, user).Replace(":", "")).Replace('+', ' ').Replace("%", "|").Replace("|5c", "\\");
 
         }
+        [IgnoreDataMember()]
+        public long UnderlyingSize { get; set; }
+        [IgnoreDataMember()]
+        public DateTime UnderlyingModified { get; set; }
+        [IgnoreDataMember()]
+        public DateTime UnderlyingCreation { get; set; }
         public File(FileInfo file, DriveMapping mapping, User user)
         {
             Extension = file.Extension;
             Type = "File";
             Name = file.Name + (file.Name.Contains(file.Extension) ? "" : file.Extension);
             CreationTime = file.CreationTime.ToShortDateString() + " " + file.CreationTime.ToString("hh:mm");
-            ModifiedTime = file.LastWriteTime.ToShortDateString() + " " + file.CreationTime.ToString("hh:mm");
+            UnderlyingCreation = file.CreationTime;
+            ModifiedTime = file.LastWriteTime.ToShortDateString() + " " + file.LastWriteTime.ToString("hh:mm");
+            UnderlyingModified = file.LastWriteTime;
             Size = parseLength(file.Length);
+            UnderlyingSize = file.Length;
             FileIcon fi;
             if (FileIcon.TryGet(Extension, out fi))
             {
