@@ -58,6 +58,12 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HAP.Data.SQL\HAP.Data.SQL.csproj">
+      <Project>{d7498641-1837-480e-8aa0-4466cdb5fb12}</Project>
+      <Name>HAP.Data.SQL</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
