@@ -22,6 +22,14 @@ if (hap == null) {
             resolveUrl: function (virtual) {
                 return virtual.replace(/~\//g, hap.root);
             },
+            keepAlive: function () {
+                setInterval(function () {
+                    $.ajax({
+                        url: hap.common.resolveUrl("~/api/test/?1=" + JSON.stringify(new Date())), type: 'GET', success: function (data) {
+                        }, error: hap.common.jsonError
+                    });
+                }, 60000);
+            },
             getLocal: function (e) {
                 for (var i = 0; i < hap.localization.length; i++)
                     if (hap.localization[i].name == e) return unescape(hap.localization[i].value.replace(/\\\\/g, "\\"));
@@ -251,5 +259,6 @@ if (hap == null) {
     $(function () {
         if (hap.load == hap.loadtypes.full) hap.sidebar.Init();
         if (hap.load > hap.loadtypes.none) hap.help.Init();
+        hap.keepAlive();
     });
 }
