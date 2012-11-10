@@ -258,7 +258,9 @@ if (hap == null) {
     };
     $(function () {
         if (hap.load == hap.loadtypes.full) hap.sidebar.Init();
-        if (hap.load > hap.loadtypes.none) hap.help.Init();
-        hap.keepAlive();
+        if (hap.load > hap.loadtypes.none) {
+            hap.help.Init();
+            hap.keepAlive();
+        }
     });
 }
