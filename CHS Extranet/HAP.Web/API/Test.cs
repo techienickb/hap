@@ -29,8 +29,15 @@ namespace HAP.Web.API
         {
             try
             {
-                File.CreateText(context.Server.MapPath("~/app_data/test.tmp")).Close();
-                File.Delete(context.Server.MapPath("~/app_data/test.tmp"));
+                if (string.IsNullOrEmpty(context.Request.QueryString["1"]))
+                {
+                    File.CreateText(context.Server.MapPath("~/app_data/test.tmp")).Close();
+                    File.Delete(context.Server.MapPath("~/app_data/test.tmp"));
+                }
+                else
+                {
+                    if (!context.User.Identity.IsAuthenticated) context.Response.Redirect("~/unauthorised.aspx");
+                }
                 context.Response.Clear();
                 context.Response.ContentType = "text/plain";
                 context.Response.Write("OK");
