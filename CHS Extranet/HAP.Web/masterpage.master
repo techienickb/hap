@@ -8,8 +8,8 @@
         <title>Home Access Plus</title>
         <asp:ContentPlaceHolder runat="server" ID="viewport"><meta name="viewport" content="width=992px" /></asp:ContentPlaceHolder>
         <link rel="shortcut icon" href="~/favicon.ico" />
-        <script src="<%: ResolveClientUrl("~/scripts/jquery-1.7.2.min.js") %>"></script>
-        <script src="<%: ResolveClientUrl("~/scripts/jquery-ui-1.8.16.custom.min.js") %>"></script>
+        <script src="<%: ResolveClientUrl("~/scripts/jquery-1.8.2.min.js") %>"></script>
+        <script src="<%: ResolveClientUrl("~/scripts/jquery-ui-1.9.1.custom.min.js") %>"></script>
         <script src="<%: ResolveClientUrl("~/api/js") %>"></script>
         <%if (false) { %>
         <script src="<%: ResolveClientUrl("~/Scripts/hap.web.js.js") %>"></script>

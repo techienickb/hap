@@ -27,7 +27,7 @@ namespace HAP.Web.Controls
         protected override void OnInitComplete(EventArgs e)
         {
             config = hapConfig.Current;
-            this.Title = string.Format("{0} - Home Access Plus+ - {1}", config.School.Name, SectionTitle);
+            this.Title = string.Format("{0} - {2} - {1}", config.School.Name, SectionTitle, Localize("homeaccessplus"));
         }
 
         protected XmlDocument _strings

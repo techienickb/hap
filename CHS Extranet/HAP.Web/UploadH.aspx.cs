@@ -18,7 +18,7 @@ namespace HAP.Web
     {
         public UploadH()
         {
-            this.SectionTitle = "My School Computer Browser - Upload HTML";
+            this.SectionTitle = "Upload via HTML";
             Context.Server.ScriptTimeout = 2400;
         }
         private bool isAuth(DriveMapping path)
