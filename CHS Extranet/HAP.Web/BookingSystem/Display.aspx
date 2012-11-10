@@ -4,7 +4,7 @@
 <head runat="server">
     <title>Display Board System</title>
     <link href="<%: ResolveClientUrl("~/style/basestyle.css") %>" rel="stylesheet" type="text/css" />
-    <script src="<%: ResolveClientUrl("~/scripts/jquery-1.7.2.min.js") %>"></script>
+    <script src="<%: ResolveClientUrl("~/scripts/jquery-1.8.2.min.js") %>"></script>
     <link href="<%: ResolveClientUrl("~/style/bookingsystem.css") %>" rel="stylesheet" type="text/css" />
 </head>
 <body class="bookingdisplay">

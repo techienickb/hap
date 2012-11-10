@@ -18,7 +18,7 @@ namespace HAP.Web
     {
         public Default()
         {
-            this.SectionTitle = "Home";
+            this.SectionTitle = Localize("home");
         }
 
         protected void Page_Load(object sender, EventArgs e)

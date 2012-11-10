@@ -621,12 +621,12 @@
     <Content Include="Scripts\jqplot.cursor.min.js" />
     <Content Include="Scripts\jqplot.dateAxisRenderer.min.js" />
     <Content Include="Scripts\jqplot.highlighter.min.js" />
-    <Content Include="Scripts\jquery-1.7.2-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.8.2.js" />
+    <None Include="Scripts\jquery-1.8.2-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui-1.9.1.custom.min.js" />
     <Content Include="Scripts\jquery.jqplot.min.js" />
     <Content Include="Scripts\jquery.mobile-1.0.min.js" />
     <Content Include="Scripts\hap.web.js.js" />
-    <Content Include="Scripts\jquery-1.7.2.min.js" />
-    <Content Include="Scripts\jquery-ui-1.8.16.custom.min.js" />
     <Content Include="Scripts\jquery.ba-hashchange.min.js" />
     <Content Include="Scripts\jquery.contextMenu.js" />
     <Content Include="Scripts\jquery.dataTables.js" />
