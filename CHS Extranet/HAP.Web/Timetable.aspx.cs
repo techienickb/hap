@@ -14,7 +14,7 @@ namespace HAP.Web
     {
         public Timetable()
         {
-            this.SectionTitle = "My Timetable";
+            this.SectionTitle = Localize("timetable/my");
         }
         protected void Page_Load(object sender, EventArgs e)
         {

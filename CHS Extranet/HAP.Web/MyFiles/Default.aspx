@@ -7,16 +7,32 @@
 	<link href="../style/MyFiles.css" rel="stylesheet" type="text/css" />
     <script src="//js.live.net/v5.0/wl.js"></script>
 </asp:Content>
-<asp:Content ContentPlaceHolderID="body" runat="server">
-	<header id="myfilesheader" class="commonheader">
-		<nav class="tiles right">
-			<a class="button" id="bug" href="#" onclick="return false;">Got an Issue?</a>
-			<a class="button" id="help" href="#" onclick="return false;"><hap:LocalResource StringPath="help" runat="server" /></a>
-		</nav>
-		<div>
-			<hap:LocalResource StringPath="myfiles/myfiles" runat="server" />
+<asp:Content ContentPlaceHolderID="title" runat="server"><asp:HyperLink runat="server" NavigateUrl="~/MyFiles/"><hap:LocalResource runat="server" StringPath="myfiles/myfiles" /></asp:HyperLink></asp:Content>
+<asp:Content ContentPlaceHolderID="header" runat="server">
+	<a style="float: right;" id="help" href="#" onclick="return false;"><hap:LocalResource StringPath="help" runat="server" />?</a>
+    <div id="toolbar" data-role="header">
+		<div style="float: right;">
+			<a class="dropdown" id="view" href="#"><hap:LocalResource runat="server" StringPath="myfiles/view" /></a>
 		</div>
-	</header>
+		<div style="float: left;">
+			<a href="#" id="backup"><span></span></a>
+		</div>
+		<div style="float: left; margin-left: 3px;" id="maintools">
+			<input type="text" id="newfoldertext" /><a id="newfolder" href="#"><hap:LocalResource runat="server" StringPath="myfiles/newfolder" /></a>
+            <a href="#" id="toolbar-cut"><hap:LocalResource runat="server" StringPath="myfiles/cut" /></a>
+            <a href="#" id="toolbar-copy"><hap:LocalResource runat="server" StringPath="myfiles/copy/copy" /></a>
+            <div id="toolbar-paste-container" class="menucontainer"><a href="#" id="toolbar-paste"><hap:LocalResource runat="server" StringPath="myfiles/paste" /></a>|<a style="padding: 0 5px;" href="#" id="toolbar-clear">X</a></div>
+            <a href="#" id="toolbar-delete"><hap:LocalResource runat="server" StringPath="myfiles/delete/delete" /></a>
+            <a href="#" id="toolbar-zip"><hap:LocalResource runat="server" StringPath="myfiles/zip/zip" /></a>
+            <a href="#" id="toolbar-unzip"><hap:LocalResource runat="server" StringPath="myfiles/unzip/unzip" /></a>
+            <a href="#" id="toolbar-open"><hap:LocalResource runat="server" StringPath="myfiles/open" /></a>
+            <a href="#" id="toolbar-download"><hap:LocalResource runat="server" StringPath="myfiles/download" /></a>
+            <a href="#" id="upload"><hap:LocalResource runat="server" StringPath="myfiles/upload/upload" /></a>
+            <label id="uploadto"></label>
+		</div>
+	</div>
+</asp:Content>
+<asp:Content ContentPlaceHolderID="body" runat="server">
 	<input type="text" id="renamebox" />
 	<hap:WrappedLocalResource runat="server" title="#myfiles/properties" id="properties" Tag="div">
 		<div id="propcont"><hap:LocalResource StringPath="loading" runat="server" />...</div>
@@ -71,26 +87,15 @@
 		</div>
 	</div>
 	<div id="myfilescontent">
-	<div id="toolbar" style="padding: 4px; margin-bottom: 4px;" class="ui-widget-header" data-role="header">
-		<div style="float: right;">
-			<span style="color: #fff;" id="search"><hap:LocalResource runat="server" StringPath="search" />:
-			<input type="text" id="filter" />
-			</span>
-			<button class="dropdown" id="view"><hap:LocalResource runat="server" StringPath="myfiles/view" /></button>
-		</div>
-		<div style="float: left;">
-			<button id="backup"></button>
-		</div>
-		<div style="float: left; margin-left: 3px;" id="maintools">
-			<input type="text" id="newfoldertext" /><button id="newfolder"><hap:LocalResource runat="server" StringPath="myfiles/newfolder" /></button><button id="toolbar-cut"><hap:LocalResource runat="server" StringPath="myfiles/cut" /></button><button id="toolbar-copy"><hap:LocalResource runat="server" StringPath="myfiles/copy/copy" /></button><button id="toolbar-paste" style="margin: 0;"><hap:LocalResource runat="server" StringPath="myfiles/paste" /></button><button id="toolbar-clear">X</button><button id="toolbar-delete"><hap:LocalResource runat="server" StringPath="myfiles/delete/delete" /></button><button id="toolbar-zip"><hap:LocalResource runat="server" StringPath="myfiles/zip/zip" /></button><button id="toolbar-unzip"><hap:LocalResource runat="server" StringPath="myfiles/unzip/unzip" /></button><button id="toolbar-open"><hap:LocalResource runat="server" StringPath="myfiles/open" /></button><button id="toolbar-download"><hap:LocalResource runat="server" StringPath="myfiles/download" /></button><button id="upload"><hap:LocalResource runat="server" StringPath="myfiles/upload/upload" /></button><label id="uploadto"></label>
-		</div>
+	<div id="Views" class="hapmenu tile-border-color">
+		<a href="#" id="tiles"><hap:LocalResource runat="server" StringPath="myfiles/tiles" /></a>
+		<a href="#" id="smallicons"><hap:LocalResource runat="server" StringPath="myfiles/smallicons" /></a>
+		<a href="#" id="mediumicons"><hap:LocalResource runat="server" StringPath="myfiles/mediumicons" /></a>
+		<a href="#" id="largeicons"><hap:LocalResource runat="server" StringPath="myfiles/largeicons" /></a>
+		<a href="#" id="details"><hap:LocalResource runat="server" StringPath="myfiles/details" /></a>
 	</div>
-	<div id="Views" class="tile-border-color">
-		<button id="tiles"><hap:LocalResource runat="server" StringPath="myfiles/tiles" /></button>
-		<button id="smallicons"><hap:LocalResource runat="server" StringPath="myfiles/smallicons" /></button>
-		<button id="mediumicons"><hap:LocalResource runat="server" StringPath="myfiles/mediumicons" /></button>
-		<button id="largeicons"><hap:LocalResource runat="server" StringPath="myfiles/largeicons" /></button>
-		<button id="details"><hap:LocalResource runat="server" StringPath="myfiles/details" /></button>
+    <div id="search">
+		<input type="text" id="filter" />
 	</div>
 	<div id="Tree" class="tile-border-color">
 	</div>
@@ -110,7 +115,7 @@
 		var temp, clipboard, table, curitem, curpath, Sortorder, Sortdirection = null;
 		var uploads = new Array();
 		$(window).hashchange(function () {
-			$("#filter").val("");
+			$("#filter").val(hap.common.getLocal("search"));
 			if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) {
 				curpath = window.location.href.split("#")[1];
 				if (typeof (window.FileReader) != 'undefined') $("#MyFiles").attr("dropzone", "copy<%=DropZoneAccepted %>");
@@ -122,6 +127,7 @@
 			else {
 				curitem = curpath = null;
 				$("#toolbar").slideUp();
+				$("#search input").fadeOut();
 				if (typeof (window.FileReader) != 'undefined') {
 					$("#MyFiles").removeAttr("dropzone").attr("dropzone", "copy<%=DropZoneAccepted %>").unbind("dragover").unbind("dragleave").unbind("dragend");
 				}
@@ -542,19 +548,19 @@
 				else unzip = false;
 			}
 			if (curpath.match(/\.zip/gi)) { cut = copy = pase = del = download = zip = unzip = false; }
-			if (cut && $("#toolbar-cut").css("display") == "none") { $("#toolbar-cut").css("display", "").animate({ width: 30 }); $("#toolbar-delete").css("display", "").animate({ width: 51 }); }
+			if (cut && $("#toolbar-cut").css("display") == "none") { $("#toolbar-cut").css("display", "").animate({ width: 22 }); $("#toolbar-delete").css("display", "").animate({ width: 43 }); }
 			if (!cut && $("#toolbar-cut").css("display") != "none") { $("#toolbar-cut").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-cut").css("display", "none") } }); $("#toolbar-delete").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-delete").css("display", "none") } }); }
-			if (copy && $("#toolbar-copy").css("display") == "none") $("#toolbar-copy").css("display", "").animate({ width: 43 });
+			if (copy && $("#toolbar-copy").css("display") == "none") $("#toolbar-copy").css("display", "").animate({ width: 35 });
 			if (!copy && $("#toolbar-copy").css("display") != "none") $("#toolbar-copy").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-copy").css("display", "none") } });
-			if (paste && $("#toolbar-paste").css("display") == "none") { $("#toolbar-paste").css("display", "").animate({ width: 46 }); $("#toolbar-clear").css("display", "").animate({ width: 20 }); }
-			if (!paste && $("#toolbar-paste").css("display") != "none") { $("#toolbar-paste").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-paste").css("display", "none") } }); $("#toolbar-clear").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-clear").css("display", "none") } }); }
-			if (download && $("#toolbar-download").css("display") == "none") $("#toolbar-download").css("display", "").animate({ width: 72 });
+			if (paste && $("#toolbar-paste").css("display") == "none") { $("#toolbar-paste-container").show(); $("#toolbar-paste").css("display", "").animate({ width: 38 }); $("#toolbar-clear").css("display", "").animate({ width: 10 }); }
+			if (!paste && $("#toolbar-paste").css("display") != "none") { $("#toolbar-paste").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-paste").css("display", "none"); $("#toolbar-paste-container").hide(); } }); $("#toolbar-clear").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-clear").css("display", "none") } }); }
+			if (download && $("#toolbar-download").css("display") == "none") $("#toolbar-download").css("display", "").animate({ width: 64 });
 			if (!download && $("#toolbar-download").css("display") != "none") $("#toolbar-download").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-download").css("display", "none") } });
-			if (open && $("#toolbar-open").css("display") == "none") $("#toolbar-open").css("display", "").animate({ width: 44 });
+			if (open && $("#toolbar-open").css("display") == "none") $("#toolbar-open").css("display", "").animate({ width: 36 });
 			if (!open && $("#toolbar-open").css("display") != "none") $("#toolbar-open").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-open").css("display", "none") } });
-			if (unzip && $("#toolbar-unzip").css("display") == "none") $("#toolbar-unzip").css("display", "").animate({ width: 48 });
+			if (unzip && $("#toolbar-unzip").css("display") == "none") $("#toolbar-unzip").css("display", "").animate({ width: 40 });
 			if (!unzip && $("#toolbar-unzip").css("display") != "none") $("#toolbar-unzip").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-unzip").css("display", "none") } });
-			if (zip && $("#toolbar-zip").css("display") == "none") $("#toolbar-zip").css("display", "").animate({ width: 30 });
+			if (zip && $("#toolbar-zip").css("display") == "none") $("#toolbar-zip").css("display", "").animate({ width: 22 });
 			if (!zip && $("#toolbar-zip").css("display") != "none") $("#toolbar-zip").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-zip").css("display", "none") } });
 		}
 		function Item(data) {
@@ -880,6 +886,7 @@
 					success: function (data) {
 						items = new Array();
 						$("#MyFiles").html("");
+						$(window).trigger("resize");
 						for (var i = 0; i < data.length; i++)
 							items.push(new Drive(data[i]));
 						for (var i = 0; i < items.length; i++)
@@ -895,10 +902,12 @@
 				success: function (data) {
 					items = new Array();
 					$("#MyFiles").html("");
+					$(window).trigger("resize");
 					for (var i = 0; i < data.length; i++)
 						items.push(new Item(data[i]));
 					for (var i = 0; i < items.length; i++) items[i].Render();
 					$("#toolbar").slideDown();
+					$("#search input").fadeIn();
 					$("#MyFilesHeaddings .name").css("width", $("#MyFiles > a .label").width() + $("#MyFiles > a img").width() + 4);
 					$("#MyFilesHeaddings .type").css("width", $("#MyFiles > a .type").width() + 2);
 					$("#MyFilesHeaddings .extension").css("width", $("#MyFiles > a .extension").width() + 2);
@@ -912,7 +921,8 @@
 				dataType: 'json',
 				contentType: 'application/json',
 				success: function (data) {
-					curitem = data;
+				    curitem = data;
+				    $("#filter").val(hap.common.getLocal("search") + ": " + curitem.Name);
 					if (curitem.Actions == 0) {
 						$("#newfolder").animate({ opacity: 1.0 }, 500, function () { $("#newfolder").show(); });
 						$("#newfoldertext").blur();
@@ -1060,13 +1070,13 @@
 					}
 				}
 			}).dynatree("getRoot").visit(function(node){ node.expand(true); });
-			$("#filter").val("");
+			$("#filter").val(hap.common.getLocal("search"));
 			$("button").button().click(function () { return false; });
 			$("button.dropdown").button({ icons: { secondary: "ui-icon-carat-1-s"} });
-			$("#backup").click(function () { history.go(-1); return false; }).button({ icons: { primary: "ui-icon-circle-arrow-w" }, text: false }).css("height", "26px");
+			$("#backup").click(function () { history.go(-1); return false; });
 			$("#newfolder").click(function () {
-				if ($("#newfolder span").text() == hap.common.getLocal("myfiles/newfolder")) {
-					$("#newfolder span").text(hap.common.getLocal("myfiles/create"));
+				if ($("#newfolder").text() == hap.common.getLocal("myfiles/newfolder")) {
+					$("#newfolder").text(hap.common.getLocal("myfiles/create"));
 					$("#newfoldertext").val("").show().animate({ width: 150, opacity: 1.0 }).focus();
 				} else {
 					if (temp != null) { clearTimeout(temp); temp == null; }
@@ -1099,6 +1109,7 @@
 						}, error: hap.common.jsonError
 					});
 				}
+				return false;
 			});
 			$("#newfoldertext").focusout(function () {
 				temp = setTimeout(function () { 
@@ -1130,7 +1141,7 @@
 				RefreshToolbar();
 				return false;
 			});
-			$("#toolbar-paste").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-paste").css("display", "none") } }).click(function () {
+			$("#toolbar-paste").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-paste-container").hide(); $("#toolbar-paste").css("display", "none") } }).click(function () {
 				var s = "";
 				for (var i = 0; i < clipboard.items.length; i++) s += clipboard.items[i].Data.Name + "\n";
 				$("#progressstatus").dialog({ autoOpen: true, modal: true, title: hap.common.getLocal("myfiles/" + ((clipboard.mode == 'copy') ? "copy/copying" : "move/moving")) + " 1 " + hap.common.getLocal("of") + " " + clipboard.items.length + " " + hap.common.getLocal("items") });
@@ -1236,14 +1247,14 @@
 				else if (keycode == 13) { event.preventDefault(); $("#renamebox").blur(); }
 			});
 			$(".button").button();
-			$("#help").button({icons: { secondary: 'ui-icon-help' }}).click(function() {
+			$("#help").click(function() {
 				hap.help.Load("myfiles/index");
 				return false;
 			});
 			$("#view").click(function () {
 				if (showView == 0) {
 					showView = 1;
-					$("#Views").animate({ height: 'toggle' }).css("right", $("#hapContent").width() - ($("#view").position().left + $("#view").width() + 4));
+					$("#Views").animate({ height: 'toggle' });
 				}
 				return false;
 			});
@@ -1256,10 +1267,10 @@
 			$(document).click(function () {
 				if (showView == 1) { $("#Views").animate({ height: 'toggle' }); showView = 0; }
 			});
-			$("#Views button").click(function () {
+			$("#Views a").click(function () {
 				if ($(this).attr("id") == "details") {
 					viewMode = 1;
-					$("#MyFiles").addClass("details").removeClass("small").removeClass("medium").removeClass("large").css("padding-top", $("#toolbar").height() + 34);
+					$("#MyFiles").addClass("details").removeClass("small").removeClass("medium").removeClass("large");
 					$("#MyFilesHeaddings").css("display", "block");
 					$("#MyFilesHeaddings .name").css("width", $("#MyFiles > a .label").width() + $("#MyFiles > a img").width() + 4);
 					$("#MyFilesHeaddings .type").css("width", $("#MyFiles > a .type").width() + 2);
@@ -1271,28 +1282,29 @@
 				}
 				else if ($(this).attr("id") == "smallicons") {
 					viewMode = 2;
-					$("#MyFiles").addClass("small").removeClass("details").removeClass("medium").removeClass("large").css("padding-top", $("#toolbar").height() + 10);
+					$("#MyFiles").addClass("small").removeClass("details").removeClass("medium").removeClass("large");
 					$("#MyFilesHeaddings").css("display", "none");
 					$("#renamebox").removeClass("details").removeClass("medium").removeClass("large").addClass("small");
 				}
 				else if ($(this).attr("id") == "mediumicons") {
 					viewMode = 3;
-					$("#MyFiles").addClass("medium").removeClass("small").removeClass("large").removeClass("details").css("padding-top", $("#toolbar").height() + 10);
+					$("#MyFiles").addClass("medium").removeClass("small").removeClass("large").removeClass("details");
 					$("#MyFilesHeaddings").css("display", "none");
 					$("#renamebox").removeClass("details").removeClass("small").removeClass("large").addClass("medium");
 				}
 				else if ($(this).attr("id") == "largeicons") {
 					viewMode = 4;
-					$("#MyFiles").addClass("large").removeClass("medium").removeClass("small").removeClass("details").css("padding-top", $("#toolbar").height() + 10);
+					$("#MyFiles").addClass("large").removeClass("medium").removeClass("small").removeClass("details");
 					$("#MyFilesHeaddings").css("display", "none");
 					$("#renamebox").removeClass("details").removeClass("small").removeClass("medium").addClass("large");
 				}
 				else {
 					viewMode = 0;
-					$("#MyFiles").removeClass("details").removeClass("small").removeClass("medium").removeClass("large").css("padding-top", $("#toolbar").height() + 10);
+					$("#MyFiles").removeClass("details").removeClass("small").removeClass("medium").removeClass("large");
 					$("#renamebox").removeClass("details").removeClass("small").removeClass("medium").removeClass("large");
 					$("#MyFilesHeaddings").css("display", "none");
 				}
+				return false;
 			});
 			$("#uploadprogress").css("margin-left", $("#myfilescontent").width() - $("#uploadprogress").width()).slideUp('slow');
 			$("#upload").click(function () { 
@@ -1317,33 +1329,28 @@
 					$("#uploaders input").hide();
 					$("#uploaders").dialog({ autoOpen: true, modal: true, width: 320, height: 280, resizable: false });
 				}
+				return false;
 			});
 			$("#uploadedfiles").attr("accept", "<%=DropZoneAccepted.Replace("f:", "") %>");
-			$("#toolbar").css("top", $("#myfilesheader").height());
-			$("#Tree").css("top", $("#myfilesheader").height() + $("#toolbar").height() + 10);
-			$("#MyFiles").css("margin-left", $("#Tree").width() + 5).css("padding-top", $("#toolbar").height() + 10);
-			$("#Views").css("top", $("#myfilesheader").height() + $("#toolbar").height() + 4);
-			$("#MyFilesHeaddings").css("margin-left", $("#Tree").width() + 5).css("top", $("#myfilesheader").height() + $("#toolbar").height() + 8);
-			$(window).scroll(function (event) {
-				if ($(this).scrollTop() >= $("#myfilesheader").offset().top + $("#myfilesheader").height()) {
-					$("#toolbar").css("position", "fixed").css("top", 0);
-					$("#Tree").css("position", "fixed").css("top", $("#toolbar").height() + 8);
-					$("#MyFilesHeaddings").css("position", "fixed").css("top", $("#toolbar").height() + 8);
-					$("#Views").css("position", "fixed").css("top", $("#toolbar").height() + 4);
-				}
-				else {
-					$("#toolbar").css("position", "absolute").css("top", $("#myfilesheader").height());
-					$("#Tree").css("position", "absolute").css("top", $("#myfilesheader").height() + $("#toolbar").height() + 8);
-					$("#Views").css("position", "absolute").css("top", $("#myfilesheader").height() + $("#toolbar").height() + 4);
-					$("#MyFilesHeaddings").css("position", "absolute").css("top", $("#myfilesheader").height() + $("#toolbar").height() + 8);
-				}
-			});
+		    $("#search").css("top", $("#hapHeader").position().top + $("#hapHeader").height());
+		    $("#search input").focus(function () {
+		        console.log("hello");
+		        if ($(this).val().match(hap.common.getLocal("search"))) $(this).val("");
+		    }).blur(function () {
+		        if ($(this).val() == "") $(this).val(hap.common.getLocal("search") + ": " + curitem.Name);
+		    });
+		    $(window).trigger("resize");
+			$("#MyFiles").css("margin-left", $("#Tree").width() + 5);
+			$("#MyFilesHeaddings").css("margin-left", $("#Tree").width() + 5).css("top", $("#hapHeader").position().top + $("#hapHeader").height());
 			$(window).trigger("hashchange");
-			$("#bug").click(function() { hap.help.Load("myfiles/bug"); return false; });
 		});
 		$(document).bind('keydown', function (event) { var keycode = (event.keyCode ? event.keyCode : (event.which ? event.which : event.charCode)); keys.shift = (keycode == 16); keys.ctrl = (keycode == 17); });
 		$(document).bind('keyup', function (event) { keys.shift = keys.ctrl = false; });
 		function closeUpload() { $("#uploaders").dialog("close"); };
+		$(window).resize(function () {
+		    setTimeout(function () { $("#Tree").css("top", $("#search").position().top + $("#search").height()).css("height", $("#hapContent").height() - $("#search").height()); }, 50);
+		    $("#Views").css("left", $('#view').position().left - 20);
+		});
 		</script>
 	</hap:CompressJS>
 	<% if (FirstTime) { %> <script type="text/javascript">$(function () { $("#help").trigger("click"); });</script><%}  %>

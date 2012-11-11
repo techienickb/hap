@@ -3,17 +3,13 @@
 	<script src="../Scripts/jquery.ba-hashchange.min.js" type="text/javascript"></script>
 	<link href="../style/bookingsystem.css" rel="stylesheet" type="text/css" />
 </asp:Content>
+<asp:Content ContentPlaceHolderID="title" runat="server"><asp:HyperLink runat="server" NavigateUrl="~/BookingSystem/"><hap:LocalResource runat="server" StringPath="bookingsystem/bookingsystem" /></asp:HyperLink></asp:Content>
+<asp:Content ContentPlaceHolderID="header" runat="server">
+	<asp:HyperLink runat="server" NavigateUrl="Admin/" ID="adminlink" Text="Control Panel" style="float: right;" />
+	<a href="OverviewCalendar.aspx" id="overview" style="float: right;">Overview</a>
+	<a id="help" href="#" style="float: right;" onclick="hap.help.Load('bookingsystem/index'); return false;"><hap:LocalResource StringPath="help" runat="server" /></a>
+</asp:Content>
 <asp:Content ContentPlaceHolderID="body" runat="server">
-	<header class="commonheader">
-		<nav class="tiles right">
-			<asp:HyperLink CssClass="button" runat="server" NavigateUrl="Admin/" ID="adminlink" Text="Control Panel" />
-			<a href="OverviewCalendar.aspx" id="overview" class="button">Overview</a>
-			<a class="button" id="help" href="#" onclick="hap.help.Load('bookingsystem/index'); return false;"><hap:LocalResource StringPath="help" runat="server" /></a>
-		</nav>
-		<div>
-			<hap:LocalResource StringPath="bookingsystem/bookingsystem" runat="server" />
-		</div>
-	</header>
 	<div id="overviewcalendar" title="Overview Calendar">
 		<label for="overviewsearch"><hap:LocalResource runat="server" StringPath="bookingsystem/quicksearch" /></label><input type="text" id="overviewsearch" />
 		<iframe src="OverviewCalendar.aspx" style="border: 0; margin: 0; padding: 0; width: 100%; height: 440px;"></iframe>

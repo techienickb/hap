@@ -3,12 +3,8 @@
 	<script src="../Scripts/jquery.ba-hashchange.min.js" type="text/javascript"></script>
 	<link href="../style/helpdesk.css" rel="stylesheet" type="text/css" />
 </asp:Content>
+<asp:Content ContentPlaceHolderID="title" runat="server"><asp:HyperLink runat="server" NavigateUrl="~/HelpDesk/"><hap:LocalResource runat="server" StringPath="helpdesk/helpdesk" /></asp:HyperLink></asp:Content>
 <asp:Content ContentPlaceHolderID="body" runat="server">
-    <header class="commonheader">
-		<div>
-			<hap:LocalResource StringPath="helpdesk/helpdesk" runat="server" />
-		</div>
-	</header>
 	<div id="updateticket" title="Update Ticket">
 		<asp:PlaceHolder runat="server" id="adminupdatepanel">
 		<div>
