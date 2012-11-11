@@ -24,6 +24,9 @@
     <my>My Timetable</my>
   </timetable>
   <helpdesk>
+    <daystoindex>Days to Index</daystoindex>
+    <refreshstats>Refresh Stats</refreshstats>
+    <stats>Stats</stats>
     <helpdesk>Help Desk</helpdesk>
     <priority>Priority</priority>
     <high>High</high>

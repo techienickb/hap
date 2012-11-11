@@ -38,14 +38,16 @@ if (hap == null) {
         header: {
             StopClose: false,
             StopUClose: false,
+            WaitInit: false,
             Init: function () {
 
                 if (window.location.pathname.toLowerCase() != hap.root.toLowerCase() && window.location.pathname.toLowerCase() != hap.common.resolveUrl('~/login.aspx').toLowerCase()) {
+                    $("#hapTitleMore").click(function () { return false; });
                     $.ajax({
                         url: hap.common.resolveUrl('~/api/livetiles/') + '?' + window.JSON.stringify(new Date()), type: 'GET', dataType: "json", contentType: 'application/JSON', success: function (data) {
                             $("#hapContent").click(function () { if ($("#hapHeaderMore").css('display') == 'block' && !hap.header.StopClose) $("#hapHeaderMore").animate({ height: 'toggle' }); hap.header.StopClose = false; }).append('<div id="hapHeaderMore" class="tile-color"><div class="tiles"></div></div>');
-                            $("#hapHeaderMore").click(function () { hap.header.StopClose = true; }).mouseleave(function () { $("#hapHeaderMore").animate({ height: 'toggle' }); });
-                            $("#hapTitleMore").click(function () { $("#hapHeaderMore").animate({ height: 'toggle' }); return false; }).trigger("click");
+                            $("#hapHeaderMore").click(function () { hap.header.StopClose = true; }).mouseleave(function () { if (!hap.header.WaitInit) $("#hapHeaderMore").animate({ height: 'toggle' }); });
+                            $("#hapTitleMore").click(function () { hap.header.WaitInit = true; $("#hapHeaderMore").animate({ height: 'toggle' }, 500, 'linear', function () { hap.header.WaitInit = false; }); return false; }).trigger("click");
                             for (var i = 0; i < data.length; i++) {
                                 if (data[i].Group == 'Me') continue;
                                 var s = "<div>" + data[i].Group + "<div>";

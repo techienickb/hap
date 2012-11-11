@@ -385,5 +385,47 @@ namespace HAP.HelpDesk
                 tickets.Add(new Ticket(node));
             return tickets.ToArray();
         }
+
+        [OperationContract]
+        [WebGet(UriTemplate = "Stats")]
+        public Stats Stats()
+        {
+            return PeriodStats("7");
+        }
+
+        [OperationContract]
+        [WebGet(UriTemplate = "Stats/{Period}")]
+        public Stats PeriodStats(string Period)
+        {
+            int p = int.Parse("-" + Period);
+            Stats s = new Stats();
+            Dictionary<string, int> highusers = new Dictionary<string, int>();
+            XmlDocument doc = new XmlDocument();
+            doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
+            s.NewTickets = s.ClosedTickets = s.OpenTickets = 0;
+            foreach (XmlNode node in doc.SelectNodes("/Tickets/Ticket"))
+            {
+                FullTicket tick = new FullTicket(node);
+                if (DateTime.Parse(tick.Date).Date >= DateTime.Now.AddDays(p).Date && DateTime.Parse(tick.Date).Date <= DateTime.Now.Date)
+                {
+                    if (highusers.ContainsKey(tick.Username)) highusers[tick.Username]++;
+                    else highusers.Add(tick.Username, 1);
+                    s.NewTickets++;
+                }
+                if (DateTime.Parse(tick.Notes[tick.Notes.Count - 1].Date).Date >= DateTime.Now.AddDays(p).Date && DateTime.Parse(tick.Notes[tick.Notes.Count - 1].Date).Date <= DateTime.Now.Date && tick.Status == "Fixed")
+                {
+                    s.ClosedTickets++;
+                }
+                if (tick.Status != "Fixed") s.OpenTickets++;
+            }
+            if (highusers.Keys.Count > 0)
+            {
+                var a = highusers.OrderByDescending(h => h.Value).First();
+                s.HighestUser = new UserStats();
+                s.HighestUser.Username = a.Key;
+                s.HighestUser.Tickets = a.Value;
+            }
+            return s;
+        }
     }
 }

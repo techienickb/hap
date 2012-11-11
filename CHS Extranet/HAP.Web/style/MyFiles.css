@@ -108,3 +108,5 @@ button { overflow: hidden; text-overflow: hidden; }
 #jqContextMenu { font-size: 13px; }
 
 #backup span { display: inline-block; background: url(../images/ui-icons_ffffff_256x240.png) -80px -192px no-repeat; height: 16px; width: 16px; vertical-align: top; margin-top: 14px; }
+
+#hapHeader #hapTitle a { background-image: url(../api/tiles/icons/24/24/images/icons/metro/folders-os/DocumentsFolder.png); background-position: 5px center; }

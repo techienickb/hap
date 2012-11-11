@@ -37,6 +37,7 @@
                     <LoggedInTemplate>
                         <a href="#" id="hapUserTitle"><%=((HAP.AD.User)Membership.GetUser()).DisplayName %> (<asp:LoginName runat="server" />)</a>
                         <div id="hapUserMenu" class=".hapmenu tile-border-color">
+                            <div class="mypic" style="background-image: url(<%:ResolveClientUrl("~/api/mypic") %>)"></div>
                             <asp:HyperLink runat="server" NavigateUrl="~/#me"><hap:LocalResource runat="server" StringPath="editprofile" /></asp:HyperLink>
                             <asp:LoginStatus runat="server" />
                         </div>

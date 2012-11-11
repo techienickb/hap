@@ -49,3 +49,5 @@ body.bookingdisplay, body.bookingdisplay form { padding: 0; margin: 0; width: 10
     #bookingsystemcontent { width: auto!important; }
     #bookingday { overflow: hidden; }
 }
+
+#hapHeader #hapTitle a { background-image: url(../api/tiles/icons/24/24/images/icons/metro/applications/calendar.png); background-position: 5px center; }

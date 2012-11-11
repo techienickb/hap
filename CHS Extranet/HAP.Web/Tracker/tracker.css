@@ -43,3 +43,5 @@
 .popupContent div {  }
 .popupContent h1 { background: transparent; margin: 0; padding: 0; height: 28px; line-height: 26px; font-size: medium; color: #1f3976; font-weight: normal; }
 #logheader img { vertical-align: middle; }
+
+#hapHeader #hapTitle a { background-image: url(../api/tiles/icons/24/24/images/icons/metro/other/History.png); background-position: 5px center; }

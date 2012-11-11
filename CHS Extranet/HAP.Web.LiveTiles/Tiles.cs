@@ -28,7 +28,7 @@ namespace HAP.Web.LiveTiles
                 foreach (LinkGroup group in groups)
                 {
                     List<Tile> tile = new List<Tile>();
-                    foreach (Link link in group.FilteredLinks) tile.Add(new Tile { Name = link.Name, Url = link.Url, Target = link.Target, Description = link.Description, Icon = (string.IsNullOrEmpty(link.Icon) || link.Icon.StartsWith("#") ? "" : string.Format("~/api/tiles/icons/{0}/{1}/{2}", 32, 32, link.Icon.Remove(0, 2))), Color = (string.IsNullOrEmpty(link.Icon) || link.Icon.StartsWith("#") ? "" : HAP.Web.LiveTiles.IconCache.GetColour(link.Icon)).Replace('\'', '"').Replace("{ ", "{ \"").Replace(": ", "\":").Replace(", ", ",\"") });
+                    foreach (Link link in group.FilteredLinks) tile.Add(new Tile { Name = link.Name, Url = link.Url, Target = link.Target, Description = link.Description, Icon = (string.IsNullOrEmpty(link.Icon) || link.Icon.StartsWith("#") ? "" : string.Format("~/api/tiles/icons/{0}/{1}/{2}", 64, 64, link.Icon.Remove(0, 2))), Color = (string.IsNullOrEmpty(link.Icon) || link.Icon.StartsWith("#") ? "" : HAP.Web.LiveTiles.IconCache.GetColour(link.Icon)).Replace('\'', '"').Replace("{ ", "{ \"").Replace(": ", "\":").Replace(", ", ",\"") });
                     tiles.Add(new TileGroup { Group = group.Name.Replace(" ", "").Replace("'", "").Replace(",", "").Replace(".", "").Replace("*", "").Replace("&", "").Replace("/", "").Replace("\\", ""), Tiles = tile.ToArray() });
                 }
                 return tiles.ToArray();
