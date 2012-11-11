@@ -5,7 +5,6 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using HAP.Data.SQL;
-using System.Web.UI.DataVisualization.Charting;
 
 namespace HAP.Web.Tracker
 {

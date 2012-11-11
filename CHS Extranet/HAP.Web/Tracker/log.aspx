@@ -1,5 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true" CodeBehind="log.aspx.cs" Inherits="HAP.Web.Tracker.log" %>
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+<asp:Content ContentPlaceHolderID="head" runat="server">
     <link href="<%=ResolveClientUrl("~/tracker/tracker.css")%>" rel="stylesheet" type="text/css" />
     <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="<%:ResolveClientUrl("~/scripts/excanvas.js") %>"></script><![endif]-->
     <script type="text/javascript" src="<%:ResolveClientUrl("~/scripts/jquery.jqplot.min.js") %>"></script>
@@ -8,12 +8,13 @@
     <script type="text/javascript" src="<%:ResolveClientUrl("~/Scripts/jqplot.cursor.min.js") %>"></script>
     <link rel="stylesheet" type="text/css" href="<%:ResolveClientUrl("~/style/jquery.jqplot.css") %>" />
 </asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
-	<header  class="commonheader">
-		<div>
-			<a href="<%:ResolveClientUrl("~/tracker") %>"><hap:LocalResource StringPath="tracker/historiclogs" runat="server" /></a>
-		</div>
-	</header>
+<asp:Content ContentPlaceHolderID="title" runat="server"><asp:HyperLink runat="server" NavigateUrl="~/tracker/logs.aspx"><hap:LocalResource runat="server" StringPath="tracker/historiclogs" /></asp:HyperLink></asp:Content>
+<asp:Content ContentPlaceHolderID="header" runat="server">
+    <asp:HyperLink runat="server" NavigateUrl="~/tracker/live.aspx"><hap:LocalResource runat="server" StringPath="tracker/livelogons" /></asp:HyperLink>
+    <asp:HyperLink runat="server" NavigateUrl="~/tracker/logs.aspx"><hap:LocalResource runat="server" StringPath="tracker/historiclogs" /></asp:HyperLink>
+    <asp:HyperLink runat="server" NavigateUrl="~/tracker/weblogs.aspx"><hap:LocalResource runat="server" StringPath="tracker/weblogs" /></asp:HyperLink>
+</asp:Content>
+<asp:Content ContentPlaceHolderID="body" runat="server">
     <div id="chartdiv" style="height:300px;width:99%; "></div>
     <button onclick="plot1.resetZoom(); return false;">Reset Zoom</button>
     <script type="text/javascript">

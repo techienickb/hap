@@ -27,9 +27,19 @@
     <body>
         <form runat="server">
             <div id="hapContent" data-role="page">
+                <header id="hapHeader" class="tile-color">
+                    <div id="hapTitle">
+                        <asp:ContentPlaceHolder id="title" runat="server"><asp:HyperLink runat="server" NavigateUrl="~/"><hap:LocalResource runat="server" StringPath="homeaccessplus" /></asp:HyperLink></asp:ContentPlaceHolder>|<a href="#" id="hapTitleMore"></a>
+                    </div>
+                    <asp:ContentPlaceHolder id="header" runat="server" />
+                </header>
                 <asp:LoginView runat="server">
                     <LoggedInTemplate>
-                        <div id="usertop">Logged in as <asp:LoginName runat="server" /> | <asp:LoginStatus runat="server" /></div>
+                        <a href="#" id="hapUserTitle"><%=((HAP.AD.User)Membership.GetUser()).DisplayName %> (<asp:LoginName runat="server" />)</a>
+                        <div id="hapUserMenu" class=".hapmenu tile-border-color">
+                            <asp:HyperLink runat="server" NavigateUrl="~/#me"><hap:LocalResource runat="server" StringPath="editprofile" /></asp:HyperLink>
+                            <asp:LoginStatus runat="server" />
+                        </div>
                     </LoggedInTemplate>
                 </asp:LoginView>
                 <div id="baseContent">
@@ -38,10 +48,10 @@
             </div>
             <script type="text/javascript">
                 $(document).ready(function () {
-                    $("#hapContent").css("min-height", document.documentElement.clientHeight + "px");
+                    $("#hapContent").css("min-height", document.documentElement.clientHeight - $("#hapHeader").height() + "px");
                 });
                 $(window).resize(function () {
-                    $("#hapContent").css("min-height", document.documentElement.clientHeight + "px");
+                    $("#hapContent").css("min-height", document.documentElement.clientHeight - $("#hapHeader").height() + "px");
                 });
             </script>
         </form>

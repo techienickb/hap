@@ -35,6 +35,40 @@ if (hap == null) {
                     if (hap.localization[i].name == e) return unescape(hap.localization[i].value.replace(/\\\\/g, "\\"));
             }
         },
+        header: {
+            StopClose: false,
+            StopUClose: false,
+            Init: function () {
+
+                if (window.location.pathname.toLowerCase() != hap.root.toLowerCase() && window.location.pathname.toLowerCase() != hap.common.resolveUrl('~/login.aspx').toLowerCase()) {
+                    $.ajax({
+                        url: hap.common.resolveUrl('~/api/livetiles/') + '?' + window.JSON.stringify(new Date()), type: 'GET', dataType: "json", contentType: 'application/JSON', success: function (data) {
+                            $("#hapContent").click(function () { if ($("#hapHeaderMore").css('display') == 'block' && !hap.header.StopClose) $("#hapHeaderMore").animate({ height: 'toggle' }); hap.header.StopClose = false; }).append('<div id="hapHeaderMore" class="tile-color"><div class="tiles"></div></div>');
+                            $("#hapHeaderMore").click(function () { hap.header.StopClose = true; }).mouseleave(function () { $("#hapHeaderMore").animate({ height: 'toggle' }); });
+                            $("#hapTitleMore").click(function () { $("#hapHeaderMore").animate({ height: 'toggle' }); return false; }).trigger("click");
+                            for (var i = 0; i < data.length; i++) {
+                                if (data[i].Group == 'Me') continue;
+                                var s = "<div>" + data[i].Group + "<div>";
+                                if (i == 0) s += '<a href="' + hap.common.resolveUrl("~/") + '" title="' + hap.common.getLocal("homeaccessplus") + " " + hap.common.getLocal("home") + '" style="background-image: url(' + hap.common.resolveUrl("~/images/icons/metro/hap-logo-64.png") + ');">' + hap.common.getLocal("home") + '</a>';
+                                for (var i2 = 0; i2 < data[i].Tiles.length; i2++) {
+                                    if (data[i].Tiles[i2].Url.substr(0, 1) != "#")
+                                        s += '<a href="' + hap.common.resolveUrl(data[i].Tiles[i2].Url) + '" style="' + (data[i].Tiles[i2].Icon == "" ? "" : 'background-image: url(' + hap.common.resolveUrl(data[i].Tiles[i2].Icon) + '); ') + (data[i].Tiles[i2].Color.substr(0, 1) == " " ? ('background-color: ' + $.parseJSON(data[i].Tiles[i2].Color).Base + ';" onmouseout="this.style.backgroundColor = \'' + $.parseJSON(data[i].Tiles[i2].Color).Base + '\';" onmouseover="this.style.backgroundColor = \'' + $.parseJSON(data[i].Tiles[i2].Color).Light + '\';" onmousedown="this.style.backgroundColor = \'' + $.parseJSON(data[i].Tiles[i2].Color).Dark + '\';"') : '"') + (data[i].Tiles[i2].Target == "" ? "" : ' target="' + data[i].Tiles[i2].Target + '"') + ' title="' + data[i].Tiles[i2].Description + '">' + data[i].Tiles[i2].Name + '</a>';
+                                }
+                                s += "</div></div>";
+                                $("#hapHeaderMore > .tiles").append(s);
+                            }
+                        }, error: hap.common.jsonError
+                    });
+                    $("#hapTitleMore").attr("title", hap.common.getLocal("more"));
+                    $("#hapHeader").css('right', $("#hapUserTitle").width() + 30 + 'px');
+                } else {
+                    $("#hapHeader").hide();
+                }
+                $("#hapUserTitle").click(function () { $("#hapUserMenu").animate({ height: 'toggle' }); return false; }).trigger("click");
+                $("#hapUserMenu").click(function () { hap.header.StopUClose = true; });
+                $("#hapContent").click(function () { if (!hap.header.StopUClose && $("#hapUserMenu").css('display') == 'block') $("#hapUserMenu").animate({ height: 'toggle' }); hap.header.StopUClose = false; });
+            }
+        },
         loadtypes : {
             none: 0,
             help: 1,
@@ -63,30 +97,6 @@ if (hap == null) {
             }
         },
         localization: [],
-        sidebar: {
-            Open: false,
-            Init: function () {
-                if (window.location.pathname.toLowerCase() != hap.root.toLowerCase() && window.location.pathname.toLowerCase() != hap.common.resolveUrl('~/login.aspx').toLowerCase())
-                    $.ajax({
-                        url: hap.common.resolveUrl('~/api/livetiles/') + '?' + window.JSON.stringify(new Date()), type: 'GET', dataType: "json", contentType: 'application/JSON', success: function (data) {
-                            $("#hapContent").append('<a href="#" id="sidebarOpener" class="tile-color-font"><span>' + hap.common.getLocal('openmenu') + '</span></a><div id="hapSidebar" class="tile-color"><a href="' + hap.common.resolveUrl("~/") + '">' + hap.common.getLocal('homeaccessplus') + ' ' + hap.common.getLocal('home') + '</a><div class="tiles"></div></div>');
-                            $("#hapSidebar").mouseleave(function () { $("#hapSidebar").animate({ width: 0 }, 1000); hap.sidebar.Open = false; }).css("overflow", "hidden");
-                            $("#sidebarOpener").click(function () { $('html, body').animate({ scrollTop: 0 }); hap.sidebar.Open = true; $("#hapSidebar").animate({ width: 200 }, 1000); return false; }).css("overflow", "auto");
-                            for (var i = 0; i < data.length; i++) {
-                                if (data[i].Group == 'Me') continue;
-                                var s = "<div>" + data[i].Group + "<div>";
-                                for (var i2 = 0; i2 < data[i].Tiles.length; i2++) {
-                                    if (data[i].Tiles[i2].Url.substr(0, 1) != "#")
-                                        s += '<a href="' + hap.common.resolveUrl(data[i].Tiles[i2].Url) + '" style="' + (data[i].Tiles[i2].Icon == "" ? "" : 'background-image: url(' + hap.common.resolveUrl(data[i].Tiles[i2].Icon) + '); ') + (data[i].Tiles[i2].Color.substr(0, 1) == " " ? ('background-color: ' + $.parseJSON(data[i].Tiles[i2].Color).Base + ';" onmouseover="this.style.backgroundColor = \'' + $.parseJSON(data[i].Tiles[i2].Color).Light + '\';" onmousedown="this.style.backgroundColor = \'' + $.parseJSON(data[i].Tiles[i2].Color).Dark + '\';"') : '"') + (data[i].Tiles[i2].Target == "" ? "" : ' target="' + data[i].Tiles[i2].Target + '"') + ' title="' + data[i].Tiles[i2].Description + '">' + data[i].Tiles[i2].Name + '</a>';
-                                    if (i2 == 5 || i2 == 11 || i2 == 17 || i2 == 23) s += '<br />';
-                                }
-                                s += "</div></div>";
-                                $("#hapSidebar > .tiles").append(s);
-                            }
-                        }, error: hap.common.jsonError
-                    });
-            }
-        },
         livetiles: {
             Init: function (data) {
                 if ($("#" + data[0].Data.Group).is(".me")) this.ShowMe(data);
@@ -257,10 +267,10 @@ if (hap == null) {
         }
     };
     $(function () {
-        if (hap.load == hap.loadtypes.full) hap.sidebar.Init();
+        hap.header.Init();
         if (hap.load > hap.loadtypes.none) {
             hap.help.Init();
-            hap.keepAlive();
+            hap.common.keepAlive();
         }
     });
 }

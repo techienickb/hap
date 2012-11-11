@@ -1,14 +1,16 @@
-﻿#access { position: absolute; }
-body.bookingdisplay, body.bookingdisplay form { padding: 0; margin: 0; width: 100%; height: 100%; }
+﻿body.bookingdisplay, body.bookingdisplay form { padding: 0; margin: 0; width: 100%; height: 100%; }
 
-#toolbar { position: absolute; height: 25px; left: 0; right: 0; vertical-align: top!important; line-height: 25px; overflow: hidden; }
-#Tree { position: absolute; width: 188px; font-size: 11px; overflow: auto; bottom: 0; top: 113px; left: 0; background: #eee; }
+#hapHeader { min-width: 820px; }
+
+#search { position: fixed; width: 168px; font-size: 16px; top: 40px; height: 30px; text-align: center; line-height: 30px; background: #eee; padding: 0 10px; }
+    #search input { font-size: 16px; width: 168px; }
+#Tree { position: fixed; width: 188px; font-size: 11px; overflow: auto; bottom: 0; top: 80px; left: 0; background: #eee; }
 .dynatree-container { margin: 0; }
 .dynatree-node { display: block; }
 a.dynatree-title { display: inline-block; text-decoration: none; color: #000; padding: 1px 4px; border: 0; }
 a.dynatree-title:hover, .dynatree-node:hover { border-color: #dedede; background: #dedede; }
 a.dynatree-title:active, .dynatree-node:active, .dynatree-node:active > a { border-color: #333; background: #333; color: #fff; }
-#MyFiles { min-height: 410px; overflow: hidden; }
+#MyFiles { min-height: 410px; overflow: hidden; padding-top: 2px; }
 #MyFiles a { float: left; margin: 0 3px 3px 0; padding: 0; border-width: 8px; border-style: solid; height: 40px; width: 230px; font-size: 11px; text-decoration: none; overflow: hidden; text-overflow: ellipsis; }
 #MyFiles a.Selectable { background-color: #eee; color: #666; border-color: #eee; }
 #MyFiles a.Selectable:hover, .droppable-hover { background-color: #dedede; border-color: #dedede; }
@@ -37,7 +39,7 @@ a.dynatree-title:active, .dynatree-node:active, .dynatree-node:active > a { bord
 #MyFiles.details a .label { border-left: solid 2px #fff; margin-left: 2px; }
 #MyFiles.details a img { height: 17px; display: table-cell; width: 17px; padding: 0; margin: 0; float: none; line-height: 17px; font-size: 17px; vertical-align: middle; border-bottom: solid 2px #fff; }
 #MyFiles.details a { display: table-row; float: none; width: auto; line-height: 20px; height: 20px; }
-#MyFiles.details { vertical-align: middle; }
+#MyFiles.details { vertical-align: middle; padding-top: 28px; }
 
 #MyFiles.small a span { display: none; }
 #MyFiles.small a .label { display: block; height: 16px; line-height: 16px; margin: 0; padding: 0; }
@@ -54,7 +56,7 @@ a.dynatree-title:active, .dynatree-node:active, .dynatree-node:active > a { bord
 #MyFiles.large a img { margin: 0 auto; height: 64px; width: 64px; line-height: 17px; float: none; display: block; }
 #MyFiles.large a { line-height: 17px; height: auto; width: 84px; white-space: normal; text-overflow: none; overflow: hidden; }
 
-#MyFilesHeaddings { position: absolute; display: none; border-top: solid 2px #fff; border-bottom: solid 2px #fff; }
+#MyFilesHeaddings { position: fixed; display: none; border-top: solid 2px #fff; border-bottom: solid 2px #fff; }
 #MyFilesHeaddings a, #MyFilesHeaddings span { display: inline-block; height: 22px; line-height: 22px; background: #333; color: #fff; border-right: solid 2px #fff; }
 
 #MyFiles a.Selected { background-color: #333; border-color: #333; color: #bbb; }
@@ -64,15 +66,16 @@ a.dynatree-title:active, .dynatree-node:active, .dynatree-node:active > a { bord
 #MyFiles a.Selected:active .label { color: #000; }
 #MyFiles a.Selected:active .type { color: #666; }
 
-#Views { position: absolute; border-width: 1px; border-style: solid; overflow: hidden; white-space: nowrap; width: 100px; z-index: 1000; }
-#Views button { display: block; width: 100px;  }
+#Views {  }
+#Views a { display: block; color: #000; text-decoration: none; padding: 5px 20px; }
 
 button.back span { top: 4px; }
 
 /* all context menus have this class */
-.context-menu { background-color: #f2f2f2; border: 1px solid #999; list-style-type: none; margin: 0; padding: 0; }
-.context-menu a { display: block; padding: 2px 6px; text-decoration: none; color: #333; }
-.context-menu a:hover { background-color: #666; color: white; }
+#jqContextMenu ul { background-color: #fff; border: 2px solid #0060a6!important; list-style-type: none; margin: 0; padding: 0; width: auto!important; }
+#jqContextMenu li { display: block; padding: 5px 10px!important; text-decoration: none; color: #333!important; cursor: pointer!important; font-size: 16px!important; }
+#jqContextMenu li:hover { background-color: #f3f3f3!important;  }
+#jqContextMenuShadow { display: none!important; }
 
 #propcont div { clear: both; overflow: hidden; }
 #propcont label { float: left; width: 100px; }
@@ -103,3 +106,5 @@ button { overflow: hidden; text-overflow: hidden; }
 #maintools button, #maintools input { margin-right: 3px; }
 
 #jqContextMenu { font-size: 13px; }
+
+#backup span { display: inline-block; background: url(../images/ui-icons_ffffff_256x240.png) -80px -192px no-repeat; height: 16px; width: 16px; vertical-align: top; margin-top: 14px; }

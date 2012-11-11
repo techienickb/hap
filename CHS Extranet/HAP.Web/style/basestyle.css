@@ -23,7 +23,7 @@ input[type=password]:hover, input[type=password]:active, input[type=time]:active
 input[type=button]:focus, input[type=submit]:focus, button:focus { outline: #edce00 solid 2px; outline-offset: 2px; background-color: #666; color: #fff; }
 
 
-#hapContent { background: #f3f3f3; position: relative; }
+#hapContent { background: #f3f3f3; position: relative; padding-top: 40px; }
 #hapContent .commonheader { overflow: hidden; clear: both; position: relative; height: 80px; }
 #hapContent .commonheader nav { position: absolute; }
 #hapContent .commonheader .left { left: 0; text-align: left; }
@@ -148,5 +148,28 @@ th span { float: right; }
 #errorlist div { margin-bottom: 3px; }
 #errorlist div .cont { display: none; }
 
-@media only print {
-}
+#hapHeader { position: fixed; top: 0; left: 0; right: 0; height: 40px; padding: 0 10px; line-height: 40px; z-index: 99; font-family: '☺SegoeLight', 'Segoe UI Light', 'Segoe UI', Tahoma; font-size: 16px; color: #fff;  }
+    #hapHeader a { padding: 0 10px; vertical-align: top; text-decoration: none; display: inline-block; height: 40px; line-height: 40px; color: #fff; }
+    #hapHeader a:hover { background-color: #3286C1; }
+    #hapHeader a:active { background-color: #004577; }
+    #hapHeader #hapTitle { float: left; font-size: 20px; height: 40px; line-height: 40px; }
+        #hapHeader #hapTitle:hover { background-color: #00508a; }
+        #hapHeader #hapTitle a { background-image: url(../images/icons/metro/hap-logo-20.png); background-repeat: no-repeat; background-position: 10px center; padding-left: 34px; }
+        #hapHeader #hapTitle #hapTitleMore { font-family: MSHPIconsRegular; background-image: none; padding: 0 5px; }
+#hapUserTitle { position: fixed; right: 0; height: 40px; line-height: 40px; top: 0; z-index: 100; background-color: #0060a6; border-right: solid 10px #0060a6; color: #fff; text-decoration: none; padding: 0 10px; font-size:16px; }
+#hapUserTitle:hover { background-color: #3286C1; text-decoration: none; }
+#hapUserTitle:active { background-color: #004577; }
+.hapmenu { position: fixed; top: 40px; background: #fff; border-style: solid; border-width: 2px; border-top: 0; z-index: 101; font-size: 16px; }
+.hapmenu a { display: block; background: #fff; color: #000; height: 30px; line-height: 30px; text-decoration: none; padding: 5px 20px; }
+    .hapmenu a:hover { background-color: #f3f3f3; }
+#hapUserMenu { right: 10px; }
+
+#hapHeaderMore { position: fixed; top: 0; left: 0; right: 0; background-color: #111; padding: 20px; overflow: hidden; z-index: 400; }
+#hapHeaderMore .tiles { margin-top: 10px; overflow: hidden; }
+#hapHeaderMore .tiles div { display: block; color: #f3f3f3; padding: 0 0 6px 2px; font-family: ☺SegoeLight, 'Segoe UI Light', 'Segoe UI', Tahoma; }
+#hapHeaderMore .tiles div div { vertical-align: text-top; padding-top: 2px; }
+#hapHeaderMore .tiles div div a { text-align: center; display: inline-block; white-space: normal; background-position: center top; background-repeat: no-repeat; padding-top: 70px; width: 100px; height: 30px; margin-right: 4px; line-height: 13px; font-size: 13px; vertical-align: text-top; color: #fff; text-decoration: none; }
+
+.dropdown:after { margin-left: .35em; font-family: 'MSHPIconsRegular'; content: ''; font-size: .688em; }
+.menucontainer { display: inline-block; height: 40px; line-height: 40px; }
+.menucontainer:hover { background-color: #00508a; }

@@ -8,12 +8,13 @@
     <script type="text/javascript" src="../Scripts/jqplot.cursor.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../style/jquery.jqplot.css" />
 </asp:Content>
+<asp:Content ContentPlaceHolderID="title" runat="server"><asp:HyperLink runat="server" NavigateUrl="~/tracker/weblogs.aspx"><hap:LocalResource runat="server" StringPath="tracker/weblogs" /></asp:HyperLink></asp:Content>
+<asp:Content ContentPlaceHolderID="header" runat="server">
+    <asp:HyperLink runat="server" NavigateUrl="~/tracker/live.aspx"><hap:LocalResource runat="server" StringPath="tracker/livelogons" /></asp:HyperLink>
+    <asp:HyperLink runat="server" NavigateUrl="~/tracker/logs.aspx"><hap:LocalResource runat="server" StringPath="tracker/historiclogs" /></asp:HyperLink>
+    <asp:HyperLink runat="server" NavigateUrl="~/tracker/weblogs.aspx"><hap:LocalResource runat="server" StringPath="tracker/weblogs" /></asp:HyperLink>
+</asp:Content>
 <asp:Content ContentPlaceHolderID="body" runat="server">
-    <header class="commonheader">
-		<div>
-			<a href="<%:ResolveClientUrl("~/tracker") %>"><hap:LocalResource StringPath="tracker/webtracker" runat="server" /></a>
-		</div>
-	</header>
     <div id="chartdiv" style="height:300px;width:99%; "></div>
     <button onclick="plot1.resetZoom(); return false;">Reset Zoom</button>
     <script type="text/javascript">

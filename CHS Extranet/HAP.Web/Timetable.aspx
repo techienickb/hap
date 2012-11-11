@@ -2,12 +2,11 @@
 <asp:Content runat="server" ContentPlaceHolderID="head">
     <link href="style/timetable.css" rel="stylesheet" type="text/css" />
 </asp:Content>
+<asp:Content ContentPlaceHolderID="title" runat="server"><asp:HyperLink runat="server" NavigateUrl="~/timetable.aspx"><hap:LocalResource runat="server" StringPath="timetable/my" /></asp:HyperLink></asp:Content>
+<asp:Content ContentPlaceHolderID="header" runat="server">
+	<a href="./"><hap:LocalResource StringPath="homeaccessplus" Seperator=" " StringPath2="home" runat="server" /></a>
+</asp:Content>
 <asp:Content ContentPlaceHolderID="body" runat="server">
-	<header class="commonheader">
-		<div>
-			<hap:LocalResource StringPath="timetable/my" runat="server" />
-		</div>
-	</header>
     <asp:PlaceHolder runat="server" ID="adminconverter">
         <div>
             <asp:Button runat="server" Text="Convert SIMS.net Export" ID="convert" onclick="convert_Click" /> (Export needs to be saved into the App_Data Folder as timetableexport.xml)

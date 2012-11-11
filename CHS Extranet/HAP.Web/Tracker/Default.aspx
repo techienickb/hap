@@ -1,10 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="HAP.Web.Tracker.Default" %>
+<asp:Content ContentPlaceHolderID="title" runat="server"><asp:HyperLink runat="server" NavigateUrl="~/tracker/"><hap:LocalResource runat="server" StringPath="tracker/logontracker" /></asp:HyperLink></asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
-    <header class="commonheader">
-		<div>
-			<a href="http://hap.codeplex.com" target="_blank"><hap:LocalResource StringPath="tracker/logontracker" runat="server" /></a>
-		</div>
-	</header>
 	<div id="HomeButtons" class="tiles" style="margin-left: 30%">
 		<a href="live.aspx" title="View the live action from the tracker">
 			<span><i style="background-image: url(../images/icons/white/tracker-live.png);"></i></span>

@@ -13,6 +13,15 @@ namespace HAP.Web.BookingSystem.admin {
     public partial class Default {
         
         /// <summary>
+        /// LocalResource1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::HAP.Web.Controls.LocalResource LocalResource1;
+        
+        /// <summary>
         /// termdatesDataSource control.
         /// </summary>
         /// <remarks>
