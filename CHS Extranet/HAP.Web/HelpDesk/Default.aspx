@@ -47,6 +47,9 @@
 			<li><a href="#closedtickets"><hap:LocalResource StringPath="helpdesk/closedtickets" runat="server" /></a></li>
 			<li><a href="#newticket"><hap:LocalResource StringPath="helpdesk/newtickets" runat="server" /></a></li>
 			<li><a href="#faqs"><hap:LocalResource StringPath="helpdesk/faqs" runat="server" /></a></li>
+            <%if (User.IsInRole("Domain Admins")) { %>
+            <li><a href="#stats"><hap:LocalResource runat="server" StringPath="helpdesk/stats" /></a></li>
+            <%} %>
 		</ul>
 		<div id="opentickets">
 			
@@ -95,6 +98,22 @@
 		<div id="faqs">
 			
 		</div>
+        <%if (User.IsInRole("Domain Admins")) { %>
+        <div id="stats">
+            <div id="stats-loading">
+                <img src="../images/metroloading.gif" /><br />
+                <hap:LocalResource runat="server" StringPath="loading" />
+            </div>
+            <div id="stats-content">
+                <div id="stats-header">
+                    <label for="spinner"><hap:LocalResource runat="server" StringPath="helpdesk/daystoindex" />:</label>
+                    <input id="spinner" name="value" value="7" />
+                    <button id="refreshstats"><hap:LocalResource runat="server" StringPath="helpdesk/refreshstats" /></button>
+                </div>
+                <div id="stats-body"></div>
+            </div>
+        </div>
+        <%} %>
 	</div>
     <hap:CompressJS runat="server" Tag="div">
 	<script type="text/javascript">
@@ -221,8 +240,8 @@
 					}
 					curticket = data.Id;
 					$('<div id="ticket-' + curticket + '" class="ticket">Loading Ticket ' + curticket + '...</div>').appendTo("#tabs");
-					$("#tabs").tabs("add", '#ticket-' + curticket, "Ticket: " + curticket, 4);
-					$("#tabs").tabs("select", 4);
+					$("#tabs").tabs("add", '#ticket-' + curticket, "Ticket: " + curticket, 5);
+					$("#tabs").tabs("select", 5);
 					$(".ui-tabs-selected a span").html("Ticket: " + data.Subject);
 					var h = '<button style="float: right;" onclick="return updateTicket();">Update</button><div><label>Ticket ' + curticket + ': </label>' + data.Subject + '</div><div><label>Opened By: </label>' + data.DisplayName + ' (' + data.Username + ')</div><div><label>Opened on: </label>' + data.Date + '</div><div><label>Priority: </label>' + data.Priority + '</div><div><label>Status: </label>' + data.Status + '</div><div class="notes tile-border-color">';
 					for (var i = 0; i < data.Notes.length; i++)
@@ -250,12 +269,12 @@
 		}
 
 		function loadTicket() {
-			$("#tabs").tabs("remove", 4);
+			$("#tabs").tabs("remove", 5);
 			$(".ticket").remove();
 			if (curticket != null) {
 				$('<div id="ticket-' + curticket + '" class="ticket">Loading Ticket ' + curticket + '...</div>').appendTo("#tabs");
-				$("#tabs").tabs("add", '#ticket-' + curticket, "Ticket: " + curticket, 4);
-				$("#tabs").tabs("select", 4);
+				$("#tabs").tabs("add", '#ticket-' + curticket, "Ticket: " + curticket, 5);
+				$("#tabs").tabs("select", 5);
 				$.ajax({
 					type: 'GET',
 					url: '<%=ResolveUrl("~/api/HelpDesk/Ticket/")%>' + curticket + '?' + window.JSON.stringify(new Date()),
@@ -280,7 +299,7 @@
 		});
 		$(function () {
 			$("#updateticket").dialog({ autoOpen: false });
-			$("#tabs").tabs({ select: function (event, ui) { if (ui.index < 4) { window.location.href = '#'; $("#updateticket").dialog("close"); } return true; } });
+			$("#tabs").tabs({ select: function (event, ui) { if (ui.index < 5) { window.location.href = '#'; $("#updateticket").dialog("close"); } return true; } });
 			$("button").button();
 			$("input[type=submit]").button();
 			$(".button").button();
@@ -326,10 +345,44 @@
 					$("#faqs").html(x);
                 },  error: hap.common.jsonError
 			});
+		    if (hap.admin) {
+		        $("#spinner").spinner().spinner("value", 7);
+		        $("#stats-content").fadeOut();
+		        $("#refreshstats").click(function () {
+		            $("#stats-loading").fadeIn();
+		            $("#stats-content").fadeOut();
+		            $.ajax({
+		                type: 'GET',
+		                url: '<%=ResolveUrl("~/api/HelpDesk/Stats/")%>' + $("#spinner").spinner("value") + '?' + window.JSON.stringify(new Date()),
+		                dataType: 'json',
+		                contentType: 'application/json',
+		                success: function (data) {
+		                    parseStats(data);
+		                },  error: hap.common.jsonError
+		            });
+		            return false;
+		        });
+		        $.ajax({
+		            type: 'GET',
+		            url: '<%=ResolveUrl("~/api/HelpDesk/Stats")%>?' + window.JSON.stringify(new Date()),
+				    dataType: 'json',
+				    contentType: 'application/json',
+				    success: function (data) {
+				        parseStats(data);
+				    },  error: hap.common.jsonError
+			    });
+		    }
 			if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curticket = window.location.href.split('#')[1].substr(7);
 			else curticket = null;
 			loadTicket();
 		});
+	    function parseStats(data) {
+	        $("#stats-loading").fadeOut();
+	        $("#stats-content").fadeIn();
+	        var s = "<div>Closed Tickets: <b>" + data.ClosedTickets + "</b></div><div>New Tickets: <b>" + data.NewTickets + "</b></div><div>Open Tickets: <b>" + data.OpenTickets + "</b></div>";
+	        if (data.HighestUser != null) s+= "<div>Highest User: <b>" + data.HighestUser.Username + "</b> with <b>" + data.HighestUser.Tickets + "</b> tickets</div>";
+	        $("#stats-body").html(s);
+	    }
 	</script>
     </hap:CompressJS>
 </asp:Content>

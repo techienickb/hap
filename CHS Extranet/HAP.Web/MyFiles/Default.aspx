@@ -147,7 +147,7 @@
 	            contentType: 'application/json',
 	            success: function (data) {
 	                temp.Index++;
-	                $("#progressstatus").dialog("title", hap.common.getLocal("myfiles/zip/zipingitem1") + " " + (temp.Index + 1) + " " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items"));
+	                $("#progressstatus").dialog("option", "title", hap.common.getLocal("myfiles/zip/zipingitem1") + " " + (temp.Index + 1) + " " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items"));
 	                $("#progressstatus .progress").progressbar({ value: (temp.Index / SelectedItems().length) * 100 });
 	                if (temp.Index < SelectedItems().length) Zip(temp.File, temp.Index);
 	                else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
@@ -167,7 +167,7 @@
 				data: '{ "ZipFile" : ' + a + ', "Overwrite": "' + overwrite + '" }',
 				contentType: 'application/json',
 				success: function (data) {
-					$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/unzip/unzipping") + " " + SelectedItems()[0].Data.Name);
+					$("#progressstatus").dialog("option", "title", hap.common.getLocal("myfiles/unzip/unzipping") + " " + SelectedItems()[0].Data.Name);
 					$("#progressstatus .progress").progressbar({ value: 80 });
 					temp = null; 
 					Load(); 
@@ -179,7 +179,7 @@
 						if (confirm(hap.common.getLocal("myfiles/folderexists1") + " " + SelectedItems()[0].Data.Name + " " + hap.common.getLocal("myfiles/folderexists2") + "\n" + hap.common.getLocal("myfiles/merge")))
 							Unzip(true);
 						else {
-							$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/unzip/unzipping") + " " + SelectedItems()[0].Data.Name);
+							$("#progressstatus").dialog("option", "title", hap.common.getLocal("myfiles/unzip/unzipping") + " " + SelectedItems()[0].Data.Name);
 							$("#progressstatus .progress").progressbar({ value: 50 });
 							temp = null; 
 							Load(); 
@@ -191,7 +191,7 @@
 						if (confirm(hap.common.getLocal("myfiles/fileexists1") + " " + SelectedItems()[0].Data.Name + " " + hap.common.getLocal("myfiles/fileexists2")))
 							Unzip(true);
 						else {
-							$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/unzip/unzipping") + " " + SelectedItems()[0].Data.Name);
+							$("#progressstatus").dialog("option", "title", hap.common.getLocal("myfiles/unzip/unzipping") + " " + SelectedItems()[0].Data.Name);
 							$("#progressstatus .progress").progressbar({ value: 50 });
 							temp = null; 
 							Load(); 
@@ -199,14 +199,14 @@
 						}
 					}
 					else if (confirm(hap.common.getLocal("myfiles/unzip/error1") + " " + SelectedItems()[0].Data.Name + ", " + hap.common.getLocal("myfiles/unzip/error2") + "\n\n" + hap.common.getLocal("errordetails") + ":\n\n" + xhr.responseXML.documentElement.children[1].children[0].textContent)) {
-						$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/unzip/unzipping") + " " + SelectedItems()[0].Data.Name);
+						$("#progressstatus").dialog("option", "title", hap.common.getLocal("myfiles/unzip/unzipping") + " " + SelectedItems()[0].Data.Name);
 						$("#progressstatus .progress").progressbar({ value: 50 });
 						temp = null; 
 						Load(); 
 						setTimeout(function() { $("#progressstatus").dialog("close"); }, 500);
 					} else { 
 					    hap.common.jsonError(xhr, ajaxOptions, thrownError);
-						$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/unzip/unzipping") + " " + SelectedItems()[0].Data.Name);
+						$("#progressstatus").dialog("option", "title", hap.common.getLocal("myfiles/unzip/unzipping") + " " + SelectedItems()[0].Data.Name);
 						$("#progressstatus .progress").progressbar({ value: 50 });
 						temp = null; 
 						Load(); 
@@ -226,7 +226,7 @@
 				contentType: 'application/json',
 				success: function (data) {
 					temp.index++;
-					$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/copy/copyingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items"));
+					$("#progressstatus").dialog("option", "title", hap.common.getLocal("myfiles/copy/copyingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items"));
 					$("#progressstatus .progress").progressbar({ value: (temp.index / SelectedItems().length) * 100 });
 					if (temp.index < SelectedItems().length) Copy(temp.index, temp.target);
 					else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
@@ -238,7 +238,7 @@
 							Copy(temp.index, temp.target, true);
 						else {
 							temp.index++;
-							$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/copy/copyingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items"));
+							$("#progressstatus").dialog("option", "title", hap.common.getLocal("myfiles/copy/copyingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items"));
 							$("#progressstatus .progress").progressbar({ value: (temp.index / SelectedItems().length) * 100 });
 							if (temp.index < SelectedItems().length) Copy(temp.index, temp.target);
 							else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
@@ -250,7 +250,7 @@
 							Copy(temp.index, temp.target, true);
 						else {
 							temp.index++;
-							$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/copy/copyingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items"));
+							$("#progressstatus").dialog("option", "title", hap.common.getLocal("myfiles/copy/copyingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items"));
 							$("#progressstatus .progress").progressbar({ value: (temp.index / SelectedItems().length) * 100 });
 							if (temp.index < SelectedItems().length) Copy(temp.index, temp.target);
 							else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
@@ -258,7 +258,7 @@
 					}
 					else if (confirm(hap.common.getLocal("myfiles/copy/error1") + " " + SelectedItems()[temp.index].Data.Name + ", " + hap.common.getLocal("myfiles/copy/error2") + "\n\n" + hap.common.getLocal("errordetails") + ":\n\n" + jQuery.parseJSON(xhr.responseText).Message)) {
 						temp.index++;
-						$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/copy/copyingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items"));
+						$("#progressstatus").dialog("option", "title", hap.common.getLocal("myfiles/copy/copyingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items"));
 						$("#progressstatus .progress").progressbar({ value: (temp.index / SelectedItems().length) * 100 });
 						if (temp.index < SelectedItems().length) Copy(temp.index, temp.target);
 						else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
@@ -278,7 +278,7 @@
 				contentType: 'application/json',
 				success: function (data) {
 					temp.index++;
-					$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/copy/copyingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + clipboard.items.length + " " + hap.common.getLocal("items"));
+					$("#progressstatus").dialog("option", "title", hap.common.getLocal("myfiles/copy/copyingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + clipboard.items.length + " " + hap.common.getLocal("items"));
 					$("#progressstatus .progress").progressbar({ value: (temp.index / clipboard.items.length) * 100 });
 					if (temp.index < clipboard.items.length) CopyClipboard(temp.index, temp.target);
 					else { clipboard = null; temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
@@ -290,7 +290,7 @@
 				            CopyClipboard(temp.index, temp.target, true);
 				        else {
 				            temp.index++;
-				            $("#progressstatus").dialog("title", hap.common.getLocal("myfiles/copy/copyingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + clipboard.items.length + " " + hap.common.getLocal("items"));
+				            $("#progressstatus").dialog("option", "title", hap.common.getLocal("myfiles/copy/copyingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + clipboard.items.length + " " + hap.common.getLocal("items"));
 				            $("#progressstatus .progress").progressbar({ value: (temp.index / clipboard.items.length) * 100 });
 				            if (temp.index < clipboard.items.length) CopyClipboard(temp.index, temp.target);
 				            else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
@@ -302,7 +302,7 @@
 				            CopyClipboard(temp.index, temp.target, true);
 				        else {
 				            temp.index++;
-				            $("#progressstatus").dialog("title", hap.common.getLocal("myfiles/copy/copyingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + clipboard.items.length + " " + hap.common.getLocal("items"));
+				            $("#progressstatus").dialog("option", "title", hap.common.getLocal("myfiles/copy/copyingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + clipboard.items.length + " " + hap.common.getLocal("items"));
 				            $("#progressstatus .progress").progressbar({ value: (temp.index / clipboard.items.length) * 100 });
 				            if (temp.index < clipboard.items.length) CopyClipboard(temp.index, temp.target);
 				            else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
@@ -310,7 +310,7 @@
 				    }
 				    else if (confirm(hap.common.getLocal("myfiles/copy/error1") + " " + clipboard.items.Data.Name + ", " + hap.common.getLocal("myfiles/copy/error2") + "\n\n" + hap.common.getLocal("errordetails") + ":\n\n" + xhr.responseXML.documentElement.children[1].children[0].textContent)) {
 				        temp.index++;
-				        $("#progressstatus").dialog("title", hap.common.getLocal("myfiles/copy/copyingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + clipboard.items.length + " " + hap.common.getLocal("items"));
+				        $("#progressstatus").dialog("option", "title", hap.common.getLocal("myfiles/copy/copyingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + clipboard.items.length + " " + hap.common.getLocal("items"));
 				        $("#progressstatus .progress").progressbar({ value: (temp.index / clipboard.items.length) * 100 });
 				        if (temp.index < clipboard.items.length) CopyClipboard(temp.index, temp.target);
 				        else { clipboard = null; temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
@@ -330,7 +330,7 @@
 				contentType: 'application/json',
 				success: function (data) {
 					temp.index++;
-					$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/move/movingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items"));
+					$("#progressstatus").dialog("option", "title", hap.common.getLocal("myfiles/move/movingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items"));
 					$("#progressstatus .progress").progressbar({ value: (temp.index / SelectedItems().length) * 100 });
 					if (temp.index < SelectedItems().length) Move(temp.index, temp.target);
 					else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
@@ -342,7 +342,7 @@
 				                Move(temp.index, temp.target, true);
 				            else {
 				                temp.index++;
-				                $("#progressstatus").dialog("title", hap.common.getLocal("myfiles/copy/copyingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items"));
+				                $("#progressstatus").dialog("option", "title", hap.common.getLocal("myfiles/copy/copyingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items"));
 				                $("#progressstatus .progress").progressbar({ value: (temp.index / SelectedItems().length) * 100 });
 				                if (temp.index < SelectedItems().length) Move(temp.index, temp.target);
 				                else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
@@ -354,7 +354,7 @@
 				                Move(temp.index, temp.target, true);
 				            else {
 				                temp.index++;
-				                $("#progressstatus").dialog("title", hap.common.getLocal("myfiles/copy/copyingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items"));
+				                $("#progressstatus").dialog("option", "title", hap.common.getLocal("myfiles/copy/copyingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items"));
 				                $("#progressstatus .progress").progressbar({ value: (temp.index / SelectedItems().length) * 100 });
 				                if (temp.index < SelectedItems().length) Move(temp.index, temp.target);
 				                else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
@@ -362,7 +362,7 @@
 				        }
 				    else if (confirm(hap.common.getLocal("myfiles/move/error1") + " " + SelectedItems()[temp.index].Data.Name + ", " + hap.common.getLocal("myfiles/move/error2") + "\n\n" + hap.common.getLocal("errordetails") + ":\n\n" + xhr.responseXML.documentElement.children[1].children[0].textContent)) {
 				        temp.index++;
-				        $("#progressstatus").dialog("title", hap.common.getLocal("myfiles/move/movingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items"));
+				        $("#progressstatus").dialog("option", "title", hap.common.getLocal("myfiles/move/movingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items"));
 				        $("#progressstatus .progress").progressbar({ value: (temp.index / SelectedItems().length) * 100 });
 				        if (temp.index < SelectedItems().length) Move(temp.index, temp.target);
 				        else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
@@ -382,7 +382,7 @@
 				contentType: 'application/json',
 				success: function (data) {
 					temp.index++;
-					$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/move/movingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + clipboard.items.length + " " + hap.common.getLocal("items"));
+					$("#progressstatus").dialog("option", "title", hap.common.getLocal("myfiles/move/movingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + clipboard.items.length + " " + hap.common.getLocal("items"));
 					$("#progressstatus .progress").progressbar({ value: (temp.index / clipboard.items.length) * 100 });
 					if (temp.index < clipboard.items.length) Move(temp.index, temp.target);
 					else { clipboard = null; temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
@@ -394,7 +394,7 @@
 							MoveClipboard(temp.index, temp.target, true);
 						else {
 							temp.index++;
-							$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/move/movingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + clipboard.items.length + " " + hap.common.getLocal("items"));
+							$("#progressstatus").dialog("option", "title", hap.common.getLocal("myfiles/move/movingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + clipboard.items.length + " " + hap.common.getLocal("items"));
 							$("#progressstatus .progress").progressbar({ value: (temp.index / clipboard.items.length) * 100 });
 							if (temp.index < clipboard.items.length) MoveClipboard(temp.index, temp.target);
 							else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
@@ -406,7 +406,7 @@
 							MoveClipboard(temp.index, temp.target, true);
 						else {
 							temp.index++;
-							$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/move/movingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + clipboard.items.length + " " + hap.common.getLocal("items"));
+							$("#progressstatus").dialog("option", "title", hap.common.getLocal("myfiles/move/movingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + clipboard.items.length + " " + hap.common.getLocal("items"));
 							$("#progressstatus .progress").progressbar({ value: (temp.index / clipboard.items.length) * 100 });
 							if (temp.index < clipboard.items.length) MoveClipboard(temp.index, temp.target);
 							else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
@@ -414,7 +414,7 @@
 					}
 					else if (confirm(hap.common.getLocal("myfiles/move/error1") + " " + clipboard.items[temp.index].Data.Name + ", " + hap.common.getLocal("myfiles/move/error2") + "\n\n" + hap.common.getLocal("errordetails") + ":\n\n" + xhr.responseXML.documentElement.children[1].children[0].textContent)) {
 						temp.index++;
-						$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/move/movingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + clipboard.items.length + " " + hap.common.getLocal("items"));
+						$("#progressstatus").dialog("option", "title", hap.common.getLocal("myfiles/move/movingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + clipboard.items.length + " " + hap.common.getLocal("items"));
 						$("#progressstatus .progress").progressbar({ value: (temp.index / clipboard.items.length) * 100 });
 						if (temp.index < clipboard.items.length) Move(temp.index, temp.target);
 						else { clipboard = null; temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
@@ -434,8 +434,10 @@
 				success: function (data) {
 					if (data[0].match(/i could not delete/gi)) alert(data[0]);
 					temp++;
-					$("#progressstatus").dialog("title", hap.common.getLocal("myfiles/delete/deletingitem1") + " " + (temp.index + 1) + " " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items"));
-					$("#progressstatus .progress").progressbar({ value: (temp / SelectedItems().length) * 100 });
+					if (temp < SelectedItems().length) {
+					    $("#progressstatus").dialog("option", "title", hap.common.getLocal("myfiles/delete/deletingitem1") + " " + (temp + 1) + " " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items"));
+					    $("#progressstatus .progress").progressbar({ value: (temp / SelectedItems().length) * 100 });
+					}
 					if (temp < SelectedItems().length) Delete(temp);
 					else { temp = null; Load(); setTimeout(function() { $("#progressstatus").dialog("close"); }, 500); }
 				},
@@ -562,6 +564,7 @@
 			if (!unzip && $("#toolbar-unzip").css("display") != "none") $("#toolbar-unzip").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-unzip").css("display", "none") } });
 			if (zip && $("#toolbar-zip").css("display") == "none") $("#toolbar-zip").css("display", "").animate({ width: 22 });
 			if (!zip && $("#toolbar-zip").css("display") != "none") $("#toolbar-zip").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-zip").css("display", "none") } });
+			$(window).trigger("resize");
 		}
 		function Item(data) {
 			this.Data = data;
@@ -902,10 +905,10 @@
 				success: function (data) {
 					items = new Array();
 					$("#MyFiles").html("");
-					$(window).trigger("resize");
 					for (var i = 0; i < data.length; i++)
 						items.push(new Item(data[i]));
 					for (var i = 0; i < items.length; i++) items[i].Render();
+					$(window).trigger("resize");
 					$("#toolbar").slideDown();
 					$("#search input").fadeIn();
 					$("#MyFilesHeaddings .name").css("width", $("#MyFiles > a .label").width() + $("#MyFiles > a img").width() + 4);
@@ -1100,7 +1103,7 @@
 									success: function (data) {
 										$("#newfoldertext").removeClass("loading");
 										$("#newfoldertext").animate({ width: 0, opacity: 0.0 }).css("margin", "0");
-										$("#newfolder span").text(hap.common.getLocal("myfiles/newfolder"));
+										$("#newfolder").text(hap.common.getLocal("myfiles/newfolder"));
 										Load();
 									},
 									error: hap.common.jsonError
@@ -1115,7 +1118,7 @@
 				temp = setTimeout(function () { 
 					$("#newfoldertext").removeClass("loading");
 					$("#newfoldertext").animate({ width: 0, opacity: 0.0 }, 500, function() { $("#newfoldertext").hide() });
-					$("#newfolder span").text(hap.common.getLocal("myfiles/newfolder"));
+					$("#newfolder").text(hap.common.getLocal("myfiles/newfolder"));
 				}, 1000);
 			}).focusin(function() {
 				if (temp != null) { clearTimeout(temp); temp == null; }
@@ -1333,23 +1336,30 @@
 			});
 			$("#uploadedfiles").attr("accept", "<%=DropZoneAccepted.Replace("f:", "") %>");
 		    $("#search").css("top", $("#hapHeader").position().top + $("#hapHeader").height());
-		    $("#search input").focus(function () {
-		        console.log("hello");
-		        if ($(this).val().match(hap.common.getLocal("search"))) $(this).val("");
-		    }).blur(function () {
-		        if ($(this).val() == "") $(this).val(hap.common.getLocal("search") + ": " + curitem.Name);
-		    });
+		    $("#search input").focus(function () { if ($(this).val().match(hap.common.getLocal("search"))) $(this).val(""); }).blur(function () { if ($(this).val() == "") $(this).val(hap.common.getLocal("search") + ": " + curitem.Name); });
 		    $(window).trigger("resize");
 			$("#MyFiles").css("margin-left", $("#Tree").width() + 5);
 			$("#MyFilesHeaddings").css("margin-left", $("#Tree").width() + 5).css("top", $("#hapHeader").position().top + $("#hapHeader").height());
 			$(window).trigger("hashchange");
 		});
-		$(document).bind('keydown', function (event) { var keycode = (event.keyCode ? event.keyCode : (event.which ? event.which : event.charCode)); keys.shift = (keycode == 16); keys.ctrl = (keycode == 17); });
+	    $(document).bind('keydown', function (event) { 
+	        var keycode = (event.keyCode ? event.keyCode : (event.which ? event.which : event.charCode)); 
+	        keys.shift = (keycode == 16); keys.ctrl = (keycode == 17); 
+	        if (keycode == 46 && SelectedItems().length > 0 && !$("input").is(":focus")) { 
+	            event.preventDefault();
+	            $("#progressstatus").dialog({ autoOpen: true, modal: true, title: hap.common.getLocal("myfiles/delete/deletingitem1") + " 1 " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items") });
+	            $("#progressstatus .progress").progressbar({ value: (1 / SelectedItems().length) * 100 });
+	            var s = "";
+	            for (var i = 0; i < SelectedItems().length; i++) s += SelectedItems()[i].Data.Name + "\n";
+	            if (confirm(hap.common.getLocal("myfiles/delete/question1") + "\n\n" + s)) Delete(0);
+	            else $("#progressstatus").dialog("close");
+	        }
+	    });
 		$(document).bind('keyup', function (event) { keys.shift = keys.ctrl = false; });
 		function closeUpload() { $("#uploaders").dialog("close"); };
 		$(window).resize(function () {
 		    setTimeout(function () { $("#Tree").css("top", $("#search").position().top + $("#search").height()).css("height", $("#hapContent").height() - $("#search").height()); }, 50);
-		    $("#Views").css("left", $('#view').position().left - 20);
+		    $("#Views").css("left", $('#view').position().left);
 		});
 		</script>
 	</hap:CompressJS>

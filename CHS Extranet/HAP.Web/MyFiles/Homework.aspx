@@ -9,15 +9,11 @@
         label { display: inline-block; min-width: 140px; padding-right: 10px; text-align: right; }
     </style>
 </asp:Content>
+<asp:Content ContentPlaceHolderID="title" runat="server"><asp:HyperLink runat="server" NavigateUrl="~/MyFiles/"><hap:LocalResource StringPath="myfiles/homework/homework" runat="server" /></asp:HyperLink></asp:Content>
+<asp:Content ContentPlaceHolderID="header" runat="server">
+    <a id="new" href="#" onclick="return false;"><hap:LocalResource StringPath="myfiles/homework/new" runat="server" /></a>
+</asp:Content>
 <asp:Content ContentPlaceHolderID="body" runat="server">
-	<header id="myfilesheader" class="commonheader">
-		<nav class="tiles right">
-            <a class="button" id="new" href="#" onclick="return false;"><hap:LocalResource StringPath="myfiles/homework/new" runat="server" /></a>
-		</nav>
-		<div>
-			<hap:LocalResource StringPath="myfiles/homework/homework" runat="server" />
-		</div>
-	</header>
 	<div id="o" style="overflow: hidden;">
 		<div id="tree" style="float: left;"></div>
 	</div>

@@ -576,6 +576,7 @@
     <Content Include="images\icons\white\tracker-historic.png" />
     <Content Include="images\icons\white\tracker-live.png" />
     <Content Include="images\icons\white\tracker.png" />
+    <Content Include="images\metroloading.gif" />
     <Content Include="images\jquery.wysiwyg.bg.png" />
     <Content Include="images\jquery.wysiwyg.gif" />
     <Content Include="images\myfiles-beta.png" />
@@ -623,8 +624,8 @@
     <Content Include="Scripts\jqplot.cursor.min.js" />
     <Content Include="Scripts\jqplot.dateAxisRenderer.min.js" />
     <Content Include="Scripts\jqplot.highlighter.min.js" />
-    <Content Include="Scripts\jquery-1.8.2.js" />
     <None Include="Scripts\jquery-1.8.2-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.8.2.min.js" />
     <Content Include="Scripts\jquery-ui-1.9.1.custom.min.js" />
     <Content Include="Scripts\jquery.jqplot.min.js" />
     <Content Include="Scripts\jquery.mobile-1.0.min.js" />
@@ -645,7 +646,6 @@
     <Content Include="HelpDesk\newusernote.htm" />
     <Content Include="HelpDesk\newadminnote.htm" />
     <Content Include="HelpDesk\newadminticket.htm" />
-    <Content Include="HelpDesk\helpdesksheet.css" />
     <Content Include="HelpDesk\newuserticket.htm" />
     <Content Include="images\arrow-right.gif" />
     <Content Include="images\dashed.gif" />
@@ -742,8 +742,9 @@
   <ItemGroup>
     <Compile Include="API\Announcement.cs" />
     <Compile Include="API\api.cs" />
-    <Compile Include="API\Homework.Upload.cs" />
     <Compile Include="API\TileIconHandler.cs" />
+    <Compile Include="API\Homework.Upload.cs" />
+    <Compile Include="API\MyPicHandler.cs" />
     <Compile Include="API\MyFiles.Permalink.cs" />
     <Compile Include="API\JS.cs" />
     <Compile Include="API\Help.cs" />

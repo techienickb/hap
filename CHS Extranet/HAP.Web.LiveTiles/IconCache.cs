@@ -130,7 +130,7 @@ namespace HAP.Web.LiveTiles
             return HttpContext.Current.Server.MapPath("~/app_data/iconcache/" + name + "-" + size.Width + "x" + size.Height + ".png");
         }
 
-        private static Image resizeImage(Image imgToResize, Size size)
+        public static Image resizeImage(Image imgToResize, Size size)
         {
             int sourceWidth = imgToResize.Width;
             int sourceHeight = imgToResize.Height;
