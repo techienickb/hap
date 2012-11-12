@@ -8,8 +8,8 @@
         <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
         <title>Home Access Plus+ - Setup</title>
         <link rel="shortcut icon" href="~/favicon.ico" />
-        <script src="Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
-        <script src="Scripts/jquery-ui-1.8.16.custom.min.js" type="text/javascript"></script>
+        <script src="Scripts/jquery-1.8.2.min.js" type="text/javascript"></script>
+        <script src="Scripts/jquery-ui-1.9.1.custom.min.js" type="text/javascript"></script>
         <script src="Scripts/jquery.dynatree.js" type="text/javascript"></script>
         <script src="Scripts/jquery-Gtimepicker.js" type="text/javascript"></script>
         <link href="~/style/jquery-ui.css" rel="stylesheet" type="text/css" />
