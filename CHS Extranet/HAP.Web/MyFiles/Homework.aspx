@@ -21,7 +21,7 @@
 	    var active;
 	    function load() {
 	        $("#uploadhomework").dialog({ autoOpen: false });
-	        $.getJSON("../api/homework/my", function (data) {
+	        $.getJSON(hap.common.formatJSONUrl("~/api/homework/my"), function (data) {
 	            var c = [], a = data.length > 0 ? { title: data[0].TeacherName, isFolder: true, children: [] } : null;
 	            for (var i = 0; i < data.length; i++) {
 	                if (a.title != data[i].TeacherName) {

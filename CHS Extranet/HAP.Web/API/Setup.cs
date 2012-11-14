@@ -342,9 +342,16 @@ namespace HAP.Web.API
             try
             {
                 if (username.Length < 2 && password.Length < 2 && domain.Length < 2) throw new Exception("Invailid Domain/Credentials");
-                PrincipalContext pc = new PrincipalContext(ContextType.Domain, domain, username, password);
-                DirectoryEntry root = new DirectoryEntry("LDAP://DC=" + domain.Replace(".", ",DC="));
-                return FillNode(root);
+                HAP.AD.User _user = new AD.User();
+                _user.Authenticate(username, password, domain);
+                try
+                {
+                    _user.ImpersonateContained();
+                    PrincipalContext pc = new PrincipalContext(ContextType.Domain, domain, username, password);
+                    DirectoryEntry root = new DirectoryEntry("LDAP://DC=" + domain.Replace(".", ",DC="));
+                    return FillNode(root);
+                }
+                finally { _user.EndContainedImpersonate(); }
             }
             catch (Exception ex) { HAP.Web.Logging.EventViewer.Log("Setup API", ex.ToString() + "\nMessage:\n" + ex.Message + "\nStack Trace:\n" + ex.StackTrace, System.Diagnostics.EventLogEntryType.Error); return null; }
         }

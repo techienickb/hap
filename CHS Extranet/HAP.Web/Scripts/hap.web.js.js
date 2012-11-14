@@ -16,6 +16,10 @@ if (hap == null) {
                     }
                 } catch (e) { if (thrownError != "") alert(thrownError); }
             },
+            formatJSONUrl: function (url) {
+                var d = new Date().valueOf();
+                return hap.common.resolveUrl(url) + '?' + d;
+            },
             clearError: function () {
                 $($("#errorlist").children()[0]).animate({ height: 0 }, 500, function () { $(this).remove(); });
             },
@@ -25,7 +29,7 @@ if (hap == null) {
             keepAlive: function () {
                 setInterval(function () {
                     $.ajax({
-                        url: hap.common.resolveUrl("~/api/test/?1=" + JSON.stringify(new Date())), type: 'GET', success: function (data) {
+                        url: hap.common.formatJSONUrl("~/api/test/"), type: 'GET', success: function (data) {
                         }, error: hap.common.jsonError
                     });
                 }, 60000);
@@ -44,7 +48,7 @@ if (hap == null) {
                 if (window.location.pathname.toLowerCase() != hap.root.toLowerCase() && window.location.pathname.toLowerCase() != hap.common.resolveUrl('~/login.aspx').toLowerCase()) {
                     $("#hapTitleMore").click(function () { return false; });
                     $.ajax({
-                        url: hap.common.resolveUrl('~/api/livetiles/') + '?' + window.JSON.stringify(new Date()), type: 'GET', dataType: "json", contentType: 'application/JSON', success: function (data) {
+                        url: hap.common.formatJSONUrl('~/api/livetiles/'), type: 'GET', dataType: "json", contentType: 'application/JSON', success: function (data) {
                             $("#hapContent").click(function () { if ($("#hapHeaderMore").css('display') == 'block' && !hap.header.StopClose) $("#hapHeaderMore").animate({ height: 'toggle' }); hap.header.StopClose = false; }).append('<div id="hapHeaderMore" class="tile-color"><div class="tiles"></div></div>');
                             $("#hapHeaderMore").click(function () { hap.header.StopClose = true; }).mouseleave(function () { if (!hap.header.WaitInit) $("#hapHeaderMore").animate({ height: 'toggle' }); });
                             $("#hapTitleMore").click(function () { hap.header.WaitInit = true; $("#hapHeaderMore").animate({ height: 'toggle' }, 500, 'linear', function () { hap.header.WaitInit = false; }); return false; }).trigger("click");
@@ -110,7 +114,7 @@ if (hap == null) {
                     if (data[i].Data.Name == "Me") {
                         $("#" + data[i].Data.Group).append('<div id="me-me"></div>').parent().addClass("me");
                         $.ajax({
-                            url: "api/livetiles/me", type: 'GET', context: this.id, dataType: "json", contentType: 'application/JSON', success: function (data) {
+                            url: hap.common.formatJSONUrl("~/api/livetiles/me"), type: 'GET', context: this.id, dataType: "json", contentType: 'application/JSON', success: function (data) {
                                 if (data.Photo != "" && data.Photo != null) $("#me-me").append('<img src="' + hap.common.resolveUrl(data.Photo) + '" style="float: right;" />');
                                 $("#me-me").append('<div id="me-name">' + data.Name + '</div><div id="me-email">' + data.Email + '</div>');
                             }, error: hap.common.jsonError
@@ -120,7 +124,7 @@ if (hap == null) {
                         $("#me-setpassword").button().click(function () {
                             if ($("#me-password-current").val().length == 0 || $("#me-password-new").val().length == 0 || $("#me-password-confirm").val().length == 0 || $("#me-password-confirm").val() != $("#me-password-new").val()) return false;
                             $.ajax({
-                                url: "api/livetiles/me/password", type: 'POST', dataType: "json", contentType: 'application/JSON', data: '{ "oldpassword": "' + $("#me-password-current").val() + '", "newpassword": "' + $("#me-password-new").val() + '" }', success: function (data) {
+                                url: hap.common.formatJSONUrl("~/api/livetiles/me/password"), type: 'POST', dataType: "json", contentType: 'application/JSON', data: '{ "oldpassword": "' + $("#me-password-current").val() + '", "newpassword": "' + $("#me-password-new").val() + '" }', success: function (data) {
                                     alert("Password Updated");
                                     $("#me-password-current, #me-password-new, #me-password-confirm").val("");
                                 }, error: hap.common.jsonError
@@ -151,7 +155,7 @@ if (hap == null) {
                         return false;
                     });
                     $.ajax({
-                        url: "api/livetiles/me" + '?' + window.JSON.stringify(new Date()), type: 'GET', context: this.id, dataType: "json", contentType: 'application/JSON', success: function (data) {
+                        url: hap.common.formatJSONUrl("~/api/livetiles/me"), type: 'GET', context: this.id, dataType: "json", contentType: 'application/JSON', success: function (data) {
                             $("#" + this + " span label").html("<b>" + data.Name + "</b><br />" + data.Email);
                             if (data.Photo != "" && data.Photo != null) $("#" + this + " span i").css("background-image", "url(" + hap.common.resolveUrl(data.Photo) + ")");
                             setInterval("$('#" + this + " span i').animate({ height: 'toggle' });", 8000);
@@ -160,7 +164,7 @@ if (hap == null) {
                 } else if (type == "myfiles") {
                     $("#" + this.id).addClass("me");
                     $.ajax({
-                        url: "api/myfiles/drives", type: 'GET', context: this.id, dataType: "json", contentType: 'application/JSON', success: function (data) {
+                        url: hap.common.formatJSONUrl("~/api/myfiles/drives"), type: 'GET', context: this.id, dataType: "json", contentType: 'application/JSON', success: function (data) {
                             var s = "";
                             for (var i = 0; i < (data.length > 3 ? 3 : data.length) ; i++)
                                 s += "<b>" + data[i].Name + "</b>" + (data[i].Space == -1 ? "<br /><br />" : '<br /><span class="progress"><label>' + data[i].Space + '%</label><u style="width: ' + data[i].Space + '%"></u></span>');
@@ -183,7 +187,7 @@ if (hap == null) {
             UpdateExchangeCalendar: function (tileid, mailbox) {
                 $("#" + tileid + " span label").html($.datepicker.formatDate('D <b>d</b>', new Date()));
                 $.ajax({
-                    url: "api/livetiles/exchange/calendar" + '?' + window.JSON.stringify(new Date()), type: 'POST', dataType: 'json', data: '{ "Mailbox" : "' + mailbox + '" }', context: { tile: tileid, mb: mailbox }, contentType: 'application/JSON', success: function (data) {
+                    url: hap.common.formatJSONUrl("~/api/livetiles/exchange/calendar"), type: 'POST', dataType: 'json', data: '{ "Mailbox" : "' + mailbox + '" }', context: { tile: tileid, mb: mailbox }, contentType: 'application/JSON', success: function (data) {
                         var s = "";
                         for (var i = 0; i < data.length; i++)
                             s += data[i] + "<br />";
@@ -196,7 +200,7 @@ if (hap == null) {
             UpdateExchangeAppointments: function (tileid) {
                 $("#" + tileid + " span label").html($.datepicker.formatDate('D <b>d</b>', new Date()));
                 $.ajax({
-                    url: "api/livetiles/exchange/appointments" + '?' + window.JSON.stringify(new Date()), type: 'GET', context: tileid, dataType: "json", contentType: 'application/JSON', success: function (data) {
+                    url: hap.common.formatJSONUrl("~/api/livetiles/exchange/appointments"), type: 'GET', context: tileid, dataType: "json", contentType: 'application/JSON', success: function (data) {
                         var s = "";
                         for (var i = 0; i < data.length; i++)
                             s += data[i] + "<br />";
@@ -209,7 +213,7 @@ if (hap == null) {
             UpdateBookings: function (tileid) {
                 $.ajax({
                     type: 'POST',
-                    url: hap.common.resolveUrl("~/api/BookingSystem/Search") + '?' + window.JSON.stringify(new Date()),
+                    url: hap.common.formatJSONUrl("~/api/BookingSystem/Search"),
                     dataType: 'json',
                     context: tileid,
                     data: '{ "Query": "' + hap.user + '" }',
@@ -230,7 +234,7 @@ if (hap == null) {
             UpdateTickets: function (tileid) {
                 $.ajax({
                     type: 'GET',
-                    url: hap.common.resolveUrl("~/api/HelpDesk/Tickets/Open") + (hap.admin ? '' : ('/' + hap.user)) + '?' + window.JSON.stringify(new Date()),
+                    url: hap.common.formatJSONUrl("~/api/HelpDesk/Tickets/Open" + (hap.admin ? '' : ('/' + hap.user))),
                     dataType: 'json',
                     context: tileid,
                     contentType: 'application/json',
@@ -246,7 +250,7 @@ if (hap == null) {
             },
             UpdateExchangeMail: function (tileid) {
                 $.ajax({
-                    url: "api/livetiles/exchange/unread" + '?' + window.JSON.stringify(new Date()), type: 'GET', context: tileid, dataType: "json", contentType: 'application/JSON', success: function (data) {
+                    url: hap.common.formatJSONUrl("~/api/livetiles/exchange/unread"), type: 'GET', context: tileid, dataType: "json", contentType: 'application/JSON', success: function (data) {
                         if (data > 0) {
                             $("#" + this + " span i").animate({ width: 60 }, 500, function () { $(this).parent().children("label").html(data); });
                         } else {
@@ -260,7 +264,7 @@ if (hap == null) {
             UpdateUptime: function (tileid, server) {
                 var con = { tile: tileid, server: server };
                 $.ajax({
-                    url: "api/livetiles/uptime/" + server, type: 'GET', context: con, dataType: "json", contentType: 'application/JSON', success: function (data) {
+                    url: hap.common.formatJSONUrl("api/livetiles/uptime/" + server), type: 'GET', context: con, dataType: "json", contentType: 'application/JSON', success: function (data) {
                         $("#" + this.tile + " span i").html(data);
                         setTimeout("hap.livetiles.UpdateUptime('" + this.tile + "', '" + this.server + "');", 5000);
                     }, error: hap.common.jsonError

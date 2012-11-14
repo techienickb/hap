@@ -1536,7 +1536,7 @@
                             if ($("#<%=un.ClientID %>").val().length > 2 && $("#<%=up.ClientID %>").val().length > 2 && $("#<%=upn.ClientID %>").val().length > 2) {
                                 $.ajax({
                                     type: 'POST',
-                                    url: 'api/setup/GetADTree',
+                                    url: hap.common.formatJSONUrl('~/api/setup/GetADTree'),
                                     data: '{"username": "' + $("#<%=un.ClientID %>").val() + '", "password": "' + $("#<%=up.ClientID %>").val() + '", "domain": "' + $("#<%=upn.ClientID %>").val() + '"}',
                                     contentType: 'application/json',
                                     dataType: 'json',
@@ -1750,7 +1750,7 @@
                             $("#filterEditor").dialog({ autoOpen: false });
                             $("#ouEditor").dialog({ autoOpen: false });
                             $("#mappingEditor").dialog({ autoOpen: false });
-                            $.get("api/test?" + window.JSON.stringify(new Date()), function (data) {
+                            $.get(hap.common.formatJSONUrl("~/api/test"), function (data) {
                                 if (data == "OK") {
                                     $("#iis6wildcardimg").attr("src", "images/setup/267.png");
                                     $("#appwa").attr("src", "images/setup/267.png");

@@ -37,28 +37,36 @@ namespace HAP.Web.API
         {
             if (context.User.Identity.IsAuthenticated)
             {
-                using (DirectorySearcher dsSearcher = new DirectorySearcher())
+                HAP.AD.User _user = new HAP.AD.User();
+                _user.Authenticate(hapConfig.Current.AD.User, hapConfig.Current.AD.Password);
+                try
                 {
-                    dsSearcher.Filter = "(&(objectClass=user) (cn=" + context.User.Identity.Name + "))";
-                    SearchResult result = dsSearcher.FindOne();
-
-                    using (DirectoryEntry user = new DirectoryEntry(result.Path))
+                    _user.ImpersonateContained();
+                    using (DirectorySearcher dsSearcher = new DirectorySearcher())
                     {
-                        byte[] data = user.Properties["jpegPhoto"].Value as byte[];
+                        dsSearcher.Filter = "(&(objectClass=user) (cn=" + context.User.Identity.Name + "))";
+                        SearchResult result = dsSearcher.FindOne();
 
-                        if (data != null)
+                        using (DirectoryEntry user = new DirectoryEntry(result.Path))
                         {
-                            using (MemoryStream s = new MemoryStream(data))
+                            byte[] data = user.Properties["jpegPhoto"].Value as byte[];
+
+                            if (data != null)
                             {
-                                context.Response.ContentType = "image/png";
-                                MemoryStream m = new MemoryStream();
-                                Bitmap.FromStream(s).Save(m, ImageFormat.Png);
-                                m.WriteTo(context.Response.OutputStream);
+                                using (MemoryStream s = new MemoryStream(data))
+                                {
+                                    context.Response.ContentType = "image/png";
+                                    MemoryStream m = new MemoryStream();
+                                    Bitmap.FromStream(s).Save(m, ImageFormat.Png);
+                                    m.WriteTo(context.Response.OutputStream);
+                                }
                             }
+                            else context.Response.Redirect("~/api/tiles/icons/128/128/images/icons/metro/folders-os/UserNo-Frame.png");
                         }
-                        else context.Response.Redirect("~/api/tiles/icons/128/128/images/icons/metro/folders-os/UserNo-Frame.png");
                     }
                 }
+                catch { context.Response.Redirect("~/api/tiles/icons/128/128/images/icons/metro/folders-os/UserNo-Frame.png"); }
+                finally { _user.EndContainedImpersonate(); }
             }
             else context.Response.Redirect("~/api/tiles/icons/128/128/images/icons/metro/folders-os/UserNo-Frame.png");
         }
