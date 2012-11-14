@@ -58,6 +58,26 @@ namespace HAP.AD
             this.MiddleNames = userp.MiddleName;
         }
 
+        public void Authenticate(string username, string password, string domain)
+        {
+            this.UserName = username.Contains('\\') ? username.Remove(0, username.IndexOf('\\')) : username;
+            this.Password = password;
+            this.DomainName = domain;
+            UserPrincipal userp = HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Web.Configuration.AuthMode.Forms ? UserP : UserPa;
+            this.UserName = userp.SamAccountName;
+            this.Comment = userp.Description;
+            this.DisplayName = userp.DisplayName;
+            this.EmployeeID = userp.EmployeeId;
+            this.Email = userp.EmailAddress;
+            this.LastLoginDate = userp.LastLogon.HasValue ? userp.LastLogon.Value : DateTime.Now;
+            this.IsLockedOut = userp.IsAccountLockedOut();
+            this.IsApproved = userp.Enabled.HasValue ? userp.Enabled.Value : false;
+            this.HomeDirectory = userp.HomeDirectory;
+            this.FirstName = userp.GivenName;
+            this.LastName = userp.Surname;
+            this.MiddleNames = userp.MiddleName;
+        }
+
         public void Save()
         {
             UserPrincipal userp = UserPa;

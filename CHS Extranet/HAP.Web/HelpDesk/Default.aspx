@@ -129,7 +129,7 @@
 			$("#updateticket").dialog({ autoOpen: true, minWidth: 600, minHeight: 400, buttons: {
 				"Update": function () {
 					var data = '{ "Note": "' + escape($("#ticket-note").val()) + '", "State": ';
-					var url = '<%=ResolveUrl("~/api/HelpDesk/Ticket/")%>' + curticket + '?' + window.JSON.stringify(new Date());
+					var url = hap.common.formatJSONUrl("~/api/HelpDesk/Ticket/" + curticket);
 					if (<%=User.IsInRole("Domain Admins").ToString().ToLower() %>) {
 						data += ($("#ticket-fixed").is(":checked") ? '"Fixed"' : ('"' + ($("#ticket-userinter").is(":checked") ? hap.common.getLocal("helpdesk/userinter") : "With IT") + '"')) + ', "Priority": "' + $("#ticket-priority input:checked").attr("value") + '", "ShowTo": "' + $("#ticket-showto").val() + '", "FAQ": "' + ($("#ticket-faq").is(":checked") ? 'true' : 'false') + '", "Subject": "' + $("#ticket-subject").val() + '"';
 						url = '<%=ResolveUrl("~/api/HelpDesk/AdminTicket/")%>' + curticket + '?' + window.JSON.stringify(new Date());
@@ -158,7 +158,7 @@
 							$("button").button();
 							$.ajax({
 								type: 'GET',
-								url: '<%=ResolveUrl("~/api/HelpDesk/Tickets/Open" + (User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName))%>?' + window.JSON.stringify(new Date()),
+								url: hap.common.formatJSONUrl("~/api/HelpDesk/Tickets/Open<%=User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName%>"),
 								dataType: 'json',
 								contentType: 'application/json',
 								success: function (data) {
@@ -172,7 +172,7 @@
 							});
 							$.ajax({
 								type: 'GET',
-								url: '<%=ResolveUrl("~/api/HelpDesk/Tickets/Closed" + (User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName))%>?' + window.JSON.stringify(new Date()),
+								url: hap.common.formatJSONUrl("~/api/HelpDesk/Tickets/Closed<%=User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName%>"),
 								dataType: 'json',
 								contentType: 'application/json',
 								success: function (data) {
@@ -186,7 +186,7 @@
 							});
 			                $.ajax({
 				                type: 'GET',
-				                url: '<%=ResolveUrl("~/api/HelpDesk/FAQs")%>?' + window.JSON.stringify(new Date()),
+				                url: hap.common.formatJSONUrl("~/api/HelpDesk/FAQs"),
 				                dataType: 'json',
 				                contentType: 'application/json',
 				                success: function (data) {
@@ -218,7 +218,7 @@
 
 		function fileTicket() {
 			var data = '{ "Subject": "' + escape($("#newticket-subject").val()) + '", "Room": "' + $("#newticket-room").val() + '", "Note": "' + escape($("#newticket-note").val()) + '"';
-			var url = '<%=ResolveUrl("~/api/HelpDesk/Ticket")%>?' + window.JSON.stringify(new Date());
+			var url = hap.common.formatJSONUrl("~/api/HelpDesk/Ticket");
 			if (<%=User.IsInRole("Domain Admins").ToString().ToLower() %>) {
 				data += ', "Priority": "' + $("#priorityradioes input:checked").val() + '", "User": "' + $("#<%=userlist.ClientID %> option:selected").attr("value") + '", "ShowTo": "' + $("#newticket-showto").val() + '"';
 				url = '<%=ResolveUrl("~/api/HelpDesk/AdminTicket")%>?' + window.JSON.stringify(new Date());
@@ -251,7 +251,7 @@
 					$("button").button();
 					$.ajax({
 						type: 'GET',
-						url: '<%=ResolveUrl("~/api/HelpDesk/Tickets/Open" + (User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName))%>?' + window.JSON.stringify(new Date()),
+						url: hap.common.formatJSONUrl("~/api/HelpDesk/Tickets/Open<%=User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName%>"),
 						dataType: 'json',
 						contentType: 'application/json',
 						success: function (data) {
@@ -277,7 +277,7 @@
 				$("#tabs").tabs("select", 5);
 				$.ajax({
 					type: 'GET',
-					url: '<%=ResolveUrl("~/api/HelpDesk/Ticket/")%>' + curticket + '?' + window.JSON.stringify(new Date()),
+					url: hap.common.formatJSONUrl("~/api/HelpDesk/Ticket/" + curticket),
 					dataType: 'json',
 					contentType: 'application/json',
 					success: function (data) {
@@ -305,7 +305,7 @@
 			$(".button").button();
 			$.ajax({
 				type: 'GET',
-				url: '<%=ResolveUrl("~/api/HelpDesk/Tickets/Open" + (User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName))%>?' + window.JSON.stringify(new Date()),
+				url: hap.common.formatJSONUrl("~/api/HelpDesk/Tickets/Open<%=User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName%>"),
 				dataType: 'json',
 				contentType: 'application/json',
 				success: function (data) {
@@ -319,7 +319,7 @@
 			});
 			$.ajax({
 				type: 'GET',
-				url: '<%=ResolveUrl("~/api/HelpDesk/Tickets/Closed" + (User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName))%>?' + window.JSON.stringify(new Date()),
+				url: hap.common.formatJSONUrl("~/api/HelpDesk/Tickets/Closed<%=User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName%>"),
 				dataType: 'json',
 				contentType: 'application/json',
 				success: function (data) {
@@ -333,7 +333,7 @@
 			});
 			$.ajax({
 				type: 'GET',
-				url: '<%=ResolveUrl("~/api/HelpDesk/FAQs")%>?' + window.JSON.stringify(new Date()),
+				url: hap.common.formatJSONUrl("~/api/HelpDesk/FAQs"),
 				dataType: 'json',
 				contentType: 'application/json',
 				success: function (data) {
@@ -353,7 +353,7 @@
 		            $("#stats-content").fadeOut();
 		            $.ajax({
 		                type: 'GET',
-		                url: '<%=ResolveUrl("~/api/HelpDesk/Stats/")%>' + $("#spinner").spinner("value") + '?' + window.JSON.stringify(new Date()),
+		                url: hap.common.formatJSONUrl("~/api/HelpDesk/Stats/" + $("#spinner").spinner("value")),
 		                dataType: 'json',
 		                contentType: 'application/json',
 		                success: function (data) {
@@ -364,7 +364,7 @@
 		        });
 		        $.ajax({
 		            type: 'GET',
-		            url: '<%=ResolveUrl("~/api/HelpDesk/Stats")%>?' + window.JSON.stringify(new Date()),
+		            url: hap.common.formatJSONUrl("~/api/HelpDesk/Stats"),
 				    dataType: 'json',
 				    contentType: 'application/json',
 				    success: function (data) {

@@ -141,7 +141,7 @@
 	        var a = '"' + SelectedItems()[index].Data.Path.replace(/\.\.\/download\//gi, "").replace(/\\/g, "/") + '"';
 	        $.ajax({
 	            type: 'POST',
-	            url: hap.common.resolveUrl('~/api/MyFiles/Zip') + '?' + window.JSON.stringify(new Date()),
+	            url: hap.common.formatJSONUrl('~/api/MyFiles/Zip'),
 	            dataType: 'json',
 	            data: '{ "Zip": "' + zipfile.replace(/\\/g, "/").replace("//", "/") + '", "Paths": [' + a.replace(/\\/g, "/") + '] }',
 	            contentType: 'application/json',
@@ -162,7 +162,7 @@
 			a = '"' + a + '"';
 			$.ajax({
 				type: 'POST',
-				url: hap.common.resolveUrl('~/api/MyFiles/UnZip') + '?' + window.JSON.stringify(new Date()),
+				url: hap.common.formatJSONUrl('~/api/MyFiles/UnZip'),
 				dataType: 'json',
 				data: '{ "ZipFile" : ' + a + ', "Overwrite": "' + overwrite + '" }',
 				contentType: 'application/json',
@@ -220,7 +220,7 @@
 			if (overwrite == null) overwrite = false;
 			$.ajax({
 				type: 'POST',
-				url: hap.common.resolveUrl('~/api/MyFiles/Copy') + '?' + window.JSON.stringify(new Date()),
+				url: hap.common.formatJSONUrl('~/api/MyFiles/Copy'),
 				dataType: 'json',
 				data: '{ "OldPath" : "' + SelectedItems()[index].Data.Path.replace(/\.\.\/download\//gi, "").replace(/\\/gi, "/") + '", "NewPath": "' + (target.replace(/\\/gi, "/") + '/' + SelectedItems()[index].Data.Path.replace(/\\/gi, "/").substr(SelectedItems()[index].Data.Path.replace(/\\/gi, "/").lastIndexOf('/')).replace(/\//gi, "")) + '", "Overwrite": "' + overwrite + '" }',
 				contentType: 'application/json',
@@ -272,7 +272,7 @@
 			var a = '"' + clipboard.items[index].Data.Path + '"';
 			$.ajax({
 				type: 'POST',
-				url: hap.common.resolveUrl('~/api/MyFiles/Copy') + '?' + window.JSON.stringify(new Date()),
+				url: hap.common.formatJSONUrl('~/api/MyFiles/Copy'),
 				dataType: 'json',
 				data: '{ "OldPath" : "' + clipboard.items[index].Data.Path.replace(/\.\.\/download\//gi, "").replace(/\\/gi, "/") + '", "NewPath": "' + (target.replace(/\\/gi, '/') + '/' + clipboard.items[index].Data.Path.replace(/\\/gi, "/").substr(clipboard.items[index].Data.Path.replace(/\\/gi, "/").lastIndexOf('/')).replace(/\//gi, '')) + '", "Overwrite": "' + overwrite + '" }',
 				contentType: 'application/json',
@@ -324,7 +324,7 @@
 			var a = '"' + SelectedItems()[index].Data.Path + '"';
 			$.ajax({
 				type: 'POST',
-				url: hap.common.resolveUrl('~/api/MyFiles/Move') + '?' + window.JSON.stringify(new Date()),
+				url: hap.common.formatJSONUrl('~/api/MyFiles/Move'),
 				dataType: 'json', 
 				data: '{ "OldPath" : "' + SelectedItems()[index].Data.Path.replace(/\.\.\/download\//gi, "").replace(/\\/gi, "/") + '", "NewPath": "' + (target.replace(/\\/gi, '/') + '/' + SelectedItems()[index].Data.Path.replace(/\\/gi, "/").substr(SelectedItems()[index].Data.Path.replace(/\\/gi, "/").lastIndexOf('/')).replace(/\//gi, '')) + '", "Overwrite": "' + overwrite + '" }',
 				contentType: 'application/json',
@@ -376,7 +376,7 @@
 			var a = '"' + clipboard.items[index].Data.Path + '"';
 			$.ajax({
 				type: 'POST',
-				url: hap.common.resolveUrl('~/api/MyFiles/Move') + '?' + window.JSON.stringify(new Date()),
+				url: hap.common.formatJSONUrl('~/api/MyFiles/Move'),
 				dataType: 'json',
 				data: '{ "OldPath" : "' + clipboard.items[index].Data.Path.replace(/\.\.\/download\//gi, "").replace(/\\/gi, "/") + '", "NewPath": "' + (target.replace(/\//gi, '/') + '/' + clipboard.items[index].Data.Path.replace(/\\/gi, "/").substr(clipboard.items[index].Data.Path.replace(/\\/gi, "/").lastIndexOf('/')).replace(/\//gi, '')) + '", "Overwrite": "' + overwrite + '" }',
 				contentType: 'application/json',
@@ -427,7 +427,7 @@
 			var a = '"' + SelectedItems()[index].Data.Path.replace(/\.\.\/download\//gi, "").replace(/\\/g, "/") + '"';
 			$.ajax({
 				type: 'POST',
-				url: hap.common.resolveUrl('~/api/MyFiles/Delete') + '?' + window.JSON.stringify(new Date()),
+				url: hap.common.formatJSONUrl('~/api/MyFiles/Delete'),
 				dataType: 'json',
 				data: '[' + a + ']',
 				contentType: 'application/json',
@@ -468,7 +468,7 @@
 				$("#upload-" + this.File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_") + " .progressbar").progressbar({ value: 0 });
 				$.ajax({
 					type: 'GET',
-					url: hap.common.resolveUrl('~/api/MyFiles/Exists/') + this.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, "") + '/' + this.File.name + '?' + window.JSON.stringify(new Date()),
+					url: hap.common.hap.common.formatJSONUrl('~/api/MyFiles/Exists/' + this.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, "") + '/' + this.File.name),
 					dataType: 'json',
 					context: this,
 					contentType: 'application/json',
@@ -705,7 +705,7 @@
 							});
 							$.ajax({
 								type: 'GET',
-								url: hap.common.resolveUrl('~/api/MyFiles/Properties/') + SelectedItems()[0].Data.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, "") + '?' + window.JSON.stringify(new Date()),
+								url: hap.common.formatJSONUrl('~/api/MyFiles/Properties/' + SelectedItems()[0].Data.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, "")),
 								dataType: 'json',
 								contentType: 'application/json',
 								success: function (data) {
@@ -743,7 +743,7 @@
 							});
 							$.ajax({
 								type: 'GET',
-								url: hap.common.resolveUrl('~/api/MyFiles/Preview/') + SelectedItems()[0].Data.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, "") + '?' + window.JSON.stringify(new Date()),
+								url: hap.common.formatJSONUrl('~/api/MyFiles/Preview/' + SelectedItems()[0].Data.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, "")),
 								dataType: 'json',
 								contentType: 'application/json',
 								success: function (data) {
@@ -776,7 +776,7 @@
 									$("#googlesignin .progress").height(16).width(16).addClass("loading");
 									$.ajax({
 										type: 'POST',
-										url: hap.common.resolveUrl('~/api/MyFiles/SendTo/Google/') + SelectedItems()[0].Data.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, "") + '?' + window.JSON.stringify(new Date()),
+										url: hap.common.formatJSONUrl('~/api/MyFiles/SendTo/Google/' + SelectedItems()[0].Data.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, "")),
 										dataType: 'json',
 										data: '{ "username" : "' + $("#googleuser").val() + '", "password": "' + $("#googlepass").val() + '" }',
 										contentType: 'application/json',
@@ -799,7 +799,7 @@
 						        $("#loadingbox").dialog({ autoOpen: true, modal: true });
 						        $.ajax({
 						            type: 'POST',
-						            url: hap.common.resolveUrl('~/api/MyFiles/SendTo/SkyDrive/') + SelectedItems()[0].Data.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, "") + '?' + window.JSON.stringify(new Date()),
+						            url: hap.common.formatJSONUrl('~/api/MyFiles/SendTo/SkyDrive/' + SelectedItems()[0].Data.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, "")),
 						            dataType: 'json',
 						            data: '{ "accessToken" : "' + WL.getSession().access_token + '" }',
 						            contentType: 'application/json',
@@ -883,7 +883,7 @@
 			if (curpath == null) {
 				$.ajax({
 					type: 'GET',
-					url: hap.common.resolveUrl('~/api/MyFiles/Drives') + '?' + window.JSON.stringify(new Date()),
+					url: hap.common.formatJSONUrl('~/api/MyFiles/Drives'),
 					dataType: 'json',
 					contentType: 'application/json;',
 					success: function (data) {
@@ -899,7 +899,7 @@
 			} else {
 			$.ajax({
 				type: 'GET',
-				url: hap.common.resolveUrl("~/api/MyFiles/") + sort + curpath.replace(/\\/gi, "/") + '?' + window.JSON.stringify(new Date()),
+				url: hap.common.formatJSONUrl("~/api/MyFiles/" + sort + curpath.replace(/\\/gi, "/")),
 				dataType: 'json',
 				contentType: 'application/json',
 				success: function (data) {
@@ -920,7 +920,7 @@
 			});
 			$.ajax({
 				type: 'GET',
-				url: hap.common.resolveUrl("~/api/MyFiles/info/") + curpath.replace(/\\/gi, "/") + '?' + window.JSON.stringify(new Date()),
+				url: hap.common.formatJSONUrl("~/api/MyFiles/info/" + curpath.replace(/\\/gi, "/")),
 				dataType: 'json',
 				contentType: 'application/json',
 				success: function (data) {
@@ -984,7 +984,7 @@
 					if (node.data.href == "#") {
 						$.ajax({
 							type: 'GET',
-							url: hap.common.resolveUrl("~/api/MyFiles/Drives") + '?' + window.JSON.stringify(new Date()),
+							url: hap.common.formatJSONUrl("~/api/MyFiles/Drives"),
 							dataType: 'json',
 							contentType: 'application/json',
 							success: function (data) {
@@ -998,7 +998,7 @@
 					} else {
 						$.ajax({
 							type: 'GET',
-							url: hap.common.resolveUrl("~/api/MyFiles/") + node.data.href.substr(1).replace(/\\/g, "/") + '?' + window.JSON.stringify(new Date()),
+							url: hap.common.formatJSONUrl("~/api/MyFiles/" + node.data.href.substr(1).replace(/\\/g, "/")),
 							dataType: 'json',
 							contentType: 'application/json',
 							success: function (data) {
@@ -1086,7 +1086,7 @@
 					$("#newfoldertext").addClass("loading");
 					$.ajax({
 						type: 'GET',
-						url: hap.common.resolveUrl("~/api/MyFiles/Exists/") + curpath.replace(/\\/gi, "/") + (curpath.replace(/\\/gi, "/").match(/\\$/g) ? '' : '/') + $("#newfoldertext").val() + '/' + '?' + window.JSON.stringify(new Date()),
+						url: hap.common.formatJSONUrl("~/api/MyFiles/Exists/" + curpath.replace(/\\/gi, "/") + (curpath.replace(/\\/gi, "/").match(/\\$/g) ? '' : '/') + $("#newfoldertext").val() + '/'),
 						dataType: 'json',
 						context: this,
 						contentType: 'application/json',
@@ -1097,7 +1097,7 @@
 							} else {
 								$.ajax({
 									type: 'POST',
-									url: hap.common.resolveUrl("~/api/MyFiles/New/") + curpath.replace(/\\/gi, "/") + (curpath.replace(/\\/gi, "/").match(/\\$/g) ? '' : '/') + $("#newfoldertext").val() + '?' + window.JSON.stringify(new Date()),
+									url: hap.common.formatJSONUrl("~/api/MyFiles/New/" + curpath.replace(/\\/gi, "/") + (curpath.replace(/\\/gi, "/").match(/\\$/g) ? '' : '/') + $("#newfoldertext").val()),
 									dataType: 'json',
 									contentType: 'application/json',
 									success: function (data) {
@@ -1208,7 +1208,7 @@
 
 					$.ajax({
 						type: 'GET',
-						url: hap.common.resolveUrl("~/api/MyFiles/Exists/") + (p.substr(0, p.lastIndexOf('\\')) + "\\" + $("#renamebox").val() + (SelectedItems()[0].Data.Extension == null ? '\\' : SelectedItems()[0].Data.Extension)).replace(/\\\\/gi, "\\").replace(/\\/gi, "/") + '?' + window.JSON.stringify(new Date()),
+						url: hap.common.formatJSONUrl("~/api/MyFiles/Exists/" + (p.substr(0, p.lastIndexOf('\\')) + "\\" + $("#renamebox").val() + (SelectedItems()[0].Data.Extension == null ? '\\' : SelectedItems()[0].Data.Extension)).replace(/\\\\/gi, "\\").replace(/\\/gi, "/")),
 						dataType: 'json',
 						context: this,
 						contentType: 'application/json',
@@ -1223,7 +1223,7 @@
 								$("#progressstatus .progress").progressbar({ value: 50 });
 								$.ajax({
 									type: 'POST',
-									url: hap.common.resolveUrl("~/api/MyFiles/Move") + '?' + window.JSON.stringify(new Date()),
+									url: hap.common.formatJSONUrl("~/api/MyFiles/Move"),
 									data: '{ "OldPath": "' + p.replace(/\\/gi, "/") + '", "NewPath": "' + (p.substr(0, p.lastIndexOf('\\')) + "\\" + $("#renamebox").val() + (SelectedItems()[0].Data.Extension == null ? '\\' : SelectedItems()[0].Data.Extension)).replace(/\\\\/gi, "\\").replace(/\\/gi, "/") + '" }',
 									dataType: 'json',
 									contentType: 'application/json',

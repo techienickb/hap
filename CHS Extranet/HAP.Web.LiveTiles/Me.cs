@@ -26,33 +26,49 @@ namespace HAP.Web.LiveTiles
             config = hapConfig.Current;
             User = ((HAP.AD.User)Membership.GetUser());
             Name = User.DisplayName;
-
-            if (string.IsNullOrEmpty(config.School.PhotoHandler) || string.IsNullOrEmpty(User.EmployeeID)) {
-                using (DirectorySearcher dsSearcher = new DirectorySearcher())
+            HAP.AD.User _user = new HAP.AD.User();
+            _user.Authenticate(hapConfig.Current.AD.User, hapConfig.Current.AD.Password);
+            _user.ImpersonateContained();
+            try
+            {
+                if (string.IsNullOrEmpty(config.School.PhotoHandler) || string.IsNullOrEmpty(User.EmployeeID))
                 {
-                    dsSearcher.Filter = "(&(objectClass=user) (cn=" + User.UserName + "))";
-                    SearchResult result = dsSearcher.FindOne();
-
-                    using (DirectoryEntry user = new DirectoryEntry(result.Path))
+                    using (DirectorySearcher dsSearcher = new DirectorySearcher())
                     {
-                        byte[] data = user.Properties["jpegPhoto"].Value as byte[];
-                        if (data != null)
-                            Photo = "~/api/mypic";
-                        else Photo = null;
+                        dsSearcher.Filter = "(&(objectClass=user) (cn=" + User.UserName + "))";
+                        SearchResult result = dsSearcher.FindOne();
+
+                        using (DirectoryEntry user = new DirectoryEntry(result.Path))
+                        {
+                            byte[] data = user.Properties["jpegPhoto"].Value as byte[];
+                            if (data != null)
+                                Photo = "~/api/mypic";
+                            else Photo = null;
+                        }
                     }
                 }
+                else Photo = string.Format("{0}?UPN={1}", config.School.PhotoHandler, User.EmployeeID);
             }
-            else Photo = string.Format("{0}?UPN={1}", config.School.PhotoHandler, User.EmployeeID);
+            catch { Photo = null; }
+            _user.EndContainedImpersonate();
             Email = User.Email;
             OtherData = new Dictionary<string, string>();
-            OtherData.Add("Comment", User.Comment);
-            OtherData.Add("Notes", User.Notes);
-            OtherData.Add("LastLoginDate", User.LastLoginDate.ToString());
-            OtherData.Add("LastName", User.LastName);
-            OtherData.Add("FirstName", User.FirstName);
-            OtherData.Add("EmployeeID", User.EmployeeID);
-            OtherData.Add("DisplayName", User.DisplayName);
-            OtherData.Add("MiddleNames", User.MiddleNames);
+            try { OtherData.Add("Comment", User.Comment); }
+            catch { }
+            try { OtherData.Add("Notes", User.Notes); }
+            catch { }
+            try { OtherData.Add("LastLoginDate", User.LastLoginDate.ToString()); }
+            catch { }
+            try { OtherData.Add("LastName", User.LastName); }
+            catch { }
+            try { OtherData.Add("FirstName", User.FirstName); }
+            catch { }
+            try { OtherData.Add("EmployeeID", User.EmployeeID); }
+            catch { }
+            try { OtherData.Add("DisplayName", User.DisplayName); }
+            catch { }
+            try { OtherData.Add("MiddleNames", User.MiddleNames); }
+            catch { }
         }
 
         public string Name { get; set; }
