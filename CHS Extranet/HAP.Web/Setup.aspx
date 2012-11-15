@@ -34,6 +34,10 @@
                         <h2 style="padding: 0; margin: 0; text-align: center;">Access your School from Home</h2>
                     </div>
                     <script type="text/javascript">
+                        function formatJSONUrl(url) {
+                            var d = new Date().valueOf();
+                            return url.replace(/~\//g, root) + '?' + d;
+                        }
                         function OnUpdateError(xhr, ajaxOptions, thrownError) {
                             try {
                                 if (xhr.responseText.match(/\<!doctype html\>/gi)) window.location.reload();
@@ -1536,7 +1540,7 @@
                             if ($("#<%=un.ClientID %>").val().length > 2 && $("#<%=up.ClientID %>").val().length > 2 && $("#<%=upn.ClientID %>").val().length > 2) {
                                 $.ajax({
                                     type: 'POST',
-                                    url: hap.common.formatJSONUrl('~/api/setup/GetADTree'),
+                                    url: formatJSONUrl('~/api/setup/GetADTree'),
                                     data: '{"username": "' + $("#<%=un.ClientID %>").val() + '", "password": "' + $("#<%=up.ClientID %>").val() + '", "domain": "' + $("#<%=upn.ClientID %>").val() + '"}',
                                     contentType: 'application/json',
                                     dataType: 'json',
@@ -1750,7 +1754,7 @@
                             $("#filterEditor").dialog({ autoOpen: false });
                             $("#ouEditor").dialog({ autoOpen: false });
                             $("#mappingEditor").dialog({ autoOpen: false });
-                            $.get(hap.common.formatJSONUrl("~/api/test"), function (data) {
+                            $.get(formatJSONUrl("~/api/test"), function (data) {
                                 if (data == "OK") {
                                     $("#iis6wildcardimg").attr("src", "images/setup/267.png");
                                     $("#appwa").attr("src", "images/setup/267.png");
