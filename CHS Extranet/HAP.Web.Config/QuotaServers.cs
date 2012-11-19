@@ -14,7 +14,7 @@ namespace HAP.Web.Configuration
         public QuotaServers(ref XmlDocument doc) : base()
         {
             this.doc = doc;
-            this.node = doc.SelectSingleNode("/hapConfig/mscb/quotaservers");
+            this.node = doc.SelectSingleNode("/hapConfig/myfiles/quotaservers");
             foreach (XmlNode n in node.ChildNodes) base.Add(new QuotaServer(n));
         }
         public void Add(string Server, string Expression, char Drive)
@@ -23,7 +23,7 @@ namespace HAP.Web.Configuration
             e.SetAttribute("server", Server);
             e.SetAttribute("drive", Drive.ToString());
             e.InnerText = HttpContext.Current.Server.HtmlEncode(Expression);
-            doc.SelectSingleNode("/hapConfig/mscb/quotaservers").AppendChild(e);
+            doc.SelectSingleNode("/hapConfig/myfiles/quotaservers").AppendChild(e);
             base.Add(new QuotaServer(e));
         }
         public QuotaServer Find(string Server, string Expression)

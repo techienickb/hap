@@ -56,7 +56,7 @@ namespace HAP.Web.MyFiles
                 foreach (Filter f in config.MySchoolComputerBrowser.Filters)
                     if (isAuth(f) && f.Expression == "*.*") return "";
                     else if (isAuth(f))
-                        foreach (string s in f.Expression.Split(new char[] { ';' }))
+                        foreach (string s in f.Expression.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
                             filters.Add("f:" + HAP.MyFiles.File.GetMimeType(s.Trim().ToLower().Remove(0, 1)));
                 return " " + string.Join(" ", filters.ToArray());
             }

@@ -42,7 +42,7 @@ namespace HAP.Web.Configuration
             Tracker = new Tracker(ref doc);
             School = new School(ref doc);
             BookingSystem = new BookingSystem(ref doc);
-            MySchoolComputerBrowser = new MySchoolComputerBrowser(ref doc);
+            MySchoolComputerBrowser = new MyFiles(ref doc);
         }
 
         public bool FirstRun
@@ -64,12 +64,12 @@ namespace HAP.Web.Configuration
         public School School { get; private set; }
         public Tracker Tracker { get; private set; }
         public BookingSystem BookingSystem { get; private set; }
-        public MySchoolComputerBrowser MySchoolComputerBrowser { get; private set; }
+        public MyFiles MySchoolComputerBrowser { get; private set; }
 
         private void doUpgrade(Version version) {
             if (version.CompareTo(Version.Parse("7.1")) == -1)
             {//Perform v7.0 to v7.1 upgrade
-                doc.SelectSingleNode("/hapConfig/mscb").Attributes["hideextensions"].Value = doc.SelectSingleNode("/hapConfig/mscb").Attributes["hideextensions"].Value.Replace(';', ',');
+                doc.SelectSingleNode("/hapConfig/myfiles").Attributes["hideextensions"].Value = doc.SelectSingleNode("/hapConfig/myfiles").Attributes["hideextensions"].Value.Replace(';', ',');
             }
             if (version.CompareTo(Version.Parse("7.3")) == -1)
             {//Perform v7.3 upgrade
@@ -207,6 +207,14 @@ namespace HAP.Web.Configuration
                     n.Attributes["icon"].Value = "~/images/icons/metro/other/History.png";
                 foreach (XmlNode n in doc.SelectNodes("/hapConfig/Homepage/Links/Group/Link[@url='~/setup.aspx']"))
                     n.Attributes["icon"].Value = "~/images/icons/metro/folders-os/Configurealt1.png";
+            }
+            if (version.CompareTo(Version.Parse("8.5.1119.1800")) < 0)//Perform v8.5 upgrade, rename mscb to myfiles
+            {
+                XmlElement oldElement = (XmlElement)doc.SelectSingleNode("/hapConfig/mscb");
+                XmlElement newElement = doc.CreateElement("myfiles");
+                while (oldElement.HasAttributes) newElement.SetAttributeNode(oldElement.RemoveAttributeNode(oldElement.Attributes[0]));
+                while (oldElement.HasChildNodes) newElement.AppendChild(oldElement.FirstChild);
+                if (oldElement.ParentNode != null) oldElement.ParentNode.ReplaceChild(newElement, oldElement);
             }
             doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             doc.Save(ConfigPath);
