@@ -13,7 +13,7 @@ namespace HAP.Web.Configuration
         public Filters(ref XmlDocument doc) : base()
         {
             this.doc = doc;
-            this.node = doc.SelectSingleNode("/hapConfig/mscb/filters");
+            this.node = doc.SelectSingleNode("/hapConfig/myfiles/filters");
             foreach (XmlNode n in node.ChildNodes) base.Add(new Filter(n));
         }
         public void Add(string Name, string Expression, string EnableFor)
@@ -22,7 +22,7 @@ namespace HAP.Web.Configuration
             e.SetAttribute("name", Name);
             e.SetAttribute("expression", Expression);
             e.SetAttribute("enablefor", EnableFor);
-            doc.SelectSingleNode("/hapConfig/mscb/filters").AppendChild(e);
+            doc.SelectSingleNode("/hapConfig/myfiles/filters").AppendChild(e);
             base.Add(new Filter(e));
         }
         public Filter Find(string name, string expression)
@@ -33,16 +33,16 @@ namespace HAP.Web.Configuration
         {
             base.Remove(Find(name, expression));
             XmlNode n = null;
-            foreach (XmlNode n1 in doc.SelectNodes("/hapConfig/mscb/filters/filter"))
+            foreach (XmlNode n1 in doc.SelectNodes("/hapConfig/myfiles/filters/filter"))
                 if (n1.Attributes["name"].Value == name && n1.Attributes["expression"].Value == expression) { n = n1; break; }
-            doc.SelectSingleNode("/hapConfig/mscb/filters").RemoveChild(n);
+            doc.SelectSingleNode("/hapConfig/myfiles/filters").RemoveChild(n);
         }
         public void Update(string name, string expression, Filter New)
         {
             int index = IndexOf(Find(name, expression));
             base.RemoveAt(index);
             XmlNode n = null;
-            foreach (XmlNode n1 in doc.SelectNodes("/hapConfig/mscb/filters/filter"))
+            foreach (XmlNode n1 in doc.SelectNodes("/hapConfig/myfiles/filters/filter"))
                 if (n1.Attributes["name"].Value == name && n1.Attributes["expression"].Value == expression) { n = n1; break; }
             n.Attributes["name"].Value = New.Name;
             n.Attributes["expression"].Value = New.Expression;

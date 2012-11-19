@@ -31,8 +31,8 @@ namespace HAP.Web
                     else if (group.ShowTo != "None")
                     {
                         bool vis = false;
-                        foreach (string s in group.ShowTo.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries))
-                            if (!vis) vis = User.IsInRole(s);
+                        foreach (string s in group.ShowTo.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
+                            if (!vis) vis = User.IsInRole(s.Trim());
                         if (vis) groups.Add(group);
                     }
                 homepagelinks.DataSource = homepageheaders.DataSource = groups.ToArray();

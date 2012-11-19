@@ -14,7 +14,7 @@ namespace HAP.Web.Configuration
         public DriveMappings(ref XmlDocument doc) : base()
         {
             this.doc = doc;
-            this.node = doc.SelectSingleNode("/hapConfig/mscb/mappings");
+            this.node = doc.SelectSingleNode("/hapConfig/myfiles/mappings");
             foreach (XmlNode n in node.ChildNodes) base.Add(n.Attributes["drive"].Value.ToCharArray()[0], new DriveMapping(n));
         }
         public void Add(char Drive, string Name, string UNC, string EnableReadTo, string EnableWriteTo, bool EnableMove, MappingUsageMode UsageMode)
@@ -27,7 +27,7 @@ namespace HAP.Web.Configuration
             e.SetAttribute("enablewriteto", EnableWriteTo);
             e.SetAttribute("enablemove", EnableMove.ToString());
             e.SetAttribute("usagemode", UsageMode.ToString());
-            doc.SelectSingleNode("/hapConfig/mscb/mappings").AppendChild(e);
+            doc.SelectSingleNode("/hapConfig/myfiles/mappings").AppendChild(e);
             base.Add(Drive, new DriveMapping(e));
         }
         public void Delete(char Drive)
