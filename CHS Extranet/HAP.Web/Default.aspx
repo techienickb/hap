@@ -2,6 +2,7 @@
 <%@ Register TagName="announcement" TagPrefix="hap" Src="~/Controls/Announcement.ascx" %>
 <%@ Register TagName="version" TagPrefix="hap" Src="~/Controls/UpdateChecker.ascx" %>
 <asp:Content runat="server" ContentPlaceHolderID="head">
+    <script src="Scripts/jquery.ba-hashchange.min.js" type="text/javascript"></script>
     <link rel="stylesheet" type="text/css" href="style/jquery.wysiwyg.css" />
     <script type="text/javascript" src="Scripts/jquery.mousewheel.js"></script>
 </asp:Content>
@@ -127,6 +128,16 @@
                     $("#HomeButtonsHeader h1:first").addClass("active");
                     $('input[type=submit]').button();
                     $("#rightscoll, #leftscroll").css("height", $("#HomeButtonsOutter").height() + "px").css("line-height", $("#HomeButtonsOutter").height() + "px");
+                });
+                $(window).hashchange(function () {
+                    if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) {
+                        if (window.location.href.split("#")[1].match(/^panel\-/gi)) {
+                            scrollpos = $("#" + window.location.href.split("#")[1]).parent().index();
+                            $("#HomeButtonsOutter").animate({ scrollLeft: (scrollpos * ($("#HomeButtonsOutter").width() - 20) + (scrollpos * 20)) });
+                            $("#HomeButtonsHeader h1").removeClass("active");
+                            this.parentNode.className = "active";
+                        }
+                    }
                 });
             </script>
         </div>
