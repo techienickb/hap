@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="HAP.Web.BookingSystem._new" %>
+<%@ Page Title="" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="HAP.Web.BookingSystem._new" %>
 <asp:Content ContentPlaceHolderID="head" runat="server">
 	<script src="../Scripts/jquery.ba-hashchange.min.js" type="text/javascript"></script>
 	<link href="../style/bookingsystem.css" rel="stylesheet" type="text/css" />
@@ -228,7 +228,11 @@
 				success: function (data) {
 					if (user.isBSAdmin) $("#val").html("This Week is a Week " + data[1]);
 					else {
-						$("#val").html("You have " + data[0] + " bookings available to use this week. This Week is a Week " + data[1]);
+					    if (data[0] >= 0 ) {
+						    $("#val").html("You have " + data[0] + " bookings available to use this week. This Week is a Week " + data[1]);
+					    } else {
+					        $("#val").html("This Week is a Week " + data[1]);
+					    }
 						availbookings = data;
 					}
 				},
@@ -248,7 +252,7 @@
 			loadDate();
 		});
 		function doBooking(res, lesson) {
-			if (availbookings[0] <= 0 && !user.isBSAdmin) { 
+			if (availbookings[0] == 0 && !user.isBSAdmin) { 
 				alert("You have exceeded your allowed bookings, please contact an Admin if this is wrong");
 				return false; 
 			}
@@ -280,8 +284,12 @@
 		    } catch (e) { }
 		    try {
 		        $("#bflquant input, #bflquant label").remove();
+		        var checked = '';
+		        if (curres.Quantities.length == 1 ) {
+		            checked = ' checked="checked" ';
+		        }
 		        for (var i = 0; i < curres.Quantities.length; i++)
-		            $("#bflquant").append('<input type="radio" name="bflquant" id="bflquant-' + curres.Quantities[i] + '" value="' + curres.Quantities[i] + '" /><label for="bflquant-' + curres.Quantities[i] + '">' + curres.Quantities[i] + '</label>');
+		            $("#bflquant").append('<input type="radio" name="bflquant" id="bflquant-' + curres.Quantities[i] + '" value="' + curres.Quantities[i] + '"' + checked + ' /><label for="bflquant-' + curres.Quantities[i] + '">' + curres.Quantities[i] + '</label>');
 		    } catch (e) { }
 		    try {
 		        if (curres.MultiRoom) {
@@ -295,7 +303,8 @@
 		                if (!l1) l1 = (curres.Data[i].Lesson == lesson);
 		                if (l1) {
 		                    l3++;
-		                    if ( l3 > curres.MaxLessons ) {
+		                    if ( (curres.MaxLessons > 0 && l3 > curres.MaxLessons) || 
+                                 (l3 > availbookings[0] && availbookings[0] > 0 ) ) {
 		                        break;
 		                    }
 		                    $("#bfmultiroom").append('<option value="' + l2 + curres.Data[i].Lesson + '">' + l3 + ' Lesson' + (l3 == 1 ? '' : 's') + '</option>');
@@ -362,7 +371,11 @@
 										success: function (data) {
 											if (user.isBSAdmin) $("#val").html("This Week is a Week " + data[1]);
 											else {
+											    if (data[0] >= 0) {
 												$("#val").html("You have " + data[0] + " bookings available to use this week. This Week is a Week " + data[1]);
+											    } else {
+											        $("#val").html("This Week is a Week " + data[1]);
+											    }
 												availbookings = data;
 											}
 										},
@@ -405,7 +418,11 @@
 								success: function (data) {
 									if (user.isBSAdmin) $("#val").html("This Week is a Week " + data[1]);
 									else {
-										$("#val").html("You have " + data[0] + " bookings available to use this week. This Week is a Week " + data[1]);
+									    if (data[0] >= 0 ) {
+										    $("#val").html("You have " + data[0] + " bookings available to use this week. This Week is a Week " + data[1]);
+									    } else {
+									        $("#val").html("This Week is a Week " + data[1]);
+									    }
 										availbookings = data;
 									}
 								},
