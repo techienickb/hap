@@ -15,7 +15,8 @@ namespace HAP.Web.LiveTiles
             {
                 List<LinkGroup> groups = new List<LinkGroup>();
                 foreach (LinkGroup group in hapConfig.Current.Homepage.Groups.Values)
-                    if (group.ShowTo == "All") groups.Add(group);
+                    if (group.HideTopMenu == true) continue;
+                    else if (group.ShowTo == "All") groups.Add(group);
                     else if (group.ShowTo != "None")
                     {
                         bool vis = false;

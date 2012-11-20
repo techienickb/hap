@@ -32,7 +32,7 @@ namespace HAP.Web
                     else if (group.ShowTo == "All")
                     {
                         groups.Add(group);
-                        if (!group.HideTopMenu) headerlinks.Add(group);
+                        if (!group.HideHomePageLink) headerlinks.Add(group);
                     }
                     else if (group.ShowTo != "None")
                     {
@@ -42,7 +42,7 @@ namespace HAP.Web
                         if (vis)
                         {
                             groups.Add(group);
-                            if (!group.HideTopMenu) headerlinks.Add(group);
+                            if (!group.HideHomePageLink) headerlinks.Add(group);
                         }
                     }
                 homepageheaders.DataSource = headerlinks.ToArray();
