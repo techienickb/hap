@@ -26,16 +26,27 @@ namespace HAP.Web
             if (!Page.IsPostBack)
             {
                 List<LinkGroup> groups = new List<LinkGroup>();
+                List<LinkGroup> headerlinks = new List<LinkGroup>();
                 foreach (LinkGroup group in config.Homepage.Groups.Values)
-                    if (group.ShowTo == "All") groups.Add(group);
+                    if (group.HideHomePage == true) continue;
+                    else if (group.ShowTo == "All")
+                    {
+                        groups.Add(group);
+                        if (!group.HideTopMenu) headerlinks.Add(group);
+                    }
                     else if (group.ShowTo != "None")
                     {
                         bool vis = false;
                         foreach (string s in group.ShowTo.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
                             if (!vis) vis = User.IsInRole(s.Trim());
-                        if (vis) groups.Add(group);
+                        if (vis)
+                        {
+                            groups.Add(group);
+                            if (!group.HideTopMenu) headerlinks.Add(group);
+                        }
                     }
-                homepagelinks.DataSource = homepageheaders.DataSource = groups.ToArray();
+                homepageheaders.DataSource = headerlinks.ToArray();
+                homepagelinks.DataSource = groups.ToArray();
                 homepagelinks.DataBind(); homepageheaders.DataBind();
             }
         }
