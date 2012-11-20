@@ -215,6 +215,12 @@ namespace HAP.Web.Configuration
                 while (oldElement.HasAttributes) newElement.SetAttributeNode(oldElement.RemoveAttributeNode(oldElement.Attributes[0]));
                 while (oldElement.HasChildNodes) newElement.AppendChild(oldElement.FirstChild);
                 if (oldElement.ParentNode != null) oldElement.ParentNode.ReplaceChild(newElement, oldElement);
+                foreach (XmlNode n in doc.SelectNodes("/hapConfig/Homepage/Links/Group"))
+                {
+                    XmlElement en = n as XmlElement;
+                    en.SetAttribute("hidehomepage", "False");
+                    en.SetAttribute("hidetopmenu", "False");
+                }
             }
             doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             doc.Save(ConfigPath);

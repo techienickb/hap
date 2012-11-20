@@ -14,6 +14,8 @@ namespace HAP.Web.Configuration
         public string Name { get; set; }
         public string ShowTo { get; set; }
         public string SubTitle { get; set; }
+        public bool HideHomePage { get; set; }
+        public bool HideTopMenu { get; set; }
         public LinkGroup(ref XmlDocument doc, string Name) : base()
         {
             this.doc = doc;
@@ -21,6 +23,9 @@ namespace HAP.Web.Configuration
             this.Name = Name;
             this.SubTitle = node.Attributes["subtitle"].Value;
             this.ShowTo = node.Attributes["showto"].Value;
+            this.HideHomePage = bool.Parse(node.Attributes["hidehomepage"].Value);
+            this.HideTopMenu = bool.Parse(node.Attributes["hidetopmenu"].Value);
+
             foreach (XmlNode n in node.ChildNodes) base.Add(new Link(n));
         }
         public Link[] FilteredLinks

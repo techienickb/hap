@@ -235,7 +235,7 @@
                                 <div class="sortablegroup">
                                 <asp:Repeater runat="server" ID="homepageLinkGroups">
                                     <ItemTemplate>
-                                        <div id="linkgroup<%#Eval("Name").ToString().Replace(' ', '_') %>" class="linkgroup"><h4><span class="lgName"><%#Eval("Name") %></span> (<span class="lgST"><%#Eval("ShowTo") %></span>) <div class="cbuttonset" style="display: inline;"><button class="edit" onclick="return editgroup('<%#Eval("Name").ToString().Replace(' ', '_') %>');">Edit</button><button class="minusbutton" onclick="return removegroup('linkgroup<%#Eval("Name").ToString().Replace(' ', '_') %>');">Delete</button><button class="addbutton" onclick="return addlink('linkgroup<%#Eval("Name").ToString().Replace(' ', '_') %>');">Add Link</button></div></h4>
+                                        <div id="linkgroup<%#Eval("Name").ToString().Replace(' ', '_') %>" class="linkgroup"><h4><span class="lgName"><%#Eval("Name") %></span> (<span class="lgST"><%#Eval("ShowTo") %></span>) <span class="lgHHP"><%#(((bool)Eval("HideHomePage")) ? "(Hidden Homepage)(Hidden Menu Link)" : "" %></span><span class="lgHTM"><%#(((bool)Eval("HideTopMenu")) ? "(Hidden Menu Link)" : "" %></span><div class="cbuttonset" style="display: inline;"><button class="edit" onclick="return editgroup('<%#Eval("Name").ToString().Replace(' ', '_') %>');">Edit</button><button class="minusbutton" onclick="return removegroup('linkgroup<%#Eval("Name").ToString().Replace(' ', '_') %>');">Delete</button><button class="addbutton" onclick="return addlink('linkgroup<%#Eval("Name").ToString().Replace(' ', '_') %>');">Add Link</button></div></h4>
                                         <p><%#Eval("SubTitle") %></p>
                                         <div class="sortable">
                                         <asp:Repeater ID="Repeater1" runat="server" DataSource='<%#Container.DataItem %>'>
@@ -468,6 +468,12 @@
                         <div>
                             <label for="groupSubTitle" style="width: 100px;">SubTitle: </label><input type="text" id="groupSubTitle" />
                         </div>
+                        <div>
+                             <label for="groupHideHomePage" style="width: 100px;">Hide On Home Page: </label><input type="checkbox" id="groupHideHomePage" />
+                        </div>
+                        <div>
+                             <label for="groupHideTopMenu" style="width: 100px;">Hide On Top Menu: </label><input type="checkbox" id="groupHideTopMenu" />
+                        </div>                    
                     </div>
                     <div id="linkEditor" title="Link Editor">
                         <div>
@@ -1433,6 +1439,8 @@
                             $("#groupName").val($("#linkgroup" + e + " > h4 > .lgName").html());
                             $("#groupShowTo").val($("#linkgroup" + e + " > h4 > .lgST").html());
                             $("#groupSubTitle").val($("#linkgroup" + e + " > p").html());
+                            $("#groupHideHomePage").attr('checked', $("#linkgroup" + e + " > h4 > .lgHHP").html() == "(Hidden Homepage)" ? true : false));
+                            $("#groupHideTopMenu").attr('checked', $("#linkgroup" + e + " > h4 > .lgHTM").html() == "(Hidden Menu Link)" ? true : false));
                             tempe = e;
                             $("#linkgroupEditor").dialog({
                                 autoOpen: true,
@@ -1442,7 +1450,7 @@
                                         $.ajax({
                                             type: 'POST',
                                             url: 'API/Setup/UpdateLinkGroup',
-                                            data: '{ "origname": "' + $("#linkgroup" + tempe + " > h4 > .lgName").html() + '", "name": "' + $("#groupName").val() + '", "showto": "' + $("#groupShowTo").val() + '", "subtitle": "' + $("#groupSubTitle").val() + '" }',
+                                            data: '{ "origname": "' + $("#linkgroup" + tempe + " > h4 > .lgName").html() + '", "name": "' + $("#groupName").val() + '", "showto": "' + $("#groupShowTo").val() + '", "subtitle": "' + $("#groupSubTitle").val() + '", "hidehomepage": "' + $("#groupHideHomePage").is(":checked") ? 'True' : 'False' + '", "hidetopmenu": "' + $("#groupHideTopMenu").is(":checked") ? 'True' : 'False' + '" }',
                                             contentType: 'application/json',
                                             dataType: 'json',
                                             success: OnLinkGroupUpdateSuccess,
@@ -1475,6 +1483,8 @@
                             $("#groupName").val("");
                             $("#groupShowTo").val("");
                             $("#groupSubTitle").val("");
+                            $("#groupHideHomePage").val("");
+                            $("#groupHideTopMenu").val("");
                             $("#linkgroupEditor").dialog({
                                 autoOpen: true,
                                 width: 350,
@@ -1483,7 +1493,7 @@
                                         $.ajax({
                                             type: 'POST',
                                             url: 'API/Setup/AddLinkGroup',
-                                            data: '{ "name": "' + $("#groupName").val() + '", "showto": "' + $("#groupShowTo").val() + '", "subtitle": "' + $("#groupSubTitle").val() + '" }',
+                                            data: '{ "name": "' + $("#groupName").val() + '", "showto": "' + $("#groupShowTo").val() + '", "subtitle": "' + $("#groupSubTitle").val() + '", "hidehomepage": "' + (($("#groupHideHomePage:checked").val() !== undefined) ? 'true' : 'false') + '", "hidetopmenu": "' + (($("#groupHideTopMenu:checked").val() !== undefined) ? 'true' : 'false') + '" }',
                                             contentType: 'application/json',
                                             dataType: 'json',
                                             success: OnLinkGroupAddSuccess,
