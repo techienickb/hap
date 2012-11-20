@@ -220,6 +220,7 @@ namespace HAP.Web.Configuration
                     XmlElement en = n as XmlElement;
                     en.SetAttribute("hidehomepage", "False");
                     en.SetAttribute("hidetopmenu", "False");
+                    en.SetAttribute("hidehomepagelink", "False");
                 }
             }
             doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();

@@ -24,17 +24,17 @@ namespace HAP.Web.Configuration
             e.AppendChild(doc.CreateElement("Links"));
             doc.SelectSingleNode("/hapConfig").AppendChild(e);
 
-            Groups.Add("Resources", "All", "", false, false);
+            Groups.Add("Resources", "All", "", false, false, false);
             Groups["Resources"].Add("Me", "Inherit", "About Me and Change My Password", "#me", "~/images/icons/metro/folders-os/UserNo-Frame.png", "", "me");
             Groups["Resources"].Add("My Files", "Inherit", "Access your School My Files", "~/myfiles/", "~/images/icons/metro/folders-os/DocumentsFolder.png", "", "myfiles");
             Groups["Resources"].Add("Remote Apps", "Inherit", "Run School Applications at Home via School", "/rdweb/", "~/images/icons/metro/applications/remotedesktop.png", "");
             Groups["Resources"].Add("My Emails", "Inherit", "Access Email", "https://schoolmail.crickhowell-hs.powys.sch.uk/owa/", "~/images/icons/metro/office-15/outlook.png", "");
-            Groups.Add("Management", "Domain Admins", "", false, false);
+            Groups.Add("Management", "Domain Admins", "", false, false, false);
             Groups["Management"].Add("Help Desk", "Inherit", "Log/View a Support Ticket", "~/helpdesk/", "~/images/icons/metro/folders-os/help.png", "", "helpdesk");
             Groups["Management"].Add("Booking System", "Inherit", "Book an IT Resource", "~/bookingsystem/", "~/images/icons/metro/applications/calendar.png", "", "bookings");
             Groups["Management"].Add("Logon Tracker", "Domain Admins", "View the Logon History", "~/tracker/", "~/images/icons/metro/other/History.png", "");
             Groups["Management"].Add("HAP+ Config", "Domain Admins", "Home Access Plus+ Config", "~/setup.aspx", "~/images/icons/metro/folders-os/Configurealt1.png", "");
-            Groups.Add("Me", "All", "#me", false, false);
+            Groups.Add("Me", "All", "#me", false, false, false);
             Groups["Me"].Add("Me", "Inherit", "", "", "", "");
             Groups["Me"].Add("Password", "Inherit", "", "", "", "");
         }
