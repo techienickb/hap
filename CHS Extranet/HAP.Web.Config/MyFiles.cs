@@ -62,7 +62,7 @@ namespace HAP.Web.Configuration
             Filters.Add("HTML Files", "*.html;*.htm", "All");
             Filters.Add("Images", "*.jpg;*.gif;*.png;*.bmp;*.jpeg", "All");
             Filters.Add("Powerpoint Files", "*.ppt;*.pptx;*.pptx;*.ppt", "All");
-            Filters.Add("Word Documents", "*.doc;*.docx;*.dotx;*.dot;*.txt;*.rft;*.pdf", "All");
+            Filters.Add("Word Documents", "*.doc;*.docx;*.dotx;*.dot;*.txt;*.rtf;*.pdf", "All");
             Filters.Add("ZIP Files", "*.zip", "All");
             Filters.Add("All Files", "*.*", "Domain Admins");
 
