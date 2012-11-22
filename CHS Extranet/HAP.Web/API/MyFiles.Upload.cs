@@ -56,9 +56,9 @@ namespace HAP.Web.API
 
         private bool isAuth(string extension)
         {
-            foreach (Filter filter in hapConfig.Current.MySchoolComputerBrowser.Filters)
+            foreach (Filter filter in hapConfig.Current.MyFiles.Filters)
                 if (filter.Expression.Contains(extension)) return true;
-            return isAuth(hapConfig.Current.MySchoolComputerBrowser.Filters.Single(fil => fil.Name == "All Files"));
+            return isAuth(hapConfig.Current.MyFiles.Filters.Single(fil => fil.Name == "All Files"));
         }
 
         private bool isAuth(Filter filter)

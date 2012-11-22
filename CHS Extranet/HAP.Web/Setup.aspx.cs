@@ -82,15 +82,15 @@ namespace HAP.Web
                 bsdays.Text = Config.BookingSystem.MaxDays.ToString();
                 bsmax.Text = Config.BookingSystem.MaxBookingsPerWeek.ToString();
                 bstwoweek.Checked = Config.BookingSystem.TwoWeekTimetable;
-                mscbFilters.DataSource = Config.MySchoolComputerBrowser.Filters.ToArray();
+                mscbFilters.DataSource = Config.MyFiles.Filters.ToArray();
                 mscbFilters.DataBind();
-                mscbMappings.DataSource = Config.MySchoolComputerBrowser.Mappings.Values;
+                mscbMappings.DataSource = Config.MyFiles.Mappings.Values;
                 mscbMappings.DataBind();
-                mscbQuotaServers.DataSource = Config.MySchoolComputerBrowser.QuotaServers.ToArray();
+                mscbQuotaServers.DataSource = Config.MyFiles.QuotaServers.ToArray();
                 mscbQuotaServers.DataBind();
-                mscbExt.Text = Config.MySchoolComputerBrowser.HideExtensions;
-                mscbWrite.Checked = Config.MySchoolComputerBrowser.WriteChecks;
-                liveid.Text = Config.MySchoolComputerBrowser.LiveAppId;
+                mscbExt.Text = Config.MyFiles.HideExtensions;
+                mscbWrite.Checked = Config.MyFiles.WriteChecks;
+                liveid.Text = Config.MyFiles.LiveAppId;
             }
         }
 
@@ -221,12 +221,12 @@ namespace HAP.Web
             catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the Booking System Two Week Timetable Option"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
             try
             {
-                Config.MySchoolComputerBrowser.HideExtensions = mscbExt.Text;
+                Config.MyFiles.HideExtensions = mscbExt.Text;
             }
             catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the My Files Hidden Extensions"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
             try
             {
-                Config.MySchoolComputerBrowser.WriteChecks = mscbWrite.Checked;
+                Config.MyFiles.WriteChecks = mscbWrite.Checked;
             }
             catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the My Files Write Checks Option"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
             try
@@ -251,7 +251,7 @@ namespace HAP.Web
             catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the Logon Tracker Max Student Logons"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
             try
             {
-                Config.MySchoolComputerBrowser.LiveAppId = liveid.Text;
+                Config.MyFiles.LiveAppId = liveid.Text;
             }
             catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the Live App Id"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
             try

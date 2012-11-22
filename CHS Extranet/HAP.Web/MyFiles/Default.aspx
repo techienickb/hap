@@ -72,7 +72,7 @@
             <li id="con-unzip"><hap:LocalResource ID="LocalResource1" StringPath="myfiles/unzip/unzip" runat="server" /></li>
             <li id="con-zip"><hap:LocalResource ID="LocalResource2" StringPath="myfiles/zip/zip" runat="server" /></li>
             <li id="con-google"><hap:LocalResource StringPath="myfiles/sendto/googledocs" runat="server" /></li>
-            <% if (!string.IsNullOrEmpty(config.MySchoolComputerBrowser.LiveAppId)) { %>
+            <% if (!string.IsNullOrEmpty(config.MyFiles.LiveAppId)) { %>
             <li id="con-skydrive"><hap:LocalResource StringPath="myfiles/sendto/skydrive" runat="server" /></li>
             <% } %>
         </ul>
@@ -794,7 +794,7 @@
 						},
 						'con-skydrive' : function (t) {
 						    if (SelectedItems().length > 1) { alert(hap.common.getLocal("myfiles/only1")); return false; }
-						    WL.init({ client_id: '<%=config.MySchoolComputerBrowser.LiveAppId%>', redirect_uri: hap.common.resolveUrl("~/myfiles/oauth.aspx"), scope: 'wl.skydrive_update', response_type: 'token' });
+						    WL.init({ client_id: '<%=config.MyFiles.LiveAppId%>', redirect_uri: hap.common.resolveUrl("~/myfiles/oauth.aspx"), scope: 'wl.skydrive_update', response_type: 'token' });
 						    WL.login({scope: 'wl.skydrive_update' }, function () { console.log("Windows Live Logged In");
 						        $("#loadingbox").dialog({ autoOpen: true, modal: true });
 						        $.ajax({

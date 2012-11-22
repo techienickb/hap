@@ -13,7 +13,7 @@ namespace HAP.Data.ComputerBrowser
         public static HAP.Data.Quota.QuotaInfo GetQuota(string username, string share)
         {
             QuotaServer server = null;
-            foreach (QuotaServer s in hapConfig.Current.MySchoolComputerBrowser.QuotaServers)
+            foreach (QuotaServer s in hapConfig.Current.MyFiles.QuotaServers)
                 if (share.ToLower().StartsWith(s.Expression.Replace("%username%", username).ToLower()))
                     server = s;
             if (server == null) throw new Exception("Can't find quota server");

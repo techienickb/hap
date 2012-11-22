@@ -37,9 +37,9 @@ namespace HAP.Web
 
         private bool isAuth(string extension)
         {
-            foreach (Filter filter in config.MySchoolComputerBrowser.Filters)
+            foreach (Filter filter in config.MyFiles.Filters)
                 if (filter.Expression.Contains(extension)) return true;
-            return isAuth(config.MySchoolComputerBrowser.Filters.Single(fil => fil.Name == "All Files"));
+            return isAuth(config.MyFiles.Filters.Single(fil => fil.Name == "All Files"));
         }
 
         private bool isAuth(Filter filter)
@@ -83,7 +83,7 @@ namespace HAP.Web
                 string path = Request.QueryString["path"].Remove(0, 1).Replace('^', '&');
                 string p = Request.QueryString["path"].Substring(0, 1);
                 DriveMapping unc = null;
-                unc = config.MySchoolComputerBrowser.Mappings[p.ToCharArray()[0]];
+                unc = config.MyFiles.Mappings[p.ToCharArray()[0]];
                 if (unc == null || !isWriteAuth(unc)) Response.Redirect(Request.ApplicationPath + "/unauthorised.aspx", true);
                 else path = Converter.FormatMapping(unc.UNC, ADUser) + path.Replace('/', '\\');
                 ADUser.EndImpersonate();
@@ -102,7 +102,7 @@ namespace HAP.Web
             string path = Request.QueryString["path"].Remove(0, 1);
             string p = Request.QueryString["path"].Substring(0, 1);
             DriveMapping unc = null;
-            unc = config.MySchoolComputerBrowser.Mappings[p.ToCharArray()[0]];
+            unc = config.MyFiles.Mappings[p.ToCharArray()[0]];
             if (unc == null || !isWriteAuth(unc)) Response.Redirect(Request.ApplicationPath + "/unauthorised.aspx", true);
             else path = Converter.FormatMapping(unc.UNC, ADUser) + path.Replace('/', '\\');
             if (FileUpload1.HasFile && isAuth(Path.GetExtension(FileUpload1.FileName))) { FileUpload1.SaveAs(Path.Combine(path, (string.IsNullOrEmpty(Request.QueryString["teacher"]) ? "" : User.Identity.Name + " - ") + FileUpload1.FileName)); message.Text += FileUpload1.FileName + " has been uploaded<br />"; }

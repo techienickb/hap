@@ -47,7 +47,7 @@
       <HintPath>..\Binaries\Google.GData.Documents.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Http">
-      <HintPath>C:\Program Files (x86)\Microsoft WCF REST\WCF REST Starter Kit Preview 2\Assemblies\Microsoft.Http.dll</HintPath>
+      <HintPath>..\Binaries\Microsoft.Http.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

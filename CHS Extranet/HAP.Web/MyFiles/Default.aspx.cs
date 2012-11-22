@@ -58,7 +58,7 @@ namespace HAP.Web.MyFiles
             get
             {
                 List<string> filters = new List<string>();
-                foreach (Filter f in config.MySchoolComputerBrowser.Filters)
+                foreach (Filter f in config.MyFiles.Filters)
                     if (isAuth(f) && f.Expression == "*.*") return "";
                     else if (isAuth(f))
                         filters.Add(f.Name + " - " + f.Expression.Trim());
@@ -71,7 +71,7 @@ namespace HAP.Web.MyFiles
             get
             {
                 List<string> filters = new List<string>();
-                foreach (Filter f in config.MySchoolComputerBrowser.Filters)
+                foreach (Filter f in config.MyFiles.Filters)
                     if (isAuth(f) && f.Expression == "*.*") return "";
                     else if (isAuth(f))
                         foreach (string s in f.Expression.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
