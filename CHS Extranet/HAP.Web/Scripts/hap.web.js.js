@@ -1,4 +1,4 @@
-﻿/*HAP.Web.JS.js - Copyright © 2012 nb development - Version 1 */
+﻿/*HAP.Web.JS.js - Copyright © 2012 nb development - Version 2 */
 if (hap == null) {
     var hap = {
         root: "/hap/",
@@ -106,7 +106,16 @@ if (hap == null) {
         livetiles: {
             Init: function (data) {
                 if ($("#" + data[0].Data.Group).is(".me")) this.ShowMe(data);
-                else for (var i = 0; i < data.length; i++) this.Tiles.push(new this.LiveTile(data[i].Type, data[i].Data));
+                else for (var i = 0; i < data.length; i++) {
+                    var found = false;
+                    for (var x = 0; x < this.TileHandlers.length; x++)
+                        if (data[i].Type.match(this.TileHandlers[x].type)) { found = true; this.Tiles.push(this.TileHandlers[x].func(data[i].Type, data[i].Data)); break; }
+                    if (!found) this.Tiles.push(new this.LiveTile(data[i].Type, data[i].Data));
+                }
+            },
+            TileHandlers: [],
+            RegisterTileHandler: function (type, func) {
+                this.TileHandlers.push({ "type": type, "func": func });
             },
             Tiles: [],
             ShowMe: function (data) {
@@ -133,27 +142,34 @@ if (hap == null) {
                         });
                     }
             },
-            LiveTile: function (type, initdata, size) {
-                this.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
-                if (type == "exchange.appointments" || type.match(/exchange.calendar\:/gi) || type == "bookings" || type == "helpdesk") size = "large";
-                this.html = '<a id="' + this.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + (size == 'large' ? ' class="large"' : '') + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
-                $("#" + initdata.Group).append(this.html);
-                if (type == "exchange.unread") {
+            RegisterDefaultTiles: function () {
+                hap.livetiles.RegisterTileHandler("exchange.unread", function (type, initdata, size) {
+                    this.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
+                    this.html = '<a id="' + this.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + (size == 'large' ? ' class="large"' : '') + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
+                    $("#" + initdata.Group).append(this.html);
                     setTimeout("hap.livetiles.UpdateExchangeMail('" + this.id + "');", 100);
-                } else if (type == "exchange.appointments") {
+                });
+                hap.livetiles.RegisterTileHandler("exchange.appointments", function (type, initdata, size) {
+                    size = "large";
+                    this.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
+                    this.html = '<a id="' + this.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + (size == 'large' ? ' class="large"' : '') + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
+                    $("#" + initdata.Group).append(this.html);
                     $("#" + this.id).addClass("appointment");
                     setTimeout("hap.livetiles.UpdateExchangeAppointments('" + this.id + "');", 100);
-                } else if (type.match(/exchange.calendar\:/gi)) {
+                });
+                hap.livetiles.RegisterTileHandler(/exchange.calendar\:/gi, function (type, initdata, size) {
+                    size = "large";
+                    this.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
+                    this.html = '<a id="' + this.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + (size == 'large' ? ' class="large"' : '') + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
+                    $("#" + initdata.Group).append(this.html);
                     $("#" + this.id).addClass("appointment");
                     setTimeout("hap.livetiles.UpdateExchangeCalendar('" + this.id + "', '" + type.split(/exchange.calendar\:/gi)[1] + "');", 100);
-                } else if (type == "me") {
-                    $("#" + this.id).addClass("me").click(function () {
-                        scrollpos = $("#HomeButtons > .me").index();
-                        $("#HomeButtonsOutter").animate({ scrollLeft: (scrollpos * ($("#HomeButtonsOutter").width() - 20) + (scrollpos * 20)) });
-                        $("#HomeButtonsHeader h1").removeClass("active");
-                        $("#HomeButtonsHeader h1")[scrollpos].className = "active";
-                        return false;
-                    });
+                });
+                hap.livetiles.RegisterTileHandler(/^me/gi, function (type, initdata, size) {
+                    this.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
+                    this.html = '<a id="' + this.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + (size == 'large' ? ' class="large"' : '') + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
+                    $("#" + initdata.Group).append(this.html);
+                    $("#" + this.id).addClass("me");
                     $.ajax({
                         url: hap.common.formatJSONUrl("~/api/livetiles/me"), type: 'GET', context: this.id, dataType: "json", contentType: 'application/JSON', success: function (data) {
                             $("#" + this + " span label").html("<b>" + data.Name + "</b><br />" + data.Email);
@@ -161,28 +177,37 @@ if (hap == null) {
                             setInterval("$('#" + this + " span i').animate({ height: 'toggle' });", 8000);
                         }, error: hap.common.jsonError
                     });
-                } else if (type == "myfiles") {
-                    $("#" + this.id).addClass("me");
-                    $.ajax({
-                        url: hap.common.formatJSONUrl("~/api/myfiles/drives"), type: 'GET', context: this.id, dataType: "json", contentType: 'application/JSON', success: function (data) {
-                            var s = "";
-                            for (var i = 0; i < (data.length > 3 ? 3 : data.length) ; i++)
-                                s += "<b>" + data[i].Name + "</b>" + (data[i].Space == -1 ? "<br /><br />" : '<br /><span class="progress"><label>' + data[i].Space + '%</label><u style="width: ' + data[i].Space + '%"></u></span>');
-                            $("#" + this + " span label").html(s);
-                            setInterval("$('#" + this + " > span > i').animate({ height: 'toggle' });", 6000);
-                        }, error: hap.common.jsonError
-                    });
-                } else if (type == "bookings") {
+                });
+                hap.livetiles.RegisterTileHandler("bookings", function (type, initdata, size) {
+                    size = "large";
+                    this.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
+                    this.html = '<a id="' + this.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + (size == 'large' ? ' class="large"' : '') + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
+                    $("#" + initdata.Group).append(this.html);
                     $("#" + this.id).addClass("appointment");
                     setTimeout("hap.livetiles.UpdateBookings('" + this.id + "');", 100);
-                } else if (type == "helpdesk") {
+                });
+                hap.livetiles.RegisterTileHandler("helpdesk", function (type, initdata, size) {
+                    size = "large";
+                    this.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
+                    this.html = '<a id="' + this.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + (size == 'large' ? ' class="large"' : '') + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
+                    $("#" + initdata.Group).append(this.html);
                     $("#" + this.id).addClass("me");
                     setInterval("$('#" + this.id + " > span > i').animate({ height: 'toggle' });", 10000);
                     setTimeout("hap.livetiles.UpdateTickets('" + this.id + "');", 100);
-                } else if (type.match(/uptime\:/gi)) {
+                });
+                hap.livetiles.RegisterTileHandler(/^uptime\:/gi, function (type, initdata, size) {
+                    this.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
+                    this.html = '<a id="' + this.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + (size == 'large' ? ' class="large"' : '') + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
+                    $("#" + initdata.Group).append(this.html);
                     $("#" + this.id).addClass("me");
                     setTimeout("hap.livetiles.UpdateUptime('" + this.id + "', '" + type.substr(7) + "');", 100);
-                }
+                });
+            },
+            LiveTile: function (type, initdata, size) {
+                this.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
+                if (type == "exchange.appointments" || type.match(/exchange.calendar\:/gi) || type == "bookings" || type == "helpdesk") size = "large";
+                this.html = '<a id="' + this.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + (size == 'large' ? ' class="large"' : '') + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
+                $("#" + initdata.Group).append(this.html);
             },
             UpdateExchangeCalendar: function (tileid, mailbox) {
                 $("#" + tileid + " span label").html($.datepicker.formatDate('D <b>d</b>', new Date()));
@@ -272,6 +297,7 @@ if (hap == null) {
             }
         }
     };
+    hap.livetiles.RegisterDefaultTiles();
     $(function () {
         hap.header.Init();
         if (hap.load > hap.loadtypes.none) {

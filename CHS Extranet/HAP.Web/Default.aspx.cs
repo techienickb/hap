@@ -26,13 +26,14 @@ namespace HAP.Web
             if (!Page.IsPostBack)
             {
                 List<LinkGroup> groups = new List<LinkGroup>();
+                List<LinkGroup> lastgroups = new List<LinkGroup>();
                 List<LinkGroup> headerlinks = new List<LinkGroup>();
                 foreach (LinkGroup group in config.Homepage.Groups.Values)
                     if (group.HideHomePage == true) continue;
                     else if (group.ShowTo == "All")
                     {
-                        groups.Add(group);
-                        if (!group.HideHomePageLink) headerlinks.Add(group);
+                        if (!group.HideHomePageLink) { headerlinks.Add(group); groups.Add(group); }
+                        else lastgroups.Add(group);
                     }
                     else if (group.ShowTo != "None")
                     {
@@ -41,10 +42,11 @@ namespace HAP.Web
                             if (!vis) vis = User.IsInRole(s.Trim());
                         if (vis)
                         {
-                            groups.Add(group);
-                            if (!group.HideHomePageLink) headerlinks.Add(group);
+                            if (!group.HideHomePageLink) { headerlinks.Add(group); groups.Add(group); }
+                            else lastgroups.Add(group);
                         }
                     }
+                groups.AddRange(lastgroups);
                 homepageheaders.DataSource = headerlinks.ToArray();
                 homepagelinks.DataSource = groups.ToArray();
                 homepagelinks.DataBind(); homepageheaders.DataBind();
