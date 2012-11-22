@@ -42,7 +42,7 @@ namespace HAP.Web.Configuration
             Tracker = new Tracker(ref doc);
             School = new School(ref doc);
             BookingSystem = new BookingSystem(ref doc);
-            MySchoolComputerBrowser = new MyFiles(ref doc);
+            MyFiles = new MyFiles(ref doc);
         }
 
         public bool FirstRun
@@ -64,7 +64,7 @@ namespace HAP.Web.Configuration
         public School School { get; private set; }
         public Tracker Tracker { get; private set; }
         public BookingSystem BookingSystem { get; private set; }
-        public MyFiles MySchoolComputerBrowser { get; private set; }
+        public MyFiles MyFiles { get; private set; }
 
         private void doUpgrade(Version version) {
             if (version.CompareTo(Version.Parse("7.1")) == -1)
@@ -208,13 +208,16 @@ namespace HAP.Web.Configuration
                 foreach (XmlNode n in doc.SelectNodes("/hapConfig/Homepage/Links/Group/Link[@url='~/setup.aspx']"))
                     n.Attributes["icon"].Value = "~/images/icons/metro/folders-os/Configurealt1.png";
             }
-            if (version.CompareTo(Version.Parse("8.5.1119.1800")) < 0)//Perform v8.5 upgrade, rename mscb to myfiles
+            if (version.CompareTo(Version.Parse("8.5.1121.1800")) < 0)//Perform v8.5 upgrade, rename mscb to myfiles
             {
                 XmlElement oldElement = (XmlElement)doc.SelectSingleNode("/hapConfig/mscb");
-                XmlElement newElement = doc.CreateElement("myfiles");
-                while (oldElement.HasAttributes) newElement.SetAttributeNode(oldElement.RemoveAttributeNode(oldElement.Attributes[0]));
-                while (oldElement.HasChildNodes) newElement.AppendChild(oldElement.FirstChild);
-                if (oldElement.ParentNode != null) oldElement.ParentNode.ReplaceChild(newElement, oldElement);
+                if (oldElement != null)
+                {
+                    XmlElement newElement = doc.CreateElement("myfiles");
+                    while (oldElement.HasAttributes) newElement.SetAttributeNode(oldElement.RemoveAttributeNode(oldElement.Attributes[0]));
+                    while (oldElement.HasChildNodes) newElement.AppendChild(oldElement.FirstChild);
+                    if (oldElement.ParentNode != null) oldElement.ParentNode.ReplaceChild(newElement, oldElement);
+                }
                 foreach (XmlNode n in doc.SelectNodes("/hapConfig/Homepage/Links/Group"))
                 {
                     XmlElement en = n as XmlElement;

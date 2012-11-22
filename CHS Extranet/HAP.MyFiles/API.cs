@@ -558,7 +558,7 @@ namespace HAP.MyFiles
                             if (!subdir.Name.ToLower().Contains("recycle") && !isSystem && !isHidden && !subdir.Name.ToLower().Contains("system volume info"))
                             {
                                 HAP.MyFiles.AccessControlActions actions = allowactions;
-                                if (config.MySchoolComputerBrowser.WriteChecks)
+                                if (config.MyFiles.WriteChecks)
                                 {
                                     if (actions == HAP.MyFiles.AccessControlActions.Change)
                                     {
@@ -622,7 +622,7 @@ namespace HAP.MyFiles
 
             long freeBytesForUser, totalBytes, freeBytes;
 
-            foreach (DriveMapping p in config.MySchoolComputerBrowser.Mappings.Values.OrderBy(m => m.Drive))
+            foreach (DriveMapping p in config.MyFiles.Mappings.Values.OrderBy(m => m.Drive))
             {
                 decimal space = -1;
                 bool showspace = isWriteAuth(p);
@@ -735,7 +735,7 @@ namespace HAP.MyFiles
 
         public bool checkext(string extension)
         {
-            string[] exc = hapConfig.Current.MySchoolComputerBrowser.HideExtensions.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+            string[] exc = hapConfig.Current.MyFiles.HideExtensions.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string s in exc)
                 if (s.Trim().ToLower() == extension.ToLower()) return false;
             return true;

@@ -19,7 +19,7 @@ namespace HAP.Data.ComputerBrowser
         {
             if (extension.StartsWith(".")) extension = extension.Remove(0, 1);
             extension = extension.ToLower();
-            XmlDocument doc = hapConfig.Current.MySchoolComputerBrowser.KnownIcons;
+            XmlDocument doc = hapConfig.Current.MyFiles.KnownIcons;
             icon = null;
             if (doc.SelectSingleNode("/Icons/Icon[@extension='" + extension + "']") == null) return false;
             else

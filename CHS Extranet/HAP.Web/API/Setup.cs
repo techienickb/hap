@@ -42,7 +42,7 @@ namespace HAP.Web.API
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
             unc = unc.Replace('/', '\\');
-            Config.MySchoolComputerBrowser.Mappings.Add(drive.ToCharArray()[0], name, unc, enablereadto, enablewriteto, enablemove, (MappingUsageMode)Enum.Parse(typeof(MappingUsageMode), usagemode));
+            Config.MyFiles.Mappings.Add(drive.ToCharArray()[0], name, unc, enablereadto, enablewriteto, enablemove, (MappingUsageMode)Enum.Parse(typeof(MappingUsageMode), usagemode));
             return 0;
         }
 
@@ -51,7 +51,7 @@ namespace HAP.Web.API
         public int RemoveMapping(string drive)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
-            Config.MySchoolComputerBrowser.Mappings.Remove(drive.ToCharArray()[0]);
+            Config.MyFiles.Mappings.Remove(drive.ToCharArray()[0]);
             return 0;
         }
 
@@ -60,7 +60,7 @@ namespace HAP.Web.API
         public int UpdateMapping(string origdrive, string drive, string name, string unc, string enablereadto, string enablewriteto, bool enablemove, string usagemode)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
-            DriveMapping m = Config.MySchoolComputerBrowser.Mappings[origdrive.ToCharArray()[0]];
+            DriveMapping m = Config.MyFiles.Mappings[origdrive.ToCharArray()[0]];
             m.Drive = drive.ToCharArray()[0];
             m.EnableMove = enablemove;
             m.UsageMode = (MappingUsageMode)Enum.Parse(typeof(MappingUsageMode), usagemode);
@@ -68,7 +68,7 @@ namespace HAP.Web.API
             m.UNC = unc.Replace('/', '\\');
             m.EnableReadTo = enablereadto;
             m.EnableWriteTo = enablewriteto;
-            Config.MySchoolComputerBrowser.Mappings.Update(origdrive.ToCharArray()[0], m);
+            Config.MyFiles.Mappings.Update(origdrive.ToCharArray()[0], m);
             return 0;
         }
 
@@ -77,7 +77,7 @@ namespace HAP.Web.API
         public int AddFilter(string name, string expression, string enablefor)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
-            Config.MySchoolComputerBrowser.Filters.Add(name, expression.Replace("/", "\\"), enablefor);
+            Config.MyFiles.Filters.Add(name, expression.Replace("/", "\\"), enablefor);
             return 0;
         }
 
@@ -86,7 +86,7 @@ namespace HAP.Web.API
         public int RemoveFilter(string name, string expression)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
-            Config.MySchoolComputerBrowser.Filters.Delete(name, expression.Replace("/", "\\"));
+            Config.MyFiles.Filters.Delete(name, expression.Replace("/", "\\"));
             return 0;
         }
 
@@ -95,11 +95,11 @@ namespace HAP.Web.API
         public int UpdateFilter(string origname, string origexpression, string name, string expression, string enablefor)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
-            Filter f = Config.MySchoolComputerBrowser.Filters.Find(origname, origexpression.Replace("/", "\\"));
+            Filter f = Config.MyFiles.Filters.Find(origname, origexpression.Replace("/", "\\"));
             f.Name = name;
             f.Expression = expression.Replace("/", "\\");
             f.EnableFor = enablefor;
-            Config.MySchoolComputerBrowser.Filters.Update(origname, origexpression.Replace("/", "\\"), f);
+            Config.MyFiles.Filters.Update(origname, origexpression.Replace("/", "\\"), f);
             return 0;
         }
 
@@ -109,7 +109,7 @@ namespace HAP.Web.API
         {
             expression = expression.Replace('/', '\\');
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
-            Config.MySchoolComputerBrowser.QuotaServers.Add(server, expression, drive.ToCharArray()[0]);
+            Config.MyFiles.QuotaServers.Add(server, expression, drive.ToCharArray()[0]);
             return 0;
         }
 
@@ -119,7 +119,7 @@ namespace HAP.Web.API
         {
             expression = expression.Replace('/', '\\');
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
-            Config.MySchoolComputerBrowser.QuotaServers.Delete(server, expression);
+            Config.MyFiles.QuotaServers.Delete(server, expression);
             return 0;
         }
 
@@ -130,11 +130,11 @@ namespace HAP.Web.API
             origexpression = origexpression.Replace('/', '\\');
             expression = expression.Replace('/', '\\');
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
-            QuotaServer q = Config.MySchoolComputerBrowser.QuotaServers.Find(origserver, origexpression);
+            QuotaServer q = Config.MyFiles.QuotaServers.Find(origserver, origexpression);
             q.Server = server;
             q.Drive = drive.ToCharArray()[0];
             q.Expression = expression;
-            Config.MySchoolComputerBrowser.QuotaServers.Update(origserver, origexpression, q);
+            Config.MyFiles.QuotaServers.Update(origserver, origexpression, q);
             return 0;
         }
 

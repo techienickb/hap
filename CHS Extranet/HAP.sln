@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{7F80432C-70D
 		Binaries\Google.GData.Extensions.dll = Binaries\Google.GData.Extensions.dll
 		Binaries\ICSharpCode.SharpZipLib.dll = Binaries\ICSharpCode.SharpZipLib.dll
 		Binaries\Microsoft.Exchange.WebServices.dll = Binaries\Microsoft.Exchange.WebServices.dll
+		Binaries\Microsoft.Http.dll = Binaries\Microsoft.Http.dll
 		Binaries\srmlib.dll = Binaries\srmlib.dll
 	EndProjectSection
 EndProject
