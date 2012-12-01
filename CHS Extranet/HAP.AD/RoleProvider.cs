@@ -25,7 +25,19 @@ namespace HAP.AD
 
         public override bool IsUserInRole(string username, string roleName)
         {
-            return wtrp.IsUserInRole(HAP.Web.Configuration.hapConfig.Current.AD.UPN.Remove(HAP.Web.Configuration.hapConfig.Current.AD.UPN.IndexOf('.')) + '\\' + username, roleName);
+            //bool core = wtrp.IsUserInRole(HAP.Web.Configuration.hapConfig.Current.AD.UPN.Remove(HAP.Web.Configuration.hapConfig.Current.AD.UPN.IndexOf('.')) + '\\' + username, roleName); 
+            //if (!core)
+            try
+            {
+                PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
+                GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, roleName);
+
+                foreach (Principal p in gp.GetMembers(true))
+                    if (p.Name.ToLower() == username.ToLower()) return true;
+                return false;
+            }
+            catch { return wtrp.IsUserInRole(HAP.Web.Configuration.hapConfig.Current.AD.UPN.Remove(HAP.Web.Configuration.hapConfig.Current.AD.UPN.IndexOf('.')) + '\\' + username, roleName); }
+            //return false;
         }
 
         public override string[] GetRolesForUser(string username)

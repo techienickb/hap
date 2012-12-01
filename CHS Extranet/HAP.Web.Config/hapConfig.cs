@@ -226,6 +226,10 @@ namespace HAP.Web.Configuration
                     en.SetAttribute("hidehomepagelink", "False");
                 }
             }
+            if (version.CompareTo(Version.Parse("8.5.1202.0000")) < 0)//Perform v8.5 upgrade, add dfstarget
+            {
+                foreach (XmlNode n in doc.SelectNodes("/hapConfig/myfiles/quotaservers")) ((XmlElement)n).SetAttribute("dfstarget", "");
+            }
             doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             doc.Save(ConfigPath);
         }
