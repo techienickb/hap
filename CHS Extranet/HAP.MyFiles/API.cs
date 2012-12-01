@@ -560,6 +560,12 @@ namespace HAP.MyFiles
                                 HAP.MyFiles.AccessControlActions actions = allowactions;
                                 if (config.MyFiles.WriteChecks)
                                 {
+                                    //try
+                                    //{
+                                    //    foreach (System.Security.AccessControl.AuthorizationRule rule in subdir.GetAccessControl().GetAccessRules(true, true, typeof(System.Security.Principal.NTAccount)))
+                                    //        ss.Add(((System.Security.AccessControl.FileSystemAccessRule)rule).AccessControlType.ToString() +  " " + ((System.Security.AccessControl.FileSystemAccessRule)rule).FileSystemRights.ToString() + " " + rule.IdentityReference.Value);
+                                    //}
+                                    //catch (Exception ex) { ss.Add(ex.ToString()); }
                                     if (actions == HAP.MyFiles.AccessControlActions.Change)
                                     {
                                         try { System.IO.File.Create(System.IO.Path.Combine(subdir.FullName, "temp.ini")).Close(); System.IO.File.Delete(System.IO.Path.Combine(subdir.FullName, "temp.ini")); }

@@ -46,6 +46,7 @@ namespace HAP.Web.API
 #if DEBUG
             HAP.Web.Logging.EventViewer.Log("Booking System JSON API", "Loading Booking from XML Datasource", System.Diagnostics.EventLogEntryType.Information);
 #endif
+            HAP.Data.SQL.WebEvents.Log(DateTime.Now, "BookingSystem.Remove", HttpContext.Current.User.Identity.Name, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Removing " + booking.Name);
             HAP.BookingSystem.BookingSystem bs = new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date));
             Booking b = bs.getBooking(booking.Room, booking.Lesson);
             try
@@ -107,6 +108,7 @@ namespace HAP.Web.API
         [WebInvoke(Method = "POST", UriTemplate = "/Booking/{Date}", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         public JSONBooking[] Book(string Date, JSONBooking booking)
         {
+            HAP.Data.SQL.WebEvents.Log(DateTime.Now, "BookingSystem.Book", HttpContext.Current.User.Identity.Name, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Booking " + booking.Name);
             try
             {
                 XmlDocument doc = HAP.BookingSystem.BookingSystem.BookingsDoc;
