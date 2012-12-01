@@ -25,7 +25,7 @@ namespace HAP.Data.ComputerBrowser
             tcpBinding.Security.Mode = SecurityMode.None; 
             EndpointAddress endpointAddress = new EndpointAddress(endPointAddr);
             ServiceClient c = new ServiceClient(tcpBinding, endpointAddress);
-            if (server.FSRM) return c.GetQuotaFromPath(share);
+            if (server.FSRM) return c.GetQuotaFromPath(string.IsNullOrWhiteSpace(server.DFSTarget) ? share : server.DFSTarget.ToLower().Replace("%username%", username.ToLower()));
             return c.GetQuota(username, server.Drive.ToString() + ":");
         }
     }
