@@ -64,6 +64,10 @@
       <Project>{36468e14-f8af-4794-ab76-25571a54682f}</Project>
       <Name>HAP.AD</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HAP.Data.SQL\HAP.Data.SQL.csproj">
+      <Project>{d7498641-1837-480e-8aa0-4466cdb5fb12}</Project>
+      <Name>HAP.Data.SQL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HAP.Data\HAP.Data.csproj">
       <Project>{66768d2f-2190-4b13-bb6c-7195a342db9a}</Project>
       <Name>HAP.Data</Name>

@@ -51,7 +51,7 @@ namespace HAP.Web.LiveTiles
             }
             catch { Photo = null; }
             _user.EndContainedImpersonate();
-            Email = User.Email;
+            Email = User.Email == null ? "" : User.Email;
             OtherData = new Dictionary<string, string>();
             try { OtherData.Add("Comment", User.Comment); }
             catch { }

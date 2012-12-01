@@ -304,7 +304,7 @@
 		                if (l1) {
 		                    l3++;
 		                    if ( (curres.MaxLessons > 0 && l3 > curres.MaxLessons) || 
-                                 (l3 > availbookings[0] && availbookings[0] > 0 ) ) {
+                                 (l3 > availbookings[0] && availbookings[0] > 0 ) || curres.Data[i].Name != "FREE") {
 		                        break;
 		                    }
 		                    $("#bfmultiroom").append('<option value="' + l2 + curres.Data[i].Lesson + '">' + l3 + ' Lesson' + (l3 == 1 ? '' : 's') + '</option>');

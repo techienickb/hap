@@ -26,19 +26,41 @@ namespace HAP.Web.routing
 
         public IHttpHandler GetHttpHandler(RequestContext requestContext)
         {
-            if (!UrlAuthorizationModule.CheckUrlAccessForPrincipal("~/f.ashx", requestContext.HttpContext.User, requestContext.HttpContext.Request.HttpMethod))
+            if (!UrlAuthorizationModule.CheckUrlAccessForPrincipal("~/Download/", requestContext.HttpContext.User, requestContext.HttpContext.Request.HttpMethod))
             {
                 requestContext.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 requestContext.HttpContext.Response.End();
             }
+
+            hapConfig config = hapConfig.Current;
+            string path = HttpUtility.UrlDecode(((string)requestContext.RouteData.Values["path"]).Replace('^', '&').Replace("|", "%"));
+            DriveMapping unc = config.MyFiles.Mappings[((string)requestContext.RouteData.Values["drive"]).ToUpper().ToCharArray()[0]];
+            path = Converter.FormatMapping(unc.UNC, ADUser) + '\\' + path.Replace('/', '\\');
+            HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.Download", requestContext.HttpContext.User.Identity.Name, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Downloading: " + path);
 
             Downloader downloader = new Downloader();
             if (requestContext.RouteData.Values.ContainsKey("path")) downloader.RoutingPath = requestContext.RouteData.Values["path"] as string;
             else downloader.RoutingPath = string.Empty;
             downloader.RoutingDrive = requestContext.RouteData.Values["drive"] as string;
             downloader.RoutingDrive = downloader.RoutingDrive.ToUpper();
-
             return downloader;
+        }
+
+        private HAP.AD.User _ADUser = null;
+        public HAP.AD.User ADUser
+        {
+            get
+            {
+                if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == HAP.Web.Configuration.AuthMode.Windows) return ((HAP.AD.User)Membership.GetUser());
+                if (_ADUser == null)
+                {
+                    _ADUser = new User();
+                    HttpCookie token = HttpContext.Current.Request.Cookies["token"];
+                    if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
+                    _ADUser.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
+                }
+                return _ADUser;
+            }
         }
     }
 
