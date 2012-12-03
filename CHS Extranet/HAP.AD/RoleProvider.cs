@@ -27,16 +27,17 @@ namespace HAP.AD
         {
             //bool core = wtrp.IsUserInRole(HAP.Web.Configuration.hapConfig.Current.AD.UPN.Remove(HAP.Web.Configuration.hapConfig.Current.AD.UPN.IndexOf('.')) + '\\' + username, roleName); 
             //if (!core)
-            try
-            {
+            //try
+            //{
                 PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
                 GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, roleName);
+                if (gp == null) return false;
 
                 foreach (Principal p in gp.GetMembers(true))
                     if (p.Name.ToLower() == username.ToLower()) return true;
                 return false;
-            }
-            catch { return wtrp.IsUserInRole(HAP.Web.Configuration.hapConfig.Current.AD.UPN.Remove(HAP.Web.Configuration.hapConfig.Current.AD.UPN.IndexOf('.')) + '\\' + username, roleName); }
+            //}
+            //catch { return wtrp.IsUserInRole(HAP.Web.Configuration.hapConfig.Current.AD.UPN.Remove(HAP.Web.Configuration.hapConfig.Current.AD.UPN.IndexOf('.')) + '\\' + username, roleName); }
             //return false;
         }
 
@@ -47,7 +48,12 @@ namespace HAP.AD
             {
                 PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
                 UserPrincipal userp = UserPrincipal.FindByIdentity(pcontext, username);
-                foreach (Principal p in userp.GetGroups()) roles.Add(p.SamAccountName);
+                foreach (Principal p in userp.GetGroups())
+                {
+                    roles.Add(p.SamAccountName);
+                    foreach (Principal p1 in (((GroupPrincipal)p).GetGroups()))
+                        roles.Add(p1.SamAccountName);
+                }
             }
             catch { }
             return roles.ToArray();
@@ -80,7 +86,13 @@ namespace HAP.AD
 
         public override string[] GetUsersInRole(string roleName)
         {
-            return wtrp.GetUsersInRole(roleName);
+            PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
+            GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, roleName);
+            if (gp == null) return new string[] {};
+            List<string> users = new List<string>();
+            foreach (Principal p in gp.GetMembers(true))
+                users.Add(p.Name);
+            return users.ToArray();//wtrp.GetUsersInRole(roleName);
         }
 
         public override string[] GetAllRoles()
