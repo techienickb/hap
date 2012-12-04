@@ -52,11 +52,22 @@ namespace HAP.AD
                 {
                     roles.Add(p.SamAccountName);
                     foreach (Principal p1 in (((GroupPrincipal)p).GetGroups()))
-                        roles.Add(p1.SamAccountName);
+                        Recurse(p1, ref roles);
                 }
             }
             catch { }
             return roles.ToArray();
+        }
+
+        public void Recurse(Principal p, ref List<string> roles)
+        {
+            roles.Add(p.Name);
+            try
+            {
+                foreach (Principal p1 in (((GroupPrincipal)p).GetGroups()))
+                    Recurse(p1, ref roles);
+            }
+            catch { }
         }
 
         public override void CreateRole(string roleName)
