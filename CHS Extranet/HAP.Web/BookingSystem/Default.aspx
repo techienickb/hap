@@ -73,7 +73,9 @@
 		</asp:PlaceHolder>
 		<div id="bfLaptops" class="bfType">
 			<div style="float: left;">
-				<label for="bflroom">Room Required In: </label><input type="text" id="bflroom" style="width: 60px" /> <span id="bflroomerror" style="display: none;">*</span>
+				<span id="bflroom_span"><label for="bflroom">Room Required In: </label><input type="text" id="bflroom" style="width: 60px" /></span>
+                <span id="bflsroom_span" style="display: none;"><label for="bflsroom">Room Required In: </label><select id="bflsroom"></select></span>
+                <span id="bflroomerror" style="display: none;">*</span>
 				<label for="bflheadphones">Headphones?: </label><input type="checkbox" id="bflheadphones" />
 				<label for="bflquant">Quantity:&nbsp;</label>
 			</div>
@@ -83,7 +85,9 @@
 			</div>
 		</div>
 		<div id="bfEquipment" class="bfType">
-				<label for="bferoom">Room Required In: </label><input type="text" id="bferoom" style="width: 60px" /> <span id="bferoomerror" style="display: none;">*</span>
+			<span id="bferoom_span"><label for="bferoom">Room Required In: </label><input type="text" id="bferoom" style="width: 60px" /></span>
+            <span id="bfesroom_span" style="display: none;"><label for="bfesroom">Room Required In: </label><select id="bfesroom"></select></span>
+            <span id="bferoomerror" style="display: none;">*</span>
 		</div>
         <div id="bfmultilesson">
             <label for="bfmultiroom">Length: </label><select id="bfmultiroom"></select>
@@ -136,7 +140,7 @@
 		var resources = <%=JSResources %>;
 		var availbookings = [ 0, 0 ];
 		var canmulti = false;
-		function resource(name, type, years, quantities, readonly, multiroom, maxlessons){
+		function resource(name, type, years, quantities, readonly, multiroom, maxlessons, rooms){
 			this.Name = name;
 			this.Type = type;
 			this.Years = years;
@@ -145,6 +149,7 @@
 			this.ReadOnly = readonly;
 			this.MultiRoom = multiroom;
 			this.MaxLessons = maxlessons;
+			this.Rooms = rooms;
 			this.Render = function() {
 				var h = "";
 				for (var x = 0; x < this.Data.length; x++) {
@@ -168,6 +173,7 @@
 				}
 				$("#" + this.Name.replace(/ /g, '_')).html(h);
 			};
+			this.timer = null;
 			this.Refresh = function() {
 				$.ajax({
 					type: 'GET',
@@ -177,6 +183,11 @@
 					success: function (data) {
 						this.Data = data;
 						this.Render();
+						if (this.timer) clearTimeout(this.timer);
+						this.timer = null;
+						var _z = 0;
+						for (var _i = 0; _i < resources.length; _i++) if (resources[_i] == this) _z = _i;
+						this.timer = setTimeout(function () { resources[_z].Refresh(); }, 30000);
 					},
 					error: hap.common.jsonError
 				});
@@ -274,8 +285,19 @@
 			$("#bfsubjects option:selected").removeAttr("selected");
 			$("#bfsubjects option:first").attr("selected", "selected");
 			$("#bflheadphones").removeAttr("checked");
-			$("#bflroom").val("");
-			$("#bferoom").val("");
+			$("#bflroom, #bferoom").val("");
+			$("#bflsroom option, #bfesroom option").remove();
+			if (curres.Rooms.length > 0) {
+			    $("#bflroom_span, #bferoom_span").css("display", "none");
+			    $("#bflsroom_span, #bfesroom_span").removeAttr("style");
+			    $("#bflsroom, #bfesroom").append('<option value="">---</option>');
+			    for (var i = 0; i < curres.Rooms.length; i++)
+			        $("#bflsroom, #bfesroom").append('<option value="' + curres.Rooms[i] + '">' + curres.Rooms[i] + '</option>');
+			}
+			else {
+			    $("#bflroom_span, #bferoom_span").removeAttr("style");
+			    $("#bflsroom_span, #bfesroom_span").css("display", "none");
+			}
 		    try {
 		        $("#bfyear option").remove();
 		        $("#bfyear").append('<option value="">---</option>');
@@ -461,6 +483,12 @@
 					minWidth: 450
 				});
 				return false;
+			});
+			$("#bflsroom").change(function () {
+			    $("#bflroom").val(this.options[this.selectedIndex].value);
+			});
+			$("#bfesroom").change(function () {
+			    $("#bferoom").val(this.options[this.selectedIndex].value);
 			});
 			$("#questionbox").dialog({ autoOpen: false });
 			$("#overviewcalendar").dialog({ autoOpen: false });

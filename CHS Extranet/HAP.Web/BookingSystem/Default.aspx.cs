@@ -118,11 +118,15 @@ namespace HAP.Web.BookingSystem
                         if (string.IsNullOrEmpty(years) || years == "Inherit") years = "Year 7, Year 8, Year 9, Year 10, Year 11, Year 12, Year 13, A-Level";
                         List<string> years1 = new List<string>();
                         List<string> quant = new List<string>();
+                        List<string> rooms = new List<string>();
+                        if (r.Rooms != null && r.Rooms.Inherit && config.BookingSystem.Rooms != null) foreach (string _s in config.BookingSystem.Rooms) rooms.Add("\"" + _s + "\"");
+                        else if (r.Rooms != null && !r.Rooms.Inherit) foreach (string _s in r.Rooms) rooms.Add("\"" + _s + "\"");
+                        string[] _rooms = rooms == null ? new string[] { } : rooms.ToArray(); 
                         foreach (string y in years.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                             years1.Add("\"" + y.Trim() + "\"");
                         foreach (string q in r.Quantities.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                             quant.Add("\"" + q.Trim() + "\"");
-                        s.Add(string.Format("new resource(\"{0}\", \"{1}\", [ {2} ], [ {3} ], {4}, {5}, \"{6}\")", r.Name, r.Type, string.Join(", ", years1.ToArray()), string.Join(", ", quant.ToArray()), isReadOnly(r.ReadOnlyTo, r.ReadWriteTo).ToString().ToLower(), isMultiLesson(r.MultiLessonTo, r.Admins).ToString().ToLower(), r.MaxMultiLesson));
+                        s.Add(string.Format("new resource(\"{0}\", \"{1}\", [ {2} ], [ {3} ], {4}, {5}, \"{6}\", [ {7} ])", r.Name, r.Type, string.Join(", ", years1.ToArray()), string.Join(", ", quant.ToArray()), isReadOnly(r.ReadOnlyTo, r.ReadWriteTo).ToString().ToLower(), isMultiLesson(r.MultiLessonTo, r.Admins).ToString().ToLower(), r.MaxMultiLesson, string.Join(", ", _rooms)));
                     }
                 }
                 return "[" + string.Join(", ", s.ToArray()) + "]";

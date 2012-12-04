@@ -12,6 +12,8 @@ namespace HAP.Web.Configuration
         public Resource(XmlNode node)
         {
             this.node = node;
+            if (node.SelectSingleNode("rooms") != null) Rooms = new Rooms(node.SelectSingleNode("rooms"));
+            else Rooms = null;
             Name = node.Attributes["name"].Value;
             Type = (ResourceType)Enum.Parse(typeof(ResourceType), node.Attributes["type"].Value);
             Enabled = bool.Parse(node.Attributes["enabled"].Value);
@@ -28,6 +30,7 @@ namespace HAP.Web.Configuration
             MaxMultiLesson = node.Attributes["maxmultilesson"] == null ? 0 : int.Parse(node.Attributes["maxmultilesson"].Value);
         }
 
+        public Rooms Rooms { get; set; }
         public string Name { get; set; }
         public ResourceType Type { get; set; }
         public bool EmailAdmins { get; set; }
@@ -42,6 +45,19 @@ namespace HAP.Web.Configuration
         public string ReadWriteTo { get; set; }
         public string MultiLessonTo { get; set; }
         public int MaxMultiLesson { get; set; }
+
+        public void InitRooms()
+        {
+            XmlElement e = node.OwnerDocument.CreateElement("rooms");
+            e.SetAttribute("inherit", "False");
+            Rooms = new Rooms(node.AppendChild(e));
+        }
+
+        public void RemoveRooms()
+        {
+            node.RemoveChild(node.SelectSingleNode("rooms"));
+            Rooms = null;
+        }
     }
 
     public enum ResourceType { Room, Laptops, Equipment, Other }
