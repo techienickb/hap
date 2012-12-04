@@ -13,6 +13,8 @@ namespace HAP.Web.Configuration
         {
             this.doc = doc;
             if (doc.SelectSingleNode("/hapConfig/bookingsystem") == null) Initialize();
+            if (doc.SelectSingleNode("/hapConfig/bookingsystem/rooms") != null) Rooms = new Rooms(doc.SelectSingleNode("/hapConfig/bookingsystem/rooms"));
+            else Rooms = null;
         }
 
         public Resources Resources { get { return new Resources(ref doc); } }
@@ -25,7 +27,20 @@ namespace HAP.Web.Configuration
         public string Admins { get { return doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["admins"].Value; } set { doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["admins"].Value = value; } }
         public bool MultiLesson { get { return bool.Parse(doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["enablemultilesson"].Value); } set { doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["enablemultilesson"].Value = value.ToString(); } }
         public int MaxMultiLesson { get { return int.Parse(doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["maxmultilesson"].Value); } set { doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["maxmultilesson"].Value = value.ToString(); } }
+        public Rooms Rooms { get; set; }
 
+        public void InitRooms()
+        {
+            XmlElement e = doc.CreateElement("rooms");
+            e.SetAttribute("inherit", "False");
+            Rooms = new Rooms(doc.SelectSingleNode("/hapConfig/bookingsystem").AppendChild(e));
+        }
+
+        public void RemoveRooms()
+        {
+            doc.SelectSingleNode("/hapConfig/bookingsystem").RemoveChild(doc.SelectSingleNode("/hapConfig/bookingsystem/rooms"));
+            Rooms = null;
+        }
 
         public void Initialize()
         {

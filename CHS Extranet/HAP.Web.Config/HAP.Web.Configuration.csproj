@@ -61,6 +61,7 @@
     <Compile Include="Lessons.cs" />
     <Compile Include="MyFiles.cs" />
     <Compile Include="QuotaServer.cs" />
+    <Compile Include="Rooms.cs" />
     <Compile Include="Subjects.cs" />
     <Compile Include="LinkGroups.cs" />
     <Compile Include="homepage.cs" />
