@@ -1034,9 +1034,6 @@
     <Content Include="style\Web.config" />
     <Content Include="Documentation.pdf" />
     <None Include="Properties\PublishProfiles\Pack.pubxml" />
-    <None Include="Properties\PublishProfiles\Package.pubxml" />
-    <None Include="Properties\PublishProfiles\Profile1.pubxml" />
-    <None Include="Properties\PublishProfiles\Profile2.pubxml" />
     <Content Include="Tracker\Web.config" />
     <Content Include="UserCard\Web.config" />
     <Content Include="style\icons.eot" />
