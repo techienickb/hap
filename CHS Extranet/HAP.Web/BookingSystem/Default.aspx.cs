@@ -138,8 +138,10 @@ namespace HAP.Web.BookingSystem
             if (showto == "All" || isBSAdmin || User.IsInRole("Domain Admins")) return true;
             foreach (string s in hidefrom.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 if (ADUser.UserName.ToLower().Equals(s.ToLower().Trim())) return false;
+                else if (User.IsInRole(s.Trim())) return false;
             foreach (string s in showto.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 if (ADUser.UserName.ToLower().Equals(s.ToLower().Trim())) return true;
+                else if (User.IsInRole(s.Trim())) return true;
             return false;
         }
 
