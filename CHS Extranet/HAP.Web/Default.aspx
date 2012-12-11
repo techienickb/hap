@@ -96,7 +96,7 @@
                     $(window).resize(function() {
                         $("#HomeButtons").css("width", (($("#HomeButtons > div").length * $("#HomeButtonsOutter").width()) + 200) + "px");
                         $("#HomeButtons .panel").css("width", $("#HomeButtonsOutter").width() + "px");
-                        $("#HomeButtonsOutter").animate({ scrollLeft: (scrollpos * ($("#HomeButtonsOutter").width() - 20) + (scrollpos * 20)) });
+                        $("#HomeButtonsOutter").scrollLeft(scrollpos * ($("#HomeButtonsOutter").width() - 20) + (scrollpos * 20));
                         $("#rightscoll, #leftscroll").css("height", $("#HomeButtonsOutter").height() + "px").css("line-height", $("#HomeButtonsOutter").height() + "px");
                     });
                     $("#HomeButtonsOutter").animate({ scrollLeft: (scrollpos * ($("#HomeButtonsOutter").width() - 20) + (scrollpos * 20)) });
