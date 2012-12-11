@@ -40,7 +40,7 @@ namespace HAP.Web.LiveTiles
 
                         using (DirectoryEntry user = new DirectoryEntry(result.Path))
                         {
-                            byte[] data = user.Properties["jpegPhoto"].Value as byte[];
+                            byte[] data = user.Properties["thumbnailPhoto "].Value as byte[];
                             if (data != null)
                                 Photo = "~/api/mypic";
                             else Photo = null;
