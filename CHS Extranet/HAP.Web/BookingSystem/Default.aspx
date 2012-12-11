@@ -259,7 +259,7 @@
 			if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curdate = new Date(window.location.href.split('#')[1].split('/')[2], window.location.href.split('#')[1].split('/')[1] - 1, window.location.href.split('#')[1].split('/')[0]);
 			else curdate = new Date(<%try { %><%=CurrentDate.Year %>, <%=CurrentDate.Month - 1 %>, <%=CurrentDate.Day %> <% } catch { } %>);
 			$('#datepicker').datepicker("setDate", curdate);
-			$("#picker").val($.datepicker.formatDate('d MM yy', curdate));
+			$("#picker").val($.datepicker.formatDate('d MM', curdate));
 			loadDate();
 		});
 		function doBooking(res, lesson) {
@@ -270,7 +270,7 @@
 			curles = lesson;
 			$("#bfdate").html($.datepicker.formatDate('d MM yy', curdate));
 			for (var i = 0; i < resources.length; i++)
-				if (resources[i].Name == res) curres = resources[i];
+			    if (resources[i].Name == res) curres = resources[i];
 			$("#bfsubject").css("display", "none");
 			$(".bfType").css("display", "none");
 			$(".bfType > input").val("");
@@ -493,7 +493,7 @@
 			$("#questionbox").dialog({ autoOpen: false });
 			$("#overviewcalendar").dialog({ autoOpen: false });
 			$("#bookingform").dialog({ autoOpen: false });
-			$("#picker").val($.datepicker.formatDate('d MM yy', curdate));
+			$("#picker").val($.datepicker.formatDate('d MM', curdate));
 			$("input[type=button]").button();
 			$(".button").button();
 			$("#datepicker").css("top", $("#picker").position().top + 29);
