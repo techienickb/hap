@@ -44,7 +44,7 @@ namespace HAP.Web.API
                     _user.ImpersonateContained();
                     using (DirectorySearcher dsSearcher = new DirectorySearcher())
                     {
-                        dsSearcher.Filter = "(&(objectClass=user) (cn=" + context.User.Identity.Name + "))";
+                        dsSearcher.Filter = "(&(objectClass=user) (cn=" + ((HAP.AD.User)Membership.GetUser()).UserName + "))";
                         SearchResult result = dsSearcher.FindOne();
 
                         using (DirectoryEntry user = new DirectoryEntry(result.Path))

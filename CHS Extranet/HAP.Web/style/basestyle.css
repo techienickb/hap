@@ -155,7 +155,7 @@ th span { float: right; }
 #hapHeaderMore .tiles { margin-top: 10px; overflow: hidden; }
 #hapHeaderMore .tiles div { display: block; color: #f3f3f3; padding: 0 0 6px 2px; font-family: ☺SegoeLight, 'Segoe UI Light', 'Segoe UI', Tahoma; }
 #hapHeaderMore .tiles div div { vertical-align: text-top; padding-top: 2px; }
-#hapHeaderMore .tiles div div a { text-align: center; display: inline-block; white-space: normal; background-position: center top; background-repeat: no-repeat; padding-top: 70px; width: 100px; height: 30px; margin-right: 4px; line-height: 13px; font-size: 13px; vertical-align: text-top; color: #fff; text-decoration: none; }
+#hapHeaderMore .tiles div div a { text-align: center; display: inline-block; white-space: normal; background-position: center top; background-repeat: no-repeat; padding-top: 70px; width: 100px; height: 30px; margin-right: 4px; margin-top: 4px; line-height: 13px; font-size: 13px; vertical-align: text-top; color: #fff; text-decoration: none; }
 
 .dropdown:after { margin-left: .35em; font-family: 'MSHPIconsRegular'; content: ''; font-size: .688em; }
 .menucontainer { display: inline-block; height: 40px; line-height: 40px; }
