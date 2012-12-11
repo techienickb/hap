@@ -42,6 +42,7 @@
                             </ItemTemplate>
                         </asp:Repeater>
                     </div>
+                    <p>&nbsp;</p>
                 </div>
                 <a id="rightscoll" href="#right"></a>
                 <a id="leftscroll" href="#left"></a>
