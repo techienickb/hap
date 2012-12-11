@@ -54,7 +54,7 @@ if (hap == null) {
                             $("#hapTitleMore").click(function () { hap.header.WaitInit = true; $("#hapHeaderMore").animate({ height: 'toggle' }, 500, 'linear', function () { hap.header.WaitInit = false; }); return false; }).trigger("click");
                             for (var i = 0; i < data.length; i++) {
                                 if (data[i].Group == 'Me') continue;
-                                var s = "<div>" + data[i].Group + "<div>";
+                                var s = "<div>" + unescape(data[i].GroupName) + "<div>";
                                 if (i == 0) s += '<a href="' + hap.common.resolveUrl("~/") + '" title="' + hap.common.getLocal("homeaccessplus") + " " + hap.common.getLocal("home") + '" style="background-image: url(' + hap.common.resolveUrl("~/images/icons/metro/hap-logo-64.png") + ');">' + hap.common.getLocal("home") + '</a>';
                                 for (var i2 = 0; i2 < data[i].Tiles.length; i2++) {
                                     if (data[i].Tiles[i2].Url.substr(0, 1) != "#")

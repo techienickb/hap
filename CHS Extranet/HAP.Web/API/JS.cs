@@ -40,7 +40,7 @@ namespace HAP.Web.API
             s = s.Replace("root: \"/hap/\",", "root: \"" + VirtualPathUtility.ToAbsolute("~/") + "\",");
             if (HttpContext.Current.User.Identity.IsAuthenticated)
             {
-                s = s.Replace("user: \"\",", "user: \"" + HttpContext.Current.User.Identity.Name + "\",");
+                s = s.Replace("user: \"\",", "user: \"" + ((HAP.AD.User)Membership.GetUser()).UserName + "\",");
                 s = s.Replace("admin: false,", "admin: " + HttpContext.Current.User.IsInRole("Domain Admins").ToString().ToLower() + ",");
             }
             s = s.Replace("\t", "").Replace("  ", " ").Replace("  ", " ");
