@@ -202,6 +202,20 @@ if (hap == null) {
                     $("#" + this.id).addClass("me");
                     setTimeout("hap.livetiles.UpdateUptime('" + this.id + "', '" + type.substr(7) + "');", 100);
                 });
+                hap.livetiles.RegisterTileHandler("myfiles", function (type, initdata, size) {
+                    this.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
+                    this.html = '<a id="' + this.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '" class="me"' + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
+                    $("#" + initdata.Group).append(this.html);
+                    $.ajax({
+                        url: hap.common.formatJSONUrl("~/api/myfiles/drives"), type: 'GET', context: this.id, dataType: "json", contentType: 'application/JSON', success: function (data) {
+                            var s = "";
+                            for (var i = 0; i < (data.length > 3 ? 3 : data.length) ; i++)
+                                s += "<b>" + data[i].Name + "</b>" + (data[i].Space == -1 ? "<br /><br />" : '<br /><span class="progress"><label>' + data[i].Space + '%</label><u style="width: ' + data[i].Space + '%"></u></span>');
+                            $("#" + this + " span label").html(s);
+                            setInterval("$('#" + this + " > span > i').animate({ height: 'toggle' });", 6000);
+                        }, error: hap.common.jsonError
+                    });
+                });
             },
             LiveTile: function (type, initdata, size) {
                 this.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
