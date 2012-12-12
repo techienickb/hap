@@ -45,6 +45,7 @@ namespace HAP.Web.API
                     using (DirectorySearcher dsSearcher = new DirectorySearcher())
                     {
                         dsSearcher.Filter = "(&(objectClass=user) (cn=" + ((HAP.AD.User)Membership.GetUser()).UserName + "))";
+                        dsSearcher.PropertiesToLoad.Add("thumbnailPhoto");
                         SearchResult result = dsSearcher.FindOne();
 
                         using (DirectoryEntry user = new DirectoryEntry(result.Path))
