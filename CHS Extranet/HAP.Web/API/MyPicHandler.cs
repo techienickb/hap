@@ -47,7 +47,8 @@ namespace HAP.Web.API
                     using (DirectorySearcher dsSearcher = new DirectorySearcher())
                     {
                         errorlist += "Creating Directory Search and Searching for then current user\n";
-                        dsSearcher.Filter = "(&(objectClass=user) (cn=" + ((HAP.AD.User)Membership.GetUser()).UserName + "))";
+                        dsSearcher.Filter = "(&(objectClass=user) (sAMAccountName=" + ((HAP.AD.User)Membership.GetUser()).UserName + "))";
+                        errorlist += "Using filter: " + dsSearcher.Filter + "\n";
                         dsSearcher.PropertiesToLoad.Add("thumbnailPhoto");
                         SearchResultCollection results = dsSearcher.FindAll();
 
@@ -70,13 +71,13 @@ namespace HAP.Web.API
                                         m.WriteTo(context.Response.OutputStream);
                                     }
                                 }
-                                else context.Response.Redirect("~/api/tiles/icons/128/128/images/icons/metro/folders-os/UserNo-Frame.png");
+                                //else context.Response.Redirect("~/api/tiles/icons/92/92/images/icons/metro/folders-os/UserNo-Frame.png");
                             }
-                            else context.Response.Redirect("~/api/tiles/icons/128/128/images/icons/metro/folders-os/UserNo-Frame.png");
+                            //else context.Response.Redirect("~/api/tiles/icons/92/92/images/icons/metro/folders-os/UserNo-Frame.png");
                         }
-                        else context.Response.Redirect("~/api/tiles/icons/128/128/images/icons/metro/folders-os/UserNo-Frame.png");
+                        //else context.Response.Redirect("~/api/tiles/icons/92/92/images/icons/metro/folders-os/UserNo-Frame.png");
                     }
-                    //throw new Exception();
+                    throw new Exception();
                 }
                 catch (Exception e)
                 {
@@ -85,7 +86,7 @@ namespace HAP.Web.API
                 }
                 finally {  }
             }
-            else context.Response.Redirect("~/api/tiles/icons/128/128/images/icons/metro/folders-os/UserNo-Frame.png");
+            else context.Response.Redirect("~/api/tiles/icons/92/92/images/icons/metro/folders-os/UserNo-Frame.png");
         }
 
         private Image FixedSize(Image imgPhoto, int Width, int Height)
