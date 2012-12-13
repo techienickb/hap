@@ -28,29 +28,26 @@ namespace HAP.Web.LiveTiles
             Name = User.DisplayName;
             HAP.AD.User _user = new HAP.AD.User();
             _user.Authenticate(hapConfig.Current.AD.User, hapConfig.Current.AD.Password);
-            _user.ImpersonateContained();
             try
             {
-                if (string.IsNullOrEmpty(config.School.PhotoHandler) || string.IsNullOrEmpty(User.EmployeeID))
+                _user.ImpersonateContained();
+                using (DirectorySearcher dsSearcher = new DirectorySearcher())
                 {
-                    using (DirectorySearcher dsSearcher = new DirectorySearcher())
-                    {
-                        dsSearcher.Filter = "(&(objectClass=user) (cn=" + User.UserName + "))";
-                        SearchResult result = dsSearcher.FindOne();
+                    dsSearcher.Filter = "(&(objectClass=user) (cn=" + ((HAP.AD.User)Membership.GetUser()).UserName + "))";
+                    dsSearcher.PropertiesToLoad.Add("thumbnailPhoto");
+                    SearchResult result = dsSearcher.FindOne();
 
-                        using (DirectoryEntry user = new DirectoryEntry(result.Path))
-                        {
-                            byte[] data = user.Properties["thumbnailPhoto "].Value as byte[];
-                            if (data != null)
-                                Photo = "~/api/mypic";
-                            else Photo = null;
-                        }
+                    using (DirectoryEntry user = new DirectoryEntry(result.Path))
+                    {
+                        byte[] data = user.Properties["thumbnailPhoto"].Value as byte[];
+
+                        if (data != null) Photo = "~/api/mypic";
+                        else Photo = null;
                     }
                 }
-                else Photo = string.Format("{0}?UPN={1}", config.School.PhotoHandler, User.EmployeeID);
             }
             catch { Photo = null; }
-            _user.EndContainedImpersonate();
+            finally { _user.EndContainedImpersonate(); }
             Email = User.Email == null ? "" : User.Email;
             OtherData = new Dictionary<string, string>();
             try { OtherData.Add("Comment", User.Comment); }

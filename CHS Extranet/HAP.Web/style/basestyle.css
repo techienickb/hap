@@ -149,7 +149,7 @@ th span { float: right; }
 .hapmenu a { display: block; background: #fff; color: #000; height: 30px; line-height: 30px; text-decoration: none; padding: 5px 20px; }
     .hapmenu a:hover { background-color: #f3f3f3; }
 #hapUserMenu { right: 10px; width: 300px; border-top-width: 2px; margin-top: -2px; }
-    #hapUserMenu .mypic { background-color: #0E5D30; float: left; width: 128px; height: 128px; background-position: center top; margin-right: 10px; }
+    #hapUserMenu .mypic { background-color: #0E5D30; float: left; width: 128px; height: 128px; background-position: center top; background-repeat: no-repeat; margin-right: 10px; }
 
 #hapHeaderMore { position: fixed; top: 0; left: 0; right: 0; background-color: #111; padding: 20px; overflow: hidden; z-index: 400; }
 #hapHeaderMore .tiles { margin-top: 10px; overflow: hidden; }
