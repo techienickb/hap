@@ -71,20 +71,19 @@ namespace HAP.Web.API
                                         m.WriteTo(context.Response.OutputStream);
                                     }
                                 }
-                                //else context.Response.Redirect("~/api/tiles/icons/92/92/images/icons/metro/folders-os/UserNo-Frame.png");
+                                else throw new Exception();
                             }
-                            //else context.Response.Redirect("~/api/tiles/icons/92/92/images/icons/metro/folders-os/UserNo-Frame.png");
+                            else throw new Exception();
                         }
-                        //else context.Response.Redirect("~/api/tiles/icons/92/92/images/icons/metro/folders-os/UserNo-Frame.png");
+                        else throw new Exception();
                     }
-                    throw new Exception();
                 }
-                catch (Exception e)
+                catch
                 {
-                    throw new Exception(errorlist, e);
-                    //context.Response.Redirect("~/api/tiles/icons/128/128/images/icons/metro/folders-os/UserNo-Frame.png");
+                    HAP.Web.Logging.EventViewer.Log("HAP.Web.API.MyPic", errorlist, System.Diagnostics.EventLogEntryType.Error, true);
+                    context.Response.Redirect("~/api/tiles/icons/128/128/images/icons/metro/folders-os/UserNo-Frame.png");
                 }
-                finally {  }
+                finally { _user.EndContainedImpersonate(); }
             }
             else context.Response.Redirect("~/api/tiles/icons/92/92/images/icons/metro/folders-os/UserNo-Frame.png");
         }
