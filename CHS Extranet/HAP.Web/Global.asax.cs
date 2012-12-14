@@ -7,6 +7,7 @@ using System.Web.SessionState;
 using System.Web.Routing;
 using HAP.Web.routing;
 using System.Diagnostics;
+using HAP.Web.Configuration;
 
 namespace HAP.Web
 {
@@ -15,6 +16,18 @@ namespace HAP.Web
 
         protected void Application_Start(object sender, EventArgs e)
         {
+            if (!hapConfig.Current.FirstRun && !EventLog.SourceExists("Home Access Plus+"))
+            {
+                HAP.AD.User _user = new HAP.AD.User();
+                _user.Authenticate(hapConfig.Current.AD.User, hapConfig.Current.AD.Password);
+                try
+                {
+                    _user.ImpersonateContained();
+                    EventLog.CreateEventSource("Home Access Plus+", "Application");
+                }
+                catch { }
+                finally { _user.EndContainedImpersonate(); }
+            }
             HttpContext.Current.Cache.Insert("hapBannedIps", new List<Banned>());
             API.APIRoutes.Register(RouteTable.Routes);
             RouteTable.Routes.Add(new Route("download/{drive}/{*path}", new DownloadRoutingHandler()));
