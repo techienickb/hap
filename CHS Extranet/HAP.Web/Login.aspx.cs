@@ -62,7 +62,7 @@ namespace HAP.Web
             ban.Attempts++;
             if (Membership.ValidateUser(username.Text.Trim(), password.Text.Trim()) && !ban.IsBanned)
             {
-                HAP.Web.Logging.EventViewer.Log("HAP+ Logon", "Home Access Plus+ Logon\n\nUsername: " + username.Text, System.Diagnostics.EventLogEntryType.Information, true);
+                HAP.Web.Logging.EventViewer.Log("HAP+ Logon", "Home Access Plus+ Logon\n\nUsername: " + username.Text, System.Diagnostics.EventLogEntryType.SuccessAudit, true);
                 HAP.Data.SQL.WebEvents.Log(DateTime.Now, "Logon", username.Text, Request.UserHostAddress, Request.Browser.Platform, Request.Browser.Browser + " " + Request.Browser.Version, Request.UserHostName, Request.UserAgent);
                 FormsAuthentication.SetAuthCookie(username.Text, false);
                 HttpCookie tokenCookie = new HttpCookie("token", TokenGenerator.ConvertToToken(password.Text));
@@ -79,6 +79,8 @@ namespace HAP.Web
                     ban.BannedUntil = DateTime.Now.AddMinutes(30);
                     message.Text = "<div class=\"ui-state-error ui-corner-all\" style=\" padding: 5px 10px\"><span class=\"ui-icon ui-icon-alert\" style=\"float: left; margin-right: 5px;\"></span>Your IP Addresss has been banned from logging on until " + ban.BannedUntil.Value.ToShortTimeString() + "</div>";
                     login.Visible = false;
+                    HAP.Web.Logging.EventViewer.Log("HAP+ Logon", "Home Access Plus+ Logon\n\nBanned logon Username: " + username.Text, System.Diagnostics.EventLogEntryType.FailureAudit, true);
+                    HAP.Data.SQL.WebEvents.Log(DateTime.Now, "Logon.Banned", username.Text, Request.UserHostAddress, Request.Browser.Platform, Request.Browser.Browser + " " + Request.Browser.Version, Request.UserHostName, Request.UserAgent);
                 }
                 else
                 {
