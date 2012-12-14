@@ -683,8 +683,9 @@ public abstract class RangeRequestHandlerBase : IHttpHandler
         }
 
         output += Environment.NewLine + Environment.NewLine;
-
+        _ADUser.EndContainedImpersonate();
         HAP.Web.Logging.EventViewer.Log(HttpContext.Current.Request.RawUrl, output, System.Diagnostics.EventLogEntryType.Information);
+        _ADUser.ImpersonateContained();
     }
 
     private void LogResponseHttpHeaders(HttpResponse Response)
@@ -696,7 +697,9 @@ public abstract class RangeRequestHandlerBase : IHttpHandler
         }
 
         output += Environment.NewLine + Environment.NewLine;
+        _ADUser.EndContainedImpersonate();
         HAP.Web.Logging.EventViewer.Log(HttpContext.Current.Request.RawUrl, output, System.Diagnostics.EventLogEntryType.Information);
+        _ADUser.ImpersonateContained();
     }
     #endregion
     #endregion
