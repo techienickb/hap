@@ -15,6 +15,7 @@ namespace HAP.Web
 
         protected void Application_Start(object sender, EventArgs e)
         {
+            HttpContext.Current.Cache.Insert("hapBannedIps", new List<Banned>());
             API.APIRoutes.Register(RouteTable.Routes);
             RouteTable.Routes.Add(new Route("download/{drive}/{*path}", new DownloadRoutingHandler()));
             RouteTable.Routes.Add(new Route("bookingsystem/r-{resource}", new PageRouteHandler("~/bookingsystem/default.aspx", true)));
