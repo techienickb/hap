@@ -28,26 +28,42 @@ namespace HAP.Web.LiveTiles
             Name = User.DisplayName;
             HAP.AD.User _user = new HAP.AD.User();
             _user.Authenticate(hapConfig.Current.AD.User, hapConfig.Current.AD.Password);
+            string errorlist = "";
             try
             {
                 _user.ImpersonateContained();
                 using (DirectorySearcher dsSearcher = new DirectorySearcher())
                 {
-                    dsSearcher.Filter = "(&(objectClass=user) (cn=" + ((HAP.AD.User)Membership.GetUser()).UserName + "))";
+                    errorlist += "Creating Directory Search and Searching for then current user\n";
+                    dsSearcher.Filter = "(&(objectClass=user) (sAMAccountName=" + ((HAP.AD.User)Membership.GetUser()).UserName + "))";
+                    errorlist += "Using filter: " + dsSearcher.Filter + "\n";
                     dsSearcher.PropertiesToLoad.Add("thumbnailPhoto");
-                    SearchResult result = dsSearcher.FindOne();
+                    SearchResultCollection results = dsSearcher.FindAll();
 
-                    using (DirectoryEntry user = new DirectoryEntry(result.Path))
+                    errorlist += "Found " + results.Count + " results, processing 1st result\n";
+                    if (results.Count > 0)
                     {
-                        byte[] data = user.Properties["thumbnailPhoto"].Value as byte[];
-
-                        if (data != null) Photo = "~/api/mypic";
-                        else Photo = null;
+                        errorlist += "Found " + results[0].Properties["thumbnailPhoto"].Count + " thumnbnailPhotos\n";
+                        if (results[0].Properties["thumbnailPhoto"].Count > 0)
+                        {
+                            byte[] data = results[0].Properties["thumbnailPhoto"][0] as byte[];
+                            if (data != null)
+                            {
+                                errorlist += "Data found, making picture url\n";
+                                Photo = "~/api/mypic";
+                            }
+                            else throw new Exception();
+                        }
+                        else throw new Exception();
                     }
+                    else throw new Exception();
                 }
             }
-            catch { Photo = null; }
-            finally { _user.EndContainedImpersonate(); }
+            catch
+            {
+                HAP.Web.Logging.EventViewer.Log("HAP.Web.API.MyPic", errorlist, System.Diagnostics.EventLogEntryType.Error, true);
+                Photo = null;
+            }
             Email = User.Email == null ? "" : User.Email;
             OtherData = new Dictionary<string, string>();
             try { OtherData.Add("Comment", User.Comment); }
