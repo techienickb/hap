@@ -364,22 +364,29 @@ namespace HAP.Web.API
             try
             {
                 ADOU adou = new ADOU();
-                adou.Name = root.Name.Remove(0, 3);
+                adou.Name = root.Name.Length > 3 ? root.Name.Remove(0, 3) : root.Name;
                 adou.Icon = (root.Name.StartsWith("DC=") ? "1" : root.SchemaClassName == "group" ? "78" : "2") + ".png";
                 if (!root.Name.StartsWith("DC="))
                 {
-                    adou.Path = (root.SchemaClassName == "organizationalUnit" ? root.Path : root.Name.Remove(0, 3));
+                    adou.Path = (root.SchemaClassName == "organizationalUnit" ? root.Path : root.Name.Length > 3 ? root.Name.Remove(0, 3) : root.Name);
                     adou.Type = root.SchemaClassName;
                 }
 
                 foreach (DirectoryEntry de in root.Children) if ((de.SchemaClassName == "group" || de.SchemaClassName == "container" || de.SchemaClassName == "builtinDomain" || de.SchemaClassName == "organizationalUnit") && (de.Name != "CN=Program Data" && de.Name != "CN=System" && de.Name != "CN=Computers" && de.Name != "CN=Managed Service Accounts" && de.Name != "CN=ForeignSecurityPrincipals"))
                     {
-                        ADOU a = FillNode(de);
-                        if (a != null) adou.Items.Add(a);
+                        try
+                        {
+                            ADOU a = FillNode(de);
+                            if (a != null) adou.Items.Add(a);
+                        }
+                        catch (Exception ex1)
+                        {
+                            HAP.Web.Logging.EventViewer.Log("Setup API -> FillNode(DirectoryEntry)", ex1.ToString() + "\nMessage:\n" + ex1.Message + "\nStack Trace:\n" + ex1.StackTrace, System.Diagnostics.EventLogEntryType.Error); return null;
+                        }
                     }
                 return adou;
             }
-            catch (Exception ex) { HAP.Web.Logging.EventViewer.Log("Setup API -> FillNode(DirectoryEntry room)", ex.ToString() + "\nMessage:\n" + ex.Message + "\nStack Trace:\n" + ex.StackTrace, System.Diagnostics.EventLogEntryType.Error); return null; }
+            catch (Exception ex) { HAP.Web.Logging.EventViewer.Log("Setup API -> FillNode(DirectoryEntry)", ex.ToString() + "\nMessage:\n" + ex.Message + "\nStack Trace:\n" + ex.StackTrace, System.Diagnostics.EventLogEntryType.Error); return null; }
         }
     }
 }

@@ -8,6 +8,7 @@ using System.DirectoryServices.AccountManagement;
 using System.DirectoryServices;
 using HAP.Web.Configuration;
 using Microsoft.Win32;
+using System.Diagnostics;
 
 namespace HAP.Web
 {
@@ -39,7 +40,7 @@ namespace HAP.Web
                 iisversion.Text = GetIisVersion().ToString();
                 iis6wildcardlab.Text = (GetIisVersion().Major < 7) ? "IIS6 Wildcard Mapping: " : "IIS7 Integrated Pipeline: ";
                 Config = hapConfig.Current;
-                Cache.Insert("tempConfig", Config, null, DateTime.MaxValue, TimeSpan.FromMinutes(4));
+                Cache.Insert("tempConfig", Config, null, DateTime.MaxValue, TimeSpan.FromMinutes(10));
                 name.Text = Config.School.Name;
                 schoolurl.Text = Config.School.WebSite;
                 upn.Text = Config.AD.UPN;
@@ -257,6 +258,18 @@ namespace HAP.Web
             try
             {
                 Config.Save();
+                if (!EventLog.SourceExists("Home Access Plus+"))
+                {
+                    HAP.AD.User _user = new HAP.AD.User();
+                    _user.Authenticate(Config.AD.User, Config.AD.Password);
+                    try
+                    {
+                        _user.ImpersonateContained();
+                        EventLog.CreateEventSource("Home Access Plus+", "Application");
+                    }
+                    catch { }
+                    finally { _user.EndContainedImpersonate(); }
+                }
                 Response.Redirect("~/Setup.aspx?Saved=1");
             }
             catch (Exception ex) { error.Visible = true; errormessage.Text = "Error Saving the Configuration"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
