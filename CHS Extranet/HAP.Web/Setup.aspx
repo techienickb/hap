@@ -8,14 +8,15 @@
         <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
         <title>Home Access Plus+ - Setup</title>
         <link rel="shortcut icon" href="~/favicon.ico" />
-        <script src="Scripts/jquery-1.8.2.min.js" type="text/javascript"></script>
-        <script src="Scripts/jquery-ui-1.9.1.custom.min.js" type="text/javascript"></script>
-        <script src="Scripts/jquery.dynatree.js" type="text/javascript"></script>
-        <script src="Scripts/jquery-Gtimepicker.js" type="text/javascript"></script>
         <link href="~/style/jquery-ui.css" rel="stylesheet" type="text/css" />
         <link href="~/style/basestyle.css" rel="stylesheet" type="text/css" />
         <link href="style/setup.css" rel="stylesheet" type="text/css" />
         <link href="style/ui.dynatree.css" rel="stylesheet" type="text/css" />
+        <script src="Scripts/modernizer.js"></script>
+        <script src="Scripts/jquery.min.js" type="text/javascript"></script>
+        <script src="Scripts/jquery-ui.min.js" type="text/javascript"></script>
+        <script src="Scripts/jquery.dynatree.js" type="text/javascript"></script>
+        <script src="Scripts/jquery-Gtimepicker.js" type="text/javascript"></script>
         <link rel="icon" type="image/vnd.microsoft.icon" href="~/favicon.ico" />
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
         <hap:HAPTag runat="server" />
@@ -727,7 +728,7 @@
                                         $.ajax({
                                             type: 'POST',
                                             url: 'API/Setup/UpdateMapping',
-                                            data: '{ "origdrive": "' + tempe.children("a").children("b").html() + '", "drive": "' + $("#mappingDrive").val().toUpperCase() + '", "name": "' + $("#mappingName").val() + '", "unc": "' + $("#mappingUNC").val().replace(/\\/g, "/") + '", "enablemove": ' + ($("#mappingEnableMove").attr("checked") ? "true" : "false") + ', "enablereadto": "' + $("#mappingEnableReadTo").val() + '", "enablewriteto": "' + $("#mappingEnableWriteTo").val() + '", "usagemode": "' + ($("mappingUsageModeDriveSpace").attr("checked") ? "DriveSpace" : "Quota") + '" }',
+                                            data: '{ "origdrive": "' + tempe.children("a").children("b").html() + '", "origunc": "' + tempe.children("a").children("i").html() + '", "drive": "' + $("#mappingDrive").val().toUpperCase() + '", "name": "' + $("#mappingName").val() + '", "unc": "' + $("#mappingUNC").val().replace(/\\/g, "/") + '", "enablemove": ' + ($("#mappingEnableMove").attr("checked") ? "true" : "false") + ', "enablereadto": "' + $("#mappingEnableReadTo").val() + '", "enablewriteto": "' + $("#mappingEnableWriteTo").val() + '", "usagemode": "' + ($("mappingUsageModeDriveSpace").attr("checked") ? "DriveSpace" : "Quota") + '" }',
                                             contentType: 'application/json',
                                             dataType: 'json',
                                             success: OnMappingUpdateSuccess,
@@ -766,7 +767,7 @@
                             $.ajax({
                                 type: 'POST',
                                 url: 'API/Setup/RemoveMapping',
-                                data: '{ "drive": "' + tempe.children("a").children("b").html() + '" }',
+                                data: '{ "drive": "' + tempe.children("a").children("b").html() + '", "unc", "' + tempe.children("a").children("i").html() + '" }',
                                 contentType: 'application/json',
                                 dataType: 'json',
                                 success: OnMappingRemoveSuccess,
