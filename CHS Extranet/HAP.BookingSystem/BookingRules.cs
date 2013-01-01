@@ -37,20 +37,19 @@ namespace HAP.BookingSystem
     {
         public BookingRule(XmlNode node)
         {
-            
-            this.Action1 = node.Attributes["action1"].Value;
-            this.Action2 = node.Attributes["action2"].Value;
-            List<BookingCondition> Conditions = new List<BookingCondition>();
+            this.Conditions = new List<BookingCondition>();
+            this.Actions = new List<string>();
             foreach (XmlNode n in node.ChildNodes)
-                Conditions.Add(new BookingCondition(n));
+                if (n.Name == "action") this.Actions.Add(n.InnerText);
+                else this.Conditions.Add(new BookingCondition(n));
+            if (this.Actions.Count == 0) this.Actions.Add("null");
         }
         private List<BookingCondition> Conditions;
-        public string Action1 { get; private set; }
-        public string Action2 { get; private set; }
+        private List<string> Actions;
 
         public void ExecuteRule(Booking b, Resource r, BookingSystem bs, bool IsRemoveEvent)
         {
-            bool good = false;
+            bool good = true;
             foreach (BookingCondition con in Conditions)
                 switch (con.MasterOperation)
                 {
@@ -63,9 +62,9 @@ namespace HAP.BookingSystem
                 }
             if (good)
             {
-                HAP.Web.Logging.EventViewer.Log("BookingSystem.BookingRule", "TODO: Good Conditions for Booking Rule: " + Action1, System.Diagnostics.EventLogEntryType.Information);
+                HAP.Web.Logging.EventViewer.Log("BookingSystem.BookingRule", "TODO: Good Conditions for Booking Rule: " + Actions[0], System.Diagnostics.EventLogEntryType.Information);
             }
-            else HAP.Web.Logging.EventViewer.Log("BookingSystem.BookingRule", "Failed Conditions for Booking Rule: " + Action1, System.Diagnostics.EventLogEntryType.Information);
+            else HAP.Web.Logging.EventViewer.Log("BookingSystem.BookingRule", "Failed Conditions for Booking Rule: " + Actions[0], System.Diagnostics.EventLogEntryType.Information);
         }
 
 
