@@ -14,7 +14,6 @@
             <div>
                 <asp:Label runat="server" AssociatedControlID="password">Password: </asp:Label>
                 <asp:TextBox TextMode="Password" runat="server" ID="password" Width="300px" />
-                <asp:RequiredFieldValidator runat="server" ControlToValidate="password" ErrorMessage="*" ForeColor="Red" />
             </div>
             <asp:Literal runat="server" ID="message" />
             <div class="submit">
