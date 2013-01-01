@@ -48,19 +48,19 @@ namespace HAP.Web.API
 
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/RemoveMapping", BodyStyle = WebMessageBodyStyle.Wrapped)]
         [OperationContract]
-        public int RemoveMapping(string drive)
+        public int RemoveMapping(string drive, string unc)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
-            Config.MyFiles.Mappings.Remove(drive.ToCharArray()[0]);
+            Config.MyFiles.Mappings.Remove(new MappingKey(drive.ToCharArray()[0], unc));
             return 0;
         }
 
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/UpdateMapping", BodyStyle = WebMessageBodyStyle.Wrapped)]
         [OperationContract]
-        public int UpdateMapping(string origdrive, string drive, string name, string unc, string enablereadto, string enablewriteto, bool enablemove, string usagemode)
+        public int UpdateMapping(string origdrive, string origunc, string drive, string name, string unc, string enablereadto, string enablewriteto, bool enablemove, string usagemode)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
-            DriveMapping m = Config.MyFiles.Mappings[origdrive.ToCharArray()[0]];
+            DriveMapping m = Config.MyFiles.Mappings[new MappingKey(origdrive.ToCharArray()[0], origunc)];
             m.Drive = drive.ToCharArray()[0];
             m.EnableMove = enablemove;
             m.UsageMode = (MappingUsageMode)Enum.Parse(typeof(MappingUsageMode), usagemode);
@@ -68,7 +68,7 @@ namespace HAP.Web.API
             m.UNC = unc.Replace('/', '\\');
             m.EnableReadTo = enablereadto;
             m.EnableWriteTo = enablewriteto;
-            Config.MyFiles.Mappings.Update(origdrive.ToCharArray()[0], m);
+            Config.MyFiles.Mappings.Update(origdrive.ToCharArray()[0], origunc, m);
             return 0;
         }
 

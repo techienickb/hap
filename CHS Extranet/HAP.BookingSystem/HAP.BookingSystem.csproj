@@ -61,6 +61,7 @@
     <Compile Include="BookingSystem.cs" />
     <Compile Include="api.cs" />
     <Compile Include="iCalGenerator.cs" />
+    <Compile Include="BookingRules.cs" />
     <Compile Include="Template.cs" />
     <Compile Include="Templates.cs" />
     <Compile Include="Term.cs" />

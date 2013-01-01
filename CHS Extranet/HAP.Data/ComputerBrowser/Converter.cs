@@ -41,7 +41,7 @@ namespace HAP.Data.ComputerBrowser
         {
             hapConfig config = hapConfig.Current;
 
-            unc = config.MyFiles.Mappings[RoutingDrive.ToCharArray()[0]];
+            unc = config.MyFiles.Mappings.FilteredMappings[RoutingDrive.ToCharArray()[0]];
             return (Converter.FormatMapping(unc.UNC, user) + HttpUtility.UrlDecode(RoutingPath.Replace('|', '%'), System.Text.Encoding.Default)).TrimEnd(new char[] { '\\' }).Replace('^', '&').Replace('/', '\\');
         }
 

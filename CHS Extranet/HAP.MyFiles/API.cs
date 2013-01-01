@@ -628,7 +628,7 @@ namespace HAP.MyFiles
 
             long freeBytesForUser, totalBytes, freeBytes;
 
-            foreach (DriveMapping p in config.MyFiles.Mappings.Values.OrderBy(m => m.Drive))
+            foreach (DriveMapping p in config.MyFiles.Mappings.FilteredMappings.Values.OrderBy(m => m.Drive))
             {
                 decimal space = -1;
                 bool showspace = isWriteAuth(p);

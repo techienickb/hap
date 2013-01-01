@@ -51,6 +51,11 @@ namespace HAP.Web.API
             Booking b = bs.getBooking(booking.Room, booking.Lesson);
             try
             {
+                BookingRules.Execute(b, hapConfig.Current.BookingSystem.Resources[b.Room], bs, true);
+            }
+            catch (Exception ex) { HAP.Web.Logging.EventViewer.Log("Booking System JSON API", ex.ToString() + "\nMessage:\n" + ex.Message + "\nStack Trace:\n" + ex.StackTrace, System.Diagnostics.EventLogEntryType.Error); }
+            try
+            {
 #if DEBUG
                 HAP.Web.Logging.EventViewer.Log("Booking System JSON API", "Checking if Email is Enabled and a UID exists on the booking", System.Diagnostics.EventLogEntryType.Information);
 #endif
@@ -170,8 +175,9 @@ namespace HAP.Web.API
                 if (config.SMTP.Enabled)
                 {
                     iCalGenerator.Generate(b, DateTime.Parse(Date));
-                    if (config.BookingSystem.Resources[booking.Room].EmailAdmins) iCalGenerator.Generate(b, DateTime.Parse(Date), true);
+                    if (config.BookingSystem.Resources[b.Room].EmailAdmins) iCalGenerator.Generate(b, DateTime.Parse(Date), true);
                 }
+                BookingRules.Execute(b, config.BookingSystem.Resources[b.Room], new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date)), false);
             }
             catch (Exception e)
             {
