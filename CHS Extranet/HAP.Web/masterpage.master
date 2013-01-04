@@ -23,7 +23,6 @@
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
         <hap:HAPTag runat="server" />
         <asp:ContentPlaceHolder id="head" runat="server" />
-        <script type="text/javascript" src="<%: ResolveClientUrl("~/Scripts/modernizer.js") %>"></script>
     </head>
     <body>
         <form runat="server">

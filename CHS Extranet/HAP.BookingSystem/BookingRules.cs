@@ -42,7 +42,6 @@ namespace HAP.BookingSystem
             foreach (XmlNode n in node.ChildNodes)
                 if (n.Name == "action") this.Actions.Add(n.InnerText);
                 else this.Conditions.Add(new BookingCondition(n));
-            if (this.Actions.Count == 0) this.Actions.Add("null");
         }
         private List<BookingCondition> Conditions;
         private List<string> Actions;
@@ -62,9 +61,83 @@ namespace HAP.BookingSystem
                 }
             if (good)
             {
-                HAP.Web.Logging.EventViewer.Log("BookingSystem.BookingRule", "TODO: Good Conditions for Booking Rule: " + Actions[0], System.Diagnostics.EventLogEntryType.Information);
+                foreach (string a in this.Actions)
+                {
+                    try
+                    {
+                        if (a.ToLower().StartsWith("bookcharging("))
+                        {
+                            string c = a.Remove(0, "bookcharging(".Length).TrimEnd(new char[] { ')' });
+                            object o = BookingCondition.processCondition(c, b, r, bs);
+                            if (o is Booking)
+                            {
+                                Booking ob = o as Booking;
+                                XmlDocument doc = HAP.BookingSystem.BookingSystem.BookingsDoc;
+                                if (!IsRemoveEvent && bs.islessonFree(b.Room, b.Lesson))
+                                {
+                                    XmlElement node = doc.CreateElement("Booking");
+                                    node.SetAttribute("date", ob.Date.ToShortDateString());
+                                    node.SetAttribute("lesson", ob.Lesson);
+                                    node.SetAttribute("room", b.Room);
+                                    if (r.Type == ResourceType.Laptops)
+                                    {
+                                        node.SetAttribute("ltroom", "--");
+                                        node.SetAttribute("ltcount", b.LTCount.ToString());
+                                        node.SetAttribute("ltheadphones", b.LTHeadPhones.ToString());
+                                    }
+                                    node.SetAttribute("username", "systemadmin");
+                                    node.SetAttribute("uid", b.uid);
+                                    node.SetAttribute("name", "CHARGING");
+                                    doc.SelectSingleNode("/Bookings").AppendChild(node);
+                                }
+                                else
+                                {
+                                    if (doc.SelectSingleNode("/Bookings/Booking[@date='" + b.Date.ToShortDateString() + "' and @lesson='" + b.Lesson + "' and @room='" + b.Room + "' and @uid='" + b.uid + "']") != null)
+                                        doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + b.Date.ToShortDateString() + "' and @lesson='" + b.Lesson + "' and @room='" + b.Room + "' and @uid='" + b.uid + "']"));
+                                }
+                            }
+                        }
+                        else if (a.ToLower().StartsWith("book("))
+                        {
+                            string c = a.Remove(0, "book(".Length).TrimEnd(new char[] { ')' });
+                            object o = BookingCondition.processCondition(c, b, r, bs);
+                            if (o is Booking)
+                            {
+                                Booking ob = o as Booking;
+                                XmlDocument doc = HAP.BookingSystem.BookingSystem.BookingsDoc;
+                                if (!IsRemoveEvent)
+                                {
+                                    XmlElement node = doc.CreateElement("Booking");
+                                    node.SetAttribute("date", ob.Date.ToShortDateString());
+                                    node.SetAttribute("lesson", ob.Lesson);
+                                    node.SetAttribute("room", b.Room);
+                                    if (r.Type == ResourceType.Laptops)
+                                    {
+                                        node.SetAttribute("ltroom", "--");
+                                        node.SetAttribute("ltcount", b.LTCount.ToString());
+                                        node.SetAttribute("ltheadphones", b.LTHeadPhones.ToString());
+                                    }
+                                    else if (r.Type == ResourceType.Equipment) node.SetAttribute("equiproom", b.EquipRoom);
+                                    node.SetAttribute("room", b.Room);
+                                    node.SetAttribute("uid", b.uid);
+                                    node.SetAttribute("username", b.Username);
+                                    node.SetAttribute("name", b.Name);
+                                    doc.SelectSingleNode("/Bookings").AppendChild(node);
+                                }
+                                else
+                                {
+                                    if (doc.SelectSingleNode("/Bookings/Booking[@date='" + b.Date.ToShortDateString() + "' and @lesson='" + b.Lesson + "' and @room='" + b.Room + "' and @uid='" + b.uid + "']") != null)
+                                        doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + b.Date.ToShortDateString() + "' and @lesson='" + b.Lesson + "' and @room='" + b.Room + "' and @uid='" + b.uid + "']"));
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        HAP.Web.Logging.EventViewer.Log("BookingSystem.BookingRule", "Failed Action: " + Actions[0] + "\n\n" + ex.ToString(), System.Diagnostics.EventLogEntryType.Error);
+                    }
+                }
             }
-            else HAP.Web.Logging.EventViewer.Log("BookingSystem.BookingRule", "Failed Conditions for Booking Rule: " + Actions[0], System.Diagnostics.EventLogEntryType.Information);
         }
 
 
@@ -89,48 +162,52 @@ namespace HAP.BookingSystem
 
         public bool IsConditionMet(Booking b, Resource r, BookingSystem bs)
         {
-            object comp1 = processCondition(Condition1, b, r, bs), comp2 = processCondition(Condition1, b, r, bs);
-            switch (Operation)
+            try
             {
-                case BookingConditionOperation.Equals:
-                    return comp1 == comp2;
-                case BookingConditionOperation.GT:
-                    if (comp1 is int)
-                        return (int)comp1 > int.Parse(comp2.ToString());
-                    else if (comp1 is DateTime)
-                        return (DateTime)comp1 > DateTime.Parse(comp2.ToString());
-                    return false;
-                case BookingConditionOperation.GTE:
-                    if (comp1 is int)
-                        return (int)comp1 >= int.Parse(comp2.ToString());
-                    else if (comp1 is DateTime)
-                        return (DateTime)comp1 >= DateTime.Parse(comp2.ToString());
-                    return false;
-                case BookingConditionOperation.LT:
-                    if (comp1 is int)
-                        return (int)comp1 < int.Parse(comp2.ToString());
-                    else if (comp1 is DateTime)
-                        return (DateTime)comp1 < DateTime.Parse(comp2.ToString());
-                    return false;
-                case BookingConditionOperation.LTE:
-                    if (comp1 is int)
-                        return (int)comp1 <= int.Parse(comp2.ToString());
-                    else if (comp1 is DateTime)
-                        return (DateTime)comp1 <= DateTime.Parse(comp2.ToString());
-                    return false;
-                case BookingConditionOperation.Not:
-                    return comp1 != comp2;
-                case BookingConditionOperation.Null:
-                    return comp1 == null;
-                case BookingConditionOperation.NotNull:
-                    return comp1 != null;
-            }
+                object comp1 = processCondition(Condition1, b, r, bs), comp2 = processCondition(Condition1, b, r, bs);
 
+                switch (Operation)
+                {
+                    case BookingConditionOperation.Equals:
+                        return comp1.Equals(comp2);
+                    case BookingConditionOperation.GT:
+                        if (comp1 is int)
+                            return (int)comp1 > int.Parse(comp2.ToString());
+                        else if (comp1 is DateTime)
+                            return (DateTime)comp1 > DateTime.Parse(comp2.ToString());
+                        return false;
+                    case BookingConditionOperation.GTE:
+                        if (comp1 is int)
+                            return (int)comp1 >= int.Parse(comp2.ToString());
+                        else if (comp1 is DateTime)
+                            return (DateTime)comp1 >= DateTime.Parse(comp2.ToString());
+                        return false;
+                    case BookingConditionOperation.LT:
+                        if (comp1 is int)
+                            return (int)comp1 < int.Parse(comp2.ToString());
+                        else if (comp1 is DateTime)
+                            return (DateTime)comp1 < DateTime.Parse(comp2.ToString());
+                        return false;
+                    case BookingConditionOperation.LTE:
+                        if (comp1 is int)
+                            return (int)comp1 <= int.Parse(comp2.ToString());
+                        else if (comp1 is DateTime)
+                            return (DateTime)comp1 <= DateTime.Parse(comp2.ToString());
+                        return false;
+                    case BookingConditionOperation.Not:
+                        return comp1.Equals(comp2) ? false : true;
+                    case BookingConditionOperation.Null:
+                        return comp1 == null;
+                    case BookingConditionOperation.NotNull:
+                        return comp1 != null;
+                }
+            }
+            catch { }
 
             return false;
         }
 
-        public object processCondition(string Condition, Booking b, Resource r, BookingSystem bs)
+        public static object processCondition(string Condition, Booking b, Resource r, BookingSystem bs)
         {
             int x = 0; bool bo = false;
             if (Condition.ToLower().StartsWith("resource."))
@@ -143,7 +220,7 @@ namespace HAP.BookingSystem
             else return Condition;
         }
 
-        public object processCondition(object o, string Condition)
+        public static object processCondition(object o, string Condition)
         {
             if (Condition == "") return o;
             string cons1 = Condition.IndexOf('.') == -1 ? Condition : Condition.Substring(0, Condition.IndexOf('.')).TrimEnd(new char[] { '.' });
