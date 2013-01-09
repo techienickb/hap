@@ -25,38 +25,42 @@ namespace HAP.AD
 
         public override bool IsUserInRole(string username, string roleName)
         {
-            //bool core = wtrp.IsUserInRole(HAP.Web.Configuration.hapConfig.Current.AD.UPN.Remove(HAP.Web.Configuration.hapConfig.Current.AD.UPN.IndexOf('.')) + '\\' + username, roleName); 
-            //if (!core)
-            //try
-            //{
-                PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
-                GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, roleName);
-                if (gp == null) return false;
+            bool core = wtrp.IsUserInRole(HAP.Web.Configuration.hapConfig.Current.AD.UPN.Remove(HAP.Web.Configuration.hapConfig.Current.AD.UPN.IndexOf('.')) + '\\' + username, roleName);
+            if (core) return true;
+            else
+                try
+                {
+                    PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
+                    GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, roleName);
+                    if (gp == null) return false;
 
-                foreach (Principal p in gp.GetMembers(true))
-                    if (p.Name.ToLower() == username.ToLower()) return true;
-                return false;
-            //}
-            //catch { return wtrp.IsUserInRole(HAP.Web.Configuration.hapConfig.Current.AD.UPN.Remove(HAP.Web.Configuration.hapConfig.Current.AD.UPN.IndexOf('.')) + '\\' + username, roleName); }
-            //return false;
+                    foreach (Principal p in gp.GetMembers(true))
+                        if (p.Name.ToLower() == username.ToLower()) return true;
+                    return false;
+                }
+                catch { return false; }
         }
 
         public override string[] GetRolesForUser(string username)
         {
-            List<string> roles = new List<string>();
-            try
+            if (HttpContext.Current.Cache["userrolecache-" + username] == null)
             {
-                PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
-                UserPrincipal userp = UserPrincipal.FindByIdentity(pcontext, username);
-                foreach (Principal p in userp.GetGroups())
+                List<string> roles = new List<string>();
+                try
                 {
-                    roles.Add(p.SamAccountName);
-                    foreach (Principal p1 in (((GroupPrincipal)p).GetGroups()))
-                        Recurse(p1, ref roles);
+                    PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
+                    UserPrincipal userp = UserPrincipal.FindByIdentity(pcontext, username);
+                    foreach (Principal p in userp.GetGroups())
+                    {
+                        roles.Add(p.SamAccountName);
+                        foreach (Principal p1 in (((GroupPrincipal)p).GetGroups()))
+                            Recurse(p1, ref roles);
+                    }
                 }
+                catch { }
+                HttpContext.Current.Cache.Insert("userrolecache-" + username, roles.ToArray(), null, System.Web.Caching.Cache.NoAbsoluteExpiration, TimeSpan.FromMinutes(5));
             }
-            catch { }
-            return roles.ToArray();
+            return HttpContext.Current.Cache["userrolecache-" + username] as string[];
         }
 
         public void Recurse(Principal p, ref List<string> roles)
