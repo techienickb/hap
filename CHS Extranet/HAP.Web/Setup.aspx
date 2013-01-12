@@ -420,8 +420,8 @@
                             </div>
                             <h3>Help Desk</h3>
                             <div>
-                                <asp:Label runat="server" Text="Help Desk Admins or Admin Groups: " AssociatedControlID="helpdeskadmins" />
-                                <asp:TextBox runat="server" ID="helpdeskadmins" Text="Domain Admins" />
+                                <asp:Label runat="server" Text="Help Desk Admins/Admin Groups: " AssociatedControlID="helpdeskadmins" />
+                                <asp:TextBox runat="server" ID="helpdeskadmins" Text="Domain Admins" onclick="showadbuilder(this, false, false);" />
                             </div>
                         </div>
                     </div>
