@@ -445,15 +445,6 @@ namespace HAP.Web {
         protected global::System.Web.UI.WebControls.Image trackerstate;
         
         /// <summary>
-        /// Label3 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label3;
-        
-        /// <summary>
         /// trackerprovider control.
         /// </summary>
         /// <remarks>
@@ -461,15 +452,6 @@ namespace HAP.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox trackerprovider;
-        
-        /// <summary>
-        /// Label4 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label4;
         
         /// <summary>
         /// trackercode control.
@@ -481,15 +463,6 @@ namespace HAP.Web {
         protected global::System.Web.UI.WebControls.TextBox trackercode;
         
         /// <summary>
-        /// Label5 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label5;
-        
-        /// <summary>
         /// trackerstudentlogs control.
         /// </summary>
         /// <remarks>
@@ -499,15 +472,6 @@ namespace HAP.Web {
         protected global::System.Web.UI.WebControls.TextBox trackerstudentlogs;
         
         /// <summary>
-        /// Label6 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label6;
-        
-        /// <summary>
         /// trackerstafflogs control.
         /// </summary>
         /// <remarks>
@@ -515,6 +479,15 @@ namespace HAP.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox trackerstafflogs;
+        
+        /// <summary>
+        /// helpdeskadmins control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox helpdeskadmins;
         
         /// <summary>
         /// Save control.

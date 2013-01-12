@@ -12,10 +12,21 @@ namespace HAP.Web.HelpDesk
     {
         public New() { this.SectionTitle = Localize("helpdesk/helpdesk"); }
 
+        public bool isHDAdmin
+        {
+            get
+            {
+                foreach (string s in config.HelpDesk.Admins.Split(new char[] { ',' }))
+                    if (s.Trim().ToLower().Equals(ADUser.UserName.ToLower())) return true;
+                    else if (User.IsInRole(s.Trim())) return true;
+                return false;
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            adminbookingpanel.Visible = adminupdatepanel.Visible = User.IsInRole("Domain Admins");
-            if (User.IsInRole("Domain Admins"))
+            adminbookingpanel.Visible = adminupdatepanel.Visible = isHDAdmin;
+            if (adminupdatepanel.Visible)
             {
                 userlist.Items.Clear();
                 foreach (UserInfo user in ADUtils.FindUsers(Configuration.OUVisibility.HelpDesk))

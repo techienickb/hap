@@ -109,7 +109,7 @@
                             <li><a href="#group-homepage">Homepage</a></li>
                             <li><a href="#group-bookingsystem">Booking System</a></li>
                             <li><a href="#group-myfiles">My Files</a></li>
-                            <li><a href="#group-tracker">Logon Tracker</a></li>
+                            <li><a href="#group-tracker">Tracker/Other</a></li>
                         </ul>
                         <div id="group-checks">
                             <h3>Checks: <img id="checksstate" src="images/setup/266.png" alt="" /></h3>
@@ -403,20 +403,25 @@
                         <div id="group-tracker">
                             <h3>Logon Tracker <asp:Image ID="trackerstate" runat="server" ImageUrl="~/images/setup/267.png" /></h3>
                             <div>
-                                <asp:Label ID="Label3" runat="server" Text="Provider (Default XML): " AssociatedControlID="trackerprovider" />
+                                <asp:Label runat="server" Text="Provider (Default XML): " AssociatedControlID="trackerprovider" />
                                 <asp:TextBox runat="server" ID="trackerprovider" Text="XML" onkeypress="checktracker();" onchange="checktracker();" />
                             </div>
                             <div>
-                                <asp:Label ID="Label4" runat="server" Text="Override Code: " AssociatedControlID="trackercode" />
+                                <asp:Label runat="server" Text="Override Code: " AssociatedControlID="trackercode" />
                                 <asp:TextBox runat="server" ID="trackercode" Columns="5" onkeypress="checktracker();" onchange="checktracker();" />
                             </div>
                             <div>
-                                <asp:Label ID="Label5" runat="server" Text="Max Student Logons: " AssociatedControlID="trackerstudentlogs" />
+                                <asp:Label runat="server" Text="Max Student Logons: " AssociatedControlID="trackerstudentlogs" />
                                 <asp:TextBox runat="server" ID="trackerstudentlogs" Text="1" Columns="2" onkeypress="checktracker();" onchange="checktracker();" />
                             </div>
                             <div>
-                                <asp:Label ID="Label6" runat="server" Text="Max Staff Logons: " AssociatedControlID="trackerstafflogs" />
+                                <asp:Label runat="server" Text="Max Staff Logons: " AssociatedControlID="trackerstafflogs" />
                                 <asp:TextBox runat="server" ID="trackerstafflogs" Text="4" Columns="2" onkeypress="checktracker();" onchange="checktracker();" />
+                            </div>
+                            <h3>Help Desk</h3>
+                            <div>
+                                <asp:Label runat="server" Text="Help Desk Admins or Admin Groups: " AssociatedControlID="helpdeskadmins" />
+                                <asp:TextBox runat="server" ID="helpdeskadmins" Text="Domain Admins" />
                             </div>
                         </div>
                     </div>

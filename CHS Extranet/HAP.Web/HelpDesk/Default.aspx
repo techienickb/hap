@@ -47,7 +47,7 @@
 			<li><a href="#closedtickets"><hap:LocalResource StringPath="helpdesk/closedtickets" runat="server" /></a></li>
 			<li><a href="#newticket"><hap:LocalResource StringPath="helpdesk/newtickets" runat="server" /></a></li>
 			<li><a href="#faqs"><hap:LocalResource StringPath="helpdesk/faqs" runat="server" /></a></li>
-            <%if (User.IsInRole("Domain Admins")) { %>
+            <%if (isHDAdmin) { %>
             <li><a href="#stats"><hap:LocalResource runat="server" StringPath="helpdesk/stats" /></a></li>
             <%} %>
 		</ul>
@@ -98,7 +98,7 @@
 		<div id="faqs">
 			
 		</div>
-        <%if (User.IsInRole("Domain Admins")) { %>
+        <%if (isHDAdmin) { %>
         <div id="stats">
             <div id="stats-loading">
                 <img src="../images/metroloading.gif" /><br />
@@ -116,7 +116,7 @@
         <%} %>
 	</div>
     <hap:CompressJS runat="server" Tag="div">
-	<script type="text/javascript">
+	<script>
 		var curticket;
 		var st = "";
 		function updateTicket() {
@@ -130,9 +130,9 @@
 				"Update": function () {
 					var data = '{ "Note": "' + escape($("#ticket-note").val()) + '", "State": ';
 					var url = hap.common.formatJSONUrl("~/api/HelpDesk/Ticket/" + curticket);
-					if (<%=User.IsInRole("Domain Admins").ToString().ToLower() %>) {
+					if (hap.hdadmin) {
 						data += ($("#ticket-fixed").is(":checked") ? '"Fixed"' : ('"' + ($("#ticket-userinter").is(":checked") ? hap.common.getLocal("helpdesk/userinter") : "With IT") + '"')) + ', "Priority": "' + $("#ticket-priority input:checked").attr("value") + '", "ShowTo": "' + $("#ticket-showto").val() + '", "FAQ": "' + ($("#ticket-faq").is(":checked") ? 'true' : 'false') + '", "Subject": "' + $("#ticket-subject").val() + '"';
-						url = '<%=ResolveUrl("~/api/HelpDesk/AdminTicket/")%>' + curticket + '?' + window.JSON.stringify(new Date());
+						url = hap.common.resolveUrl("~/api/HelpDesk/AdminTicket/") + curticket + '?' + window.JSON.stringify(new Date());
 					} else data += '"New"';
 					data += ' }';
 					$.ajax({
@@ -144,7 +144,7 @@
 						error: hap.common.jsonError,
 						success: function (data) {
 							$("#ticket-note").val("");
-							if (<%=User.IsInRole("Domain Admins").ToString().ToLower() %>) {
+							if (hap.hdadmin) {
 								$("#ticket-priority input:checked").removeAttr("checked");
 								$("#ticket-showto").val("");
 								$("#ticket-fixed").removeAttr("checked");
@@ -158,7 +158,7 @@
 							$("button").button();
 							$.ajax({
 								type: 'GET',
-								url: hap.common.formatJSONUrl("~/api/HelpDesk/Tickets/Open<%=User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName%>"),
+								url: hap.common.formatJSONUrl("~/api/HelpDesk/Tickets/Open<%=isHDAdmin ? "" : "/" + ADUser.UserName%>"),
 								dataType: 'json',
 								contentType: 'application/json',
 								success: function (data) {
@@ -172,7 +172,7 @@
 							});
 							$.ajax({
 								type: 'GET',
-								url: hap.common.formatJSONUrl("~/api/HelpDesk/Tickets/Closed<%=User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName%>"),
+								url: hap.common.formatJSONUrl("~/api/HelpDesk/Tickets/Closed<%=isHDAdmin ? "" : "/" + ADUser.UserName%>"),
 								dataType: 'json',
 								contentType: 'application/json',
 								success: function (data) {
@@ -216,10 +216,11 @@
 			return false;
 		}
 
-		function fileTicket() {
+	    function fileTicket() {
+	        if ($("#newticket-subject").val().length == 0) { alert("Ticket Subject needs to be entered"); return; }
 			var data = '{ "Subject": "' + escape($("#newticket-subject").val()) + '", "Room": "' + $("#newticket-room").val() + '", "Note": "' + escape($("#newticket-note").val()) + '"';
 			var url = hap.common.formatJSONUrl("~/api/HelpDesk/Ticket");
-			if (<%=User.IsInRole("Domain Admins").ToString().ToLower() %>) {
+			if (hap.hdadmin) {
 				data += ', "Priority": "' + $("#priorityradioes input:checked").val() + '", "User": "' + $("#<%=userlist.ClientID %> option:selected").attr("value") + '", "ShowTo": "' + $("#newticket-showto").val() + '"';
 				url = '<%=ResolveUrl("~/api/HelpDesk/AdminTicket")%>?' + window.JSON.stringify(new Date());
 			}
@@ -234,7 +235,7 @@
 					$("#newticket-subject").val("");
 					$("#newticket-room").val("");
 					$("#newticket-note").val("");
-					if (<%=User.IsInRole("Domain Admins").ToString().ToLower() %>) {
+					if (hap.hdadmin) {
 						$("#priorityradioes input:checked").removeAttr("checked");
 						$("#newticket-showto").val("");
 					}
@@ -251,7 +252,7 @@
 					$("button").button();
 					$.ajax({
 						type: 'GET',
-						url: hap.common.formatJSONUrl("~/api/HelpDesk/Tickets/Open<%=User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName%>"),
+						url: hap.common.formatJSONUrl("~/api/HelpDesk/Tickets/Open<%=isHDAdmin ? "" : "/" + ADUser.UserName%>"),
 						dataType: 'json',
 						contentType: 'application/json',
 						success: function (data) {
@@ -305,28 +306,24 @@
 			$(".button").button();
 			$.ajax({
 				type: 'GET',
-				url: hap.common.formatJSONUrl("~/api/HelpDesk/Tickets/Open<%=User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName%>"),
+				url: hap.common.formatJSONUrl("~/api/HelpDesk/Tickets/Open<%=isHDAdmin ? "" : "/" + ADUser.UserName%>"),
 				dataType: 'json',
 				contentType: 'application/json',
 				success: function (data) {
 					var x = "";
-					for (var i = 0; i < data.length; i++) {
-						x += '<div><a href="#ticket-' + data[i].Id + '" class="' + data[i].Priority.replace(/ /g, "-") + '">' + data[i].Subject + '</a></div>'
-					}
+					for (var i = 0; i < data.length; i++) x += '<div><a href="#ticket-' + data[i].Id + '" class="' + data[i].Priority.replace(/ /g, "-") + '">' + data[i].Subject + ' <span>' + data[i].Id + ' - ' + data[i].Username + ' - ' + data[i].Date + '</span></a></div>';
 					if (data.length == 0) x = "No Tickets";
 					$("#opentickets").html(x);
                 },  error: hap.common.jsonError
 			});
 			$.ajax({
 				type: 'GET',
-				url: hap.common.formatJSONUrl("~/api/HelpDesk/Tickets/Closed<%=User.IsInRole("Domain Admins") ? "" : "/" + ADUser.UserName%>"),
+				url: hap.common.formatJSONUrl("~/api/HelpDesk/Tickets/Closed<%=isHDAdmin ? "" : "/" + ADUser.UserName%>"),
 				dataType: 'json',
 				contentType: 'application/json',
 				success: function (data) {
 					var x = "";
-					for (var i = 0; i < data.length; i++) {
-						x += '<div><a href="#ticket-' + data[i].Id + '" class="' + data[i].Priority.replace(/ /g, "-") + '">' + data[i].Subject + '</a></div>'
-					}
+					for (var i = 0; i < data.length; i++) x += '<div><a href="#ticket-' + data[i].Id + '" class="' + data[i].Priority.replace(/ /g, "-") + '">' + data[i].Subject + ' <span>' + data[i].Id + ' - ' + data[i].Username + ' - ' + data[i].Date + '</span></a></div>';
 					if (data.length == 0) x = "No Tickets";
 					$("#closedtickets").html(x);
                 },  error: hap.common.jsonError
@@ -345,7 +342,7 @@
 					$("#faqs").html(x);
                 },  error: hap.common.jsonError
 			});
-		    if (hap.admin) {
+			if (hap.hdadmin) {
 		        $("#spinner").spinner().spinner("value", 7);
 		        $("#stats-content").fadeOut();
 		        $("#refreshstats").click(function () {
@@ -362,15 +359,17 @@
 		            });
 		            return false;
 		        });
-		        $.ajax({
-		            type: 'GET',
-		            url: hap.common.formatJSONUrl("~/api/HelpDesk/Stats"),
-				    dataType: 'json',
-				    contentType: 'application/json',
-				    success: function (data) {
-				        parseStats(data);
-				    },  error: hap.common.jsonError
-			    });
+		        setTimeout(function() {
+		            $.ajax({
+		                type: 'GET',
+		                url: hap.common.formatJSONUrl("~/api/HelpDesk/Stats"),
+		                dataType: 'json',
+		                contentType: 'application/json',
+		                success: function (data) {
+		                    parseStats(data);
+		                },  error: hap.common.jsonError
+		            });
+		        }, 500);
 		    }
 			if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curticket = window.location.href.split('#')[1].substr(7);
 			else curticket = null;

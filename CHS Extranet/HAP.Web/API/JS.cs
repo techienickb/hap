@@ -42,10 +42,34 @@ namespace HAP.Web.API
             {
                 s = s.Replace("user: \"\",", "user: \"" + ((HAP.AD.User)Membership.GetUser()).UserName + "\",");
                 s = s.Replace("admin: false,", "admin: " + HttpContext.Current.User.IsInRole("Domain Admins").ToString().ToLower() + ",");
+                s = s.Replace("bsadmin: false,", "admin: " + isBSAdmin.ToString().ToLower() + ",");
+                s = s.Replace("hdadmin: false,", "admin: " + isHDAdmin.ToString().ToLower() + ",");
             }
             s = s.Replace("\t", "").Replace("  ", " ").Replace("  ", " ");
             s = s.Replace("localization: []", "localization: [" + string.Join(", ", BuildLocalization(_locals.SelectSingleNode("/hapStrings"), "")) + "]");
             context.Response.Write(s);
+        }
+
+        public bool isBSAdmin
+        {
+            get
+            {
+                foreach (string s in hapConfig.Current.BookingSystem.Admins.Split(new char[] { ',' }))
+                    if (s.Trim().ToLower().Equals(HttpContext.Current.User.Identity.Name.ToLower())) return true;
+                    else if (HttpContext.Current.User.IsInRole(s.Trim())) return true;
+                return false;
+            }
+        }
+
+        public bool isHDAdmin
+        {
+            get
+            {
+                foreach (string s in hapConfig.Current.HelpDesk.Admins.Split(new char[] { ',' }))
+                    if (s.Trim().ToLower().Equals(HttpContext.Current.User.Identity.Name.ToLower())) return true;
+                    else if (HttpContext.Current.User.IsInRole(s.Trim())) return true;
+                return false;
+            }
         }
 
         private string[] BuildLocalization(XmlNode node, string salt)

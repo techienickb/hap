@@ -43,6 +43,7 @@ namespace HAP.Web.Configuration
             School = new School(ref doc);
             BookingSystem = new BookingSystem(ref doc);
             MyFiles = new MyFiles(ref doc);
+            HelpDesk = new HelpDesk(ref doc);
         }
 
         public bool FirstRun
@@ -64,6 +65,7 @@ namespace HAP.Web.Configuration
         public School School { get; private set; }
         public Tracker Tracker { get; private set; }
         public BookingSystem BookingSystem { get; private set; }
+        public HelpDesk HelpDesk { get; private set; }
         public MyFiles MyFiles { get; private set; }
 
         private void doUpgrade(Version version) {
