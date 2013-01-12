@@ -4,6 +4,8 @@ if (hap == null) {
         root: "/hap/",
         user: "",
         admin: false,
+        bsadmin: false,
+        hdadmin: false,
         common: {
             jsonError: function (xhr, ajaxOptions, thrownError) {
                 try {
@@ -273,7 +275,7 @@ if (hap == null) {
             UpdateTickets: function (tileid) {
                 $.ajax({
                     type: 'GET',
-                    url: hap.common.formatJSONUrl("~/api/HelpDesk/Tickets/Open" + (hap.admin ? '' : ('/' + hap.user))),
+                    url: hap.common.formatJSONUrl("~/api/HelpDesk/Tickets/Open" + (hap.hdadmin ? '' : ('/' + hap.user))),
                     dataType: 'json',
                     context: tileid,
                     contentType: 'application/json',

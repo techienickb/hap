@@ -92,6 +92,7 @@ namespace HAP.Web
                 mscbExt.Text = Config.MyFiles.HideExtensions;
                 mscbWrite.Checked = Config.MyFiles.WriteChecks;
                 liveid.Text = Config.MyFiles.LiveAppId;
+                helpdeskadmins.Text = Config.HelpDesk.Admins;
             }
         }
 
@@ -250,6 +251,11 @@ namespace HAP.Web
                 Config.Tracker.MaxStudentLogons = int.Parse(trackerstudentlogs.Text);
             }
             catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the Logon Tracker Max Student Logons"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.HelpDesk.Admins = helpdeskadmins.Text;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the Help Desk Admin Groups"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
             try
             {
                 Config.MyFiles.LiveAppId = liveid.Text;
