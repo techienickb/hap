@@ -156,48 +156,7 @@
 							$("#ticket-" + curticket).html(h);
 							st = data.ShowTo;
 							$("button").button();
-							$.ajax({
-								type: 'GET',
-								url: hap.common.formatJSONUrl("~/api/HelpDesk/Tickets/Open<%=isHDAdmin ? "" : "/" + ADUser.UserName%>"),
-								dataType: 'json',
-								contentType: 'application/json',
-								success: function (data) {
-									var x = "";
-									for (var i = 0; i < data.length; i++) {
-										x += '<div><a href="#ticket-' + data[i].Id + '" class="' + data[i].Priority.replace(/ /g, "-") + '">' + data[i].Subject + '</a></div>'
-									}
-									if (data.length == 0) x = "No Tickets";
-									$("#opentickets").html(x);
-                                },  error: hap.common.jsonError
-							});
-							$.ajax({
-								type: 'GET',
-								url: hap.common.formatJSONUrl("~/api/HelpDesk/Tickets/Closed<%=isHDAdmin ? "" : "/" + ADUser.UserName%>"),
-								dataType: 'json',
-								contentType: 'application/json',
-								success: function (data) {
-									var x = "";
-									for (var i = 0; i < data.length; i++) {
-										x += '<div><a href="#ticket-' + data[i].Id + '" class="' + data[i].Priority.replace(/ /g, "-") + '">' + data[i].Subject + '</a></div>'
-									}
-									if (data.length == 0) x = "No Tickets";
-									$("#closedtickets").html(x);
-                                },  error: hap.common.jsonError
-							});
-			                $.ajax({
-				                type: 'GET',
-				                url: hap.common.formatJSONUrl("~/api/HelpDesk/FAQs"),
-				                dataType: 'json',
-				                contentType: 'application/json',
-				                success: function (data) {
-					                var x = "";
-					                for (var i = 0; i < data.length; i++) {
-						                x += '<div><a href="#ticket-' + data[i].Id + '" class="' + data[i].Priority.replace(/ /g, "-") + '">' + data[i].Subject + '</a></div>'
-					                }
-					                if (data.length == 0) x = "No FAQs";
-					                $("#faqs").html(x);
-                                },  error: hap.common.jsonError
-			                });
+                            Update();
 						}
 					});
 					$(this).dialog("close");
@@ -250,20 +209,7 @@
 					h += '</div>';
 					$("#ticket-" + curticket).html(h);
 					$("button").button();
-					$.ajax({
-						type: 'GET',
-						url: hap.common.formatJSONUrl("~/api/HelpDesk/Tickets/Open<%=isHDAdmin ? "" : "/" + ADUser.UserName%>"),
-						dataType: 'json',
-						contentType: 'application/json',
-						success: function (data) {
-							var x = "";
-							for (var i = 0; i < data.length; i++) {
-								x += '<div><a href="#ticket-' + data[i].Id + '" class="' + data[i].Priority.replace(/ /g, "-") + '">' + data[i].Subject + '</a></div>'
-							}
-							if (data.length == 0) x = "No Tickets";
-							$("#opentickets").html(x);
-                        },  error: hap.common.jsonError
-					});
+					Update();
 	            },  error: hap.common.jsonError
 			});
 			return false;
@@ -304,77 +250,80 @@
 			$("button").button();
 			$("input[type=submit]").button();
 			$(".button").button();
-			$.ajax({
-				type: 'GET',
-				url: hap.common.formatJSONUrl("~/api/HelpDesk/Tickets/Open<%=isHDAdmin ? "" : "/" + ADUser.UserName%>"),
-				dataType: 'json',
-				contentType: 'application/json',
-				success: function (data) {
-					var x = "";
-					for (var i = 0; i < data.length; i++) x += '<div><a href="#ticket-' + data[i].Id + '" class="' + data[i].Priority.replace(/ /g, "-") + '">' + data[i].Subject + ' <span>' + data[i].Id + ' - ' + data[i].Username + ' - ' + data[i].Date + '</span></a></div>';
-					if (data.length == 0) x = "No Tickets";
-					$("#opentickets").html(x);
-                },  error: hap.common.jsonError
-			});
-			$.ajax({
-				type: 'GET',
-				url: hap.common.formatJSONUrl("~/api/HelpDesk/Tickets/Closed<%=isHDAdmin ? "" : "/" + ADUser.UserName%>"),
-				dataType: 'json',
-				contentType: 'application/json',
-				success: function (data) {
-					var x = "";
-					for (var i = 0; i < data.length; i++) x += '<div><a href="#ticket-' + data[i].Id + '" class="' + data[i].Priority.replace(/ /g, "-") + '">' + data[i].Subject + ' <span>' + data[i].Id + ' - ' + data[i].Username + ' - ' + data[i].Date + '</span></a></div>';
-					if (data.length == 0) x = "No Tickets";
-					$("#closedtickets").html(x);
-                },  error: hap.common.jsonError
-			});
-			$.ajax({
-				type: 'GET',
-				url: hap.common.formatJSONUrl("~/api/HelpDesk/FAQs"),
-				dataType: 'json',
-				contentType: 'application/json',
-				success: function (data) {
-					var x = "";
-					for (var i = 0; i < data.length; i++) {
-						x += '<div><a href="#ticket-' + data[i].Id + '" class="' + data[i].Priority.replace(/ /g, "-") + '">' + data[i].Subject + '</a></div>'
-					}
-					if (data.length == 0) x = "No FAQs";
-					$("#faqs").html(x);
-                },  error: hap.common.jsonError
-			});
-			if (hap.hdadmin) {
-		        $("#spinner").spinner().spinner("value", 7);
-		        $("#stats-content").fadeOut();
-		        $("#refreshstats").click(function () {
-		            $("#stats-loading").fadeIn();
-		            $("#stats-content").fadeOut();
-		            $.ajax({
-		                type: 'GET',
-		                url: hap.common.formatJSONUrl("~/api/HelpDesk/Stats/" + $("#spinner").spinner("value")),
-		                dataType: 'json',
-		                contentType: 'application/json',
-		                success: function (data) {
-		                    parseStats(data);
-		                },  error: hap.common.jsonError
-		            });
-		            return false;
-		        });
-		        setTimeout(function() {
-		            $.ajax({
-		                type: 'GET',
-		                url: hap.common.formatJSONUrl("~/api/HelpDesk/Stats"),
-		                dataType: 'json',
-		                contentType: 'application/json',
-		                success: function (data) {
-		                    parseStats(data);
-		                },  error: hap.common.jsonError
-		            });
-		        }, 500);
-		    }
 			if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curticket = window.location.href.split('#')[1].substr(7);
 			else curticket = null;
 			loadTicket();
+			Update();
 		});
+		function Update() {
+		    $.ajax({
+		        type: 'GET',
+		        url: hap.common.formatJSONUrl("~/api/HelpDesk/Tickets/Open<%=isHDAdmin ? "" : "/" + ADUser.UserName%>"),
+				dataType: 'json',
+				contentType: 'application/json',
+				success: function (data) {
+				    var x = "";
+				    for (var i = 0; i < data.length; i++) x += '<div><a href="#ticket-' + data[i].Id + '" class="' + data[i].Priority.replace(/ /g, "-") + '">' + data[i].Subject + ' <span>' + data[i].Id + ' - ' + data[i].Username + ' - ' + data[i].Date + '</span></a></div>';
+				    if (data.length == 0) x = "No Tickets";
+				    $("#opentickets").html(x);
+				}, error: hap.common.jsonError
+			});
+            $.ajax({
+                type: 'GET',
+                url: hap.common.formatJSONUrl("~/api/HelpDesk/Tickets/Closed<%=isHDAdmin ? "" : "/" + ADUser.UserName%>"),
+				dataType: 'json',
+				contentType: 'application/json',
+				success: function (data) {
+				    var x = "";
+				    for (var i = 0; i < data.length; i++) x += '<div><a href="#ticket-' + data[i].Id + '" class="' + data[i].Priority.replace(/ /g, "-") + '">' + data[i].Subject + ' <span>' + data[i].Id + ' - ' + data[i].Username + ' - ' + data[i].Date + '</span></a></div>';
+				    if (data.length == 0) x = "No Tickets";
+				    $("#closedtickets").html(x);
+				}, error: hap.common.jsonError
+			});
+            $.ajax({
+                type: 'GET',
+                url: hap.common.formatJSONUrl("~/api/HelpDesk/FAQs"),
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (data) {
+                    var x = "";
+                    for (var i = 0; i < data.length; i++) {
+                        x += '<div><a href="#ticket-' + data[i].Id + '" class="' + data[i].Priority.replace(/ /g, "-") + '">' + data[i].Subject + '</a></div>'
+                    }
+                    if (data.length == 0) x = "No FAQs";
+                    $("#faqs").html(x);
+                }, error: hap.common.jsonError
+            });
+            if (hap.hdadmin) {
+                $("#spinner").spinner().spinner("value", 7);
+                $("#stats-content").fadeOut();
+                $("#refreshstats").click(function () {
+                    $("#stats-loading").fadeIn();
+                    $("#stats-content").fadeOut();
+                    $.ajax({
+                        type: 'GET',
+                        url: hap.common.formatJSONUrl("~/api/HelpDesk/Stats/" + $("#spinner").spinner("value")),
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        success: function (data) {
+                            parseStats(data);
+                        }, error: hap.common.jsonError
+                    });
+                    return false;
+                });
+                setTimeout(function () {
+                    $.ajax({
+                        type: 'GET',
+                        url: hap.common.formatJSONUrl("~/api/HelpDesk/Stats"),
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        success: function (data) {
+                            parseStats(data);
+                        }, error: hap.common.jsonError
+                    });
+                }, 500);
+            }
+		}
 	    function parseStats(data) {
 	        $("#stats-loading").fadeOut();
 	        $("#stats-content").fadeIn();
