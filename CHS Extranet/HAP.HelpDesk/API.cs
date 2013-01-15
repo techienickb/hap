@@ -21,6 +21,13 @@ namespace HAP.HelpDesk
     public class API
     {
         [OperationContract]
+        [WebGet(UriTemplate="/Permalink/{Id}")]
+        public void Permalink(string Id)
+        {
+            HttpContext.Current.Response.Redirect("~/HelpDesk/#ticket-" + Id);
+        }
+
+        [OperationContract]
         [WebInvoke(Method = "PUT", UriTemplate = "/Ticket/{Id}", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         public FullTicket UpdateTicket(string Id, string Note)
         {
