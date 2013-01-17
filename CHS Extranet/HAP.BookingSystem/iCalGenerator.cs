@@ -28,14 +28,8 @@ namespace HAP.BookingSystem
             try
             {
                 if (string.IsNullOrEmpty(booking.User.Email)) return;
-#if DEBUG
-                HAP.Web.Logging.EventViewer.Log(HttpContext.Current.Request.RawUrl, "No User Email Address Found!", System.Diagnostics.EventLogEntryType.Error);
-#endif
             }
-            catch (Exception e) { 
-#if DEBUG
-                HAP.Web.Logging.EventViewer.Log(HttpContext.Current.Request.RawUrl, e.ToString() + "\nMessage:\n" + e.Message + "\n\nStack Trace:\n" + e.StackTrace, System.Diagnostics.EventLogEntryType.Error);
-#endif
+            catch { 
                 return;
             }
             hapConfig config = hapConfig.Current;
@@ -60,7 +54,7 @@ namespace HAP.BookingSystem
 
             sb.AppendLine("BEGIN:VCALENDAR");
             sb.AppendLine("VERSION:2.0");
-            sb.AppendLine("PRODID:-//chsit/CalendarAppointment");
+            sb.AppendLine("PRODID:-//hap/CalendarAppointment");
             sb.AppendLine("CALSCALE:GREGORIAN");
             sb.AppendLine("METHOD:REQUEST");
             sb.AppendLine("BEGIN:VEVENT");
@@ -137,21 +131,15 @@ namespace HAP.BookingSystem
             try
             {
                 if (string.IsNullOrEmpty(booking.User.Email)) return;
-#if DEBUG
-                HAP.Web.Logging.EventViewer.Log(HttpContext.Current.Request.RawUrl, "No User Email Address Found!", System.Diagnostics.EventLogEntryType.Error);
-#endif
             }
             catch (Exception e)
             {
-#if DEBUG
-                HAP.Web.Logging.EventViewer.Log(HttpContext.Current.Request.RawUrl, e.ToString() + "\nMessage:\n" + e.Message + "\n\nStack Trace:\n" + e.StackTrace, System.Diagnostics.EventLogEntryType.Error);
-#endif
                 return;
             }
 
             sb.AppendLine("BEGIN:VCALENDAR");
             sb.AppendLine("VERSION:2.0");
-            sb.AppendLine("PRODID:-//chsit/CalendarAppointment");
+            sb.AppendLine("PRODID:-//hap/CalendarAppointment");
             sb.AppendLine("CALSCALE:GREGORIAN");
             sb.AppendLine("METHOD:REQUEST");
             sb.AppendLine("BEGIN:VEVENT");
@@ -161,20 +149,14 @@ namespace HAP.BookingSystem
             sb.AppendLine("ATTENDEE;ROLE=REQ-PARTICIPANT;CN=" + booking.User.DisplayName + ":MAILTO:" + booking.User.Email);
             foreach (string s in hapConfig.Current.BookingSystem.Resources[booking.Room].Admins.Split(new char[] { ',' }))
             {
-                UserInfo ui = ADUtils.FindUserInfos(s)[0];
+                UserInfo ui = ADUtils.FindUserInfos(s.Trim())[0];
                 uis.Add(ui);
                 try
                 {
                     if (string.IsNullOrEmpty(ui.Email)) continue;
-#if DEBUG
-                    HAP.Web.Logging.EventViewer.Log(HttpContext.Current.Request.RawUrl, "No User Email Address Found!", System.Diagnostics.EventLogEntryType.Error);
-#endif
                 }
-                catch (Exception e)
+                catch
                 {
-#if DEBUG
-                    HAP.Web.Logging.EventViewer.Log(HttpContext.Current.Request.RawUrl, e.ToString() + "\nMessage:\n" + e.Message + "\n\nStack Trace:\n" + e.StackTrace, System.Diagnostics.EventLogEntryType.Error);
-#endif
                     continue;
                 }
                 if (!string.IsNullOrEmpty(ui.Email))
@@ -229,15 +211,9 @@ namespace HAP.BookingSystem
             try
             {
                 if (string.IsNullOrEmpty(booking.User.Email)) return;
-#if DEBUG
-                HAP.Web.Logging.EventViewer.Log(HttpContext.Current.Request.RawUrl, "No User Email Address Found!", System.Diagnostics.EventLogEntryType.Error);
-#endif
             }
-            catch (Exception e)
+            catch
             {
-#if DEBUG
-                HAP.Web.Logging.EventViewer.Log(HttpContext.Current.Request.RawUrl, e.ToString() + "\nMessage:\n" + e.Message + "\n\nStack Trace:\n" + e.StackTrace, System.Diagnostics.EventLogEntryType.Error);
-#endif
                 return;
             }
             hapConfig config = hapConfig.Current;
@@ -261,7 +237,7 @@ namespace HAP.BookingSystem
 
             sb.AppendLine("BEGIN:VCALENDAR");
             sb.AppendLine("VERSION:2.0");
-            sb.AppendLine("PRODID:-//chsit/CalendarAppointment");
+            sb.AppendLine("PRODID:-//hap/CalendarAppointment");
             sb.AppendLine("CALSCALE:GREGORIAN");
             sb.AppendLine("METHOD:CANCEL");
             sb.AppendLine("BEGIN:VEVENT");
@@ -312,15 +288,9 @@ namespace HAP.BookingSystem
             try
             {
                 if (string.IsNullOrEmpty(booking.User.Email)) return;
-#if DEBUG
-                HAP.Web.Logging.EventViewer.Log(HttpContext.Current.Request.RawUrl, "No User Email Address Found!", System.Diagnostics.EventLogEntryType.Error);
-#endif
             }
             catch (Exception e)
             {
-#if DEBUG
-                HAP.Web.Logging.EventViewer.Log(HttpContext.Current.Request.RawUrl, e.ToString() + "\nMessage:\n" + e.Message + "\n\nStack Trace:\n" + e.StackTrace, System.Diagnostics.EventLogEntryType.Error);
-#endif
                 return;
             }
             hapConfig config = hapConfig.Current;
@@ -344,7 +314,7 @@ namespace HAP.BookingSystem
 
             sb.AppendLine("BEGIN:VCALENDAR");
             sb.AppendLine("VERSION:2.0");
-            sb.AppendLine("PRODID:-//chsit/CalendarAppointment");
+            sb.AppendLine("PRODID:-//hap/CalendarAppointment");
             sb.AppendLine("CALSCALE:GREGORIAN");
             sb.AppendLine("METHOD:CANCEL");
             sb.AppendLine("BEGIN:VEVENT");
@@ -376,19 +346,13 @@ namespace HAP.BookingSystem
 
             foreach (string s in hapConfig.Current.BookingSystem.Resources[booking.Room].Admins.Split(new char[] { ',' }))
             {
-                UserInfo ui = ADUtils.FindUserInfos(s)[0];
+                UserInfo ui = ADUtils.FindUserInfos(s.Trim())[0];
                 try
                 {
                     if (string.IsNullOrEmpty(ui.Email)) continue;
-#if DEBUG
-                    HAP.Web.Logging.EventViewer.Log(HttpContext.Current.Request.RawUrl, "No User Email Address Found!", System.Diagnostics.EventLogEntryType.Error);
-#endif
                 }
                 catch (Exception e)
                 {
-#if DEBUG
-                    HAP.Web.Logging.EventViewer.Log(HttpContext.Current.Request.RawUrl, e.ToString() + "\nMessage:\n" + e.Message + "\n\nStack Trace:\n" + e.StackTrace, System.Diagnostics.EventLogEntryType.Error);
-#endif
                     continue;
                 }
                 if (!string.IsNullOrEmpty(ui.Email)) mes.To.Add(new MailAddress(ui.Email, ui.DisplayName));
