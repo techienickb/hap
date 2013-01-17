@@ -80,7 +80,7 @@ namespace HAP.Web
                     ADUser.Authenticate(Homework.Teacher, TokenGenerator.ConvertToPlain(Homework.Token));
                 }
                 ADUser.Impersonate();
-                string path = Server.UrlDecode(Request.QueryString["path"].Remove(0, 1).Replace('^', '&'));
+                string path = Server.UrlDecode(Request.QueryString["path"].Remove(0, 1).Replace('^', '&').Replace("|", "%"));
                 string p = Request.QueryString["path"].Substring(0, 1);
                 DriveMapping unc = null;
                 unc = config.MyFiles.Mappings.FilteredMappings[p.ToCharArray()[0]];
@@ -99,7 +99,7 @@ namespace HAP.Web
             }
             ADUser.Impersonate();
             message.Text = "";
-            string path = Server.UrlDecode(Request.QueryString["path"].Remove(0, 1).Replace('^', '&'));
+            string path = Server.UrlDecode(Request.QueryString["path"].Remove(0, 1).Replace('^', '&').Replace("|", "%"));
             string p = Request.QueryString["path"].Substring(0, 1);
             DriveMapping unc = null;
             unc = config.MyFiles.Mappings.FilteredMappings[p.ToCharArray()[0]];
