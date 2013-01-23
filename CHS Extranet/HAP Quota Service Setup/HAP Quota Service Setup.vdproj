@@ -15,44 +15,44 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_519A7130B8C8B65C0F43E5FE03F740D3"
+        "OwnerKey" = "8:_BBCE9609C51172FF0C63CB4EFA785803"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_519A7130B8C8B65C0F43E5FE03F740D3"
+        "OwnerKey" = "8:_DCE56C29339D447DBB59AFBBA918215D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_6168530980174EB986773E0EB9ED18C1"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_62E89CD389F0E256E0B84BB216615F13"
-        "OwnerKey" = "8:_BDCFDDFA0F6DF17AF1A6899F9B098F23"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_62E89CD389F0E256E0B84BB216615F13"
+        "MsmKey" = "8:_A50CC5BF74D6CEC92CB666EFFC643234"
         "OwnerKey" = "8:_DCE56C29339D447DBB59AFBBA918215D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_9C4DE419E275BBD444108BA753C29E72"
-        "OwnerKey" = "8:_BDCFDDFA0F6DF17AF1A6899F9B098F23"
+        "MsmKey" = "8:_A50CC5BF74D6CEC92CB666EFFC643234"
+        "OwnerKey" = "8:_BBCE9609C51172FF0C63CB4EFA785803"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_9C4DE419E275BBD444108BA753C29E72"
-        "OwnerKey" = "8:_DCE56C29339D447DBB59AFBBA918215D"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_BDCFDDFA0F6DF17AF1A6899F9B098F23"
+        "MsmKey" = "8:_BBCE9609C51172FF0C63CB4EFA785803"
         "OwnerKey" = "8:_DCE56C29339D447DBB59AFBBA918215D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_DB47DD3CB3DFE9A78D80B4EB5CE34F1A"
-        "OwnerKey" = "8:_62E89CD389F0E256E0B84BB216615F13"
+        "OwnerKey" = "8:_519A7130B8C8B65C0F43E5FE03F740D3"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -76,19 +76,19 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_BDCFDDFA0F6DF17AF1A6899F9B098F23"
+        "OwnerKey" = "8:_BBCE9609C51172FF0C63CB4EFA785803"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_9C4DE419E275BBD444108BA753C29E72"
+        "OwnerKey" = "8:_519A7130B8C8B65C0F43E5FE03F740D3"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_62E89CD389F0E256E0B84BB216615F13"
+        "OwnerKey" = "8:_A50CC5BF74D6CEC92CB666EFFC643234"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -196,34 +196,14 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6168530980174EB986773E0EB9ED18C1"
-            {
-            "SourcePath" = "8:register.vbs"
-            "TargetName" = "8:register.vbs"
-            "Tag" = "8:"
-            "Folder" = "8:_7E1444332F30452BA4B4CF811F9B6B8D"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_62E89CD389F0E256E0B84BB216615F13"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_519A7130B8C8B65C0F43E5FE03F740D3"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:Interop.DiskQuotaTypeLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
-                    "_62E89CD389F0E256E0B84BB216615F13"
+                    "_519A7130B8C8B65C0F43E5FE03F740D3"
                     {
                     "Name" = "8:Interop.DiskQuotaTypeLibrary.dll"
                     "Attributes" = "3:512"
@@ -247,14 +227,34 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_9C4DE419E275BBD444108BA753C29E72"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6168530980174EB986773E0EB9ED18C1"
+            {
+            "SourcePath" = "8:register.vbs"
+            "TargetName" = "8:register.vbs"
+            "Tag" = "8:"
+            "Folder" = "8:_7E1444332F30452BA4B4CF811F9B6B8D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A50CC5BF74D6CEC92CB666EFFC643234"
             {
             "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyIsInGAC" = "11:TRUE"
             "AssemblyAsmDisplayName" = "8:srmlib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
-                    "_9C4DE419E275BBD444108BA753C29E72"
+                    "_A50CC5BF74D6CEC92CB666EFFC643234"
                     {
                     "Name" = "8:srmlib.dll"
                     "Attributes" = "3:512"
@@ -278,14 +278,14 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_BDCFDDFA0F6DF17AF1A6899F9B098F23"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_BBCE9609C51172FF0C63CB4EFA785803"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:HAP.Data.Quota, Version=2.0.0.0, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
-                    "_BDCFDDFA0F6DF17AF1A6899F9B098F23"
+                    "_BBCE9609C51172FF0C63CB4EFA785803"
                     {
                     "Name" = "8:HAP.Data.Quota.dll"
                     "Attributes" = "3:512"
@@ -383,15 +383,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HAP Quota Service"
-        "ProductCode" = "8:{7C86EEF3-3191-4CBF-8E2A-CCD5E0A45890}"
-        "PackageCode" = "8:{BDDA17EB-E559-469C-AB5A-A745A397322F}"
+        "ProductCode" = "8:{DCBC419E-953F-42F6-861F-AD86DAC3F7DB}"
+        "PackageCode" = "8:{F28CB890-3EB0-40F5-A7A3-150550E38C39}"
         "UpgradeCode" = "8:{55C8129E-4F05-41B8-A23E-1AE6A8DC351D}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:3.1.0"
+        "ProductVersion" = "8:3.2.0"
         "Manufacturer" = "8:nb development"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -905,7 +905,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_DCE56C29339D447DBB59AFBBA918215D"
             {
-            "SourcePath" = "8:..\\HAP.Data.Quota.Service\\obj\\x86\\Debug\\HAP Quota Service.exe"
+            "SourcePath" = "8:..\\HAP.Data.Quota.Service\\obj\\x86\\Release\\HAP Quota Service.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_7E1444332F30452BA4B4CF811F9B6B8D"

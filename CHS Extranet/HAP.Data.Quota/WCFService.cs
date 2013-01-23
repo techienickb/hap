@@ -111,8 +111,8 @@ namespace HAP.Data.Quota
 #if DEBUG
                 if (!EventLog.SourceExists("HAP+ Quota Service")) EventLog.CreateEventSource("HAP+ Quota Service", "Application");
                 EventLog.WriteEntry("HAP+ Quota Service", "Error Resolving Path: " + uncPath + "\n\n" + ex.Message + "\n\n" + ex.StackTrace, EventLogEntryType.Error);
-                return "ERROR WITH UNC PATH: " + uncPath;
 #endif
+                return "ERROR WITH UNC PATH: " + uncPath;
             }
         }
 
