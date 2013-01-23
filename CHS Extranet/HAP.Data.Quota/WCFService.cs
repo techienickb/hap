@@ -48,8 +48,10 @@ namespace HAP.Data.Quota
             }
             catch (Exception ex)
             {
+#if DEBUG
                 if (!EventLog.SourceExists("HAP+ Quota Service")) EventLog.CreateEventSource("HAP+ Quota Service", "Application");
                 EventLog.WriteEntry("HAP+ Quota Service", path + "\n\n" + ex.ToString() + "\n\n" + ex.Message + "\n\n" + ex.StackTrace, EventLogEntryType.Error);
+#endif
                 path = GetPath(path);
                 try
                 {
@@ -65,7 +67,9 @@ namespace HAP.Data.Quota
                 }
                 catch (Exception e)
                 {
+#if DEBUG
                     EventLog.WriteEntry("HAP+ Quota Service", path + "\n\n" + e.ToString() + "\n\n" + e.Message + "\n\n" + e.StackTrace, EventLogEntryType.Error);
+#endif
                 }
             }
             return q;
@@ -104,9 +108,11 @@ namespace HAP.Data.Quota
             }
             catch (Exception ex)
             {
+#if DEBUG
                 if (!EventLog.SourceExists("HAP+ Quota Service")) EventLog.CreateEventSource("HAP+ Quota Service", "Application");
                 EventLog.WriteEntry("HAP+ Quota Service", "Error Resolving Path: " + uncPath + "\n\n" + ex.Message + "\n\n" + ex.StackTrace, EventLogEntryType.Error);
                 return "ERROR WITH UNC PATH: " + uncPath;
+#endif
             }
         }
 
