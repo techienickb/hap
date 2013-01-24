@@ -37,7 +37,6 @@ namespace HAP.Data.Quota
             try
             {
                 Quota = FSRMQuotaManager.GetQuota(path);
-                if (!EventLog.SourceExists("HAP+ Quota Service")) EventLog.CreateEventSource("HAP+ Quota Service", "Application");
                 qFree = Math.Round((Decimal)Quota.QuotaLimit - (Decimal)Quota.QuotaUsed, 0);
                 qUsed = (Decimal)Quota.QuotaUsed;
                 qTotal = (Decimal)Quota.QuotaLimit;
@@ -45,17 +44,12 @@ namespace HAP.Data.Quota
                 q.Total = Convert.ToDouble(qTotal.ToString());
                 q.Used = Convert.ToDouble(qUsed.ToString());
             }
-            catch (Exception ex)
+            catch
             {
-#if DEBUG
-                if (!EventLog.SourceExists("HAP+ Quota Service")) EventLog.CreateEventSource("HAP+ Quota Service", "Application");
-                EventLog.WriteEntry("HAP+ Quota Service", path + "\n\n" + ex.ToString() + "\n\n" + ex.Message + "\n\n" + ex.StackTrace, EventLogEntryType.Error);
-#endif
                 path = GetPath(path);
                 try
                 {
                     Quota = FSRMQuotaManager.GetQuota(path);
-                    EventLog.WriteEntry("HAP+ Quota Service", "Type: " + Quota.QuotaLimit.GetType().ToString(), EventLogEntryType.Information);
                     qFree = (Decimal)Quota.QuotaLimit - (Decimal)Quota.QuotaUsed;
                     qUsed = (Decimal)Quota.QuotaUsed;
                     qTotal = (Decimal)Quota.QuotaLimit;
@@ -63,11 +57,8 @@ namespace HAP.Data.Quota
                     q.Total = Convert.ToDouble(qTotal.ToString());
                     q.Used = Convert.ToDouble(qUsed.ToString());
                 }
-                catch (Exception e)
+                catch
                 {
-#if DEBUG
-                    EventLog.WriteEntry("HAP+ Quota Service", path + "\n\n" + e.ToString() + "\n\n" + e.Message + "\n\n" + e.StackTrace, EventLogEntryType.Error);
-#endif
                 }
             }
             return q;
@@ -96,12 +87,8 @@ namespace HAP.Data.Quota
 
                 return path;
             }
-            catch (Exception ex)
+            catch
             {
-#if DEBUG
-                if (!EventLog.SourceExists("HAP+ Quota Service")) EventLog.CreateEventSource("HAP+ Quota Service", "Application");
-                EventLog.WriteEntry("HAP+ Quota Service", "Error Resolving Path: " + uncPath + "\n\n" + ex.Message + "\n\n" + ex.StackTrace, EventLogEntryType.Error);
-#endif
                 return "ERROR WITH UNC PATH: " + uncPath;
             }
         }
