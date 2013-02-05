@@ -339,7 +339,11 @@
 		            $("#bfmultilesson").hide();
 		            canmulti = false;
 		        }
-		    } catch (e) { }
+		    } catch (e) 
+		    {
+		        $("#bfmultilesson").hide();
+		        canmulti = false; 
+            }
 			$("#bflquant").buttonset();
 			$("#bflesson").html(lesson);
 			$("#bookingform").dialog({ 
