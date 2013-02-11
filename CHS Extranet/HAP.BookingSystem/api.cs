@@ -29,6 +29,8 @@ namespace HAP.Web.API
             foreach (XmlNode n in doc.SelectNodes("/Bookings/Booking"))
             {
                 Booking b = new Booking(n, false);
+                if(b.Date < DateTime.Today )
+                    continue;
                 if (b.Username.ToLower().StartsWith(Query.ToLower()))
                     bookings.Add(new JSONBooking(b));
             }
