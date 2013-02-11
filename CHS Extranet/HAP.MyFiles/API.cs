@@ -40,6 +40,10 @@ namespace HAP.MyFiles
                 if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
                 user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
             }
+            else
+            {
+                user = new User(HttpContext.Current.User.Identity.Name);
+            }
             HAP.Web.SendTo.Google.Client client = new HAP.Web.SendTo.Google.Client();
             client.Login(username, password);
             DriveMapping mapping;
@@ -68,6 +72,10 @@ namespace HAP.MyFiles
                 if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
                 user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
             }
+            else
+            {
+                user = new User(HttpContext.Current.User.Identity.Name);
+            }
             DriveMapping mapping;
             string p = Converter.DriveToUNC('/' + Path, Drive, out mapping, user);
             HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.SendTo.SkyDrive", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Sending to SkyDrive: " + p);
@@ -93,6 +101,10 @@ namespace HAP.MyFiles
                 HttpCookie token = HttpContext.Current.Request.Cookies["token"];
                 if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
                 user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
+            }
+            else
+            {
+                user = new User(HttpContext.Current.User.Identity.Name);
             }
             DriveMapping mapping;
             string z = Converter.DriveToUNC(Zip.Remove(0, 1), Zip.Substring(0, 1), out mapping, user);
@@ -134,6 +146,10 @@ namespace HAP.MyFiles
                 if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
                 user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
             }
+            else
+            {
+                user = new User(HttpContext.Current.User.Identity.Name);
+            }
             DriveMapping mapping;
             string p = Converter.DriveToUNC(ZipFile.Remove(0, 1), ZipFile.Substring(0, 1), out mapping, user);
             HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.UnZIP", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Unzipping: " + p);
@@ -162,6 +178,10 @@ namespace HAP.MyFiles
                 HttpCookie token = HttpContext.Current.Request.Cookies["token"];
                 if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
                 user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
+            }
+            else
+            {
+                user = new User(HttpContext.Current.User.Identity.Name);
             }
             DriveMapping mapping;
             string p = Converter.DriveToUNC(OldPath.Remove(0, 1), OldPath.Substring(0, 1), out mapping, user);
@@ -218,6 +238,10 @@ namespace HAP.MyFiles
                 if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
                 user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
             }
+            else
+            {
+                user = new User(HttpContext.Current.User.Identity.Name);
+            }
             DriveMapping mapping;
             string p = Converter.DriveToUNC(OldPath.Remove(0, 1), OldPath.Substring(0, 1), out mapping, user);
             string p2 = Converter.DriveToUNC(NewPath.Remove(0, 1), NewPath.Substring(0, 1), out mapping, user);
@@ -257,6 +281,10 @@ namespace HAP.MyFiles
                 if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
                 user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
             }
+            else
+            {
+                user = new User(HttpContext.Current.User.Identity.Name);
+            }
 
             foreach (string path in Paths) 
             {
@@ -292,6 +320,10 @@ namespace HAP.MyFiles
                 if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
                 user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
             }
+            else
+            {
+                user = new User(HttpContext.Current.User.Identity.Name);
+            }
             DriveMapping mapping;
             string path = Converter.DriveToUNC("/" + Path, Drive, out mapping, user);
             HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.NewFolder", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Creating new folder: " + path);
@@ -317,6 +349,10 @@ namespace HAP.MyFiles
                 HttpCookie token = HttpContext.Current.Request.Cookies["token"];
                 if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
                 user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
+            }
+            else
+            {
+                user = new User(HttpContext.Current.User.Identity.Name);
             }
             DriveMapping mapping;
             string path = Converter.DriveToUNC("/" + Path, Drive, out mapping, user);
@@ -398,13 +434,20 @@ namespace HAP.MyFiles
             Path = "/" + Path;
             hapConfig config = hapConfig.Current;
             List<File> Items = new List<File>();
-            User user = new User();
+
+            User user;
             if (config.AD.AuthenticationMode == Web.Configuration.AuthMode.Forms)
             {
+                user = new User();
                 HttpCookie token = HttpContext.Current.Request.Cookies["token"];
                 if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
                 user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
             }
+            else
+            {
+                user = new User(HttpContext.Current.User.Identity.Name);
+            }
+            
             user.ImpersonateContained();
             try
             {
@@ -448,6 +491,10 @@ namespace HAP.MyFiles
                 HttpCookie token = HttpContext.Current.Request.Cookies["token"];
                 if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
                 user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
+            }
+            else
+            {
+                user = new User(HttpContext.Current.User.Identity.Name);
             }
             DriveMapping mapping;
             string path = Converter.DriveToUNC(Path, Drive, out mapping, user);
@@ -539,6 +586,10 @@ namespace HAP.MyFiles
                 if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
                 user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
             }
+            else
+            {
+                user = new User(HttpContext.Current.User.Identity.Name);
+            }
             DriveMapping mapping;
             string path = Converter.DriveToUNC(Path, Drive, out mapping, user);
             HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.List", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Requesting list of: " + path);
@@ -624,6 +675,10 @@ namespace HAP.MyFiles
                 HttpCookie token = HttpContext.Current.Request.Cookies["token"];
                 if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
                 user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
+            }
+            else
+            {
+                user = new User(HttpContext.Current.User.Identity.Name);
             }
 
             long freeBytesForUser, totalBytes, freeBytes;
