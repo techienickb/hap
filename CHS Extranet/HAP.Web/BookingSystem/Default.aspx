@@ -320,8 +320,7 @@
 		            var l1 = false;
 		            var l2 = "";
 		            var l3 = 0;
-		            var i = 0;
-		            for (i = 0; i < curres.Data.length; i++)
+		            for (var i = 0; i < curres.Data.length; i++)
 		            {
 		                if (!l1) l1 = (curres.Data[i].Lesson == lesson);
 		                if (l1) {
@@ -334,7 +333,7 @@
 		                    l2 += curres.Data[i].Lesson + ',';
 		                }
 		            }
-		            if (i == 0) { canmulti = false; $("#bfmultilesson").hide(); }
+		            if (l2 == "") { canmulti = false; $("#bfmultilesson").hide(); }
 		            canmulti = true;
 		        }
 		        else {
