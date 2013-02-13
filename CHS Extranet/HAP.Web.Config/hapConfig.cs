@@ -232,6 +232,13 @@ namespace HAP.Web.Configuration
             {
                 foreach (XmlNode n in doc.SelectNodes("/hapConfig/myfiles/quotaservers")) ((XmlElement)n).SetAttribute("dfstarget", "");
             }
+            if (version.CompareTo(Version.Parse("9.0.0213.1330")) < 0) //Perform v9 upgrade
+            {
+                XmlElement el = doc.SelectSingleNode("/hapConfig/SMTP") as XmlElement;
+                el.SetAttribute("impersonationuser", "");
+                el.SetAttribute("impersonationpassword", "");
+                el.SetAttribute("impersonationdomain", "");
+            }
             doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             doc.Save(ConfigPath);
         }
