@@ -27,7 +27,8 @@
             hap.load = hap.loadtypes.none;
             $(document).ready(function () {
                 $("#<%=login.ClientID %>").button();
-                $("#<%=username.ClientID %>").focus();
+                if ($("#<%=username.ClientID %>").val().length == 0) $("#<%=username.ClientID %>").focus();
+                else $("#<%=password.ClientID %>").focus();
             });
             $("#<%=username.ClientID%>").focusout(function () {
                 $("#<%=username.ClientID%>").val($.trim($("#<%=username.ClientID%>").val()));

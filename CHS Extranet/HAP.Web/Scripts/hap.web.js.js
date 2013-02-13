@@ -12,10 +12,14 @@ if (hap == null) {
                 try {
                     if (xhr.responseText.match(/\<!doctype html/gi)) window.location.reload();
                     else {
-                        if (document.getElementById("errorlist") == null) $("#hapContent").append('<div id="errorlist"></div>');
-                        $("<div class=\"ui-state-error ui-corner-all\" style=\"padding: 3px 10px 3px 10px\"><span class=\"ui-icon ui-icon-alert\" style=\"float: left; margin-right: 5px; margin-top: 2px;\"></span><a href=\"#\" onclick=\"this.nextSibling.className = (this.nextSibling.className == 'cont') ? '' : 'cont'; return false;\">" + jQuery.parseJSON(xhr.responseText).Message + "</a><div class=\"cont\">This error has been logged on the server's event log</div></div>").appendTo("#errorlist");
-                        if (hap.errorTimeout == null) hap.errorTimeout = setTimeout("hap.common.clearError();", 10000);
-                        try { console.log(xhr.responseText); } catch (ex) { };
+                        if (jQuery.parseJSON(xhr.responseText).Message == "Length of the data to decrypt is invalid.") hap.help.Load("impmsg");
+                        else {
+                            if (document.getElementById("errorlist") == null) $("#hapContent").append('<div id="errorlist"></div>');
+                            $("<div class=\"ui-state-error ui-corner-all\" style=\"padding: 3px 10px 3px 10px\"><span class=\"ui-icon ui-icon-alert\" style=\"float: left; margin-right: 5px; margin-top: 2px;\"></span><a href=\"#\" onclick=\"this.nextSibling.className = (this.nextSibling.className == 'cont') ? '' : 'cont'; return false;\">" + jQuery.parseJSON(xhr.responseText).Message + "</a><div class=\"cont\">This error has been logged on the server's event log</div></div>").appendTo("#errorlist");
+                            if (hap.errorTimeout == null) hap.errorTimeout = setTimeout("hap.common.clearError();", 10000);
+
+                            try { console.log(xhr.responseText); } catch (ex) { };
+                        }
                     }
                 } catch (e) { if (thrownError != "") alert(thrownError); }
             },
@@ -101,7 +105,7 @@ if (hap == null) {
                     dataType: 'json',
                     contentType: 'application/json',
                     success: function (data) {
-                        $("#helpbox .content").html(data);
+                        $("#helpbox .content").html(data.replace("%am", );
                     },
                     error: hap.common.jsonError
                 });

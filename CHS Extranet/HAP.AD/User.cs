@@ -205,6 +205,10 @@ namespace HAP.AD
 
         public bool Impersonate()
         {
+            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Web.Configuration.AuthMode.Forms)
+                if (string.IsNullOrEmpty(this.Password) && HttpContext.Current.Request.Cookies["token"] != null) 
+                    try { this.Password = TokenGenerator.ConvertToPlain(HttpContext.Current.Request.Cookies["token"].Value); }
+                    catch { this.Password = HttpContext.Current.Request.Cookies["token"].Value; return false; }
             if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Web.Configuration.AuthMode.Windows)
             {
                 if (ADUtils.RevertToSelf())
@@ -228,8 +232,6 @@ namespace HAP.AD
                 }
                 else
                 {
-                    if (string.IsNullOrEmpty(this.Password) && HttpContext.Current.Request.Cookies["token"] != null) this.Password = TokenGenerator.ConvertToPlain(HttpContext.Current.Request.Cookies["token"].Value);
-                    else if (string.IsNullOrEmpty(this.Password) && HttpContext.Current.Session != null) this.Password = HttpContext.Current.Session["password"].ToString();
                     if (ADUtils.LogonUserA(this.UserName, this.DomainName, this.Password, LOGON32_LOGON_INTERACTIVE, LOGON32_PROVIDER_DEFAULT, ref token) != 0)
                     {
                         if (ADUtils.DuplicateToken(token, 2, ref tokenDuplicate) != 0)
@@ -255,7 +257,11 @@ namespace HAP.AD
 
         public bool ImpersonateContained()
         {
-            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Web.Configuration.AuthMode.Windows)
+            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Web.Configuration.AuthMode.Forms)
+                if (string.IsNullOrEmpty(this.Password) && HttpContext.Current.Request.Cookies["token"] != null)
+                    try { this.Password = TokenGenerator.ConvertToPlain(HttpContext.Current.Request.Cookies["token"].Value); }
+                    catch { this.Password = HttpContext.Current.Request.Cookies["token"].Value; return false; }
+            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Web.Configuration.AuthMode.Windows || this.Password == "kerberos")
             {
                 if (ADUtils.RevertToSelf())
                 {
@@ -270,7 +276,6 @@ namespace HAP.AD
 
             if (ADUtils.RevertToSelf())
             {
-                if (string.IsNullOrEmpty(this.Password) && HttpContext.Current.Request.Cookies["token"] != null) this.Password = TokenGenerator.ConvertToPlain(HttpContext.Current.Request.Cookies["token"].Value);
                 if (ADUtils.LogonUserA(this.UserName, this.DomainName, this.Password, LOGON32_LOGON_INTERACTIVE, LOGON32_PROVIDER_DEFAULT, ref token) != 0)
                 {
                     if (ADUtils.DuplicateToken(token, 2, ref tokenDuplicate) != 0)

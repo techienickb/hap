@@ -617,6 +617,7 @@
     <Content Include="images\ui-icons_ffffff_256x240.png" />
     <Content Include="images\drive.png" />
     <Content Include="images\myfiles-i.png" />
+    <Content Include="kerberos.aspx" />
     <Content Include="Login.aspx" />
     <Content Include="MyFiles\Default.aspx" />
     <Content Include="MyFiles\Homework.aspx" />
@@ -832,6 +833,13 @@
     </Compile>
     <Compile Include="HelpDesk\Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="kerberos.aspx.cs">
+      <DependentUpon>kerberos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="kerberos.aspx.designer.cs">
+      <DependentUpon>kerberos.aspx</DependentUpon>
     </Compile>
     <Compile Include="Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>
