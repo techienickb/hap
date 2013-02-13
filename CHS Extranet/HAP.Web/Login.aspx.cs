@@ -9,6 +9,7 @@ using HAP.Web.Configuration;
 using HAP.Data;
 using HAP.AD;
 using System.Net;
+using System.Net.NetworkInformation;
 
 namespace HAP.Web
 {
@@ -16,9 +17,14 @@ namespace HAP.Web
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (User.Identity.IsAuthenticated && !Page.IsPostBack) Response.Redirect("unauthorised.aspx");
+            if (User.Identity.IsAuthenticated && !Page.IsPostBack && Request.QueryString.Count < 2) Response.Redirect("unauthorised.aspx");
             if (!Page.IsPostBack)
             {
+                if (!string.IsNullOrEmpty(hapConfig.Current.AD.InternalIP))
+                {
+                    if (new IPSubnet(hapConfig.Current.AD.InternalIP).Contains(Request.UserHostAddress) && Request.QueryString.Count < 2) Response.Redirect("~/kerberos.aspx?ReturnUrl=" + Request.QueryString[0]);
+                    else if (new IPSubnet(hapConfig.Current.AD.InternalIP).Contains(Request.UserHostAddress) && Request.QueryString.Count == 2) username.Text = User.Identity.Name.Contains('\\') ? User.Identity.Name.Substring(User.Identity.Name.IndexOf('\\') + 1) : User.Identity.Name;
+                }
                 if (Cache.Get("hapBannedIps") == null) HttpContext.Current.Cache.Insert("hapBannedIps", new List<Banned>());
                 List<Banned> bans = Cache.Get("hapBannedIps") as List<Banned>;
                 if (bans.Count(b => b.Computer == Request.UserHostName && b.IPAddress == Request.UserHostAddress && b.UserAgent == Request.UserAgent) > 0)
@@ -108,5 +114,57 @@ namespace HAP.Web
         public string Computer { get; set; }
         public int Attempts { get; set; }
 
+    }
+
+    public class IPSubnet
+    {
+        private readonly byte[] _address;
+        private readonly int _prefixLength;
+
+        public IPSubnet(string value)
+        {
+            if (value == null)
+                throw new ArgumentNullException("value");
+
+            string[] parts = value.Split('/');
+            if (parts.Length != 2)
+                throw new ArgumentException("Invalid CIDR notation.", "value");
+
+            _address = IPAddress.Parse(parts[0]).GetAddressBytes();
+            _prefixLength = Convert.ToInt32(parts[1], 10);
+        }
+
+        public bool Contains(string address)
+        {
+            return this.Contains(IPAddress.Parse(address).GetAddressBytes());
+        }
+
+        public bool Contains(byte[] address)
+        {
+            if (address == null)
+                throw new ArgumentNullException("address");
+
+            if (address.Length != _address.Length)
+                return false; // IPv4/IPv6 mismatch
+
+            int index = 0;
+            int bits = _prefixLength;
+
+            for (; bits >= 8; bits -= 8)
+            {
+                if (address[index] != _address[index])
+                    return false;
+                ++index;
+            }
+
+            if (bits > 0)
+            {
+                int mask = (byte)~(255 >> bits);
+                if ((address[index] & mask) != (_address[index] & mask))
+                    return false;
+            }
+
+            return true;
+        }
     }
 }

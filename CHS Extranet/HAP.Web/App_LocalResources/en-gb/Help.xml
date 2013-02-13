@@ -15,6 +15,19 @@ British English Help Localised Resources
       </ul>
     ]]>
   </contents>
+  <impmsg>
+    <![CDATA[<h1>You've been auto logged in using %am authentication</h1>
+    <p>These features will be unavailable: 
+    <ul>
+      <li>My Files via Home Access Plus+</li>
+      <li>Live Email Tile Information</li>
+      <li>Live Calendar Tile Information</li>
+      <li>My Homework (part of My Files)</li>
+    </ul></p>
+    <p>To get the full feature set</p>
+    <h1><a href="%l" class="button">Click Here</a></h1>
+    <p>and log in with your username and password</p>]]>
+  </impmsg>
   <myfiles>
     <bug>
       <![CDATA[

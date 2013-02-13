@@ -7,6 +7,7 @@ using System.ServiceModel.Activation;
 using System.ServiceModel.Web;
 using System.Xml;
 using HAP.Web.Configuration;
+using HAP.AD;
 
 namespace HAP.Web.API
 {
@@ -20,7 +21,10 @@ namespace HAP.Web.API
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(HttpContext.Current.Server.MapPath("~/App_LocalResources/" + hapConfig.Current.Local + "/help.xml"));
-            return doc.SelectSingleNode("/resources/" + Path.ToLower()).InnerText.Replace("~/", VirtualPathUtility.ToAbsolute("~/"));
+            string am = "Forms";
+            try { TokenGenerator.ConvertToPlain(HttpContext.Current.Request.Cookies["token"].Value); }
+            catch { am = HttpContext.Current.Request.Cookies["token"].Value; }
+            return doc.SelectSingleNode("/resources/" + Path.ToLower()).InnerText.Replace("%am", am).Replace("%l", "~/login.aspx?ReturnUrl=/&From=" + am).Replace("~/", VirtualPathUtility.ToAbsolute("~/"));
         }
     }
 }

@@ -131,6 +131,14 @@ namespace HAP.Web.Configuration
                 return AuthMode.Forms;
             }
         }
+        public string InternalIP
+        {
+            get
+            {
+                if (el.HasAttribute("internalip")) return el.GetAttribute("internalip");
+                return "";
+            }
+        }
     }
     public enum AuthMode { Forms, Windows }
 }
