@@ -6,6 +6,7 @@ if (hap == null) {
         admin: false,
         bsadmin: false,
         hdadmin: false,
+        errorTimeout: null,
         common: {
             jsonError: function (xhr, ajaxOptions, thrownError) {
                 try {
@@ -13,7 +14,7 @@ if (hap == null) {
                     else {
                         if (document.getElementById("errorlist") == null) $("#hapContent").append('<div id="errorlist"></div>');
                         $("<div class=\"ui-state-error ui-corner-all\" style=\"padding: 3px 10px 3px 10px\"><span class=\"ui-icon ui-icon-alert\" style=\"float: left; margin-right: 5px; margin-top: 2px;\"></span><a href=\"#\" onclick=\"this.nextSibling.className = (this.nextSibling.className == 'cont') ? '' : 'cont'; return false;\">" + jQuery.parseJSON(xhr.responseText).Message + "</a><div class=\"cont\">This error has been logged on the server's event log</div></div>").appendTo("#errorlist");
-                        setTimeout("hap.common.clearError();", 10000);
+                        if (hap.errorTimeout == null) hap.errorTimeout = setTimeout("hap.common.clearError();", 10000);
                         try { console.log(xhr.responseText); } catch (ex) { };
                     }
                 } catch (e) { if (thrownError != "") alert(thrownError); }
@@ -23,7 +24,9 @@ if (hap == null) {
                 return hap.common.resolveUrl(url) + '?' + d;
             },
             clearError: function () {
-                $($("#errorlist").children()[0]).animate({ height: 0 }, 500, function () { $(this).remove(); });
+                $($("#errorlist").children()[0]).animate({ height: 0 }, 300, function () { $($("#errorlist").children()[0]).remove(); });
+                if ($("#errorlist").children().length > 0) hap.errorTimeout = setTimeout("hap.common.clearError();", 10000);
+                else hap.errorTimeout = null;
             },
             resolveUrl: function (virtual) {
                 return virtual.replace(/~\//g, hap.root);
@@ -47,7 +50,7 @@ if (hap == null) {
             WaitInit: false,
             Init: function () {
 
-                if (window.location.pathname.toLowerCase() != hap.root.toLowerCase() && window.location.pathname.toLowerCase() != hap.common.resolveUrl('~/login.aspx').toLowerCase()) {
+                if (window.location.pathname.toLowerCase() != hap.root.toLowerCase() && window.location.pathname.toLowerCase() != hap.common.resolveUrl('~/login.aspx').toLowerCase() && window.location.pathname.toLowerCase() != hap.common.resolveUrl('~/kerberos.aspx').toLowerCase()) {
                     $("#hapTitleMore").click(function () { return false; });
                     $.ajax({
                         url: hap.common.formatJSONUrl('~/api/livetiles/'), type: 'GET', dataType: "json", contentType: 'application/JSON', success: function (data) {
