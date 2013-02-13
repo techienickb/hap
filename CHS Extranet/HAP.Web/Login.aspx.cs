@@ -19,6 +19,7 @@ namespace HAP.Web
             if (User.Identity.IsAuthenticated && !Page.IsPostBack) Response.Redirect("unauthorised.aspx");
             if (!Page.IsPostBack)
             {
+                if (Cache.Get("hapBannedIps") == null) HttpContext.Current.Cache.Insert("hapBannedIps", new List<Banned>());
                 List<Banned> bans = Cache.Get("hapBannedIps") as List<Banned>;
                 if (bans.Count(b => b.Computer == Request.UserHostName && b.IPAddress == Request.UserHostAddress && b.UserAgent == Request.UserAgent) > 0)
                 {
@@ -48,6 +49,7 @@ namespace HAP.Web
 
         protected void login_Click(object sender, EventArgs e)
         {
+            if (Cache.Get("hapBannedIps") == null) HttpContext.Current.Cache.Insert("hapBannedIps", new List<Banned>());
             List<Banned> bans = Cache.Get("hapBannedIps") as List<Banned>;
             Cache.Remove("hapBannedIps");
             if (bans.Count(b => b.Computer == Request.UserHostName && b.IPAddress == Request.UserHostAddress && b.UserAgent == Request.UserAgent) == 0)
