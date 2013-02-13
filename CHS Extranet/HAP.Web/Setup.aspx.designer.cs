@@ -283,6 +283,42 @@ namespace HAP.Web {
         protected global::System.Web.UI.WebControls.TextBox smtpfromemail;
         
         /// <summary>
+        /// ewsurl control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox ewsurl;
+        
+        /// <summary>
+        /// imuser control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox imuser;
+        
+        /// <summary>
+        /// imdomain control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox imdomain;
+        
+        /// <summary>
+        /// impassword control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox impassword;
+        
+        /// <summary>
         /// hp_ab_st control.
         /// </summary>
         /// <remarks>

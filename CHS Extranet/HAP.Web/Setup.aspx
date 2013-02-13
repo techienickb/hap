@@ -219,6 +219,23 @@
                                 <asp:Label runat="server" Text="From (Email): " AssociatedControlID="smtpfromemail" />
                                 <asp:TextBox runat="server" ID="smtpfromemail" Text="" onkeypress="checksmtp();" onchange="checksmtp();" />
                             </div>
+                            <h3>Exchange Support (Not Required)</h3>
+                            <div>
+                                <asp:Label runat="server" Text="EWS Url: " AssociatedControlID="ewsurl" />
+                                <asp:TextBox runat="server" ID="ewsurl" Text="" onkeypress="checksmtp();" onchange="checksmtp();" />
+                            </div>
+                            <div>
+                                <asp:Label runat="server" Text="Impersonation User: " AssociatedControlID="imuser" />
+                                <asp:TextBox runat="server" ID="imuser" Text="" onkeypress="checksmtp();" onchange="checksmtp();" />
+                            </div>
+                            <div>
+                                <asp:Label runat="server" Text="Impersonation Domain: " AssociatedControlID="imdomain" />
+                                <asp:TextBox runat="server" ID="imdomain" Text="" onkeypress="checksmtp();" onchange="checksmtp();" />
+                            </div>
+                            <div>
+                                <asp:Label runat="server" Text="Impersonation Password: " AssociatedControlID="impassword" />
+                                <asp:TextBox runat="server" ID="impassword" Text="" onkeypress="checksmtp();" onchange="checksmtp();" />
+                            </div>
                         </div>
                         <div id="group-homepage">
 

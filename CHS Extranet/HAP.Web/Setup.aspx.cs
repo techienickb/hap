@@ -57,7 +57,6 @@ namespace HAP.Web
                 smtpfromemail.Text = Config.SMTP.FromEmail;
                 smtpfromname.Text = Config.SMTP.FromUser;
                 smtpuser.Text = Config.SMTP.User;
-                smtppassword.Text = Config.SMTP.Password;
                 smtpport.Text = Config.SMTP.Port.ToString();
                 smtpssl.Checked = Config.SMTP.SSL;
                 trackercode.Text = Config.Tracker.OverrideCode;
@@ -93,6 +92,9 @@ namespace HAP.Web
                 mscbWrite.Checked = Config.MyFiles.WriteChecks;
                 liveid.Text = Config.MyFiles.LiveAppId;
                 helpdeskadmins.Text = Config.HelpDesk.Admins;
+                ewsurl.Text = Config.SMTP.Exchange;
+                imdomain.Text = Config.SMTP.ImpersonationDomain;
+                imuser.Text = Config.SMTP.ImpersonationUser;
             }
         }
 
@@ -163,9 +165,29 @@ namespace HAP.Web
             catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the SMTP User"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
             try
             {
-                Config.SMTP.Password = smtppassword.Text;
+                if (smtppassword.Text.Length > 0) Config.SMTP.Password = smtppassword.Text;
             }
             catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the SMTP Password"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.SMTP.Exchange = ewsurl.Text;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the Exchange EWS Url"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                if (impassword.Text.Length > 0) Config.SMTP.ImpersonationPassword = impassword.Text;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the Impersonation Password"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.SMTP.ImpersonationDomain = imdomain.Text;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the Impersonation Domain"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.SMTP.ImpersonationUser = imuser.Text;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the Impersonation User"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
             try
             {
                 adorgs.DataSource = Config.AD.OUs.Values;
