@@ -35,16 +35,25 @@ namespace HAP.Web.LiveTiles
             else
             {
                 HAP.AD.User u = ((HAP.AD.User)Membership.GetUser());
-                u.ImpersonateContained();
-                service.UseDefaultCredentials = true;
-                //service.Credentials = CredentialCache.DefaultNetworkCredentials;
+                if (String.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser))
+                {
+                    u.ImpersonateContained();
+                    service.UseDefaultCredentials = true;
+                    //service.Credentials = CredentialCache.DefaultNetworkCredentials;
+                }
+                else
+                {
+                    service.Credentials = new NetworkCredential(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser, HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationPassword, HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationDomain);
+                    service.ImpersonatedUserId = new ImpersonatedUserId(ConnectingIdType.SmtpAddress, u.Email);
+                }
             }
             
             Folder inbox = Folder.Bind(service, WellKnownFolderName.Inbox);
             SearchFilter sf = new SearchFilter.SearchFilterCollection(LogicalOperator.And, new SearchFilter.IsEqualTo(EmailMessageSchema.IsRead, false));
             ItemView view = new ItemView(10);
             FindItemsResults<Item> findResults = service.FindItems(WellKnownFolderName.Inbox, sf, view);
-            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Configuration.AuthMode.Windows)
+            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Configuration.AuthMode.Windows
+                && String.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser))
             {
                 HAP.AD.User u = ((HAP.AD.User)Membership.GetUser());
                 u.EndContainedImpersonate();
@@ -72,14 +81,23 @@ namespace HAP.Web.LiveTiles
             else
             {
                 HAP.AD.User u = ((HAP.AD.User)Membership.GetUser());
-                u.ImpersonateContained();
-                service.UseDefaultCredentials = true;
-                //service.Credentials = CredentialCache.DefaultNetworkCredentials;
+                if (String.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser))
+                {
+                    u.ImpersonateContained();
+                    service.UseDefaultCredentials = true;
+                    //service.Credentials = CredentialCache.DefaultNetworkCredentials;
+                }
+                else
+                {
+                    service.Credentials = new NetworkCredential(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser, HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationPassword, HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationDomain);
+                    service.ImpersonatedUserId = new ImpersonatedUserId(ConnectingIdType.SmtpAddress, u.Email);
+                }
             }
             List<string> s = new List<string>();
             foreach (Appointment a in service.FindAppointments(WellKnownFolderName.Calendar, new CalendarView(DateTime.Now, DateTime.Now.AddDays(1))))
                 s.Add(a.Subject + "<br />" + (a.Start.Date > DateTime.Now.Date ? "Tomorrow: " : "") + a.Start.ToShortTimeString() + " - " + a.End.ToShortTimeString());
-            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Configuration.AuthMode.Windows)
+            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Configuration.AuthMode.Windows
+                && String.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser))
             {
                 HAP.AD.User u = ((HAP.AD.User)Membership.GetUser());
                 u.EndContainedImpersonate();

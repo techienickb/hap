@@ -72,5 +72,20 @@ namespace HAP.Web.Configuration
             get { if (el.GetAttribute("exchange") == null) return ""; return el.GetAttribute("exchange"); }
             set { el.SetAttribute("exchange", value); }
         }
+        public string ImpersonationUser
+        {
+            get { return el.GetAttribute("impersonationuser"); }
+            set { el.SetAttribute("impersonationuser", value); }
+        }
+        public string ImpersonationPassword
+        {
+            get { return el.GetAttribute("impersonationpassword"); }
+            set { el.SetAttribute("impersonationpassword", value); }
+        }
+        public string ImpersonationDomain
+        {
+            get { return el.GetAttribute("impersonationdomain"); }
+            set { el.SetAttribute("impersonationdomain", value); }
+        }
     }
 }
