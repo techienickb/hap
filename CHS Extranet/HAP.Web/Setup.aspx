@@ -520,6 +520,12 @@
                         <div>
                             <label for="linkShowTo" style="width: 100px;">Show To: </label><input type="text" id="linkShowTo" onclick="showadbuilder(this, true);" />
                         </div>
+                        <div>
+                            <label for="linkWidth">Width: </label><select id="linkWidth"><option>1</option><option>2</option><option>3</option></select>
+                        </div>
+                        <div>
+                            <label for="linkHeight">Height: </label><select id="linkHeight"><option>1</option><option>2</option><option>3</option></select>
+                        </div>
                     </div>
                     <div id="addsub" title="Add/Edit Subject">
                         <div>
@@ -1354,6 +1360,8 @@
                             $("#linkUrl").val("");
                             $("#linkTarget").val("");
                             $("#linkShowTo").val("");
+                            $("#linkWidth option:first-child").attr("selected", "selected");
+                            $("#linkHeight option:first-child").attr("selected", "selected");
                             tempe = e;
                             $("#linkEditor").dialog({
                                 autoOpen: true,
@@ -1363,7 +1371,7 @@
                                         $.ajax({
                                             type: 'POST',
                                             url: 'API/Setup/AddLink',
-                                            data: '{ "group": "' + $("#" + tempe + " > h4 > .lgName").html() + '", "name": "' + $("#linkName").val() + '", "desc": "' + $("#linkDesc").val() + '", "icon": "' + $("#linkIcon").val() + '", "url": "' + $("#linkUrl").val() + '", "target": "' + $("#linkTarget").val() + '", "showto": "' + $("#linkShowTo").val() + '" }',
+                                            data: '{ "group": "' + $("#" + tempe + " > h4 > .lgName").html() + '", "name": "' + $("#linkName").val() + '", "desc": "' + $("#linkDesc").val() + '", "icon": "' + $("#linkIcon").val() + '", "url": "' + $("#linkUrl").val() + '", "target": "' + $("#linkTarget").val() + '", "showto": "' + $("#linkShowTo").val() + '", "width": "' + $("#linkWidth").val() + '", "height": "' + $("#linkHeight").val() + '" }',
                                             contentType: 'application/json',
                                             dataType: 'json',
                                             success: OnLinkAddSuccess,
@@ -1384,7 +1392,7 @@
                                 var data = response.AddLinkResult;
                                 if (data != 0) alert(data);
                                 else {
-                                    $("#" + tempe + " > .sortable").append('<div class="homepagelink" id="link' + $("#linkName").val().replace(' ', '-') + '"><button title="Remove" onclick="return removelink(this);">X</button><a href="#link" title="Edit" onclick="return editlink(\'link' + $("#linkName").val().replace(' ', '-') + '\');"><img src="' + $("#linkIcon").val().replace("~/", root) + '" alt="" /><b>' + $("#linkName").val() + '</b><i>' + $("#linkDesc").val() + '</i><span>' + $("#linkTarget").val() + '</span><u>' + $("#linkUrl").val() + '</u><dd>' + $("#linkShowTo").val() + '</dd></a></div>');
+                                    $("#" + tempe + " > .sortable").append('<div class="homepagelink" id="link' + $("#linkName").val().replace(' ', '-') + '"><button title="Remove" onclick="return removelink(this);">X</button><a href="#link" title="Edit" onclick="return editlink(\'link' + $("#linkName").val().replace(' ', '-') + '\');"><img src="' + $("#linkIcon").val().replace("~/", root) + '" alt="" /><b>' + $("#linkName").val() + '</b><i>' + $("#linkDesc").val() + '</i><span>' + $("#linkTarget").val() + '</span><u>' + $("#linkUrl").val() + '</u><dd>' + $("#linkShowTo").val() + '</dd><h1>' + $("#linkWidth").val() + '</h1><h2>' + $("#linkHeight").val() + '</h2></a></div>');
                                     resetButtons();
                                     tempe = null;
                                 }
@@ -1397,6 +1405,11 @@
                             $("#linkUrl").val($(e).children("u").html());
                             $("#linkTarget").val($(e).children("span").html());
                             $("#linkShowTo").val($(e).children("dd").html());
+                            // $(e).children("h1").html()
+                            $("#linkWidth option:first-child").attr("selected", "selected");
+                            // $(e).children("h2").html()
+                            $("#linkHeight option:first-child").attr("selected", "selected");
+
                             tempe = e;
                             $("#linkEditor").dialog({
                                 autoOpen: true,
@@ -1406,7 +1419,7 @@
                                         $.ajax({
                                             type: 'POST',
                                             url: 'API/Setup/UpdateLink',
-                                            data: '{ "group": "' + $("#" + $(tempe).parent().parent().parent().attr("id") + " > h4 > .lgName").html() + '", "origname": "' + $(tempe).children("b").html() + '", "name": "' + $("#linkName").val() + '", "desc": "' + $("#linkDesc").val() + '", "icon": "' + $("#linkIcon").val() + '", "url": "' + $("#linkUrl").val() + '", "target": "' + $("#linkTarget").val() + '", "showto": "' + $("#linkShowTo").val() + '" }',
+                                            data: '{ "group": "' + $("#" + $(tempe).parent().parent().parent().attr("id") + " > h4 > .lgName").html() + '", "origname": "' + $(tempe).children("b").html() + '", "name": "' + $("#linkName").val() + '", "desc": "' + $("#linkDesc").val() + '", "icon": "' + $("#linkIcon").val() + '", "url": "' + $("#linkUrl").val() + '", "target": "' + $("#linkTarget").val() + '", "showto": "' + $("#linkShowTo").val()  + '", "height": "' + $("#linkHeight").val()  + '", "width": "' + $("#linkWidth").val() + '" }',
                                             contentType: 'application/json',
                                             dataType: 'json',
                                             success: OnLinkUpdateSuccess,
@@ -1433,6 +1446,8 @@
                                     $(tempe).children("u").html($("#linkUrl").val());
                                     $(tempe).children("span").html($("#linkTarget").val());
                                     $(tempe).children("dd").html($("#linkShowTo").val());
+                                    $(tempe).children("h1").html($("#linkWidth").val());
+                                    $(tempe).children("h2").html($("#linkHeight").val());
                                     $("#" + tempe).attr("id", "link" + $("#linkName").val().replace(' ', '_'));
                                     tempe = null;
                                 }

@@ -238,6 +238,13 @@ namespace HAP.Web.Configuration
                 el.SetAttribute("impersonationuser", "");
                 el.SetAttribute("impersonationpassword", "");
                 el.SetAttribute("impersonationdomain", "");
+
+                foreach (XmlNode n in doc.SelectNodes("/hapConfig/Homepage/Links/Group/Link"))
+                {
+                    XmlElement en = n as XmlElement;
+                    en.SetAttribute("width", "1");
+                    en.SetAttribute("height", "1");
+                }
             }
             doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             doc.Save(ConfigPath);
