@@ -203,7 +203,7 @@ namespace HAP.Web.API
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
             Lesson l = Config.BookingSystem.Lessons.Get(origname);
             l.Name = name;
-            l.Type = (LessonType)Enum.Parse(typeof(LessonType), type);
+            l.Type = (LessonType)Enum.Parse(typeof(LessonType), type.Replace(" ", ""));
             int h = int.Parse(start.Substring(0, 2)) + (start.Contains("PM") ? 12 : 0);
             if (h == 12) h = 0;
             else if (h == 24) h = 12;
