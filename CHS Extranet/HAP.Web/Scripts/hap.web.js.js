@@ -105,7 +105,7 @@ if (hap == null) {
                     dataType: 'json',
                     contentType: 'application/json',
                     success: function (data) {
-                        $("#helpbox .content").html(data.replace("%am", );
+                        $("#helpbox .content").html(data);
                     },
                     error: hap.common.jsonError
                 });
