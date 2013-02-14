@@ -49,6 +49,10 @@ namespace HAP.Web.API
                         if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
                         _ADUser.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
                     }
+                    else
+                    {
+                        _ADUser = new User(HttpContext.Current.User.Identity.Name);
+                    }
                 }
                 return _ADUser;
             }
