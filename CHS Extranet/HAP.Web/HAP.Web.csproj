@@ -117,6 +117,7 @@
     <Content Include="Controls\UpdateChecker.ascx" />
     <Content Include="ExampleCustomTile.js" />
     <Content Include="haplogo-icon.ico" />
+    <Content Include="HelpDesk\newassignticket.htm" />
     <Content Include="HelpDesk\Default.aspx" />
     <Content Include="images\120-arrow.png" />
     <Content Include="images\ajax-loader.png" />

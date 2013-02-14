@@ -25,14 +25,33 @@ namespace HAP.Web.HelpDesk
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            List<string> users = new List<string>();
+            foreach (string s in config.HelpDesk.Admins.Split(new char[] { ',' }))
+                try 
+                { 
+                    foreach (string s2 in System.Web.Security.Roles.GetUsersInRole(s.Trim())) if (!users.Contains(s2.ToLower())) users.Add(s2.ToLower()); 
+                } 
+                catch  
+                { 
+                    users.Add(s.Trim().ToLower()); 
+                }
+
             adminbookingpanel.Visible = adminupdatepanel.Visible = isHDAdmin;
             if (adminupdatepanel.Visible)
             {
                 userlist.Items.Clear();
+                userlist2.Items.Clear();
                 foreach (UserInfo user in ADUtils.FindUsers(Configuration.OUVisibility.HelpDesk))
+                {
                     if (user.DisplayName == user.UserName) userlist.Items.Add(new ListItem(user.UserName, user.UserName.ToLower()));
                     else userlist.Items.Add(new ListItem(string.Format("{0} - ({1})", user.UserName, user.DisplayName), user.UserName.ToLower()));
-                userlist.SelectedValue = ADUser.UserName.ToLower();
+                    if (users.Contains(user.UserName.ToLower()))
+                    {
+                        if (user.DisplayName == user.UserName) userlist2.Items.Add(new ListItem(user.UserName, user.UserName.ToLower()));
+                        else userlist2.Items.Add(new ListItem(string.Format("{0} - ({1})", user.UserName, user.DisplayName), user.UserName.ToLower()));
+                    }
+                }
+                userlist.SelectedValue = userlist2.SelectedValue = ADUser.UserName.ToLower();
             }
         }
     }
