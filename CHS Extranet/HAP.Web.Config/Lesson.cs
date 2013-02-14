@@ -24,5 +24,5 @@ namespace HAP.Web.Configuration
         public DateTime EndTime { get; set; }
     }
 
-    public enum LessonType { Lesson, Break, Lunch }
+    public enum LessonType { Lesson, Break, Lunch, BeforeSchool, AfterSchool }
 }

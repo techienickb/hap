@@ -260,7 +260,7 @@
                                             <ItemTemplate>
                                                 <div class="homepagelink" id="link<%#Eval("Name").ToString().Replace(' ', '_') %>">
                                                 <button title="Remove" onclick="return removelink(this);">X</button>
-                                                <a href="#link" title="Edit" onclick="return editlink(this);">
+                                                <a href="#link" title="Edit" onclick="return editlink(this);" data-width="<%#Eval("Width") %>" data-height="<%#Eval("Height") %>">
                                                     <img src="<%#ResolveUrl(Eval("Icon").ToString()) %>" alt="" />
                                                     <b><%#Eval("Name") %></b>
                                                     <i><%#Eval("Description") %></i>
@@ -1130,7 +1130,7 @@
                         }
                         function addlesson() {
                             $("#lessonName").val("");
-                            $("#lessonType option:first-child").attr("selected", "selected");
+                            $("#lessonType option").first().attr("selected", "selected");
                             $("#lessonStart").val("00:00 AM");
                             $("#lessonEnd").val("00:00 AM");
                             $("#addlesson").dialog({
@@ -1170,7 +1170,7 @@
                         function editlesson(b) {
                             tempe = b;
                             $("#lessonName").val($(tempe).parent().parent().children(".lesson").children("span").html());
-                            $("#lessonType option:first-child").attr("selected", "selected");
+                            $("#lessonType").val($(tempe).parent().parent().children(".lesson").children("i").html());
                             $("#lessonStart").val($(tempe).parent().parent().children(".lesson").children(".starttime").html());
                             $("#lessonEnd").val($(tempe).parent().parent().children(".lesson").children(".endtime").html());
                             $("#addlesson").dialog({
@@ -1392,7 +1392,7 @@
                                 var data = response.AddLinkResult;
                                 if (data != 0) alert(data);
                                 else {
-                                    $("#" + tempe + " > .sortable").append('<div class="homepagelink" id="link' + $("#linkName").val().replace(' ', '-') + '"><button title="Remove" onclick="return removelink(this);">X</button><a href="#link" title="Edit" onclick="return editlink(\'link' + $("#linkName").val().replace(' ', '-') + '\');"><img src="' + $("#linkIcon").val().replace("~/", root) + '" alt="" /><b>' + $("#linkName").val() + '</b><i>' + $("#linkDesc").val() + '</i><span>' + $("#linkTarget").val() + '</span><u>' + $("#linkUrl").val() + '</u><dd>' + $("#linkShowTo").val() + '</dd><h1>' + $("#linkWidth").val() + '</h1><h2>' + $("#linkHeight").val() + '</h2></a></div>');
+                                    $("#" + tempe + " > .sortable").append('<div class="homepagelink" id="link' + $("#linkName").val().replace(' ', '-') + '"><button title="Remove" onclick="return removelink(this);">X</button><a href="#link" title="Edit" data-height="' + $("#linkHeight").val() + '" data-width="' + $("#linkWidth").val() + '" onclick="return editlink(\'link' + $("#linkName").val().replace(' ', '-') + '\');"><img src="' + $("#linkIcon").val().replace("~/", root) + '" alt="" /><b>' + $("#linkName").val() + '</b><i>' + $("#linkDesc").val() + '</i><span>' + $("#linkTarget").val() + '</span><u>' + $("#linkUrl").val() + '</u><dd>' + $("#linkShowTo").val() + '</dd></a></div>');
                                     resetButtons();
                                     tempe = null;
                                 }
@@ -1405,10 +1405,8 @@
                             $("#linkUrl").val($(e).children("u").html());
                             $("#linkTarget").val($(e).children("span").html());
                             $("#linkShowTo").val($(e).children("dd").html());
-                            // $(e).children("h1").html()
-                            $("#linkWidth option:first-child").attr("selected", "selected");
-                            // $(e).children("h2").html()
-                            $("#linkHeight option:first-child").attr("selected", "selected");
+                            $("#linkWidth").val($(e).data("width"));
+                            $("#linkHeight").val($(e).data("height"));
 
                             tempe = e;
                             $("#linkEditor").dialog({
@@ -1446,9 +1444,9 @@
                                     $(tempe).children("u").html($("#linkUrl").val());
                                     $(tempe).children("span").html($("#linkTarget").val());
                                     $(tempe).children("dd").html($("#linkShowTo").val());
-                                    $(tempe).children("h1").html($("#linkWidth").val());
-                                    $(tempe).children("h2").html($("#linkHeight").val());
-                                    $("#" + tempe).attr("id", "link" + $("#linkName").val().replace(' ', '_'));
+                                    $(tempe).data("width", $("#linkWidth").val());
+                                    $(tempe).data("height", $("#linkHeight").val());
+                                    $(tempe).parent().attr("id", "link" + $("#linkName").val().replace(' ', '_'));
                                     tempe = null;
                                 }
                             }
