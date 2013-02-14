@@ -232,7 +232,7 @@ namespace HAP.Web.Configuration
             {
                 foreach (XmlNode n in doc.SelectNodes("/hapConfig/myfiles/quotaservers")) ((XmlElement)n).SetAttribute("dfstarget", "");
             }
-            if (version.CompareTo(Version.Parse("9.0.0213.1330")) < 0) //Perform v9 upgrade
+            if (version.CompareTo(Version.Parse("9.0.0214.1930")) < 0) //Perform v9 upgrade
             {
                 XmlElement el = doc.SelectSingleNode("/hapConfig/SMTP") as XmlElement;
                 el.SetAttribute("impersonationuser", "");

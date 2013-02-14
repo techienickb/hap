@@ -20,6 +20,7 @@ namespace HAP.HelpDesk
         public string DisplayName { get; set; }
         public bool FAQ { get; set; }
         public string ShowTo { get; set; }
+        public string AssignedTo { get; set; }
 
         public Ticket(XmlNode node)
         {
@@ -27,6 +28,7 @@ namespace HAP.HelpDesk
             Subject = node.Attributes["subject"].Value;
             Priority = node.Attributes["priority"].Value;
             Status = node.Attributes["status"].Value;
+            AssignedTo = (node.Attributes["assignedto"] == null) ? "" : node.Attributes["assignedto"].Value;
             if (node.SelectNodes("Note")[0].Attributes["date"] != null)
                 Date = DateTime.Parse(node.SelectNodes("Note")[0].Attributes["date"].Value + " " + node.SelectNodes("Note")[0].Attributes["time"].Value).ToString("dd/MM/yy HH:mm");
             Date = DateTime.Parse(node.SelectNodes("Note")[0].Attributes["datetime"].Value).ToString("dd/MM/yy HH:mm");

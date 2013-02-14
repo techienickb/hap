@@ -24,6 +24,11 @@
     <my>My Timetable</my>
   </timetable>
   <helpdesk>
+    <assignticket>Ticket (#) has been Assigned To You</assignticket>
+    <ticketupdated>Ticket (#) has been Updated</ticketupdated>
+    <tickedhasbeen>Your Ticket (#) has been %</tickedhasbeen>
+    <ticketcreated>A Ticket (#) has been Created</ticketcreated>
+    <ticketlogged>A Support Ticket (#) has been Logged</ticketlogged>
     <daystoindex>Days to Index</daystoindex>
     <refreshstats>Refresh Stats</refreshstats>
     <stats>Stats</stats>
@@ -31,7 +36,14 @@
     <priority>Priority</priority>
     <high>High</high>
     <low>Low</low>
+    <updated>Updated</updated>
     <normal>Normal</normal>
+    <fixed>Fixed</fixed>
+    <closed>Closed</closed>
+    <opened>Opened</opened>
+    <reopened>Reopened</reopened>
+    <update>Update</update>
+    <reopen>Reopen</reopen>
     <makeaware>Make aware</makeaware>
     <csloun>(comma seperated list of usernames)</csloun>
     <markasfaq>Mark as FAQ</markasfaq>

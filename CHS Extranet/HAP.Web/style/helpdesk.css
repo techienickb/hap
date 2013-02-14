@@ -1,4 +1,7 @@
-﻿.ticket .notes { overflow: auto; height: 400px; margin-top: 5px; border-width: 1px; border-style: solid; padding: 10px }
+﻿#tabs { padding: 10px; background: #fff; }
+
+#toolbar a.active { background: #fff; color: #0060a6; }
+.ticket .notes { overflow: auto; height: 400px; margin-top: 5px; border-width: 1px; border-style: solid; padding: 10px }
 .ticket .notes pre { white-space: normal; }
 
 #newticket div, .ticket div, #updateticket div { overflow: hidden; }

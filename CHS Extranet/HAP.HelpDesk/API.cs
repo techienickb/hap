@@ -56,7 +56,7 @@ namespace HAP.HelpDesk
             {
                 MailMessage mes = new MailMessage();
 
-                mes.Subject = "Ticket (#" + Id + ") has been Updated";
+                mes.Subject = Localizable.Localize("helpdesk/ticketupdated").Replace("#", "#" + Id);
                 mes.From = mes.Sender = new MailAddress(ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].Email, ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].DisplayName);
                 mes.ReplyToList.Add(mes.From);
                 mes.To.Add(new MailAddress(hapConfig.Current.SMTP.FromEmail, hapConfig.Current.SMTP.FromUser));
@@ -82,27 +82,27 @@ namespace HAP.HelpDesk
 
         [OperationContract]
         [WebInvoke(Method = "PUT", UriTemplate = "/AdminTicket/{Id}", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public FullTicket UpdateAdminTicket(string Id, string Note, string State, string Priority, string ShowTo, string FAQ, string Subject)
+        public FullTicket UpdateAdminTicket(string Id, string Note, string State, string Priority, string ShowTo, string FAQ, string Subject, string AssignTo)
         {
             HAP.Data.SQL.WebEvents.Log(DateTime.Now, "HelpDesk.UpdateAdmin", HttpContext.Current.User.Identity.Name, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Updating Admin Ticket " + Id);
 
             XmlDocument doc = new XmlDocument();
             doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
             XmlNode ticket = doc.SelectSingleNode("/Tickets/Ticket[@id='" + Id + "']");
-            ticket.Attributes["status"].Value = "New";
             if (!string.IsNullOrEmpty(Subject)) ticket.Attributes["subject"].Value = Subject;
             XmlElement node = doc.CreateElement("Note");
             node.SetAttribute("datetime", DateTime.Now.ToString("u"));
             node.SetAttribute("username", HttpContext.Current.User.Identity.Name);
-            if (string.IsNullOrEmpty(Note)) node.InnerXml = "<![CDATA[No Note Information Added]]>";
+            if (string.IsNullOrEmpty(Note)) node.InnerXml = string.IsNullOrEmpty(AssignTo) ? "<![CDATA[No Note Information Added]]>" : "<![CDATA[Assigned to: " + AssignTo + "]]>";
             else node.InnerXml = "<![CDATA[" + HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />") + "]]>";
             ticket.AppendChild(node);
 
-            ticket.Attributes["status"].Value = State;
-
-            ticket.Attributes["priority"].Value = Priority;
+            if (!string.IsNullOrEmpty(State)) ticket.Attributes["status"].Value = State;
+            if (node.Attributes["assignedto"] == null) ticket.Attributes.Append(doc.CreateAttribute("assignedto"));
+            ticket.Attributes["assignedto"].Value = string.IsNullOrEmpty(AssignTo) ? HttpContext.Current.User.Identity.Name : AssignTo;
+            ticket.Attributes["priority"].Value = string.IsNullOrEmpty(Priority) ? ticket.Attributes["priority"].Value : Priority;
             if (ticket.Attributes["showto"] == null) ticket.Attributes.Append(doc.CreateAttribute("showto"));
-            ticket.Attributes["showto"].Value = ShowTo;
+            if (!string.IsNullOrEmpty(ShowTo)) ticket.Attributes["showto"].Value = ShowTo;
             if (ticket.Attributes["faq"] == null) ticket.Attributes.Append(doc.CreateAttribute("faq"));
             ticket.Attributes["faq"].Value = string.IsNullOrWhiteSpace(FAQ) ? "false" : FAQ;
 
@@ -128,7 +128,7 @@ namespace HAP.HelpDesk
             if (hapConfig.Current.SMTP.Enabled && user.Email != null && !string.IsNullOrEmpty(user.Email))
             {
                 MailMessage mes = new MailMessage();
-                mes.Subject = "Your Ticket (#" + Id + ") has been " + (State == "Fixed" ? "Closed" : "Updated");
+                mes.Subject = Localizable.Localize("helpdesk/tickedhasbeen").Replace("#", "#" + Id).Replace("%", State == "Fixed" ? Localizable.Localize("helpdesk/closed") : Localizable.Localize("helpdesk/updated"));
                 mes.From = mes.Sender = new MailAddress(currentuser.Email, currentuser.DisplayName);
                 mes.ReplyToList.Add(mes.From);
 
@@ -140,9 +140,9 @@ namespace HAP.HelpDesk
                 StreamReader fs = template.OpenText();
 
                 mes.Body = fs.ReadToEnd().Replace("{0}", Id).Replace("{1}",
-                    (State == "Fixed" ? "Closed" : "Updated")).Replace("{2}",
+                    (State == "Fixed" ? Localizable.Localize("helpdesk/closed") : Localizable.Localize("helpdesk/updated"))).Replace("{2}",
                     emailnote).Replace("{3}",
-                    (State == "Fixed" ? "reopen" : "update")).Replace("{4}",
+                    (State == "Fixed" ? Localizable.Localize("helpdesk/reopen") : Localizable.Localize("helpdesk/update"))).Replace("{4}",
                     HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath).Replace("{5}", HttpContext.Current.User.Identity.Name).Replace("{6}", user.DisplayName).Replace("{7}", currentuser.DisplayName).Replace("{8}", ft.Subject);
 
                 SmtpClient smtp = new SmtpClient(hapConfig.Current.SMTP.Server, hapConfig.Current.SMTP.Port);
@@ -157,7 +157,7 @@ namespace HAP.HelpDesk
 
                     MailMessage mes = new MailMessage();
 
-                    mes.Subject = "Ticket (#" + Id + ") has been Updated";
+                    mes.Subject = Localizable.Localize("helpdesk/ticketupdated").Replace("#", "#" + Id);
                     mes.From = new MailAddress(hapConfig.Current.SMTP.FromEmail, hapConfig.Current.SMTP.FromUser);
                     mes.Sender = mes.From;
                     mes.ReplyToList.Add(mes.From);
@@ -169,9 +169,9 @@ namespace HAP.HelpDesk
                     StreamReader fs = template.OpenText();
 
                     mes.Body = fs.ReadToEnd().Replace("{0}", Id).Replace("{1}",
-                        (State == "Fixed" ? "Closed" : "Updated")).Replace("{2}",
+                        (State == "Fixed" ? Localizable.Localize("helpdesk/closed") : Localizable.Localize("helpdesk/updated"))).Replace("{2}",
                         emailnote).Replace("{3}",
-                        (State == "Fixed" ? "reopen" : "update")).Replace("{4}",
+                        (State == "Fixed" ? Localizable.Localize("helpdesk/reopen") : Localizable.Localize("helpdesk/update"))).Replace("{4}",
                         HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath).Replace("{8}", ft.Subject);
 
                     SmtpClient smtp = new SmtpClient(hapConfig.Current.SMTP.Server, hapConfig.Current.SMTP.Port);
@@ -180,6 +180,31 @@ namespace HAP.HelpDesk
                     smtp.EnableSsl = hapConfig.Current.SMTP.SSL;
                     smtp.Send(mes);
                 }
+            if (hapConfig.Current.SMTP.Enabled && !string.IsNullOrEmpty(AssignTo))
+            {
+                MailMessage mes = new MailMessage();
+
+                mes.Subject = Localizable.Localize("helpdesk/assignticket").Replace("#", "#" + Id);
+                mes.From = new MailAddress(hapConfig.Current.SMTP.FromEmail, hapConfig.Current.SMTP.FromUser);
+                mes.Sender = mes.From;
+                mes.ReplyToList.Add(mes.From);
+
+                mes.To.Add(new MailAddress(ADUtils.FindUserInfos(AssignTo)[0].Email, ADUtils.FindUserInfos(AssignTo)[0].DisplayName));
+
+                mes.IsBodyHtml = true;
+                FileInfo template = new FileInfo(HttpContext.Current.Server.MapPath("~/HelpDesk/newassignticket.htm"));
+                StreamReader fs = template.OpenText();
+
+                mes.Body = fs.ReadToEnd().Replace("{0}", Id).Replace("{3}",
+                    (State == "Fixed" ? Localizable.Localize("helpdesk/reopen") : Localizable.Localize("helpdesk/update"))).Replace("{4}",
+                    HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath).Replace("{8}", ft.Subject);
+
+                SmtpClient smtp = new SmtpClient(hapConfig.Current.SMTP.Server, hapConfig.Current.SMTP.Port);
+                if (!string.IsNullOrEmpty(hapConfig.Current.SMTP.User))
+                    smtp.Credentials = new NetworkCredential(hapConfig.Current.SMTP.User, hapConfig.Current.SMTP.Password);
+                smtp.EnableSsl = hapConfig.Current.SMTP.SSL;
+                smtp.Send(mes);
+            }
             return new FullTicket(doc.SelectSingleNode("/Tickets/Ticket[@id='" + Id + "']"));
         }
 
@@ -222,7 +247,7 @@ namespace HAP.HelpDesk
             {
                 MailMessage mes = new MailMessage();
 
-                mes.Subject = "A Ticket (#" + x + ") has been Created";
+                mes.Subject = Localizable.Localize("helpdesk/ticketcreated").Replace("#", "#" + x);
                 mes.From = new MailAddress(ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].Email, ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].DisplayName);
                 mes.Sender = mes.From;
                 mes.ReplyToList.Add(mes.From);
@@ -287,7 +312,7 @@ namespace HAP.HelpDesk
             {
                 MailMessage mes = new MailMessage();
 
-                mes.Subject = "A Support Ticket (#" + x + ") has been Logged";
+                mes.Subject = Localizable.Localize("helpdesk/ticketlogged").Replace("#", "#" + x);
 
                 mes.From = mes.Sender = new MailAddress(ADUtils.FindUserInfos(User)[0].Email, ADUtils.FindUserInfos(User)[0].DisplayName);
                 mes.ReplyToList.Add(mes.From);
@@ -316,7 +341,7 @@ namespace HAP.HelpDesk
                 
                     MailMessage mes = new MailMessage();
 
-                    mes.Subject = "A Ticket (#" + x + ") has been Created";
+                    mes.Subject = Localizable.Localize("helpdesk/ticketcreated").Replace("#", "#" + x);
                     mes.From = new MailAddress(hapConfig.Current.SMTP.FromEmail, hapConfig.Current.SMTP.FromUser);
                     mes.Sender = mes.From;
                     mes.ReplyToList.Add(mes.From);
