@@ -99,6 +99,18 @@ h1.Announcement b { font-size: 16px; }
 #HomeButtons a:hover { text-decoration: none; }
 #HomeButtons a.large, #HomeButtons a.large span, #HomeButtons a.large span i { width: 235px; }
 
+#HomeButtons a.height2 { height: 235px; }
+#HomeButtons a.height2 span, #HomeButtons a.height2 span i { height: 221px; }
+#HomeButtons a.height3 { height: 361px; }
+#HomeButtons a.height3 span, #HomeButtons a.height3 span i { height: 344px; }
+#HomeButtons a.width2 { width: 235px; }
+#HomeButtons a.width2 span, #HomeButtons a.width2 span i { width: 227px; }
+#HomeButtons a.width3 { width: 361px; }
+#HomeButtons a.width3 span, #HomeButtons a.width3 span i { width: 354px; }
+
+
+
+
 #HomeButtons .appointment span { text-align: left; overflow: visible; }
 #HomeButtons .appointment span i { text-transform: none; font-style: normal; overflow: hidden; }
 #HomeButtons .appointment span label { float: right; line-height: normal; font-size: 11px; height: 24px; position: relative; margin-top: -14px; padding: 0; }

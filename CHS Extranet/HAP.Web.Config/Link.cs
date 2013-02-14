@@ -19,6 +19,8 @@ namespace HAP.Web.Configuration
             Target = node.Attributes["target"].Value;
             Icon = node.Attributes["icon"].Value;
             Type = node.Attributes["type"] != null ? node.Attributes["type"].Value : "";
+            Width = node.Attributes["width"].Value;
+            Height = node.Attributes["height"].Value;
         }
 
         public string Name { get; set; }
@@ -28,5 +30,7 @@ namespace HAP.Web.Configuration
         public string Icon { get; set; }
         public string Target { get; set; }
         public string Type { get; set; }
+        public string Width { get; set; }
+        public string Height { get; set; }
     }
 }

@@ -297,7 +297,7 @@ namespace HAP.Web.API
 
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/UpdateLink", BodyStyle = WebMessageBodyStyle.Wrapped)]
         [OperationContract]
-        public int UpdateLink(string group, string origname, string name, string desc, string icon, string url, string target, string showto)
+        public int UpdateLink(string group, string origname, string name, string desc, string icon, string url, string target, string showto, string width, string height)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
             Link l = Config.Homepage.Groups[group].Single(a => a.Name == origname);
@@ -307,16 +307,18 @@ namespace HAP.Web.API
             l.Target = target;
             l.Icon = icon;
             l.Name = name;
+            l.Width = width;
+            l.Height = height;
             Config.Homepage.Groups[group].UpdateLink(origname, l);
             return 0;
         }
 
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/AddLink", BodyStyle = WebMessageBodyStyle.Wrapped)]
         [OperationContract]
-        public int AddLink(string group, string name, string desc, string icon, string url, string target, string showto)
+        public int AddLink(string group, string name, string desc, string icon, string url, string target, string showto, string width, string height)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
-            Config.Homepage.Groups[group].Add(name, showto, desc, url, icon, target);
+            Config.Homepage.Groups[group].Add(name, showto, desc, url, icon, target, width, height);
             return 0;
         }
 

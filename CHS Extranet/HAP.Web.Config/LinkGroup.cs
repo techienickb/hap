@@ -47,7 +47,7 @@ namespace HAP.Web.Configuration
                 return Links.ToArray();
             }
         }
-        public void Add(string Name, string ShowTo, string Description, string Url, string Icon, string Target)
+        public void Add(string Name, string ShowTo, string Description, string Url, string Icon, string Target, string width, string height)
         {
             XmlElement e = doc.CreateElement("Link");
             e.SetAttribute("name", Name);
@@ -56,10 +56,12 @@ namespace HAP.Web.Configuration
             e.SetAttribute("url", Url);
             e.SetAttribute("icon", Icon);
             e.SetAttribute("target", Target);
+            e.SetAttribute("width", width);
+            e.SetAttribute("height", height);
             doc.SelectSingleNode("/hapConfig/Homepage/Links/Group[@name='" + this.Name + "']").AppendChild(e);
             base.Add(new Link(e));
         }
-        public void Add(string Name, string ShowTo, string Description, string Url, string Icon, string Target, string Type)
+        public void Add(string Name, string ShowTo, string Description, string Url, string Icon, string Target, string width, string height, string Type)
         {
             XmlElement e = doc.CreateElement("Link");
             e.SetAttribute("name", Name);
@@ -69,6 +71,8 @@ namespace HAP.Web.Configuration
             e.SetAttribute("icon", Icon);
             e.SetAttribute("target", Target);
             e.SetAttribute("type", Type);
+            e.SetAttribute("width", width);
+            e.SetAttribute("height", height);
             doc.SelectSingleNode("/hapConfig/Homepage/Links/Group[@name='" + this.Name + "']").AppendChild(e);
             base.Add(new Link(e));
         }
