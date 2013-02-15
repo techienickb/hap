@@ -19,7 +19,7 @@
             </div>
             <div id="HomeButtonsHeader">
                 <asp:Repeater ID="homepageheaders" runat="server">
-                    <ItemTemplate><h1 id="header-<%#Eval("Name").ToString().Replace(" ", "").Replace("'", "").Replace("+", "").Replace(".", "").Replace(",", "").Replace("&", "").Replace("/", "").Replace("\\", "") %>"><a href="#<%#Eval("Name").ToString().Remove(1).ToLower() %><%#Eval("Name").ToString().Replace(" ", "").Replace("'", "").Replace("+", "").Replace(".", "").Replace(",", "").Replace("&", "").Replace("/", "").Replace("\\", "").Remove(0, 1) %>" title="Show the <%#Eval("Name") %> Tab"><%#Eval("Name") %></a></h1></ItemTemplate>
+                    <ItemTemplate><h1 id="header-<%#Eval("Name").ToString().Replace(" ", "").Replace("'", "").Replace("+", "").Replace(".", "").Replace(",", "").Replace("&", "").Replace("/", "").Replace("\\", "") %>"><a href="#-<%#Eval("Name").ToString().Remove(1).ToLower() %><%#Eval("Name").ToString().Replace(" ", "").Replace("'", "").Replace("+", "").Replace(".", "").Replace(",", "").Replace("&", "").Replace("/", "").Replace("\\", "").Remove(0, 1) %>" title="Show the <%#Eval("Name") %> Tab"><%#Eval("Name") %></a></h1></ItemTemplate>
                 </asp:Repeater>
             </div>
             <div id="HomeButtonsContainer">
@@ -107,7 +107,7 @@
                 });
                 $(window).hashchange(function () {
                     if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) {
-                        var e = window.location.href.split('#')[1].substr(0, 1).toUpperCase() + window.location.href.split('#')[1].substr(1);
+                        var e = window.location.href.split('#')[1].substr((window.location.href.split('#')[1].substr(0, 1) == '-' ? 1 : 0), 1).toUpperCase() + window.location.href.split('#')[1].substr((window.location.href.split('#')[1].substr(0, 1) == '-' ? 2 : 1));
                         if ($("#" + e)[0]) {
                             scrollpos = $("#panel-" + e).index();
                             $("#HomeButtonsOutter").animate({ scrollLeft: (scrollpos * ($("#HomeButtonsOutter").width() - 20) + (scrollpos * 20)) });

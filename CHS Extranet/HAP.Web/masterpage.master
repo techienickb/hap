@@ -41,7 +41,7 @@
                             <%if (new HAP.AD.User().isKerberos()) { %>
                             <a href="#" onclick="hap.help.Load('impmsg'); return false;"><hap:LocalResource runat="server" StringPath="autologon" /></a>
                             <%} %>
-                            <a href="<%:ResolveClientUrl("~/")%>#me"><hap:LocalResource runat="server" StringPath="editprofile" /></a>
+                            <a href="<%:ResolveClientUrl("~/")%>#-me"><hap:LocalResource runat="server" StringPath="editprofile" /></a>
                             <asp:LoginStatus runat="server" />
                         </div>
                     </LoggedInTemplate>
