@@ -203,6 +203,14 @@ namespace HAP.AD
             return true;
         }
 
+        public bool isKerberos()
+        {
+            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Web.Configuration.AuthMode.Forms)
+                try { TokenGenerator.ConvertToPlain(HttpContext.Current.Request.Cookies["token"].Value); }
+                catch { return true; }
+            return false;
+        }
+
         public bool Impersonate()
         {
             if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Web.Configuration.AuthMode.Forms)

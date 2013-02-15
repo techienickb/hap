@@ -26,6 +26,7 @@ namespace HAP.Web.LiveTiles
  
             ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
             service.Url = new Uri("https://" + HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange + "/ews/exchange.asmx");
+            HAP.AD.User u = ((HAP.AD.User)Membership.GetUser());
             if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Configuration.AuthMode.Forms)
             {
                 HttpCookie token = HttpContext.Current.Request.Cookies["token"];
@@ -34,7 +35,6 @@ namespace HAP.Web.LiveTiles
             }
             else
             {
-                HAP.AD.User u = ((HAP.AD.User)Membership.GetUser());
                 if (String.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser))
                 {
                     u.ImpersonateContained();
@@ -52,12 +52,8 @@ namespace HAP.Web.LiveTiles
             SearchFilter sf = new SearchFilter.SearchFilterCollection(LogicalOperator.And, new SearchFilter.IsEqualTo(EmailMessageSchema.IsRead, false));
             ItemView view = new ItemView(10);
             FindItemsResults<Item> findResults = service.FindItems(WellKnownFolderName.Inbox, sf, view);
-            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Configuration.AuthMode.Windows
-                && String.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser))
-            {
-                HAP.AD.User u = ((HAP.AD.User)Membership.GetUser());
+            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Configuration.AuthMode.Windows)
                 u.EndContainedImpersonate();
-            }
             return findResults.TotalCount;
         }
 
@@ -72,6 +68,7 @@ namespace HAP.Web.LiveTiles
 
             ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
             service.Url = new Uri("https://" + HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange + "/ews/exchange.asmx");
+            HAP.AD.User u = ((HAP.AD.User)Membership.GetUser());
             if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Configuration.AuthMode.Forms)
             {
                 HttpCookie token = HttpContext.Current.Request.Cookies["token"];
@@ -80,7 +77,6 @@ namespace HAP.Web.LiveTiles
             }
             else
             {
-                HAP.AD.User u = ((HAP.AD.User)Membership.GetUser());
                 if (String.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser))
                 {
                     u.ImpersonateContained();
@@ -96,12 +92,7 @@ namespace HAP.Web.LiveTiles
             List<string> s = new List<string>();
             foreach (Appointment a in service.FindAppointments(WellKnownFolderName.Calendar, new CalendarView(DateTime.Now, DateTime.Now.AddDays(1))))
                 s.Add(a.Subject + "<br />" + (a.Start.Date > DateTime.Now.Date ? "Tomorrow: " : "") + a.Start.ToShortTimeString() + " - " + a.End.ToShortTimeString());
-            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Configuration.AuthMode.Windows
-                && String.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser))
-            {
-                HAP.AD.User u = ((HAP.AD.User)Membership.GetUser());
-                u.EndContainedImpersonate();
-            }
+            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Configuration.AuthMode.Windows) u.EndContainedImpersonate();
             return s.ToArray();
         }
 
