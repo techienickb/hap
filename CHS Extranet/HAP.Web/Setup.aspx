@@ -234,7 +234,7 @@
                             </div>
                             <div>
                                 <asp:Label runat="server" Text="Impersonation Password: " AssociatedControlID="impassword" />
-                                <asp:TextBox runat="server" ID="impassword" Text="" onkeypress="checksmtp();" onchange="checksmtp();" />
+                                <asp:TextBox runat="server" ID="impassword" TextMode="Password" Text="" onkeypress="checksmtp();" onchange="checksmtp();" />
                             </div>
                         </div>
                         <div id="group-homepage">
