@@ -60,5 +60,5 @@ namespace HAP.Web.Configuration
         }
     }
 
-    public enum ResourceType { Room, Laptops, Equipment, Other }
+    public enum ResourceType { Room, Laptops, Equipment, Loan, Other }
 }

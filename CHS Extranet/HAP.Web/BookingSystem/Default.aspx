@@ -89,6 +89,11 @@
             <span id="bfesroom_span" style="display: none;"><label for="bfesroom">Room Required In: </label><select id="bfesroom"></select></span>
             <span id="bferoomerror" style="display: none;">*</span>
 		</div>
+		<div id="bfLoan" class="bfType">
+			<span id="bfloroom_span"><label for="bfloroom">Room to be used In: </label><input type="text" id="bfloroom" style="width: 60px" /></span>
+            <span id="bflosroom_span" style="display: none;"><label for="bflosroom">Room Required In: </label><select id="bflosroom"></select></span>
+            <span id="bfloroomerror" style="display: none;">*</span>
+		</div>
         <div id="bfmultilesson">
             <label for="bfmultiroom">Length: </label><select id="bfmultiroom"></select>
         </div>
@@ -157,17 +162,18 @@
 				    if (this.ReadOnly) h += "false";
 					else if (this.Data[x].Name == "FREE") h += "doBooking('" +  this.Name + "', '" + this.Data[x].Lesson + "');";
 					else {
-						if (this.Data[x].Static && $.inArray(this.Name, user.isAdminOf) != -1) h += "doBooking('" + this.Name + "', '" + this.Data[x].Lesson + "');";
-						else if (this.Data[x].Static == false && (this.Data[x].Username.toLowerCase() == user.username.toLowerCase() || $.inArray(this.Name, user.isAdminOf) != -1)) h += "doRemove('" + this.Name + "', '" + this.Data[x].Lesson + "', '" + this.Data[x].Name + "');";
+						if (this.Data[x].Static && $.inArray(this.Name, user.isAdminOf) != -1 && this.Type != "Loan") h += "doBooking('" + this.Name + "', '" + this.Data[x].Lesson + "');";
+						else if (this.Data[x].Static == false && this.Type != "Loan" && (this.Data[x].Username.toLowerCase() == user.username.toLowerCase() || $.inArray(this.Name, user.isAdminOf) != -1)) h += "doRemove('" + this.Name + "', '" + this.Data[x].Lesson + "', '" + this.Data[x].Name + "');";
+						else if (this.Data[x].Static == false && this.Type == "Loan" && (this.Data[x].Username.toLowerCase() == user.username.toLowerCase() || $.inArray(this.Name, user.isAdminOf) != -1)) h += "doReturn('" + this.Name + "', '" + this.Data[x].Lesson + "', '" + this.Data[x].Name + "');";
 						else h += "false;";
 					}
-					h += '" href="#' + this.Name + '-' + this.Data[x].Lesson.toLowerCase().replace(/ /g, "") + '" class="' + (this.Data[x].Static ? 'static ' : '') + ($.inArray(this.Name, user.isAdminOf) == -1 ? '' : 'admin') + ((this.Data[x].Username.toLowerCase() == user.username.toLowerCase() && $.inArray(this.Name, user.isAdminOf) == -1) ? ' bookie' : '') + ((this.Data[x].Name == "FREE" && !this.ReadOnly) ? ' free' : ' booked') + '">';
-					h += (this.Data[x].Static ? '<span class="state static" title="Timetabled Lesson"><i></i><span>Override</span></span>' : (this.Data[x].Name == "FREE" ? '<span class="state book" title="Book"><i></i><span>Book</span></span>' : '<span class="state remove" title="Remove"><i></i><span>Remove</span></span>'));
+					h += '" href="#' + this.Name + '-' + this.Data[x].Lesson.toLowerCase().replace(/ /g, "") + '" class="' + (this.Data[x].Static ? 'static ' : '') + (this.Type == "Loan" ? 'loan ' : '') + ($.inArray(this.Name, user.isAdminOf) == -1 ? '' : 'admin') + ((this.Data[x].Username.toLowerCase() == user.username.toLowerCase() && $.inArray(this.Name, user.isAdminOf) == -1) ? ' bookie' : '') + ((this.Data[x].Name == "FREE" && !this.ReadOnly) ? ' free' : ' booked') + '">';
+					h += (this.Data[x].Static ? '<span class="state static" title="Timetabled Lesson"><i></i><span>Override</span></span>' : (this.Data[x].Name == "FREE" ? '<span class="state book" title="Book"><i></i><span>Book</span></span>' : (this.Type == "Loan" ? '<span class="state Return" title="Return"><i></i><span>Return</span></span>' : '<span class="state remove" title="Remove"><i></i><span>Remove</span></span>')));
 					h += this.Data[x].Name + '<span>' + this.Data[x].DisplayName;
 					if (this.Data[x].Name == "FREE" || this.Data[x].Name == "UNAVAILABLE" || this.Data[x].Name == "CHARGING") { }
 					else {
 						if (this.Type == "Laptops") h += ' in ' + this.Data[x].LTRoom + ' [' + this.Data[x].LTCount + '|' + (this.Data[x].LTHeadPhones ? 'HP' : 'N-HP') + ']';
-						else if (this.Type == "Equipment") h += ' in ' + this.Data[x].EquipRoom;
+						else if (this.Type == "Equipment" || this.Type == "Loan") h += ' in ' + this.Data[x].EquipRoom;
 					}
 					h += '</span></a>';
 				}
@@ -279,24 +285,23 @@
 				$("#bfres").html("with " + curres.Name);
 				if ($("#bf" + curres.Type) != null) $("#bf" + curres.Type).css("display", "block");
 			}
-			$("#bflroomerror").css("display", "none");
-			$("#bferoomerror").css("display", "none");
+			$("#bflroomerror, #bferoomerror, #bfloroomerror").css("display", "none");
 			$("#bfsubject").val("");
 			$("#bfsubjects option:selected").removeAttr("selected");
 			$("#bfsubjects option:first").attr("selected", "selected");
 			$("#bflheadphones").removeAttr("checked");
-			$("#bflroom, #bferoom").val("");
-			$("#bflsroom option, #bfesroom option").remove();
+			$("#bflroom, #bferoom, #bfloroom").val("");
+			$("#bflsroom option, #bfesroom option, #bflosroom option").remove();
 			if (curres.Rooms.length > 0) {
-			    $("#bflroom_span, #bferoom_span").css("display", "none");
-			    $("#bflsroom_span, #bfesroom_span").removeAttr("style");
-			    $("#bflsroom, #bfesroom").append('<option value="">---</option>');
+			    $("#bflroom_span, #bferoom_span, #bfloroom_span").css("display", "none");
+			    $("#bflsroom_span, #bfesroom_span, #bflosroom_span").removeAttr("style");
+			    $("#bflsroom, #bfesroom, #bflosroom").append('<option value="">---</option>');
 			    for (var i = 0; i < curres.Rooms.length; i++)
-			        $("#bflsroom, #bfesroom").append('<option value="' + curres.Rooms[i] + '">' + curres.Rooms[i] + '</option>');
+			        $("#bflsroom, #bfesroom, #bflosroom").append('<option value="' + curres.Rooms[i] + '">' + curres.Rooms[i] + '</option>');
 			}
 			else {
-			    $("#bflroom_span, #bferoom_span").removeAttr("style");
-			    $("#bflsroom_span, #bfesroom_span").css("display", "none");
+			    $("#bflroom_span, #bferoom_span, #bfloroom_span").removeAttr("style");
+			    $("#bflsroom_span, #bfesroom_span, #bflosroom_span").css("display", "none");
 			}
 		    try {
 		        $("#bfyear option").remove();
@@ -314,7 +319,7 @@
 		            $("#bflquant").append('<input type="radio" name="bflquant" id="bflquant-' + curres.Quantities[i] + '" value="' + curres.Quantities[i] + '"' + checked + ' /><label for="bflquant-' + curres.Quantities[i] + '">' + curres.Quantities[i] + '</label>');
 		    } catch (e) { }
 		    try {
-		        if (curres.MultiRoom) {
+		        if (curres.MultiRoom && curres.Type != "Loan") {
 		            $("#bfmultilesson").show();
 		            $("#bfmultiroom option").remove();
 		            var l1 = false;
@@ -335,6 +340,27 @@
 		            }
 		            if (l2 == "") { canmulti = false; $("#bfmultilesson").hide(); }
 		            canmulti = true;
+		        }
+		        else if (curres.Type == "Loan") {
+		            canmulti = true;
+		            $("#bfmultiroom option").remove();
+		            var l1 = false;
+		            var l2 = "";
+		            var l3 = 0;
+		            for (var i = 0; i < curres.Data.length; i++)
+		            {
+		                if (!l1) l1 = (curres.Data[i].Lesson == lesson);
+		                if (l1) {
+		                    l3++;
+		                    if ( (curres.MaxLessons > 0 && l3 > curres.MaxLessons) || 
+                                 (l3 > availbookings[0] && availbookings[0] > 0 ) || curres.Data[i].Name != "FREE") {
+		                        break;
+		                    }
+		                    $("#bfmultiroom").append('<option value="' + l2 + curres.Data[i].Lesson + '">' + l3 + ' Lesson' + (l3 == 1 ? '' : 's') + '</option>');
+		                    l2 += curres.Data[i].Lesson + ',';
+		                }
+		            }
+		            $("#bfmultiroom").val($("#bfmultiroom option").last().val());
 		        }
 		        else {
 		            $("#bfmultilesson").hide();
@@ -369,6 +395,12 @@
 								abort = true;
 							} else $("#bferoomerror").css("display", "none");
 							
+							if (curres.Type == "Loan" && $("#bfloroom").val().length == 0) { 
+							    $("#bfloroomerror").removeAttr("style").css("color", "red");
+							    abort = true;
+							} else $("#bfloroomerror").css("display", "none");
+							
+
 							var n1 = "";
 							if ($("#bfyear option:selected").val() != null || $("#bfyear option:selected").val() != "") n1 = $("#bfyear option:selected").val();
 							if (n1 != "") n1 += " ";
@@ -380,6 +412,9 @@
 							}
 							else if (curres.Type == "Equipment") {
 								d += ', "EquipRoom": "' + $("#bferoom").val() + '"';
+							}
+							else if (curres.Type == "Loan") {
+							    d += ', "EquipRoom": "' + $("#bfloroom").val()  + '"';
 							}
 							d += " } }";
 							$.ajax({
@@ -421,6 +456,50 @@
 				});
 			return false;
 		}
+	    function doReturn(res, lesson, name) {
+	        $("#questionbox span").html("Are you sure you want to return<br/>" + res + " during " + lesson);
+	        $("#questionbox").dialog({ autoOpen: true, 
+	            buttons: { "Yes": function() {
+	                curles = lesson;
+	                $("#bfdate").html($.datepicker.formatDate('d MM yy', curdate));
+	                for (var i = 0; i < resources.length; i++)
+	                    if (resources[i].Name == res) curres = resources[i];
+	                $.ajax({
+	                    type: 'POST',
+	                    url: hap.common.formatJSONUrl("~/api/BookingSystem/Return/" + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear()),
+	                    dataType: 'json',
+	                    contentType: 'application/json',
+	                    data: '{ "Resource": "' + curres.Name + '", "lesson": "' + curles + '" }',
+	                    success: function (data) {
+	                        curres.Data = data;
+	                        curres.Render();
+	                        $.ajax({
+	                            type: 'GET',
+	                            url: hap.common.formatJSONUrl("~/api/BookingSystem/Initial/" + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username),
+	                            dataType: 'json',
+	                            success: function (data) {
+	                                if (user.isBSAdmin) $("#val").html("This Week is a Week " + data[1]);
+	                                else {
+	                                    if (data[0] >= 0 ) {
+	                                        $("#val").html("You have " + data[0] + " bookings available to use this week. This Week is a Week " + data[1]);
+	                                    } else {
+	                                        $("#val").html("This Week is a Week " + data[1]);
+	                                    }
+	                                    availbookings = data;
+	                                }
+	                            },
+	                            error: hap.common.jsonError
+	                        });
+	                    },
+	                    error: hap.common.jsonError
+	                });
+	                $(this).dialog("close");
+	            }, "No": function() {
+	                $(this).dialog("close");
+	            } } 
+	        });
+	        return false;
+	    }
 		function doRemove(res, lesson, name) {
 			$("#questionbox span").html("Are you sure you want to remove<br/>" + name + " in/with " + res + " during " + lesson);
 			$("#questionbox").dialog({ autoOpen: true, 
