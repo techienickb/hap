@@ -27,7 +27,7 @@ namespace HAP.Web.LiveTiles
             ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
             service.Url = new Uri("https://" + HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange + "/ews/exchange.asmx");
             HAP.AD.User u = ((HAP.AD.User)Membership.GetUser());
-            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Configuration.AuthMode.Forms)
+            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Configuration.AuthMode.Forms && string.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser))
             {
                 HttpCookie token = HttpContext.Current.Request.Cookies["token"];
                 if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
@@ -35,7 +35,7 @@ namespace HAP.Web.LiveTiles
             }
             else
             {
-                if (String.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser))
+                if (string.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser))
                 {
                     u.ImpersonateContained();
                     service.UseDefaultCredentials = true;
@@ -52,7 +52,7 @@ namespace HAP.Web.LiveTiles
             SearchFilter sf = new SearchFilter.SearchFilterCollection(LogicalOperator.And, new SearchFilter.IsEqualTo(EmailMessageSchema.IsRead, false));
             ItemView view = new ItemView(10);
             FindItemsResults<Item> findResults = service.FindItems(WellKnownFolderName.Inbox, sf, view);
-            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Configuration.AuthMode.Windows)
+            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Configuration.AuthMode.Windows || !string.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser))
                 u.EndContainedImpersonate();
             return findResults.TotalCount;
         }
@@ -69,7 +69,7 @@ namespace HAP.Web.LiveTiles
             ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
             service.Url = new Uri("https://" + HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange + "/ews/exchange.asmx");
             HAP.AD.User u = ((HAP.AD.User)Membership.GetUser());
-            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Configuration.AuthMode.Forms)
+            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Configuration.AuthMode.Forms &&  string.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser))
             {
                 HttpCookie token = HttpContext.Current.Request.Cookies["token"];
                 if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
@@ -77,7 +77,7 @@ namespace HAP.Web.LiveTiles
             }
             else
             {
-                if (String.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser))
+                if (string.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser))
                 {
                     u.ImpersonateContained();
                     service.UseDefaultCredentials = true;
@@ -92,7 +92,8 @@ namespace HAP.Web.LiveTiles
             List<string> s = new List<string>();
             foreach (Appointment a in service.FindAppointments(WellKnownFolderName.Calendar, new CalendarView(DateTime.Now, DateTime.Now.AddDays(1))))
                 s.Add(a.Subject + "<br />" + (a.Start.Date > DateTime.Now.Date ? "Tomorrow: " : "") + a.Start.ToShortTimeString() + " - " + a.End.ToShortTimeString());
-            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Configuration.AuthMode.Windows) u.EndContainedImpersonate();
+            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Configuration.AuthMode.Windows || !string.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser)) 
+                u.EndContainedImpersonate();
             return s.ToArray();
         }
 
