@@ -97,7 +97,7 @@ if (hap == null) {
                 $("#helpbox").dialog({ autoOpen: false });
             },
             Load: function (path) {
-                $("#helpbox").dialog({ autoOpen: true, modal: true, height: 600, width: 990, buttons: { "Close": function () { $(this).dialog("close"); } } });
+                $("#helpbox").dialog({ autoOpen: true, modal: false, height: 600, width: 990, buttons: { "Close": function () { $(this).dialog("close"); } } });
                 $("#helpbox .content").html("Loading...");
                 $.ajax({
                     type: 'GET',

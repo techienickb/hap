@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
+using System.Threading;
 using System.Web;
 using System.Web.Security;
 using System.Web.UI;
@@ -14,13 +15,17 @@ namespace HAP.Web
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            HAP.Web.Logging.EventViewer.Log("HAP+ Logon", "Home Access Plus+ Kerberos Logon\n\nUsername: " + Request.ServerVariables["AUTH_USER"], System.Diagnostics.EventLogEntryType.Information, true);
-            HAP.Data.SQL.WebEvents.Log(DateTime.Now, "Kerberos Logon", Request.ServerVariables["AUTH_USER"], Request.UserHostAddress, Request.Browser.Platform, Request.Browser.Browser + " " + Request.Browser.Version, Request.UserHostName, Request.UserAgent);
-            FormsAuthentication.SetAuthCookie(Request.ServerVariables["AUTH_USER"], false);
-            HttpCookie tokenCookie = new HttpCookie("token", Request.ServerVariables["AUTH_TYPE"]);
+            HttpWorkerRequest workerRequest = (HttpWorkerRequest)((IServiceProvider)HttpContext.Current).GetService(typeof(HttpWorkerRequest));
+            string str2 = workerRequest.GetServerVariable("AUTH_TYPE");
+            WindowsIdentity wi = new WindowsIdentity(workerRequest.GetUserToken());
+            string username = wi.Name.Contains('\\') ? wi.Name.Substring(wi.Name.IndexOf('\\') + 1) : wi.Name;
+            HAP.Web.Logging.EventViewer.Log("HAP+ Logon", "HAP+ " + str2 + " Logon\n\nUsername: " + username, System.Diagnostics.EventLogEntryType.Information, true);
+            HAP.Data.SQL.WebEvents.Log(DateTime.Now, str2 + " Logon", username, Request.UserHostAddress, Request.Browser.Platform, Request.Browser.Browser + " " + Request.Browser.Version, Request.UserHostName, Request.UserAgent);
+            FormsAuthentication.SetAuthCookie(username, false);
+            HttpCookie tokenCookie = new HttpCookie("token", str2);
             if (Request.Cookies["token"] == null) Response.AppendCookie(tokenCookie);
             else Response.SetCookie(tokenCookie);
-            FormsAuthentication.RedirectFromLoginPage(Request.ServerVariables["AUTH_USER"], false);
+            FormsAuthentication.RedirectFromLoginPage(username, false);
         }
     }
 }

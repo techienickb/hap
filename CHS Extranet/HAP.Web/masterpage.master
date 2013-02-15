@@ -38,6 +38,9 @@
                         <a href="#" id="hapUserTitle"><%=((HAP.AD.User)Membership.GetUser()).DisplayName %> (<%=((HAP.AD.User)Membership.GetUser()).UserName %>)</a>
                         <div id="hapUserMenu" class="hapmenu tile-border-color">
                             <div class="mypic" style="background-image: url(<%:ResolveClientUrl("~/api/mypic") %>?<%:DateTime.Now.Ticks.ToString() %>)"></div>
+                            <%if (new HAP.AD.User().isKerberos()) { %>
+                            <a href="#" onclick="hap.help.Load('impmsg'); return false;"><hap:LocalResource runat="server" StringPath="autologon" /></a>
+                            <%} %>
                             <a href="<%:ResolveClientUrl("~/")%>#me"><hap:LocalResource runat="server" StringPath="editprofile" /></a>
                             <asp:LoginStatus runat="server" />
                         </div>
