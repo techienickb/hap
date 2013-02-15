@@ -162,6 +162,50 @@ namespace HAP.Web.API
         }
 
         [OperationContract]
+        [WebInvoke(Method = "POST", UriTemplate = "/Return/{Date}", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        public JSONBooking[] Return(string Date, string Resource, string lesson)
+        {
+            hapConfig config = hapConfig.Current;
+            Booking b = new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date)).getBooking(Resource, lesson);
+            XmlDocument doc = HAP.BookingSystem.BookingSystem.BookingsDoc;
+            List<string> newlesson = new List<string>(); bool go = false;
+            foreach (Lesson l in config.BookingSystem.Lessons) {
+                if (b.Lesson.StartsWith(l.Name)) go = true;
+                if (go) newlesson.Add(l.Name);
+                if (l.Name == lesson) go = false;
+            }
+            doc.SelectSingleNode("/Bookings/Booking[@date='" + DateTime.Parse(Date).ToShortDateString() + "' and @lesson[contains(., '" + lesson + "')] and @room='" + Resource + "']").Attributes["lesson"].Value = string.Join(", ", newlesson.ToArray());
+            HAP.BookingSystem.BookingSystem.BookingsDoc = doc;
+            #region Charging
+            if (config.BookingSystem.Resources[Resource].EnableCharging)
+            {
+                HAP.BookingSystem.BookingSystem bs = new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date));
+                int index = config.BookingSystem.Lessons.FindIndex(l => l.Name == lesson);
+                if (index < config.BookingSystem.Lessons.Count - 1)
+                {
+                    if (bs.islessonFree(Resource, config.BookingSystem.Lessons[index + 1].Name))
+                    {
+                        XmlElement node = doc.CreateElement("Booking");
+                        node.SetAttribute("date", DateTime.Parse(Date).ToShortDateString());
+                        node.SetAttribute("lesson", config.BookingSystem.Lessons[index + 1].Name);
+                        node.SetAttribute("room", Resource);
+                        node.SetAttribute("username", "systemadmin");
+                        node.SetAttribute("name", "CHARGING");
+                        doc.SelectSingleNode("/Bookings").AppendChild(node);
+                    }
+                }
+                HAP.BookingSystem.BookingSystem.BookingsDoc = doc;
+            }
+            #endregion
+            if (config.SMTP.Enabled)
+            {
+                iCalGenerator.Generate(b, DateTime.Parse(Date));
+                if (config.BookingSystem.Resources[b.Room].EmailAdmins) iCalGenerator.Generate(b, DateTime.Parse(Date), true);
+            }
+            return LoadRoom(Date, Resource);
+        }
+
+        [OperationContract]
         [WebGet(ResponseFormat=WebMessageFormat.Json, UriTemplate="/LoadRoom/{Date}/{Resource}")]
         public JSONBooking[] LoadRoom(string Date, string Resource)
         {

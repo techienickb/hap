@@ -551,7 +551,7 @@
                             <label for="resName">Name: </label><input type="text" id="resName" />
                         </div>
                         <div>
-                            <label for="resType">Type: </label><select id="resType"><option>Room</option><option>Laptops</option><option>Equipment</option><option>Other</option></select>
+                            <label for="resType">Type: </label><select id="resType"><option>Room</option><option>Laptops</option><option>Equipment</option><option>Loan</option><option>Other</option></select>
                         </div>
                         <div>
                             <label for="resEnabled">Enabled: </label><input type="checkbox" id="resEnabled" />
