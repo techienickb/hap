@@ -521,10 +521,10 @@
                             <label for="linkShowTo" style="width: 100px;">Show To: </label><input type="text" id="linkShowTo" onclick="showadbuilder(this, true);" />
                         </div>
                         <div>
-                            <label for="linkWidth">Width: </label><select id="linkWidth"><option>1</option><option>2</option><option>3</option></select>
+                            <label for="linkWidth" style="width: 100px;">Width: </label><select id="linkWidth"><option>1</option><option>2</option><option>3</option></select>
                         </div>
                         <div>
-                            <label for="linkHeight">Height: </label><select id="linkHeight"><option>1</option><option>2</option><option>3</option></select>
+                            <label for="linkHeight" style="width: 100px;">Height: </label><select id="linkHeight"><option>1</option><option>2</option><option>3</option></select>
                         </div>
                     </div>
                     <div id="addsub" title="Add/Edit Subject">

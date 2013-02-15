@@ -232,18 +232,23 @@ namespace HAP.Web.Configuration
             {
                 foreach (XmlNode n in doc.SelectNodes("/hapConfig/myfiles/quotaservers")) ((XmlElement)n).SetAttribute("dfstarget", "");
             }
-            if (version.CompareTo(Version.Parse("9.0.0214.1930")) < 0) //Perform v9 upgrade
+            if (version.CompareTo(Version.Parse("9.0.0215.1930")) < 0) //Perform v9 upgrade
             {
                 XmlElement el = doc.SelectSingleNode("/hapConfig/SMTP") as XmlElement;
-                el.SetAttribute("impersonationuser", "");
-                el.SetAttribute("impersonationpassword", "");
-                el.SetAttribute("impersonationdomain", "");
+                if (el.Attributes["impersonationuser"] == null)
+                {
+                    el.SetAttribute("impersonationuser", "");
+                    el.SetAttribute("impersonationpassword", "");
+                    el.SetAttribute("impersonationdomain", "");
+                }
 
                 foreach (XmlNode n in doc.SelectNodes("/hapConfig/Homepage/Links/Group/Link"))
                 {
                     XmlElement en = n as XmlElement;
                     en.SetAttribute("width", "1");
                     en.SetAttribute("height", "1");
+                    if (en.Attributes["type"] != null && (en.GetAttribute("type") == "exchange.appointments" || en.GetAttribute("type").StartsWith("exchange.calendar") || en.GetAttribute("type") == "helpdesk" || en.GetAttribute("type") == "bookings"))
+                        en.SetAttribute("width", "2");
                 }
             }
             doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();
