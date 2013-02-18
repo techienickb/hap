@@ -22,8 +22,8 @@ namespace HAP.Web
             {
                 if (!string.IsNullOrEmpty(hapConfig.Current.AD.InternalIP))
                 {
-                    if (new IPSubnet(hapConfig.Current.AD.InternalIP).Contains(Request.UserHostAddress) && Request.QueryString.Count < 2) Response.Redirect("~/kerberos.aspx?ReturnUrl=" + Request.QueryString[0]);
-                    else if (new IPSubnet(hapConfig.Current.AD.InternalIP).Contains(Request.UserHostAddress) && Request.QueryString.Count == 2) username.Text = User.Identity.Name.Contains('\\') ? User.Identity.Name.Substring(User.Identity.Name.IndexOf('\\') + 1) : User.Identity.Name;
+                    if (new IPSubnet(hapConfig.Current.AD.InternalIP).Contains(Request.UserHostAddress) && Dns.GetHostEntry(Request.UserHostAddress).HostName.ToLower().EndsWith(hapConfig.Current.AD.UPN.ToLower()) && Request.QueryString.Count < 2) Response.Redirect("~/kerberos.aspx?ReturnUrl=" + Request.QueryString[0]);
+                    else if (new IPSubnet(hapConfig.Current.AD.InternalIP).Contains(Request.UserHostAddress) && Dns.GetHostEntry(Request.UserHostAddress).HostName.ToLower().EndsWith(hapConfig.Current.AD.UPN.ToLower()) && Request.QueryString.Count == 2) username.Text = User.Identity.Name.Contains('\\') ? User.Identity.Name.Substring(User.Identity.Name.IndexOf('\\') + 1) : User.Identity.Name;
                 }
                 if (Cache.Get("hapBannedIps") == null) HttpContext.Current.Cache.Insert("hapBannedIps", new List<Banned>());
                 List<Banned> bans = Cache.Get("hapBannedIps") as List<Banned>;
