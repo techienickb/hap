@@ -251,6 +251,10 @@ namespace HAP.Web.Configuration
                         en.SetAttribute("width", "2");
                 }
             }
+            if (version.CompareTo(Version.Parse("9.0.02222.1800")) < 0) //Perform v9 upgrade
+            {
+                ((XmlElement)doc.SelectSingleNode("/hapConfig/AD")).SetAttribute("usenestedlookups", "True");
+            }
             doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             doc.Save(ConfigPath);
         }

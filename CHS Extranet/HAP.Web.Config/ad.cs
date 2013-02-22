@@ -26,6 +26,7 @@ namespace HAP.Web.Configuration
             e.SetAttribute("password", "");
             e.SetAttribute("upn", "");
             e.SetAttribute("studentsgroup", "");
+            e.SetAttribute("usenestedlookups", "True");
             XmlElement ous = doc.CreateElement("OUs");
             e.AppendChild(ous);
             doc.SelectSingleNode("/hapConfig").AppendChild(e);
@@ -43,6 +44,12 @@ namespace HAP.Web.Configuration
         {
             get { return el.GetAttribute("upn"); }
             set { el.SetAttribute("upn", value); }
+        }
+
+        public bool UseNestedLookups
+        {
+            get { return bool.Parse(el.GetAttribute("usenestedlookups")); }
+            set { el.SetAttribute("usenestedlookups", value.ToString()); }
         }
 
 
