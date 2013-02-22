@@ -25,25 +25,24 @@ namespace HAP.AD
 
         public override bool IsUserInRole(string username, string roleName)
         {
-            bool core = wtrp.IsUserInRole(HAP.Web.Configuration.hapConfig.Current.AD.UPN.Remove(HAP.Web.Configuration.hapConfig.Current.AD.UPN.IndexOf('.')) + '\\' + username, roleName);
-            if (core) return true;
-            else
-                try
-                {
-                    PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
-                    GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, roleName);
-                    if (gp == null) return false;
+            if (HAP.Web.Configuration.hapConfig.Current.AD.UseNestedLookups) return wtrp.IsUserInRole(HAP.Web.Configuration.hapConfig.Current.AD.UPN.Remove(HAP.Web.Configuration.hapConfig.Current.AD.UPN.IndexOf('.')) + '\\' + username, roleName);
+            try
+            {
+                PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
+                GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, roleName);
+                if (gp == null) return false;
 
-                    foreach (Principal p in gp.GetMembers(true))
-                        if (p.Name.ToLower() == username.ToLower()) return true;
-                    return false;
-                }
-                catch { return false; }
+                foreach (Principal p in gp.GetMembers(true))
+                    if (p.Name.ToLower() == username.ToLower()) return true;
+            }
+            catch { }
+            return false;
         }
 
         public override string[] GetRolesForUser(string username)
         {
-            if (HttpContext.Current.Cache["userrolecache-" + username] == null)
+            if (HAP.Web.Configuration.hapConfig.Current.AD.UseNestedLookups) return wtrp.GetRolesForUser(username);
+            else if (HttpContext.Current.Cache["userrolecache-" + username] == null)
             {
                 List<string> roles = new List<string>();
                 try
@@ -101,9 +100,10 @@ namespace HAP.AD
 
         public override string[] GetUsersInRole(string roleName)
         {
+            if (HAP.Web.Configuration.hapConfig.Current.AD.UseNestedLookups) return wtrp.GetUsersInRole(roleName);
             PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
             GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, roleName);
-            if (gp == null) return new string[] {};
+            if (gp == null) return new string[] { };
             List<string> users = new List<string>();
             foreach (Principal p in gp.GetMembers(true))
                 users.Add(p.Name);
