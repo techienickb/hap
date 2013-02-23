@@ -8,6 +8,8 @@ using HAP.AD;
 using Microsoft.Win32;
 using System.Web;
 using HAP.Data.ComputerBrowser;
+using System.Security.AccessControl;
+using System.Security.Principal;
 
 namespace HAP.MyFiles
 {
@@ -24,12 +26,14 @@ namespace HAP.MyFiles
         public string Contents { get; set; }
         public string Icon { get; set; }
         public string Extension { get; set; }
+        public string Permissions { get; set; }
 
         public Properties() { }
         public Properties(FileInfo file, DriveMapping mapping, User user)
         {
             Actions = isWriteAuth(mapping) ? HAP.MyFiles.AccessControlActions.Change : HAP.MyFiles.AccessControlActions.View;
             Name = file.Name + (file.Name.Contains(file.Extension) ? "" : file.Extension);
+            Permissions = "";
             Extension = file.Extension;
             DateCreated = file.CreationTime.ToString();
             DateModified = file.LastWriteTime.ToString();
@@ -66,6 +70,7 @@ namespace HAP.MyFiles
         {
             DriveMapping m;
             Actions = isWriteAuth(mapping) ? HAP.MyFiles.AccessControlActions.Change : HAP.MyFiles.AccessControlActions.View;
+            Permissions = "";
             if (Actions == HAP.MyFiles.AccessControlActions.Change)
             {
                 try { System.IO.File.Create(System.IO.Path.Combine(dir.FullName, "temp.ini")).Close(); System.IO.File.Delete(System.IO.Path.Combine(dir.FullName, "temp.ini")); }
@@ -94,7 +99,12 @@ namespace HAP.MyFiles
             DateCreated = dir.CreationTime.ToString();
             DriveMapping m;
             Actions = isWriteAuth(mapping) ? HAP.MyFiles.AccessControlActions.Change : HAP.MyFiles.AccessControlActions.View;
-            if (Actions == HAP.MyFiles.AccessControlActions.Change)
+            try
+            {
+                Permissions = UserFileAccessRights.Get(dir.FullName).ToCollectionString();
+            }
+            catch { }
+            if (Actions == HAP.MyFiles.AccessControlActions.Change && hapConfig.Current.MyFiles.WriteChecks)
             {
                 try { System.IO.File.Create(System.IO.Path.Combine(dir.FullName, "temp.ini")).Close(); System.IO.File.Delete(System.IO.Path.Combine(dir.FullName, "temp.ini")); }
                 catch { Actions = HAP.MyFiles.AccessControlActions.View; }
