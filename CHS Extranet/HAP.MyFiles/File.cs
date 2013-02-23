@@ -25,6 +25,11 @@ namespace HAP.MyFiles
             Extension = file.Extension;
             Type = "Directory";
             Name = file.Name + (file.Name.Contains(file.Extension) ? "" : file.Extension);
+            try
+            {
+                Permissions = UserFileAccessRights.Get(file.FullName).ToCollectionString();
+            }
+            catch { Permissions = ""; }
             FileIcon fi;
             if (FileIcon.TryGet(Extension, out fi))
             {
@@ -50,6 +55,7 @@ namespace HAP.MyFiles
         public DateTime UnderlyingModified { get; set; }
         [IgnoreDataMember()]
         public DateTime UnderlyingCreation { get; set; }
+        public string Permissions { get; set; }
         public File(FileInfo file, DriveMapping mapping, User user)
         {
             Extension = file.Extension;
@@ -60,6 +66,7 @@ namespace HAP.MyFiles
             ModifiedTime = file.LastWriteTime.ToShortDateString() + " " + file.LastWriteTime.ToString("hh:mm");
             UnderlyingModified = file.LastWriteTime;
             Size = parseLength(file.Length);
+            Permissions = "";
             UnderlyingSize = file.Length;
             FileIcon fi;
             if (FileIcon.TryGet(Extension, out fi))
