@@ -75,6 +75,7 @@
     <Compile Include="Homework\Homeworks.cs" />
     <Compile Include="Homework\UserNode.cs" />
     <Compile Include="API.cs" />
+    <Compile Include="NTFSPerms.cs" />
     <Compile Include="NTFSUtils.cs" />
     <Compile Include="Properties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

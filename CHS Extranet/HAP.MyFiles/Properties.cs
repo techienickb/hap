@@ -26,14 +26,13 @@ namespace HAP.MyFiles
         public string Contents { get; set; }
         public string Icon { get; set; }
         public string Extension { get; set; }
-        public string Permissions { get; set; }
+        public NTFSPerms Permissions { get; set; }
 
         public Properties() { }
         public Properties(FileInfo file, DriveMapping mapping, User user)
         {
             Actions = isWriteAuth(mapping) ? HAP.MyFiles.AccessControlActions.Change : HAP.MyFiles.AccessControlActions.View;
             Name = file.Name + (file.Name.Contains(file.Extension) ? "" : file.Extension);
-            Permissions = "";
             Extension = file.Extension;
             DateCreated = file.CreationTime.ToString();
             DateModified = file.LastWriteTime.ToString();
@@ -70,7 +69,6 @@ namespace HAP.MyFiles
         {
             DriveMapping m;
             Actions = isWriteAuth(mapping) ? HAP.MyFiles.AccessControlActions.Change : HAP.MyFiles.AccessControlActions.View;
-            Permissions = "";
             if (Actions == HAP.MyFiles.AccessControlActions.Change)
             {
                 try { System.IO.File.Create(System.IO.Path.Combine(dir.FullName, "temp.ini")).Close(); System.IO.File.Delete(System.IO.Path.Combine(dir.FullName, "temp.ini")); }
@@ -84,6 +82,11 @@ namespace HAP.MyFiles
             }
             Name = (dir.FullName == Converter.DriveToUNC("", mapping.Drive.ToString(), out m, user) + '\\') ? mapping.Name : dir.Name;
             Location = HttpUtility.UrlEncode(Converter.UNCtoDrive(dir.FullName, mapping, user).Replace(":", "")).Replace('+', ' ').Replace("%", "|").Replace("|5c", "\\");
+            try
+            {
+                Permissions = UserFileAccessRights.Get(dir.FullName).ToPerms();
+            }
+            catch { }
             Type = "File Folder";
             if (Type != "File")
             {
@@ -101,7 +104,7 @@ namespace HAP.MyFiles
             Actions = isWriteAuth(mapping) ? HAP.MyFiles.AccessControlActions.Change : HAP.MyFiles.AccessControlActions.View;
             try
             {
-                Permissions = UserFileAccessRights.Get(dir.FullName).ToCollectionString();
+                Permissions = UserFileAccessRights.Get(dir.FullName).ToPerms();
             }
             catch { }
             if (Actions == HAP.MyFiles.AccessControlActions.Change && hapConfig.Current.MyFiles.WriteChecks)
