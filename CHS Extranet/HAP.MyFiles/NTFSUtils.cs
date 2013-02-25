@@ -360,6 +360,29 @@ namespace HAP.MyFiles
             return "{ " + string.Join(", ", _s.ToArray()) + " }";
         }
 
+        public NTFSPerms ToPerms()
+        {
+            NTFSPerms perms = new NTFSPerms();
+            perms.AppendData = canAppendData();
+            perms.CreateDirs = canCreateDirectories();
+            perms.Delete = canDelete();
+            perms.DeleteSubDirsOrFiles = canDeleteSubdirectoriesAndFiles();
+            perms.Execute = canExecuteFile();
+            perms.FullControl = canFullControl();
+            perms.ListDirs = canListDirectory();
+            perms.Modify = canModify();
+            perms.ReadAttr = canReadAttributes();
+            perms.ReadData = canReadData();
+            perms.ReadExAttr = canReadExtendedAttributes();
+            perms.ReadExecute = canReadAndExecute();
+            perms.Traverse = canTraverse();
+            perms.Write = canWrite();
+            perms.WriteAttr = canWriteAttributes();
+            perms.WriteData = canWriteData();
+            perms.WriteExAttr = canWriteExtendedAttributes();
+            return perms;
+        }
+
         /// <summary>
         /// Simply displays all allowed rights
         /// 

@@ -25,7 +25,7 @@ namespace HAP.AD
 
         public override bool IsUserInRole(string username, string roleName)
         {
-            if (HAP.Web.Configuration.hapConfig.Current.AD.UseNestedLookups) return wtrp.IsUserInRole(HAP.Web.Configuration.hapConfig.Current.AD.UPN.Remove(HAP.Web.Configuration.hapConfig.Current.AD.UPN.IndexOf('.')) + '\\' + username, roleName);
+            if (!HAP.Web.Configuration.hapConfig.Current.AD.UseNestedLookups) return wtrp.IsUserInRole(HAP.Web.Configuration.hapConfig.Current.AD.UPN.Remove(HAP.Web.Configuration.hapConfig.Current.AD.UPN.IndexOf('.')) + '\\' + username, roleName);
             try
             {
                 PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
@@ -41,7 +41,7 @@ namespace HAP.AD
 
         public override string[] GetRolesForUser(string username)
         {
-            if (HAP.Web.Configuration.hapConfig.Current.AD.UseNestedLookups) return wtrp.GetRolesForUser(username);
+            if (!HAP.Web.Configuration.hapConfig.Current.AD.UseNestedLookups) return wtrp.GetRolesForUser(username);
             else if (HttpContext.Current.Cache["userrolecache-" + username] == null)
             {
                 List<string> roles = new List<string>();
@@ -100,7 +100,7 @@ namespace HAP.AD
 
         public override string[] GetUsersInRole(string roleName)
         {
-            if (HAP.Web.Configuration.hapConfig.Current.AD.UseNestedLookups) return wtrp.GetUsersInRole(roleName);
+            if (!HAP.Web.Configuration.hapConfig.Current.AD.UseNestedLookups) return wtrp.GetUsersInRole(roleName);
             PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
             GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, roleName);
             if (gp == null) return new string[] { };
