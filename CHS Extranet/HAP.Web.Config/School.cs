@@ -40,5 +40,10 @@ namespace HAP.Web.Configuration
             get { return el.GetAttribute("photohandler"); }
             set { el.SetAttribute("photohandler", value); }
         }
+        public bool HidePhotoErrors
+        {
+            get { if (el.Attributes["hidephotoerror"] != null) bool.Parse(el.GetAttribute("hidephotoerror")); return false; }
+            set { el.SetAttribute("hidephotoerror", value.ToString()); }
+        }
     }
 }
