@@ -80,6 +80,7 @@ namespace HAP.Web.API
                 }
                 catch
                 {
+                    _user.EndContainedImpersonate();
                     if (!hapConfig.Current.School.HidePhotoErrors) HAP.Web.Logging.EventViewer.Log("HAP.Web.API.MyPic", errorlist, System.Diagnostics.EventLogEntryType.Error, true);
                     context.Response.Redirect("~/api/tiles/icons/128/128/images/icons/metro/folders-os/UserNo-Frame.png");
                 }
