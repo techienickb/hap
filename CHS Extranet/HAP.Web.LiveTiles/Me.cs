@@ -62,7 +62,7 @@ namespace HAP.Web.LiveTiles
             catch
             {
                 _user.EndContainedImpersonate();
-                HAP.Web.Logging.EventViewer.Log("HAP.Web.API.MyPic", errorlist, System.Diagnostics.EventLogEntryType.Error, true);
+                if (!hapConfig.Current.School.HidePhotoErrors) HAP.Web.Logging.EventViewer.Log("HAP.Web.API.MyPic", errorlist, System.Diagnostics.EventLogEntryType.Error, true);
                 Photo = null;
             }
             finally { _user.EndContainedImpersonate(); }
