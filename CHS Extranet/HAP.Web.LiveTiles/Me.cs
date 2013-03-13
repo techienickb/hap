@@ -61,9 +61,11 @@ namespace HAP.Web.LiveTiles
             }
             catch
             {
+                _user.EndContainedImpersonate();
                 HAP.Web.Logging.EventViewer.Log("HAP.Web.API.MyPic", errorlist, System.Diagnostics.EventLogEntryType.Error, true);
                 Photo = null;
             }
+            finally { _user.EndContainedImpersonate(); }
             Email = User.Email == null ? "" : User.Email;
             OtherData = new Dictionary<string, string>();
             try { OtherData.Add("Comment", User.Comment); }
