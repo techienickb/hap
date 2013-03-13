@@ -69,11 +69,11 @@ namespace HAP.MyFiles
         {
             DriveMapping m;
             Actions = isWriteAuth(mapping) ? HAP.MyFiles.AccessControlActions.Change : HAP.MyFiles.AccessControlActions.View;
-            if (Actions == HAP.MyFiles.AccessControlActions.Change)
+            try
             {
-                try { System.IO.File.Create(System.IO.Path.Combine(dir.FullName, "temp.ini")).Close(); System.IO.File.Delete(System.IO.Path.Combine(dir.FullName, "temp.ini")); }
-                catch { Actions = HAP.MyFiles.AccessControlActions.View; }
+                Permissions = UserFileAccessRights.Get(dir.FullName).ToPerms();
             }
+            catch { }
             if (dir.FullName.Contains(".zip")) Actions = AccessControlActions.ZIP;
             else 
             { 
@@ -107,13 +107,6 @@ namespace HAP.MyFiles
                 Permissions = UserFileAccessRights.Get(dir.FullName).ToPerms();
             }
             catch { }
-            if (Actions == HAP.MyFiles.AccessControlActions.Change && hapConfig.Current.MyFiles.WriteChecks)
-            {
-                try { System.IO.File.Create(System.IO.Path.Combine(dir.FullName, "temp.ini")).Close(); System.IO.File.Delete(System.IO.Path.Combine(dir.FullName, "temp.ini")); }
-                catch { Actions = HAP.MyFiles.AccessControlActions.View; }
-            }
-            try { dir.GetDirectories(); }
-            catch { Actions = HAP.MyFiles.AccessControlActions.None; }
             if (dir.FullName == Converter.DriveToUNC("", mapping.Drive.ToString(), out m, user) + "\\")
             {
                 Location = null;

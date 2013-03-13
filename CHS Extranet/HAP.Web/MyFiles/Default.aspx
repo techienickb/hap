@@ -583,7 +583,7 @@
 				else h += this.Data.Type + '</span><span class="extension">' + this.Data.Extension + '</span><span class="size">' + this.Data.Size;
 				h += '</span></a>';
 				$("#MyFiles").append(h);
-				if (this.Data.Actions == 0) $("#" + this.Id).draggable({ helper: function () { return $('<div id="dragobject"><img /><span></span></div>'); }, start: function (event, ui) {
+				if (this.Data.Permissions.Modifty) $("#" + this.Id).draggable({ helper: function () { return $('<div id="dragobject"><img /><span></span></div>'); }, start: function (event, ui) {
 					var item = null;
 					for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
 					if (!item.Selected) for (var x = 0; x < items.length; x++) if (items[x].Selected) { items[x].Selected = false; items[x].Refresh(); }
@@ -594,7 +594,7 @@
 					$("#dragobject span").text("").hide();
 				}
 				});
-				if (this.Data.Type == 'Directory' && this.Data.Actions == 0) $("#" + this.Id).droppable({ accept: '.Selectable', activeClass: 'droppable-active', hoverClass: 'droppable-hover', drop: function (ev, ui) {
+				if (this.Data.Type == 'Directory' && this.Data.Permissions.AppendData && this.Data.Permissions.WriteData) $("#" + this.Id).droppable({ accept: '.Selectable', activeClass: 'droppable-active', hoverClass: 'droppable-hover', drop: function (ev, ui) {
 					var item = null;
 					for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
 					var s = "";
@@ -613,7 +613,7 @@
 					$("#dragobject span").text("").hide();
 				}
 				});
-				if (typeof (window.FileReader) != 'undefined' && this.Data.Type == 'Directory' && this.Data.Actions == 0) {
+				if (typeof (window.FileReader) != 'undefined' && this.Data.Type == 'Directory' && this.Data.Permissions.WriteData && this.Data.Permissions.AppendData) {
 					$("#" + this.Id).attr("dropzone", "copy<%=DropZoneAccepted %>").bind("dragover", function () {
 						var item = null;
 						for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
@@ -656,18 +656,19 @@
 						return true;
 					},
 					onShowMenu: function (e, menu) {
-					    if (curitem.Actions != 0) { $("#con-delete", menu).remove(); $("#con-skydrive", menu).remove(); $("#con-google", menu).remove(); $("#con-rename", menu).remove(); $("#con-zip", menu).remove(); $("#con-unzip", menu).remove(); }
-						if (curitem.Actions == 3) { $("#con-download", menu).remove(); if (SelectedItems().length != 1 || SelectedItems()[0].Data.Type != 'Directory') ("#con-open", menu).remove(); $("#con-properties", menu).remove(); $("#con-zip", menu).remove(); $("#con-unzip", menu).remove(); }
-						if (SelectedItems().length > 1) { $("#con-unzip", menu).remove(); $("#con-download", menu).remove(); $("#con-open", menu).remove(); $("#con-rename", menu).remove(); $("#con-properties", menu).remove(); $("#con-preview", menu).remove(); $("#con-google", menu).remove(); $("#con-skydrive", menu).remove(); }
-						else {
-							var remgoogle = false;
-							if (SelectedItems()[0].Data.Extension != ".txt" && SelectedItems()[0].Data.Extension != ".xlsx" && SelectedItems()[0].Data.Extension != ".docx" && SelectedItems()[0].Data.Extension != ".xls" && SelectedItems()[0].Data.Extension != ".csv" && SelectedItems()[0].Data.Extension != ".png" && SelectedItems()[0].Data.Extension != ".gif" && SelectedItems()[0].Data.Extension != ".jpg" && SelectedItems()[0].Data.Extension != ".jpeg" && SelectedItems()[0].Data.Extension != ".bmp") {
-								$("#con-preview", menu).remove();
-								if (SelectedItems()[0].Data.Extension != ".ppt" && SelectedItems()[0].Data.Extension != ".pptx" && SelectedItems()[0].Data.Extension != ".pps" && SelectedItems()[0].Data.Extension != ".doc" && SelectedItems()[0].Data.Extension != ".rtf") $("#con-google", menu).remove();
-							}
-							if (SelectedItems()[0].Data.Extension != ".zip") $("#con-unzip", menu).remove();
-						}
-						return menu;
+					    if (!curitem.Permissions.Delete || curitem.Actions > 0) $("#con-delete", menu).remove();
+					    if (!curitem.Permissions.Modify || !curitem.Permissions.WriteData || !curitem.Permissions.AppendData || curitem.Actions > 0) { $("#con-rename", menu).remove(); $("#con-zip", menu).remove(); $("#con-unzip", menu).remove(); }
+					    if (curitem.Actions == 3) { $("#con-download", menu).remove(); if (SelectedItems().length != 1 || SelectedItems()[0].Data.Type != 'Directory') ("#con-open", menu).remove(); $("#con-properties", menu).remove(); $("#con-zip", menu).remove(); $("#con-unzip", menu).remove(); }
+					    if (SelectedItems().length > 1) { $("#con-unzip", menu).remove(); $("#con-download", menu).remove(); $("#con-open", menu).remove(); $("#con-rename", menu).remove(); $("#con-properties", menu).remove(); $("#con-preview", menu).remove(); $("#con-google", menu).remove(); $("#con-skydrive", menu).remove(); }
+					    else {
+					        var remgoogle = false;
+					        if (SelectedItems()[0].Data.Extension != ".txt" && SelectedItems()[0].Data.Extension != ".xlsx" && SelectedItems()[0].Data.Extension != ".docx" && SelectedItems()[0].Data.Extension != ".xls" && SelectedItems()[0].Data.Extension != ".csv" && SelectedItems()[0].Data.Extension != ".png" && SelectedItems()[0].Data.Extension != ".gif" && SelectedItems()[0].Data.Extension != ".jpg" && SelectedItems()[0].Data.Extension != ".jpeg" && SelectedItems()[0].Data.Extension != ".bmp") {
+					            $("#con-preview", menu).remove();
+					            if (SelectedItems()[0].Data.Extension != ".ppt" && SelectedItems()[0].Data.Extension != ".pptx" && SelectedItems()[0].Data.Extension != ".pps" && SelectedItems()[0].Data.Extension != ".doc" && SelectedItems()[0].Data.Extension != ".rtf") $("#con-google", menu).remove();
+					        }
+					        if (SelectedItems()[0].Data.Extension != ".zip") $("#con-unzip", menu).remove();
+					    }
+					    return menu;
 					},
 					bindings: {
 						'con-open': function (t) {
