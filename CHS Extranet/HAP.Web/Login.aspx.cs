@@ -86,7 +86,7 @@ namespace HAP.Web
             }
             else
             {
-                if (ban.Attempts > 3)
+                if (ban.Attempts > (hapConfig.Current.AD.MaxLogonAttemps - 1))
                 {
                     ban.IsBanned = true;
                     ban.BannedUntil = DateTime.Now.AddMinutes(30);

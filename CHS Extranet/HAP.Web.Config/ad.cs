@@ -51,7 +51,11 @@ namespace HAP.Web.Configuration
             get { return bool.Parse(el.GetAttribute("usenestedlookups")); }
             set { el.SetAttribute("usenestedlookups", value.ToString()); }
         }
-
+        public int MaxLogonAttemps
+        {
+            get { return int.Parse(el.GetAttribute("maxlogonattempts")); }
+            set { el.SetAttribute("maxlogonattempts", value.ToString()); }
+        }
 
         public string StudentsGroup
         {
