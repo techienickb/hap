@@ -11,6 +11,6 @@
 #opentickets a { display: inline-block; padding: 3px 0 3px 24px; }
 #opentickets a.Low { background: transparent url(../images/statusicons/priority_low.png)  no-repeat left top; }
 #opentickets a.High { background: transparent url(../images/statusicons/priority_high.png)  no-repeat left top; }
-#closedtickets a span, #opentickets a span { font-size: 72%; color: #808080; }
+#archivedbody a span, #closedtickets a span, #opentickets a span { font-size: 72%; color: #808080; }
 
 #hapHeader #hapTitle a { background-image: url(../api/tiles/icons/24/24/images/icons/metro/folders-os/help.png); background-position: 5px center; }

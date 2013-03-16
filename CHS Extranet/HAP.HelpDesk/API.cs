@@ -369,10 +369,17 @@ namespace HAP.HelpDesk
 
         [OperationContract]
         [WebGet(UriTemplate = "Tickets/{State}", ResponseFormat = WebMessageFormat.Json)]
-        public Ticket[] AllTickets(string State)
+        public Ticket[] AllShortTickets(string State)
+        {
+            return AllTickets("", State);
+        }
+
+        [OperationContract]
+        [WebGet(UriTemplate = "ATickets/{Archive}/{State}", ResponseFormat = WebMessageFormat.Json)]
+        public Ticket[] AllTickets(string Archive, string State)
         {
             XmlDocument doc = new XmlDocument();
-            doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
+            doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets" + Archive + ".xml"));
             List<Ticket> tickets = new List<Ticket>();
             string xpath = string.Format("/Tickets/Ticket[@status{0}]", State == "Open" ? "!='Fixed'" : "='Fixed'");
             foreach (XmlNode node in doc.SelectNodes(xpath))
@@ -382,16 +389,24 @@ namespace HAP.HelpDesk
 
         [OperationContract]
         [WebGet(UriTemplate="Tickets/{State}/{Username}", ResponseFormat=WebMessageFormat.Json)]
-        public Ticket[] Tickets(string State, string Username)
+        public Ticket[] ShortTickets(string State, string Username)
+        {
+            return Tickets("", State, Username);
+        }
+
+        [OperationContract]
+        [WebGet(UriTemplate = "ATickets/{Archive}/{State}/{Username}", ResponseFormat = WebMessageFormat.Json)]
+        public Ticket[] Tickets(string Archive, string State, string Username)
         {
             XmlDocument doc = new XmlDocument();
-            doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
+            doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets" + Archive + ".xml"));
             List<Ticket> tickets = new List<Ticket>();
             string xpath = string.Format("/Tickets/Ticket[@status{0}]", State == "Open" ? "!='Fixed'" : "='Fixed'");
 
             foreach (XmlNode node in doc.SelectNodes(xpath))
                 if (node.SelectNodes("Note")[0].Attributes["username"].Value.ToLower() == Username.ToLower() || (node.Attributes["showto"] != null && contains(node.Attributes["showto"].Value, Username)))
                     tickets.Add(new Ticket(node));
+            if (State != "Open") tickets.Reverse();
             return tickets.ToArray();
         }
 
@@ -403,12 +418,19 @@ namespace HAP.HelpDesk
         }
 
         [OperationContract]
-        [WebGet(UriTemplate = "Ticket/{TicketId}", ResponseFormat = WebMessageFormat.Json)]
-        public FullTicket Ticket(string TicketId)
+        [WebGet(UriTemplate = "ATicket/{Archive}/{TicketId}", ResponseFormat = WebMessageFormat.Json)]
+        public FullTicket Ticket(string Archive, string TicketId)
         {
             XmlDocument doc = new XmlDocument();
-            doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
+            doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets" + Archive + ".xml"));
             return new FullTicket(doc.SelectSingleNode("/Tickets/Ticket[@id='" + TicketId + "']"));
+        }
+
+        [OperationContract]
+        [WebGet(UriTemplate = "Ticket/{TicketId}", ResponseFormat = WebMessageFormat.Json)]
+        public FullTicket ShortTicket(string TicketId)
+        {
+            return Ticket("", TicketId);
         }
 
         [OperationContract]

@@ -31,6 +31,51 @@ namespace HAP.Web.HelpDesk {
         protected global::System.Web.UI.WebControls.PlaceHolder adminupdatepanel;
         
         /// <summary>
+        /// archiveddates control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList archiveddates;
+        
+        /// <summary>
+        /// archiveadmin control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel archiveadmin;
+        
+        /// <summary>
+        /// archivefrom control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox archivefrom;
+        
+        /// <summary>
+        /// archiveto control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox archiveto;
+        
+        /// <summary>
+        /// archivetickets control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton archivetickets;
+        
+        /// <summary>
         /// adminbookingpanel control.
         /// </summary>
         /// <remarks>
