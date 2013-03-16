@@ -535,19 +535,23 @@
 		}
 		function RefreshToolbar() {
 			var cut, copy, paste, download, open, unzip, zip;
-			zip = cut = copy = del = SelectedItems().length > 0;
-			paste = curitem.Actions == 0 && clipboard != null;
+			zip = cut = copy = del = open = SelectedItems().length > 0;
+			paste = curitem.Actions == 0 && curitem.Permissions.WriteData && curitem.Permissions.AppendData && clipboard != null;
 			zip = zip ? curitem.Actions == 0 : zip;
 			unzip = download = open = SelectedItems().length == 1;
 			unzip = unzip ? curitem.Actions == 0 : unzip;
 			for (var i = 0; i < SelectedItems().length; i++) {
 				var item = SelectedItems()[i];
-				if (item.Data.Actions == 0 && cut) cut = true;
+				if (item.Data.Actions == 0 && cut && item.Data.Permissions.ReadData && item.Data.Permissions.WriteData) cut = true;
 				else cut = false;
-				if (item.Data.Type == "Directory") download = false;
-				else open = false;
-				if (item.Data.Path.match(/\.zip/gi)) unzip = true;
+				if (item.Data.Actions == 0 && copy && item.Data.Permissions.ReadData && item.Data.Permissions.WriteData) copy = true;
+				else copy = false;
+				if (item.Data.Type == "Directory" || item.Data.Permissions.Execute == false || item.Data.Permissions.ReadData == false) download = false;
+				if (item.Data.Traverse == false) open = false;
+				if (item.Data.Path.match(/\.zip/gi) && unzip && curitem.Permissions.WriteData) unzip = true;
 				else unzip = false;
+				if (item.Data.Actions == 0 && del && item.Data.Permissions.DeleteSubDirsOrFiles) del = true;
+				else del = false;
 			}
 			if (curpath.match(/\.zip/gi)) { cut = copy = pase = del = download = zip = unzip = false; }
 			if (cut && $("#toolbar-cut").css("display") == "none") { $("#toolbar-cut").css("display", "").animate({ width: 22 }); $("#toolbar-delete").css("display", "").animate({ width: 43 }); }
@@ -583,7 +587,7 @@
 				else h += this.Data.Type + '</span><span class="extension">' + this.Data.Extension + '</span><span class="size">' + this.Data.Size;
 				h += '</span></a>';
 				$("#MyFiles").append(h);
-				if (this.Data.Permissions.Modifty) $("#" + this.Id).draggable({ helper: function () { return $('<div id="dragobject"><img /><span></span></div>'); }, start: function (event, ui) {
+				if (this.Data.Permissions.Modify) $("#" + this.Id).draggable({ helper: function () { return $('<div id="dragobject"><img /><span></span></div>'); }, start: function (event, ui) {
 					var item = null;
 					for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
 					if (!item.Selected) for (var x = 0; x < items.length; x++) if (items[x].Selected) { items[x].Selected = false; items[x].Refresh(); }
@@ -656,11 +660,13 @@
 						return true;
 					},
 					onShowMenu: function (e, menu) {
-					    if (!curitem.Permissions.Delete || curitem.Actions > 0) $("#con-delete", menu).remove();
-					    if (!curitem.Permissions.Modify || !curitem.Permissions.WriteData || !curitem.Permissions.AppendData || curitem.Actions > 0) { $("#con-rename", menu).remove(); $("#con-zip", menu).remove(); $("#con-unzip", menu).remove(); }
-					    if (curitem.Actions == 3) { $("#con-download", menu).remove(); if (SelectedItems().length != 1 || SelectedItems()[0].Data.Type != 'Directory') ("#con-open", menu).remove(); $("#con-properties", menu).remove(); $("#con-zip", menu).remove(); $("#con-unzip", menu).remove(); }
+					    if ((curitem.Permissions.Delete == false && curitem.Permissions.DeleteSubDirsOrFiles == false) || curitem.Actions > 0) $("#con-delete", menu).remove();
+					    if ((curitem.Permissions.Modify == false && curitem.Permissions.WriteData == false && curitem.Permissions.AppendData == false) || curitem.Actions > 0) { $("#con-rename", menu).remove(); $("#con-zip", menu).remove(); $("#con-unzip", menu).remove(); }
+					    if (curitem.Actions == 3) { $("#con-download", menu).remove(); if (SelectedItems().length != 1 || SelectedItems()[0].Data.Type != 'Directory') $("#con-open", menu).remove(); $("#con-properties", menu).remove(); $("#con-zip", menu).remove(); $("#con-unzip", menu).remove(); }
 					    if (SelectedItems().length > 1) { $("#con-unzip", menu).remove(); $("#con-download", menu).remove(); $("#con-open", menu).remove(); $("#con-rename", menu).remove(); $("#con-properties", menu).remove(); $("#con-preview", menu).remove(); $("#con-google", menu).remove(); $("#con-skydrive", menu).remove(); }
 					    else {
+					        if (SelectedItems()[0].Data.Type == "Directory") $("#con-download", menu).remove();
+					        else if (!SelectedItems()[0].Data.Path.match(/\.zip/gi)) $("#con-open", menu).remove();
 					        var remgoogle = false;
 					        if (SelectedItems()[0].Data.Extension != ".txt" && SelectedItems()[0].Data.Extension != ".xlsx" && SelectedItems()[0].Data.Extension != ".docx" && SelectedItems()[0].Data.Extension != ".xls" && SelectedItems()[0].Data.Extension != ".csv" && SelectedItems()[0].Data.Extension != ".png" && SelectedItems()[0].Data.Extension != ".gif" && SelectedItems()[0].Data.Extension != ".jpg" && SelectedItems()[0].Data.Extension != ".jpeg" && SelectedItems()[0].Data.Extension != ".bmp") {
 					            $("#con-preview", menu).remove();

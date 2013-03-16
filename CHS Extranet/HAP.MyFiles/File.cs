@@ -47,7 +47,7 @@ namespace HAP.MyFiles
             UnderlyingSize = 0;
             Size = "";
             Path = HttpUtility.UrlEncode(Converter.UNCtoDrive(file.FullName, mapping, user).Replace(":", "")).Replace('+', ' ').Replace("%", "|").Replace("|5c", "\\");
-
+            Permissions = UserFileAccessRights.Get(file.FullName).ToPerms();
         }
         [IgnoreDataMember()]
         public long UnderlyingSize { get; set; }
@@ -94,6 +94,7 @@ namespace HAP.MyFiles
             Path = "../Download/" + HttpUtility.UrlEncode(m.Replace(":", "")).Replace('+', ' ').Replace("%", "|").Replace("|2f", "/");
             if (file.Extension.ToLower().Equals(".png") || file.Extension.ToLower().Equals(".jpg") || file.Extension.ToLower().Equals(".jpeg") || file.Extension.ToLower().Equals(".gif") || file.Extension.ToLower().Equals(".bmp") || file.Extension.ToLower().Equals(".wmf"))
                 Icon = "../api/mycomputer/thumb/" + HttpUtility.UrlEncode(m.Replace(":", "")).Replace('+', ' ').Replace("%", "|").Replace("|2f", "/");
+            Permissions = UserFileAccessRights.Get(file.FullName).ToPerms();
         }
 
         public File(FileInfo file, DriveMapping mapping, User user, AccessControlActions actions)
