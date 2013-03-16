@@ -531,6 +531,7 @@ namespace HAP.MyFiles
                         f.Size = "";
                         f.Description = "File Folder";
                         f.Extension = "";
+                        f.Permissions = new NTFSPerms();
                         f.Name = ze.Name.Replace('/', '\\');
                         if (f.Name.EndsWith("\\")) f.Name = f.Name.Remove(f.Name.Length - 1);
                         f.Type = "Directory";
@@ -552,7 +553,7 @@ namespace HAP.MyFiles
                         f.CreationTime = f.ModifiedTime = ze.DateTime.ToShortDateString() + " " + ze.DateTime.ToString("hh:mm");
                         f.Icon = "../images/icons/file.png";
                         f.Name = ze.Name.Replace('/', '\\');
-
+                        f.Permissions = new NTFSPerms();
                         if (subpath == "" && f.Name.Contains('\\')) continue;
                         else if (subpath != "" && !f.Name.StartsWith(subpath)) continue;
                         else if (subpath != "" && f.Name.StartsWith(subpath) && f.Name.Remove(0, subpath.Length + 1).Contains('\\')) continue;
