@@ -8,6 +8,9 @@
     <div id="toolbar">
         <a id="opentickets-link" href="#opentickets" onclick="return false;"><hap:LocalResource StringPath="helpdesk/opentickets" runat="server" /></a>
         <a id="closedtickets-link" href="#closedtickets" onclick="return false;"><hap:LocalResource StringPath="helpdesk/closedtickets" runat="server" /></a>
+        <%if (isHDAdmin || hasArch) { %>
+        <a id="archivedtickets-link" href="#archivedtickets" onclick="return false;"><hap:LocalResource StringPath="helpdesk/archivedtickets" runat="server" /></a>
+        <%} %>
 	    <a href="#newticket" id="newticket-link"><hap:LocalResource StringPath="helpdesk/newtickets" runat="server" /></a>
 	    <a href="#faqs" id="faq-link"><hap:LocalResource StringPath="helpdesk/faqs" runat="server" /></a>
         <%if (isHDAdmin) { %>
@@ -67,6 +70,56 @@
 		    <div style="text-align: center;"><img src="../images/metroloading.gif" /></div>
             <hap:LocalResource runat="server" StringPath="loading" />
 		</div>
+        <div id="archivedtickets">
+            <div id="archivedmain">
+                <div id="archivedhead">
+                    <asp:Label AssociatedControlID="archiveddates" runat="server"><hap:LocalResource StringPath="helpdesk/selectarchive" runat="server" />: </asp:Label>
+                    <asp:DropDownList runat="server" ID="archiveddates" />
+                    <script>
+                        $("#<%=archiveddates.ClientID%>").change(function () {
+                            if ($(this).val() == "") {
+                                $("#archivedloading").hide();
+                                $("#archivedbody").html("No Archived Tickets");
+                            } else {
+                                $("#archivedloading").show();
+                                $("#archivedbody").html("");
+                                $.ajax({
+                                    type: 'GET',
+                                    url: hap.common.formatJSONUrl("~/api/HelpDesk/ATickets/" + $("#<%=archiveddates.ClientID%>").val() + "/Closed<%=isHDAdmin ? "" : "/" + ADUser.UserName%>"),
+                                    dataType: 'json',
+		                            contentType: 'application/json',
+		                            success: function (data) {
+		                                var x = "";
+		                                for (var i = 0; i < data.length; i++) x += '<div><a href="#ticket-' + $("#<%=archiveddates.ClientID%>").val() + '/' + data[i].Id + '" class="' + data[i].Priority.replace(/ /g, "-") + '">' + data[i].Subject + ' <span>' + data[i].Id + ' - ' + data[i].Username + (data[i].AssignedTo == '' ? '' : (' -> ' + data[i].AssignedTo)) + ' - ' + data[i].Date + '</span></a></div>';
+		                                if (data.length == 0) x = "No Tickets";
+		                                $("#archivedbody").html(x);
+		                                $("#archivedloading").hide();
+		                            }, error: hap.common.jsonError
+		                        });
+                            }
+                        });
+                    </script>
+                </div>
+                <asp:Panel runat="server" ID="archiveadmin">
+                    <h2><hap:LocalResource StringPath="helpdesk/archivetickets" runat="server" /></h2>
+                    <asp:Label AssociatedControlID="archivefrom" runat="server"><hap:LocalResource StringPath="from" runat="server" /></asp:Label>
+                    <asp:TextBox ID="archivefrom" type="date" runat="server"></asp:TextBox>
+                    <asp:Label AssociatedControlID="archiveto" runat="server"><hap:LocalResource StringPath="to" runat="server" /></asp:Label>
+                    <asp:TextBox ID="archiveto" type="date" runat="server"></asp:TextBox>
+                    <script>
+                        $("#<%=archivefrom.ClientID%>, #<%=archiveto.ClientID%>").datepicker({ dateFormat: 'dd/mm/yy' });
+                    </script>
+                    <div>
+                        <asp:LinkButton runat="server" CssClass="button" ID="archivetickets" OnClick="archivetickets_Click"><hap:LocalResource StringPath="tracker/archive" runat="server" /></asp:LinkButton>
+                    </div>
+                </asp:Panel>
+                <div id="archivedloading" style="display: none;">
+		            <div style="text-align: center;"><img src="../images/metroloading.gif" /></div>
+                    <hap:LocalResource runat="server" StringPath="loading" />
+                </div>
+                <div id="archivedbody"></div>
+            </div>
+        </div>
 		<div id="newticket">
 			<div>
 				<label for="newticket-subject"><hap:LocalResource StringPath="helpdesk/issue" runat="server" />: </label>
@@ -253,20 +306,21 @@
 			if (curticket != null) {
 			    $("#tabs > div").hide();
 			    $("#toolbar a").removeClass("active");
-			    $('<div id="ticket-' + curticket + '" class="ticket">Loading Ticket ' + curticket + '...</div>').appendTo("#tabs");
-				$("#toolbar").append('<a href="#ticket-' + curticket + '" class="ticket active">Ticket: ' + curticket + '</a>');
+			    var stringticket = curticket.match(/\//gi) ? curticket.split(/\//g)[1] : curticket;
+			    $('<div id="ticket-' + curticket.replace(/\//gi, "_") + '" class="ticket">Loading Ticket ' + stringticket + '...</div>').appendTo("#tabs");
+			    $("#toolbar").append('<a href="#ticket-' + curticket + '" class="ticket active">Ticket: ' + stringticket + '</a>');
 				$.ajax({
 					type: 'GET',
-					url: hap.common.formatJSONUrl("~/api/HelpDesk/Ticket/" + curticket),
+					url: hap.common.formatJSONUrl("~/api/HelpDesk/" + (curticket.match(/\//gi) ? 'A' : '') + "Ticket/" + curticket),
 					dataType: 'json',
 					contentType: 'application/json',
 					success: function (data) {
 						$(".ui-tabs-selected a span").html("Ticket: " + data.Subject);
-						var h = '<button style="float: right;" onclick="return updateTicket();">Update</button>' + (hap.hdadmin ? '<button style="float: right;" onclick="return assignTicket();">Assign</button>' : '') + '<div><label>Ticket ' + curticket + ': </label><span id="sub">' + data.Subject + '</span></div><div><label>Opened By: </label>' + data.DisplayName + ' (' + data.Username + ')</div><div><label>Opened on: </label>' + data.Date + '</div><div><label>Priority: </label>' + data.Priority + '</div><div><label>Status: </label>' + data.Status + '</div>' + (data.AssignedTo == "" ? "" : '<div><label>Assigned To:</label>' + data.AssignedTo + '</div>') + '<div class="notes tile-border-color">';
+						var h = (curticket.match(/\//gi) ? '' : ('<button style="float: right;" onclick="return updateTicket();">Update</button>' + (hap.hdadmin ? '<button style="float: right;" onclick="return assignTicket();">Assign</button>' : ''))) + '<div><label>Ticket ' + (curticket.match(/\//gi) ? curticket.split(/\//g)[1] : curticket) + ': </label><span id="sub">' + data.Subject + '</span></div><div><label>Opened By: </label>' + data.DisplayName + ' (' + data.Username + ')</div><div><label>Opened on: </label>' + data.Date + '</div><div><label>Priority: </label>' + data.Priority + '</div><div><label>Status: </label>' + data.Status + '</div>' + (data.AssignedTo == "" ? "" : '<div><label>Assigned To:</label>' + data.AssignedTo + '</div>') + '<div class="notes tile-border-color">';
 						for (var i = 0; i < data.Notes.length; i++)
 							h += data.Notes[i].DisplayName + ' ' + data.Notes[i].Date + '<br /><pre>' + unescape(data.Notes[i].NoteText).replace(/\+/g, ' ') + '</pre>';
 						h += '</div>';
-						$("#ticket-" + curticket).html(h);
+						$("#ticket-" + curticket.replace(/\//gi, "_")).html(h);
 						$("button").button();
                     },  error: hap.common.jsonError
 				});
@@ -287,9 +341,7 @@
 		        if ($(this).index() < 5) { window.location.href = "#"; $("#updateticket, #assignticket").dialog("close"); }
 		        return false;
 		    });
-			$("button").button();
-			$("input[type=submit]").button();
-			$(".button").button();
+			$("button, .button, input[type=submit]").button();
 			if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curticket = window.location.href.split('#')[1].substr(7);
 			else curticket = null;
 			if (curticket == null) $("#toolbar a").first().click();

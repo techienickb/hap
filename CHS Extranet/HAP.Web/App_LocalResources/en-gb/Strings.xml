@@ -10,6 +10,7 @@
   <autologon>About Auto Logon</autologon>
   <of>of</of>
   <to>to</to>
+  <from>from</from>
   <items>items</items>
   <username>Username</username>
   <close>Close</close>
@@ -25,6 +26,9 @@
     <my>My Timetable</my>
   </timetable>
   <helpdesk>
+    <archivedtickets>Archived Tickets</archivedtickets>
+    <archivetickets>Archive Tickets</archivetickets>
+    <selectarchive>Select an Archive</selectarchive>
     <assignticket>Ticket (#) has been Assigned To You</assignticket>
     <ticketupdated>Ticket (#) has been Updated</ticketupdated>
     <tickedhasbeen>Your Ticket (#) has been %</tickedhasbeen>

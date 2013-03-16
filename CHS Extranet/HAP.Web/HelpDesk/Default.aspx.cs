@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using HAP.AD;
+using System.IO;
+using System.Xml;
 
 namespace HAP.Web.HelpDesk
 {
@@ -23,6 +25,8 @@ namespace HAP.Web.HelpDesk
             }
         }
 
+        public bool hasArch { get; set; }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             List<string> users = new List<string>();
@@ -36,7 +40,11 @@ namespace HAP.Web.HelpDesk
                     users.Add(s.Trim().ToLower()); 
                 }
 
-            adminbookingpanel.Visible = adminupdatepanel.Visible = isHDAdmin;
+            adminbookingpanel.Visible = adminupdatepanel.Visible = archiveadmin.Visible = isHDAdmin;
+            foreach (FileInfo f in new DirectoryInfo(Server.MapPath("~/app_data/")).GetFiles("Tickets_*.xml", SearchOption.TopDirectoryOnly))
+                archiveddates.Items.Add(new ListItem(f.Name.Remove(f.Name.LastIndexOf('.')).Remove(0, 8).Replace("_", " to "), f.Name.Remove(f.Name.LastIndexOf('.')).Remove(0, 7)));
+            hasArch = archiveddates.Items.Count > 0;
+            if (hasArch) archiveddates.Items.Insert(0, new ListItem("--- Select ---", ""));
             if (adminupdatepanel.Visible)
             {
                 userlist.Items.Clear();
@@ -53,6 +61,39 @@ namespace HAP.Web.HelpDesk
                 }
                 userlist.SelectedValue = userlist2.SelectedValue = ADUser.UserName.ToLower();
             }
+        }
+
+
+        public void Archive()
+        {
+        }
+
+        protected void archivetickets_Click(object sender, EventArgs e)
+        {
+            DateTime datefrom = DateTime.Parse(archivefrom.Text);
+            DateTime dateto = DateTime.Parse(archiveto.Text);
+            StreamWriter sw = File.CreateText(HttpContext.Current.Server.MapPath("~/app_data/Tickets_" + datefrom.ToString("dd-MM-yy") + "_" + dateto.ToString("dd-MM-yy") + ".xml"));
+            sw.WriteLine("<?xml version=\"1.0\"?>");
+            sw.WriteLine("<Tickets/>");
+            sw.Close();
+            sw.Dispose();
+            XmlDocument doc2 = new XmlDocument();
+            doc2.Load(HttpContext.Current.Server.MapPath("~/app_data/Tickets_" + datefrom.ToString("dd-MM-yy") + "_" + dateto.ToString("dd-MM-yy") + ".xml"));
+            XmlDocument doc = new XmlDocument();
+            doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
+            foreach (XmlNode node in doc.SelectNodes("/Tickets/Ticket[@status='Fixed']"))
+            {
+                DateTime d = DateTime.Parse(node.SelectNodes("Note")[node.SelectNodes("Note").Count - 1].Attributes["datetime"].Value);
+                bool faq = node.Attributes["faq"] != null;
+                if (faq) faq = bool.Parse(node.Attributes["faq"].Value);
+                if (datefrom.Date <= d.Date && dateto.Date > d.Date && !faq)
+                {
+                    doc2.SelectSingleNode("/Tickets").AppendChild(doc2.ImportNode(node.Clone(), true));
+                    doc.SelectSingleNode("/Tickets").RemoveChild(node);
+                }
+            }
+            doc.Save(HttpContext.Current.Server.MapPath("~/app_data/Tickets.xml"));
+            doc2.Save(HttpContext.Current.Server.MapPath("~/app_data/Tickets_" + datefrom.ToString("dd-MM-yy") + "_" + dateto.ToString("dd-MM-yy") + ".xml"));
         }
     }
 }
