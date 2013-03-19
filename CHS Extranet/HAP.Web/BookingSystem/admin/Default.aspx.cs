@@ -164,7 +164,7 @@ namespace HAP.Web.BookingSystem.admin
             t1.Subject = ((TextBox)e.Item.FindControl("esubject")).Text;
             t.Add(t1.ID, t1);
             t.Save();
-            etemplates.DataBind();
+            Response.Redirect("./#email-templates");
         }
 
         protected void importSIMS_Click(object sender, EventArgs args)
@@ -232,7 +232,7 @@ namespace HAP.Web.BookingSystem.admin
         protected void Edit_Delete_Click(object sender, EventArgs e)
         {
             new HAP.BookingSystem.BookingSystem().deleteStaticBooking1(Edit_id.Value.Split(new char[] { ':' })[1], Edit_id.Value.Split(new char[] { ':' })[2], int.Parse(Edit_id.Value.Split(new char[] { ':' })[0]));
-            Page.DataBind();
+            Response.Redirect("./#static-bookings");
         }
 
         protected void Edit_Save_Click(object sender, EventArgs e)
@@ -246,7 +246,17 @@ namespace HAP.Web.BookingSystem.admin
             el.SetAttribute("name", Edit_lessonName.Text);
             el.SetAttribute("username", Edit_UsernameDDL.SelectedValue);
             sb.Save(Server.MapPath("~/app_data/StaticBookings.xml"));
-            Page.DataBind();
+            Response.Redirect("./#static-bookings");
+        }
+
+        protected void DetailsView1_ItemInserted(object sender, DetailsViewInsertedEventArgs e)
+        {
+            Response.Redirect("./#static-bookings");
+        }
+
+        protected void ABR_ItemInserting(object sender, ListViewInsertEventArgs e)
+        {
+            Response.Redirect("./#abr");
         }
     }
 

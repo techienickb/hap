@@ -131,14 +131,13 @@
             </script>
 			<div style="float: right; padding: 10px; width: 50%">
 				<p>Save the SIMS export to <%=Server.MapPath("~/app_data/sims-bookings.xml") %> then click the button:</p>
-				<asp:Button runat="server" ID="importSIMS" Text="Import SIMS" CausesValidation="false" style="font-size: 130%" onclick="importSIMS_Click" />
-				<p>CAUTION: The Teacher's Name from the SIMS Export (Title Initial Surname) needs to equal the Notes/Display Name field in AD for that user, or the Notes/Display name only has one person with that surname</p>
+				<asp:Button runat="server" ID="importSIMS" Text="Import SIMS" CausesValidation="false" style="font-size: 130%" onclick=CAUTION: The Teacher's Name from the SIMS Export (Title Initial Surname) needs to equal the Notes/Display Name field in AD for that user, or the Notes/Display name only has one person with that surname</p>
 			</div>
 			<asp:ObjectDataSource ID="StaticBookingsDS" runat="server" DataObjectTypeName="HAP.BookingSystem.Booking"
 				DeleteMethod="deleteStaticBooking" InsertMethod="addStaticBooking" SelectMethod="getStaticBookingsArray"
 				TypeName="HAP.BookingSystem.BookingSystem" UpdateMethod="updateStaticBooking" />
 			<asp:DetailsView ID="DetailsView1" runat="server" AutoGenerateRows="False" DataSourceID="StaticBookingsDS"
-				DefaultMode="Insert" EnableModelValidation="True" GridLines="None" CssClass="tile-border-color" style="border-width: 1px; border-style: solid; border-top: 0;">
+				DefaultMode="Insert" EnableModelValidation="True" GridLines="None" CssClass="tile-border-color" style="border-width: 1px; border-style: solid; border-top: 0;" OnItemInserted="DetailsView1_ItemInserted">
 				<Fields>
 					<asp:TemplateField HeaderText="Day" SortExpression="Day">
 						<InsertItemTemplate>
@@ -186,7 +185,7 @@
 		</div>
 		<div id="abr">
 		    <asp:ListView ID="ABR" runat="server" DataSourceID="ABRDS" EnableModelValidation="True"
-			    InsertItemPosition="LastItem">
+			    InsertItemPosition="LastItem" OnItemInserting="ABR_ItemInserting">
 			    <EditItemTemplate>
 				    <tr>
 					    <td colspan="2">
@@ -317,7 +316,7 @@
 			    UpdateMethod="updateBookingRights" DeleteMethod="deleteBookingRights" />>
 		</div>
 		<div id="email-templates">
-			<p>{0} = Username, {1} = Display Name, {2} = Room, {3} = Booking Name, {4} = Date, {5} = Day, {6} = Lesson, {7} = LTRoom or EquipRoom, {8} = LTCount</p>
+			<p>{0} = Username, {1} = Display Name, {2} = Room, {3} = Booking Name, {4} = Date, {5} = Day, {6} = Lesson, {7} = LTRoom or EquipRoom, {8} = LTCountom or EquipRoom, {8} = LTCount</p>
 			<asp:Repeater ID="etemplates" runat="server" onitemcommand="etemplates_ItemCommand" DataSourceID="etemplatesds">
 				<ItemTemplate>
 					<div>
