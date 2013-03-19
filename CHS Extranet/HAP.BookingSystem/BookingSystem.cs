@@ -105,17 +105,18 @@ namespace HAP.BookingSystem
 
         public bool isStatic(string room, string lesson)
         {
-            if (!StaticBookings.ContainsKey(new BookingKey(DayNumber, lesson, room))) return false;
-            else
-            {
-                if (StaticBookings[new BookingKey(DayNumber, lesson, room)].StartDate.HasValue && StaticBookings[new BookingKey(DayNumber, lesson, room)].EndDate.HasValue)
-                    return (StaticBookings[new BookingKey(DayNumber, lesson, room)].StartDate.Value.Date <= DateTime.Now.Date && StaticBookings[new BookingKey(DayNumber, lesson, room)].EndDate >= DateTime.Now.Date);
-                else if (StaticBookings[new BookingKey(DayNumber, lesson, room)].StartDate.HasValue && !StaticBookings[new BookingKey(DayNumber, lesson, room)].EndDate.HasValue)
-                    return (StaticBookings[new BookingKey(DayNumber, lesson, room)].StartDate.Value.Date <= DateTime.Now.Date);
-                else if (!StaticBookings[new BookingKey(DayNumber, lesson, room)].StartDate.HasValue && StaticBookings[new BookingKey(DayNumber, lesson, room)].EndDate.HasValue)
-                    return (StaticBookings[new BookingKey(DayNumber, lesson, room)].EndDate.Value.Date >= DateTime.Now.Date);
-                else return true;
-            }
+            foreach (BookingKey key in StaticBookings.Keys)
+                if (key.Lesson.Contains(lesson) && key.Day == DayNumber && key.Room == room)
+                {
+                    if (StaticBookings[key].StartDate.HasValue && StaticBookings[key].EndDate.HasValue)
+                        return (StaticBookings[key].StartDate.Value.Date <= DateTime.Now.Date && StaticBookings[key].EndDate >= DateTime.Now.Date);
+                    else if (StaticBookings[key].StartDate.HasValue && !StaticBookings[key].EndDate.HasValue)
+                        return (StaticBookings[key].StartDate.Value.Date <= DateTime.Now.Date);
+                    else if (!StaticBookings[key].StartDate.HasValue && StaticBookings[key].EndDate.HasValue)
+                        return (StaticBookings[key].EndDate.Value.Date >= DateTime.Now.Date);
+                    else return true;
+                }
+            return false;
         }
 
         public bool islessonFree(string room, string lesson)
