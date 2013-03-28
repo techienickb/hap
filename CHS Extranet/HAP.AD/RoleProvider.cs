@@ -53,7 +53,7 @@ namespace HAP.AD
                     {
                         roles.Add(p.SamAccountName);
                         foreach (Principal p1 in (((GroupPrincipal)p).GetGroups()))
-                            Recurse(p1, ref roles);
+                            Recurse(p1, ref roles, 0);
                     }
                 }
                 catch { }
@@ -62,15 +62,16 @@ namespace HAP.AD
             return HttpContext.Current.Cache["userrolecache-" + username] as string[];
         }
 
-        public void Recurse(Principal p, ref List<string> roles)
+        public void Recurse(Principal p, ref List<string> roles, int loop)
         {
             roles.Add(p.Name);
-            try
-            {
-                foreach (Principal p1 in (((GroupPrincipal)p).GetGroups()))
-                    Recurse(p1, ref roles);
-            }
-            catch { }
+            if (loop < HAP.Web.Configuration.hapConfig.Current.AD.MaxRecursions)
+                try
+                {
+                    foreach (Principal p1 in (((GroupPrincipal)p).GetGroups()))
+                        Recurse(p1, ref roles, loop + 1);
+                }
+                catch { }
         }
 
         public override void CreateRole(string roleName)

@@ -20,12 +20,18 @@ namespace HAP.Web.Configuration
         {
             XmlElement e = doc.CreateElement("HelpDesk");
             e.SetAttribute("admins", "Domain Admins");
+            e.SetAttribute("firstlineemails", "");
             doc.SelectSingleNode("/hapConfig").AppendChild(e);
         }
         public string Admins
         {
             get { return el.GetAttribute("admins"); }
             set { el.SetAttribute("admins", value); }
+        }
+        public string FirstLineEmails
+        {
+            get { return el.GetAttribute("firstlineemails"); }
+            set { el.SetAttribute("firstlineemails", value); }
         }
     }
 }

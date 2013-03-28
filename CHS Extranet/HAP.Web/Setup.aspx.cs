@@ -47,6 +47,9 @@ namespace HAP.Web
                 un.Text = Config.AD.User;
                 up.Text = "";
                 sg.Text = Config.AD.StudentsGroup;
+                admaxlogon.Text = Config.AD.MaxLogonAttemps.ToString();
+                adnest.Checked = Config.AD.UseNestedLookups;
+                adrecur.Text = Config.AD.MaxRecursions.ToString();
                 hp_ab_st.Text = Config.Homepage.AnnouncementBox.ShowTo;
                 hp_ab_adt.Text = Config.Homepage.AnnouncementBox.EnableEditTo;
                 proxyaddress.Text = Config.ProxyServer.Address;
@@ -95,6 +98,7 @@ namespace HAP.Web
                 ewsurl.Text = Config.SMTP.Exchange;
                 imdomain.Text = Config.SMTP.ImpersonationDomain;
                 imuser.Text = Config.SMTP.ImpersonationUser;
+                helpdeskfirstline.Text = Config.HelpDesk.FirstLineEmails;
             }
         }
 
@@ -128,6 +132,21 @@ namespace HAP.Web
                 Config.AD.StudentsGroup = sg.Text;
             }
             catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the AD Students Group"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.AD.MaxLogonAttemps = int.Parse(admaxlogon.Text);
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the AD Max Logon Attemps"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.AD.MaxRecursions = int.Parse(adrecur.Text);
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the AD Max Recursive Attemps"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.AD.UseNestedLookups = adnest.Checked;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the AD Use Nested Lookups"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
             try
             {
                 Config.SMTP.Server = smtpaddress.Text;
@@ -278,6 +297,11 @@ namespace HAP.Web
                 Config.HelpDesk.Admins = helpdeskadmins.Text;
             }
             catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the Help Desk Admin Groups"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.HelpDesk.FirstLineEmails = helpdeskfirstline.Text;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the Help Desk First Line Emails"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
             try
             {
                 Config.MyFiles.LiveAppId = liveid.Text;
