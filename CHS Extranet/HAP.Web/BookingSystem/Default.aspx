@@ -580,7 +580,7 @@
 			$("#picker").val($.datepicker.formatDate('d MM', curdate));
 			$("input[type=button]").button();
 			$(".button").button();
-			$("#datepicker").css("top", $("#picker").position().top + 29);
+		    $("#datepicker").css("top", $("#picker").position().top + $("#bookingday > .head").height());
 			$("#datepicker").animate({ height: 'toggle' });
 			$("#bflquant").buttonset();
 			$("#hapContent").click(function() {

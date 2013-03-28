@@ -13,11 +13,11 @@ body.bookingdisplay, body.bookingdisplay form { padding: 0; margin: 0; width: 10
 .bookingdisplay { overflow: hidden; }
 
 #bookingsystemcontent { margin: 0 auto; }
-#datepicker { z-index: 9999; }
+#datepicker { z-index: 200; }
 #bookingday { overflow: auto; border-width: 1px; border-style: solid; }
 #bookingday .head { height: 30px; line-height: 30px; color: #fff; margin: 0; padding: 0; overflow: hidden; white-space: nowrap; }
 #bookingday .head h1 { float: left; width: 156px; text-align: center; font-size: 120%; font-weight: normal; margin: 0; padding: 0; }
-#bookingday .head #picker { border: 0; border-radius: 0; width: 100%; height: 29px; line-height: 29px; font-size: 110%; background: #0060a6; color: #fff; }
+#bookingday .head #picker { border: 0; border-radius: 0; width: 100%; height: 30px; line-height: 30px; font-size: 110%; background: #0060a6; color: #fff; padding: 0; }
 #bookingday .head #picker:hover { background-color: #3286C1; }
 #bookingday .head #picker:active { background-color: #004577; }
 #bookingday .body { overflow: hidden; }
@@ -51,3 +51,4 @@ body.bookingdisplay, body.bookingdisplay form { padding: 0; margin: 0; width: 10
 }
 
 #hapHeader #hapTitle a { background-image: url(../api/tiles/icons/24/24/images/icons/metro/applications/calendar.png); background-position: 5px center; }
+#datepicker .ui-datepicker { border-top: 0; }
