@@ -17,6 +17,8 @@ label { float: left; width: 200px; text-align: right; padding: 2px 10px; }
 .homepagelink span, u, dd { display: none; }
 .homepagelink img { float: left; margin-right: 6px; height: 100%; }
 .homepagelink button { float: right; height: 36px; }
+.homepagelink button span { padding-left: 5px!important; padding-right: 5px!important; }
+.homepagelink .ui-state-active, .addbutton.ui-state-active { border-width: 2px!important; }
 .homepagegroup { background: #dedede; height: 180px; }
 .sortablegroup h4 { cursor: move; }
 #lessons div { overflow: hidden; }

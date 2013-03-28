@@ -4,10 +4,9 @@
 
 html, body { padding: 0; margin: 0; }
 
-.tile-color, .ui-widget-header { background: #0060a6; border-color: #0060a6; }
-.tile-border-color, .ui-widget-content { border-color: #0060a6; }
-.ui-widget-header a, .ui-widget-header { color: #fff; }
-.tile-color-font, .ui-tabs .ui-tabs-nav li.ui-tabs-selected a, .ui-tabs .ui-tabs-nav li.ui-tabs-selected a:hover { color: #0060a6; }
+.tile-color, #datepicker .ui-datepicker-header { background: #0060a6; border-color: #0060a6; }
+.tile-border-color, #datepicker .ui-datepicker { border-color: #0060a6; }
+.tile-color-font { color: #0060a6; }
 .tiles a { background-color: #0060a6; color: #fff; border-color: #0060a6; }
 .tiles a:hover { background-color: #3286C1; border-color: #3286C1; }
 .tiles a:active { background-color: #004577; border-color: #004577; }
@@ -16,11 +15,11 @@ html, body { padding: 0; margin: 0; }
 #hapContent input, #hapContent select, #hapContent input { font-size: 13px; }
 a img { border: 0; }
 
-input[type=button], input[type=submit], button { border: 0; cursor: pointer; padding: 4px 6px; background-color: #bbb; }
-input[type=button]:hover, input[type=submit]:hover, button:hover { background-color: #999; color: #fff; }
-input[type=password], input[type=text], input[type=time], input[type=date], input[type=email], textarea { border: solid 1px #bbb; font-family: Calibri, Arial, Sans-Serif; font-size: 14px; }
-input[type=password]:hover, input[type=password]:active, input[type=time]:active, input[type=date]:active, input[type=time]:hover, input[type=date]:hover, input[type=text]:hover, input[type=email]:hover, textarea:hover, input[type=text]:focus, input[type=email]:focus, textarea:focus { border: #edce00 solid 1px; }
-input[type=button]:focus, input[type=submit]:focus, button:focus { outline: #edce00 solid 2px; outline-offset: 2px; background-color: #666; color: #fff; }
+/*input[type=button], input[type=submit], button { border: 0; cursor: pointer; padding: 4px 6px; background-color: #bbb; }
+input[type=button]:hover, input[type=submit]:hover, button:hover { background-color: #999; color: #fff; }*/
+input[type=password], input[type=text], input[type=time], input[type=date], input[type=email], textarea { border: solid 2px #bbb; font-family: Calibri, Arial, Sans-Serif; font-size: 14px; }
+input[type=password]:hover, input[type=password]:active, input[type=time]:active, input[type=date]:active, input[type=time]:hover, input[type=date]:hover, input[type=text]:hover, input[type=email]:hover, textarea:hover, input[type=text]:focus, input[type=email]:focus, textarea:focus { border: #edce00 solid 2px; }
+input[type=button]:focus, input[type=submit]:focus, button:focus { outline: #edce00 solid 2px; outline-offset: 2px; }
 
 
 #hapContent { background: #f3f3f3; position: relative; padding-top: 40px; }
@@ -58,8 +57,7 @@ input[type=button]:focus, input[type=submit]:focus, button:focus { outline: #edc
 #loginform .submit { padding-top: 30px; }
 #loginform .submit a { width: 200px; display: inline-block; }
 #loginform .submit a span:before { font-family: MSHPIconsRegular; font-size: 1em; content: ''; margin-right: 20px; }
-#loginform .submit a:hover { color: #666; }
-#loginform .submit a:active, #loginform .submit a:focus { color: #fff; background: #666; }
+#loginform .submit a:hover { color: #fff; }
 #loginform .base { padding-top: 60px; padding-left: 60px; padding-bottom: 0; }
 #loginform .copyright { position: absolute; right: 40px; bottom: 40px; }
 
@@ -154,10 +152,10 @@ th span { float: right; }
         #hapHeader #hapTitle:hover { background-color: #00508a; }
         #hapHeader #hapTitle a { background-image: url(../images/icons/metro/hap-logo-20.png); background-repeat: no-repeat; background-position: 10px center; padding-left: 34px; }
         #hapHeader #hapTitle #hapTitleMore { font-family: MSHPIconsRegular; background-image: none; padding: 0 5px; }
-#hapUserTitle { position: fixed; right: 0; height: 40px; line-height: 40px; top: 0; z-index: 110; background-color: #0060a6; border-right: solid 10px #0060a6; color: #fff; text-decoration: none; padding: 0 10px; font-size:16px; }
+#hapUserTitle { position: fixed; right: 0; height: 40px; line-height: 40px; top: 0; z-index: 310; background-color: #0060a6; border-right: solid 10px #0060a6; color: #fff; text-decoration: none; padding: 0 10px; font-size:16px; }
 #hapUserTitle:hover { background-color: #3286C1; text-decoration: none; }
 #hapUserTitle:active { background-color: #004577; }
-.hapmenu { position: fixed; top: 40px; background: #fff; border-style: solid; border-width: 2px; border-top-width: 0; z-index: 101; font-size: 16px; }
+.hapmenu { position: fixed; top: 40px; background: #fff; border-style: solid; border-width: 2px; border-top-width: 0; z-index: 301; font-size: 16px; }
 .hapmenu a { display: block; background: #fff; color: #000; height: 30px; line-height: 30px; text-decoration: none; padding: 5px 20px; }
     .hapmenu a:hover { background-color: #f3f3f3; }
 #hapUserMenu { right: 10px; width: 300px; border-top-width: 2px; margin-top: -2px; }
@@ -172,3 +170,5 @@ th span { float: right; }
 .dropdown:after { margin-left: .35em; font-family: 'MSHPIconsRegular'; content: ''; font-size: .688em; }
 .menucontainer { display: inline-block; height: 40px; line-height: 40px; }
 .menucontainer:hover { background-color: #00508a; }
+
+#bflquant .ui-button-text { padding: 1px 4px; }

@@ -153,7 +153,7 @@
 			</div>
 			<div>
 				<label for="newticket-showto"><hap:LocalResource StringPath="helpdesk/makeaware" runat="server" />: </label>
-				<input type="text" id="newticket-showto" /> <hap:LocalResource StringPath="helpdesk/note" runat="server" />
+				<input type="text" id="newticket-showto" />
 			</div>
 			</asp:PlaceHolder>
 			<input type="submit" value="File Ticket" onclick="return fileTicket()" />
