@@ -27,6 +27,8 @@ namespace HAP.Web.Configuration
             e.SetAttribute("upn", "");
             e.SetAttribute("studentsgroup", "");
             e.SetAttribute("usenestedlookups", "True");
+            e.SetAttribute("maxlogonattempts", "4");
+            e.SetAttribute("maxrecursions", "10");
             XmlElement ous = doc.CreateElement("OUs");
             e.AppendChild(ous);
             doc.SelectSingleNode("/hapConfig").AppendChild(e);
@@ -56,7 +58,11 @@ namespace HAP.Web.Configuration
             get { return int.Parse(el.GetAttribute("maxlogonattempts")); }
             set { el.SetAttribute("maxlogonattempts", value.ToString()); }
         }
-
+        public int MaxRecursions
+        {
+            get { return int.Parse(el.GetAttribute("maxrecursions")); }
+            set { el.SetAttribute("maxrecursions", value.ToString()); }
+        }
         public string StudentsGroup
         {
             get { return el.GetAttribute("studentsgroup"); }

@@ -256,6 +256,11 @@ namespace HAP.Web.Configuration
                 ((XmlElement)doc.SelectSingleNode("/hapConfig/AD")).SetAttribute("usenestedlookups", "True");
                 ((XmlElement)doc.SelectSingleNode("/hapConfig/AD")).SetAttribute("maxlogonattempts", "4");
             }
+            if (version.CompareTo(Version.Parse("9.0.0328.1900")) < 0) //Perform v9 upgrade
+            {
+                ((XmlElement)doc.SelectSingleNode("/hapConfig/AD")).SetAttribute("maxrecursions", "10");
+                ((XmlElement)doc.SelectSingleNode("/hapConfig/HelpDesk")).SetAttribute("firstlineemails", doc.SelectSingleNode("/hapConfig/SMTP").Attributes["fromaddress"].Value);
+            }
             doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             doc.Save(ConfigPath);
         }

@@ -131,11 +131,11 @@
                             </div>
                             <h3>General: <asp:Image ID="generalstate" runat="server" ImageUrl="~/images/setup/266.png" /></h3>
                             <div>
-                                <asp:Label ID="Label1" runat="server" Text="School Name: " AssociatedControlID="name" />
+                                <asp:Label runat="server" Text="School Name: " AssociatedControlID="name" />
                                 <asp:TextBox runat="server" ID="name" Text="" onkeypress="generalchange();" onchange="generalchange();" />
                             </div>
                             <div>
-                                <asp:Label ID="Label2" runat="server" Text="School URL: " AssociatedControlID="schoolurl" />
+                                <asp:Label runat="server" Text="School URL: " AssociatedControlID="schoolurl" />
                                 <asp:TextBox runat="server" ID="schoolurl" Text="" onkeypress="generalchange();" onchange="generalchange();" />
                             </div>
                         </div>
@@ -158,6 +158,18 @@
                                 <asp:Label runat="server" Text="Students Group: " AssociatedControlID="sg" />
                                 <asp:TextBox runat="server" ID="sg" Text="" onclick="showadbrowser(this, 'group');" />
                             </div>
+                            <div>
+                                <asp:CheckBox runat="server" ID="adnest" Text="Use Nested Lookups" TextAlign="Left" />
+                            </div>
+                            <div>
+                                <asp:Label runat="server" Text="Max Recursions: " AssociatedControlID="adrecur" />
+                                <asp:TextBox runat="server" ID="adrecur" Columns="2" />
+                            </div>
+                            <div>
+                                <asp:Label runat="server" Text="Max Logon Attemps: " AssociatedControlID="admaxlogon" />
+                                <asp:TextBox runat="server" ID="admaxlogon" Columns="2" />
+                            </div>
+                            
                             <h3>Active Directory User List OUs <img alt="" id="adgroupsstate" src="images/setup/266.png" /></h3>
                             <div>
                                 <p>For user selection, each OU unit will be processed in the Booking System/Help Desk Admin User Drop Down Selectors</p>
@@ -439,6 +451,10 @@
                             <div>
                                 <asp:Label runat="server" Text="Help Desk Admins/Admin Groups: " AssociatedControlID="helpdeskadmins" />
                                 <asp:TextBox runat="server" ID="helpdeskadmins" Text="Domain Admins" onclick="showadbuilder(this, false, false);" />
+                            </div>
+                            <div>
+                                <asp:Label runat="server" Text="Help Desk First Line Emails: " AssociatedControlID="helpdeskfirstline" />
+                                <asp:TextBox runat="server" ID="helpdeskfirstline" Text="" />*Comma seperated list
                             </div>
                         </div>
                     </div>
@@ -1726,7 +1742,26 @@
                             if ($("#<%=name.ClientID %>").val().length > 2 && $("#<%=schoolurl.ClientID %>").val().length > 2) i = "267.png";
                             $("#<%=generalstate.ClientID %>").attr("src", root + "images/setup/" + i);
                         }
+                        (function ($) {
+                            "use strict";
+                            $.fn.switch = function () {
+                                for (var i = 0; i < this.length; i++) {
+                                    var o = $(this[i]);
+                                    o.before('<span class="hapswitch" data-for="' + o.attr("id") + '"><span></span><i></i></span>');
+                                    o.addClass("hapswitch").change(function() {
+                                        $(this).prev().removeClass("on").addClass($(this).is(":checked") ? 'on' : '');
+                                    }).prev().click(function () {
+                                        $(this).next().prop("checked", $(this).next().is(":checked") ? false : true);
+                                        $(this).removeClass("on").addClass($(this).next().is(":checked") ? 'on' : '');
+                                    });
+                                    if (o.is(":checked")) o.prev().addClass('on');
+                                }
+                                return this;
+                            };
+                        })(jQuery, this);
                         $(function () {
+                            $("#<%=trackerstudentlogs.ClientID%>, #<%=trackerstafflogs.ClientID%>, #<%=bsmax.ClientID%>, #<%=bsdays.ClientID%>, #<%=admaxlogon.ClientID%>, #<%=adrecur.ClientID%>").spinner();
+                            $("input[type='checkbox']").switch();
                             $('#maintabs').tabs({ select: function (event, ui) {
                                 if (<%=HAP.Web.Configuration.hapConfig.Current.FirstRun.ToString().ToLower() %> && ui.index > 1) {
                                     $("#<%=Save.ClientID%>").css("display", "");

@@ -59,7 +59,8 @@ namespace HAP.HelpDesk
                 mes.Subject = Localizable.Localize("helpdesk/ticketupdated").Replace("#", "#" + Id);
                 mes.From = mes.Sender = new MailAddress(ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].Email, ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].DisplayName);
                 mes.ReplyToList.Add(mes.From);
-                mes.To.Add(new MailAddress(hapConfig.Current.SMTP.FromEmail, hapConfig.Current.SMTP.FromUser));
+                foreach (string s in hapConfig.Current.HelpDesk.FirstLineEmails.Split(new char[] { ',' }))
+                    mes.To.Add(new MailAddress(s.Trim()));
 
                 mes.IsBodyHtml = true;
 
@@ -252,7 +253,8 @@ namespace HAP.HelpDesk
                 mes.Sender = mes.From;
                 mes.ReplyToList.Add(mes.From);
 
-                mes.To.Add(new MailAddress(hapConfig.Current.SMTP.FromEmail, hapConfig.Current.SMTP.FromUser));
+                foreach (string s in hapConfig.Current.HelpDesk.FirstLineEmails.Split(new char[] { ',' }))
+                    mes.To.Add(new MailAddress(s.Trim()));
 
                 mes.IsBodyHtml = true;
                 FileInfo template = new FileInfo(HttpContext.Current.Server.MapPath("~/HelpDesk/newuserticket.htm"));
@@ -404,7 +406,7 @@ namespace HAP.HelpDesk
             string xpath = string.Format("/Tickets/Ticket[@status{0}]", State == "Open" ? "!='Fixed'" : "='Fixed'");
 
             foreach (XmlNode node in doc.SelectNodes(xpath))
-                if (node.SelectNodes("Note")[0].Attributes["username"].Value.ToLower() == Username.ToLower() || (node.Attributes["showto"] != null && contains(node.Attributes["showto"].Value, Username)))
+                if (node.SelectNodes("Note")[0].Attributes["username"].Value.ToLower() == Username.ToLower() || (node.Attributes["assignedto"] != null && contains(node.Attributes["assignedto"].Value, Username)) || (node.Attributes["showto"] != null && contains(node.Attributes["showto"].Value, Username)))
                     tickets.Add(new Ticket(node));
             if (State != "Open") tickets.Reverse();
             return tickets.ToArray();
