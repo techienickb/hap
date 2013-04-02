@@ -2,11 +2,13 @@
 <%@ Register TagName="announcement" TagPrefix="hap" Src="~/Controls/Announcement.ascx" %>
 <%@ Register TagName="version" TagPrefix="hap" Src="~/Controls/UpdateChecker.ascx" %>
 <asp:Content runat="server" ContentPlaceHolderID="head">
-    <script src="Scripts/jquery.ba-hashchange.min.js" type="text/javascript"></script>
     <link rel="stylesheet" type="text/css" href="style/jquery.wysiwyg.css" />
-    <script type="text/javascript" src="Scripts/jquery.mousewheel.js"></script>
+    <script src="Scripts/jquery.ba-hashchange.min.js"></script>
+    <script src="Scripts/jquery.mousewheel.js"></script>
+    <script src="Scripts/jquery.event.move.js"></script>
+    <script src="Scripts/jquery.event.swipe.js"></script>
 </asp:Content>
-<asp:Content runat="server" ContentPlaceHolderID="viewport"><meta name="viewport" content="width=device-width" /></asp:Content>
+<asp:Content runat="server" ContentPlaceHolderID="viewport"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" /></asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
     <div id="hapHomeContainer">
         <div id="hapHomeSide" class="tile-color"></div>
@@ -58,25 +60,16 @@
                         scrollpos = Math.min(Math.max(scrollpos, 0), maxscroll);
                         location.href = $($("#HomeButtonsHeader h1")[scrollpos]).children("a")[0].href;
                         return false;
-                    }).on('touchstart', function(event) { if (event.originalEvent.touches) event = event.originalEvent.touches[0]; if (sliding == 0) { sliding = 1; startClientX = event.clientX; } 
-                    }).on('touchend', function (event) {
-                        if (sliding == 2) {
-                            sliding = 0;
-                            scrollpos = pixelOffset < startPixelOffset ? scrollpos + 1 : scrollpos - 1;
-                            scrollpos = Math.min(Math.max(scrollpos, 0), maxscroll);
-                            location.href = $($("#HomeButtonsHeader h1")[scrollpos]).children("a")[0].href;
-                        }
-                    }).on('touchmove', function(event) {
-                        event.preventDefault();
-                        if (event.originalEvent.touches)
-                            event = event.originalEvent.touches[0];
-                        var deltaSlide = event.clientX - startClientX;
-                        if (sliding == 2) {
-                            var touchPixelRatio = 1;
-                            if ((scrollpos == 0 && event.clientX > startClientX) || (maxscroll && event.clientX < startClientX))
-                                touchPixelRatio = 3;
-                            pixelOffset = startPixelOffset + deltaSlide / touchPixelRatio;
-                        }
+                    }).on("swipeleft", function (e) {
+                        scrollpos++;
+                        scrollpos = Math.min(Math.max(scrollpos, 0), maxscroll);
+                        location.href = $($("#HomeButtonsHeader h1")[scrollpos]).children("a")[0].href;
+                        return false;
+                    }).on("swiperight", function (e) {
+                        scrollpos--;
+                        scrollpos = Math.min(Math.max(scrollpos, 0), maxscroll);
+                        location.href = $($("#HomeButtonsHeader h1")[scrollpos]).children("a")[0].href;
+                        return false;
                     });
                     $("#HomeButtons").css("width", (($("#HomeButtons > div").length * $("#HomeButtonsOutter").width()) + 200) + "px");
                     if ($("#HomeButtons > div").length == 1) $("#rightscoll, #leftscroll").hide();

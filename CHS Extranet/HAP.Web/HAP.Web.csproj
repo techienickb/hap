@@ -633,6 +633,7 @@
     <Content Include="Scripts\jqplot.dateAxisRenderer.min.js" />
     <Content Include="Scripts\jqplot.highlighter.min.js" />
     <None Include="Scripts\jquery-vsdoc.js" />
+    <Content Include="Scripts\jquery.event.move.js" />
     <Content Include="Scripts\jquery.min.js" />
     <Content Include="Scripts\jquery-ui.min.js" />
     <Content Include="Scripts\jquery.jqplot.min.js" />
@@ -644,6 +645,7 @@
     <Content Include="Scripts\jquery.mousewheel.js" />
     <Content Include="Scripts\jquery.wysiwyg.js" />
     <Content Include="Scripts\modernizer.js" />
+    <Content Include="Scripts\jquery.event.swipe.js" />
     <None Include="Scripts\_references.js" />
     <Content Include="style\editor.css" />
     <Content Include="style\jquery.jqplot.css" />

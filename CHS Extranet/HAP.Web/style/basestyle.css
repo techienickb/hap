@@ -144,7 +144,7 @@ th span { float: right; }
 #errorlist div { margin-bottom: 3px; }
 #errorlist div .cont { display: none; }
 
-#hapHeader { position: fixed; top: 0; left: 0; right: 0; height: 40px; padding: 0 10px; line-height: 40px; z-index: 99; font-family: '☺SegoeLight', 'Segoe UI Light', 'Segoe UI', Tahoma; font-size: 16px; color: #fff;  }
+#hapHeader { position: fixed; top: 0; left: 0; right: 0; height: 40px; padding: 0 10px; line-height: 40px; z-index: 99; font-family: '☺SegoeLight', 'Segoe UI Light', 'Segoe UI', Tahoma; font-size: 16px; color: #fff; white-space: nowrap; overflow: hidden;  }
     #hapHeader a { padding: 0 10px; vertical-align: top; text-decoration: none; display: inline-block; height: 40px; line-height: 40px; color: #fff; }
     #hapHeader a:hover { background-color: #3286C1; }
     #hapHeader a:active { background-color: #004577; }
