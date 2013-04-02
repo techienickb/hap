@@ -46,6 +46,22 @@ if (hap == null) {
             getLocal: function (e) {
                 for (var i = 0; i < hap.localization.length; i++)
                     if (hap.localization[i].name == e) return unescape(hap.localization[i].value.replace(/\\\\/g, "\\"));
+            },
+            makeSwitchs: function () {
+                var e = $("input[type='checkbox']");
+                for (var i = 0; i < e.length; i++) {
+                    var o = $(e[i]);
+                    if (o.hasClass("hapswitch")) continue;
+                    o.before('<span class="hapswitch" data-for="' + o.attr("id") + '"><span></span><i></i></span>');
+                    o.addClass("hapswitch").change(function () {
+                        $(this).prev().removeClass("on").addClass($(this).is(":checked") ? 'on' : '');
+                    }).prev().click(function () {
+                        $(this).next().prop("checked", $(this).next().is(":checked") ? false : true);
+                        $(this).removeClass("on").addClass($(this).next().is(":checked") ? 'on' : '');
+                    });
+                    if (o.is(":checked")) o.prev().addClass('on');
+                }
+
             }
         },
         header: {
@@ -318,30 +334,12 @@ if (hap == null) {
         }
     };
     hap.livetiles.RegisterDefaultTiles();
-    (function ($) {
-        "use strict";
-        $.fn.switch = function () {
-            for (var i = 0; i < this.length; i++) {
-                var o = $(this[i]);
-                if (o.hasClass("hapswitch")) continue;
-                o.before('<span class="hapswitch" data-for="' + o.attr("id") + '"><span></span><i></i></span>');
-                o.addClass("hapswitch").change(function () {
-                    $(this).prev().removeClass("on").addClass($(this).is(":checked") ? 'on' : '');
-                }).prev().click(function () {
-                    $(this).next().prop("checked", $(this).next().is(":checked") ? false : true);
-                    $(this).removeClass("on").addClass($(this).next().is(":checked") ? 'on' : '');
-                });
-                if (o.is(":checked")) o.prev().addClass('on');
-            }
-            return this;
-        };
-    })(jQuery, this);
     $(function () {
         hap.header.Init();
         if (hap.load > hap.loadtypes.none) {
             hap.help.Init();
             hap.common.keepAlive();
         }
-        $("input[type='checkbox']").switch();
+        hap.common.makeSwitchs();
     });
 }
