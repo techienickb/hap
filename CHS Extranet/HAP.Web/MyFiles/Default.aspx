@@ -6,6 +6,7 @@
 	<link href="../style/ui.dynatree.css" rel="stylesheet" type="text/css" />
 	<link href="../style/MyFiles.css" rel="stylesheet" type="text/css" />
     <script src="//js.live.net/v5.0/wl.js"></script>
+    <script>$("link[media='handheld'], link[media='screen and (max-device-width: 780px)'], style[media='screen and (max-device-width: 780px)']").remove();</script>
 </asp:Content>
 <asp:Content ContentPlaceHolderID="title" runat="server"><asp:HyperLink runat="server" NavigateUrl="~/MyFiles/"><hap:LocalResource runat="server" StringPath="myfiles/myfiles" /></asp:HyperLink></asp:Content>
 <asp:Content ContentPlaceHolderID="header" runat="server">
