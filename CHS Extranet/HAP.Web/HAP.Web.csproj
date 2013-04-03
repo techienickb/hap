@@ -104,7 +104,6 @@
     </Content>
     <Content Include="App_LocalResources\en-gb\Strings.xml" />
     <Content Include="BookingSystem\admin\Default.aspx" />
-    <Content Include="BookingSystem\bookingsystem.css" />
     <Content Include="BookingSystem\Display.aspx" />
     <Content Include="BookingSystem\loading.gif" />
     <Content Include="BookingSystem\Default.aspx" />

@@ -49,15 +49,6 @@ namespace HAP.Web.BookingSystem {
         protected global::System.Web.UI.WebControls.DropDownList userlist;
         
         /// <summary>
-        /// lessons control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater lessons;
-        
-        /// <summary>
         /// resources1 control.
         /// </summary>
         /// <remarks>
@@ -65,6 +56,15 @@ namespace HAP.Web.BookingSystem {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Repeater resources1;
+        
+        /// <summary>
+        /// lessons control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater lessons;
         
         /// <summary>
         /// resources2 control.

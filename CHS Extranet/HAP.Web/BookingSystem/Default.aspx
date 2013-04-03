@@ -2,6 +2,11 @@
 <asp:Content ContentPlaceHolderID="head" runat="server">
 	<script src="../Scripts/jquery.ba-hashchange.min.js" type="text/javascript"></script>
 	<link href="../style/bookingsystem.css" rel="stylesheet" type="text/css" />
+    <style>
+        #bookingday #resources, .col a, #bookingday .head h1 { width: <%=Math.Round(100.00 / (config.BookingSystem.Lessons.Count + 1), 1)%>%; }
+        #bookingday #resources { min-height: <%=(60 * config.BookingSystem.Resources.Count + 1) %>px; }
+        #bookingday .body .col, #bookingday #resources div { height: <%=Math.Round(100.00 / (config.BookingSystem.Resources.Count + 1), 1) %>%; }
+    </style>
 </asp:Content>
 <asp:Content ContentPlaceHolderID="title" runat="server"><asp:HyperLink runat="server" NavigateUrl="~/BookingSystem/"><hap:LocalResource runat="server" StringPath="bookingsystem/bookingsystem" /></asp:HyperLink></asp:Content>
 <asp:Content runat="server" ContentPlaceHolderID="viewport"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" /></asp:Content>
@@ -106,16 +111,13 @@
 	    </p>
         <div id="datepicker" style="position: absolute;"></div>
         <div id="bscontent">
-		    <div id="bookingday" class="tile-border-color">
-			    <div class="head tile-color" style="min-width: <%=(156 * (config.BookingSystem.Lessons.Count + 1)) + 2 %>px">
-				    <h1><input type="button" id="picker" onclick="return showDatePicker();" /></h1>
-				    <asp:Repeater runat="server" ID="lessons"><ItemTemplate><h1><%#Eval("Name") %></h1></ItemTemplate></asp:Repeater>
-			    </div>
-			
+		    <div id="bookingday" class="tile-border-color">		
 			    <div class="body"<%=BodyCode[0] %> style="min-width: <%=(156 * (config.BookingSystem.Lessons.Count + 1)) + 2 %>px">
 				    <div id="resources" class="tile-color">
+                        <div class="head"><input type="button" id="picker" onclick="return showDatePicker();" /></div>
 					    <asp:Repeater runat="server" ID="resources1"><ItemTemplate><div><a href="<%#ResolveClientUrl("~/bookingsystem/r-" + Eval("Name").ToString()) %>"><%#Eval("Name") %></a></div></ItemTemplate></asp:Repeater>
 				    </div>
+                    <div class="head col"><asp:Repeater runat="server" ID="lessons"><ItemTemplate><h1><%#Eval("Name") %></h1></ItemTemplate></asp:Repeater></div>
 				    <asp:Repeater runat="server" ID="resources2">
 					    <ItemTemplate>
 						    <div id="<%#Eval("Name").ToString().Replace(" ", "_") %>" class="col">

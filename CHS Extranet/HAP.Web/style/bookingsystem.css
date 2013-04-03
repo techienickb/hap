@@ -15,21 +15,20 @@ body.bookingdisplay, body.bookingdisplay form { padding: 0; margin: 0; width: 10
 .bookingdisplay { overflow: hidden; }
 
 #bookingsystemcontent { margin: 0 auto; }
-#datepicker { z-index: 200; top: 97px; }
-#bookingday { position: absolute; top: 67px; left: 0; right: 0; background: #fff; }
-#bookingday .head { overflow-y: hidden; height: 30px; line-height: 30px; color: #fff; margin: 0; padding: 0; white-space: nowrap; }
-#bookingday .head h1 { float: left; width: 156px; text-align: center; font-size: 120%; font-weight: normal; margin: 0; padding: 0; }
-#bookingday .head #picker { border: 0; border-radius: 0; width: 100%; height: 30px; line-height: 30px; font-size: 110%; background: #0060a6; color: #fff; padding: 0; }
+#datepicker { z-index: 200; top: 97px; left: 0; }
+#bookingday { position: absolute; top: 67px; left: 0; right: 0; bottom: 0; background: #fff; }
+
+#bookingday .head #picker { border: 0; border-radius: 0; width: 100%; height: 30px; line-height: 30px; font-size: 110%; background: #0060a6; color: #fff; padding: 0; font-size: 18px; }
 #bookingday .head #picker:hover { background-color: #3286C1; }
 #bookingday .head #picker:active { background-color: #004577; }
-#bookingday .body { overflow: hidden; }
-#bookingday .body .col { height: 60px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-#bookingday .body .col div, #bookingday #resources div { text-align: center; height: 60px; line-height: 60px; white-space: nowrap; text-overflow: ellipsis; }
+#bookingday .body { height: 100%; background: #fff; }
+#bookingday .body .col, #bookingday #resources div { min-height: 60px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; background: #fff; }
+#bookingday .body .col div { text-align: center; height: 100%; line-height: 60px; white-space: nowrap; text-overflow: ellipsis; }
 
 #bookingday #resources { color: #fff; padding: 0 0 2px 0; width: 156px; float: left; height: 100%; }
 
 
-#bookingday .body a { display: block; position: relative; z-index: 10; margin: 2px 0 0 2px; float: left; font-size: 12px; width: 134px; padding: 10px 10px; height: 38px; background-color: #eee; text-decoration: none; color: #666; cursor: default; white-space: nowrap; text-overflow: ellipsis; }
+#bookingday .body a, #bookingday h1 { display: block; position: relative; z-index: 10; margin: 2px 0 0 2px; float: left; font-size: 12px; min-width: 134px; padding: 10px 10px; min-height: 38px; height: 100%; background-color: #eee; text-decoration: none; color: #666; cursor: default; white-space: nowrap; text-overflow: ellipsis; }
 #bookingday .body a.admin, #bookingday .body a.bookie, #bookingday .body a.free { cursor: pointer; }
 #bookingday .body a span { display: block; font-size: 10px; line-height: 12px; }
 #bookingday .body a span.state { position: absolute; float: right; top: 0; right: 0; line-height: 16px; height: 14px; overflow: hidden; }
@@ -42,6 +41,11 @@ body.bookingdisplay, body.bookingdisplay form { padding: 0; margin: 0; width: 10
 #bookingday .body a:hover span.book i { background: transparent url(../images/ui-icons_454545_256x240.png) no-repeat -66px -112px; }
 #bookingday .body a.admin:hover, #bookingday .body a.bookie:hover, #bookingday .body a.free:hover { background-color: #dedede; }
 #bookingday .body a.admin:active, #bookingday .body a.bookie:hover, #bookingday .body a.free:hover { background-color: #ccc; }
+
+#bookingday .head, #bookingday .body.head .col div { height: 30px!important; line-height: 30px!important; background: #0060a6!important; color: #fff; min-height: 30px!important; }
+#bookingday h1 { background: transparent; text-align: center; line-height: 30px!important; height: 30px!important; color: #fff; padding-top: 0; padding-bottom: 0; font-weight: normal; font-size: 15px; }
+#bookingday #resources div { background: #0060a6; text-align: center; line-height: 60px; }
+
 #bookingday #resources a { background-color: transparent; display: inline; margin: 0; float: none; position: static; font-size: 14px; width: auto; padding: 0; height: auto; line-height: normal; color: #fff; cursor: pointer;  }
 #datepicker .ui-corner-all { border-radius: 0; }
 #searchresults .date { width: 100px; display:inline-block; }
