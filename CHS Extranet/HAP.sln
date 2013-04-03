@@ -5,6 +5,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{7F80432C-70D
 	ProjectSection(SolutionItems) = preProject
 		DiskQuotaTypeLibrary.dll = DiskQuotaTypeLibrary.dll
 		Binaries\DocumentFormat.OpenXml.dll = Binaries\DocumentFormat.OpenXml.dll
+		Binaries\DropNet.dll = Binaries\DropNet.dll
 		Binaries\Excel.dll = Binaries\Excel.dll
 		Binaries\Google.GData.AccessControl.DLL = Binaries\Google.GData.AccessControl.DLL
 		Binaries\Google.GData.Client.dll = Binaries\Google.GData.Client.dll
@@ -13,6 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{7F80432C-70D
 		Binaries\ICSharpCode.SharpZipLib.dll = Binaries\ICSharpCode.SharpZipLib.dll
 		Binaries\Microsoft.Exchange.WebServices.dll = Binaries\Microsoft.Exchange.WebServices.dll
 		Binaries\Microsoft.Http.dll = Binaries\Microsoft.Http.dll
+		Binaries\RestSharp.dll = Binaries\RestSharp.dll
 		Binaries\srmlib.dll = Binaries\srmlib.dll
 	EndProjectSection
 EndProject

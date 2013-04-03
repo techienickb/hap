@@ -3,6 +3,7 @@
 	<script src="../Scripts/jquery.ba-hashchange.min.js" type="text/javascript"></script>
 	<link href="../style/helpdesk.css" rel="stylesheet" type="text/css" />
 </asp:Content>
+<asp:Content runat="server" ContentPlaceHolderID="viewport"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" /></asp:Content>
 <asp:Content ContentPlaceHolderID="title" runat="server"><asp:HyperLink runat="server" NavigateUrl="~/HelpDesk/"><hap:LocalResource runat="server" StringPath="helpdesk/helpdesk" /></asp:HyperLink></asp:Content>
 <asp:Content ContentPlaceHolderID="header" runat="server">
     <div id="toolbar">
@@ -19,6 +20,7 @@
     </div>
 </asp:Content>
 <asp:Content ContentPlaceHolderID="body" runat="server">
+    <div id="hap-HD">
     <div id="assignticket">
         <div>
 			<asp:Label runat="server" AssociatedControlID="userlist2" Text="Assign To: " />
@@ -426,4 +428,5 @@
 	    }
 	</script>
     </hap:CompressJS>
+    </div>
 </asp:Content>
