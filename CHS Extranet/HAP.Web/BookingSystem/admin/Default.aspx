@@ -1,14 +1,14 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true"
 	CodeBehind="Default.aspx.cs" Inherits="HAP.Web.BookingSystem.admin.Default" %>
 <%@ Import Namespace="HAP.Web.BookingSystem" %>
-<asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
+<asp:Content ContentPlaceHolderID="head" runat="server">
 	<link href="../../style/bookingsystem.css" rel="stylesheet" type="text/css" />
 </asp:Content>
 <asp:Content ContentPlaceHolderID="title" runat="server"><asp:HyperLink runat="server" NavigateUrl="~/BookingSystem/"><hap:LocalResource ID="LocalResource1" runat="server" StringPath="bookingsystem/bookingsystem" /></asp:HyperLink></asp:Content>
 <asp:Content ContentPlaceHolderID="header" runat="server">
 	<a href="../"><hap:LocalResource StringPath="bookingsystem/bookingsystem" Seperator=" " StringPath2="home" runat="server" /></a>
 </asp:Content>
-<asp:Content ID="Content1" ContentPlaceHolderID="body" runat="server">
+<asp:Content ContentPlaceHolderID="body" runat="server">
     <script type="text/javascript">$(function () { $(".selector").datepicker({ dateFormat: "dd/mm/yy" }); });</script>
 	<div id="tabs">
 		<ul>
@@ -18,8 +18,7 @@
 			<li><a href="#email-templates">Email Templates</a></li>
 		</ul>
 		<div id="term-dates">
-			<asp:ObjectDataSource ID="termdatesDataSource" runat="server" SelectMethod="ToArray"
-				TypeName="HAP.BookingSystem.Terms"></asp:ObjectDataSource>
+			<asp:ObjectDataSource ID="termdatesDataSource" runat="server" SelectMethod="ToArray" TypeName="HAP.BookingSystem.Terms"></asp:ObjectDataSource>
 			<asp:Repeater ID="termdates" runat="server" DataSourceID="termdatesDataSource">
 				<HeaderTemplate>
 					<table style="width: 100%">
