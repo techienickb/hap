@@ -22,6 +22,12 @@
             <SolidColorBrush x:Key="ProgressBarIndeterminateForegroundThemeBrush" Color="White" />
             <SolidColorBrush x:Key="ProgressBarForegroundThemeBrush" Color="White" />
             <SolidColorBrush x:Key="ProgressBarBackgroundThemeBrush" Color="#33FFFFFF" />
+            <SolidColorBrush x:Key="ComboBoxItemSelectedBackgroundThemeBrush" Color="#FF004577" />
+            <SolidColorBrush x:Key="ComboBoxItemSelectedPointerOverBackgroundThemeBrush" Color="#FF0060a6" />
+            <SolidColorBrush x:Key="ListViewItemSelectedPointerOverBackgroundThemeBrush" Color="#FF003459" />
+            <SolidColorBrush x:Key="ListViewItemSelectedPointerOverBorderThemeBrush" Color="#FF003459" />
+            <SolidColorBrush x:Key="ListViewItemSelectedBackgroundThemeBrush" Color="#FF003459" />
+            <SolidColorBrush x:Key="ListViewItemOverlayBackgroundThemeBrush" Color="#FF004577" />
         </ResourceDictionary>
 
         <ResourceDictionary x:Key="HighContrast">
@@ -1853,5 +1859,9 @@
             </Setter.Value>
         </Setter>
     </Style>
-
+    <Style x:Key="DownloadAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource AppBarButtonStyle}">
+        <Setter Property="AutomationProperties.AutomationId" Value="DownloadAppBarButton"/>
+        <Setter Property="AutomationProperties.Name" Value="Download"/>
+        <Setter Property="Content" Value="&#xE118;"/>
+    </Style>
 </ResourceDictionary>

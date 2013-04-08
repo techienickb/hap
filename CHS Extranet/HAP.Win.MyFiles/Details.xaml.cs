@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
@@ -22,21 +21,22 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The Items Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234233
+// The Item Detail Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234232
 
 namespace HAP.Win.MyFiles
 {
     /// <summary>
-    /// A page that displays a collection of item previews.  In the Split Application this page
-    /// is used to display and select one of the available groups.
+    /// A page that displays details for a single item within a group while allowing gestures to
+    /// flip through other items belonging to the same group.
     /// </summary>
-    public sealed partial class Browser : HAP.Win.MyFiles.Common.LayoutAwarePage
+    public sealed partial class Details : HAP.Win.MyFiles.Common.LayoutAwarePage
     {
-        public Browser()
+        public Details()
         {
             this.InitializeComponent();
         }
 
+        private string Path;
         /// <summary>
         /// Populates the page with content passed during navigation.  Any saved state is also
         /// provided when recreating a page from a prior session.
@@ -48,20 +48,19 @@ namespace HAP.Win.MyFiles
         /// session.  This will be null the first time a page is visited.</param>
         protected override async void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
+            // Allow saved page state to override the initial item to display
+            if (pageState != null && pageState.ContainsKey("SelectedItem"))
+            {
+                navigationParameter = pageState["path"];
+            }
             loading.IsIndeterminate = true;
-            string path = navigationParameter as string;
-            HttpWebRequest req;
-            if (path == "")
+            Path = navigationParameter as string;
+            if (Path == "")
             {
-                pageTitle.Text = "My Drives";
-                req = WebRequest.CreateHttp(new Uri(HAPSettings.CurrentSite.Address, "./api/myfiles/drives"));
+                Frame.GoBack();
+                return;
             }
-            else
-            {
-                pageTitle.Text = path.Replace("/", "\\").Replace("\\", " \\ ");
-                req = WebRequest.CreateHttp(new Uri(HAPSettings.CurrentSite.Address, "./api/myfiles/" + path.Replace('\\', '/')));
-            }
-
+            HttpWebRequest req = WebRequest.CreateHttp(new Uri(HAPSettings.CurrentSite.Address, "./api/myfiles/Properties/" + Path.Replace('\\', '/').Replace("../Download/", "")));
             req.Method = "GET";
             req.ContentType = "application/json";
 
@@ -73,7 +72,7 @@ namespace HAP.Win.MyFiles
                 req.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie(HAPSettings.CurrentToken[2], HAPSettings.CurrentToken[1]));
                 tokengood = true;
             }
-            catch 
+            catch
             {
                 MessageDialog mes = new MessageDialog("Your Logon Token has Expired");
                 mes.Commands.Add(new UICommand("OK"));
@@ -88,22 +87,9 @@ namespace HAP.Win.MyFiles
                 {
                     WebResponse x = await req.GetResponseAsync();
                     x1 = (HttpWebResponse)x;
-                    if (path == "")
-                    {
-                        JSONDrive[] drives = JsonConvert.DeserializeObject<JSONDrive[]>(new StreamReader(x1.GetResponseStream()).ReadToEnd());
-                        itemsViewSource.Source = drives;
-                        driveGridView.Visibility = Windows.UI.Xaml.Visibility.Visible;
-                        fileGridView.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-                        driveGridView.SelectedIndex = -1;
-                    }
-                    else
-                    {
-                        JSONFile[] files = JsonConvert.DeserializeObject<JSONFile[]>(new StreamReader(x1.GetResponseStream()).ReadToEnd());
-                        itemsViewSource.Source = files;
-                        driveGridView.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-                        fileGridView.Visibility = Windows.UI.Xaml.Visibility.Visible;
-                        fileGridView.SelectedIndex = -1;
-                    }
+                    JSONProperties prop = JsonConvert.DeserializeObject<JSONProperties>(new StreamReader(x1.GetResponseStream()).ReadToEnd());
+                    DataContext = prop;
+                    pageTitle.Text = prop.Name;
                 }
                 catch (Exception ex)
                 {
@@ -117,64 +103,19 @@ namespace HAP.Win.MyFiles
             loading.IsIndeterminate = false;
         }
 
-        private void driveGridView_ItemClick(object sender, ItemClickEventArgs e)
+        /// <summary>
+        /// Preserves state associated with this page in case the application is suspended or the
+        /// page is discarded from the navigation cache.  Values must conform to the serialization
+        /// requirements of <see cref="SuspensionManager.SessionState"/>.
+        /// </summary>
+        /// <param name="pageState">An empty dictionary to be populated with serializable state.</param>
+        protected override void SaveState(Dictionary<String, Object> pageState)
         {
-            Frame.Navigate(typeof(Browser), ((JSONDrive)e.ClickedItem).Path);
-        }
-
-        private void fileGridView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            JSONFile file = ((JSONFile)e.ClickedItem);
-            if (file.Extension == "") Frame.Navigate(typeof(Browser), ((JSONFile)e.ClickedItem).Path);
-            else
-            {
-                Frame.Navigate(typeof(Details), ((JSONFile)e.ClickedItem).Path);
-                //pro.Visibility = Windows.UI.Xaml.Visibility.Visible;
-                //pro.Value = 0;
-                //downloadfile(file);
-            }
-        }
-
-        void downloadfile(JSONFile file)
-        {
-            HttpWebRequest req = WebRequest.CreateHttp(new Uri(HAPSettings.CurrentSite.Address, file.Path.Substring(1)));
-            req.Method = "GET";
-            req.CookieContainer = new CookieContainer();
-            req.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie("token", HAPSettings.CurrentToken[0]));
-            req.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie(HAPSettings.CurrentToken[2], HAPSettings.CurrentToken[1]));
-            req.AllowReadStreamBuffering = false;
-            req.BeginGetResponse(a =>
-            {
-                using (WebResponse response = req.EndGetResponse(a))
-                {
-                    int expected = (int)response.ContentLength;
-                    using (System.IO.BinaryReader reader  = new BinaryReader(response.GetResponseStream()))
-                    {
-                        MemoryStream ms = new MemoryStream(expected);
-                        bool canwrite = true;
-                        int count = 0, x = 0;
-                        while (canwrite)
-                        {
-                            try
-                            {
-                                ms.WriteByte(reader.ReadByte());
-                            }
-                            catch { canwrite = false; }
-                            count++;
-                            x++;
-                            if (x == 100) { var ignored = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { pro.Value = count * 100.0 / expected; }); x = 0; }
-
-                        }
-                        var ignored1 = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { makefile(ms, (JSONFile)a.AsyncState); });
-                        var ignored2 = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {pro.Value = 100.0;});
-                    }
-                }
-            }
-            , file);
+            pageState.Add("path", Path);
         }
 
 
-        async void makefile(MemoryStream ms, JSONFile jfile)
+        async void makefile(MemoryStream ms, JSONProperties jfile)
         {
             Windows.Storage.StorageFolder temporaryFolder = ApplicationData.Current.TemporaryFolder;
             StorageFile sampleFile = await temporaryFolder.CreateFileAsync(jfile.Name + jfile.Extension, CreationCollisionOption.ReplaceExisting);
@@ -214,7 +155,6 @@ namespace HAP.Win.MyFiles
                 }
                 else
                 {
-                    var ignored1 = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { pro.Visibility = Windows.UI.Xaml.Visibility.Collapsed; });
                 }
             }
             await sampleFile.DeleteAsync();
@@ -233,29 +173,45 @@ namespace HAP.Win.MyFiles
             return unsnapped;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void downloadbutton_Click(object sender, RoutedEventArgs e)
         {
-            JSONFile file = ((JSONFile)fileGridView.SelectedItem);
+            loading.IsIndeterminate = true;
             pro.Visibility = Windows.UI.Xaml.Visibility.Visible;
             pro.Value = 0;
-            downloadfile(file);
-        }
-
-        private void fileGridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            try
+            HttpWebRequest req = WebRequest.CreateHttp(new Uri(HAPSettings.CurrentSite.Address, Path.Substring(1)));
+            req.Method = "GET";
+            req.CookieContainer = new CookieContainer();
+            req.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie("token", HAPSettings.CurrentToken[0]));
+            req.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie(HAPSettings.CurrentToken[2], HAPSettings.CurrentToken[1]));
+            req.AllowReadStreamBuffering = false;
+            req.BeginGetResponse(a =>
             {
-                if (fileGridView.SelectedItem != null)
+                using (WebResponse response = req.EndGetResponse(a))
                 {
-                    JSONFile file = ((JSONFile)fileGridView.SelectedItem);
-                    if (file.Extension != "") { bottomAppBar.IsEnabled = bottomAppBar.IsOpen = true; }
-                    else { bottomAppBar.IsEnabled = bottomAppBar.IsOpen = false; fileGridView.SelectedIndex = -1; }
+                    int expected = (int)response.ContentLength;
+                    using (System.IO.BinaryReader reader = new BinaryReader(response.GetResponseStream()))
+                    {
+                        MemoryStream ms = new MemoryStream(expected);
+                        bool canwrite = true;
+                        int count = 0, x = 0;
+                        while (canwrite)
+                        {
+                            try
+                            {
+                                ms.WriteByte(reader.ReadByte());
+                            }
+                            catch { canwrite = false; }
+                            count++;
+                            x++;
+                            if (x == 100) { var ignored = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { pro.Value = count * 100.0 / expected; }); x = 0; }
+
+                        }
+                        var ignored1 = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { makefile(ms, (JSONProperties)a.AsyncState); });
+                        var ignored2 = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { pro.Value = 100.0; loading.IsIndeterminate = false; });
+                    }
                 }
-                else { bottomAppBar.IsEnabled = bottomAppBar.IsOpen = false; }
             }
-            catch { bottomAppBar.IsEnabled = bottomAppBar.IsOpen = false; }
+            , (JSONProperties)DataContext);
         }
-
-
     }
 }
