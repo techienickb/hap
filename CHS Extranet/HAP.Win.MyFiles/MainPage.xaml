@@ -25,6 +25,13 @@
 
         <StackPanel Grid.Row="2" HorizontalAlignment="Left" Margin="125,31,0,0" VerticalAlignment="Top" Width="800" >
             <TextBlock HorizontalAlignment="Left" Margin="0,0,0,40" VerticalAlignment="Top" TextWrapping="Wrap" Text="Please to connect you to your School's Home Access Plus+ Install"  Style="{StaticResource PageSubheaderTextStyle}" />
+            <TextBlock Text="HAP+ Site:" FontSize="16" Padding="0,6" />
+            <StackPanel Orientation="Horizontal">
+                <ComboBox Width="600" Name="sites" SelectedIndex="0" SelectionChanged="sites_SelectionChanged">
+                    <ComboBoxItem Content="New Site+" IsSelected="True"/>
+                </ComboBox>
+                <Button Content="Remove" Name="removesite" Visibility="Collapsed" Click="removesite_Click" />
+            </StackPanel>
             <TextBlock TextWrapping="Wrap" Text="HAP+ Address:" FontSize="16" Padding="0,6"/>
             <TextBox Name="address" Text="https://" InputScope="Url" />
             <TextBlock TextWrapping="Wrap" Text="Username:" FontSize="16" Padding="0,6" />

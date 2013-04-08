@@ -82,7 +82,11 @@ namespace HAP.Win.MyFiles
             List<string> s = new List<string>();
             s.AddRange((string[])roamingSettings.Values["sites"]);
             s.Remove(key);
-            roamingSettings.Values["sites"] = s.ToArray();
+            if (s.Count == 0)
+            {
+                roamingSettings.Containers["hapSites"].Values["site0"] = new string[] { "site0", "", "", "" };
+                roamingSettings.Values["sites"] = new string[] { "site0" };
+            } else roamingSettings.Values["sites"] = s.ToArray();
         }
 
         public void DataChangeHandler(Windows.Storage.ApplicationData appData, object o)
