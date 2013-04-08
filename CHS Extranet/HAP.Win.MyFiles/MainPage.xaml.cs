@@ -87,30 +87,40 @@ namespace HAP.Win.MyFiles
                 }
                 if (x1 != null)
                 {
-                    JSON.JSONUser user = JsonConvert.DeserializeObject<JSON.JSONUser>(new StreamReader(x1.GetResponseStream()).ReadToEnd());
-                    if (user.isValid)
+                    try
                     {
-                        HAPSettings hs = new HAPSettings();
-                        hs.AddSite(new HAPSetting() { Name = user.SiteName, Address = new Uri(s), Password = password.Password, Username = username.Text });
-                        if (hs.SiteContainer.Values.ContainsKey("site0")) hs.RemoveSite("site0");
+                        JSON.JSONUser user = JsonConvert.DeserializeObject<JSON.JSONUser>(new StreamReader(x1.GetResponseStream()).ReadToEnd());
+                        if (user.isValid)
+                        {
+                            HAPSettings hs = new HAPSettings();
+                            hs.AddSite(new HAPSetting() { Name = user.SiteName, Address = new Uri(s), Password = password.Password, Username = username.Text });
+                            if (hs.SiteContainer.Values.ContainsKey("site0")) hs.RemoveSite("site0");
 
-                        HAPSettings.CurrentSite = hs.Settings[user.SiteName];
-                        HAPSettings.CurrentToken = user.ToString();
+                            HAPSettings.CurrentSite = hs.Settings[user.SiteName];
+                            HAPSettings.CurrentToken = user.ToString();
 
-                        MessageDialog mes = new MessageDialog("Hello " + user.FirstName + ",\n\nThis app is limited to browsing and download files from your School");
-                        mes.Commands.Add(new UICommand("OK"));
-                        mes.DefaultCommandIndex = 0;
-                        await mes.ShowAsync();
-                        Frame.Navigate(typeof(Browser), "");
+                            MessageDialog mes = new MessageDialog("Hello " + user.FirstName + ",\n\nThis app is limited to browsing and download files from your School");
+                            mes.Commands.Add(new UICommand("OK"));
+                            mes.DefaultCommandIndex = 0;
+                            await mes.ShowAsync();
+                            Frame.Navigate(typeof(Browser), "");
+                        }
+                        else
+                        {
+                            MessageDialog mes = new MessageDialog("Your Username/Password conbination doesn't match a user at this school!", "Error");
+                            mes.Commands.Add(new UICommand("OK"));
+                            mes.DefaultCommandIndex = 0;
+                            await mes.ShowAsync();
+                            loading.IsIndeterminate = false;
+                            login.IsEnabled = true;
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        MessageDialog mes = new MessageDialog("Your Username/Password conbination doesn't match a user at this school!", "Error");
+                        MessageDialog mes = new MessageDialog((ex.ToString().Contains("404") ? "Your School's Home Access Plus+ Install isn't up-to-date\n\nPlease ask them to upgrade to HAP+ v9 or above" : "Communication Error\n\n" + ex.ToString()));
                         mes.Commands.Add(new UICommand("OK"));
                         mes.DefaultCommandIndex = 0;
-                        await mes.ShowAsync();
-                        loading.IsIndeterminate = false;
-                        login.IsEnabled = true;
+                        mes.ShowAsync();
                     }
                 }
             }
