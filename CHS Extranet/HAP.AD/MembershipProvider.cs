@@ -148,7 +148,6 @@ namespace HAP.AD
                 return true;
             }
             catch { return false; }
-
         }
 
         public override string ApplicationName { get; set; }

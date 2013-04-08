@@ -23,7 +23,7 @@ namespace HAP.MyFiles
         public AccessControlActions Actions { get; set; }
         public int CompareTo(object obj)
         {
-            return Name.CompareTo(((File)obj).Name);
+            return Name.CompareTo(((Drive)obj).Name);
         } 
     }
 }
