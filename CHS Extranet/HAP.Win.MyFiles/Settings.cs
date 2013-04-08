@@ -7,6 +7,10 @@ using System.Diagnostics;
 using Windows.Storage;
 using Windows.Foundation;
 using Windows.Security.Credentials;
+using System.Net;
+using System.IO;
+using Windows.UI.Popups;
+using Newtonsoft.Json;
 
 namespace HAP.Win.MyFiles
 {
@@ -16,11 +20,11 @@ namespace HAP.Win.MyFiles
         {
             Windows.Storage.ApplicationData.Current.DataChanged += new TypedEventHandler<ApplicationData, object>(DataChangeHandler);
             Windows.Storage.ApplicationDataContainer roamingSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
-            roamingSettings.DeleteContainer("hapSites");
+            //roamingSettings.DeleteContainer("hapSites");
             Windows.Storage.ApplicationDataContainer container = roamingSettings.CreateContainer("hapSites", Windows.Storage.ApplicationDataCreateDisposition.Always);
             if (roamingSettings.Containers.ContainsKey("hapSites") && roamingSettings.Containers["hapSites"].Values.Count == 0)
             {
-                roamingSettings.Containers["hapSites"].Values["site0"] = new string[] { "site0", "", "", "" };
+                roamingSettings.Containers["hapSites"].Values["site0"] = new string[] { "site0", "" };
                 roamingSettings.Values["sites"] = new string[] { "site0" };
             }
         }
@@ -68,24 +72,30 @@ namespace HAP.Win.MyFiles
         {
             Windows.Storage.ApplicationDataContainer roamingSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
             Windows.Storage.ApplicationDataContainer container = roamingSettings.CreateContainer("hapSites", Windows.Storage.ApplicationDataCreateDisposition.Always);
-            if (roamingSettings.Containers["hapSites"].Values.ContainsKey(value.Name)) return;
             roamingSettings.Containers["hapSites"].Values[value.Name] = value.ToString();
             List<string> s = new List<string>();
             s.AddRange((string[])roamingSettings.Values["sites"]);
-            s.Add(value.Name);
+            if (!s.Contains(value.Name)) s.Add(value.Name);
             roamingSettings.Values["sites"] = s.ToArray();
         }
         public void RemoveSite(string key)
         {
             Windows.Storage.ApplicationDataContainer roamingSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
             Windows.Storage.ApplicationDataContainer container = roamingSettings.CreateContainer("hapSites", Windows.Storage.ApplicationDataCreateDisposition.Always);
+
+            if (key != "site0")
+            {
+                PasswordVault vault = new PasswordVault();
+                if (vault.FindAllByResource("HAP+ Credentials").Count(c => c.UserName.EndsWith(Settings[key].Address.DnsSafeHost)) == 1) vault.Remove(vault.FindAllByResource("HAP+ Credentials").Single(c => c.UserName.EndsWith(Settings[key].Address.DnsSafeHost)));
+            }
+
             roamingSettings.Containers["hapSites"].Values.Remove(key);
             List<string> s = new List<string>();
             s.AddRange((string[])roamingSettings.Values["sites"]);
             s.Remove(key);
             if (s.Count == 0)
             {
-                roamingSettings.Containers["hapSites"].Values["site0"] = new string[] { "site0", "", "", "" };
+                roamingSettings.Containers["hapSites"].Values["site0"] = new string[] { "site0", "" };
                 roamingSettings.Values["sites"] = new string[] { "site0" };
             } else roamingSettings.Values["sites"] = s.ToArray();
         }
@@ -100,18 +110,19 @@ namespace HAP.Win.MyFiles
     {
         public string Username { get; set; }
         public string Password { get; set; }
+        public bool PasswordInVault { get; set; }
         public Uri Address { get; set; }
         public string Name { get; set; }
         public static HAPSetting Parse(string[] s)
         {
-            HAPSetting set = new HAPSetting() { Name = s[0], Address = new Uri(s[1]), Username = "", Password = "" };
+            HAPSetting set = new HAPSetting() { Name = s[0] };
             if (s[0] != "site0")
             {
+                set.Address = new Uri(s[1]);
                 PasswordVault vault = new PasswordVault();
                 if (vault.FindAllByResource("HAP+ Credentials").Count(c => c.UserName.EndsWith(set.Address.DnsSafeHost)) == 0)
                 {
-
-                    //ask for new credentails - possible change of computer so credentails will not be in the vault.
+                    set.PasswordInVault = false;
                 }
                 else
                 {
@@ -123,10 +134,25 @@ namespace HAP.Win.MyFiles
             }
             return set;
         }
+
         public string[] ToString()
         {
-            PasswordVault vault = new PasswordVault();
-            vault.Add(new PasswordCredential("HAP+ Credentials", Username + "@" + Address.DnsSafeHost, Password));
+            if (Name != "site0")
+            {
+                PasswordVault vault = new PasswordVault();
+                try
+                {
+                    if (vault.FindAllByResource("HAP+ Credentials").Count(c => c.UserName.EndsWith(Address.DnsSafeHost)) == 0)
+                        vault.Add(new PasswordCredential("HAP+ Credentials", Username + "@" + Address.DnsSafeHost, Password));
+                    else
+                    {
+                        PasswordCredential cred = vault.FindAllByResource("HAP+ Credentials").Single(c => c.UserName.EndsWith(Address.DnsSafeHost));
+                        cred.UserName = Username + "@" + Address.DnsSafeHost;
+                        cred.Password = Password;
+                    }
+                }
+                catch { vault.Add(new PasswordCredential("HAP+ Credentials", Username + "@" + Address.DnsSafeHost, Password)); }
+            }
             return new string[] { Name, Address.ToString() };
         }
     }

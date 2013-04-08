@@ -34,7 +34,6 @@ namespace HAP.Win.MyFiles.JSON
     public class JSONFile
     {
         public NTFSPerms Permissions { get; set; }
-
         public string CreationTime { get; set; }
         public string ModifiedTime { get; set; }
         public string Name { get; set; }
@@ -66,6 +65,22 @@ namespace HAP.Win.MyFiles.JSON
         public bool WriteAttr { get; set; }
         public bool WriteData { get; set; }
         public bool WriteExAttr { get; set; }
+    }
+
+    public class JSONProperties
+    {
+        public AccessControlActions Actions { get; set; }
+        public string Name { get; set; }
+        public string DateCreated { get; set; }
+        public string Location { get; set; }
+        public string Type { get; set; }
+        public string Size { get; set; }
+        public string DateModified { get; set; }
+        public string DateAccessed { get; set; }
+        public string Contents { get; set; }
+        public string Icon { get; set; }
+        public string Extension { get; set; }
+        public NTFSPerms Permissions { get; set; }
     }
 
     public enum AccessControlActions { Change, View, None, ZIP }

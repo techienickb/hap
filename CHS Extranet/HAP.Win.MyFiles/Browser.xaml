@@ -38,20 +38,19 @@
             Padding="116,10,116,46"
             ItemsSource="{Binding Source={StaticResource itemsViewSource}}"
             ItemTemplate="{StaticResource Drive250x250ItemTemplate}"
-            SelectionMode="None"
-            IsSwipeEnabled="false" IsItemClickEnabled="True" ItemClick="driveGridView_ItemClick"   />
+            SelectionMode="None" IsSwipeEnabled="false" IsItemClickEnabled="True" ItemClick="driveGridView_ItemClick"   />
         <GridView
             Grid.Row="2"
             x:Name="fileGridView"
             AutomationProperties.AutomationId="ItemsGridView"
             AutomationProperties.Name="Items"
-            TabIndex="1"
+            TabIndex="1" 
             Grid.RowSpan="2"
             Padding="116,10,116,46"
             ItemsSource="{Binding Source={StaticResource itemsViewSource}}"
             ItemTemplate="{StaticResource Standard250x250ItemTemplate}"
-            SelectionMode="None" IsItemClickEnabled="True"
-            IsSwipeEnabled="false" ItemClick="fileGridView_ItemClick"/>
+            SelectionMode="Single" IsItemClickEnabled="True"
+            IsSwipeEnabled="false" ItemClick="fileGridView_ItemClick" SelectionChanged="fileGridView_SelectionChanged"/>
 
 
         <!-- Back button and page title -->
@@ -93,9 +92,24 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="pageTitle" Storyboard.TargetProperty="Style">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SnappedPageHeaderTextStyle}"/>
                         </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="fileGridView" Storyboard.TargetProperty="Padding">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="10,10,10,10"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="driveGridView" Storyboard.TargetProperty="Padding">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="10,10,10,10"/>
+                        </ObjectAnimationUsingKeyFrames>
                     </Storyboard>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
     </Grid>
+    <common:LayoutAwarePage.BottomAppBar>
+        <AppBar x:Name="bottomAppBar" IsEnabled="False" Padding="10,0,10,0">
+            <Grid>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Button Style="{StaticResource DownloadAppBarButtonStyle}" Click="Button_Click"/>
+                </StackPanel>
+            </Grid>
+        </AppBar>
+    </common:LayoutAwarePage.BottomAppBar>
 </common:LayoutAwarePage>

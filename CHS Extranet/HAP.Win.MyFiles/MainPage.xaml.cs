@@ -61,55 +61,67 @@ namespace HAP.Win.MyFiles
             login.IsEnabled = false;
             string s = address.Text;
             if (!s.EndsWith("/")) s += "/";
-            System.Net.HttpWebRequest req = WebRequest.CreateHttp(new Uri(new Uri(s), "./api/ad"));
-            req.Method = "POST";
-            req.ContentType = "application/json";
-            req.Proxy = WebRequest.DefaultWebProxy;
-            HttpWebResponse x1 = null;
             try
             {
-                StreamWriter sw = new StreamWriter(await req.GetRequestStreamAsync());
-                sw.Write("{ \"username\": \"" + username.Text + "\", \"password\": \"" + password.Password + "\" }");
-                sw.Flush();
-                WebResponse x = await req.GetResponseAsync();
-                x1 = (HttpWebResponse)x;
+                System.Net.HttpWebRequest req = WebRequest.CreateHttp(new Uri(new Uri(s), "./api/ad"));
+                req.Method = "POST";
+                req.ContentType = "application/json";
+                req.Proxy = WebRequest.DefaultWebProxy;
+                HttpWebResponse x1 = null;
+                try
+                {
+                    StreamWriter sw = new StreamWriter(await req.GetRequestStreamAsync());
+                    sw.Write("{ \"username\": \"" + username.Text + "\", \"password\": \"" + password.Password + "\" }");
+                    sw.Flush();
+                    WebResponse x = await req.GetResponseAsync();
+                    x1 = (HttpWebResponse)x;
+                }
+                catch (Exception ex)
+                {
+                    loading.IsIndeterminate = false;
+                    login.IsEnabled = true;
+                    MessageDialog mes = new MessageDialog("An Active Internet Connection is Required\n\n" + ex.ToString());
+                    mes.Commands.Add(new UICommand("OK"));
+                    mes.DefaultCommandIndex = 0;
+                    mes.ShowAsync();
+                }
+                if (x1 != null)
+                {
+                    JSON.JSONUser user = JsonConvert.DeserializeObject<JSON.JSONUser>(new StreamReader(x1.GetResponseStream()).ReadToEnd());
+                    if (user.isValid)
+                    {
+                        HAPSettings hs = new HAPSettings();
+                        hs.AddSite(new HAPSetting() { Name = user.SiteName, Address = new Uri(s), Password = password.Password, Username = username.Text });
+                        if (hs.SiteContainer.Values.ContainsKey("site0")) hs.RemoveSite("site0");
+
+                        HAPSettings.CurrentSite = hs.Settings[user.SiteName];
+                        HAPSettings.CurrentToken = user.ToString();
+
+                        MessageDialog mes = new MessageDialog("Hello " + user.FirstName + ",\n\nThis app is limited to browsing and download files from your School");
+                        mes.Commands.Add(new UICommand("OK"));
+                        mes.DefaultCommandIndex = 0;
+                        await mes.ShowAsync();
+                        Frame.Navigate(typeof(Browser), "");
+                    }
+                    else
+                    {
+                        MessageDialog mes = new MessageDialog("Your Username/Password conbination doesn't match a user at this school!", "Error");
+                        mes.Commands.Add(new UICommand("OK"));
+                        mes.DefaultCommandIndex = 0;
+                        await mes.ShowAsync();
+                        loading.IsIndeterminate = false;
+                        login.IsEnabled = true;
+                    }
+                }
             }
-            catch (Exception ex)
+            catch
             {
-                loading.IsIndeterminate = false;
-                login.IsEnabled = true;
-                MessageDialog mes = new MessageDialog("An Active Internet Connection is Required\n\n" + ex.ToString());
+                MessageDialog mes = new MessageDialog("That Address doesn't seem to be valid");
                 mes.Commands.Add(new UICommand("OK"));
                 mes.DefaultCommandIndex = 0;
                 mes.ShowAsync();
-            }
-            if (x1 != null)
-            {
-                JSON.JSONUser user = JsonConvert.DeserializeObject<JSON.JSONUser>(new StreamReader(x1.GetResponseStream()).ReadToEnd());
-                if (user.isValid)
-                {
-                    HAPSettings hs = new HAPSettings();
-                    hs.AddSite(new HAPSetting() { Name = user.SiteName, Address = new Uri(s), Password = password.Password, Username = username.Text });
-                    if (hs.SiteContainer.Values.ContainsKey("site0")) hs.RemoveSite("site0");
-
-                    HAPSettings.CurrentSite = hs.Settings[user.SiteName];
-                    HAPSettings.CurrentToken = user.ToString();
-
-                    MessageDialog mes = new MessageDialog("Hello " + user.FirstName + ",\n\nThis app is limited to browsing and download files from your School");
-                    mes.Commands.Add(new UICommand("OK"));
-                    mes.DefaultCommandIndex = 0;
-                    await mes.ShowAsync();
-                    Frame.Navigate(typeof(Browser), "");
-                }
-                else
-                {
-                    MessageDialog mes = new MessageDialog("Your Username/Password conbination doesn't match a user at this school!", "Error");
-                    mes.Commands.Add(new UICommand("OK"));
-                    mes.DefaultCommandIndex = 0;
-                    await mes.ShowAsync();
-                    loading.IsIndeterminate = false;
-                    login.IsEnabled = true;
-                }
+                loading.IsIndeterminate = false;
+                login.IsEnabled = true;
             }
         }
 
@@ -144,9 +156,10 @@ namespace HAP.Win.MyFiles
         private void removesite_Click(object sender, RoutedEventArgs e)
         {
             string name = ((HAPSetting)((ComboBoxItem)sites.SelectedItem).DataContext).Name;
+            int index = sites.SelectedIndex;
             new HAPSettings().RemoveSite(name);
-            sites.Items.Remove(sites.SelectedItem);
             sites.SelectedIndex = 0;
+            sites.Items.RemoveAt(index);
         }
     }
 }
