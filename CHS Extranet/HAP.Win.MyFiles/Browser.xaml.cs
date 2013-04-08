@@ -66,26 +66,53 @@ namespace HAP.Win.MyFiles
             req.ContentType = "application/json";
 
             req.CookieContainer = new CookieContainer();
-            req.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie("token", HAPSettings.CurrentToken[0]));
-            req.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie(HAPSettings.CurrentToken[2], HAPSettings.CurrentToken[1]));
-            WebResponse x = await req.GetResponseAsync();
-            HttpWebResponse x1 = (HttpWebResponse)x;
-            if (path == "")
+            bool tokengood = false;
+            try
             {
-                JSONDrive[] drives = JsonConvert.DeserializeObject<JSONDrive[]>(new StreamReader(x1.GetResponseStream()).ReadToEnd());
-                itemsViewSource.Source = drives;
-                driveGridView.Visibility = Windows.UI.Xaml.Visibility.Visible;
-                fileGridView.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-                driveGridView.SelectedIndex = -1;
+                req.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie("token", HAPSettings.CurrentToken[0]));
+                req.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie(HAPSettings.CurrentToken[2], HAPSettings.CurrentToken[1]));
+                tokengood = true;
             }
-            else
+            catch 
             {
-                JSONFile[] files = JsonConvert.DeserializeObject<JSONFile[]>(new StreamReader(x1.GetResponseStream()).ReadToEnd());
-                itemsViewSource.Source = files;
-                driveGridView.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-                fileGridView.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                MessageDialog mes = new MessageDialog("Your Logon Token has Expired");
+                mes.Commands.Add(new UICommand("OK"));
+                mes.DefaultCommandIndex = 0;
+                mes.ShowAsync();
+                Frame.Navigate(typeof(MainPage));
             }
-
+            if (tokengood)
+            {
+                HttpWebResponse x1 = null;
+                try
+                {
+                    WebResponse x = await req.GetResponseAsync();
+                    x1 = (HttpWebResponse)x;
+                    if (path == "")
+                    {
+                        JSONDrive[] drives = JsonConvert.DeserializeObject<JSONDrive[]>(new StreamReader(x1.GetResponseStream()).ReadToEnd());
+                        itemsViewSource.Source = drives;
+                        driveGridView.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                        fileGridView.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                        driveGridView.SelectedIndex = -1;
+                    }
+                    else
+                    {
+                        JSONFile[] files = JsonConvert.DeserializeObject<JSONFile[]>(new StreamReader(x1.GetResponseStream()).ReadToEnd());
+                        itemsViewSource.Source = files;
+                        driveGridView.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                        fileGridView.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageDialog mes = new MessageDialog(ex.ToString(), "An error has occured processing this request");
+                    mes.Commands.Add(new UICommand("OK"));
+                    mes.DefaultCommandIndex = 0;
+                    mes.ShowAsync();
+                    Frame.GoBack();
+                }
+            }
             loading.IsIndeterminate = false;
         }
 

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using Windows.Storage;
 using Windows.Foundation;
+using Windows.Security.Credentials;
 
 namespace HAP.Win.MyFiles
 {
@@ -15,7 +16,7 @@ namespace HAP.Win.MyFiles
         {
             Windows.Storage.ApplicationData.Current.DataChanged += new TypedEventHandler<ApplicationData, object>(DataChangeHandler);
             Windows.Storage.ApplicationDataContainer roamingSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
-            //roamingSettings.DeleteContainer("hapSites");
+            roamingSettings.DeleteContainer("hapSites");
             Windows.Storage.ApplicationDataContainer container = roamingSettings.CreateContainer("hapSites", Windows.Storage.ApplicationDataCreateDisposition.Always);
             if (roamingSettings.Containers.ContainsKey("hapSites") && roamingSettings.Containers["hapSites"].Values.Count == 0)
             {
@@ -103,11 +104,30 @@ namespace HAP.Win.MyFiles
         public string Name { get; set; }
         public static HAPSetting Parse(string[] s)
         {
-            return new HAPSetting() { Name = s[0], Address = new Uri(s[1]), Username = s[2], Password = s[3] };
+            HAPSetting set = new HAPSetting() { Name = s[0], Address = new Uri(s[1]), Username = "", Password = "" };
+            if (s[0] != "site0")
+            {
+                PasswordVault vault = new PasswordVault();
+                if (vault.FindAllByResource("HAP+ Credentials").Count(c => c.UserName.EndsWith(set.Address.DnsSafeHost)) == 0)
+                {
+
+                    //ask for new credentails - possible change of computer so credentails will not be in the vault.
+                }
+                else
+                {
+                    PasswordCredential cred = vault.FindAllByResource("HAP+ Credentials").Single(c => c.UserName.EndsWith(set.Address.DnsSafeHost));
+                    set.Username = cred.UserName.Substring(0, cred.UserName.IndexOf('@'));
+                    cred.RetrievePassword();
+                    set.Password = cred.Password;
+                }
+            }
+            return set;
         }
         public string[] ToString()
         {
-            return new string[] { Name, Address.ToString(), Username, Password };
+            PasswordVault vault = new PasswordVault();
+            vault.Add(new PasswordCredential("HAP+ Credentials", Username + "@" + Address.DnsSafeHost, Password));
+            return new string[] { Name, Address.ToString() };
         }
     }
 }
