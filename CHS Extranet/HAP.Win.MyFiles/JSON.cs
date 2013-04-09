@@ -83,5 +83,12 @@ namespace HAP.Win.MyFiles.JSON
         public NTFSPerms Permissions { get; set; }
     }
 
+    public class JSONUploadParams
+    {
+        public int maxRequestLength { get; set; }
+        public string[] Filters { get; set; }
+        public JSONProperties Properties { get; set; }
+    }
+
     public enum AccessControlActions { Change, View, None, ZIP }
 }
