@@ -99,7 +99,7 @@ namespace HAP.Win.MyFiles
                             HAPSettings.CurrentSite = hs.Settings[user.SiteName];
                             HAPSettings.CurrentToken = user.ToString();
 
-                            MessageDialog mes = new MessageDialog("Hello " + user.FirstName + ",\n\nThis app is limited to browsing and download files from your School");
+                            MessageDialog mes = new MessageDialog("Hello " + user.FirstName + ", you are now connected via HAP+ to " + user.SiteName + ",\n\nThis app is currently limited to browsing/download/uploading files from/to your School");
                             mes.Commands.Add(new UICommand("OK"));
                             mes.DefaultCommandIndex = 0;
                             await mes.ShowAsync();

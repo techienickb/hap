@@ -317,26 +317,31 @@ namespace HAP.Win.MyFiles
             {
                 var ignored1 = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { loading.IsIndeterminate = true; });
                 FileOpenPicker openPicker = new FileOpenPicker();
-                openPicker.ViewMode = PickerViewMode.Thumbnail;
+                openPicker.ViewMode = PickerViewMode.List;
                 openPicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
-                foreach (string s in Params.Filters) openPicker.FileTypeFilter.Add(s.Substring(1));
+                if (Params.Filters[0] == "*.*") openPicker.FileTypeFilter.Add("*");
+                else foreach (string s in Params.Filters) openPicker.FileTypeFilter.Add(s.Substring(1));
 
-                StorageFile file = await openPicker.PickSingleFileAsync();
-                if (file != null)
+                var files = await openPicker.PickMultipleFilesAsync();
+                if (files != null)
                 {
                     try
                     {
+                        List<string> filenames = new List<string>();
+                        foreach (StorageFile file in files)
+                        {
+                            Uri uri = new Uri(HAPSettings.CurrentSite.Address, "./api/myfiles-upload/" + (fileGridView.SelectedItem == null ? path : ((JSONFile)fileGridView.SelectedItem).Path).Replace('\\', '/'));
+                            BackgroundUploader uploader = new BackgroundUploader();
+                            uploader.SetRequestHeader("X_FILENAME", file.Name);
+                            filenames.Add(file.Name);
+                            uploader.Method = "POST";
+                            uploader.SetRequestHeader("Cookie", string.Format("{0}={1}; token={2}", HAPSettings.CurrentToken[2], HAPSettings.CurrentToken[1], HAPSettings.CurrentToken[0]));
+                            UploadOperation upload = uploader.CreateUpload(uri, file);
 
-                        Uri uri = new Uri(HAPSettings.CurrentSite.Address, "./MyFiles/Upload/" + path.Replace('\\', '/'));
-                        BackgroundUploader uploader = new BackgroundUploader();
-                        uploader.SetRequestHeader("X_FILENAME", file.Name);
-                        uploader.SetRequestHeader("Cookie", string.Format("{0}={1}; token={2}", HAPSettings.CurrentToken[2], HAPSettings.CurrentToken[1], HAPSettings.CurrentToken[0]));
-                        UploadOperation upload = uploader.CreateUpload(uri, file);
-
-                        // Attach progress and completion handlers.
-                        HandleUploadAsync(upload, true);
-
-                        MessageDialog mes = new MessageDialog("The upload of " + file.Name + " has started, you will get notified when it's done", "Uploading " + file.Name);
+                            // Attach progress and completion handlers.
+                            HandleUploadAsync(upload, true);
+                        }
+                        MessageDialog mes = new MessageDialog("The upload of " + string.Join(", ", filenames.ToArray()) + " has started, you will get notified when it's done", "Uploading");
                         mes.Commands.Add(new UICommand("OK"));
                         mes.DefaultCommandIndex = 0;
                         mes.ShowAsync();
