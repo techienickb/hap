@@ -20,6 +20,8 @@ using System.Data;
 using System.Net;
 using System.Collections.Specialized;
 using ICSharpCode.SharpZipLib.Zip;
+using System.Web.Configuration;
+using System.Configuration;
 
 namespace HAP.MyFiles
 {
@@ -665,10 +667,23 @@ namespace HAP.MyFiles
         }
 
         [OperationContract]
-        [WebGet(UriTemplate = "UploadParams/{Drive}/{*Path}")]
+        [WebGet(UriTemplate = "UploadParams/{Drive}/{*Path}", ResponseFormat=WebMessageFormat.Json)]
         public UploadInit UploadParams(string Drive, string Path)
         {
-            return new UploadInit() { Properties = Properties(Drive, Path) };
+            UploadInit init = new UploadInit();
+            HttpRuntimeSection section = ConfigurationManager.GetSection("system.web/httpRuntime") as HttpRuntimeSection;
+
+            if (section != null)
+                init.maxRequestLength = section.MaxRequestLength * 1024; // Cofig Value
+            else
+                init.maxRequestLength = 4096 * 1024; // Default Value
+            List<string> filters = new List<string>();
+            foreach (Filter f in hapConfig.Current.MyFiles.Filters)
+                if (isAuth(f) && f.Expression == "*.*") { filters = new List<string>(); filters.Add(f.Expression); break; }
+                else if (isAuth(f)) filters.Add(f.Expression.Trim());
+            init.Filters = filters.ToArray();
+            init.Properties= Properties(Drive, Path);
+            return init;
         }
 
         [OperationContract]
