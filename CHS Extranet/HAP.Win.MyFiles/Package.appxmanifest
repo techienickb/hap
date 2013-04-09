@@ -15,7 +15,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="HAP.Win.MyFiles.App">
-      <VisualElements DisplayName="HAP+ My Files" Logo="Assets\Logo.png" SmallLogo="Assets\SmallLogo.png" Description="Home Access Plus+ My Files Windows 8 Store App" ForegroundText="light" BackgroundColor="#0060a6">
+      <VisualElements DisplayName="HAP+ My Files" Logo="Assets\Logo.png" SmallLogo="Assets\SmallLogo.png" Description="Home Access Plus+ My Files Windows 8 Store App" ForegroundText="light" BackgroundColor="#0060a6" ToastCapable="true">
         <DefaultTile ShowName="allLogos" ShortName="HAP+ - My Files" />
         <SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#0060a6" />
       </VisualElements>

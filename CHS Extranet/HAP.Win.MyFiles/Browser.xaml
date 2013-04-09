@@ -107,7 +107,10 @@
         <AppBar x:Name="bottomAppBar" IsEnabled="False" Padding="10,0,10,0">
             <Grid>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <Button Style="{StaticResource DownloadAppBarButtonStyle}" Click="Button_Click"/>
+                    <Button Name="downloadbutton" Style="{StaticResource DownloadAppBarButtonStyle}" Click="Button_Click"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Name="uploadbutton" Style="{StaticResource UploadAppBarButtonStyle}" Click="Button_Click_1"/>
                 </StackPanel>
             </Grid>
         </AppBar>

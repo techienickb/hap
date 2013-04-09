@@ -59,6 +59,7 @@
       <HintPath>..\Binaries\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.DirectoryServices" />
@@ -90,6 +91,7 @@
     <Compile Include="Properties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShellThumbnail.cs" />
+    <Compile Include="UploadInit.cs" />
     <Compile Include="WordVisualizer\CoreProperties.cs" />
     <Compile Include="WordVisualizer\DisplayModeEnumeration.cs" />
     <Compile Include="WordVisualizer\EmuUnit.cs" />

@@ -665,6 +665,13 @@ namespace HAP.MyFiles
         }
 
         [OperationContract]
+        [WebGet(UriTemplate = "UploadParams/{Drive}/{*Path}")]
+        public UploadInit UploadParams(string Drive, string Path)
+        {
+            return new UploadInit() { Properties = Properties(Drive, Path) };
+        }
+
+        [OperationContract]
         [WebGet(UriTemplate="Drives")]
         public Drive[] Drives()
         {

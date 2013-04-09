@@ -5,12 +5,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using Windows.Data.Xml.Dom;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Provider;
 using Windows.UI.Core;
+using Windows.UI.Notifications;
 using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -35,7 +37,7 @@ namespace HAP.Win.MyFiles
         {
             this.InitializeComponent();
         }
-
+        private JSONUploadParams Params;
         private string Path;
         /// <summary>
         /// Populates the page with content passed during navigation.  Any saved state is also
@@ -140,18 +142,22 @@ namespace HAP.Win.MyFiles
                     // Let Windows know that we're finished changing the file so the other app can update the remote version of the file.
                     // Completing updates may require Windows to ask for user input.
                     FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
-                    MessageDialog mes;
+                    XmlDocument toastXML = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText02);
+                    XmlNodeList texts = toastXML.GetElementsByTagName("text");
                     if (status == FileUpdateStatus.Complete)
                     {
-                        mes = new MessageDialog("File " + file.Name + " was saved.", "File Operation");
+                        texts[0].AppendChild(toastXML.CreateTextNode("HAP+ - Download Complete"));
+                        texts[1].AppendChild(toastXML.CreateTextNode(file.Name + " has been downloaded and is ready to use."));
                     }
                     else
                     {
-                        mes = new MessageDialog("File " + file.Name + " couldn't be saved.", "File Operation");
+                        texts[0].AppendChild(toastXML.CreateTextNode("HAP+ - Download Canceled"));
+                        texts[1].AppendChild(toastXML.CreateTextNode("You have canceled this download"));
                     }
-                    mes.Commands.Add(new UICommand("Ok"));
-                    mes.DefaultCommandIndex = 0;
-                    var ignored1 = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { pro.Visibility = Windows.UI.Xaml.Visibility.Collapsed; mes.ShowAsync(); });
+                    ((XmlElement)toastXML.SelectSingleNode("/toast")).SetAttribute("launch", "{\"type\":\"toast\"}");
+                    ToastNotification toast = new ToastNotification(toastXML);
+                    ToastNotificationManager.CreateToastNotifier().Show(toast);
+                    var ignored1 = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { pro.Visibility = Windows.UI.Xaml.Visibility.Collapsed; });
                 }
                 else
                 {
