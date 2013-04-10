@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -61,20 +63,29 @@ namespace HAP.Win.MyFiles
             login.IsEnabled = false;
             string s = address.Text;
             if (!s.EndsWith("/")) s += "/";
+            Uri url = null;
             try
             {
-                System.Net.HttpWebRequest req = WebRequest.CreateHttp(new Uri(new Uri(s), "./api/ad"));
-                req.Method = "POST";
-                req.ContentType = "application/json";
-                req.Proxy = WebRequest.DefaultWebProxy;
-                HttpWebResponse x1 = null;
+                url = new Uri(new Uri(s), "./api/ad");
+            }
+            catch
+            {
+                MessageDialog mes = new MessageDialog("That Address doesn't seem to be valid");
+                mes.Commands.Add(new UICommand("OK"));
+                mes.DefaultCommandIndex = 0;
+                mes.ShowAsync();
+                loading.IsIndeterminate = false;
+                login.IsEnabled = true;
+            }
+            if (url != null)
+            {
+                HttpClient c = new HttpClient();
+                StringContent sc = new StringContent("{ \"username\": \"" + username.Text + "\", \"password\": \"" + password.Password + "\" }", Encoding.UTF8, "application/json");
+                string sc1 = null;
                 try
                 {
-                    StreamWriter sw = new StreamWriter(await req.GetRequestStreamAsync());
-                    sw.Write("{ \"username\": \"" + username.Text + "\", \"password\": \"" + password.Password + "\" }");
-                    sw.Flush();
-                    WebResponse x = await req.GetResponseAsync();
-                    x1 = (HttpWebResponse)x;
+                    var cr = await c.PostAsync(url, sc);
+                    sc1 = await cr.Content.ReadAsStringAsync();
                 }
                 catch (Exception ex)
                 {
@@ -85,11 +96,11 @@ namespace HAP.Win.MyFiles
                     mes.DefaultCommandIndex = 0;
                     mes.ShowAsync();
                 }
-                if (x1 != null)
+                if (sc1 != null)
                 {
                     try
                     {
-                        JSON.JSONUser user = JsonConvert.DeserializeObject<JSON.JSONUser>(new StreamReader(x1.GetResponseStream()).ReadToEnd());
+                        JSON.JSONUser user = JsonConvert.DeserializeObject<JSON.JSONUser>(sc1);
                         if (user.isValid)
                         {
                             HAPSettings hs = new HAPSettings();
@@ -123,15 +134,6 @@ namespace HAP.Win.MyFiles
                         mes.ShowAsync();
                     }
                 }
-            }
-            catch
-            {
-                MessageDialog mes = new MessageDialog("That Address doesn't seem to be valid");
-                mes.Commands.Add(new UICommand("OK"));
-                mes.DefaultCommandIndex = 0;
-                mes.ShowAsync();
-                loading.IsIndeterminate = false;
-                login.IsEnabled = true;
             }
         }
 

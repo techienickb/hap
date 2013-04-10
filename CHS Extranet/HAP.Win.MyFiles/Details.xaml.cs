@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using Windows.Data.Xml.Dom;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -37,7 +39,6 @@ namespace HAP.Win.MyFiles
         {
             this.InitializeComponent();
         }
-        private JSONUploadParams Params;
         private string Path;
         /// <summary>
         /// Populates the page with content passed during navigation.  Any saved state is also
@@ -62,16 +63,14 @@ namespace HAP.Win.MyFiles
                 Frame.GoBack();
                 return;
             }
-            HttpWebRequest req = WebRequest.CreateHttp(new Uri(HAPSettings.CurrentSite.Address, "./api/myfiles/Properties/" + Path.Replace('\\', '/').Replace("../Download/", "")));
-            req.Method = "GET";
-            req.ContentType = "application/json";
-
-            req.CookieContainer = new CookieContainer();
             bool tokengood = false;
+            HttpClientHandler h = new HttpClientHandler();
+            h.CookieContainer = new CookieContainer();
+            h.UseCookies = true;
             try
             {
-                req.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie("token", HAPSettings.CurrentToken[0]));
-                req.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie(HAPSettings.CurrentToken[2], HAPSettings.CurrentToken[1]));
+                h.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie("token", HAPSettings.CurrentToken[0]));
+                h.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie(HAPSettings.CurrentToken[2], HAPSettings.CurrentToken[1]));
                 tokengood = true;
             }
             catch
@@ -84,12 +83,11 @@ namespace HAP.Win.MyFiles
             }
             if (tokengood)
             {
-                HttpWebResponse x1 = null;
+                HttpClient c = new HttpClient(h);
+                c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 try
                 {
-                    WebResponse x = await req.GetResponseAsync();
-                    x1 = (HttpWebResponse)x;
-                    JSONProperties prop = JsonConvert.DeserializeObject<JSONProperties>(new StreamReader(x1.GetResponseStream()).ReadToEnd());
+                    JSONProperties prop = JsonConvert.DeserializeObject<JSONProperties>(await c.GetStringAsync(new Uri(HAPSettings.CurrentSite.Address, "./api/myfiles/Properties/" + Path.Replace('\\', '/').Replace("../Download/", ""))));
                     DataContext = prop;
                     pageTitle.Text = prop.Name;
                 }
@@ -186,6 +184,7 @@ namespace HAP.Win.MyFiles
             pro.Value = 0;
             HttpWebRequest req = WebRequest.CreateHttp(new Uri(HAPSettings.CurrentSite.Address, Path.Substring(1)));
             req.Method = "GET";
+            req.Headers = new WebHeaderCollection();
             req.CookieContainer = new CookieContainer();
             req.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie("token", HAPSettings.CurrentToken[0]));
             req.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie(HAPSettings.CurrentToken[2], HAPSettings.CurrentToken[1]));
