@@ -509,6 +509,38 @@ namespace HAP.MyFiles
                 ret = ((attr & FileAttributes.Directory) == FileAttributes.Directory) ? new Properties(new DirectoryInfo(path), mapping, user) : new Properties(new FileInfo(path), mapping, user);
             }
             finally { user.EndContainedImpersonate(); }
+
+            return ret;
+        }
+
+        public Properties PropertiesNoSize(string Drive, string Path)
+        {
+            Properties ret = new Properties();
+            Path = "/" + Path;
+            hapConfig config = hapConfig.Current;
+            List<File> Items = new List<File>();
+            User user = new User();
+            if (config.AD.AuthenticationMode == Web.Configuration.AuthMode.Forms)
+            {
+                HttpCookie token = HttpContext.Current.Request.Cookies["token"];
+                if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
+                user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
+            }
+            else
+            {
+                user = new User(HttpContext.Current.User.Identity.Name);
+            }
+            DriveMapping mapping;
+            string path = Converter.DriveToUNC(Path, Drive, out mapping, user);
+            HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.Properties", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Requesting properties of: " + path);
+            user.ImpersonateContained();
+            try
+            {
+                FileAttributes attr = System.IO.File.GetAttributes(path);
+                //detect whether its a directory or file
+                ret = ((attr & FileAttributes.Directory) == FileAttributes.Directory) ? new Properties(new DirectoryInfo(path), mapping, user, false) : new Properties(new FileInfo(path), mapping, user);
+            }
+            finally { user.EndContainedImpersonate(); }
             
             return ret;
         }
@@ -682,7 +714,7 @@ namespace HAP.MyFiles
                 if (isAuth(f) && f.Expression == "*.*") { filters = new List<string>(); filters.Add(f.Expression); break; }
                 else if (isAuth(f)) filters.Add(f.Expression.Trim());
             init.Filters = filters.ToArray();
-            init.Properties= Properties(Drive, Path);
+            init.Properties = PropertiesNoSize(Drive, Path);
             return init;
         }
 

@@ -96,7 +96,11 @@ namespace HAP.MyFiles
             else Icon = "../images/icons/file.png";
         }
 
-        public Properties(DirectoryInfo dir, DriveMapping mapping, User user)
+        public Properties(DirectoryInfo dir, DriveMapping mapping, User user) : this(dir, mapping, user, true)
+        {
+        }
+
+        public Properties(DirectoryInfo dir, DriveMapping mapping, User user, bool RunSize)
         {
             Name = dir.Name;
             DateCreated = dir.CreationTime.ToString();
@@ -115,11 +119,10 @@ namespace HAP.MyFiles
             {
                 Location = HttpUtility.UrlEncode(Converter.UNCtoDrive(dir.Parent.FullName, mapping, user).Replace(":", "")).Replace('+', ' ').Replace("%", "|").Replace("|5c", "\\");
 
-                long s = 0;
                 Contents = dir.GetFiles().Length + " Files, ";
                 Contents += dir.GetDirectories().Length + " Folders";
-                foreach (FileInfo f in dir.GetFiles("*.*", SearchOption.AllDirectories))
-                    s += f.Length;
+                long s = 0;
+                if (RunSize) foreach (FileInfo f in dir.GetFiles("*.*", SearchOption.AllDirectories)) s += f.Length;
                 Size = File.parseLength(s);
             }
             Type = "File Folder";

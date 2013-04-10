@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -59,31 +60,17 @@ namespace HAP.Win.MyFiles
         {
             loading.IsIndeterminate = true;
             path = navigationParameter as string;
-            HttpWebRequest req;
-            if (path == "")
-            {
-                pageTitle.Text = "My Drives";
-                req = WebRequest.CreateHttp(new Uri(HAPSettings.CurrentSite.Address, "./api/myfiles/drives"));
-                bottomAppBar.IsEnabled = downloadbutton.IsEnabled = uploadbutton.IsEnabled = false;
-            }
-            else
-            {
-                pageTitle.Text = path.Replace("/", "\\").Replace("\\", " \\ ");
-                req = WebRequest.CreateHttp(new Uri(HAPSettings.CurrentSite.Address, "./api/myfiles/" + path.Replace('\\', '/')));
-            }
-
-            req.Method = "GET";
-            req.ContentType = "application/json";
-
-            req.CookieContainer = new CookieContainer();
             bool tokengood = false;
+            HttpClientHandler h = new HttpClientHandler();
+            h.CookieContainer = new CookieContainer();
+            h.UseCookies = true;
             try
             {
-                req.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie("token", HAPSettings.CurrentToken[0]));
-                req.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie(HAPSettings.CurrentToken[2], HAPSettings.CurrentToken[1]));
+                h.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie("token", HAPSettings.CurrentToken[0]));
+                h.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie(HAPSettings.CurrentToken[2], HAPSettings.CurrentToken[1]));
                 tokengood = true;
             }
-            catch 
+            catch
             {
                 MessageDialog mes = new MessageDialog("Your Logon Token has Expired");
                 mes.Commands.Add(new UICommand("OK"));
@@ -93,14 +80,15 @@ namespace HAP.Win.MyFiles
             }
             if (tokengood)
             {
-                HttpWebResponse x1 = null;
+                HttpClient c = new HttpClient(h);
+                c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 try
                 {
-                    WebResponse x = await req.GetResponseAsync();
-                    x1 = (HttpWebResponse)x;
                     if (path == "")
                     {
-                        JSONDrive[] drives = JsonConvert.DeserializeObject<JSONDrive[]>(new StreamReader(x1.GetResponseStream()).ReadToEnd());
+                        pageTitle.Text = "My Drives";
+                        bottomAppBar.IsEnabled = downloadbutton.IsEnabled = uploadbutton.IsEnabled = false;
+                        JSONDrive[] drives = JsonConvert.DeserializeObject<JSONDrive[]>(await c.GetStringAsync(new Uri(HAPSettings.CurrentSite.Address, "./api/myfiles/drives")));
                         itemsViewSource.Source = drives;
                         driveGridView.Visibility = Windows.UI.Xaml.Visibility.Visible;
                         fileGridView.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
@@ -108,52 +96,16 @@ namespace HAP.Win.MyFiles
                     }
                     else
                     {
-                        JSONFile[] files = JsonConvert.DeserializeObject<JSONFile[]>(new StreamReader(x1.GetResponseStream()).ReadToEnd());
+                        pageTitle.Text = path.Replace("/", "\\").Replace("\\", " \\ ");
+                        JSONFile[] files = JsonConvert.DeserializeObject<JSONFile[]>(await c.GetStringAsync(new Uri(HAPSettings.CurrentSite.Address, "./api/myfiles/" + path.Replace('\\', '/'))));
                         itemsViewSource.Source = files;
                         driveGridView.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                         fileGridView.Visibility = Windows.UI.Xaml.Visibility.Visible;
                         fileGridView.SelectedIndex = -1;
-                        req = WebRequest.CreateHttp(new Uri(HAPSettings.CurrentSite.Address, "./api/myfiles/UploadParams/" + path.Replace('\\', '/')));
-                        req.Method = "GET";
-                        req.ContentType = "application/json";
-
-                        req.CookieContainer = new CookieContainer();
-                        tokengood = false;
-                        try
-                        {
-                            req.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie("token", HAPSettings.CurrentToken[0]));
-                            req.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie(HAPSettings.CurrentToken[2], HAPSettings.CurrentToken[1]));
-                            tokengood = true;
-                        }
-                        catch
-                        {
-                            MessageDialog mes = new MessageDialog("Your Logon Token has Expired");
-                            mes.Commands.Add(new UICommand("OK"));
-                            mes.DefaultCommandIndex = 0;
-                            mes.ShowAsync();
-                            Frame.Navigate(typeof(MainPage));
-                        }
-                        if (tokengood)
-                        {
-                            x1 = null;
-                            try
-                            {
-                                x = await req.GetResponseAsync();
-                                x1 = (HttpWebResponse)x;
-                                JSONUploadParams prop = JsonConvert.DeserializeObject<JSONUploadParams>(new StreamReader(x1.GetResponseStream()).ReadToEnd());
-                                Params = prop;
-                                bottomAppBar.IsEnabled = prop.Properties.Permissions.ReadData;
-                                uploadbutton.IsEnabled = prop.Properties.Permissions.AppendData;
-                            }
-                            catch (Exception ex)
-                            {
-                                MessageDialog mes = new MessageDialog(ex.ToString(), "An error has occured processing this request");
-                                mes.Commands.Add(new UICommand("OK"));
-                                mes.DefaultCommandIndex = 0;
-                                mes.ShowAsync();
-                                Frame.GoBack();
-                            }
-                        }
+                        JSONUploadParams prop = JsonConvert.DeserializeObject<JSONUploadParams>(await c.GetStringAsync(new Uri(HAPSettings.CurrentSite.Address, "./api/myfiles/UploadParams/" + path.Replace('\\', '/'))));
+                        Params = prop;
+                        bottomAppBar.IsEnabled = prop.Properties.Permissions.ReadData;
+                        uploadbutton.IsEnabled = prop.Properties.Permissions.AppendData;
                     }
                 }
                 catch (Exception ex)
@@ -165,6 +117,7 @@ namespace HAP.Win.MyFiles
                     Frame.GoBack();
                 }
             }
+           
             loading.IsIndeterminate = false;
         }
 
@@ -190,6 +143,7 @@ namespace HAP.Win.MyFiles
         {
             HttpWebRequest req = WebRequest.CreateHttp(new Uri(HAPSettings.CurrentSite.Address, file.Path.Substring(1)));
             req.Method = "GET";
+            req.Headers = new WebHeaderCollection();
             req.CookieContainer = new CookieContainer();
             req.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie("token", HAPSettings.CurrentToken[0]));
             req.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie(HAPSettings.CurrentToken[2], HAPSettings.CurrentToken[1]));
@@ -320,10 +274,12 @@ namespace HAP.Win.MyFiles
                 openPicker.ViewMode = PickerViewMode.List;
                 openPicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
                 if (Params.Filters[0] == "*.*") openPicker.FileTypeFilter.Add("*");
-                else foreach (string s in Params.Filters) openPicker.FileTypeFilter.Add(s.Substring(1));
+                else foreach (string s in Params.Filters) 
+                        if (s.Contains(";")) foreach (string s1 in s.Split(new char[] { ';' })) openPicker.FileTypeFilter.Add(s1.Substring(1).Trim());
+                        else openPicker.FileTypeFilter.Add(s.Substring(1).Trim());
 
                 var files = await openPicker.PickMultipleFilesAsync();
-                if (files != null)
+                if (files != null && files.Count > 0)
                 {
                     try
                     {
