@@ -6,6 +6,9 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.System;
+using Windows.UI.ApplicationSettings;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -35,6 +38,18 @@ namespace HAP.Win.MyFiles
             set.InitHandlers();
         }
 
+        public void App_CommandsRequested(SettingsPane sender, SettingsPaneCommandsRequestedEventArgs args)
+        {
+            args.Request.ApplicationCommands.Add(new SettingsCommand("privacypolicy", "Privacy Policy", OpenPrivacyPolicy));
+        }
+
+        private async void OpenPrivacyPolicy(IUICommand command)
+        {
+            Uri uri = new Uri("http://www.nbdev.co.uk/projects/hap/privacy-policy.aspx");
+            await Windows.System.Launcher.LaunchUriAsync(uri);
+        }
+
+
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
         /// will be used when the application is launched to open a specific file, to display
@@ -43,6 +58,7 @@ namespace HAP.Win.MyFiles
         /// <param name="args">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs args)
         {
+            SettingsPane.GetForCurrentView().CommandsRequested += App_CommandsRequested;
             Frame rootFrame = Window.Current.Content as Frame;
 
             // Do not repeat app initialization when the Window already has content,
