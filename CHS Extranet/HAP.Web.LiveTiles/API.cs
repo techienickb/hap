@@ -17,21 +17,21 @@ namespace HAP.Web.LiveTiles
     public class API
     {
         [OperationContract]
-        [WebGet(UriTemplate = "")]
+        [WebGet(UriTemplate = "", ResponseFormat = WebMessageFormat.Json)]
         public TileGroup[] Tiles()
         {
             return HAP.Web.LiveTiles.Tiles.Current;
         }
 
         [OperationContract]
-        [WebGet(UriTemplate = "Exchange/Unread")]
+        [WebGet(UriTemplate = "Exchange/Unread", ResponseFormat = WebMessageFormat.Json)]
         public int ExchangeUnread()
         {
             return HAP.Web.LiveTiles.ExchangeConnector.Unread();
         }
 
         [OperationContract]
-        [WebGet(UriTemplate = "Exchange/Appointments")]
+        [WebGet(UriTemplate = "Exchange/Appointments", ResponseFormat = WebMessageFormat.Json)]
         public string[] ExchangeAppointments()
         {
             return HAP.Web.LiveTiles.ExchangeConnector.Appointments();
@@ -45,14 +45,14 @@ namespace HAP.Web.LiveTiles
         }
 
         [OperationContract]
-        [WebGet(UriTemplate = "Me")]
+        [WebGet(UriTemplate = "Me", ResponseFormat = WebMessageFormat.Json)]
         public HAP.Web.LiveTiles.Me Me()
         {
             return HAP.Web.LiveTiles.Me.GetMe;
         }
 
         [OperationContract]
-        [WebGet(UriTemplate = "Uptime/{Server}")]
+        [WebGet(UriTemplate = "Uptime/{Server}", ResponseFormat = WebMessageFormat.Json)]
         public string Uptime(string Server)
         {
             TimeSpan t = HAP.Web.LiveTiles.ServerUptime.Uptime(Server);

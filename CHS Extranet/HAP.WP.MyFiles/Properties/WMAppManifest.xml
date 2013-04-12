@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Deployment xmlns="http://schemas.microsoft.com/windowsphone/2009/deployment" AppPlatformVersion="7.1">
+  <App xmlns="" ProductID="{a0cfd393-814c-4837-bf8a-e85604d97a30}" Title="HAP+ My Files" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="Nick Brown" Description="Home Access Plus+ My Files" Publisher="nb development" BitsPerPixel="32">
+    <IconPath IsRelative="true" IsResource="false">hap-logo.png</IconPath>
+    <Capabilities>
+      <Capability Name="ID_CAP_MEDIALIB" />
+      <Capability Name="ID_CAP_NETWORKING" />
+    </Capabilities>
+    <Tasks>
+      <DefaultTask Name="_default" NavigationPage="MainPage.xaml" />
+    </Tasks>
+    <Tokens>
+      <PrimaryToken TokenID="HAP.WP.MyFilesToken" TaskName="_default">
+        <TemplateType5>
+          <BackgroundImageURI IsRelative="true" IsResource="false">hap-logo.png</BackgroundImageURI>
+          <Count>0</Count>
+          <Title>HAP+ My Files</Title>
+        </TemplateType5>
+      </PrimaryToken>
+    </Tokens>
+  </App>
+</Deployment>

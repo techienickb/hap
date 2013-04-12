@@ -429,7 +429,7 @@ namespace HAP.MyFiles
         }
 
         [OperationContract]
-        [WebGet(UriTemplate = "info/{Drive}/{*Path}")]
+        [WebGet(UriTemplate = "info/{Drive}/{*Path}", ResponseFormat = WebMessageFormat.Json)]
         public Properties info(string Drive, string Path)
         {
             Properties ret = new Properties();
@@ -466,7 +466,7 @@ namespace HAP.MyFiles
         }
 
         [OperationContract]
-        [WebGet(UriTemplate = "Exists/{Drive}/{*Path}")]
+        [WebGet(UriTemplate = "Exists/{Drive}/{*Path}", ResponseFormat = WebMessageFormat.Json)]
         public Properties Exists(string Drive, string Path)
         {
             try
@@ -480,7 +480,7 @@ namespace HAP.MyFiles
         }
 
         [OperationContract]
-        [WebGet(UriTemplate="Properties/{Drive}/{*Path}")]
+        [WebGet(UriTemplate = "Properties/{Drive}/{*Path}", ResponseFormat = WebMessageFormat.Json)]
         public Properties Properties(string Drive, string Path)
         {
             Properties ret = new Properties();
@@ -608,7 +608,7 @@ namespace HAP.MyFiles
         }
 
         [OperationContract]
-        [WebGet(UriTemplate = "Sort/{SortOrder}/{Direction}/{Drive}/{*Path}")]
+        [WebGet(UriTemplate = "Sort/{SortOrder}/{Direction}/{Drive}/{*Path}", ResponseFormat = WebMessageFormat.Json)]
         public File[] SortedList(string Drive, string Path, string SortOrder, string Direction)
         {
             Path = "/" + Path;
@@ -692,7 +692,7 @@ namespace HAP.MyFiles
         }
 
         [OperationContract]
-        [WebGet(UriTemplate="{Drive}/{*Path}")]
+        [WebGet(UriTemplate = "{Drive}/{*Path}", ResponseFormat = WebMessageFormat.Json)]
         public File[] List(string Drive, string Path)
         {
             return SortedList(Drive, Path, "Default", "1");
@@ -719,7 +719,7 @@ namespace HAP.MyFiles
         }
 
         [OperationContract]
-        [WebGet(UriTemplate="Drives")]
+        [WebGet(UriTemplate="Drives", ResponseFormat=WebMessageFormat.Json)]
         public Drive[] Drives()
         {
             List<Drive> drives = new List<Drive>();
