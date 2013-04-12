@@ -7,9 +7,12 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
+using System.Threading.Tasks;
 using Windows.Data.Xml.Dom;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Networking.BackgroundTransfer;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Provider;
@@ -38,7 +41,9 @@ namespace HAP.Win.MyFiles
         public Details()
         {
             this.InitializeComponent();
+            cts = new CancellationTokenSource();
         }
+        private CancellationTokenSource cts;
         private string Path;
         /// <summary>
         /// Populates the page with content passed during navigation.  Any saved state is also
@@ -117,16 +122,12 @@ namespace HAP.Win.MyFiles
 
         async void makefile(MemoryStream ms, JSONProperties jfile)
         {
-            Windows.Storage.StorageFolder temporaryFolder = ApplicationData.Current.TemporaryFolder;
-            StorageFile sampleFile = await temporaryFolder.CreateFileAsync(jfile.Name + jfile.Extension, CreationCollisionOption.ReplaceExisting);
-            await FileIO.WriteBytesAsync(sampleFile, ms.ToArray());
-
             if (EnsureUnsnapped())
             {
                 FileSavePicker savePicker = new FileSavePicker();
                 savePicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
                 // Dropdown of file types the user can save the file as
-                savePicker.FileTypeChoices.Add(jfile.Type, new List<string>() { jfile.Extension });
+                savePicker.FileTypeChoices.Add(string.IsNullOrEmpty(jfile.Type) ? jfile.Extension : jfile.Type, new List<string>() { jfile.Extension });
                 // Default file name if the user does not type one in or select a file to replace
                 savePicker.SuggestedFileName = jfile.Name;
 
@@ -161,7 +162,6 @@ namespace HAP.Win.MyFiles
                 {
                 }
             }
-            await sampleFile.DeleteAsync();
         }
 
         internal bool EnsureUnsnapped()
@@ -177,46 +177,143 @@ namespace HAP.Win.MyFiles
             return unsnapped;
         }
 
-        private void downloadbutton_Click(object sender, RoutedEventArgs e)
+        private async void downloadbutton_Click(object sender, RoutedEventArgs e)
         {
             loading.IsIndeterminate = true;
             pro.Visibility = Windows.UI.Xaml.Visibility.Visible;
             pro.Value = 0;
-            HttpWebRequest req = WebRequest.CreateHttp(new Uri(HAPSettings.CurrentSite.Address, Path.Substring(1)));
-            req.Method = "GET";
-            req.Headers = new WebHeaderCollection();
-            req.CookieContainer = new CookieContainer();
-            req.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie("token", HAPSettings.CurrentToken[0]));
-            req.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie(HAPSettings.CurrentToken[2], HAPSettings.CurrentToken[1]));
-            req.AllowReadStreamBuffering = false;
-            req.BeginGetResponse(a =>
+            if (((JSONProperties)DataContext).Size.ToLower().Contains("mb") || ((JSONProperties)DataContext).Size.ToLower().Contains("gb"))
             {
-                using (WebResponse response = req.EndGetResponse(a))
+                if (EnsureUnsnapped())
                 {
-                    int expected = (int)response.ContentLength;
-                    using (System.IO.BinaryReader reader = new BinaryReader(response.GetResponseStream()))
-                    {
-                        MemoryStream ms = new MemoryStream(expected);
-                        bool canwrite = true;
-                        int count = 0, x = 0;
-                        while (canwrite)
-                        {
-                            try
-                            {
-                                ms.WriteByte(reader.ReadByte());
-                            }
-                            catch { canwrite = false; }
-                            count++;
-                            x++;
-                            if (x == 100) { var ignored = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { pro.Value = count * 100.0 / expected; }); x = 0; }
+                    FileSavePicker savePicker = new FileSavePicker();
+                    savePicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+                    // Dropdown of file types the user can save the file as
+                    savePicker.FileTypeChoices.Add(string.IsNullOrEmpty(((JSONProperties)DataContext).Type) ? ((JSONProperties)DataContext).Extension : ((JSONProperties)DataContext).Type, new List<string>() { ((JSONProperties)DataContext).Extension });
+                    // Default file name if the user does not type one in or select a file to replace
+                    savePicker.SuggestedFileName = ((JSONProperties)DataContext).Name;
 
-                        }
-                        var ignored1 = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { makefile(ms, (JSONProperties)a.AsyncState); });
-                        var ignored2 = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { pro.Value = 100.0; loading.IsIndeterminate = false; });
-                    }
+                    StorageFile file = await savePicker.PickSaveFileAsync();
+                    Uri uri = new Uri(HAPSettings.CurrentSite.Address, Path.Substring(1));
+                    BackgroundDownloader downloader = new BackgroundDownloader();
+                    downloader.Method = "GET";
+                    downloader.SetRequestHeader("Cookie", string.Format("{0}={1}; token={2}", HAPSettings.CurrentToken[2], HAPSettings.CurrentToken[1], HAPSettings.CurrentToken[0]));
+                    DownloadOperation download = downloader.CreateDownload(uri, file);
+                    // Attach progress and completion handlers.
+                    HandleDownloadAsync(download, true);
+                    MessageDialog mes = new MessageDialog("The download of " + ((JSONProperties)DataContext).Name + " has started, you will get notified when it's done", "Downloading");
+                    mes.Commands.Add(new UICommand("OK"));
+                    mes.DefaultCommandIndex = 0;
+                    mes.ShowAsync();
+                    var ignored3 = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { pro.Visibility = Windows.UI.Xaml.Visibility.Collapsed; loading.IsIndeterminate = false; });
                 }
             }
-            , (JSONProperties)DataContext);
+            else
+            {
+                HttpWebRequest req = WebRequest.CreateHttp(new Uri(HAPSettings.CurrentSite.Address, Path.Substring(1)));
+                req.Method = "GET";
+                req.Headers = new WebHeaderCollection();
+                req.CookieContainer = new CookieContainer();
+                req.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie("token", HAPSettings.CurrentToken[0]));
+                req.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie(HAPSettings.CurrentToken[2], HAPSettings.CurrentToken[1]));
+                req.AllowReadStreamBuffering = false;
+                req.BeginGetResponse(a =>
+                {
+                    using (WebResponse response = req.EndGetResponse(a))
+                    {
+                        int expected = (int)response.ContentLength;
+                        using (System.IO.BinaryReader reader = new BinaryReader(response.GetResponseStream()))
+                        {
+                            MemoryStream ms = new MemoryStream(expected);
+                            bool canwrite = true;
+                            long count = 0; int x = 0;
+                            while (canwrite)
+                            {
+                                try
+                                {
+                                    ms.WriteByte(reader.ReadByte());
+                                }
+                                catch { canwrite = false; }
+                                count++;
+                                x++;
+                                if (x == 100)
+                                {
+                                    x = 0;
+                                    try
+                                    {
+                                        var ignored = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { try { pro.Value = count * 100.0 / expected; } catch { } });
+                                    }
+                                    catch { }
+                                }
+
+                            }
+                            var ignored1 = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { makefile(ms, (JSONProperties)a.AsyncState); });
+                        }
+                    }
+                }
+                , (JSONProperties)DataContext);
+            }
+        }
+        private async Task HandleDownloadAsync(DownloadOperation download, bool start)
+        {
+            try
+            {
+
+                Progress<DownloadOperation> progressCallback = new Progress<DownloadOperation>(DownloadProgress);
+                if (start)
+                {
+                    // Start the upload and attach a progress handler.
+                    await download.StartAsync().AsTask(cts.Token, progressCallback);
+                }
+                else
+                {
+                    // The upload was already running when the application started, re-attach the progress handler.
+                    await download.AttachAsync().AsTask(cts.Token, progressCallback);
+                }
+
+                ResponseInformation response = download.GetResponseInformation();
+            }
+            catch (TaskCanceledException)
+            {
+                XmlDocument toastXML = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText02);
+                XmlNodeList texts = toastXML.GetElementsByTagName("text");
+                texts[0].AppendChild(toastXML.CreateTextNode("HAP+ - Download Canceled"));
+                texts[1].AppendChild(toastXML.CreateTextNode("The download of " + download.ResultFile.Name + " has been Canceled."));
+                ((XmlElement)toastXML.SelectSingleNode("/toast")).SetAttribute("launch", "{\"type\":\"toast\"}");
+                ToastNotification toast = new ToastNotification(toastXML);
+                ToastNotificationManager.CreateToastNotifier().Show(toast);
+            }
+        }
+
+        private void DownloadProgress(DownloadOperation download)
+        {
+            BackgroundDownloadProgress progress = download.Progress;
+
+            double percentSent = 100;
+            if (progress.TotalBytesToReceive > 0)
+            {
+                percentSent = progress.BytesReceived * 100 / progress.TotalBytesToReceive;
+            }
+            if (progress.TotalBytesToReceive > 2097152 && Math.Round(percentSent, 0) == 50)
+            {
+                XmlDocument toastXML = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText02);
+                XmlNodeList texts = toastXML.GetElementsByTagName("text");
+                texts[0].AppendChild(toastXML.CreateTextNode("HAP+ - 50% Downloaded"));
+                texts[1].AppendChild(toastXML.CreateTextNode("The download of " + download.ResultFile.Name + " has reached 50%."));
+                ((XmlElement)toastXML.SelectSingleNode("/toast")).SetAttribute("launch", "{\"type\":\"toast\"}");
+                ToastNotification toast = new ToastNotification(toastXML);
+                ToastNotificationManager.CreateToastNotifier().Show(toast);
+            }
+            if (progress.Status == BackgroundTransferStatus.Completed || percentSent == 100)
+            {
+                XmlDocument toastXML = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText02);
+                XmlNodeList texts = toastXML.GetElementsByTagName("text");
+                texts[0].AppendChild(toastXML.CreateTextNode("HAP+ - Download Complete"));
+                texts[1].AppendChild(toastXML.CreateTextNode("The download of " + download.ResultFile.Name + " has completed."));
+                ((XmlElement)toastXML.SelectSingleNode("/toast")).SetAttribute("launch", "{\"type\":\"toast\"}");
+                ToastNotification toast = new ToastNotification(toastXML);
+                ToastNotificationManager.CreateToastNotifier().Show(toast);
+            }
         }
     }
 }
