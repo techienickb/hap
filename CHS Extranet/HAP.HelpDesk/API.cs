@@ -436,7 +436,7 @@ namespace HAP.HelpDesk
         }
 
         [OperationContract]
-        [WebGet(UriTemplate = "FAQs")]
+        [WebGet(UriTemplate = "FAQs", ResponseFormat = WebMessageFormat.Json)]
         public Ticket[] FAQs()
         {
             XmlDocument doc = new XmlDocument();
@@ -448,14 +448,14 @@ namespace HAP.HelpDesk
         }
 
         [OperationContract]
-        [WebGet(UriTemplate = "Stats")]
+        [WebGet(UriTemplate = "Stats", ResponseFormat = WebMessageFormat.Json)]
         public Stats Stats()
         {
             return PeriodStats("7");
         }
 
         [OperationContract]
-        [WebGet(UriTemplate = "Stats/{Period}")]
+        [WebGet(UriTemplate = "Stats/{Period}", ResponseFormat = WebMessageFormat.Json)]
         public Stats PeriodStats(string Period)
         {
             int p = int.Parse("-" + Period);

@@ -9,6 +9,7 @@ using System.Web;
 using HAP.AD;
 using HAP.Web.Configuration;
 using System.Web.Security;
+using System.Diagnostics;
 
 namespace HAP.AD
 {
@@ -27,6 +28,7 @@ namespace HAP.AD
                 User u = new User();
                 u.Authenticate(username, password);
                 FormsAuthentication.SetAuthCookie(username, false);
+                Log("HAP+ App Logon", "Home Access Plus+ Logon\n\nUsername: " + username, System.Diagnostics.EventLogEntryType.Information);
                 user.Token2 = HttpContext.Current.Response.Cookies[FormsAuthentication.FormsCookieName].Value;
                 user.Token1 = TokenGenerator.ConvertToToken(password);
                 user.Username = u.UserName;
@@ -45,6 +47,20 @@ namespace HAP.AD
         {
             return UserGET(username, password);
         }
+
+        public void Log(string source, string message, EventLogEntryType type)
+        {
+            try
+            {
+                EventLog myLog = new EventLog("Application", ".", "Home Access Plus+");
+                myLog.EnableRaisingEvents = true;
+                if (type == EventLogEntryType.Error) myLog.WriteEntry("An error occurred in Home Access Plus+\r\n\r\nPage: " + source + "\r\n\r\n" + message, type);
+                else myLog.WriteEntry("Home Access Plus+ Info\r\n\r\nPage: " + source + "\r\n\r\n" + message, type);
+                myLog.Close();
+            }
+            catch { }
+        }
+
     }
 
     public class JSONUser

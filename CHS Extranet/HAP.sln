@@ -13,7 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{7F80432C-70D
 		Binaries\ICSharpCode.SharpZipLib.dll = Binaries\ICSharpCode.SharpZipLib.dll
 		Binaries\Microsoft.Exchange.WebServices.dll = Binaries\Microsoft.Exchange.WebServices.dll
 		Binaries\Microsoft.Http.dll = Binaries\Microsoft.Http.dll
-		Binaries\Newtonsoft.Json.dll = Binaries\Newtonsoft.Json.dll
 		Binaries\srmlib.dll = Binaries\srmlib.dll
 	EndProjectSection
 EndProject
@@ -65,9 +64,33 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP Quota Service x86", "HA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Win.MyFiles", "HAP.Win.MyFiles\HAP.Win.MyFiles.csproj", "{7A45CE1F-79C1-4A63-96F7-698F2E10A43B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JSON.net", "JSON.net", "{21F06B4A-B827-4E6D-8781-43F1FBB4F7EC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WinRT", "WinRT", "{BE7EA4B2-6350-43C4-AC23-C6091AD64F8A}"
+	ProjectSection(SolutionItems) = preProject
+		Binaries\JSON.net\WinRT\Newtonsoft.Json.dll = Binaries\JSON.net\WinRT\Newtonsoft.Json.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Portable", "Portable", "{F21F2F95-E0F4-404B-9122-73E8C2037F9F}"
+	ProjectSection(SolutionItems) = preProject
+		Binaries\JSON.net\Portable\Newtonsoft.Json.dll = Binaries\JSON.net\Portable\Newtonsoft.Json.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".net 4", ".net 4", "{4B0AFCA9-EE47-4775-9B33-57479AAA49B7}"
+	ProjectSection(SolutionItems) = preProject
+		Binaries\JSON.net\Net40\Newtonsoft.Json.dll = Binaries\JSON.net\Net40\Newtonsoft.Json.dll
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.WP.MyFiles", "HAP.WP.MyFiles\HAP.WP.MyFiles.csproj", "{A0CFD393-814C-4837-BF8A-E85604D97A30}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Portable40", "Portable40", "{2FA0DEB1-776F-47F1-9BA6-F1A31A8B72C9}"
+	ProjectSection(SolutionItems) = preProject
+		Binaries\JSON.net\Portable40\Newtonsoft.Json.dll = Binaries\JSON.net\Portable40\Newtonsoft.Json.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 23
+		SccNumberOfProjects = 24
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs08
 		SccLocalPath0 = .
@@ -145,6 +168,9 @@ Global
 		SccProjectUniqueName22 = HAP.Win.MyFiles\\HAP.Win.MyFiles.csproj
 		SccProjectName22 = HAP.Win.MyFiles
 		SccLocalPath22 = HAP.Win.MyFiles
+		SccProjectUniqueName23 = HAP.WP.MyFiles\\HAP.WP.MyFiles.csproj
+		SccProjectName23 = HAP.WP.MyFiles
+		SccLocalPath23 = HAP.WP.MyFiles
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug WinRT|Any CPU = Debug WinRT|Any CPU
@@ -805,11 +831,48 @@ Global
 		{7A45CE1F-79C1-4A63-96F7-698F2E10A43B}.Release|x86.ActiveCfg = Release|x86
 		{7A45CE1F-79C1-4A63-96F7-698F2E10A43B}.Release|x86.Build.0 = Release|x86
 		{7A45CE1F-79C1-4A63-96F7-698F2E10A43B}.Release|x86.Deploy.0 = Release|x86
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Debug WinRT|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Debug WinRT|Any CPU.Build.0 = Debug|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Debug WinRT|Any CPU.Deploy.0 = Debug|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Debug WinRT|ARM.ActiveCfg = Debug|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Debug WinRT|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Debug WinRT|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Debug WinRT|Mixed Platforms.Deploy.0 = Debug|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Debug WinRT|x64.ActiveCfg = Debug|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Debug WinRT|x86.ActiveCfg = Debug|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Debug|Mixed Platforms.Deploy.0 = Debug|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Release WinRT|Any CPU.ActiveCfg = Release|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Release WinRT|Any CPU.Build.0 = Release|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Release WinRT|Any CPU.Deploy.0 = Release|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Release WinRT|ARM.ActiveCfg = Release|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Release WinRT|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Release WinRT|Mixed Platforms.Build.0 = Release|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Release WinRT|Mixed Platforms.Deploy.0 = Release|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Release WinRT|x64.ActiveCfg = Release|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Release WinRT|x86.ActiveCfg = Release|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Release|ARM.ActiveCfg = Release|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Release|Mixed Platforms.Deploy.0 = Release|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Release|x64.ActiveCfg = Release|Any CPU
+		{A0CFD393-814C-4837-BF8A-E85604D97A30}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{21F06B4A-B827-4E6D-8781-43F1FBB4F7EC} = {7F80432C-70D9-4AAA-9FE3-6398471FC04D}
 		{E10211DD-09C4-4756-AC4D-36C73A73FCEB} = {9A28C64F-CA1C-4D4C-A26C-907F9B8269EB}
 		{51E919E3-C676-4439-B192-F1F936FB830B} = {9A28C64F-CA1C-4D4C-A26C-907F9B8269EB}
 		{4D363196-D7E0-45A3-951A-DF52E8FD84AC} = {9A28C64F-CA1C-4D4C-A26C-907F9B8269EB}
@@ -818,6 +881,10 @@ Global
 		{A06C244E-4136-4A30-97AD-F0717974A5D0} = {7B73919E-D6DA-4B3E-A9BC-CDBCACD84EEA}
 		{A991E5B1-BA49-4FF3-9155-4FC79412131C} = {7B73919E-D6DA-4B3E-A9BC-CDBCACD84EEA}
 		{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9} = {7B73919E-D6DA-4B3E-A9BC-CDBCACD84EEA}
+		{BE7EA4B2-6350-43C4-AC23-C6091AD64F8A} = {21F06B4A-B827-4E6D-8781-43F1FBB4F7EC}
+		{F21F2F95-E0F4-404B-9122-73E8C2037F9F} = {21F06B4A-B827-4E6D-8781-43F1FBB4F7EC}
+		{4B0AFCA9-EE47-4775-9B33-57479AAA49B7} = {21F06B4A-B827-4E6D-8781-43F1FBB4F7EC}
+		{2FA0DEB1-776F-47F1-9BA6-F1A31A8B72C9} = {21F06B4A-B827-4E6D-8781-43F1FBB4F7EC}
 	EndGlobalSection
 	GlobalSection(SharpSetup) = preSolution
 		Version = 1.2

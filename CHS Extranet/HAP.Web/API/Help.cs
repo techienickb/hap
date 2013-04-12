@@ -16,7 +16,7 @@ namespace HAP.Web.API
     public class Help
     {
         [OperationContract]
-        [WebGet(UriTemplate="{*Path}")]
+        [WebGet(UriTemplate = "{*Path}", ResponseFormat = WebMessageFormat.Json)]
         public string Get(string Path)
         {
             XmlDocument doc = new XmlDocument();

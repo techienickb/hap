@@ -129,7 +129,7 @@ namespace HAP.Win.MyFiles
         private void fileGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
             JSONFile file = ((JSONFile)e.ClickedItem);
-            if (file.Extension == "") Frame.Navigate(typeof(Browser), ((JSONFile)e.ClickedItem).Path);
+            if (file.Type != null && file.Type == "Directory") Frame.Navigate(typeof(Browser), ((JSONFile)e.ClickedItem).Path);
             else
             {
                 Frame.Navigate(typeof(Details), ((JSONFile)e.ClickedItem).Path);
@@ -289,7 +289,7 @@ namespace HAP.Win.MyFiles
                 if (fileGridView.SelectedItem != null)
                 {
                     JSONFile file = ((JSONFile)fileGridView.SelectedItem);
-                    if (file.Extension != "") { downloadbutton.IsEnabled = bottomAppBar.IsOpen = true; uploadbutton.IsEnabled = false; }
+                    if (file.Type != null && file.Type == "Directory") { downloadbutton.IsEnabled = bottomAppBar.IsOpen = true; uploadbutton.IsEnabled = false; }
                     else { downloadbutton.IsEnabled = false; uploadbutton.IsEnabled = bottomAppBar.IsOpen = file.Permissions.AppendData; }
                 }
                 else { downloadbutton.IsEnabled = bottomAppBar.IsOpen = false; uploadbutton.IsEnabled = Params.Properties.Permissions.AppendData; }
