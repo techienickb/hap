@@ -284,17 +284,20 @@ namespace HAP.Win.MyFiles
 
         private void fileGridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            try
+            //try
+            //{
+            if (fileGridView.SelectedItem != null && fileGridView.SelectedItem is JSONFile)
             {
-                if (fileGridView.SelectedItem != null)
-                {
-                    JSONFile file = ((JSONFile)fileGridView.SelectedItem);
-                    if (file.Type != null && file.Type == "Directory") { downloadbutton.IsEnabled = bottomAppBar.IsOpen = true; uploadbutton.IsEnabled = false; }
-                    else { downloadbutton.IsEnabled = false; uploadbutton.IsEnabled = bottomAppBar.IsOpen = file.Permissions.AppendData; }
-                }
-                else { downloadbutton.IsEnabled = bottomAppBar.IsOpen = false; uploadbutton.IsEnabled = Params.Properties.Permissions.AppendData; }
+                JSONFile file = ((JSONFile)fileGridView.SelectedItem);
+                if (file.Type != null && file.Type == "Directory") { downloadbutton.IsEnabled = false; uploadbutton.IsEnabled = bottomAppBar.IsOpen = file.Permissions.Modify; }
+                else { downloadbutton.IsEnabled = bottomAppBar.IsOpen = true; uploadbutton.IsEnabled = false; }
             }
-            catch { downloadbutton.IsEnabled = bottomAppBar.IsOpen = uploadbutton.IsEnabled = false; }
+            else
+            {
+                downloadbutton.IsEnabled = bottomAppBar.IsOpen = false; uploadbutton.IsEnabled = Params == null ? false : Params.Properties.Permissions.Modify;
+            }
+            //}
+            //catch { downloadbutton.IsEnabled = bottomAppBar.IsOpen = uploadbutton.IsEnabled = false; }
         }
 
         private async void upload()

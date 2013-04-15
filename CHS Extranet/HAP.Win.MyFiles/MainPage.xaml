@@ -31,6 +31,7 @@
                     <ComboBoxItem Content="New Site+" IsSelected="True"/>
                 </ComboBox>
                 <Button Content="Remove" Name="removesite" Visibility="Collapsed" Click="removesite_Click" />
+                <Button Content="Help" Name="help" Click="help_Click" />
             </StackPanel>
             <TextBlock TextWrapping="Wrap" Text="HAP+ Address:" FontSize="16" Padding="0,6"/>
             <TextBox Name="address" Text="https://" InputScope="Url" />
@@ -40,7 +41,6 @@
             <PasswordBox Name="password" Margin="0,0,200,0" IsPasswordRevealButtonEnabled="True"  />
             <Button Content="Login" Name="login" HorizontalAlignment="Left"  Margin="0,40,0,0" VerticalAlignment="Top" Height="60" Width="200" FontSize="20" Click="Button_Click"/>
         </StackPanel>
-
         <VisualStateManager.VisualStateGroups>
 
             <!-- Visual states reflect the application's view state -->
