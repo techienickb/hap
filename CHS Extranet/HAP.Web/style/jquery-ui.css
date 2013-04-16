@@ -752,7 +752,7 @@ html, body{background-color:#ffffff;}
 .ui-state-error{border-color:#c31d1d;color:#ffffff;background:#c31d1d;}
 .ui-state-error .ui-icon{background-image:url(../images/ui-icons_ffffff_0.png);}
 
-.ui-front { z-index: 299; }
+.ui-front { z-index: 999; }
 
 .ui-spinner { display: inline-block; overflow: hidden; padding: 0; position: relative; vertical-align: middle; }
 .ui-spinner-input { background: none repeat scroll 0 0 transparent; border: medium none; color: inherit; margin: 0.2em 22px 0.2em 0.4em; border: 0!important; padding: 0; vertical-align: middle; }
