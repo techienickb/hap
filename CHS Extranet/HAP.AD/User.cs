@@ -24,18 +24,7 @@ namespace HAP.AD
             this.UserName = username.Contains('\\') ? username.Remove(0, username.IndexOf('\\') + 1) : username;
             this.DomainName = HAP.Web.Configuration.hapConfig.Current.AD.UPN;
             UserPrincipal userp = UserPa;
-            this.UserName = userp.SamAccountName;
-            this.Comment = userp.Description;
-            this.DisplayName = userp.DisplayName;
-            this.EmployeeID = userp.EmployeeId;
-            this.Email = userp.EmailAddress;
-            this.LastLoginDate = userp.LastLogon.HasValue ? userp.LastLogon.Value : DateTime.Now;
-            this.IsLockedOut = userp.IsAccountLockedOut();
-            this.IsApproved = userp.Enabled.HasValue ? userp.Enabled.Value : false;
-            this.HomeDirectory = userp.HomeDirectory;
-            this.FirstName = userp.GivenName;
-            this.LastName = userp.Surname;
-            this.MiddleNames = userp.MiddleName;
+            this.LoadUserFromAD(userp);
         }
         
         public void Authenticate(string username, string password)
@@ -44,18 +33,7 @@ namespace HAP.AD
             this.Password = password;
             this.DomainName = HAP.Web.Configuration.hapConfig.Current.AD.UPN;
             UserPrincipal userp = HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Web.Configuration.AuthMode.Forms ? UserP : UserPa;
-            this.UserName = userp.SamAccountName;
-            this.Comment = userp.Description;
-            this.DisplayName = userp.DisplayName;
-            this.EmployeeID = userp.EmployeeId;
-            this.Email = userp.EmailAddress;
-            this.LastLoginDate = userp.LastLogon.HasValue ? userp.LastLogon.Value : DateTime.Now;
-            this.IsLockedOut = userp.IsAccountLockedOut();
-            this.IsApproved = userp.Enabled.HasValue ? userp.Enabled.Value : false;
-            this.HomeDirectory = userp.HomeDirectory;
-            this.FirstName = userp.GivenName;
-            this.LastName = userp.Surname;
-            this.MiddleNames = userp.MiddleName;
+            this.LoadUserFromAD(userp);
         }
 
         public void Authenticate(string username, string password, string domain)
@@ -64,6 +42,11 @@ namespace HAP.AD
             this.Password = password;
             this.DomainName = domain;
             UserPrincipal userp = HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Web.Configuration.AuthMode.Forms ? UserP : UserPa;
+            this.LoadUserFromAD(userp);
+        }
+
+        private void LoadUserFromAD(UserPrincipal userp)
+        {
             this.UserName = userp.SamAccountName;
             this.Comment = userp.Description;
             this.DisplayName = userp.DisplayName;
