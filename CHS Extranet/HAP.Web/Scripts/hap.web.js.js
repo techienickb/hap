@@ -51,6 +51,7 @@ if (hap == null) {
                 var e = $("input[type='checkbox']");
                 for (var i = 0; i < e.length; i++) {
                     var o = $(e[i]);
+                    if (o.hasClass("noswitch")) continue;
                     if (o.hasClass("hapswitch")) continue;
                     o.before('<span class="hapswitch" data-for="' + o.attr("id") + '"><span></span><i></i></span>');
                     o.addClass("hapswitch").change(function () {
@@ -122,6 +123,7 @@ if (hap == null) {
                     contentType: 'application/json',
                     success: function (data) {
                         $("#helpbox .content").html(data);
+                        $("#helpbox .content button").button();
                     },
                     error: hap.common.jsonError
                 });

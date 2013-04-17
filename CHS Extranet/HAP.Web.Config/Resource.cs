@@ -28,6 +28,7 @@ namespace HAP.Web.Configuration
             ReadWriteTo = node.Attributes["readwriteto"].Value;
             MultiLessonTo = node.Attributes["multilessonto"] == null ? "" : node.Attributes["multilessonto"].Value;
             MaxMultiLesson = node.Attributes["maxmultilesson"] == null ? 0 : int.Parse(node.Attributes["maxmultilesson"].Value);
+            Disclaimer = node.Attributes["disclaimer"] == null ? "" : node.Attributes["disclaimer"].Value;
         }
 
         public Rooms Rooms { get; set; }
@@ -45,7 +46,7 @@ namespace HAP.Web.Configuration
         public string ReadWriteTo { get; set; }
         public string MultiLessonTo { get; set; }
         public int MaxMultiLesson { get; set; }
-
+        public string Disclaimer { get; set; }
         public void InitRooms()
         {
             XmlElement e = node.OwnerDocument.CreateElement("rooms");

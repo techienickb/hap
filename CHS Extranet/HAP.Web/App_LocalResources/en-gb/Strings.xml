@@ -21,6 +21,7 @@
   <bookingsystem>
     <bookingsystem>Booking System</bookingsystem>
     <quicksearch>Search for: </quicksearch>
+    <nodisclaimer>You need to agree to the resource disclaimer</nodisclaimer>
   </bookingsystem>
   <timetable>
     <my>My Timetable</my>

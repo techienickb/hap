@@ -38,7 +38,7 @@ namespace HAP.Web
         private bool isAuth(string extension)
         {
             foreach (Filter filter in config.MyFiles.Filters)
-                if (filter.Expression.Contains(extension)) return true;
+                if (filter.Expression.ToLower().Contains(extension.ToLower())) return true;
             return isAuth(config.MyFiles.Filters.Single(fil => fil.Name == "All Files"));
         }
 

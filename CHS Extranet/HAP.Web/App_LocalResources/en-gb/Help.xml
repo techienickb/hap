@@ -30,6 +30,13 @@ British English Help Localised Resources
     <h2>To Logout, Close your browser</h2>]]>
   </impmsg>
   <myfiles>
+    <w8app>
+      <![CDATA[
+      <h2>The HAP+ My Files App is Available in the Windows Store</h2>
+      <p>You can now access your My Files via the Windows Store My Files App</p>
+      <button onclick="window.open('http://apps.microsoft.com/windows/en-US/app/home-access-plus-my-files/83c7c64d-6f8d-4532-8c39-76b4fb83e9d3'); return false;">Visit the Windows Store</button>
+      ]]>
+    </w8app>
     <bug>
       <![CDATA[
       <h2>Got an Issue with the My Files Beta?</h2>
@@ -323,11 +330,8 @@ British English Help Localised Resources
       <ul>
       <li><b><a href="javascript:void(hap.help.Load('bookingsystem/index'));">Welcome</a></b>
       </li>
-      <li><b>The Interface</b>
+      <li><b><a href="javascript:void(hap.help.Load('bookingsystem/interface'));">The Interface</a></b>
       </li>
-      <li><b>Operations</b>
-      </li>
-      <li><b>Guides to:</b>
       </ul>
       
     ]]>
@@ -343,8 +347,22 @@ British English Help Localised Resources
           <li><b>The Bookings Grid</b> - This is a grid containing all of your Establishment's Resources which you can book.  You can also remove your booking from this interface if you have made a mistake.</li>
           <li><b>The Booking Form</b> - This form allows you to book a resource for a specific time and date</li>
         </ol>
-      <br />&nbsp;</p>
+      <br /><a href="javascript:void(hap.help.Load('bookingsystem/interface'));">More interface help</a></p>
       <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('bookingsystem/contents'));">click here</a><br />&nbsp;</p>]]>
     </index>
+    <interface>
+      <![CDATA[<h2>The Booking System Interface</h2>
+      <p>This picture shows what the current booking system looks like</p>
+      <img src="../images/help/bookingsystem-interface.png" />
+      <p>At the top is the Common Header, allowing you to navigate to another part of HAP+ as well as accessing this help document, get the overview/search dialog and, if you have permissions, the Booking System Control Panel.<br />
+      Under that is the Week and Bookings available information bar, this will show what Week it is (if your school uses a 2 week timetable) as well as how many bookings you have left for that week, if it doesn't show that information you have unlimited bookings.<br />
+      Under that is the Date that is currently being shown, clicking on this will show the Calendar of days that you can move to.</p>
+      <p>In the main section of the page is a grid of Resources down the left and lessons along the top.  Free resources are clickable (unless you have permissions to overwrite, or remove your own booking).<br />
+      Resources marked with a circle arrow are timetabled lessons and, unless you have permissions, cannot be booked over<br />
+      Lessons marked with a crossing line are lessons that have been overriden.</p>
+      <p>The booking form pops up to confirm a booking as well as a few other details, it will ask for the Year group to book for, which subject it is as well as additional, resource specific information (number of laptops, headphones needed, etc)</p>
+      <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('bookingsystem/contents'));">click here</a><br />&nbsp;</p>]]>
+      ]]>
+    </interface>
   </bookingsystem>
 </resources>

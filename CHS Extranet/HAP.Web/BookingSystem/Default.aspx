@@ -103,6 +103,9 @@
         <div id="bfmultilesson">
             <label for="bfmultiroom">Length: </label><select id="bfmultiroom"></select>
         </div>
+        <div id="bfdisclaimer">
+            <label for="bfdisclaim"></label><input type="checkbox" class="noswitch" id="bfdisclaim" />
+        </div>
 	</div>
 	<div id="bookingsystemcontent">
 	    <p class="ui-state-highlight ui-corner-all" style="padding: 2px 6px">
@@ -148,12 +151,13 @@
 		var resources = <%=JSResources %>;
 		var availbookings = [ 0, 0 ];
 		var canmulti = false;
-		function resource(name, type, years, quantities, readonly, multiroom, maxlessons, rooms){
+		function resource(name, type, years, quantities, readonly, multiroom, maxlessons, rooms, disclaimer){
 			this.Name = name;
 			this.Type = type;
 			this.Years = years;
 			this.Quantities = quantities;
 			this.Data;
+			this.Disclaimer = disclaimer;
 			this.ReadOnly = readonly;
 			this.MultiRoom = multiroom;
 			this.MaxLessons = maxlessons;
@@ -376,12 +380,18 @@
             }
 			$("#bflquant").buttonset();
 			$("#bflesson").html(lesson);
+			if (curres.Disclaimer != "") {
+			    $("#bfdisclaimer").show();
+			    $("#bfdisclaimer label").html(curres.Disclaimer);
+			    $("#bfdisclaimer input").prop("checked", false);
+			} else { $("#bfdisclaimer").hide(); }
 			$("#bookingform").dialog({ 
 					modal: true, 
 					autoOpen: true,
 					minWidth: 500,
 					buttons: {
-						"Book": function () {
+					    "Book": function () {
+					        if (curres.Disclaimer != "" && !$("#bfdisclaimer input").is(":checked")) { alert(hap.common.getLocal('bookingsystem/nodisclaimer')); return; }
 							var abort = false;
 							if ($("#bfsubject").val().length == 0) { 
 								$("#subjecterror").removeAttr("style").css("color", "red");
