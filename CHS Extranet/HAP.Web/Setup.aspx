@@ -1077,7 +1077,7 @@
                         function editres(b) {
                             tempe = $(b).parent().parent();
                             $("#resName").val(tempe.children(".resource").children("span").html());
-                            $("#resType option:first-child").attr("selected", "selected");
+                            $("#resType").val(tempe.children(".resource").children("i").html());
                             if (tempe.children(".resource").children(".enabled").html() == "Enabled") $("#resEnabled").attr("checked", "checked");
                             else $("#resEnabled").removeAttr("checked");
                             if (tempe.children(".resource").children(".charging").html() == "N") $("#resCharging").removeAttr("checked");
