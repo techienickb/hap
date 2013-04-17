@@ -711,11 +711,11 @@
                             $("#mappingDrive").val("");
                             $("#mappingUNC").val("");
                             $("#mappingName").val("");
-                            $("#mappingEnableMove").removeAttr("checked");
+                            $("#mappingEnableMove").prop("checked", false);
                             $("#mappingEnableReadTo").val("");
                             $("#mappingEnableWriteTo").val("");
-                            $("#mappingUsageModeDriveSpace").attr("checked", "checked");
-                            $("#mappingUsageModeQuotaServer").removeAttr("checked");
+                            $("#mappingUsageModeDriveSpace").prop("checked", true);
+                            $("#mappingUsageModeQuotaServer").prop("checked", false);
                             $("#mappingEditor").dialog({
                                 autoOpen: true,
                                 width: 500,
@@ -724,7 +724,7 @@
                                         $.ajax({
                                             type: 'POST',
                                             url: 'API/Setup/AddMapping',
-                                            data: '{ "drive": "' + $("#mappingDrive").val().toUpperCase() + '", "name": "' + $("#mappingName").val() + '", "unc": "' + $("#mappingUNC").val().replace(/\\/g, "/") + '", "enablemove": ' + ($("#mappingEnableMove").attr("checked") ? "true" : "false") + ', "enablereadto": "' + $("#mappingEnableReadTo").val() + '", "enablewriteto": "' + $("#mappingEnableWriteTo").val() + '", "usagemode": "' + ($("mappingUsageModeDriveSpace").attr("checked") ? "DriveSpace" : "Quota") + '" }',
+                                            data: '{ "drive": "' + $("#mappingDrive").val().toUpperCase() + '", "name": "' + $("#mappingName").val() + '", "unc": "' + $("#mappingUNC").val().replace(/\\/g, "/") + '", "enablemove": ' + ($("#mappingEnableMove").is(":checked") ? "true" : "false") + ', "enablereadto": "' + $("#mappingEnableReadTo").val() + '", "enablewriteto": "' + $("#mappingEnableWriteTo").val() + '", "usagemode": "' + ($("mappingUsageModeDriveSpace").is(":checked") ? "DriveSpace" : "Quota") + '" }',
                                             contentType: 'application/json',
                                             dataType: 'json',
                                             success: OnMappingAddSuccess,
@@ -745,7 +745,7 @@
                                 var data = response.AddMappingResult;
                                 if (data != 0) alert(data);
                                 else {
-                                    $("#mappings").append('<div class="homepagelink"><button title="Remove" onclick="return removemapping(this);">X</button><a href="#mapping" class="mapping" title="Edit" onclick="return editmapping(this);"><img src="<%#ResolveUrl("~/images/icons/netdrive.png") %>" alt="" /><b>' + $("#mappingDrive").val().toUpperCase() + '</b><i>' + $("#mappingUNC").val() + '</i><span class="name">' + $("#mappingName").val() + '</span><span class="ert">' + $("#mappingEnableReadTo").val() + '</span><span class="ewt">' + $("#mappingEnableWriteTo").val() + '</span><span class="em">' + ($("mappingEnableMove").attr("checked") ? "true" : "false") + '</span><dd>' + ($("mappingUsageModeDriveSpace").attr("checked") ? "DriveSpace" : "Quota") + '</dd></a></div>');
+                                    $("#mappings").append('<div class="homepagelink"><button title="Remove" onclick="return removemapping(this);">X</button><a href="#mapping" class="mapping" title="Edit" onclick="return editmapping(this);"><img src="<%#ResolveUrl("~/images/icons/netdrive.png") %>" alt="" /><b>' + $("#mappingDrive").val().toUpperCase() + '</b><i>' + $("#mappingUNC").val() + '</i><span class="name">' + $("#mappingName").val() + '</span><span class="ert">' + $("#mappingEnableReadTo").val() + '</span><span class="ewt">' + $("#mappingEnableWriteTo").val() + '</span><span class="em">' + ($("mappingEnableMove").is(":checked") ? "true" : "false") + '</span><dd>' + ($("mappingUsageModeDriveSpace").is(":checked") ? "DriveSpace" : "Quota") + '</dd></a></div>');
                                     resetButtons();
                                 }
                             }
@@ -756,16 +756,16 @@
                             $("#mappingName").val(tempe.children("a").children(".name").html());
                             $("#mappingUNC").val(tempe.children("a").children("i").html());
                             if (tempe.children("a").children(".em").html() == "True")
-                                $("#mappingEnableMove").attr("checked", "checked");
-                            else $("#mappingEnableMove").removeAttr("checked");
+                                $("#mappingEnableMove").prop("checked", true);
+                            else $("#mappingEnableMove").prop("checked", false);
                             $("#mappingEnableReadTo").val($.trim(tempe.children("a").children(".ert").html()));
                             $("#mappingEnableWriteTo").val($.trim(tempe.children("a").children(".ewt").html()));
                             if (tempe.children("a").children("dd").html() == "DriveSpace") {
-                                $("#mappingUsageModeDriveSpace").attr("checked", "checked");
-                                $("#mappingUsageModeQuotaServer").removeAttr("checked");
+                                $("#mappingUsageModeDriveSpace").prop("checked", true);
+                                $("#mappingUsageModeQuotaServer").prop("checked", false);
                             } else {
-                                $("#mappingUsageModeQuotaServer").attr("checked", "checked");
-                                $("#mappingUsageModeDriveSpace").removeAttr("checked");
+                                $("#mappingUsageModeQuotaServer").prop("checked", true);
+                                $("#mappingUsageModeDriveSpace").prop("checked", false);
                             }
                             $("#mappingEditor").dialog({
                                 autoOpen: true,
@@ -799,11 +799,11 @@
                                     tempe.children("a").children("b").html($("#mappingDrive").val().toUpperCase());
                                     tempe.children("a").children("i").html($("#mappingUNC").val());
                                     tempe.children("a").children(".name").html($("#mappingName").val());
-                                    if ($("#mappingEnableMove").attr("checked")) tempe.children("a").children(".em").html() == "True";
+                                    if ($("#mappingEnableMove").is(":checked")) tempe.children("a").children(".em").html() == "True";
                                     else tempe.children("a").children(".em").html() == "False"
                                     tempe.children("a").children(".ert").html($("#mappingEnableReadTo").val());
                                     tempe.children("a").children(".ewt").html($("#mappingEnableWriteTo").val());
-                                    if ($("#mappingUsageModeDriveSpace").attr("checked")) tempe.children("a").children("dd").html("DriveSpace");
+                                    if ($("#mappingUsageModeDriveSpace").is(":checked")) tempe.children("a").children("dd").html("DriveSpace");
                                     else tempe.children("a").children("dd").html("Quota");
                                     tempe = null;
                                 }
@@ -1029,11 +1029,11 @@
                         function addres() {
                             $("#resName").val("");
                             $("#resType option:first-child").attr("selected", "selected");
-                            $("#resEnabled").attr("checked", "checked");
-                            $("#resCharging").removeAttr("checked");
+                            $("#resEnabled").prop("checked", true);
+                            $("#resCharging").prop("checked", false);
                             $("#resAdmins").val("");
                             $("#resShowTo").val("");
-                            $("#resEmail").attr("checked", "checked");
+                            $("#resEmail").prop("checked", true);
                             $("#resHideFrom").val("");
                             $("#resQuantities").val("");
                             $("#resReadOnlyTo").val("");
@@ -1048,7 +1048,7 @@
                                         $.ajax({
                                             type: 'POST',
                                             url: 'API/Setup/AddResource',
-                                            data: '{ "name": "' + $("#resName").val() + '", "type": "' + $("#resType").val() + '", "enabled": ' + ($("#resEnabled").attr("checked") ? 'true' : 'false') + ', "charging": ' + ($("#resCharging").attr("checked") ? 'true' : 'false') + ', "admins": "' + $("#resAdmins").val() + '", "emailadmins": ' + ($("#resEmail").attr("checked") ? 'true' : 'false') + ', "showto": "' + $("#resShowTo").val() + '", "hidefrom": "' + $("#resHideFrom").val() + '", "quantities": "' + $("#resQuantities").val() + '", "years": "' + $("#resYears").val() + '", "readwriteto": "' + $("#resReadWriteTo").val() + '", "readonlyto": "' + $("#resReadOnlyTo").val() + '", "disclaimer": "' + $("#resDisclaimer").val() + '" }',
+                                            data: '{ "name": "' + $("#resName").val() + '", "type": "' + $("#resType").val() + '", "enabled": ' + ($("#resEnabled").is(":checked") ? 'true' : 'false') + ', "charging": ' + ($("#resCharging").is(":checked") ? 'true' : 'false') + ', "admins": "' + $("#resAdmins").val() + '", "emailadmins": ' + ($("#resEmail").is(":checked") ? 'true' : 'false') + ', "showto": "' + $("#resShowTo").val() + '", "hidefrom": "' + $("#resHideFrom").val() + '", "quantities": "' + $("#resQuantities").val() + '", "years": "' + $("#resYears").val() + '", "readwriteto": "' + $("#resReadWriteTo").val() + '", "readonlyto": "' + $("#resReadOnlyTo").val() + '", "disclaimer": "' + $("#resDisclaimer").val() + '" }',
                                             contentType: 'application/json',
                                             dataType: 'json',
                                             success: OnResourceAddSuccess,
@@ -1069,7 +1069,7 @@
                                 var data = response.AddResourceResult;
                                 if (data != 0) alert(data);
                                 else {
-                                    $("#resources").append('<div><div class="resource" style="float: left;" data-disclaimer="' + $("resDisclaimer").val() + '"><span>' + $("#resName").val() + '</span> (<i>' + $("#resType").val() + '</i>) [<b class="enabled">' + ($("#resEnabled").attr("checked") ? "Enabled" : "Disabled") + '</b>|<b class="charging">' + ($("#resCharging").attr("checked") ? "Charging" : "N") + '</b>|<b class="email">' + ($("#resEmail").attr("checked") ? "Email Admins" : "N") + '</b>]<br />Admins: <b class="admins">' + $("#resAdmins").val() + '</b>, Quantities: <b class="quantities">' + $("#resQuantities").val() + '</b>, Years: <b class="years">' + $("#resYears").val() + '</b><br />Show To: <b class="showto">' + $("#resShowTo").val() + '</b><br />Hide From: <b class="hidefrom">' + $("#resHideFrom").val() + '</b><br />Read Only: <b class="readonly">' + $("#resReadOnlyTo").val() + '</b>, Read/Write: <b class="readwrite">' + $("#resReadWriteTo").val() + '</b></div><div class="cbuttonset"><button onclick="return editres(this);" title="Edit">Edit</button><button onclick="return removeres(this);" title="Delete">Delete</button></div></div>');
+                                    $("#resources").append('<div><div class="resource" style="float: left;" data-disclaimer="' + $("resDisclaimer").val() + '"><span>' + $("#resName").val() + '</span> (<i>' + $("#resType").val() + '</i>) [<b class="enabled">' + ($("#resEnabled").is(":checked") ? "Enabled" : "Disabled") + '</b>|<b class="charging">' + ($("#resCharging").is(":checked") ? "Charging" : "N") + '</b>|<b class="email">' + ($("#resEmail").is(":checked") ? "Email Admins" : "N") + '</b>]<br />Admins: <b class="admins">' + $("#resAdmins").val() + '</b>, Quantities: <b class="quantities">' + $("#resQuantities").val() + '</b>, Years: <b class="years">' + $("#resYears").val() + '</b><br />Show To: <b class="showto">' + $("#resShowTo").val() + '</b><br />Hide From: <b class="hidefrom">' + $("#resHideFrom").val() + '</b><br />Read Only: <b class="readonly">' + $("#resReadOnlyTo").val() + '</b>, Read/Write: <b class="readwrite">' + $("#resReadWriteTo").val() + '</b></div><div class="cbuttonset"><button onclick="return editres(this);" title="Edit">Edit</button><button onclick="return removeres(this);" title="Delete">Delete</button></div></div>');
                                     resetButtons();
                                 }
                             }
@@ -1078,12 +1078,12 @@
                             tempe = $(b).parent().parent();
                             $("#resName").val(tempe.children(".resource").children("span").html());
                             $("#resType").val(tempe.children(".resource").children("i").html());
-                            if (tempe.children(".resource").children(".enabled").html() == "Enabled") $("#resEnabled").attr("checked", "checked");
-                            else $("#resEnabled").removeAttr("checked");
-                            if (tempe.children(".resource").children(".charging").html() == "N") $("#resCharging").removeAttr("checked");
-                            else $("#resCharging").attr("checked", "checked");
-                            if (tempe.children(".resource").children(".email").html() == "N") $("#resEmail").removeAttr("checked");
-                            else $("#resEmail").attr("checked", "checked");
+                            if (tempe.children(".resource").children(".enabled").html() == "Enabled") $("#resEnabled").prop("checked", true);
+                            else $("#resEnabled").prop("checked", false);
+                            if (tempe.children(".resource").children(".charging").html() == "N") $("#resCharging").prop("checked", false);
+                            else $("#resCharging").prop("checked", true);
+                            if (tempe.children(".resource").children(".email").html() == "N") $("#resEmail").prop("checked", false);
+                            else $("#resEmail").prop("checked", true);
                             $("#resAdmins").val(tempe.children(".resource").children(".admins").html());
                             $("#resShowTo").val(tempe.children(".resource").children(".showto").html());
                             $("#resReadOnlyTo").val(tempe.children(".resource").children(".readonly").html());
@@ -1100,7 +1100,7 @@
                                         $.ajax({
                                             type: 'POST',
                                             url: 'API/Setup/UpdateResource',
-                                            data: '{ "origname": "' + tempe.children(".resource").children("span").html() + '", "name": "' + $("#resName").val() + '", "type": "' + $("#resType").val() + '", "enabled": ' + ($("#resEnabled").attr("checked") == "checked" ? 'true' : 'false') + ', "charging": ' + ($("#resCharging").attr("checked") ? 'true' : 'false') + ', "admins": "' + $("#resAdmins").val() + '", "emailadmins": ' + ($("#resEmail").attr("checked") ? 'true' : 'false') + ', "showto": "' + $("#resShowTo").val() + '", "hidefrom": "' + $("#resHideFrom").val() + '", "quantities": "' + $("#resQuantities").val() + '", "years": "' + $("#resYears").val() + '", "readwriteto": "' + $("#resReadWriteTo").val() + '", "readonlyto": "' + $("#resReadOnlyTo").val() + '", "disclaimer": "' + $("#resDisclaimer").val() + '" }',
+                                            data: '{ "origname": "' + tempe.children(".resource").children("span").html() + '", "name": "' + $("#resName").val() + '", "type": "' + $("#resType").val() + '", "enabled": ' + ($("#resEnabled").is(":checked") ? 'true' : 'false') + ', "charging": ' + ($("#resCharging").is(":checked") ? 'true' : 'false') + ', "admins": "' + $("#resAdmins").val() + '", "emailadmins": ' + ($("#resEmail").is(":checked") ? 'true' : 'false') + ', "showto": "' + $("#resShowTo").val() + '", "hidefrom": "' + $("#resHideFrom").val() + '", "quantities": "' + $("#resQuantities").val() + '", "years": "' + $("#resYears").val() + '", "readwriteto": "' + $("#resReadWriteTo").val() + '", "readonlyto": "' + $("#resReadOnlyTo").val() + '", "disclaimer": "' + $("#resDisclaimer").val() + '" }',
                                             contentType: 'application/json',
                                             dataType: 'json',
                                             success: OnResourceUpdateSuccess,
@@ -1121,7 +1121,7 @@
                                 var data = response.UpdateResourceResult;
                                 if (data != 0) alert(data);
                                 else {
-                                    $(tempe).children(".resource").replaceWith('<div class="resource" data-disclaimer="' + $("#resDisclaimer").val() + '" style="float: left;"><span>' + $("#resName").val() + '</span> (<i>' + $("#resType").val() + '</i>) [<b class="enabled">' + ($("#resEnabled").attr("checked") ? "Enabled" : "Disabled") + '</b>|<b class="charging">' + ($("#resCharging").attr("checked") ? "Charging" : "N") + '</b>|<b class="email">' + ($("#resEmail").attr("checked") ? "Email Admins" : "N") + '</b>]<br />Admins: <b class="admins">' + $("#resAdmins").val() + '</b>, Quantities: <b class="quantities">' + $("#resQuantities").val() + '</b>, Years: <b class="years">' + $("#resYears").val() + '</b><br />Show To: <b class="showto">' + $("#resShowTo").val() + '</b><br />Hide From: <b class="hidefrom">' + $("#resHideFrom").val() + '</b></div>');
+                                    $(tempe).children(".resource").replaceWith('<div class="resource" data-disclaimer="' + $("#resDisclaimer").val() + '" style="float: left;"><span>' + $("#resName").val() + '</span> (<i>' + $("#resType").val() + '</i>) [<b class="enabled">' + ($("#resEnabled").is(":checked") ? "Enabled" : "Disabled") + '</b>|<b class="charging">' + ($("#resCharging").is(":checked") ? "Charging" : "N") + '</b>|<b class="email">' + ($("#resEmail").is(":checked") ? "Email Admins" : "N") + '</b>]<br />Admins: <b class="admins">' + $("#resAdmins").val() + '</b>, Quantities: <b class="quantities">' + $("#resQuantities").val() + '</b>, Years: <b class="years">' + $("#resYears").val() + '</b><br />Show To: <b class="showto">' + $("#resShowTo").val() + '</b><br />Hide From: <b class="hidefrom">' + $("#resHideFrom").val() + '</b></div>');
                                     tempe = null;
                                 }
                             }
@@ -1499,9 +1499,9 @@
                             $("#groupName").val($("#linkgroup" + e + " > h4 > .lgName").html());
                             $("#groupShowTo").val($("#linkgroup" + e + " > h4 > .lgST").html());
                             $("#groupSubTitle").val($("#linkgroup" + e + " > p").html());
-                            $("#groupHideHomePage").attr('checked', $("#linkgroup" + e + " > h4 > .lgHHP").html() == "(Hidden Homepage)" ? true : false);
-                            $("#groupHideTopMenu").attr('checked', $("#linkgroup" + e + " > h4 > .lgHTM").html() == "(Hidden Top Menu Link)" ? true : false);
-                            $("#groupHideHomePageLink").attr('checked', $("#linkgroup" + e + " > h4 > .lgHHPL").html() == "(Hidden Homepage Link)" ? true : false);
+                            $("#groupHideHomePage").prop("checked", $("#linkgroup" + e + " > h4 > .lgHHP").html() == "(Hidden Homepage)" ? true : false);
+                            $("#groupHideTopMenu").prop('checked', $("#linkgroup" + e + " > h4 > .lgHTM").html() == "(Hidden Top Menu Link)" ? true : false);
+                            $("#groupHideHomePageLink").prop('checked', $("#linkgroup" + e + " > h4 > .lgHHPL").html() == "(Hidden Homepage Link)" ? true : false);
                             tempe = e;
                             $("#linkgroupEditor").dialog({
                                 autoOpen: true,
@@ -1592,18 +1592,16 @@
                             else $("#<%=trackerstate.ClientID %>").attr("src", root + "images/setup/266.png");
                         }
                         function checksmtp() {
-                            if ($("#<%=smtpenabled.ClientID %>").attr("checked") && $("#<%=smtpenabled.ClientID %>").attr("checked") == "checked") {
+                            if ($("#<%=smtpenabled.ClientID %>").is(":checked")) {
                                 if ($("#<%=smtpaddress.ClientID %>").val().length > 2 && $("#<%=smtpport.ClientID %>").val().length > 1 && $("#<%=smtpfromname.ClientID %>").val().length > 2 && $("#<%=smtpfromemail.ClientID %>").val().length > 2)
                                     $("#<%=smtpstate.ClientID %>").attr("src", root + "images/setup/267.png");
                                 else $("#<%=smtpstate.ClientID %>").attr("src", root + "images/setup/266.png");
                             } else $("#<%=smtpstate.ClientID %>").attr("src", root + "images/setup/267.png");
                         }
                         function checkweb() {
-                            if ($("#<%=proxyenabled.ClientID %>").attr("checked")) {
-                                if ($("#<%=proxyenabled.ClientID %>").attr("checked") == "checked" && $("#<%=proxyaddress.ClientID %>").val().length > 2 && $("#<%=proxyport.ClientID%>").val().length > 1)
+                                if ($("#<%=proxyenabled.ClientID %>").is(":checked") && $("#<%=proxyaddress.ClientID %>").val().length > 2 && $("#<%=proxyport.ClientID%>").val().length > 1)
                                     $("#<%=proxystate.ClientID %>").attr("src", root + "images/setup/267.png");
                                 else $("#<%=proxystate.ClientID %>").attr("src", root + "images/setup/266.png");
-                            } else $("#<%=proxystate.ClientID %>").attr("src", root + "images/setup/267.png");
                         }
                         function checkad() {
                             $("#treeprogress").progressbar({ value: 0 });
@@ -1663,7 +1661,7 @@
                         function showadbrowser(e, type) {
                             reqtype = type;
                             obj = e;
-                            $("#adgroups-all").attr("checked", "checked");
+                            $("#adgroups-all").prop("checked", true);
                             $("#adbrowserwrapper").dialog({
                                 autoOpen: true,
                                 width: 400,
@@ -1680,34 +1678,34 @@
                             if (noall) {
                                 $("#adgroups-mode").attr("style", "display: none");
                                 document.getElementById("adgroup-custom").style.display = "block";
-                                $("#adgroups-mode-custom").attr("checked", "checked");
-                                $("#adgroups-mode-all").removeAttr("checked");
-                                $("#adgroups-mode-inherit").removeAttr("checked");
+                                $("#adgroups-mode-custom").prop("checked", true);
+                                $("#adgroups-mode-all").prop("checked", false);
+                                $("#adgroups-mode-inherit").prop("checked", false);
                             }
                             else {
                                 $("#adgroups-mode").removeAttr("style");
                                 document.getElementById("adgroup-custom").style.display = "none";
-                                $("#adgroups-mode-custom").removeAttr("checked");
-                                $("#adgroups-mode-all").attr("checked", "checked");
-                                $("#adgroups-mode-inherit").removeAttr("checked");
+                                $("#adgroups-mode-custom").prop("checked", false);
+                                $("#adgroups-mode-all").prop("checked", true);
+                                $("#adgroups-mode-inherit").prop("checked", false);
                             }
                             if (inherit) $("#adgroups-mode-inherit-label").show();
                             else $("#adgroups-mode-inherit-label").hide();
                             $('#adgroups-custom option').remove();
                             if ($(obj2).val() == "All") {
-                                $("#adgroups-mode-custom").removeAttr("checked");
-                                $("#adgroups-mode-all").attr("checked", "checked");
-                                $("#adgroups-mode-inherit").removeAttr("checked");
+                                $("#adgroups-mode-custom").prop("checked", false);
+                                $("#adgroups-mode-all").prop("checked", true);
+                                $("#adgroups-mode-inherit").prop("checked", false);
                             }
                             else if ($(obj2).val() == "Inherit") {
-                                $("#adgroups-mode-custom").removeAttr("checked");
-                                $("#adgroups-mode-all").removeAttr("checked");
-                                $("#adgroups-mode-inherit").attr("checked", "checked");
+                                $("#adgroups-mode-custom").prop("checked", false);
+                                $("#adgroups-mode-all").prop("checked", false);
+                                $("#adgroups-mode-inherit").prop("checked", true);
                             }
                             else {
-                                $("#adgroups-mode-custom").attr("checked", "checked");
-                                $("#adgroups-mode-all").removeAttr("checked");
-                                $("#adgroups-mode-inherit").removeAttr("checked");
+                                $("#adgroups-mode-custom").prop("checked", true);
+                                $("#adgroups-mode-all").prop("checked", false);
+                                $("#adgroups-mode-inherit").prop("checked", false);
                                 document.getElementById("adgroup-custom").style.display = "block";
                                 for (var x = 0; x < $(obj2).val().split(', ').length; x++) {
                                     $("#adgroups-custom").append('<option value="' + $(obj2).val().split(', ')[x] + '">' + $(obj2).val().split(', ')[x] + '</option>');
@@ -1716,8 +1714,8 @@
                             $("#adgroups").dialog({
                                 autoOpen: true, width: 400, buttons: {
                                     "OK": function () {
-                                        if ($("#adgroups-mode-all").attr("checked")) obj2.value = "All";
-                                        else if ($("#adgroups-mode-inherit").attr("checked")) obj2.value = "Inherit";
+                                        if ($("#adgroups-mode-all").is(":checked")) obj2.value = "All";
+                                        else if ($("#adgroups-mode-inherit").is(":checked")) obj2.value = "Inherit";
                                         else { var a = []; for (var x = 0; x < document.getElementById("adgroups-custom").childNodes.length; x++) if (document.getElementById("adgroups-custom").childNodes[x].tagName) a.push(document.getElementById("adgroups-custom").childNodes[x].value); obj2.value = a.join(", "); }
                                         $(obj2).trigger('change');
                                         $(this).dialog("close");
