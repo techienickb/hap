@@ -17,7 +17,7 @@ namespace HAP.Web.Configuration
             this.node = doc.SelectSingleNode("/hapConfig/bookingsystem/resources");
             foreach (XmlNode n in node.ChildNodes) base.Add(n.Attributes["name"].Value, new Resource(n));
         }
-        public void Add(string Name, ResourceType Type, string Admins, bool Enabled, bool EmailAdmins, bool EnableCharging, string showto, string hidefrom, string years, string quantities, string readonlyto, string readwriteto)
+        public void Add(string Name, ResourceType Type, string Admins, bool Enabled, bool EmailAdmins, bool EnableCharging, string showto, string hidefrom, string years, string quantities, string readonlyto, string readwriteto, string disclaimer)
         {
             XmlElement e = doc.CreateElement("resource");
             e.SetAttribute("name", Name);
@@ -32,6 +32,7 @@ namespace HAP.Web.Configuration
             e.SetAttribute("quantities", quantities);
             e.SetAttribute("readonlyto", readonlyto);
             e.SetAttribute("readwriteto", readwriteto);
+            e.SetAttribute("disclaimer", disclaimer);
             doc.SelectSingleNode("/hapConfig/bookingsystem/resources").AppendChild(e);
             base.Add(Name, new Resource(e));
         }
@@ -43,7 +44,7 @@ namespace HAP.Web.Configuration
         public void Update(string name, Resource r)
         {
             base.Remove(name);
-            XmlNode e = doc.SelectSingleNode("/hapConfig/bookingsystem/resources/resource[@name='" + name + "']");
+            XmlElement e = doc.SelectSingleNode("/hapConfig/bookingsystem/resources/resource[@name='" + name + "']") as XmlElement;
             e.Attributes["name"].Value = r.Name;
             e.Attributes["type"].Value = r.Type.ToString();
             e.Attributes["enabled"].Value = r.Enabled.ToString();
@@ -56,6 +57,7 @@ namespace HAP.Web.Configuration
             e.Attributes["quantities"].Value = r.Quantities;
             e.Attributes["readonlyto"].Value = r.ReadOnlyTo;
             e.Attributes["readwriteto"].Value = r.ReadWriteTo;
+            e.SetAttribute("disclaimer", r.Disclaimer);
             base.Add(r.Name, new Resource(e));
         }
 

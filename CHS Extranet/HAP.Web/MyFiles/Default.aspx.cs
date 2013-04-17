@@ -21,6 +21,9 @@ namespace HAP.Web.MyFiles
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            FirstTime = true;
+            W8AppCap = Request.UserAgent.ToLower().Contains("windows nt 6.2");
+            if (!File.Exists(Server.MapPath("~/app_data/myfiles-appusers.txt"))) File.Create(Server.MapPath("~/app_data/myfiles-appusers.txt")).Close();
             StreamReader sr = File.OpenText(Server.MapPath("~/app_data/myfiles-users.txt"));
             string s;
             while ((s = sr.ReadLine()) != null) if (s.ToLower() == HttpContext.Current.User.Identity.Name.ToLower()) FirstTime = false;
@@ -33,9 +36,21 @@ namespace HAP.Web.MyFiles
                 sw.Close();
                 sw.Dispose();
             }
+            sr = File.OpenText(Server.MapPath("~/app_data/myfiles-appusers.txt"));
+            while ((s = sr.ReadLine()) != null) if (s.ToLower() == HttpContext.Current.User.Identity.Name.ToLower()) W8AppCap = false;
+            sr.Close();
+            sr.Dispose();
+            if (W8AppCap)
+            {
+                StreamWriter sw = File.AppendText(Server.MapPath("~/app_data/myfiles-appusers.txt"));
+                sw.WriteLine(HttpContext.Current.User.Identity.Name);
+                sw.Close();
+                sw.Dispose();
+            }
         }
 
         protected bool FirstTime { get; set; }
+        protected bool W8AppCap { get; set; }
 
         /// <summary>
         /// The max file size in bytes

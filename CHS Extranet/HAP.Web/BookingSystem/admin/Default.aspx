@@ -3,6 +3,10 @@
 <%@ Import Namespace="HAP.Web.BookingSystem" %>
 <asp:Content ContentPlaceHolderID="head" runat="server">
 	<link href="../../style/bookingsystem.css" rel="stylesheet" type="text/css" />
+    <style>
+        #bookingday { position: static; bottom: auto; top: auto; left: auto; right: auto; clear: both; overflow: hidden; }
+        #bookingday .body { height: auto; }
+    </style>
 </asp:Content>
 <asp:Content ContentPlaceHolderID="title" runat="server"><asp:HyperLink runat="server" NavigateUrl="~/BookingSystem/"><hap:LocalResource ID="LocalResource1" runat="server" StringPath="bookingsystem/bookingsystem" /></asp:HyperLink></asp:Content>
 <asp:Content ContentPlaceHolderID="header" runat="server">
@@ -130,7 +134,8 @@
             </script>
 			<div style="float: right; padding: 10px; width: 50%">
 				<p>Save the SIMS export to <%=Server.MapPath("~/app_data/sims-bookings.xml") %> then click the button:</p>
-				<asp:Button runat="server" ID="importSIMS" Text="Import SIMS" CausesValidation="false" style="font-size: 130%" onclick=CAUTION: The Teacher's Name from the SIMS Export (Title Initial Surname) needs to equal the Notes/Display Name field in AD for that user, or the Notes/Display name only has one person with that surname</p>
+				<asp:Button runat="server" ID="importSIMS" Text="Import SIMS" CausesValidation="false" style="font-size: 130%" onclick="importSIMS_Click" />
+                CAUTION: The Teacher's Name from the SIMS Export (Title Initial Surname) needs to equal the Notes/Display Name field in AD for that user, or the Notes/Display name only has one person with that surname</p>
 			</div>
 			<asp:ObjectDataSource ID="StaticBookingsDS" runat="server" DataObjectTypeName="HAP.BookingSystem.Booking"
 				DeleteMethod="deleteStaticBooking" InsertMethod="addStaticBooking" SelectMethod="getStaticBookingsArray"

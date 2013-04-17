@@ -1372,4 +1372,5 @@
 		</script>
 	</hap:CompressJS>
 	<% if (FirstTime) { %> <script type="text/javascript">$(function () { $("#help").trigger("click"); });</script><%}  %>
+    <% if (W8AppCap) { %> <script type="text/javascript">$(function () { hap.help.Load("myfiles/w8app"); });</script><%}  %>
 </asp:Content>
