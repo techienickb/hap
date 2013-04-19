@@ -87,9 +87,14 @@ namespace HAP.AD
         {
             get
             {
-                PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, this.DomainName, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
-                UserPrincipal userp = UserPrincipal.FindByIdentity(pcontext, this.UserName);
-                return userp;
+                try
+                {
+                    PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, this.DomainName, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
+
+                    UserPrincipal userp = UserPrincipal.FindByIdentity(pcontext, this.UserName);
+                    return userp;
+                }
+                catch (Exception e) { throw new UnauthorizedAccessException("Invalid Administrator Credentials, you may need to get your administrator to reset the HAP+ Settings for Active Directory", e); }
             }
         }
 
