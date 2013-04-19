@@ -102,7 +102,7 @@ namespace HAP.Web.API
                     node.SetAttribute("ltcount", booking.LTCount.ToString());
                     node.SetAttribute("ltheadphones", booking.LTHeadPhones.ToString());
                 }
-                else if (config.BookingSystem.Resources[booking.Room].Type == ResourceType.Equipment)
+                else if (config.BookingSystem.Resources[booking.Room].Type == ResourceType.Equipment || config.BookingSystem.Resources[booking.Room].Type == ResourceType.Loan)
                     node.SetAttribute("equiproom", booking.EquipRoom);
                 node.SetAttribute("room", booking.Room);
                 node.SetAttribute("uid", booking.Username + DateTime.Now.ToString(iCalGenerator.DateFormat));
@@ -199,8 +199,8 @@ namespace HAP.Web.API
             #endregion
             if (config.SMTP.Enabled)
             {
-                iCalGenerator.Generate(b, DateTime.Parse(Date));
-                if (config.BookingSystem.Resources[b.Room].EmailAdmins) iCalGenerator.Generate(b, DateTime.Parse(Date), true);
+                iCalGenerator.GenerateCancel(b, DateTime.Parse(Date));
+                if (config.BookingSystem.Resources[b.Room].EmailAdmins) iCalGenerator.GenerateCancel(b, DateTime.Parse(Date), true);
             }
             return LoadRoom(Date, Resource);
         }
@@ -213,7 +213,12 @@ namespace HAP.Web.API
             List<JSONBooking> bookings = new List<JSONBooking>();
             HAP.BookingSystem.BookingSystem bs = new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date));
             foreach (Lesson lesson in hapConfig.Current.BookingSystem.Lessons)
-                bookings.Add(new JSONBooking(bs.getBooking(Resource, lesson.Name)));
+            {
+                Booking b = bs.getBooking(Resource, lesson.Name);
+                JSONBooking j = new JSONBooking(b);
+                if (b.Resource.Type == ResourceType.Loan) j.Lesson = lesson.Name;
+                bookings.Add(j);
+            }
             WebOperationContext.Current.OutgoingResponse.Format = WebMessageFormat.Json;
             return bookings.ToArray();
         }
