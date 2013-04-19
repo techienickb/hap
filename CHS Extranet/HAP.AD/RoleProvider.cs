@@ -25,24 +25,14 @@ namespace HAP.AD
 
         public override bool IsUserInRole(string username, string roleName)
         {
-            if (!HAP.Web.Configuration.hapConfig.Current.AD.UseNestedLookups) return wtrp.IsUserInRole(HAP.Web.Configuration.hapConfig.Current.AD.UPN.Remove(HAP.Web.Configuration.hapConfig.Current.AD.UPN.IndexOf('.')) + '\\' + username, roleName);
-            try
-            {
-                PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
-                GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, roleName);
-                if (gp == null) return false;
-
-                foreach (Principal p in gp.GetMembers(true))
-                    if (p.Name.ToLower() == username.ToLower()) return true;
-            }
-            catch { }
+            foreach (string s in GetRolesForUser(username)) if (s.ToLower().Trim().Contains(roleName.Trim().ToLower())) return true;
             return false;
         }
 
         public override string[] GetRolesForUser(string username)
         {
             if (!HAP.Web.Configuration.hapConfig.Current.AD.UseNestedLookups) return wtrp.GetRolesForUser(username);
-            else if (HttpContext.Current.Cache["userrolecache-" + username] == null)
+            else if (HttpContext.Current.Cache["userrolecache-" + username.ToLower()] == null)
             {
                 List<string> roles = new List<string>();
                 try
@@ -57,9 +47,9 @@ namespace HAP.AD
                     }
                 }
                 catch { }
-                HttpContext.Current.Cache.Insert("userrolecache-" + username, roles.ToArray(), null, System.Web.Caching.Cache.NoAbsoluteExpiration, TimeSpan.FromMinutes(5));
+                HttpContext.Current.Cache.Insert("userrolecache-" + username.ToLower(), roles.ToArray(), null, System.Web.Caching.Cache.NoAbsoluteExpiration, TimeSpan.FromMinutes(5));
             }
-            return HttpContext.Current.Cache["userrolecache-" + username] as string[];
+            return HttpContext.Current.Cache["userrolecache-" + username.ToLower()] as string[];
         }
 
         public void Recurse(Principal p, ref List<string> roles, int loop)
@@ -102,13 +92,17 @@ namespace HAP.AD
         public override string[] GetUsersInRole(string roleName)
         {
             if (!HAP.Web.Configuration.hapConfig.Current.AD.UseNestedLookups) return wtrp.GetUsersInRole(roleName);
-            PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
-            GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, roleName);
-            if (gp == null) return new string[] { };
-            List<string> users = new List<string>();
-            foreach (Principal p in gp.GetMembers(true))
-                users.Add(p.Name);
-            return users.ToArray();//wtrp.GetUsersInRole(roleName);
+            else if (HttpContext.Current.Cache["rolecache-" + roleName.ToLower()] == null)
+            {
+                PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
+                GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, roleName);
+                if (gp == null) return new string[] { };
+                List<string> users = new List<string>();
+                foreach (Principal p in gp.GetMembers(true))
+                    users.Add(p.Name);
+                HttpContext.Current.Cache.Insert("rolecache-" + roleName.ToLower(), users.ToArray(), null, System.Web.Caching.Cache.NoAbsoluteExpiration, TimeSpan.FromMinutes(5));
+            }
+            return HttpContext.Current.Cache["rolecache-" + roleName.ToLower()] as string[];
         }
 
         public override string[] GetAllRoles()
