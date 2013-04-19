@@ -20,12 +20,15 @@ namespace HAP.AD
 
         public static User[] FindUsers(string Group)
         {
-            GroupPrincipal gp = GroupPrincipal.FindByIdentity(ADUtils.GetPContext(), Group);
-            List<User> users = new List<User>();
-            foreach (Principal p in gp.Members)
-                try { users.Add(new User(p.SamAccountName)); }
-                catch { }
-            return users.ToArray();
+            if (HttpContext.Current.Cache["usergroupcache-" + Group.ToLower()] == null)
+            {
+                GroupPrincipal gp = GroupPrincipal.FindByIdentity(ADUtils.GetPContext(), Group);
+                List<User> users = new List<User>();
+                foreach (Principal p in gp.Members)
+                    try { users.Add(new User(p.SamAccountName)); }
+                    catch { } HttpContext.Current.Cache.Insert("usergroupcache-" + Group.ToLower(), users.ToArray(), null, System.Web.Caching.Cache.NoAbsoluteExpiration, TimeSpan.FromMinutes(5));
+            }
+            return HttpContext.Current.Cache["usergroupcache-" + Group.ToLower()] as User[];
         }
 
         public static UserInfo[] FindUsers(OUVisibility vis)
@@ -43,30 +46,34 @@ namespace HAP.AD
 
         public static UserInfo[] FindUsersIn(string OU)
         {
-            hapConfig config = hapConfig.Current;
-            List<UserInfo> results = new List<UserInfo>();
-            DirectoryEntry usersDE = new DirectoryEntry(OU, config.AD.User, config.AD.Password);
-            DirectorySearcher ds = new DirectorySearcher(usersDE);
-            ds.Filter = "(&(objectClass=user)(sAMAccountName=*))";
-            ds.PropertiesToLoad.Add("sAMAccountName");
-            ds.PropertiesToLoad.Add("info");
-            ds.PropertiesToLoad.Add("mail");
-            ds.PropertiesToLoad.Add("displayName");
-            try
+            if (HttpContext.Current.Cache["ouusers-" + OU.ToLower()] == null)
             {
-                SearchResultCollection sr = ds.FindAll();
+                hapConfig config = hapConfig.Current;
+                List<UserInfo> results = new List<UserInfo>();
+                DirectoryEntry usersDE = new DirectoryEntry(OU, config.AD.User, config.AD.Password);
+                DirectorySearcher ds = new DirectorySearcher(usersDE);
+                ds.Filter = "(&(objectClass=user)(sAMAccountName=*))";
+                ds.PropertiesToLoad.Add("sAMAccountName");
+                ds.PropertiesToLoad.Add("info");
+                ds.PropertiesToLoad.Add("mail");
+                ds.PropertiesToLoad.Add("displayName");
+                try
+                {
+                    SearchResultCollection sr = ds.FindAll();
 
-                for (int i = 0; i < sr.Count; i++)
-                    results.Add(new UserInfo(
-                        sr[i].Properties["sAMAccountName"][0].ToString(),
-                        sr[i].Properties["info"] != null ? sr[i].Properties["info"].Count > 0 ? sr[i].Properties["info"][0].ToString() : "" : "",
-                        sr[i].Properties["displayName"] != null ? sr[i].Properties["displayName"].Count > 0 ? sr[i].Properties["displayName"][0].ToString() : "" : "",
-                        sr[i].Properties["mail"] != null ? sr[i].Properties["mail"].Count > 0 ? sr[i].Properties["mail"][0].ToString() : "" : ""
-                    ));
+                    for (int i = 0; i < sr.Count; i++)
+                        results.Add(new UserInfo(
+                            sr[i].Properties["sAMAccountName"][0].ToString(),
+                            sr[i].Properties["info"] != null ? sr[i].Properties["info"].Count > 0 ? sr[i].Properties["info"][0].ToString() : "" : "",
+                            sr[i].Properties["displayName"] != null ? sr[i].Properties["displayName"].Count > 0 ? sr[i].Properties["displayName"][0].ToString() : "" : "",
+                            sr[i].Properties["mail"] != null ? sr[i].Properties["mail"].Count > 0 ? sr[i].Properties["mail"][0].ToString() : "" : ""
+                        ));
+                }
+                catch (Exception e) { throw new Exception(usersDE.Path, e); }
+                results.Sort();
+                HttpContext.Current.Cache.Insert("ouusers-" + OU.ToLower(), results.ToArray(), null, System.Web.Caching.Cache.NoAbsoluteExpiration, TimeSpan.FromMinutes(5));
             }
-            catch (Exception e) { throw new Exception(usersDE.Path, e); }
-            results.Sort();
-            return results.ToArray();
+            return HttpContext.Current.Cache["ouusers-" + OU.ToLower()] as UserInfo[];
         }
 
         public static UserInfo[] FindUsers(ou ou, string subou)
@@ -77,31 +84,35 @@ namespace HAP.AD
         public static UserInfo[] FindUserInfos(string query)
         {
             hapConfig config = hapConfig.Current;
-            List<UserInfo> results = new List<UserInfo>();
-
-            //throw new Exception(usersDE1.Path);
-            //DirectoryEntry usersDE = new DirectoryEntry(ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
-            DirectorySearcher ds = new DirectorySearcher(DirectoryRoot);
-            ds.Filter = "(&(objectClass=user)(sAMAccountName=" + query + "))";
-            ds.PropertiesToLoad.Add("sAMAccountName");
-            ds.PropertiesToLoad.Add("info");
-            ds.PropertiesToLoad.Add("mail");
-            ds.PropertiesToLoad.Add("displayName");
-            try
+            if (HttpContext.Current.Cache["fulluserinfo-" + query.ToLower()] == null)
             {
-                SearchResultCollection sr = ds.FindAll();
+                List<UserInfo> results = new List<UserInfo>();
 
-                for (int i = 0; i < sr.Count; i++)
-                    results.Add(new UserInfo(
-                        sr[i].Properties["sAMAccountName"][0].ToString(),
-                        sr[i].Properties["info"] != null ? sr[i].Properties["info"].Count > 0 ? sr[i].Properties["info"][0].ToString() : "" : "",
-                        sr[i].Properties["displayName"] != null ? sr[i].Properties["displayName"].Count > 0 ? sr[i].Properties["displayName"][0].ToString() : "" : "",
-                        sr[i].Properties["mail"] != null ? sr[i].Properties["mail"].Count > 0 ? sr[i].Properties["mail"][0].ToString() : "" : ""
-                    ));
+                //throw new Exception(usersDE1.Path);
+                //DirectoryEntry usersDE = new DirectoryEntry(ConfigurationManager.ConnectionStrings[config.ADSettings.ADConnectionString].ConnectionString, config.ADSettings.ADUsername, config.ADSettings.ADPassword);
+                DirectorySearcher ds = new DirectorySearcher(DirectoryRoot);
+                ds.Filter = "(&(objectClass=user)(sAMAccountName=" + query + "))";
+                ds.PropertiesToLoad.Add("sAMAccountName");
+                ds.PropertiesToLoad.Add("info");
+                ds.PropertiesToLoad.Add("mail");
+                ds.PropertiesToLoad.Add("displayName");
+                try
+                {
+                    SearchResultCollection sr = ds.FindAll();
+
+                    for (int i = 0; i < sr.Count; i++)
+                        results.Add(new UserInfo(
+                            sr[i].Properties["sAMAccountName"][0].ToString(),
+                            sr[i].Properties["info"] != null ? sr[i].Properties["info"].Count > 0 ? sr[i].Properties["info"][0].ToString() : "" : "",
+                            sr[i].Properties["displayName"] != null ? sr[i].Properties["displayName"].Count > 0 ? sr[i].Properties["displayName"][0].ToString() : "" : "",
+                            sr[i].Properties["mail"] != null ? sr[i].Properties["mail"].Count > 0 ? sr[i].Properties["mail"][0].ToString() : "" : ""
+                        ));
+                }
+                catch (Exception e) { throw new Exception(ds.Filter, e); }
+                results.Sort();
+                HttpContext.Current.Cache.Insert("fulluserinfo-" + query.ToLower(), results.ToArray(), null, System.Web.Caching.Cache.NoAbsoluteExpiration, TimeSpan.FromMinutes(5));
             }
-            catch (Exception e) { throw new Exception(ds.Filter, e); }
-            results.Sort();
-            return results.ToArray();
+            return HttpContext.Current.Cache["fulluserinfo-" + query.ToLower()] as UserInfo[];
         }
 
         public static string FriendlyDomainToLdapDomain(string friendlyDomainName)
