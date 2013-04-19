@@ -61,7 +61,7 @@ namespace HAP.Web.API
         private bool isAuth(string extension)
         {
             foreach (Filter filter in hapConfig.Current.MyFiles.Filters)
-                if (filter.Expression.Contains(extension)) return true;
+                if (filter.Expression.ToLower().Contains(extension.ToLower())) return true;
             return isAuth(hapConfig.Current.MyFiles.Filters.Single(fil => fil.Name == "All Files"));
         }
 
@@ -97,7 +97,7 @@ namespace HAP.Web.API
             if (!string.IsNullOrEmpty(context.Request.Headers["X_FILENAME"]))
             {
 
-                if (!isAuth(Path.GetExtension(context.Request.Headers["X_FILENAME"]))) throw new UnauthorizedAccessException(_doc.SelectSingleNode("/hapStrings/myfiles/upload/filetypeerror").InnerText);
+                if (!isAuth(Path.GetExtension(context.Request.Headers["X_FILENAME"])) throw new UnauthorizedAccessException(_doc.SelectSingleNode("/hapStrings/myfiles/upload/filetypeerror").InnerText);
                 DriveMapping m;
                 string path = Path.Combine(Converter.DriveToUNC('\\' + RoutingPath, RoutingDrive, out m, ADUser), context.Request.Headers["X_FILENAME"]);
                 HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.Upload", ADUser.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Uploading of: " + context.Request.Headers["X_FILENAME"] + " to: " + path);
