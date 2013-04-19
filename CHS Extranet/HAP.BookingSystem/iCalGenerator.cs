@@ -36,8 +36,10 @@ namespace HAP.BookingSystem
             StringBuilder sb = new StringBuilder();
             StringWriter sw = new StringWriter(sb);
 
-            DateTime startDate = new DateTime(date.Year, date.Month, date.Day, config.BookingSystem.Lessons.Get(booking.Lesson).StartTime.Hour, config.BookingSystem.Lessons.Get(booking.Lesson).StartTime.Minute, 0);
-            DateTime endDate = new DateTime(date.Year, date.Month, date.Day, config.BookingSystem.Lessons.Get(booking.Lesson).EndTime.Hour, config.BookingSystem.Lessons.Get(booking.Lesson).EndTime.Minute, 0);
+            string[] lessons = booking.Lesson.Split(new char[] { ',' });
+
+            DateTime startDate = new DateTime(date.Year, date.Month, date.Day, config.BookingSystem.Lessons.Get(lessons[0].Trim()).StartTime.Hour, config.BookingSystem.Lessons.Get(lessons[0].Trim()).StartTime.Minute, 0);
+            DateTime endDate = new DateTime(date.Year, date.Month, date.Day, config.BookingSystem.Lessons.Get(lessons[lessons.Length - 1].Trim()).EndTime.Hour, config.BookingSystem.Lessons.Get(lessons[lessons.Length - 1].Trim()).EndTime.Minute, 0);
             string location = "";
             Resource resource = config.BookingSystem.Resources[booking.Room];
 
@@ -47,7 +49,7 @@ namespace HAP.BookingSystem
             string ltcount = "";
             if (resource.Type == ResourceType.Room) location = booking.Room;
             else if (resource.Type == ResourceType.Laptops) { location = booking.LTRoom; ltcount = booking.LTCount.ToString(); }
-            else if (resource.Type == ResourceType.Equipment) location = booking.EquipRoom;
+            else if (resource.Type == ResourceType.Equipment || resource.Type == ResourceType.Loan) location = booking.EquipRoom;
             
             string summary = string.Format(template.Subject, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, ltcount);
             string description = string.Format(template.Content, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, ltcount);
@@ -111,8 +113,10 @@ namespace HAP.BookingSystem
             StringBuilder sb = new StringBuilder();
             StringWriter sw = new StringWriter(sb);
 
-            DateTime startDate = new DateTime(date.Year, date.Month, date.Day, config.BookingSystem.Lessons.Get(booking.Lesson).StartTime.Hour, config.BookingSystem.Lessons.Get(booking.Lesson).StartTime.Minute, 0);
-            DateTime endDate = new DateTime(date.Year, date.Month, date.Day, config.BookingSystem.Lessons.Get(booking.Lesson).EndTime.Hour, config.BookingSystem.Lessons.Get(booking.Lesson).EndTime.Minute, 0);
+            string[] lessons = booking.Lesson.Split(new char[] { ',' });
+
+            DateTime startDate = new DateTime(date.Year, date.Month, date.Day, config.BookingSystem.Lessons.Get(lessons[0].Trim()).StartTime.Hour, config.BookingSystem.Lessons.Get(lessons[0].Trim()).StartTime.Minute, 0);
+            DateTime endDate = new DateTime(date.Year, date.Month, date.Day, config.BookingSystem.Lessons.Get(lessons[lessons.Length - 1].Trim()).EndTime.Hour, config.BookingSystem.Lessons.Get(lessons[lessons.Length - 1].Trim()).EndTime.Minute, 0);
             string location = "";
             Resource resource = config.BookingSystem.Resources[booking.Room];
             Templates t = new Templates();
@@ -121,7 +125,7 @@ namespace HAP.BookingSystem
             string ltcount = "";
             if (resource.Type == ResourceType.Room) location = booking.Room;
             else if (resource.Type == ResourceType.Laptops) { location = booking.LTRoom; ltcount = booking.LTCount.ToString(); }
-            else if (resource.Type == ResourceType.Equipment) location = booking.EquipRoom;
+            else if (resource.Type == ResourceType.Equipment || resource.Type == ResourceType.Loan) location = booking.EquipRoom;
             
             string summary = string.Format(template.Subject, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, ltcount);
             string description = string.Format(template.Content, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, ltcount);
@@ -220,13 +224,14 @@ namespace HAP.BookingSystem
             StringBuilder sb = new StringBuilder();
             StringWriter sw = new StringWriter(sb);
 
-            DateTime startDate = new DateTime(date.Year, date.Month, date.Day, config.BookingSystem.Lessons.Get(booking.Lesson).StartTime.Hour, config.BookingSystem.Lessons.Get(booking.Lesson).StartTime.Minute, 0);
-            DateTime endDate = new DateTime(date.Year, date.Month, date.Day, config.BookingSystem.Lessons.Get(booking.Lesson).EndTime.Hour, config.BookingSystem.Lessons.Get(booking.Lesson).EndTime.Minute, 0);
+            string[] lessons = booking.Lesson.Split(new char[] { ',' });
+            DateTime startDate = new DateTime(date.Year, date.Month, date.Day, config.BookingSystem.Lessons.Get(lessons[0].Trim()).StartTime.Hour, config.BookingSystem.Lessons.Get(lessons[0].Trim()).StartTime.Minute, 0);
+            DateTime endDate = new DateTime(date.Year, date.Month, date.Day, config.BookingSystem.Lessons.Get(lessons[lessons.Length - 1].Trim()).EndTime.Hour, config.BookingSystem.Lessons.Get(lessons[lessons.Length - 1].Trim()).EndTime.Minute, 0);
             string location = "";
             Resource resource = config.BookingSystem.Resources[booking.Room];
             if (resource.Type == ResourceType.Room) location = booking.Room;
             else if (resource.Type == ResourceType.Laptops) location = booking.LTRoom;
-            else if (resource.Type == ResourceType.Equipment) location = booking.EquipRoom;
+            else if (resource.Type == ResourceType.Equipment || resource.Type == ResourceType.Loan) location = booking.EquipRoom;
             string summary = "Cancellation of " + booking.Name + " in " + location;
             string description = "Cancellation of " + booking.Name + " in " + location + " during " + booking.Lesson + " on " + booking.Date.ToShortDateString();
             if (resource.Type == ResourceType.Laptops)
@@ -297,13 +302,15 @@ namespace HAP.BookingSystem
             StringBuilder sb = new StringBuilder();
             StringWriter sw = new StringWriter(sb);
 
-            DateTime startDate = new DateTime(date.Year, date.Month, date.Day, config.BookingSystem.Lessons.Get(booking.Lesson).StartTime.Hour, config.BookingSystem.Lessons.Get(booking.Lesson).StartTime.Minute, 0);
-            DateTime endDate = new DateTime(date.Year, date.Month, date.Day, config.BookingSystem.Lessons.Get(booking.Lesson).EndTime.Hour, config.BookingSystem.Lessons.Get(booking.Lesson).EndTime.Minute, 0);
+            string[] lessons = booking.Lesson.Split(new char[] { ',' });
+
+            DateTime startDate = new DateTime(date.Year, date.Month, date.Day, config.BookingSystem.Lessons.Get(lessons[0].Trim()).StartTime.Hour, config.BookingSystem.Lessons.Get(lessons[0].Trim()).StartTime.Minute, 0);
+            DateTime endDate = new DateTime(date.Year, date.Month, date.Day, config.BookingSystem.Lessons.Get(lessons[lessons.Length - 1].Trim()).EndTime.Hour, config.BookingSystem.Lessons.Get(lessons[lessons.Length - 1].Trim()).EndTime.Minute, 0);
             string location = "";
             Resource resource = config.BookingSystem.Resources[booking.Room];
             if (resource.Type == ResourceType.Room) location = booking.Room;
             else if (resource.Type == ResourceType.Laptops) location = booking.LTRoom;
-            else if (resource.Type == ResourceType.Equipment) location = booking.EquipRoom;
+            else if (resource.Type == ResourceType.Equipment || resource.Type == ResourceType.Loan) location = booking.EquipRoom;
             string summary = "Cancellation of " + booking.Name + " in " + location;
             string description = "Cancellation of " + booking.Name + " in " + location + " during " + booking.Lesson + " on " + booking.Date.ToShortDateString();
             if (resource.Type == ResourceType.Laptops)
