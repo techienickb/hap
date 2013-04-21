@@ -91,7 +91,7 @@ namespace HAP.Web.LiveTiles
             }
             List<string> s = new List<string>();
             foreach (Appointment a in service.FindAppointments(WellKnownFolderName.Calendar, new CalendarView(DateTime.Now, DateTime.Now.AddDays(1))))
-                s.Add(a.Subject + "<br />" + (a.Start.Date > DateTime.Now.Date ? "Tomorrow: " : "") + a.Start.ToShortTimeString() + " - " + a.End.ToShortTimeString());
+                s.Add(a.Subject + "<br />" + (a.Start.Date > DateTime.Now.Date ? "Tomorrow: " : "") + ((a.Start.AddDays(1) == a.End) ? "All Day" : a.Start.AddDays(5) == a.End ? "All Week" : (a.Start.ToShortTimeString() + " - " + a.End.ToShortTimeString())));
             if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Configuration.AuthMode.Windows || !string.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser)) 
                 u.EndContainedImpersonate();
             return s.ToArray();
@@ -112,7 +112,7 @@ namespace HAP.Web.LiveTiles
             FolderId fid = new FolderId(WellKnownFolderName.Calendar, new Mailbox(mailbox));
             List<string> s = new List<string>();
             foreach (Appointment a in service.FindAppointments(fid, new CalendarView(DateTime.Now, DateTime.Now.AddDays(1))))
-                s.Add(a.Subject + "<br />" + (a.Start.Date > DateTime.Now.Date ? "Tomorrow: " : "") + a.Start.ToShortTimeString() + " - " + a.End.ToShortTimeString());
+                s.Add(a.Subject + "<br />" + (a.Start.Date > DateTime.Now.Date ? "Tomorrow: " : "") + ((a.Start.AddDays(1) == a.End) ? "All Day" : a.Start.AddDays(5) == a.End ? "All Week" : (a.Start.ToShortTimeString() + " - " + a.End.ToShortTimeString())));
             return s.ToArray();
         }
     }
