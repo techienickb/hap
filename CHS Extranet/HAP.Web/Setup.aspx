@@ -1162,7 +1162,7 @@
                                         $.ajax({
                                             type: 'POST',
                                             url: 'API/Setup/AddLesson',
-                                            data: '{ "name": "' + $("#lessonName").val() + '", "type": "' + $("#lessonType").val() + '", "start": "' + $("#lessonStart").val() + '", "end": "' + $("#lessonEnd").val() + '" }',
+                                            data: '{ "name": "' + $("#lessonName").val() + '", "type": "' + $("#lessonType").val().replace(/ /gi, '') + '", "start": "' + $("#lessonStart").val() + '", "end": "' + $("#lessonEnd").val() + '" }',
                                             contentType: 'application/json',
                                             dataType: 'json',
                                             success: OnLessonAddSuccess,

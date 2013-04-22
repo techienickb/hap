@@ -115,7 +115,7 @@
         <div id="datepicker" style="position: absolute;"></div>
         <div id="bscontent">
 		    <div id="bookingday" class="tile-border-color">		
-			    <div class="body"<%=BodyCode[0] %> style="min-width: <%=(156 * (config.BookingSystem.Lessons.Count + 1)) + 2 %>px">
+			    <div class="body"<%=BodyCode[0] %> style="min-width: <%=(200 * (config.BookingSystem.Lessons.Count + 1)) + 2 %>px">
 				    <div id="resources" class="tile-color">
                         <div class="head"><input type="button" id="picker" onclick="return showDatePicker();" /></div>
 					    <asp:Repeater runat="server" ID="resources1"><ItemTemplate><div><a href="<%#ResolveClientUrl("~/bookingsystem/r-" + Eval("Name").ToString()) %>"><%#Eval("Name") %></a></div></ItemTemplate></asp:Repeater>
