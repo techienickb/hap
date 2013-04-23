@@ -24,7 +24,7 @@ namespace HAP.Web.API
             string am = "Forms";
             try { TokenGenerator.ConvertToPlain(HttpContext.Current.Request.Cookies["token"].Value); }
             catch { am = HttpContext.Current.Request.Cookies["token"].Value; }
-            return doc.SelectSingleNode("/resources/" + Path.ToLower()).InnerText.Replace("%am", am).Replace("%l", "~/login.aspx?ReturnUrl=/&From=" + am).Replace("~/", VirtualPathUtility.ToAbsolute("~/"));
+            return doc.SelectSingleNode("/resources/" + Path.ToLower()).InnerText.Replace("%am", am).Replace("%l", "~/login.aspx?ReturnUrl=~/&From=" + am).Replace("~/", VirtualPathUtility.ToAbsolute("~/"));
         }
     }
 }
