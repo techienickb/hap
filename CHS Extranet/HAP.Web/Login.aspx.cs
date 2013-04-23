@@ -20,7 +20,7 @@ namespace HAP.Web
             if (User.Identity.IsAuthenticated && !Page.IsPostBack && Request.QueryString.Count < 2) Response.Redirect("unauthorised.aspx");
             if (!Page.IsPostBack)
             {
-                if (!string.IsNullOrEmpty(hapConfig.Current.AD.InternalIP))
+                if (!string.IsNullOrEmpty(hapConfig.Current.AD.InternalIP) && !Request.Browser.Browser.Contains("Chrome"))
                 {
                     if (new IPSubnet(hapConfig.Current.AD.InternalIP).Contains(Request.UserHostAddress) && Dns.GetHostEntry(Request.UserHostAddress).HostName.ToLower().EndsWith(hapConfig.Current.AD.UPN.ToLower()) && Request.QueryString.Count < 2) Response.Redirect("~/kerberos.aspx?ReturnUrl=" + Request.QueryString[0]);
                     else if (new IPSubnet(hapConfig.Current.AD.InternalIP).Contains(Request.UserHostAddress) && Dns.GetHostEntry(Request.UserHostAddress).HostName.ToLower().EndsWith(hapConfig.Current.AD.UPN.ToLower()) && Request.QueryString.Count == 2) username.Text = User.Identity.Name.Contains('\\') ? User.Identity.Name.Substring(User.Identity.Name.IndexOf('\\') + 1) : User.Identity.Name;
