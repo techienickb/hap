@@ -1765,8 +1765,8 @@
                         $(function () {
                             $("#<%=trackerstudentlogs.ClientID%>, #<%=trackerstafflogs.ClientID%>, #<%=bsmax.ClientID%>, #<%=bsdays.ClientID%>, #<%=admaxlogon.ClientID%>, #<%=adrecur.ClientID%>").spinner();
                             $("input[type='checkbox']").switch();
-                            $('#maintabs').tabs({ select: function (event, ui) {
-                                if (<%=HAP.Web.Configuration.hapConfig.Current.FirstRun ? "false" : "true" %> || ui.index > 1) {
+                            $('#maintabs').tabs({ activate: function (event, ui) {
+                                if (<%=HAP.Web.Configuration.hapConfig.Current.FirstRun ? "false" : "true" %> || ui.newTab.index() > 1) {
                                     $("#<%=Save.ClientID%>").css("display", "");
                                 }
                             }, disabled: [1, 2, 3, 4, 5, 6] });
