@@ -15,8 +15,8 @@ namespace HAP.Web.API
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
     public class Announcement
     {
-        [WebInvoke(UriTemplate = "Save", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        public void Save(string content, bool show)
+        [WebInvoke(UriTemplate = "Save", ResponseFormat=WebMessageFormat.Json, Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+        public bool Save(string content, bool show)
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Announcement.xml"));
@@ -24,6 +24,7 @@ namespace HAP.Web.API
             node.Attributes[0].Value = show.ToString();
             node.InnerXml = string.Format("<![CDATA[ {0} ]]>", HttpUtility.UrlDecode(content, System.Text.Encoding.Default));
             doc.Save(HttpContext.Current.Server.MapPath("~/App_Data/Announcement.xml"));
+            return true;
         }
     }
 }
