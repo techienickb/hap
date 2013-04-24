@@ -5,7 +5,7 @@
     <head runat="server">
         <title>Overview Calendar</title>
         <link href="<%=ResolveClientUrl("~/style/basestyle.css")%>" rel="stylesheet" type="text/css" />
-        <link href="bookingsystem.css" rel="stylesheet" type="text/css" />
+        <link href="<%=ResolveClientUrl("~/style/bookingpopup.css")%>" rel="stylesheet" type="text/css" />
     </head>
     <body>
         <form id="form1" runat="server">
