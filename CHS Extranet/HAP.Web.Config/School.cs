@@ -42,7 +42,7 @@ namespace HAP.Web.Configuration
         }
         public bool HidePhotoErrors
         {
-            get { if (el.Attributes["hidephotoerror"] != null) bool.Parse(el.GetAttribute("hidephotoerror")); return false; }
+            get { if (el.Attributes["hidephotoerror"] != null) return bool.Parse(el.GetAttribute("hidephotoerror")); return false; }
             set { el.SetAttribute("hidephotoerror", value.ToString()); }
         }
     }
