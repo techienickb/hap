@@ -548,7 +548,7 @@
 				if (item.Data.Actions == 0 && copy && item.Data.Permissions.ReadData && item.Data.Permissions.WriteData) copy = true;
 				else copy = false;
 				if (item.Data.Type == "Directory" || item.Data.Permissions.Execute == false || item.Data.Permissions.ReadData == false) download = false;
-				if (item.Data.Traverse == false) open = false;
+				if (item.Data.Traverse == false || (item.Data.Type != "Directory" && item.Data.Extension.toLowerCase() != ".zip")) open = false;
 				if (item.Data.Path.match(/\.zip/gi) && unzip && curitem.Permissions.WriteData) unzip = true;
 				else unzip = false;
 				if (item.Data.Actions == 0 && del && item.Data.Permissions.DeleteSubDirsOrFiles) del = true;
