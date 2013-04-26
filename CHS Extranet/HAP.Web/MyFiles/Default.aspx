@@ -80,6 +80,8 @@
 	</div>
 	<hap:WrappedLocalResource runat="server" id="uploaders" title="#myfiles/upload/upload" Tag="div">
 		<input type="file" multiple="multiple" id="uploadedfiles" />
+        <label for="uploadfilesrandom"><hap:LocalResource runat="server" StringPath="myfiles/upload/random" /></label>
+        <input type="checkbox" id="uploadfilesrandom" />
 		<iframe style="width: 300px; height: 180px"></iframe>
 	</hap:WrappedLocalResource>
 	<div id="uploadprogress" class="tile-border-color" style="border-width: 1px; border-style: solid; border-bottom: 0;">
@@ -448,13 +450,18 @@
 		function Upload(file, path) {
 			this.File = file;
 			this.Path = path;
+			this.FileName = "";
+			this.FormatFileName = function() {
+			    return this.File.name.substr(0, this.File.name.lastIndexOf('.')) + Math.floor((Math.random()*100)+1) + this.File.name.substr(this.File.name.lastIndexOf('.'));
+			};
 			this.Start = function() {
+			    if ($("#uploadfilesrandom").is(":checked")) this.FileName = this.FormatFileName();
 				if (this.File.name.indexOf('.') == -1) {
-					alert(hap.common.getLocal("myfiles/upload/folderwarning").replace(/\%/g, this.File.name));
+				    alert(hap.common.getLocal("myfiles/upload/folderwarning").replace(/\%/g, this.FileName));
 					uploads.pop(this);
 					return false;
 				}
-				else if ("<%=AcceptedExtensions %>".toLowerCase().indexOf(this.File.name.substr(this.File.name.lastIndexOf('.')).toLowerCase()) == -1 && "<%=DropZoneAccepted %>" != "") {
+				else if ("<%=AcceptedExtensions %>".toLowerCase().indexOf(this.FileName.substr(this.FileName.lastIndexOf('.')).toLowerCase()) == -1 && "<%=DropZoneAccepted %>" != "") {
 					alert(this.File.name + " " + hap.common.getLocal("myfiles/upload/filetypewarning") + "\n\n <%=AcceptedExtensions %>");
 					uploads.pop(this);
 					return false;
@@ -465,18 +472,18 @@
 					return false;
 				}
 
-				$("#progresses").append('<div id="upload-' + this.File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_") + '"><div class="progressbar" style="display: inline-block; width: 100px; height: 20px; vertical-align: middle; overflow: hidden;"></div> ' + this.File.name + '</div>');
-				$("#upload-" + this.File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_") + " .progressbar").progressbar({ value: 0 });
+		        $("#progresses").append('<div id="upload-' + this.FileName.replace(/[\\'\. \[\]\(\)\-]/g, "_") + '"><div class="progressbar" style="display: inline-block; width: 100px; height: 20px; vertical-align: middle; overflow: hidden;"></div> ' + this.FileName + '</div>');
+		        $("#upload-" + this.FileName.replace(/[\\'\. \[\]\(\)\-]/g, "_") + " .progressbar").progressbar({ value: 0 });
 				$.ajax({
 					type: 'GET',
-					url: hap.common.formatJSONUrl('~/api/MyFiles/Exists/' + this.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, "") + '/' + this.File.name),
+					url: hap.common.formatJSONUrl('~/api/MyFiles/Exists/' + this.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, "") + '/' + this.FileName),
 					dataType: 'json',
 					context: this,
 					contentType: 'application/json',
 					success: function (data) {
-						if (data.Name == null || confirm(hap.common.getLocal("myfiles/upload/fileexists1") + " " + this.File.name + " " + hap.common.getLocal("myfiles/upload/fileexists2"))) this.ContinueUpload(this.File.name);
+					    if (data.Name == null || confirm(hap.common.getLocal("myfiles/upload/fileexists1") + " " + this.FileName + " " + hap.common.getLocal("myfiles/upload/fileexists2"))) this.ContinueUpload(this.FileName);
 						else { 
-							$("#upload-" + this.File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_")).remove();
+					        $("#upload-" + this.FileName.replace(/[\\'\. \[\]\(\)\-]/g, "_")).remove();
 							if (uploads.length == 1) $("#uploadprogress").slideUp('slow');
 							uploads.pop(this);
 						}
@@ -486,7 +493,8 @@
 			};
 			this.xhr = new XMLHttpRequest();
 			this.ContinueUpload = function(a) {
-				var id = a.replace(/[\\'\. \[\]\(\)\-]/g, "_");
+			    var id = a.replace(/[\\'\. \[\]\(\)\-]/g, "_");
+			    $("#upload-" + id + " .progress").progressbar({ value: 0 });
 				this.xhr = new XMLHttpRequest();
 				this.xhr.id = id;
 				this.xhr.upload.addEventListener("progress", this.onProgress, false);
@@ -495,16 +503,16 @@
 				this.xhr.open('POST', hap.common.resolveUrl('~/api/myfiles-upload/') + this.Path.replace(/\\/g, '/') + '/', true);
 				this.xhr.onreadystatechange = function () {
 					if (this.readyState == 4) {
-						var item = null;
-						for (var i = 0; i < uploads.length; i ++) if (uploads[i].File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_") == this.id) item = uploads[i];
-						if (this.status != 200) alert(hap.common.getLocal("myfiles/upload/upload") + " " + hap.common.getLocal("of") + " " + item.File.name + " " + hap.common.getLocal("myfiles/upload/failed") + "\n\n" + this.responseText.substr(this.responseText.indexOf('<title>') + 7, this.responseText.indexOf('</title>') - (7 + this.responseText.indexOf('<title>'))));
-						$("#upload-" + this.id + " .progressbar").progressbar("value", 100 );
+					    var uitem = null;
+					    for (var i = 0; i < uploads.length; i ++) if (uploads[i].FileName.replace(/[\\'\. \[\]\(\)\-]/g, "_") == this.id) uitem = uploads[i];
+					    if (this.status != 200) alert(hap.common.getLocal("myfiles/upload/upload") + " " + hap.common.getLocal("of") + " " + uitem.FileName + " " + hap.common.getLocal("myfiles/upload/failed") + "\n\n" + this.responseText.substr(this.responseText.indexOf('<title>') + 7, this.responseText.indexOf('</title>') - (7 + this.responseText.indexOf('<title>'))));
+						$("#upload-" + id + " .progressbar").progressbar({ value: 100 });
 						$("#upload-" + id).delay(1000).slideUp('slow', function() { $("#upload-" + id).remove(); if (uploads.length == 0) $("#uploadprogress").slideUp('slow'); });
-						if (curpath.substr(0, curpath.length - 1).replace(/\//g, "\\") == item.Path || curpath.replace(/\//g, "\\") == item.Path) Load();
-						uploads.pop(item);
+						if (curpath.substr(0, curpath.length - 1).replace(/\//g, "\\") == uitem.Path || curpath.replace(/\//g, "\\") == uitem.Path) Load();
+						uploads.pop(uitem);
 					}
 				};
-				this.xhr.setRequestHeader('X_FILENAME', this.File.name);
+				this.xhr.setRequestHeader('X_FILENAME', this.FileName);
 				this.xhr.send(this.File);
 			};
 			this.onProgress = function (e) {
@@ -512,7 +520,7 @@
 				for (var i = 0; i < uploads.length; i++) if (uploads[i].File.size == e.total) uploads[i].updateProgress(percent);
 			};
 			this.updateProgress = function (e) {
-				$("#upload-" + this.File.name.replace(/[\\'\. \[\]\(\)\-]/g, "_") + " .progressbar").progressbar("value", e);
+			    $("#upload-" + this.FileName.replace(/[\\'\. \[\]\(\)\-]/g, "_") + " .progressbar").progressbar({ value: e });
 			};
 		}
 		function Drive(data) {
@@ -1337,7 +1345,7 @@
 					});
 				} else {
 					$("#uploaders iframe").attr("src", "../uploadh.aspx?path=" + curpath).css("display", "block");
-					$("#uploaders input").hide();
+					$("#uploaders input, #uploaders label").hide();
 					$("#uploaders").dialog({ autoOpen: true, modal: true, width: 320, height: 280, resizable: false });
 				}
 				return false;
