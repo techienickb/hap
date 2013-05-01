@@ -64,7 +64,7 @@ namespace HAP.MyFiles
 
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "SendTo/SkyDrive/{Drive}/{*Path}", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public void SkyDrive(string Drive, string Path, string accessToken)
+        public bool SkyDrive(string Drive, string Path, string accessToken)
         {
             hapConfig config = hapConfig.Current;
             User user = new User();
@@ -90,11 +90,12 @@ namespace HAP.MyFiles
             {
                 user.EndContainedImpersonate();
             }
+            return true;
         }
 
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "Zip", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle=WebMessageBodyStyle.WrappedRequest)]
-        public void Zip(string Zip, string[] Paths)
+        public bool Zip(string Zip, string[] Paths)
         {
             hapConfig config = hapConfig.Current;
             User user = new User();
@@ -134,11 +135,12 @@ namespace HAP.MyFiles
             {
                 user.EndContainedImpersonate();
             }
+            return true;
         }
 
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "Unzip", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public void Unzip(string ZipFile, bool Overwrite)
+        public bool Unzip(string ZipFile, bool Overwrite)
         {
             hapConfig config = hapConfig.Current;
             User user = new User();
@@ -167,11 +169,12 @@ namespace HAP.MyFiles
             {
                 user.EndContainedImpersonate();
             }
+            return true;
         }
 
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "Copy", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public void Copy(string OldPath, string NewPath, bool Overwrite)
+        public bool Copy(string OldPath, string NewPath, bool Overwrite)
         {
             hapConfig config = hapConfig.Current;
             User user = new User();
@@ -209,6 +212,7 @@ namespace HAP.MyFiles
             {
                 user.EndContainedImpersonate();
             }
+            return true;
         }
 
         public static void copyDirectory(string Src,string Dst)
@@ -230,7 +234,7 @@ namespace HAP.MyFiles
 
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "Move", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public void Move(string OldPath, string NewPath, bool Overwrite)
+        public bool Move(string OldPath, string NewPath, bool Overwrite)
         {
             hapConfig config = hapConfig.Current;
             User user = new User();
@@ -268,6 +272,7 @@ namespace HAP.MyFiles
             {
                 user.EndContainedImpersonate();
             }
+            return true;
         }
 
         [OperationContract]
@@ -312,7 +317,7 @@ namespace HAP.MyFiles
 
         [OperationContract]
         [WebInvoke(Method="POST", UriTemplate="New/{Drive}/{*Path}", RequestFormat=WebMessageFormat.Json, ResponseFormat=WebMessageFormat.Json)]
-        public void NewFolder(string Drive, string Path)
+        public bool NewFolder(string Drive, string Path)
         {
             hapConfig config = hapConfig.Current;
             User user = new User();
@@ -338,6 +343,7 @@ namespace HAP.MyFiles
             {
                 user.EndContainedImpersonate();
             }
+            return true;
         }
 
         [OperationContract]
