@@ -455,7 +455,7 @@
 			    return this.File.name.substr(0, this.File.name.lastIndexOf('.')) + Math.floor((Math.random()*100)+1) + this.File.name.substr(this.File.name.lastIndexOf('.'));
 			};
 			this.Start = function() {
-			    if ($("#uploadfilesrandom").is(":checked")) this.FileName = this.FormatFileName();
+			    this.FileName = $("#uploadfilesrandom").is(":checked") ? this.FormatFileName() : this.File.name;
 				if (this.File.name.indexOf('.') == -1) {
 				    alert(hap.common.getLocal("myfiles/upload/folderwarning").replace(/\%/g, this.FileName));
 					uploads.pop(this);
@@ -1102,7 +1102,7 @@
 					$("#newfoldertext").addClass("loading");
 					$.ajax({
 						type: 'GET',
-						url: hap.common.formatJSONUrl("~/api/MyFiles/Exists/" + curpath.replace(/\\/gi, "/") + (curpath.replace(/\\/gi, "/").match(/\\$/g) ? '' : '/') + $("#newfoldertext").val() + '/'),
+						url: hap.common.formatJSONUrl("~/api/MyFiles/Exists/" + curpath.replace(/\\/gi, "/") + (curpath.replace(/\\/gi, "/").match(/\\$/g) ? '' : '/') + $("#newfoldertext").val() + '/').replace(/\/\//gi, "/"),
 						dataType: 'json',
 						context: this,
 						contentType: 'application/json',
@@ -1113,7 +1113,7 @@
 							} else {
 								$.ajax({
 									type: 'POST',
-									url: hap.common.formatJSONUrl("~/api/MyFiles/New/" + curpath.replace(/\\/gi, "/") + (curpath.replace(/\\/gi, "/").match(/\\$/g) ? '' : '/') + $("#newfoldertext").val()),
+									url: hap.common.formatJSONUrl("~/api/MyFiles/New/" + curpath.replace(/\\/gi, "/") + (curpath.replace(/\\/gi, "/").match(/\\$/g) ? '' : '/') + $("#newfoldertext").val()).replace(/\/\//gi, "/"),
 									dataType: 'json',
 									contentType: 'application/json',
 									success: function (data) {
