@@ -63,7 +63,7 @@ namespace HAP.Web.LiveTiles
 
         [OperationContract]
         [WebInvoke(Method="POST", RequestFormat=WebMessageFormat.Json, ResponseFormat=WebMessageFormat.Json, UriTemplate="Me/Password", BodyStyle=WebMessageBodyStyle.WrappedRequest)]
-        public void SetPassword(string oldpassword, string newpassword) 
+        public int SetPassword(string oldpassword, string newpassword) 
         {
             User u = new User();
             u.Authenticate(HttpContext.Current.User.Identity.Name, oldpassword);
@@ -71,6 +71,7 @@ namespace HAP.Web.LiveTiles
             HttpCookie tokenCookie = new HttpCookie("token", TokenGenerator.ConvertToToken(newpassword));
             if (HttpContext.Current.Request.Cookies["token"] == null) HttpContext.Current.Response.AppendCookie(tokenCookie);
             else HttpContext.Current.Response.SetCookie(tokenCookie);
+            return 0;
         }
     }
 }
