@@ -31,6 +31,7 @@ namespace HAP.BookingSystem
             if (node.Attributes["uid"] != null) this.uid = node.Attributes["uid"].Value;
             if (node.Attributes["startdate"] != null) this.StartDate = DateTime.Parse(node.Attributes["startdate"].Value);
             if (node.Attributes["enddate"] != null) this.EndDate = DateTime.Parse(node.Attributes["enddate"].Value);
+            if (node.Attributes["count"] != null) this.Count = int.Parse(node.Attributes["count"].Value);
         }
 
         public Booking(XmlNode node, bool Static)
@@ -51,6 +52,7 @@ namespace HAP.BookingSystem
             if (node.Attributes["uid"] != null) this.uid = node.Attributes["uid"].Value;
             if (node.Attributes["startdate"] != null) this.StartDate = DateTime.Parse(node.Attributes["startdate"].Value);
             if (node.Attributes["enddate"] != null) this.EndDate = DateTime.Parse(node.Attributes["enddate"].Value);
+            if (node.Attributes["count"] != null) this.Count = int.Parse(node.Attributes["count"].Value);
         }
 
         public Booking(XmlNode node, int day)
@@ -69,6 +71,7 @@ namespace HAP.BookingSystem
             else this.LTHeadPhones = false;
             if (node.Attributes["equiproom"] != null) this.EquipRoom = node.Attributes["equiproom"].Value;
             if (node.Attributes["uid"] != null) this.uid = node.Attributes["uid"].Value;
+            if (node.Attributes["count"] != null) this.Count = int.Parse(node.Attributes["count"].Value);
         }
 
         public Booking(int day, string lesson, string room, string name, string username)
@@ -106,6 +109,7 @@ namespace HAP.BookingSystem
         public string LTRoom { get; set; }
         public string EquipRoom { get; set; }
         public int LTCount { get; set; }
+        public int Count { get; set; }
         public bool Static { get; set; }
         public string uid { get; set; }
         public DateTime Date { get; set; }
@@ -147,6 +151,7 @@ namespace HAP.BookingSystem
             catch { this.DisplayName = b.Username; }
             this.Static = b.Static;
             this.Date = b.Static ? b.Day.ToString() : b.Date.ToShortDateString();
+            this.Count = b.Count;
             try
             {
                 this.LTCount = b.LTCount;
@@ -179,6 +184,7 @@ namespace HAP.BookingSystem
         public string LTRoom { get; set; }
         public string EquipRoom { get; set; }
         public int LTCount { get; set; }
+        public int Count { get; set; }
         public bool Static { get; set; }
         public string Username { get; set; }
         public string Date { get; set; }

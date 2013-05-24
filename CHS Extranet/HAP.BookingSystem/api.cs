@@ -108,6 +108,7 @@ namespace HAP.Web.API
                 node.SetAttribute("uid", booking.Username + DateTime.Now.ToString(iCalGenerator.DateFormat));
                 node.SetAttribute("username", booking.Username);
                 node.SetAttribute("name", booking.Name);
+                if (booking.Count != null) node.SetAttribute("count", booking.Count.ToString());
                 doc.SelectSingleNode("/Bookings").AppendChild(node);
                 #region Charging
                 if (config.BookingSystem.Resources[booking.Room].EnableCharging && !booking.Lesson.Contains(','))
