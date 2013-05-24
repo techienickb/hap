@@ -83,12 +83,8 @@
                 <span id="bflsroom_span" style="display: none;"><label for="bflsroom">Room Required In: </label><select id="bflsroom"></select></span>
                 <span id="bflroomerror" style="display: none;">*</span>
 				<label for="bflheadphones">Headphones?: </label><input type="checkbox" id="bflheadphones" />
-				<label for="bflquant">Quantity:&nbsp;</label>
 			</div>
-			<div id="bflquant" style="float: left;">
-				<input type="radio" name="bflquant" id="bflquant-16" value="16" /><label for="bflquant-16">16</label>
-				<input type="radio" name="bflquant" id="bflquant-32" value="32" /><label for="bflquant-32">32</label>
-			</div>
+
 		</div>
 		<div id="bfEquipment" class="bfType">
 			<span id="bferoom_span"><label for="bferoom">Room Required In: </label><input type="text" id="bferoom" style="width: 60px" /></span>
@@ -100,6 +96,18 @@
             <span id="bflosroom_span" style="display: none;"><label for="bflosroom">Room Required In: </label><select id="bflosroom"></select></span>
             <span id="bfloroomerror" style="display: none;">*</span>
 		</div>
+        <div id="bfquantrad">
+            <label for="bflquant">Quantity:&nbsp;</label>
+            <div id="bflquant" style="float: left;">
+				<input type="radio" name="bflquant" id="bflquant-16" value="16" /><label for="bflquant-16">16</label>
+				<input type="radio" name="bflquant" id="bflquant-32" value="32" /><label for="bflquant-32">32</label>
+			</div>
+        </div>
+        <div id="bfquantnumb">
+            <label for="bfquantspin">Quantity:&nbsp;</label>
+            <input type="number" id="bfquantspin" style="width: 40px;" value="0" />/<span id="bfquantmax"></span>
+            <script>$("#bfquantspin").spinner();</script>
+        </div>
         <div id="bfmultilesson">
             <label for="bfmultiroom">Length: </label><select id="bfmultiroom"></select>
         </div>
@@ -179,7 +187,8 @@
 					h += this.Data[x].Name + '<span>' + this.Data[x].DisplayName;
 					if (this.Data[x].Name == "FREE" || this.Data[x].Name == "UNAVAILABLE" || this.Data[x].Name == "CHARGING") { }
 					else {
-						if (this.Type == "Laptops") h += ' in ' + this.Data[x].LTRoom + ' [' + this.Data[x].LTCount + '|' + (this.Data[x].LTHeadPhones ? 'HP' : 'N-HP') + ']';
+					    if (this.Type == "Laptops") h += ' in ' + this.Data[x].LTRoom + ' [' + this.Data[x].LTCount + '|' + (this.Data[x].LTHeadPhones ? 'HP' : 'N-HP') + ']';
+					    else if (this.Data[x].Count != null) h += ' [' + this.Data[x].Count + '/' + this.Quantities[this.Quantities.length] +']';
 						else if (this.Type == "Equipment" || this.Type == "Loan") h += ' in ' + this.Data[x].EquipRoom;
 					}
 					h += '</span></a>';
@@ -317,13 +326,22 @@
 		            $("#bfyear").append('<option value="' + curres.Years[i] + '">' + curres.Years[i] + '</option>');
 		    } catch (e) { }
 		    try {
-		        $("#bflquant input, #bflquant label").remove();
-		        var checked = '';
-		        if (curres.Quantities.length == 1 ) {
-		            checked = ' checked="checked" ';
+		        if (curres.Type == "Laptops") {
+		            $("#bfquantrad").show();
+		            $("#bfquantnum").hide();
+		            $("#bflquant input, #bflquant label").remove();
+		            var checked = '';
+		            if (curres.Quantities.length == 1 ) {
+		                checked = ' checked="checked" ';
+		            }
+		            for (var i = 0; i < curres.Quantities.length; i++)
+		                $("#bflquant").append('<input type="radio" name="bflquant" id="bflquant-' + curres.Quantities[i] + '" value="' + curres.Quantities[i] + '"' + checked + ' /><label for="bflquant-' + curres.Quantities[i] + '">' + curres.Quantities[i] + '</label>');
+		        } else {
+		            $("#bfquantrad").hide();
+		            $("#bfquantnum").show();
+		            $("#bfquantmax").html(curres.Quantities[curres.Quantities.length]);
+		            $("#bfquantspin").spinner( "option", "min", 0).spinner("option", "max", curres.Quantities[curres.Quantities.length]);
 		        }
-		        for (var i = 0; i < curres.Quantities.length; i++)
-		            $("#bflquant").append('<input type="radio" name="bflquant" id="bflquant-' + curres.Quantities[i] + '" value="' + curres.Quantities[i] + '"' + checked + ' /><label for="bflquant-' + curres.Quantities[i] + '">' + curres.Quantities[i] + '</label>');
 		    } catch (e) { }
 		    try {
 		        if (curres.MultiRoom && curres.Type != "Loan") {
@@ -377,7 +395,9 @@
 		    {
 		        $("#bfmultilesson").hide();
 		        canmulti = false; 
-            }
+		    }
+		    if (curres.Quantities.length > 0) $("#bfquant").show();
+		    else $("#bfquant").hide();
 			$("#bflquant").buttonset();
 			$("#bflesson").html(lesson);
 			if (curres.Disclaimer != "") {
@@ -428,6 +448,9 @@
 							}
 							else if (curres.Type == "Loan") {
 							    d += ', "EquipRoom": "' + $("#bfloroom").val()  + '"';
+							}
+							else if (curres.Quantities.length > 0) {
+							    d += ', "Count": ' + $("#bfquantspin").val();
 							}
 							d += " } }";
 							$.ajax({
