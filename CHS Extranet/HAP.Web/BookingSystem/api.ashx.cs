@@ -26,10 +26,10 @@ namespace HAP.Web.BookingSystem
                 List<string> bookings = new List<string>();
                 foreach (Resource br in config.BookingSystem.Resources.Values)
                     foreach (Lesson l in config.BookingSystem.Lessons)
-                    {
-                        Booking b = bs.getBooking(br.Name, l.Name);
-                        bookings.Add(string.Format(format, b.Lesson, b.Name, b.Room, b.Username == "Not Booked" ? "" : b.User.Notes));
-                    }
+                        foreach (Booking b in bs.getBooking(br.Name, l.Name))
+                        {
+                            bookings.Add(string.Format(format, b.Lesson, b.Name, b.Room, b.Username == "Not Booked" ? "" : b.User.Notes));
+                        }
                 context.Response.Write(string.Join("\n", bookings.ToArray()));
             }
             else if (context.Request.QueryString["op"] == "getTimes")

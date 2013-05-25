@@ -53,15 +53,15 @@ namespace HAP.Web.BookingSystem
                 writer.Write(res.Name);
                 writer.WriteLine("</h2>");
                 foreach (Lesson lesson in config.BookingSystem.Lessons)
-                {
-                    Booking b = bs.getBooking(Room, lesson.Name);
-                    string lessonname = b.Name;
-                    if (lessonname.Length > 17) lessonname = lessonname.Remove(17) + "...";
-                    if (lessonname.Length > 16 && b.Static) lessonname = lessonname.Remove(14) + "...";
-                    if (b.Name == "FREE") writer.Write("<div{0}>FREE</div>", alt ? " class=\"alt\"" : "");
-                    else writer.Write("<div{2}><span>{0}<i>with {1}</i></span></div>", lessonname, b.User.Notes, alt ? " class=\"alt\"" : "");
-                    alt = !alt;
-                }
+                    foreach (Booking b in bs.getBooking(Room, lesson.Name))
+                    {
+                        string lessonname = b.Name;
+                        if (lessonname.Length > 17) lessonname = lessonname.Remove(17) + "...";
+                        if (lessonname.Length > 16 && b.Static) lessonname = lessonname.Remove(14) + "...";
+                        if (b.Name == "FREE") writer.Write("<div{0}>FREE</div>", alt ? " class=\"alt\"" : "");
+                        else writer.Write("<div{2}><span>{0}<i>with {1}</i></span></div>", lessonname, b.User.Notes, alt ? " class=\"alt\"" : "");
+                        alt = !alt;
+                    }
                 alt = false;
                 writer.Write("</div>");
             }

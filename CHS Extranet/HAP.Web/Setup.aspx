@@ -337,7 +337,7 @@
                                             <div>
                                                 <div class="resource" style="float: left;" data-disclaimer="<%#Eval("Disclaimer") %>">
                                                     <span><%#Eval("Name") %></span>
-                                                    (<i><%#Eval("Type") %></i>) [<b class="enabled"><%#((bool)Eval("Enabled")) ? "Enabled" : "Disabled" %></b>|<b class="charging"><%#((bool)Eval("EnableCharging")) ? "Charging" : "N"%></b>|<b class="email"><%#((bool)Eval("EmailAdmins")) ? "Email Admins" : "N" %></b>]<br />
+                                                    (<i><%#Eval("Type") %></i>) [<b class="enabled"><%#((bool)Eval("Enabled")) ? "Enabled" : "Disabled" %></b>|<b class="charging"><%#((bool)Eval("EnableCharging")) ? "Charging" : "N"%></b>|<b class="email"><%#((bool)Eval("EmailAdmins")) ? "Email Admins" : "N" %></b>|<b class="share"><%#((bool)Eval("CanShare")) ? "Sharable" : "N" %></b>]<br />
                                                     Admins: <b class="admins"><%#Eval("Admins") %></b>, Years: <b class="years"><%#Eval("Years") %></b>, Quantities: <b class="quantities"><%#Eval("Quantities") %></b><br />Show To: <b class="showto"><%#Eval("ShowTo") %></b><br />Hide From: <b class="hidefrom"><%#Eval("HideFrom") %></b>
                                                     Read Only: <b class="readonly"><%#Eval("ReadOnlyTo")%></b>, Read/Write: <b class="readwrite"><%#Eval("ReadWriteTo") %></b>
                                                 </div>
@@ -602,6 +602,10 @@
                         <div>
                             <label for="resDisclaimer">Disclaimer: </label><input type="text" id="resDisclaimer" /><br />(Agreement the user needs to tick (short))
                         </div>
+                        <div>
+                            <label for="resShare">Sharable: </label><input type="checkbox" id="resShare" />
+                        </div>
+
                     </div>
                     <div id="qserverEditor" title="Quota Server Editor">
                         <p class="ui-state-highlight ui-corner-all" style=" padding: 5px 10px"><span class="ui-icon ui-icon-info" style="float: left; margin-right: 5px;"></span>%username% = username</p>
@@ -1034,6 +1038,7 @@
                             $("#resAdmins").val("");
                             $("#resShowTo").val("");
                             $("#resEmail").prop("checked", true);
+                            $("#resShare").prop("checked", false);
                             $("#resHideFrom").val("");
                             $("#resQuantities").val("");
                             $("#resReadOnlyTo").val("");
@@ -1048,7 +1053,7 @@
                                         $.ajax({
                                             type: 'POST',
                                             url: 'API/Setup/AddResource',
-                                            data: '{ "name": "' + $("#resName").val() + '", "type": "' + $("#resType").val() + '", "enabled": ' + ($("#resEnabled").is(":checked") ? 'true' : 'false') + ', "charging": ' + ($("#resCharging").is(":checked") ? 'true' : 'false') + ', "admins": "' + $("#resAdmins").val() + '", "emailadmins": ' + ($("#resEmail").is(":checked") ? 'true' : 'false') + ', "showto": "' + $("#resShowTo").val() + '", "hidefrom": "' + $("#resHideFrom").val() + '", "quantities": "' + $("#resQuantities").val() + '", "years": "' + $("#resYears").val() + '", "readwriteto": "' + $("#resReadWriteTo").val() + '", "readonlyto": "' + $("#resReadOnlyTo").val() + '", "disclaimer": "' + $("#resDisclaimer").val() + '" }',
+                                            data: '{ "name": "' + $("#resName").val() + '", "type": "' + $("#resType").val() + '", "enabled": ' + ($("#resEnabled").is(":checked") ? 'true' : 'false') + ', "charging": ' + ($("#resCharging").is(":checked") ? 'true' : 'false') + ', "admins": "' + $("#resAdmins").val() + '", "emailadmins": ' + ($("#resEmail").is(":checked") ? 'true' : 'false') + ', "showto": "' + $("#resShowTo").val() + '", "hidefrom": "' + $("#resHideFrom").val() + '", "quantities": "' + $("#resQuantities").val() + '", "years": "' + $("#resYears").val() + '", "readwriteto": "' + $("#resReadWriteTo").val() + '", "readonlyto": "' + $("#resReadOnlyTo").val() + '", "disclaimer": "' + $("#resDisclaimer").val() + '", "canshare": ' + $("#resShare").is(":checked") + ' }',
                                             contentType: 'application/json',
                                             dataType: 'json',
                                             success: OnResourceAddSuccess,
@@ -1069,7 +1074,7 @@
                                 var data = response.AddResourceResult;
                                 if (data != 0) alert(data);
                                 else {
-                                    $("#resources").append('<div><div class="resource" style="float: left;" data-disclaimer="' + $("resDisclaimer").val() + '"><span>' + $("#resName").val() + '</span> (<i>' + $("#resType").val() + '</i>) [<b class="enabled">' + ($("#resEnabled").is(":checked") ? "Enabled" : "Disabled") + '</b>|<b class="charging">' + ($("#resCharging").is(":checked") ? "Charging" : "N") + '</b>|<b class="email">' + ($("#resEmail").is(":checked") ? "Email Admins" : "N") + '</b>]<br />Admins: <b class="admins">' + $("#resAdmins").val() + '</b>, Quantities: <b class="quantities">' + $("#resQuantities").val() + '</b>, Years: <b class="years">' + $("#resYears").val() + '</b><br />Show To: <b class="showto">' + $("#resShowTo").val() + '</b><br />Hide From: <b class="hidefrom">' + $("#resHideFrom").val() + '</b><br />Read Only: <b class="readonly">' + $("#resReadOnlyTo").val() + '</b>, Read/Write: <b class="readwrite">' + $("#resReadWriteTo").val() + '</b></div><div class="cbuttonset"><button onclick="return editres(this);" title="Edit">Edit</button><button onclick="return removeres(this);" title="Delete">Delete</button></div></div>');
+                                    $("#resources").append('<div><div class="resource" style="float: left;" data-disclaimer="' + $("resDisclaimer").val() + '"><span>' + $("#resName").val() + '</span> (<i>' + $("#resType").val() + '</i>) [<b class="enabled">' + ($("#resEnabled").is(":checked") ? "Enabled" : "Disabled") + '</b>|<b class="charging">' + ($("#resCharging").is(":checked") ? "Charging" : "N") + '</b>|<b class="email">' + ($("#resEmail").is(":checked") ? "Email Admins" : "N") + '</b>]<br />Admins: <b class="admins">' + $("#resAdmins").val() + '</b><b class="share">' + ($("#resShare").is(":checked") ? "Sharable" : "N") + '</b>, Quantities: <b class="quantities">' + $("#resQuantities").val() + '</b>, Years: <b class="years">' + $("#resYears").val() + '</b><br />Show To: <b class="showto">' + $("#resShowTo").val() + '</b><br />Hide From: <b class="hidefrom">' + $("#resHideFrom").val() + '</b><br />Read Only: <b class="readonly">' + $("#resReadOnlyTo").val() + '</b>, Read/Write: <b class="readwrite">' + $("#resReadWriteTo").val() + '</b></div><div class="cbuttonset"><button onclick="return editres(this);" title="Edit">Edit</button><button onclick="return removeres(this);" title="Delete">Delete</button></div></div>');
                                     resetButtons();
                                 }
                             }
@@ -1092,6 +1097,7 @@
                             $("#resQuantities").val(tempe.children(".resource").children(".quantities").html());
                             $("#resYears").val(tempe.children(".resource").children(".years").html());
                             $("#resDisclaimer").val(tempe.children(".resource").data("disclaimer"));
+                            $("#resShare").prop("checked", tempe.children(".share").html() != "N");
                             $("#addres").dialog({
                                 autoOpen: true,
                                 width: 500,
@@ -1100,7 +1106,7 @@
                                         $.ajax({
                                             type: 'POST',
                                             url: 'API/Setup/UpdateResource',
-                                            data: '{ "origname": "' + tempe.children(".resource").children("span").html() + '", "name": "' + $("#resName").val() + '", "type": "' + $("#resType").val() + '", "enabled": ' + ($("#resEnabled").is(":checked") ? 'true' : 'false') + ', "charging": ' + ($("#resCharging").is(":checked") ? 'true' : 'false') + ', "admins": "' + $("#resAdmins").val() + '", "emailadmins": ' + ($("#resEmail").is(":checked") ? 'true' : 'false') + ', "showto": "' + $("#resShowTo").val() + '", "hidefrom": "' + $("#resHideFrom").val() + '", "quantities": "' + $("#resQuantities").val() + '", "years": "' + $("#resYears").val() + '", "readwriteto": "' + $("#resReadWriteTo").val() + '", "readonlyto": "' + $("#resReadOnlyTo").val() + '", "disclaimer": "' + $("#resDisclaimer").val() + '" }',
+                                            data: '{ "origname": "' + tempe.children(".resource").children("span").html() + '", "name": "' + $("#resName").val() + '", "type": "' + $("#resType").val() + '", "enabled": ' + ($("#resEnabled").is(":checked") ? 'true' : 'false') + ', "charging": ' + ($("#resCharging").is(":checked") ? 'true' : 'false') + ', "admins": "' + $("#resAdmins").val() + '", "emailadmins": ' + ($("#resEmail").is(":checked") ? 'true' : 'false') + ', "showto": "' + $("#resShowTo").val() + '", "hidefrom": "' + $("#resHideFrom").val() + '", "quantities": "' + $("#resQuantities").val() + '", "years": "' + $("#resYears").val() + '", "readwriteto": "' + $("#resReadWriteTo").val() + '", "readonlyto": "' + $("#resReadOnlyTo").val() + '", "disclaimer": "' + $("#resDisclaimer").val() + '", "canshare": ' + $("#resShare").is(":checked") + ' }',
                                             contentType: 'application/json',
                                             dataType: 'json',
                                             success: OnResourceUpdateSuccess,
@@ -1121,7 +1127,7 @@
                                 var data = response.UpdateResourceResult;
                                 if (data != 0) alert(data);
                                 else {
-                                    $(tempe).children(".resource").replaceWith('<div class="resource" data-disclaimer="' + $("#resDisclaimer").val() + '" style="float: left;"><span>' + $("#resName").val() + '</span> (<i>' + $("#resType").val() + '</i>) [<b class="enabled">' + ($("#resEnabled").is(":checked") ? "Enabled" : "Disabled") + '</b>|<b class="charging">' + ($("#resCharging").is(":checked") ? "Charging" : "N") + '</b>|<b class="email">' + ($("#resEmail").is(":checked") ? "Email Admins" : "N") + '</b>]<br />Admins: <b class="admins">' + $("#resAdmins").val() + '</b>, Quantities: <b class="quantities">' + $("#resQuantities").val() + '</b>, Years: <b class="years">' + $("#resYears").val() + '</b><br />Show To: <b class="showto">' + $("#resShowTo").val() + '</b><br />Hide From: <b class="hidefrom">' + $("#resHideFrom").val() + '</b></div>');
+                                    $(tempe).children(".resource").replaceWith('<div class="resource" data-disclaimer="' + $("#resDisclaimer").val() + '" style="float: left;"><span>' + $("#resName").val() + '</span> (<i>' + $("#resType").val() + '</i>) [<b class="enabled">' + ($("#resEnabled").is(":checked") ? "Enabled" : "Disabled") + '</b>|<b class="charging">' + ($("#resCharging").is(":checked") ? "Charging" : "N") + '</b>|<b class="email">' + ($("#resEmail").is(":checked") ? "Email Admins" : "N") + '</b><b class="share">' + ($("#resShare").is(":checked") ? "Sharable" : "N") + '</b>]<br />Admins: <b class="admins">' + $("#resAdmins").val() + '</b>, Quantities: <b class="quantities">' + $("#resQuantities").val() + '</b>, Years: <b class="years">' + $("#resYears").val() + '</b><br />Show To: <b class="showto">' + $("#resShowTo").val() + '</b><br />Hide From: <b class="hidefrom">' + $("#resHideFrom").val() + '</b></div>');
                                     tempe = null;
                                 }
                             }

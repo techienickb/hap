@@ -29,10 +29,10 @@ namespace HAP.Web.BookingSystem
                         Repeater r = room.FindControl(s) as Repeater;
                         List<Booking> bookings = new List<Booking>();
                         foreach (Lesson lesson in config.BookingSystem.Lessons)
-                        {
-                            Booking b = bs.getBooking(s, lesson.Name);
-                            bookings.Add(b);
-                        }
+                            foreach (Booking b in bs.getBooking(s, lesson.Name))
+                            {
+                                bookings.Add(b);
+                            }
                         r.DataSource = bookings.ToArray();
                         r.DataBind();
                     }
@@ -44,10 +44,10 @@ namespace HAP.Web.BookingSystem
                             Repeater r = c as Repeater;
                             List<Booking> bookings = new List<Booking>();
                             foreach (Lesson lesson in config.BookingSystem.Lessons)
-                            {
-                                Booking b = bs.getBooking(Room, lesson.Name);
-                                bookings.Add(b);
-                            }
+                                foreach (Booking b in bs.getBooking(Room, lesson.Name))
+                                {
+                                    bookings.Add(b);
+                                }
                             r.DataSource = bookings.ToArray();
                             r.DataBind();
                         }
@@ -64,10 +64,10 @@ namespace HAP.Web.BookingSystem
                         Repeater r = c as Repeater;
                         List<Booking> bookings = new List<Booking>();
                         foreach (Lesson lesson in config.BookingSystem.Lessons)
-                        {
-                            Booking b = bs.getBooking(Room, lesson.Name);
-                            bookings.Add(b);
-                        }
+                            foreach (Booking b in bs.getBooking(Room, lesson.Name))
+                            {
+                                bookings.Add(b);
+                            }
                         r.DataSource = bookings.ToArray();
                         r.DataBind();
                     }

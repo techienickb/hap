@@ -140,16 +140,16 @@ namespace HAP.Web.API
 
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/AddResource", BodyStyle = WebMessageBodyStyle.Wrapped)]
         [OperationContract]
-        public int AddResource(string name, string type, bool enabled, bool charging, string admins, bool emailadmins, string showto, string hidefrom, string quantities, string years, string readonlyto, string readwriteto, string disclaimer)
+        public int AddResource(string name, string type, bool enabled, bool charging, string admins, bool emailadmins, string showto, string hidefrom, string quantities, string years, string readonlyto, string readwriteto, string disclaimer, bool canshare)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
-            Config.BookingSystem.Resources.Add(name, (ResourceType)Enum.Parse(typeof(ResourceType), type), admins, enabled, emailadmins, charging, showto, hidefrom, years, quantities, readonlyto, readwriteto, disclaimer);
+            Config.BookingSystem.Resources.Add(name, (ResourceType)Enum.Parse(typeof(ResourceType), type), admins, enabled, emailadmins, charging, showto, hidefrom, years, quantities, readonlyto, readwriteto, disclaimer, canshare);
             return 0;
         }
 
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/UpdateResource", BodyStyle = WebMessageBodyStyle.Wrapped)]
         [OperationContract]
-        public int UpdateResource(string origname, string name, string type, bool enabled, bool charging, string admins, bool emailadmins, string showto, string hidefrom, string years, string quantities, string readonlyto, string readwriteto, string disclaimer)
+        public int UpdateResource(string origname, string name, string type, bool enabled, bool charging, string admins, bool emailadmins, string showto, string hidefrom, string years, string quantities, string readonlyto, string readwriteto, string disclaimer, bool canshare)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
             Resource r = Config.BookingSystem.Resources[origname];
@@ -166,6 +166,7 @@ namespace HAP.Web.API
             r.ReadOnlyTo = readonlyto;
             r.Years = years;
             r.Disclaimer = disclaimer;
+            r.CanShare = canshare;
             Config.BookingSystem.Resources.Update(origname, r);
             return 0;
         }
