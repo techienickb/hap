@@ -10,6 +10,7 @@ using HAP.AD;
 using Microsoft.Exchange.WebServices.Data;
 using System.Security.Principal;
 using System.Web.Security;
+using HAP.Web.Configuration;
 
 namespace HAP.Web.LiveTiles
 {
@@ -31,7 +32,7 @@ namespace HAP.Web.LiveTiles
             {
                 HttpCookie token = HttpContext.Current.Request.Cookies["token"];
                 if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
-                service.Credentials = new NetworkCredential(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value), HAP.Web.Configuration.hapConfig.Current.AD.UPN);
+                service.Credentials = new NetworkCredential((hapConfig.Current.SMTP.EWSUseEmailoverAN ? u.Email : u.UserName), TokenGenerator.ConvertToPlain(token.Value), HAP.Web.Configuration.hapConfig.Current.AD.UPN);
             }
             else
             {
@@ -73,7 +74,7 @@ namespace HAP.Web.LiveTiles
             {
                 HttpCookie token = HttpContext.Current.Request.Cookies["token"];
                 if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
-                service.Credentials = new NetworkCredential(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value), HAP.Web.Configuration.hapConfig.Current.AD.UPN);
+                service.Credentials = new NetworkCredential((hapConfig.Current.SMTP.EWSUseEmailoverAN ? u.Email : u.UserName), TokenGenerator.ConvertToPlain(token.Value), HAP.Web.Configuration.hapConfig.Current.AD.UPN);
             }
             else
             {
