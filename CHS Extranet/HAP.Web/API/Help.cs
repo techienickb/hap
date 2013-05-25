@@ -22,8 +22,12 @@ namespace HAP.Web.API
             XmlDocument doc = new XmlDocument();
             doc.Load(HttpContext.Current.Server.MapPath("~/App_LocalResources/" + hapConfig.Current.Local + "/help.xml"));
             string am = "Forms";
-            try { TokenGenerator.ConvertToPlain(HttpContext.Current.Request.Cookies["token"].Value); }
-            catch { am = HttpContext.Current.Request.Cookies["token"].Value; }
+            if (hapConfig.Current.AD.AuthenticationMode == AuthMode.Forms)
+            {
+                try { TokenGenerator.ConvertToPlain(HttpContext.Current.Request.Cookies["token"].Value); }
+                catch { am = HttpContext.Current.Request.Cookies["token"].Value; }
+            }
+            else am = "Windows";
             return doc.SelectSingleNode("/resources/" + Path.ToLower()).InnerText.Replace("%am", am).Replace("%l", "~/login.aspx?ReturnUrl=~/&From=" + am).Replace("~/", VirtualPathUtility.ToAbsolute("~/"));
         }
     }
