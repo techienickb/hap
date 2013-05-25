@@ -96,9 +96,9 @@
             <span id="bflosroom_span" style="display: none;"><label for="bflosroom">Room Required In: </label><select id="bflosroom"></select></span>
             <span id="bfloroomerror" style="display: none;">*</span>
 		</div>
-        <div id="bfquantrad">
+        <div id="bfquantrad" style="clear: both;">
             <label for="bflquant">Quantity:&nbsp;</label>
-            <div id="bflquant" style="float: left;">
+            <div id="bflquant" style="display: inline-block;">
 				<input type="radio" name="bflquant" id="bflquant-16" value="16" /><label for="bflquant-16">16</label>
 				<input type="radio" name="bflquant" id="bflquant-32" value="32" /><label for="bflquant-32">32</label>
 			</div>
