@@ -17,7 +17,7 @@ namespace HAP.Web.Configuration
             this.node = doc.SelectSingleNode("/hapConfig/bookingsystem/resources");
             foreach (XmlNode n in node.ChildNodes) base.Add(n.Attributes["name"].Value, new Resource(n));
         }
-        public void Add(string Name, ResourceType Type, string Admins, bool Enabled, bool EmailAdmins, bool EnableCharging, string showto, string hidefrom, string years, string quantities, string readonlyto, string readwriteto, string disclaimer)
+        public void Add(string Name, ResourceType Type, string Admins, bool Enabled, bool EmailAdmins, bool EnableCharging, string showto, string hidefrom, string years, string quantities, string readonlyto, string readwriteto, string disclaimer, bool canshare)
         {
             XmlElement e = doc.CreateElement("resource");
             e.SetAttribute("name", Name);
@@ -33,6 +33,7 @@ namespace HAP.Web.Configuration
             e.SetAttribute("readonlyto", readonlyto);
             e.SetAttribute("readwriteto", readwriteto);
             e.SetAttribute("disclaimer", disclaimer);
+            e.SetAttribute("canshare", canshare.ToString());
             doc.SelectSingleNode("/hapConfig/bookingsystem/resources").AppendChild(e);
             base.Add(Name, new Resource(e));
         }
@@ -57,6 +58,7 @@ namespace HAP.Web.Configuration
             e.Attributes["quantities"].Value = r.Quantities;
             e.Attributes["readonlyto"].Value = r.ReadOnlyTo;
             e.Attributes["readwriteto"].Value = r.ReadWriteTo;
+            e.Attributes["canshare"].Value = r.CanShare.ToString();
             e.SetAttribute("disclaimer", r.Disclaimer);
             base.Add(r.Name, new Resource(e));
         }

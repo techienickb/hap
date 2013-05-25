@@ -29,6 +29,7 @@ namespace HAP.Web.Configuration
             MultiLessonTo = node.Attributes["multilessonto"] == null ? "" : node.Attributes["multilessonto"].Value;
             MaxMultiLesson = node.Attributes["maxmultilesson"] == null ? 0 : int.Parse(node.Attributes["maxmultilesson"].Value);
             Disclaimer = node.Attributes["disclaimer"] == null ? "" : node.Attributes["disclaimer"].Value;
+            CanShare = node.Attributes["canshare"] == null ? false : bool.Parse(node.Attributes["canshare"].Value);
         }
 
         public Rooms Rooms { get; set; }
@@ -46,6 +47,7 @@ namespace HAP.Web.Configuration
         public string ReadWriteTo { get; set; }
         public string MultiLessonTo { get; set; }
         public int MaxMultiLesson { get; set; }
+        public bool CanShare { get; set; }
         public string Disclaimer { get; set; }
         public void InitRooms()
         {

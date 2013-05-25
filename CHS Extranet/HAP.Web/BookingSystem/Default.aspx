@@ -3,7 +3,7 @@
 	<script src="../Scripts/jquery.ba-hashchange.min.js" type="text/javascript"></script>
 	<link href="../style/bookingsystem.css" rel="stylesheet" type="text/css" />
     <style>
-        #bookingday #resources, .col a, #bookingday .head h1 { width: <%=Math.Round(100.00 / (config.BookingSystem.Lessons.Count + 1), 1)%>%; }
+        #bookingday #resources, .col a, .col .share, #bookingday .head h1 { width: <%=Math.Round(100.00 / (config.BookingSystem.Lessons.Count + 1), 1)%>%; }
         #bookingday #resources { min-height: <%=(60 * config.BookingSystem.Resources.Count + 1) %>px; }
         #bookingday .body .col, #bookingday #resources div { height: <%=Math.Round(100.00 / (config.BookingSystem.Resources.Count + 1), 1) %>%; }
     </style>
@@ -105,7 +105,7 @@
         </div>
         <div id="bfquantnumb">
             <label for="bfquantspin">Quantity:&nbsp;</label>
-            <input type="number" id="bfquantspin" style="width: 40px;" value="0" />/<span id="bfquantmax"></span>
+            <input type="number" id="bfquantspin" style="width: 40px;" value="1" />/<span id="bfquantmax"></span>
             <script>$("#bfquantspin").spinner();</script>
         </div>
         <div id="bfmultilesson">
@@ -159,7 +159,7 @@
 		var resources = <%=JSResources %>;
 		var availbookings = [ 0, 0 ];
 		var canmulti = false;
-		function resource(name, type, years, quantities, readonly, multiroom, maxlessons, rooms, disclaimer){
+		function resource(name, type, years, quantities, readonly, multiroom, maxlessons, rooms, disclaimer, canshare){
 			this.Name = name;
 			this.Type = type;
 			this.Years = years;
@@ -170,30 +170,43 @@
 			this.MultiRoom = multiroom;
 			this.MaxLessons = maxlessons;
 			this.Rooms = rooms;
+			this.CanShare = canshare;
 			this.Render = function() {
-				var h = "";
-				for (var x = 0; x < this.Data.length; x++) {
-				    h += '<a onclick="return ';
-				    if (this.ReadOnly) h += "false";
-					else if (this.Data[x].Name == "FREE") h += "doBooking('" +  this.Name + "', '" + this.Data[x].Lesson + "');";
-					else {
-						if (this.Data[x].Static && $.inArray(this.Name, user.isAdminOf) != -1 && this.Type != "Loan") h += "doBooking('" + this.Name + "', '" + this.Data[x].Lesson + "');";
-						else if (this.Data[x].Static == false && this.Type != "Loan" && (this.Data[x].Username.toLowerCase() == user.username.toLowerCase() || $.inArray(this.Name, user.isAdminOf) != -1)) h += "doRemove('" + this.Name + "', '" + this.Data[x].Lesson + "', '" + this.Data[x].Name + "');";
-						else if (this.Data[x].Static == false && this.Type == "Loan" && (this.Data[x].Username.toLowerCase() == user.username.toLowerCase() || $.inArray(this.Name, user.isAdminOf) != -1)) h += "doReturn('" + this.Name + "', '" + this.Data[x].Lesson + "', '" + this.Data[x].Name + "');";
-						else h += "false;";
-					}
-					h += '" href="#' + this.Name + '-' + this.Data[x].Lesson.toLowerCase().replace(/ /g, "") + '" class="' + (this.Data[x].Static ? 'static ' : '') + (this.Type == "Loan" ? 'loan ' : '') + ($.inArray(this.Name, user.isAdminOf) == -1 ? '' : 'admin') + ((this.Data[x].Username.toLowerCase() == user.username.toLowerCase() && $.inArray(this.Name, user.isAdminOf) == -1) ? ' bookie' : '') + ((this.Data[x].Name == "FREE" && !this.ReadOnly) ? ' free' : ' booked') + '">';
-					h += (this.Data[x].Static ? '<span class="state static" title="Timetabled Lesson"><i></i><span>Override</span></span>' : (this.Data[x].Name == "FREE" ? '<span class="state book" title="Book"><i></i><span>Book</span></span>' : (this.Type == "Loan" ? '<span class="state Return" title="Return"><i></i><span>Return</span></span>' : '<span class="state remove" title="Remove"><i></i><span>Remove</span></span>')));
-					h += this.Data[x].Name + '<span>' + this.Data[x].DisplayName;
-					if (this.Data[x].Name == "FREE" || this.Data[x].Name == "UNAVAILABLE" || this.Data[x].Name == "CHARGING") { }
-					else {
-					    if (this.Type == "Laptops") h += ' in ' + this.Data[x].LTRoom + ' [' + this.Data[x].LTCount + '|' + (this.Data[x].LTHeadPhones ? 'HP' : 'N-HP') + ']';
-					    else if (this.Data[x].Count != null) h += ' [' + this.Data[x].Count + '/' + this.Quantities[this.Quantities.length] +']';
-						else if (this.Type == "Equipment" || this.Type == "Loan") h += ' in ' + this.Data[x].EquipRoom;
-					}
-					h += '</span></a>';
-				}
-				$("#" + this.Name.replace(/ /g, '_')).html(h);
+			    var h1 = "";
+			    var xy = 0;
+			    for (var x = 0; x < this.Data.length; x++) {
+			        var h = "";
+			        for (var y = 0; y < this.Data[x].length; y++)
+			        {
+			            h += '<a onclick="return ';
+			            if (this.ReadOnly) h += "false";
+			            else if (this.Data[x][y].Name == "FREE") h += "doBooking('" +  this.Name + "', '" + this.Data[x][y].Lesson + "');";
+			            else {
+			                if (this.Data[x][y].Static && $.inArray(this.Name, user.isAdminOf) != -1 && this.Type != "Loan") h += "doBooking('" + this.Name + "', '" + this.Data[x][y].Lesson + "');";
+			                else if (this.Data[x][y].Static == false && this.Type != "Loan" && (this.Data[x][y].Username.toLowerCase() == user.username.toLowerCase() || $.inArray(this.Name, user.isAdminOf) != -1)) h += "doRemove('" + this.Name + "', '" + this.Data[x][y].Lesson + "', '" + this.Data[x][y].Name + "', " + y + ");";
+			                else if (this.Data[x][y].Static == false && this.Type == "Loan" && (this.Data[x][y].Username.toLowerCase() == user.username.toLowerCase() || $.inArray(this.Name, user.isAdminOf) != -1)) h += "doReturn('" + this.Name + "', '" + this.Data[x][y].Lesson + "', '" + this.Data[x][y].Name + "');";
+			                else h += "false;";
+			            }
+			            h += '" href="#' + this.Name + '-' + this.Data[x][y].Lesson.toLowerCase().replace(/ /g, "") + '" class="' + (this.Data[x][y].Static ? 'static ' : '') + (this.Type == "Loan" ? 'loan ' : '') + ($.inArray(this.Name, user.isAdminOf) == -1 ? '' : 'admin') + ((this.Data[x][y].Username.toLowerCase() == user.username.toLowerCase() && $.inArray(this.Name, user.isAdminOf) == -1) ? ' bookie' : '') + ((this.Data[x][y].Name == "FREE" && !this.ReadOnly) ? ' free' : ' booked') + '">';
+			            h += (this.Data[x][y].Static ? '<span class="state static" title="Timetabled Lesson"><i></i><span>Override</span></span>' : (this.Data[x][y].Name == "FREE" ? '<span class="state book" title="Book"><i></i><span>Book</span></span>' : (this.Type == "Loan" ? '<span class="state Return" title="Return"><i></i><span>Return</span></span>' : '<span class="state remove" title="Remove"><i></i><span>Remove</span></span>')));
+			            h += this.Data[x][y].Name + '<span>' + this.Data[x][y].DisplayName;
+			            if (this.Data[x][y].Name == "FREE" || this.Data[x][y].Name == "UNAVAILABLE" || this.Data[x][y].Name == "CHARGING") { }
+			            else {
+			                if (this.Type == "Laptops") h += ' in ' + this.Data[x][y].LTRoom + ' [' + this.Data[x][y].LTCount + '|' + (this.Data[x][y].LTHeadPhones ? 'HP' : 'N-HP') + ']';
+			                else if (this.Data[x][y].Count != 0 && this.Quantities.length > 0 && this.CanShare && !this.Data[x][0].Static) { xy += this.Data[x][y].Count; h += ' [' + this.Data[x][y].Count + '/' + this.Quantities[this.Quantities.length - 1] +']'; }
+			                else if (this.Type == "Equipment" || this.Type == "Loan") h += ' in ' + this.Data[x][y].EquipRoom;
+			            }
+			            h += '</span></a>';
+			        }
+			        if (this.CanShare && this.Data[x][0].Count > 0 && !this.Data[x][0].Static) {
+			            h = '<span class="share' + (xy + 3 < this.Quantities[this.Quantities.length - 1] ? '' : ' full') + '">' + h;
+			            if (!this.ReadOnly && xy + 3 < this.Quantities[this.Quantities.length - 1])
+			                h += '<a onclick="return doBooking(\'' +  this.Name + "', '" + this.Data[x][0].Lesson + '\');" href="#' + this.Name + '-' + this.Data[x][0].Lesson.toLowerCase().replace(/ /g, "") + '" class="' + ($.inArray(this.Name, user.isAdminOf) == -1 ? '' : 'admin') + ' free"><span class="state book" title="Book"><i></i><span>Book</span></span>' + (this.Quantities[this.Quantities.length - 1] - xy) + ' FREE</span></a>';
+			            h += '</span>';
+			        }
+			        h1 += h;
+			    }
+				$("#" + this.Name.replace(/ /g, '_')).html(h1);
 			};
 			this.timer = null;
 			this.Refresh = function() {
@@ -328,7 +341,7 @@
 		    try {
 		        if (curres.Type == "Laptops") {
 		            $("#bfquantrad").show();
-		            $("#bfquantnum").hide();
+		            $("#bfquantnumb").hide();
 		            $("#bflquant input, #bflquant label").remove();
 		            var checked = '';
 		            if (curres.Quantities.length == 1 ) {
@@ -336,11 +349,19 @@
 		            }
 		            for (var i = 0; i < curres.Quantities.length; i++)
 		                $("#bflquant").append('<input type="radio" name="bflquant" id="bflquant-' + curres.Quantities[i] + '" value="' + curres.Quantities[i] + '"' + checked + ' /><label for="bflquant-' + curres.Quantities[i] + '">' + curres.Quantities[i] + '</label>');
+		        } else if (curres.CanShare) {
+		            $("#bfquantrad").hide();
+		            $("#bfquantnumb").show();
+		            var cr3 = curres.Quantities[curres.Quantities.length - 1];
+		            for (var cr1 = 0; cr1 < curres.Data.length; cr1++)
+		                if (curres.Data[cr1][0].Lesson == curles)
+		                    for (var cr2 = 0; cr2 < curres.Data[cr1].length; cr2++)
+		                        cr3 -= curres.Data[cr1][cr2].Count;
+		            $("#bfquantmax").html(cr3);
+		            $("#bfquantspin").val(cr3).spinner( "option", "min", 1).spinner("option", "max", cr3);
 		        } else {
 		            $("#bfquantrad").hide();
-		            $("#bfquantnum").show();
-		            $("#bfquantmax").html(curres.Quantities[curres.Quantities.length]);
-		            $("#bfquantspin").spinner( "option", "min", 0).spinner("option", "max", curres.Quantities[curres.Quantities.length]);
+		            $("#bfquantnumb").hide();
 		        }
 		    } catch (e) { }
 		    try {
@@ -449,7 +470,7 @@
 							else if (curres.Type == "Loan") {
 							    d += ', "EquipRoom": "' + $("#bfloroom").val()  + '"';
 							}
-							else if (curres.Quantities.length > 0) {
+							else if (curres.Quantities.length > 0 && curres.CanShare && $("#bfquantspin").val() < curres.Quantities[curres.Quantities.length - 1]) {
 							    d += ', "Count": ' + $("#bfquantspin").val();
 							}
 							d += " } }";
@@ -536,7 +557,7 @@
 	        });
 	        return false;
 	    }
-		function doRemove(res, lesson, name) {
+		function doRemove(res, lesson, name, index) {
 			$("#questionbox span").html("Are you sure you want to remove<br/>" + name + " in/with " + res + " during " + lesson);
 			$("#questionbox").dialog({ autoOpen: true, 
 				buttons: { "Yes": function() {
@@ -546,7 +567,7 @@
 						if (resources[i].Name == res) curres = resources[i];
 					$.ajax({
 						type: 'DELETE',
-						url: hap.common.formatJSONUrl("~/api/BookingSystem/Booking/" + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear()),
+						url: hap.common.formatJSONUrl("~/api/BookingSystem/Booking/" + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + "/" + index),
 						dataType: 'json',
 						contentType: 'application/json',
 						data: '{ "booking": { "Room": "' + curres.Name + '", "Lesson": "' + curles + '", "Name": "' + name + '" } }',

@@ -69,16 +69,18 @@ namespace HAP.BookingSystem
             }
         }
 
-        public Booking getBooking(string room, string lesson)
+        public Booking[] getBooking(string room, string lesson)
         {
             XmlDocument doc = BookingsDoc;
             if (!islessonFree(room, lesson))
             {
-                XmlNode node = doc.SelectSingleNode("/Bookings/Booking[@date='" + Date.ToShortDateString() + "' and @lesson[contains(.,'" + lesson + "')] and @room='" + room + "']");
-                return new Booking(node, DayNumber);
+                List<Booking> bookings = new List<Booking>();
+                foreach (XmlNode node in doc.SelectNodes("/Bookings/Booking[@date='" + Date.ToShortDateString() + "' and @lesson[contains(.,'" + lesson + "')] and @room='" + room + "']"))
+                    bookings.Add(new Booking(node, DayNumber));
+                return bookings.ToArray();
             }
-            else if (isStatic(room, lesson)) return StaticBookings[BookingKey.parseBooking(DayNumber, lesson, room)];
-            return new Booking(DayNumber, lesson, room, "FREE", "Not Booked");
+            else if (isStatic(room, lesson)) return new Booking[] { StaticBookings[BookingKey.parseBooking(DayNumber, lesson, room)] };
+            return new Booking[] { new Booking(DayNumber, lesson, room, "FREE", "Not Booked") };
         }
 
         public static Dictionary<BookingKey, Booking> StaticBookings

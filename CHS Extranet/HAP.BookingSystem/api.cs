@@ -42,12 +42,12 @@ namespace HAP.Web.API
         }
 
         [OperationContract]
-        [WebInvoke(Method = "DELETE", UriTemplate = "/Booking/{Date}", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public JSONBooking[] RemoveBooking(string Date, JSONBooking booking)
+        [WebInvoke(Method = "DELETE", UriTemplate = "/Booking/{Date}/{i}", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        public JSONBooking[][] RemoveBooking(string Date, JSONBooking booking, string i)
         {
             HAP.Data.SQL.WebEvents.Log(DateTime.Now, "BookingSystem.Remove", HttpContext.Current.User.Identity.Name, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Removing " + booking.Name);
             HAP.BookingSystem.BookingSystem bs = new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date));
-            Booking b = bs.getBooking(booking.Room, booking.Lesson);
+            Booking b = bs.getBooking(booking.Room, booking.Lesson)[int.Parse(i)];
             try
             {
                 BookingRules.Execute(b, hapConfig.Current.BookingSystem.Resources[b.Room], bs, true);
@@ -63,7 +63,8 @@ namespace HAP.Web.API
             }
             catch (Exception ex) { HAP.Web.Logging.EventViewer.Log("Booking System JSON API", ex.ToString() + "\nMessage:\n" + ex.Message + "\nStack Trace:\n" + ex.StackTrace, System.Diagnostics.EventLogEntryType.Error); }
             XmlDocument doc = HAP.BookingSystem.BookingSystem.BookingsDoc;
-            doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + DateTime.Parse(Date).ToShortDateString() + "' and @lesson[contains(., '" + booking.Lesson + "')] and @room='" + booking.Room + "']"));
+            XmlNodeList nodes = doc.SelectNodes("/Bookings/Booking[@date='" + DateTime.Parse(Date).ToShortDateString() + "' and @lesson[contains(., '" + booking.Lesson + "')] and @room='" + booking.Room + "']");
+            doc.SelectSingleNode("/Bookings").RemoveChild(nodes[int.Parse(i)]);
             if (hapConfig.Current.BookingSystem.Resources[booking.Room].EnableCharging && !booking.Lesson.Contains(','))
             {
                 int index = hapConfig.Current.BookingSystem.Lessons.FindIndex(l1 => l1.Name == booking.Lesson) + 1;
@@ -86,7 +87,7 @@ namespace HAP.Web.API
 
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "/Booking/{Date}", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public JSONBooking[] Book(string Date, JSONBooking booking)
+        public JSONBooking[][] Book(string Date, JSONBooking booking)
         {
             HAP.Data.SQL.WebEvents.Log(DateTime.Now, "BookingSystem.Book", HttpContext.Current.User.Identity.Name, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Booking " + booking.Name);
             try
@@ -147,7 +148,8 @@ namespace HAP.Web.API
                 }
                 #endregion
                 HAP.BookingSystem.BookingSystem.BookingsDoc = doc;
-                Booking b = new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date)).getBooking(booking.Room, booking.Lesson);
+                Booking[] b1 = new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date)).getBooking(booking.Room, booking.Lesson);
+                Booking b = b1[b1.Length - 1];
                 if (config.SMTP.Enabled)
                 {
                     iCalGenerator.Generate(b, DateTime.Parse(Date));
@@ -164,10 +166,10 @@ namespace HAP.Web.API
 
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "/Return/{Date}", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public JSONBooking[] Return(string Date, string Resource, string lesson)
+        public JSONBooking[][] Return(string Date, string Resource, string lesson)
         {
             hapConfig config = hapConfig.Current;
-            Booking b = new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date)).getBooking(Resource, lesson);
+            Booking b = new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date)).getBooking(Resource, lesson)[0];
             XmlDocument doc = HAP.BookingSystem.BookingSystem.BookingsDoc;
             List<string> newlesson = new List<string>(); bool go = false;
             foreach (Lesson l in config.BookingSystem.Lessons) {
@@ -208,17 +210,21 @@ namespace HAP.Web.API
 
         [OperationContract]
         [WebGet(ResponseFormat=WebMessageFormat.Json, UriTemplate="/LoadRoom/{Date}/{Resource}")]
-        public JSONBooking[] LoadRoom(string Date, string Resource)
+        public JSONBooking[][] LoadRoom(string Date, string Resource)
         {
             Resource = HttpUtility.UrlDecode(Resource, System.Text.Encoding.Default).Replace("%20", " ");
-            List<JSONBooking> bookings = new List<JSONBooking>();
+            List<JSONBooking[]> bookings = new List<JSONBooking[]>();
             HAP.BookingSystem.BookingSystem bs = new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date));
             foreach (Lesson lesson in hapConfig.Current.BookingSystem.Lessons)
             {
-                Booking b = bs.getBooking(Resource, lesson.Name);
-                JSONBooking j = new JSONBooking(b);
-                if (b.Resource.Type == ResourceType.Loan) j.Lesson = lesson.Name;
-                bookings.Add(j);
+                List<JSONBooking> js = new List<JSONBooking>();
+                foreach (Booking b in bs.getBooking(Resource, lesson.Name))
+                {
+                    JSONBooking j = new JSONBooking(b);
+                    if (b.Resource.Type == ResourceType.Loan) j.Lesson = lesson.Name;
+                    js.Add(j);
+                }
+                bookings.Add(js.ToArray());
             }
             WebOperationContext.Current.OutgoingResponse.Format = WebMessageFormat.Json;
             return bookings.ToArray();

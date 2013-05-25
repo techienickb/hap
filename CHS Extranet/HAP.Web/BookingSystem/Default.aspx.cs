@@ -126,7 +126,7 @@ namespace HAP.Web.BookingSystem
                             years1.Add("\"" + y.Trim() + "\"");
                         foreach (string q in r.Quantities.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                             quant.Add("\"" + q.Trim() + "\"");
-                        s.Add(string.Format("new resource(\"{0}\", \"{1}\", [ {2} ], [ {3} ], {4}, {5}, \"{6}\", [ {7} ], \"{8}\")", r.Name, r.Type, string.Join(", ", years1.ToArray()), string.Join(", ", quant.ToArray()), isReadOnly(r.ReadOnlyTo, r.ReadWriteTo).ToString().ToLower(), isMultiLesson(r.MultiLessonTo, r.Admins).ToString().ToLower(), r.MaxMultiLesson, string.Join(", ", _rooms), r.Disclaimer));
+                        s.Add(string.Format("new resource(\"{0}\", \"{1}\", [ {2} ], [ {3} ], {4}, {5}, \"{6}\", [ {7} ], \"{8}\", {9})", r.Name, r.Type, string.Join(", ", years1.ToArray()), string.Join(", ", quant.ToArray()), isReadOnly(r.ReadOnlyTo, r.ReadWriteTo).ToString().ToLower(), isMultiLesson(r.MultiLessonTo, r.Admins).ToString().ToLower(), r.MaxMultiLesson, string.Join(", ", _rooms), r.Disclaimer, r.CanShare.ToString().ToLower()));
                     }
                 }
                 return "[" + string.Join(", ", s.ToArray()) + "]";
