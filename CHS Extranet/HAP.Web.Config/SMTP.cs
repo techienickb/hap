@@ -209,5 +209,9 @@ namespace HAP.Web.Configuration
             get { return el.GetAttribute("impersonationdomain"); }
             set { el.SetAttribute("impersonationdomain", value); }
         }
+        public bool EWSUseEmailoverAN
+        {
+            get { if (el.Attributes["ewsuseemailoveran"] != null) return bool.Parse(el.GetAttribute("ewsuseemailoveran")); return false; }
+        }
     }
 }
