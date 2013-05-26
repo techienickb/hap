@@ -78,6 +78,7 @@ namespace HAP.Web
                 HAP.Data.SQL.WebEvents.Log(DateTime.Now, "Logon", username.Text, Request.UserHostAddress, Request.Browser.Platform, Request.Browser.Browser + " " + Request.Browser.Version, Request.UserHostName, Request.UserAgent);
                 FormsAuthentication.SetAuthCookie(username.Text, false);
                 HttpCookie tokenCookie = new HttpCookie("token", TokenGenerator.ConvertToToken(password.Text));
+                tokenCookie.Secure = tokenCookie.HttpOnly = true;
                 if (Request.Cookies["token"] == null) Response.AppendCookie(tokenCookie);
                 else Response.SetCookie(tokenCookie);
                 bans.Remove(ban);
