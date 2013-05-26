@@ -26,6 +26,7 @@ namespace HAP.Web.Configuration
             e.SetAttribute("enabled", Enabled.ToString());
             e.SetAttribute("emailadmins", EmailAdmins.ToString());
             e.SetAttribute("enablecharging", EnableCharging.ToString());
+            if (EnableCharging) e.SetAttribute("chargingperiods", "1");
             e.SetAttribute("showto", showto);
             e.SetAttribute("hidefrom", hidefrom);
             e.SetAttribute("years", years);

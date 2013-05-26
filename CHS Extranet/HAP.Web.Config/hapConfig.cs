@@ -265,8 +265,9 @@ namespace HAP.Web.Configuration
             {
                 foreach (XmlNode n in doc.SelectNodes("/hapConfig/bookingsystem/resources/resource"))
                 {
-                    n.Attributes.Append(doc.CreateAttribute("canshare"));
-                    n.Attributes["canshare"].Value = "False";
+                    XmlElement e = n as XmlElement;
+                    e.SetAttribute("canshare", "False");
+                    if (e.GetAttribute("enablecharging") == "True") e.SetAttribute("chargingperiods", "1");
                 }
             }
             doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();
