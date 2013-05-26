@@ -67,7 +67,7 @@ namespace HAP.Web.API
             doc.SelectSingleNode("/Bookings").RemoveChild(nodes[int.Parse(i)]);
             if (hapConfig.Current.BookingSystem.Resources[booking.Room].EnableCharging && !booking.Lesson.Contains(','))
             {
-                for (int x = 1; x < hapConfig.Current.BookingSystem.Resources[booking.Room].ChargingPeriods; x++)
+                for (int x = 1; x <= hapConfig.Current.BookingSystem.Resources[booking.Room].ChargingPeriods; x++)
                 {
                     int index = hapConfig.Current.BookingSystem.Lessons.FindIndex(l1 => l1.Name == booking.Lesson) + x;
                     if (index >= hapConfig.Current.BookingSystem.Lessons.Count) index--;
@@ -117,7 +117,7 @@ namespace HAP.Web.API
                 #region Charging
                 if (config.BookingSystem.Resources[booking.Room].EnableCharging && !booking.Lesson.Contains(','))
                 {
-                    for (int x = 1; x < hapConfig.Current.BookingSystem.Resources[booking.Room].ChargingPeriods; x++)
+                    for (int x = 1; x <= hapConfig.Current.BookingSystem.Resources[booking.Room].ChargingPeriods; x++)
                     {
                         HAP.BookingSystem.BookingSystem bs = new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date));
                         int index = config.BookingSystem.Lessons.FindIndex(l => l.Name == booking.Lesson);
