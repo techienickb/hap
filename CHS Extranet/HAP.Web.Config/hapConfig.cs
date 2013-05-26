@@ -261,7 +261,7 @@ namespace HAP.Web.Configuration
                 ((XmlElement)doc.SelectSingleNode("/hapConfig/AD")).SetAttribute("maxrecursions", "10");
                 ((XmlElement)doc.SelectSingleNode("/hapConfig/HelpDesk")).SetAttribute("firstlineemails", doc.SelectSingleNode("/hapConfig/SMTP").Attributes["fromaddress"].Value);
             }
-            if (version.CompareTo(Version.Parse("9.2.0527.0000")) < 0) //Perform v9.2 upgrade
+            if (version.CompareTo(Version.Parse("9.2.0526.0000")) < 0) //Perform v9.2 upgrade
             {
                 foreach (XmlNode n in doc.SelectNodes("/hapConfig/bookingsystem/resources/resource"))
                 {
