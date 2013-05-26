@@ -173,8 +173,8 @@
 			this.CanShare = canshare;
 			this.Render = function() {
 			    var h1 = "";
-			    var xy = 0;
 			    for (var x = 0; x < this.Data.length; x++) {
+			        var xy = 0;
 			        var h = "";
 			        for (var y = 0; y < this.Data[x].length; y++)
 			        {
