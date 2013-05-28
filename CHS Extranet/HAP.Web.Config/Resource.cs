@@ -31,6 +31,7 @@ namespace HAP.Web.Configuration
             Disclaimer = node.Attributes["disclaimer"] == null ? "" : node.Attributes["disclaimer"].Value;
             CanShare = node.Attributes["canshare"] == null ? false : bool.Parse(node.Attributes["canshare"].Value);
             ChargingPeriods = node.Attributes["chargingperiods"] == null ? 1 : int.Parse(node.Attributes["chargingperiods"].Value);
+            EnableNotes = node.Attributes["enablenotes"] == null ? false : bool.Parse(node.Attributes["enablenotes"].Value);
         }
 
         public Rooms Rooms { get; set; }
@@ -51,6 +52,7 @@ namespace HAP.Web.Configuration
         public int MaxMultiLesson { get; set; }
         public bool CanShare { get; set; }
         public string Disclaimer { get; set; }
+        public bool EnableNotes { get; set; }
         public void InitRooms()
         {
             XmlElement e = node.OwnerDocument.CreateElement("rooms");

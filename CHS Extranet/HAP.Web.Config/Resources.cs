@@ -35,6 +35,7 @@ namespace HAP.Web.Configuration
             e.SetAttribute("readwriteto", readwriteto);
             e.SetAttribute("disclaimer", disclaimer);
             e.SetAttribute("canshare", canshare.ToString());
+            e.SetAttribute("enablenotes", "false");
             doc.SelectSingleNode("/hapConfig/bookingsystem/resources").AppendChild(e);
             base.Add(Name, new Resource(e));
         }

@@ -44,6 +44,8 @@ body.bookingdisplay, body.bookingdisplay form { padding: 0; margin: 0; width: 10
 #bookingday .body .share a { min-height: 0; height: auto; margin: 0 -10px; float: none; display: block; width: 100%; padding-top: 5px; padding-bottom: 5px; }
 #bookingday .body .share { overflow: auto; padding: 0 10px; }
 
+#bookingday .body a span i.notes { background: transparent url(../images/ui-icons_454545_256x240.png) no-repeat -131px -99px!important; }
+
 #bookingday .head, #bookingday .body.head .col div { height: 30px!important; line-height: 30px!important; background: #0060a6!important; color: #fff; min-height: 30px!important; }
 #bookingday h1 { background: transparent; text-align: center; line-height: 30px!important; height: 30px!important; color: #fff; padding-top: 0; padding-bottom: 0; font-weight: normal; font-size: 15px; }
 #bookingday #resources div { background: #0060a6; text-align: center; line-height: 60px; }
