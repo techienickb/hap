@@ -270,6 +270,14 @@ namespace HAP.Web.Configuration
                     if (e.GetAttribute("enablecharging") == "True") e.SetAttribute("chargingperiods", "1");
                 }
             }
+            if (version.CompareTo(Version.Parse("9.2.0528.0000")) < 0) //Perform v9.2 upgrade
+            {
+                foreach (XmlNode n in doc.SelectNodes("/hapConfig/bookingsystem/resources/resource"))
+                {
+                    XmlElement e = n as XmlElement;
+                    e.SetAttribute("enablenotes", "false");
+                }
+            }
             doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             doc.Save(ConfigPath);
         }

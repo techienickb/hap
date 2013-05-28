@@ -114,6 +114,7 @@
         <div id="bfdisclaimer">
             <label for="bfdisclaim"></label><input type="checkbox" class="noswitch" id="bfdisclaim" />
         </div>
+        <div id="bfnote"><label for="bfnotes">Notes:</label><br /><textarea id="bfnotes" style="width: 99%;"></textarea></div>
 	</div>
 	<div id="bookingsystemcontent">
 	    <p class="ui-state-highlight ui-corner-all" style="padding: 2px 6px">
@@ -153,13 +154,11 @@
         </div>
 	</div>
 	<hap:CompressJS runat="server" tag="div">
-	<script type="text/javascript">
-		var curdate, curres, curles;
-		var user = { <%=JSUser %> };
-		var resources = <%=JSResources %>;
-		var availbookings = [ 0, 0 ];
-		var canmulti = false;
-		function resource(name, type, years, quantities, readonly, multiroom, maxlessons, rooms, disclaimer, canshare){
+	<script>
+		var curdate, curres, curles, user, resources, date;
+        var availbookings = [ 0, 0 ];
+        var canmulti = false;
+		function resource(name, type, years, quantities, readonly, multiroom, maxlessons, rooms, disclaimer, canshare, notes) {
 			this.Name = name;
 			this.Type = type;
 			this.Years = years;
@@ -170,6 +169,7 @@
 			this.MultiRoom = multiroom;
 			this.MaxLessons = maxlessons;
 			this.Rooms = rooms;
+			this.Notes = notes;
 			this.CanShare = canshare;
 			this.Render = function() {
 			    var h1 = "";
@@ -188,7 +188,7 @@
 			                else h += "false;";
 			            }
 			            h += '" href="#' + this.Name + '-' + this.Data[x][y].Lesson.toLowerCase().replace(/ /g, "") + '" class="' + (this.Data[x][y].Static ? 'static ' : '') + (this.Type == "Loan" ? 'loan ' : '') + ($.inArray(this.Name, user.isAdminOf) == -1 ? '' : 'admin') + ((this.Data[x][y].Username.toLowerCase() == user.username.toLowerCase() && $.inArray(this.Name, user.isAdminOf) == -1) ? ' bookie' : '') + ((this.Data[x][y].Name == "FREE" && !this.ReadOnly) ? ' free' : ' booked') + '">';
-			            h += (this.Data[x][y].Static ? '<span class="state static" title="Timetabled Lesson"><i></i><span>Override</span></span>' : (this.Data[x][y].Name == "FREE" ? '<span class="state book" title="Book"><i></i><span>Book</span></span>' : (this.Type == "Loan" ? '<span class="state Return" title="Return"><i></i><span>Return</span></span>' : '<span class="state remove" title="Remove"><i></i><span>Remove</span></span>')));
+			            h += (this.Data[x][y].Static ? '<span class="state static" title="Timetabled Lesson"><i></i><span>Override</span></span>' : (this.Data[x][y].Name == "FREE" ? '<span class="state book" title="Book"><i></i><span>Book</span></span>' : (this.Type == "Loan" ? '<span class="state Return" title="Return"><i></i><span>Return</span></span>' : '<span class="state remove">' + (this.Data[x][y].Notes != null ? ('<i class="notes" title="Booking Notes:\n' + unescape(this.Data[x][y].Notes) + '"></i>') : '') + '<i title="Remove"></i><span title="Remove">Remove</span></span>')));
 			            h += this.Data[x][y].Name + '<span>' + this.Data[x][y].DisplayName;
 			            if (this.Data[x][y].Name == "FREE" || this.Data[x][y].Name == "UNAVAILABLE" || this.Data[x][y].Name == "CHARGING") { }
 			            else {
@@ -199,8 +199,8 @@
 			            h += '</span></a>';
 			        }
 			        if (this.CanShare && this.Data[x][0].Count > 0 && !this.Data[x][0].Static) {
-			            h = '<span class="share' + (xy + 3 < this.Quantities[this.Quantities.length - 1] ? '' : ' full') + '">' + h;
-			            if (!this.ReadOnly && xy + 3 < this.Quantities[this.Quantities.length - 1])
+			            h = '<span class="share' + (xy < this.Quantities[this.Quantities.length - 1] ? '' : ' full') + '">' + h;
+			            if (!this.ReadOnly && xy < this.Quantities[this.Quantities.length - 1])
 			                h += '<a onclick="return doBooking(\'' +  this.Name + "', '" + this.Data[x][0].Lesson + '\');" href="#' + this.Name + '-' + this.Data[x][0].Lesson.toLowerCase().replace(/ /g, "") + '" class="' + ($.inArray(this.Name, user.isAdminOf) == -1 ? '' : 'admin') + ' free"><span class="state book" title="Book"><i></i><span>Book</span></span>' + (this.Quantities[this.Quantities.length - 1] - xy) + ' FREE</span></a>';
 			            h += '</span>';
 			        }
@@ -292,7 +292,7 @@
 		$(window).hashchange(function () {
 			
 			if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curdate = new Date(window.location.href.split('#')[1].split('/')[2], window.location.href.split('#')[1].split('/')[1] - 1, window.location.href.split('#')[1].split('/')[0]);
-			else curdate = new Date(<%try { %><%=CurrentDate.Year %>, <%=CurrentDate.Month - 1 %>, <%=CurrentDate.Day %> <% } catch { } %>);
+			else curdate = date;
 			$('#datepicker').datepicker("setDate", curdate);
 			$("#picker").val($.datepicker.formatDate('d MM', curdate));
 			loadDate();
@@ -321,6 +321,10 @@
 			$("#bflheadphones").removeAttr("checked");
 			$("#bflroom, #bferoom, #bfloroom").val("");
 			$("#bflsroom option, #bfesroom option, #bflosroom option").remove();
+			if (curres.Notes) {
+			    $("#bfnote").show();
+			    $("#bfnotes").val("");
+			} else $("#bfnote").hide();
 			if (curres.Rooms.length > 0) {
 			    $("#bflroom_span, #bferoom_span, #bfloroom_span").css("display", "none");
 			    $("#bflsroom_span, #bfesroom_span, #bflosroom_span").removeAttr("style");
@@ -470,9 +474,14 @@
 							else if (curres.Type == "Loan") {
 							    d += ', "EquipRoom": "' + $("#bfloroom").val()  + '"';
 							}
-							else if (curres.Quantities.length > 0 && curres.CanShare && $("#bfquantspin").val() < curres.Quantities[curres.Quantities.length - 1]) {
+							else if (curres.Quantities.length > 0 && curres.CanShare && parseInt($("#bfquantspin").val()) < parseInt(curres.Quantities[curres.Quantities.length - 1])) {
 							    d += ', "Count": ' + $("#bfquantspin").val();
 							}
+
+							if (curres.Notes) {
+							    d += ', "Notes": "' + escape($("#bfnotes").val()) + '"';
+							}
+
 							d += " } }";
 							$.ajax({
 								type: 'POST',
@@ -604,7 +613,7 @@
 		$(function () {
 			try {
 				if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curdate = new Date(window.location.href.split('#')[1].split('/')[2], window.location.href.split('#')[1].split('/')[1] - 1, window.location.href.split('#')[1].split('/')[0]);
-				else curdate = new Date(<%try { %><%=CurrentDate.Year %>, <%=CurrentDate.Month - 1 %>, <%=CurrentDate.Day %><% } catch { } %>);
+				else curdate = date;
 			} catch (ex) { alert(ex); }
 			$("#datepicker").datepicker({ 
 				minDate: user.minDate,
@@ -648,4 +657,9 @@
 		});
 	</script>
 	</hap:CompressJS>
+    <script>		
+        user = { <%=JSUser %> };
+        resources = <%=JSResources %>;
+        date = new Date(<%try { %><%=CurrentDate.Year %>, <%=CurrentDate.Month - 1 %>, <%=CurrentDate.Day %> <% } catch { } %>);
+    </script>
 </asp:Content>
