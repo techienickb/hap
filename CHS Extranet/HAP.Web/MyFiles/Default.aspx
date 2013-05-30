@@ -695,7 +695,7 @@
 						'con-download': function (t) {
 							if (SelectedItems().length > 1) { alert(hap.common.getLocal("myfiles/only1")); return false; }
 							if (SelectedItems()[0].Data.Type == 'Directory') window.location.href = "#" + SelectedItems()[0].Data.Path;
-							else window.location.href = SelectedItems()[0].Data.Path;
+							else { alert(hap.common.getLocal("myfiles/downloadwarning")); window.open(SelectedItems()[0].Data.Path); }
 						},
 						'con-delete': function (t) {
 							$("#progressstatus").dialog({ autoOpen: true, modal: true, title: hap.common.getLocal("myfiles/delete/deletingitem1") + " 1 " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items") });
@@ -854,8 +854,9 @@
 				if (item.Data.Type != 'Directory') alert(hap.common.getLocal("myfiles/downloadwarning"));
 				var item = null;
 				for (var x = 0; x < items.length; x++)
-					if (items[x].Id == $(this).attr("id")) { item = items[x]; break; }
-				window.location.href = (item.Data.Path.match(/\.\./i) ? item.Data.Path.replace(/\\/g, "/") : '#' + item.Data.Path);
+				    if (items[x].Id == $(this).attr("id")) { item = items[x]; break; }
+				if (item.Data.Type != 'Directory') window.open((item.Data.Path.match(/\.\./i) ? item.Data.Path.replace(/\\/g, "/") : '#' + item.Data.Path));
+				else window.location.href = (item.Data.Path.match(/\.\./i) ? item.Data.Path.replace(/\\/g, "/") : '#' + item.Data.Path);
 			};
 			this.Click = function (e) {
 				e.preventDefault();
@@ -1198,8 +1199,9 @@
 				return false;
 			});
 			$("#toolbar-download").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-download").css("display", "none") } }).click(function () {
-				if (SelectedItems()[0].Data.Path.match(/\.zip\//gi)) window.location.href = SelectedItems()[0].Data.Path.split(/\.zip\//gi)[0] + ".zip";
-				else window.location.href = SelectedItems()[0].Data.Path;
+			    alert(hap.common.getLocal("myfiles/downloadwarning"));
+				if (SelectedItems()[0].Data.Path.match(/\.zip\//gi)) window.open(SelectedItems()[0].Data.Path.split(/\.zip\//gi)[0] + ".zip");
+				else window.open(SelectedItems()[0].Data.Path);
 				return false;
 			});
 			$("#toolbar-delete").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-delete").css("display", "none") } }).click(function () {
