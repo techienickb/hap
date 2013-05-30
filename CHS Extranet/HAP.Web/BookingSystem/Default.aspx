@@ -4,8 +4,8 @@
 	<link href="../style/bookingsystem.css" rel="stylesheet" type="text/css" />
     <style>
         #bookingday #resources, .col a, .col .share, #bookingday .head h1 { width: <%=Math.Round(100.00 / (config.BookingSystem.Lessons.Count + 1), 1)%>%; }
-        #bookingday #resources { min-height: <%=(60 * config.BookingSystem.Resources.Count + 1) %>px; }
-        #bookingday .body .col, #bookingday #resources div { height: <%=Math.Round(100.00 / (config.BookingSystem.Resources.Count + 1), 1) %>%; }
+        #bookingday #resources { min-height: <%=(60 * (rez.Count + 1)) %>px; }
+        #bookingday .body .col, #bookingday #resources div { height: <%=Math.Round(100.00 / (rez.Count + 1), 1) %>%; }
     </style>
 </asp:Content>
 <asp:Content ContentPlaceHolderID="title" runat="server"><asp:HyperLink runat="server" NavigateUrl="~/BookingSystem/"><hap:LocalResource runat="server" StringPath="bookingsystem/bookingsystem" /></asp:HyperLink></asp:Content>
@@ -477,7 +477,11 @@
 							else if (curres.Quantities.length > 0 && curres.CanShare && parseInt($("#bfquantspin").val()) < parseInt(curres.Quantities[curres.Quantities.length - 1])) {
 							    d += ', "Count": ' + $("#bfquantspin").val();
 							}
-
+							console.log(curres.Quantities.length > 0);
+							console.log(curres.CanShare);
+							console.log(parseInt($("#bfquantspin").val()));
+							console.log(parseInt(curres.Quantities[curres.Quantities.length - 1]));
+							console.log(parseInt($("#bfquantspin").val()) < parseInt(curres.Quantities[curres.Quantities.length - 1]));
 							if (curres.Notes) {
 							    d += ', "Notes": "' + escape($("#bfnotes").val()) + '"';
 							}

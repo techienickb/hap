@@ -78,12 +78,12 @@ namespace HAP.Web.routing
 
         public override string GetRequestedFileMimeType(HttpContext context)
         {
-            config = hapConfig.Current;
-            string path = HttpUtility.UrlDecode(RoutingPath.Replace('^', '&').Replace("|", "%"));
-            DriveMapping unc = config.MyFiles.Mappings.FilteredMappings[RoutingDrive.ToCharArray()[0]];
-            if (unc == null || !isAuth(unc)) context.Response.Redirect(VirtualPathUtility.ToAbsolute("~/unauthorised.aspx"), true);
-            else path = Converter.FormatMapping(unc.UNC, ADUser) + '\\' + path.Replace('/', '\\');
-            return MimeType(Path.GetExtension(path));
+            //config = hapConfig.Current;
+            //string path = HttpUtility.UrlDecode(RoutingPath.Replace('^', '&').Replace("|", "%"));
+            //DriveMapping unc = config.MyFiles.Mappings.FilteredMappings[RoutingDrive.ToCharArray()[0]];
+            //if (unc == null || !isAuth(unc)) context.Response.Redirect(VirtualPathUtility.ToAbsolute("~/unauthorised.aspx"), true);
+            //else path = Converter.FormatMapping(unc.UNC, ADUser) + '\\' + path.Replace('/', '\\');
+            return "application/octet-stream";
         }
 
         private hapConfig config;
@@ -113,25 +113,6 @@ namespace HAP.Web.routing
                 return vis;
             }
             return false;
-        }
-
-        public static string MimeType(string Extension)
-        {
-            string mime = "application/octet-stream";
-            //if (string.IsNullOrEmpty(Extension))
-            //    return mime;
-            //string ext = Extension.ToLower();
-            //FileIcon fi;
-            //if (FileIcon.TryGet(ext, out fi)) mime = fi.ContentType;
-            //if (mime == "application/octetstream")
-            //{
-            //    RegistryKey rk = Registry.ClassesRoot.OpenSubKey(ext);
-            //    if (rk != null && rk.GetValue("Content Type") != null)
-            //        mime = rk.GetValue("Content Type").ToString();
-            //}
-            //if (mime.Length == 0) mime = "application/octet-stream";
-            return mime;
-
         }
 
         public string RoutingPath { get; set; }

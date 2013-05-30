@@ -16,10 +16,11 @@ namespace HAP.Web.BookingSystem
         {
             this.SectionTitle = Localize("bookingsystem/bookingsystem");
         }
-        
+
+        protected List<Resource> rez;
         protected void Page_Load(object sender, EventArgs e)
         {
-            List<Resource> rez = new List<Resource>();
+            rez = new List<Resource>();
             if (RouteData.Values.Count == 0)
                 foreach (Resource r in config.BookingSystem.Resources.Values)
                 {
