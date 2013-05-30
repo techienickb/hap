@@ -644,9 +644,9 @@
     <Content Include="Scripts\jquery.dataTables.js" />
     <Content Include="Scripts\jquery.mousewheel.js" />
     <Content Include="Scripts\jquery.wysiwyg.js" />
-    <Content Include="Scripts\modernizer.js" />
     <Content Include="Scripts\jquery.event.swipe.js" />
     <None Include="Scripts\_references.js" />
+    <Content Include="Scripts\modernizr.js" />
     <Content Include="style\bookingpopup.css" />
     <Content Include="style\editor.css" />
     <Content Include="style\jquery.jqplot.css" />
