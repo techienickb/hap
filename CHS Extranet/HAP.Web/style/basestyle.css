@@ -61,7 +61,7 @@ input[type=button]:focus, input[type=submit]:focus, button:focus { outline: #edc
 #loginform .base { padding-top: 60px; padding-left: 60px; padding-bottom: 0; }
 #loginform .copyright { position: absolute; right: 40px; bottom: 40px; }
 
-#loginform h1, #title h1 { color: #0060a6; font-size: 5em; margin: 0; font-weight: normal; padding-top: 15%; }
+#loginform h1, #title h1 { color: #0060a6; font-size: 5em; margin: 0; font-weight: normal; padding-top: 10%; }
 #loginform h1 a, #title h1 a { color: #0060a6; text-decoration: none; }
 #loginform h2, #title h2 { margin: 0; padding: 0 0 40px 60px; font-size: 2.5em; font-weight: normal; }
 
