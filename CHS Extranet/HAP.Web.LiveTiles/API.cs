@@ -8,6 +8,7 @@ using System.Text;
 using System.Web;
 using HAP.AD;
 using HAP.Web.Configuration;
+using Microsoft.Exchange.WebServices.Data;
 
 namespace HAP.Web.LiveTiles
 {
@@ -42,6 +43,13 @@ namespace HAP.Web.LiveTiles
         public string[] ExchangeCalendar(string Mailbox)
         {
             return HAP.Web.LiveTiles.ExchangeConnector.Appointments(Mailbox);
+        }
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "Exchange/CalendarInfo")]
+        public EWSAppointmentInfo[] ExchangeCalendarInfo(string Mailbox)
+        {
+            return HAP.Web.LiveTiles.ExchangeConnector.AppointmentsInfoWeek(Mailbox);
         }
 
         [OperationContract]
