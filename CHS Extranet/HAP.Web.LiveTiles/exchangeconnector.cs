@@ -11,6 +11,7 @@ using Microsoft.Exchange.WebServices.Data;
 using System.Security.Principal;
 using System.Web.Security;
 using HAP.Web.Configuration;
+using System.Text.RegularExpressions;
 
 namespace HAP.Web.LiveTiles
 {
@@ -116,5 +117,45 @@ namespace HAP.Web.LiveTiles
                 s.Add(a.Subject + "<br />" + (a.Start.Date > DateTime.Now.Date ? "Tomorrow: " : "") + ((a.Start.AddDays(1) == a.End) ? "All Day" : a.Start.AddDays(5) == a.End ? "All Week" : (a.Start.ToShortTimeString() + " - " + a.End.ToShortTimeString())));
             return s.ToArray();
         }
+
+        public static EWSAppointmentInfo[] AppointmentsInfoWeek(string mailbox)
+        {
+            ServicePointManager.ServerCertificateValidationCallback =
+            delegate(Object obj, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
+            {
+                // Replace this line with code to validate server certificate.
+                return true;
+            };
+
+            ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
+            service.Url = new Uri("https://" + HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange + "/ews/exchange.asmx");
+            service.Credentials = new NetworkCredential(HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password, HAP.Web.Configuration.hapConfig.Current.AD.UPN);
+            FolderId fid = new FolderId(WellKnownFolderName.Calendar, new Mailbox(mailbox));
+            List<EWSAppointmentInfo> s = new List<EWSAppointmentInfo>();
+            foreach (Appointment a in service.FindAppointments(fid, new CalendarView(DateTime.Now, DateTime.Now.AddDays(14))))
+            {
+                s.Add(new EWSAppointmentInfo { Start = a.Start.ToString(), End = a.End.ToString(), Location = a.Location, Subject = a.Subject });
+                try
+                {
+                    a.Load(); 
+                    string b = a.Body.Text;
+                    Regex r = new Regex("<html>(?:.|\n|\r)+?<body>", RegexOptions.IgnoreCase);
+                    b = r.Replace(b, "");
+                    b = new Regex("</body>(?:.|\n|\r)+?</html>(?:.|\n|\r)+?", RegexOptions.IgnoreCase).Replace(b, "");
+                    s.Last().Body = b;
+                }
+                catch { }
+            }
+            return s.ToArray();
+        }
+    }
+
+    public class EWSAppointmentInfo
+    {
+        public string Subject { get; set; }
+        public string Body { get; set; }
+        public string End { get; set; }
+        public string Start { get; set; }
+        public string Location { get; set; }
     }
 }

@@ -183,6 +183,24 @@ if (hap == null) {
                     $("#" + this.id).addClass("appointment");
                     setTimeout("hap.livetiles.UpdateExchangeAppointments('" + this.id + "');", 100);
                 });
+                hap.livetiles.RegisterTileHandler(/exchange.calendarinfo\:/gi, function (type, initdata) {
+                    this.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
+                    this.html = '<a id="' + this.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + ' class="width' + initdata.Width + ' height' + initdata.Height + '"' + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
+                    $("#" + initdata.Group).append(this.html);
+                    $("#" + this.id).data("name", initdata.Name).data("mailbox", type.split(/exchange.calendarinfo\:/gi)[1]).addClass("appointment").click(function () {
+                        $.ajax({
+                            url: hap.common.formatJSONUrl("~/api/livetiles/exchange/calendarinfo"), context: this, type: 'POST', dataType: 'json', data: '{ "Mailbox" : "' + $(this).data("mailbox") + '" }', contentType: 'application/JSON', success: function (data) {
+                                var s = "";
+                                var url = $(this).attr("href");
+                                for (var i = 0; i < data.length; i++)
+                                    s += '<span style="font-size: 20px; display: block;">' + data[i].Subject + '</span>From: ' + data[i].Start + " To: " + data[i].End + "<br />" + unescape(data[i].Body).replace('\n', '') + "<hr />";
+                                $("<div/>").html(s).dialog({ width: 800, height: 500, title: $(this).data("name"), autoOpen: true, buttons: { "Open": function() { window.location.href = url; }, "Close": function () { $(this).dialog("close"); } } });
+                            }, error: hap.common.jsonError
+                        });
+                        return false;
+                    });
+                    setTimeout("hap.livetiles.UpdateExchangeCalendarInfo('" + this.id + "', '" + type.split(/exchange.calendarinfo\:/gi)[1] + "');", 100);
+                });
                 hap.livetiles.RegisterTileHandler(/exchange.calendar\:/gi, function (type, initdata) {
                     this.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
                     this.html = '<a id="' + this.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + ' class="width' + initdata.Width + ' height' + initdata.Height + '"' + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
@@ -246,6 +264,19 @@ if (hap == null) {
                 if (type == "exchange.appointments" || type.match(/exchange.calendar\:/gi) || type == "bookings" || type == "helpdesk") size = "large";
                 this.html = '<a id="' + this.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + 'class="width' + initdata.Width  + ' height' + initdata.Height + '"' + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
                 $("#" + initdata.Group).append(this.html);
+            },
+            UpdateExchangeCalendarInfo: function (tileid, mailbox) {
+                $("#" + tileid + " span label").html($.datepicker.formatDate('D <b>d</b>', new Date()));
+                $.ajax({
+                    url: hap.common.formatJSONUrl("~/api/livetiles/exchange/calendarinfo"), type: 'POST', dataType: 'json', data: '{ "Mailbox" : "' + mailbox + '" }', context: { tile: tileid, mb: mailbox }, contentType: 'application/JSON', success: function (data) {
+                        var s = "";
+                        for (var i = 0; i < data.length; i++)
+                            s += data[i].Start + " - " + data[i].End + "<br />" + data[i].Subject + "<br />";
+                        $("#" + this.tile + " span i").html(s);
+                        if (data.length > 0) $("#" + this.tile + " span i").attr("style", "background-image: url();");
+                        setTimeout("hap.livetiles.UpdateExchangeCalendarInfo('" + this.tile + "', '" + this.mb + "');", 100000);
+                    }, error: hap.common.jsonError
+                });
             },
             UpdateExchangeCalendar: function (tileid, mailbox) {
                 $("#" + tileid + " span label").html($.datepicker.formatDate('D <b>d</b>', new Date()));
