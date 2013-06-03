@@ -201,7 +201,7 @@
 			        if (this.CanShare && this.Data[x][0].Count > 0 && !this.Data[x][0].Static) {
 			            h = '<span class="share' + (xy < this.Quantities[this.Quantities.length - 1] ? '' : ' full') + '">' + h;
 			            if (!this.ReadOnly && xy < this.Quantities[this.Quantities.length - 1])
-			                h += '<a onclick="return doBooking(\'' +  this.Name + "', '" + this.Data[x][0].Lesson + '\');" href="#' + this.Name + '-' + this.Data[x][0].Lesson.toLowerCase().replace(/ /g, "") + '" class="' + ($.inArray(this.Name, user.isAdminOf) == -1 ? '' : 'admin') + ' free"><span class="state book" title="Book"><i></i><span>Book</span></span>' + (this.Quantities[this.Quantities.length - 1] - xy) + ' FREE</span></a>';
+			                h += '<a onclick="return doBooking(\'' +  this.Name + "', '" + this.Data[x][0].Lesson + '\');" href="#' + this.Name + '-' + this.Data[x][0].Lesson.toLowerCase().replace(/ /g, "") + '" class="' + ($.inArray(this.Name, user.isAdminOf) == -1 ? '' : 'admin') + ' free"><span class="state book" title="Book"><i></i><span>Book</span></span>' + (this.Quantities[this.Quantities.length - 1] - xy) + ' FREE</a>';
 			            h += '</span>';
 			        }
 			        h1 += h;
