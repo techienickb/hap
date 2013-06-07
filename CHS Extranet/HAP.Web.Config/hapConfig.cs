@@ -52,6 +52,11 @@ namespace HAP.Web.Configuration
             set { doc.SelectSingleNode("/hapConfig").Attributes["firstrun"].Value = value.ToString(); }
         }
 
+        public bool Verbose
+        {
+            get { return doc.SelectSingleNode("/hapConfig").Attributes["verbose"] == null ? false : bool.Parse(doc.SelectSingleNode("/hapConfig").Attributes["verbose"].Value); }
+        }
+
         public string Local
         {
             get { return doc.SelectSingleNode("/hapConfig").Attributes["local"].Value; }

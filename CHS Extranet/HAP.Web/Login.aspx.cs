@@ -99,7 +99,7 @@ namespace HAP.Web
                 else
                 {
                     login.Visible = true;
-                    message.Text = "<div class=\"ui-state-error ui-corner-all\" style=\" padding: 5px 10px\"><span class=\"ui-icon ui-icon-alert\" style=\"float: left; margin-right: 5px;\"></span>Either your Username or Password was Incorrect.</div>";
+                    message.Text = "<div class=\"ui-state-error ui-corner-all\" style=\" padding: 5px 10px\"><span class=\"ui-icon ui-icon-alert\" style=\"float: left; margin-right: 5px;\"></span>Either your Username or Password was Incorrect or you do not have permission to access this site.</div>";
                 }
                 Cache.Insert("hapBannedIps", bans);
             }

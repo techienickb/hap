@@ -6,6 +6,7 @@ using System.Web.Security;
 using System.DirectoryServices.AccountManagement;
 using System.Security.Principal;
 using System.DirectoryServices;
+using System.IO;
 
 
 namespace HAP.AD
