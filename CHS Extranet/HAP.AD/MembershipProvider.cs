@@ -1,7 +1,11 @@
-﻿using System;
+﻿using HAP.Web.Configuration;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Web;
+using System.Web.Configuration;
 
 
 namespace HAP.AD
@@ -72,8 +76,27 @@ namespace HAP.AD
 
         public override System.Web.Security.MembershipUser GetUser(string username, bool userIsOnline)
         {
+            StreamWriter sw = null;
+            try
+            {
+                sw = File.Exists(HttpContext.Current.Server.MapPath("~/app_data/verbose.log")) ? File.AppendText(HttpContext.Current.Server.MapPath("~/app_data/verbose.log")) : File.CreateText(HttpContext.Current.Server.MapPath("~/app_data/verbose.log"));
+                sw.WriteLine(DateTime.Now.ToString() + " HAP.AD.MembershipProvider.GetUser() called for " + username);
+            }
+            catch
+            {
+                Thread.Sleep(100);
+                sw = File.Exists(HttpContext.Current.Server.MapPath("~/app_data/verbose2.log")) ? File.AppendText(HttpContext.Current.Server.MapPath("~/app_data/verbose2.log")) : File.CreateText(HttpContext.Current.Server.MapPath("~/app_data/verbose2.log"));
+                sw.WriteLine(DateTime.Now.ToString() + " new HAP.AD.MembershipProvider.GetUser() called for " + username);
+            }
             if (HttpContext.Current.Cache["usercache-" + username] == null)
+            {
+                if (hapConfig.Current.Verbose)
+                {
+                    sw.WriteLine(DateTime.Now.ToString() + " Regenerated user cache for " + username);
+                }
                 HttpContext.Current.Cache.Insert("usercache-" + username, new User(username), null, DateTime.Now.AddMinutes(1), System.Web.Caching.Cache.NoSlidingExpiration);
+            }
+            if (hapConfig.Current.Verbose) sw.Close();
             return HttpContext.Current.Cache["usercache-" + username] as User;
         }
 
@@ -146,10 +169,33 @@ namespace HAP.AD
         {
             try
             {
-                new User().Authenticate(username, password);
+                User u = new User();
+                u.Authenticate(username, password);
+                if (hapConfig.Current.Verbose)
+                {
+                    StreamWriter sw = File.Exists(HttpContext.Current.Server.MapPath("~/app_data/verbose.log")) ? File.AppendText(HttpContext.Current.Server.MapPath("~/app_data/verbose.log")) : File.CreateText(HttpContext.Current.Server.MapPath("~/app_data/verbose.log"));
+                    sw.WriteLine(DateTime.Now.ToString() + " HAP.AD.MembershipProvider.ValidateUser() called for " + username + " - sucsess");
+                    sw.Close();
+                }
+                var config = System.Web.Configuration.WebConfigurationManager.GetSection("system.web/authorization") as AuthorizationSection;
+                foreach (AuthorizationRule rule in config.Rules)
+                    if (rule.Action == AuthorizationRuleAction.Deny)
+                    {
+                        if (rule.Roles != null) foreach (string s in rule.Roles) if (s != "?" && new RoleProvider().IsUserInRole(u.UserName, s)) throw new UnauthorizedAccessException();
+                        if (rule.Users != null) foreach (string s in rule.Users) if (s != "*" && u.UserName.ToLower().Equals(s)) throw new UnauthorizedAccessException();
+                    }
                 return true;
             }
-            catch { return false; }
+            catch
+            {
+                if (hapConfig.Current.Verbose)
+                {
+                    StreamWriter sw = File.Exists(HttpContext.Current.Server.MapPath("~/app_data/verbose.log")) ? File.AppendText(HttpContext.Current.Server.MapPath("~/app_data/verbose.log")) : File.CreateText(HttpContext.Current.Server.MapPath("~/app_data/verbose.log"));
+                    sw.WriteLine(DateTime.Now.ToString() + " HAP.AD.MembershipProvider.ValidateUser() called " + username + " - failed");
+                    sw.Close();
+                }
+                return false;
+            }
         }
 
         public override string ApplicationName { get; set; }
