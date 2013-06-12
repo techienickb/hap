@@ -297,6 +297,11 @@
 			$("#picker").val($.datepicker.formatDate('d MM', curdate));
 			loadDate();
 		});
+		function isAdminOf(res) {
+		    for (var i = 0; i < user.isAdminOf.length; i++)
+		        if (res == user.isAdminOf[i]) return true;
+		    return false;
+		}
 		function doBooking(res, lesson) {
 			if (availbookings[0] == 0 && !user.isBSAdmin) { 
 				alert("You have exceeded your allowed bookings, please contact an Admin if this is wrong");
@@ -377,15 +382,13 @@
 		            var l3 = 0;
 		            for (var i = 0; i < curres.Data.length; i++)
 		            {
-		                if (!l1) l1 = (curres.Data[i].Lesson == lesson);
+		                if (!l1) l1 = (curres.Data[i][0].Lesson == lesson);
 		                if (l1) {
 		                    l3++;
-		                    if ( (curres.MaxLessons > 0 && l3 > curres.MaxLessons) || 
-                                 (l3 > availbookings[0] && availbookings[0] > 0 ) || curres.Data[i].Name != "FREE") {
-		                        break;
-		                    }
-		                    $("#bfmultiroom").append('<option value="' + l2 + curres.Data[i].Lesson + '">' + l3 + ' Lesson' + (l3 == 1 ? '' : 's') + '</option>');
-		                    l2 += curres.Data[i].Lesson + ',';
+		                    if ((isAdminOf(curres.Name) || (parseInt(curres.MaxLessons) > 0 && l3 <= parseInt(curres.MaxLessons) && (l3 <= availbookings[0] && availbookings[0] > 0))) && curres.Data[i][0].Name == "FREE") {
+		                        $("#bfmultiroom").append('<option value="' + l2 + curres.Data[i][0].Lesson + '">' + l3 + ' Lesson' + (l3 == 1 ? '' : 's') + '</option>');
+		                        l2 += curres.Data[i][0].Lesson + ',';
+		                    } else break;
 		                }
 		            }
 		            if (l2 == "") { canmulti = false; $("#bfmultilesson").hide(); }
@@ -399,15 +402,13 @@
 		            var l3 = 0;
 		            for (var i = 0; i < curres.Data.length; i++)
 		            {
-		                if (!l1) l1 = (curres.Data[i].Lesson == lesson);
+		                if (!l1) l1 = (curres.Data[i][0].Lesson == lesson);
 		                if (l1) {
 		                    l3++;
-		                    if ( (curres.MaxLessons > 0 && l3 > curres.MaxLessons) || 
-                                 (l3 > availbookings[0] && availbookings[0] > 0 ) || curres.Data[i].Name != "FREE") {
-		                        break;
-		                    }
-		                    $("#bfmultiroom").append('<option value="' + l2 + curres.Data[i].Lesson + '">' + l3 + ' Lesson' + (l3 == 1 ? '' : 's') + '</option>');
-		                    l2 += curres.Data[i].Lesson + ',';
+		                    if ((isAdminOf(curres.Name) || (parseInt(curres.MaxLessons) > 0 && l3 <= parseInt(curres.MaxLessons) && (l3 <= availbookings[0] && availbookings[0] > 0))) && curres.Data[i][0].Name == "FREE") {
+		                        $("#bfmultiroom").append('<option value="' + l2 + curres.Data[i][0].Lesson + '">' + l3 + ' Lesson' + (l3 == 1 ? '' : 's') + '</option>');
+		                        l2 += curres.Data[i][0].Lesson + ',';
+		                    } else break;
 		                }
 		            }
 		            $("#bfmultiroom").val($("#bfmultiroom option").last().val());
