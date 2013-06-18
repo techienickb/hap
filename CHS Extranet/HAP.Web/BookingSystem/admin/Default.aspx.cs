@@ -254,7 +254,7 @@ namespace HAP.Web.BookingSystem.admin
             Response.Redirect("./#static-bookings");
         }
 
-        protected void ABR_ItemInserting(object sender, ListViewInsertEventArgs e)
+        protected void ABR_ItemInserted(object sender, ListViewInsertedEventArgs e)
         {
             Response.Redirect("./#abr");
         }
