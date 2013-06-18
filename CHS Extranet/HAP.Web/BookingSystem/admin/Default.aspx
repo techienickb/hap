@@ -189,7 +189,7 @@
 		</div>
 		<div id="abr">
 		    <asp:ListView ID="ABR" runat="server" DataSourceID="ABRDS" EnableModelValidation="True"
-			    InsertItemPosition="LastItem" OnItemInserting="ABR_ItemInserting">
+			    InsertItemPosition="LastItem" OnItemInserted="ABR_ItemInserted">
 			    <EditItemTemplate>
 				    <tr>
 					    <td colspan="2">
