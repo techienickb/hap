@@ -33,28 +33,9 @@ namespace HAP.AD
 
         public override string[] GetRolesForUser(string username)
         {
-            StreamWriter sw = null;
-            if (HAP.Web.Configuration.hapConfig.Current.Verbose)
-            {
-                try
-                {
-                    sw = File.Exists(HttpContext.Current.Server.MapPath("~/app_data/verbose.log")) ? File.AppendText(HttpContext.Current.Server.MapPath("~/app_data/verbose.log")) : File.CreateText(HttpContext.Current.Server.MapPath("~/app_data/verbose.log"));
-                    sw.WriteLine(DateTime.Now.ToString() + " new HAP.AD.RoleProvider.GetRolesForUser() called");
-                }
-                catch
-                {
-                    Thread.Sleep(100);
-                    sw = File.Exists(HttpContext.Current.Server.MapPath("~/app_data/verbose2.log")) ? File.AppendText(HttpContext.Current.Server.MapPath("~/app_data/verbose2.log")) : File.CreateText(HttpContext.Current.Server.MapPath("~/app_data/verbose2.log"));
-                    sw.WriteLine(DateTime.Now.ToString() + " new HAP.AD.RoleProvider.GetRolesForUser() called");
-                }
-            }
             if (!HAP.Web.Configuration.hapConfig.Current.AD.UseNestedLookups) return wtrp.GetRolesForUser(username);
             else if (HttpContext.Current.Cache["userrolecache-" + username.ToLower()] == null)
             {
-                if (HAP.Web.Configuration.hapConfig.Current.Verbose)
-                {
-                    sw.WriteLine(DateTime.Now.ToString() + " new HAP.AD.RoleProvider.GetRolesForUser() called - Regenerating Role Cache (should only see this once per user) for " + username);
-                }
                 List<string> roles = new List<string>();
                 try
                 {
@@ -69,10 +50,6 @@ namespace HAP.AD
                 }
                 catch { }
                 HttpContext.Current.Cache.Insert("userrolecache-" + username.ToLower(), roles.ToArray(), null, System.Web.Caching.Cache.NoAbsoluteExpiration, TimeSpan.FromMinutes(5));
-            }
-            if (HAP.Web.Configuration.hapConfig.Current.Verbose)
-            {
-                sw.Close();
             }
             return HttpContext.Current.Cache["userrolecache-" + username.ToLower()] as string[];
         }
@@ -116,19 +93,9 @@ namespace HAP.AD
 
         public override string[] GetUsersInRole(string roleName)
         {
-            StreamWriter sw = null;
-            if (HAP.Web.Configuration.hapConfig.Current.Verbose)
-            {
-                sw = File.Exists(HttpContext.Current.Server.MapPath("~/app_data/verbose.log")) ? File.AppendText(HttpContext.Current.Server.MapPath("~/app_data/verbose.log")) : File.CreateText(HttpContext.Current.Server.MapPath("~/app_data/verbose.log"));
-                sw.WriteLine(DateTime.Now.ToString() + " new HAP.AD.RoleProvider.GetYsersInRole() called");
-            }
             if (!HAP.Web.Configuration.hapConfig.Current.AD.UseNestedLookups) return wtrp.GetUsersInRole(roleName);
             else if (HttpContext.Current.Cache["rolecache-" + roleName.ToLower()] == null)
             {
-                if (HAP.Web.Configuration.hapConfig.Current.Verbose)
-                {
-                    sw.WriteLine(DateTime.Now.ToString() + " Regenerated role cache for role " + roleName);
-                }
                 PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
                 GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, roleName);
                 if (gp == null) return new string[] { };
@@ -136,10 +103,6 @@ namespace HAP.AD
                 foreach (Principal p in gp.GetMembers(true))
                     users.Add(p.Name);
                 HttpContext.Current.Cache.Insert("rolecache-" + roleName.ToLower(), users.ToArray(), null, System.Web.Caching.Cache.NoAbsoluteExpiration, TimeSpan.FromMinutes(5));
-            }
-            if (HAP.Web.Configuration.hapConfig.Current.Verbose)
-            {
-                sw.Close();
             }
             return HttpContext.Current.Cache["rolecache-" + roleName.ToLower()] as string[];
         }
