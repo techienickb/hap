@@ -124,6 +124,7 @@
     <Content Include="images\arrow-collapseover.png" />
     <Content Include="images\arrow-expand.png" />
     <Content Include="images\arrow-expandover.png" />
+    <Content Include="images\contextbar.png" />
     <Content Include="images\cut.png" />
     <Content Include="images\door.png" />
     <Content Include="images\h2bg.gif" />
@@ -591,6 +592,7 @@
     <Content Include="images\setup\266.png" />
     <Content Include="images\setup\267.png" />
     <Content Include="images\setup\78.png" />
+    <Content Include="images\triangle.png" />
     <Content Include="images\ui-bg_diagonals-thick_18_b81900_40x40.png" />
     <Content Include="images\ui-bg_diagonals-thick_20_666666_40x40.png" />
     <Content Include="images\ui-bg_flat_0_aaaaaa_40x100.png" />

@@ -1790,7 +1790,6 @@
                                         data: '{"groups": "' + $(this).sortable('toArray').toString() + '"}',
                                         contentType: 'application/json',
                                         dataType: 'json',
-                                        success: OnGroupOrderUpdateSuccess,
                                         error: OnUpdateError
                                     });
                                 }
@@ -1805,7 +1804,6 @@
                                         data: '{"group": "' + $(this).parent(".linkgroup").attr("id") + '", "links": "' + $(this).sortable('toArray').toString() + '"}',
                                         contentType: 'application/json',
                                         dataType: 'json',
-                                        success: OnGroupOrderUpdateSuccess,
                                         error: OnUpdateError
                                     });
                                 }

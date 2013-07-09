@@ -90,7 +90,7 @@ h1.Announcement b { font-size: 16px; }
 #EditAnn a.EditAnnLink { position: absolute; right: 0; top: 0; }
 #EditAnn a.EditAnnLink img { vertical-align: middle; text-decoration: none; height: 48px; }
 
-#HomeButtons a { float: left; margin: 3px 3px 0 0; padding: 8px; height: 108px; width: 108px; font-size: 11px; text-decoration: none; }
+#HomeButtons a { float: left; margin: 3px 3px 0 0; padding: 8px; height: 108px; width: 108px; font-size: 11px; text-decoration: none; position: relative; }
 #HomeButtons a span { display: block; text-align: center; width: 108px; height: 90px; vertical-align: middle; overflow: hidden; }
 #HomeButtons a span i { float: left; width: 108px; font-style: normal; height: 90px; vertical-align: middle; background: transparent no-repeat center center; }
 #HomeButtons a span label { float: left; cursor: pointer; line-height: 80px; font-size: 32px; padding-left: 5px; }
@@ -181,3 +181,25 @@ span.hapswitch.on::after { content: 'on' }
 .hapswitch i { display: block; position: absolute; left: 0; top: 0; height: 20px; width: 12px; background: #000; -moz-transition: left linear .1s; -o-transition: left linear .1s; -webkit-transition: left linear .1s; transition: left linear .1s; }
 .hapswitch.on span { background: #66B3FF; }
 .hapswitch.on i { left: 42px; }
+
+#HomeButtons .selected { border: solid 2px #0060a6; background-image: url(../images/triangle.png); background-repeat: no-repeat; background-position: right top; margin: 1px 1px -2px -2px }
+#contextbar { background: #000; height: 0; position: fixed; bottom: 0; left: 0; right: 0; color: #fff; overflow: hidden; -moz-transition: height ease-in-out 0.2s; -o-transition: height ease-in-out 0.2s; -webkit-transition: inherit; transition: height ease-in-out 0.2s; }
+#contextbar.show { height: 80px; padding: 20px; }
+#contextbar a { color: #555; display: none; padding-top: 60px; text-decoration: none; cursor: default; background: transparent url(../images/contextbar.png) no-repeat; width: 64px; text-align: center; }
+#contextbar a:first-of-type { color: #fff; cursor: pointer; float: right; }
+#contextbar a:first-of-type:hover { background-position: -68px 0; }
+#contextbar a:first-of-type, #contextbar.editmode a { display: inline-block; }
+#contextbar.editmode.selectactive a, #contextbar.editmode a:nth-of-type(2) { color: #fff; cursor: pointer; }
+#contextbar.editmode a:nth-of-type(4) { background-position: -272px 0; }
+#contextbar.editmode.selectactive a:nth-of-type(4):hover { background-position: -340px 0; }
+#contextbar.editmode a:nth-of-type(3) { background-position: -136px 0; }
+#contextbar.editmode.selectactive a:nth-of-type(3):hover { background-position: -204px 0; }
+#contextbar.editmode a:nth-of-type(2), #contextbar.editmode.selectactive a:nth-of-type(2):hover { background-position: -409px 0; color: #fff; cursor: pointer; }
+#contextbar.editmode.selectactive a:nth-of-type(2), #contextbar.editmode.selectactive a:nth-of-type(2):hover { color: #555; }
+#contextbar.editmode a:nth-of-type(2):hover { background-position: -477px 0; }
+
+#sidebaredit { background: #fff; width: 0; overflow: hidden; white-space: nowrap; position: absolute; left: 0; top: 0; bottom: 0; -moz-transition: width ease-in-out 0.2s; -o-transition: width ease-in-out 0.2s; -webkit-transition: inherit; transition: width ease-in-out 0.2s; }
+#sidebaredit.show { width: 30%; }
+#sidebaredit h1 { background: #00508a; color: #fff; font-weight: 100; padding: 5px 10px; margin: 0 0 10px; }
+#sidebaredit label { display: inline-block; width: 25%; text-align: right; padding-right: 10px; }
+#sidebaredit input { width: 70%; }
