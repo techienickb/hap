@@ -11,6 +11,10 @@ using System.Web;
 using HAP.Data;
 using System.DirectoryServices.AccountManagement;
 using System.DirectoryServices;
+using System.Net;
+using System.Xml;
+using System.Text.RegularExpressions;
+using System.Reflection;
 
 namespace HAP.Web.API
 {
@@ -18,6 +22,38 @@ namespace HAP.Web.API
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class setup
     {
+        [OperationContract]
+        [WebInvoke(Method = "GET", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/CheckUpdate", BodyStyle = WebMessageBodyStyle.Bare)]
+        public UpdateCheck CheckUpdate()
+        {
+            WebClient client = new WebClient();
+            if (!string.IsNullOrEmpty(hapConfig.Current.ProxyServer.Address) && hapConfig.Current.ProxyServer.Enabled)
+                client.Proxy = new WebProxy(hapConfig.Current.ProxyServer.Address, hapConfig.Current.ProxyServer.Port);
+            XmlDocument xmldoc = new XmlDocument();
+            try
+            {
+                xmldoc.LoadXml(client.DownloadString("http://hap.codeplex.com/Project/ProjectRss.aspx?ProjectRSSFeed=codeplex://release/hap"));
+
+                XmlNode latest = xmldoc.SelectNodes("/rss/channel/item")[0];
+                XmlNode title = latest.SelectSingleNode("title");
+                Regex reg = new Regex("Release: v([\\d\\.])+");
+                string versioninfo = reg.Match(title.InnerText).Value.Replace("Release: ", "").TrimStart(new char[] { 'v' });
+
+                Version NeededUpdate = Version.Parse(versioninfo);
+                int comp = Assembly.GetExecutingAssembly().GetName().Version.CompareTo(NeededUpdate);
+                if (comp == -1)
+                {
+
+
+                    return new UpdateCheck { Current = Assembly.GetExecutingAssembly().GetName().Version.ToString(), Next = NeededUpdate.ToString() };
+                }
+            }
+            catch { }
+            return new UpdateCheck();
+
+        }
+
+
         [OperationContract]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/AddOU", BodyStyle = WebMessageBodyStyle.Wrapped)]
         public int AddOU(string path, string name, string visibility)
@@ -392,5 +428,11 @@ namespace HAP.Web.API
             }
             catch (Exception ex) { HAP.Web.Logging.EventViewer.Log("Setup API -> FillNode(DirectoryEntry)", ex.ToString() + "\nMessage:\n" + ex.Message + "\nStack Trace:\n" + ex.StackTrace, System.Diagnostics.EventLogEntryType.Error); return null; }
         }
+    }
+
+    public class UpdateCheck
+    {
+        public string Current { get; set; }
+        public string Next { get; set; }
     }
 }
