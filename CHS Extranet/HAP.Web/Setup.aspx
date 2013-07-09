@@ -308,6 +308,10 @@
                                 <asp:CheckBox runat="server" ID="bsclean" ToolTip="Keep the XML Database Clear of Old Bookings?" />
                             </div>
                             <div>
+                                <asp:Label runat="server" Text="Archive Cleared XML: " AssociatedControlID="bsarch" />
+                                <asp:CheckBox runat="server" ID="bsarch" ToolTip="Archive the Cleared XML Bookings into an Archive XML file?" />
+                            </div>
+                            <div>
                                 <asp:Label runat="server" Text="Admin Groups: " AssociatedControlID="bsadmins" />
                                 <asp:TextBox runat="server" ID="bsadmins" Text="" onclick="showadbuilder(this, false, false);" /> (domain admins are already allocated)
                             </div>
@@ -386,7 +390,6 @@
                                                     <span class="name"><%#Eval("Name") %></span>
                                                     <span class="ert"><%#Eval("EnableReadTo") %></span>
                                                     <span class="ewt"><%#Eval("EnableWriteTo") %></span>
-                                                    <span class="em"><%#Eval("EnableMove") %></span>
                                                     <dd><%#Eval("UsageMode") %></dd>
                                                 </a>
                                             </div>
@@ -468,9 +471,6 @@
                         </div>
                         <div>
                             <label for="mappingUNC" style="width: 100px;">UNC: </label><input type="text" id="mappingUNC" />
-                        </div>
-                        <div>
-                            <label for="mappingEnableMove" style="width: 100px;">Enable Move: </label><input type="checkbox" id="mappingEnableMove" />
                         </div>
                         <div>
                             <label for="mappingEnableReadTo" style="width: 100px;">Enable Read To: </label><input type="text" id="mappingEnableReadTo" onclick="showadbuilder(this, false);" />
@@ -715,7 +715,6 @@
                             $("#mappingDrive").val("");
                             $("#mappingUNC").val("");
                             $("#mappingName").val("");
-                            $("#mappingEnableMove").prop("checked", false);
                             $("#mappingEnableReadTo").val("");
                             $("#mappingEnableWriteTo").val("");
                             $("#mappingUsageModeDriveSpace").prop("checked", true);
@@ -728,7 +727,7 @@
                                         $.ajax({
                                             type: 'POST',
                                             url: 'API/Setup/AddMapping',
-                                            data: '{ "drive": "' + $("#mappingDrive").val().toUpperCase() + '", "name": "' + $("#mappingName").val() + '", "unc": "' + $("#mappingUNC").val().replace(/\\/g, "/") + '", "enablemove": ' + ($("#mappingEnableMove").is(":checked") ? "true" : "false") + ', "enablereadto": "' + $("#mappingEnableReadTo").val() + '", "enablewriteto": "' + $("#mappingEnableWriteTo").val() + '", "usagemode": "' + ($("mappingUsageModeDriveSpace").is(":checked") ? "DriveSpace" : "Quota") + '" }',
+                                            data: '{ "drive": "' + $("#mappingDrive").val().toUpperCase() + '", "name": "' + $("#mappingName").val() + '", "unc": "' + $("#mappingUNC").val().replace(/\\/g, "/") + '", "enablemove": true, "enablereadto": "' + $("#mappingEnableReadTo").val() + '", "enablewriteto": "' + $("#mappingEnableWriteTo").val() + '", "usagemode": "' + ($("mappingUsageModeDriveSpace").is(":checked") ? "DriveSpace" : "Quota") + '" }',
                                             contentType: 'application/json',
                                             dataType: 'json',
                                             success: OnMappingAddSuccess,
@@ -749,7 +748,7 @@
                                 var data = response.AddMappingResult;
                                 if (data != 0) alert(data);
                                 else {
-                                    $("#mappings").append('<div class="homepagelink"><button title="Remove" onclick="return removemapping(this);">X</button><a href="#mapping" class="mapping" title="Edit" onclick="return editmapping(this);"><img src="<%#ResolveUrl("~/images/icons/netdrive.png") %>" alt="" /><b>' + $("#mappingDrive").val().toUpperCase() + '</b><i>' + $("#mappingUNC").val() + '</i><span class="name">' + $("#mappingName").val() + '</span><span class="ert">' + $("#mappingEnableReadTo").val() + '</span><span class="ewt">' + $("#mappingEnableWriteTo").val() + '</span><span class="em">' + ($("mappingEnableMove").is(":checked") ? "true" : "false") + '</span><dd>' + ($("mappingUsageModeDriveSpace").is(":checked") ? "DriveSpace" : "Quota") + '</dd></a></div>');
+                                    $("#mappings").append('<div class="homepagelink"><button title="Remove" onclick="return removemapping(this);">X</button><a href="#mapping" class="mapping" title="Edit" onclick="return editmapping(this);"><img src="<%#ResolveUrl("~/images/icons/netdrive.png") %>" alt="" /><b>' + $("#mappingDrive").val().toUpperCase() + '</b><i>' + $("#mappingUNC").val() + '</i><span class="name">' + $("#mappingName").val() + '</span><span class="ert">' + $("#mappingEnableReadTo").val() + '</span><span class="ewt">' + $("#mappingEnableWriteTo").val() + '</span><dd>' + ($("mappingUsageModeDriveSpace").is(":checked") ? "DriveSpace" : "Quota") + '</dd></a></div>');
                                     resetButtons();
                                 }
                             }
@@ -759,9 +758,6 @@
                             $("#mappingDrive").val(tempe.children("a").children("b").html());
                             $("#mappingName").val(tempe.children("a").children(".name").html());
                             $("#mappingUNC").val(tempe.children("a").children("i").html());
-                            if (tempe.children("a").children(".em").html() == "True")
-                                $("#mappingEnableMove").prop("checked", true);
-                            else $("#mappingEnableMove").prop("checked", false);
                             $("#mappingEnableReadTo").val($.trim(tempe.children("a").children(".ert").html()));
                             $("#mappingEnableWriteTo").val($.trim(tempe.children("a").children(".ewt").html()));
                             if (tempe.children("a").children("dd").html() == "DriveSpace") {
@@ -779,7 +775,7 @@
                                         $.ajax({
                                             type: 'POST',
                                             url: 'API/Setup/UpdateMapping',
-                                            data: '{ "origdrive": "' + tempe.children("a").children("b").html() + '", "origunc": "' + tempe.children("a").children("i").html() + '", "drive": "' + $("#mappingDrive").val().toUpperCase() + '", "name": "' + $("#mappingName").val() + '", "unc": "' + $("#mappingUNC").val().replace(/\\/g, "/") + '", "enablemove": ' + ($("#mappingEnableMove").attr("checked") ? "true" : "false") + ', "enablereadto": "' + $("#mappingEnableReadTo").val() + '", "enablewriteto": "' + $("#mappingEnableWriteTo").val() + '", "usagemode": "' + ($("mappingUsageModeDriveSpace").attr("checked") ? "DriveSpace" : "Quota") + '" }',
+                                            data: '{ "origdrive": "' + tempe.children("a").children("b").html() + '", "origunc": "' + tempe.children("a").children("i").html() + '", "drive": "' + $("#mappingDrive").val().toUpperCase() + '", "name": "' + $("#mappingName").val() + '", "unc": "' + $("#mappingUNC").val().replace(/\\/g, "/") + '", "enablemove": true, "enablereadto": "' + $("#mappingEnableReadTo").val() + '", "enablewriteto": "' + $("#mappingEnableWriteTo").val() + '", "usagemode": "' + ($("mappingUsageModeDriveSpace").attr("checked") ? "DriveSpace" : "Quota") + '" }',
                                             contentType: 'application/json',
                                             dataType: 'json',
                                             success: OnMappingUpdateSuccess,
@@ -803,8 +799,6 @@
                                     tempe.children("a").children("b").html($("#mappingDrive").val().toUpperCase());
                                     tempe.children("a").children("i").html($("#mappingUNC").val());
                                     tempe.children("a").children(".name").html($("#mappingName").val());
-                                    if ($("#mappingEnableMove").is(":checked")) tempe.children("a").children(".em").html() == "True";
-                                    else tempe.children("a").children(".em").html() == "False"
                                     tempe.children("a").children(".ert").html($("#mappingEnableReadTo").val());
                                     tempe.children("a").children(".ewt").html($("#mappingEnableWriteTo").val());
                                     if ($("#mappingUsageModeDriveSpace").is(":checked")) tempe.children("a").children("dd").html("DriveSpace");

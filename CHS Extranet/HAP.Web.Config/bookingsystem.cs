@@ -23,6 +23,7 @@ namespace HAP.Web.Configuration
         public int MaxBookingsPerWeek { get { return int.Parse(doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["maxbookingsperweek"].Value); } set { doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["maxbookingsperweek"].Value = value.ToString(); } }
         public int MaxDays { get { return int.Parse(doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["maxdays"].Value); } set { doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["maxdays"].Value = value.ToString(); } }
         public bool KeepXmlClean { get { return bool.Parse(doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["keepxmlclean"].Value); } set { doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["keepxmlclean"].Value = value.ToString(); } }
+        public bool ArchiveXml { get { return bool.Parse(doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["archive"].Value); } set { doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["archive"].Value = value.ToString(); } }
         public bool TwoWeekTimetable { get { return bool.Parse(doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["twoweektimetable"].Value); } set { doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["twoweektimetable"].Value = value.ToString(); } }
         public string Admins { get { return doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["admins"].Value; } set { doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["admins"].Value = value; } }
         public bool MultiLesson { get { return bool.Parse(doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["enablemultilesson"].Value); } set { doc.SelectSingleNode("/hapConfig/bookingsystem").Attributes["enablemultilesson"].Value = value.ToString(); } }
@@ -58,6 +59,7 @@ namespace HAP.Web.Configuration
             e.SetAttribute("keepxmlclean", "true");
             e.SetAttribute("twoweektimetable", "true");
             e.SetAttribute("enablemultilesson", "false");
+            e.SetAttribute("archive", "false");
             e.SetAttribute("maxmultilesson", "0");
             doc.SelectSingleNode("/hapConfig").AppendChild(e);
         }

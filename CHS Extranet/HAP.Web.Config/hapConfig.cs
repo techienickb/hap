@@ -283,6 +283,10 @@ namespace HAP.Web.Configuration
                     e.SetAttribute("enablenotes", "false");
                 }
             }
+            if (version.CompareTo(Version.Parse("9.2.0709.2000")) < 0) //Perform v9.2 upgrade
+            {
+                ((XmlElement)doc.SelectSingleNode("/hapConfig/bookingsystem")).SetAttribute("archive", "false");
+            }
             doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             doc.Save(ConfigPath);
         }

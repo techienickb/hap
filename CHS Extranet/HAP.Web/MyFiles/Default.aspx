@@ -988,6 +988,7 @@
 			return data.match(re);
 		}
 		$(function () {
+		    setTimeout(function() { $("#MyFiles").css("min-height", $("#hapContent").height() - 2); }, 100);
 		    $("#properties").dialog({ autoOpen: false });
 		    $("#loadingbox").dialog({ autoOpen: false });
 			$("#preview").dialog({ autoOpen: false });
@@ -1376,7 +1377,7 @@
 		$(document).bind('keyup', function (event) { keys.shift = keys.ctrl = false; });
 		function closeUpload() { $("#uploaders").dialog("close"); };
 		$(window).resize(function () {
-		    setTimeout(function () { $("#Tree").css("top", $("#search").position().top + $("#search").height()).css("height", $("#hapContent").height() - $("#search").height()); }, 50);
+		    setTimeout(function () { $("#Tree").css("top", $("#search").position().top + $("#search").height()).css("height", $("#hapContent").height() - $("#search").height()); $("#MyFiles").css("min-height", $("#hapContent").height() - 2); }, 50);
 		    $("#Views").css("left", $('#view').position().left);
 		});
 		</script>

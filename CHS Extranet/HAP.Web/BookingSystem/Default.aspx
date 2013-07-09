@@ -146,6 +146,9 @@
 			<asp:Label runat="server" AssociatedControlID="userlist" Text="User To Book For: " />
 			<asp:DropDownList runat="server" ID="userlist" />
 		</div>
+        <div>
+            <label for="bflstatic">Make static?: </label><input type="checkbox" id="bflstatic" />
+        </div>
 		</asp:PlaceHolder>
         <div id="bfdisclaimer">
             <label for="bfdisclaim"></label><input type="checkbox" class="noswitch" id="bfdisclaim" />
@@ -332,6 +335,7 @@
 		    n1 += $("#bfsubject").val();
 		    if (abort) return false;
 		    var d = '{ "booking": { "Room": "' + curres.Name + '", "Lesson": "' + (canmulti ? $("#bfmultiroom").val() : curles) + '", "Username": "' + (user.isBSAdmin ? $("#<%=userlist.ClientID %> option:selected").val() : user.username) + '", "Name": "' + n1 + '"';
+		    if ($("#bflstatic").length > 0 && $("#bflstatic").is(":checked")) d +=  ', "Static": true';
 		    if (curres.Type == "Laptops") {
 		        d += ', "LTCount": ' + $("#bflquant input:checked").attr("value") + ', "LTRoom": "' + $("#bflroom").val() + '", "LTHeadPhones": ' + (($('#bflheadphones:checked').val() !== undefined) ? 'true' : 'false');
 		    }
