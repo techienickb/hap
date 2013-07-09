@@ -320,7 +320,7 @@
 			    UpdateMethod="updateBookingRights" DeleteMethod="deleteBookingRights" />>
 		</div>
 		<div id="email-templates">
-			<p>{0} = Username, {1} = Display Name, {2} = Room, {3} = Booking Name, {4} = Date, {5} = Day, {6} = Lesson, {7} = LTRoom or EquipRoom, {8} = LTCountom or EquipRoom, {8} = LTCount</p>
+			<p>{0} = Username, {1} = Display Name, {2} = Room, {3} = Booking Name, {4} = Date, {5} = Day, {6} = Lesson, {7} = LTRoom or EquipRoom, {8} = LTCountom or EquipRoom, {8} = LTCount, {9} = Notes</p>
 			<asp:Repeater ID="etemplates" runat="server" onitemcommand="etemplates_ItemCommand" DataSourceID="etemplatesds">
 				<ItemTemplate>
 					<div>

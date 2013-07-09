@@ -58,7 +58,9 @@
                 <label for="edit-url">Url: </label><input type="text" id="edit-url" /><br />
                 <label for="edit-target">Target: </label><input type="text" id="edit-target" /><br />
                 <label for="edit-icon">Icon: </label><input type="text" id="edit-icon" /><br />
-                <button id="edit-save">Save</button><button id="edit-cancel">Cancel</button>
+                <div class="buttons">
+                    <button id="edit-save">Save</button><button id="edit-cancel">Cancel</button>
+                </div>
             </div>
             <div id="contextbar">
                 <a href="#edit" id="edit">Edit Mode</a>
