@@ -71,6 +71,7 @@ namespace HAP.Web
                 homepageLinkGroups.DataSource = Config.Homepage.Groups.Values;
                 homepageLinkGroups.DataBind();
                 bsclean.Checked = Config.BookingSystem.KeepXmlClean;
+                bsarch.Checked = Config.BookingSystem.ArchiveXml;
                 bstwoweek.Checked = Config.BookingSystem.TwoWeekTimetable;
                 bsmax.Text = Config.BookingSystem.MaxBookingsPerWeek.ToString();
                 bsdays.Text = Config.BookingSystem.MaxDays.ToString();
@@ -81,7 +82,6 @@ namespace HAP.Web
                 bslessons.DataBind();
                 bsresources.DataSource = Config.BookingSystem.Resources.Values;
                 bsresources.DataBind();
-                bsclean.Checked = Config.BookingSystem.KeepXmlClean;
                 bsdays.Text = Config.BookingSystem.MaxDays.ToString();
                 bsmax.Text = Config.BookingSystem.MaxBookingsPerWeek.ToString();
                 bstwoweek.Checked = Config.BookingSystem.TwoWeekTimetable;
@@ -240,6 +240,11 @@ namespace HAP.Web
             try
             {
                 Config.BookingSystem.KeepXmlClean = bsclean.Checked;
+            }
+            catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the Booking System Keep XML Clean Option"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
+            try
+            {
+                Config.BookingSystem.ArchiveXml = bsarch.Checked;
             }
             catch (Exception ex) { error.Visible = true; errormessage.Text = "Error with the Booking System Keep XML Clean Option"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace; }
             try

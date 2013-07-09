@@ -95,74 +95,81 @@ namespace HAP.Web.API
             HAP.Data.SQL.WebEvents.Log(DateTime.Now, "BookingSystem.Book", HttpContext.Current.User.Identity.Name, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Booking " + booking.Name);
             try
             {
-                XmlDocument doc = HAP.BookingSystem.BookingSystem.BookingsDoc;
-                XmlElement node = doc.CreateElement("Booking");
-                node.SetAttribute("date", DateTime.Parse(Date).ToShortDateString());
-                node.SetAttribute("lesson", booking.Lesson);
-                hapConfig config = hapConfig.Current;
-                if (config.BookingSystem.Resources[booking.Room].Type == ResourceType.Laptops)
-                {
-                    node.SetAttribute("ltroom", booking.LTRoom);
-                    node.SetAttribute("ltcount", booking.LTCount.ToString());
-                    node.SetAttribute("ltheadphones", booking.LTHeadPhones.ToString());
+                if (booking.Static) {
+                    HAP.BookingSystem.BookingSystem bs = new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date));
+                    bs.addStaticBooking(new Booking { Name = booking.Name, Lesson = booking.Lesson, Username = booking.Username, Room = booking.Room, Day = bs.DayNumber });
                 }
-                else if (config.BookingSystem.Resources[booking.Room].Type == ResourceType.Equipment || config.BookingSystem.Resources[booking.Room].Type == ResourceType.Loan)
-                    node.SetAttribute("equiproom", booking.EquipRoom);
-                node.SetAttribute("room", booking.Room);
-                node.SetAttribute("uid", booking.Username + DateTime.Now.ToString(iCalGenerator.DateFormat));
-                node.SetAttribute("username", booking.Username);
-                node.SetAttribute("name", booking.Name);
-                if (booking.Count >= 0) node.SetAttribute("count", booking.Count.ToString());
-                if (!string.IsNullOrWhiteSpace(booking.Notes)) node.SetAttribute("notes", booking.Notes);
-                doc.SelectSingleNode("/Bookings").AppendChild(node);
-                #region Charging
-                if (config.BookingSystem.Resources[booking.Room].EnableCharging && !booking.Lesson.Contains(','))
+                else
                 {
-                    for (int x = 1; x <= hapConfig.Current.BookingSystem.Resources[booking.Room].ChargingPeriods; x++)
+                    XmlDocument doc = HAP.BookingSystem.BookingSystem.BookingsDoc;
+                    XmlElement node = doc.CreateElement("Booking");
+                    node.SetAttribute("date", DateTime.Parse(Date).ToShortDateString());
+                    node.SetAttribute("lesson", booking.Lesson);
+                    hapConfig config = hapConfig.Current;
+                    if (config.BookingSystem.Resources[booking.Room].Type == ResourceType.Laptops)
                     {
-                        HAP.BookingSystem.BookingSystem bs = new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date));
-                        int index = config.BookingSystem.Lessons.FindIndex(l => l.Name == booking.Lesson);
-                        if (index > 0 && bs.islessonFree(booking.Room, config.BookingSystem.Lessons[index - x].Name))
+                        node.SetAttribute("ltroom", booking.LTRoom);
+                        node.SetAttribute("ltcount", booking.LTCount.ToString());
+                        node.SetAttribute("ltheadphones", booking.LTHeadPhones.ToString());
+                    }
+                    else if (config.BookingSystem.Resources[booking.Room].Type == ResourceType.Equipment || config.BookingSystem.Resources[booking.Room].Type == ResourceType.Loan)
+                        node.SetAttribute("equiproom", booking.EquipRoom);
+                    node.SetAttribute("room", booking.Room);
+                    node.SetAttribute("uid", booking.Username + DateTime.Now.ToString(iCalGenerator.DateFormat));
+                    node.SetAttribute("username", booking.Username);
+                    node.SetAttribute("name", booking.Name);
+                    if (booking.Count >= 0) node.SetAttribute("count", booking.Count.ToString());
+                    if (!string.IsNullOrWhiteSpace(booking.Notes)) node.SetAttribute("notes", booking.Notes);
+                    doc.SelectSingleNode("/Bookings").AppendChild(node);
+                    #region Charging
+                    if (config.BookingSystem.Resources[booking.Room].EnableCharging && !booking.Lesson.Contains(','))
+                    {
+                        for (int x = 1; x <= hapConfig.Current.BookingSystem.Resources[booking.Room].ChargingPeriods; x++)
                         {
-                            node = doc.CreateElement("Booking");
-                            node.SetAttribute("date", DateTime.Parse(Date).ToShortDateString());
-                            node.SetAttribute("lesson", config.BookingSystem.Lessons[index - x].Name);
-                            node.SetAttribute("room", booking.Room);
-                            node.SetAttribute("ltroom", "--");
-                            node.SetAttribute("ltcount", booking.LTCount.ToString());
-                            node.SetAttribute("ltheadphones", booking.LTHeadPhones.ToString());
-                            node.SetAttribute("username", "systemadmin");
-                            node.SetAttribute("name", "UNAVAILABLE");
-                            doc.SelectSingleNode("/Bookings").AppendChild(node);
-                        }
-                        if (index < config.BookingSystem.Lessons.Count - x)
-                        {
-                            if (bs.islessonFree(booking.Room, config.BookingSystem.Lessons[index + x].Name))
+                            HAP.BookingSystem.BookingSystem bs = new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date));
+                            int index = config.BookingSystem.Lessons.FindIndex(l => l.Name == booking.Lesson);
+                            if (index > 0 && bs.islessonFree(booking.Room, config.BookingSystem.Lessons[index - x].Name))
                             {
                                 node = doc.CreateElement("Booking");
                                 node.SetAttribute("date", DateTime.Parse(Date).ToShortDateString());
-                                node.SetAttribute("lesson", config.BookingSystem.Lessons[index + x].Name);
+                                node.SetAttribute("lesson", config.BookingSystem.Lessons[index - x].Name);
                                 node.SetAttribute("room", booking.Room);
                                 node.SetAttribute("ltroom", "--");
                                 node.SetAttribute("ltcount", booking.LTCount.ToString());
                                 node.SetAttribute("ltheadphones", booking.LTHeadPhones.ToString());
                                 node.SetAttribute("username", "systemadmin");
-                                node.SetAttribute("name", "CHARGING");
+                                node.SetAttribute("name", "UNAVAILABLE");
                                 doc.SelectSingleNode("/Bookings").AppendChild(node);
+                            }
+                            if (index < config.BookingSystem.Lessons.Count - x)
+                            {
+                                if (bs.islessonFree(booking.Room, config.BookingSystem.Lessons[index + x].Name))
+                                {
+                                    node = doc.CreateElement("Booking");
+                                    node.SetAttribute("date", DateTime.Parse(Date).ToShortDateString());
+                                    node.SetAttribute("lesson", config.BookingSystem.Lessons[index + x].Name);
+                                    node.SetAttribute("room", booking.Room);
+                                    node.SetAttribute("ltroom", "--");
+                                    node.SetAttribute("ltcount", booking.LTCount.ToString());
+                                    node.SetAttribute("ltheadphones", booking.LTHeadPhones.ToString());
+                                    node.SetAttribute("username", "systemadmin");
+                                    node.SetAttribute("name", "CHARGING");
+                                    doc.SelectSingleNode("/Bookings").AppendChild(node);
+                                }
                             }
                         }
                     }
+                    #endregion
+                    HAP.BookingSystem.BookingSystem.BookingsDoc = doc;
+                    Booking[] b1 = new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date)).getBooking(booking.Room, booking.Lesson);
+                    Booking b = b1[b1.Length - 1];
+                    if (config.SMTP.Enabled)
+                    {
+                        iCalGenerator.Generate(b, DateTime.Parse(Date));
+                        if (config.BookingSystem.Resources[b.Room].EmailAdmins) iCalGenerator.Generate(b, DateTime.Parse(Date), true);
+                    }
+                    BookingRules.Execute(b, config.BookingSystem.Resources[b.Room], new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date)), false);
                 }
-                #endregion
-                HAP.BookingSystem.BookingSystem.BookingsDoc = doc;
-                Booking[] b1 = new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date)).getBooking(booking.Room, booking.Lesson);
-                Booking b = b1[b1.Length - 1];
-                if (config.SMTP.Enabled)
-                {
-                    iCalGenerator.Generate(b, DateTime.Parse(Date));
-                    if (config.BookingSystem.Resources[b.Room].EmailAdmins) iCalGenerator.Generate(b, DateTime.Parse(Date), true);
-                }
-                BookingRules.Execute(b, config.BookingSystem.Resources[b.Room], new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date)), false);
             }
             catch (Exception e)
             {

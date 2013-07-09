@@ -5,6 +5,8 @@ using System.Web;
 using System.Xml;
 using HAP.Web.Configuration;
 using System.Configuration;
+using System.IO;
+using System.Threading;
 
 namespace HAP.BookingSystem
 {
@@ -54,6 +56,8 @@ namespace HAP.BookingSystem
                     foreach (XmlNode node in value.SelectNodes("/Bookings/Booking"))
                         if (DateTime.Parse(node.Attributes["date"].Value) < DateTime.Now.AddDays(-7))
                             nodes.Add(node);
+                    if (hapConfig.Current.BookingSystem.ArchiveXml && nodes.Count > 0)
+                        new Thread(new ParameterizedThreadStart(ArchiveXml)).Start(new Obj { Nodes = nodes.ToArray(), Path = HttpContext.Current.Server.MapPath("~/app_data/bookingarchive.xml") }); //archive ASYNC
                     foreach (XmlNode node in nodes)
                         value.SelectSingleNode("/Bookings").RemoveChild(node);
                 }
@@ -67,6 +71,24 @@ namespace HAP.BookingSystem
                 writer.Close();
                 HttpContext.Current.Cache.Remove("bookings");
             }
+        }
+
+        public static void ArchiveXml(object obj)
+        {
+            Obj o = obj as Obj;
+            if (!File.Exists(o.Path))
+            {
+                StreamWriter sw = File.CreateText(o.Path);
+                sw.WriteLine("<?xml version=\"1.0\"?>");
+                sw.WriteLine("</Bookings>");
+                sw.Close();
+                sw.Dispose();
+            }
+            XmlDocument doc = new XmlDocument();
+            doc.Load(o.Path);
+            foreach (XmlNode node in o.Nodes)
+                doc.SelectSingleNode("/Bookings").AppendChild(node);
+            doc.Save(o.Path);
         }
 
         public Booking[] getBooking(string room, string lesson)
@@ -304,5 +326,11 @@ namespace HAP.BookingSystem
             doc.Save(HttpContext.Current.Server.MapPath("~/App_Data/StaticBookings.xml"));
         }
         #endregion
+    }
+
+    public class Obj
+    {
+        public XmlNode[] Nodes { get; set; }
+        public string Path { get; set; }
     }
 }
