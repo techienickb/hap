@@ -189,17 +189,17 @@ if (hap == null) {
                     t.Render();
                     $("#" + t.id).data("name", initdata.Name).data("mailbox", type.split(/exchange.calendarinfo\:/gi)[1]).addClass("appointment").click(function () {
                         $.ajax({
-                            url: hap.common.formatJSONUrl("~/api/livetiles/exchange/calendarinfo"), context: t, type: 'POST', dataType: 'json', data: '{ "Mailbox" : "' + $(t).data("mailbox") + '" }', contentType: 'application/JSON', success: function (data) {
+                            url: hap.common.formatJSONUrl("~/api/livetiles/exchange/calendarinfo"), context: t, type: 'POST', dataType: 'json', data: '{ "Mailbox" : "' + $('#' + t.id).data("mailbox") + '" }', contentType: 'application/JSON', success: function (data) {
                                 var s = "";
-                                var url = $(this).attr("href");
+                                var url = $(this.id).attr("href");
                                 for (var i = 0; i < data.length; i++)
                                     s += '<span style="font-size: 20px; display: block;">' + data[i].Subject + '</span>From: ' + data[i].Start + " To: " + data[i].End + "<br />" + unescape(data[i].Body).replace('\n', '') + "<hr />";
-                                $("<div/>").html(s).dialog({ width: 800, height: 500, title: $(this).data("name"), autoOpen: true, buttons: { "Open": function() { window.location.href = url; }, "Close": function () { $(this).dialog("close"); } } });
+                                $("<div/>").html(s).dialog({ width: 800, height: 500, title: $(this.id).data("name"), autoOpen: true, buttons: { "Open": function() { window.location.href = url; }, "Close": function () { $(this).dialog("close"); } } });
                             }, error: hap.common.jsonError
                         });
                         return false;
                     });
-                    setTimeout("hap.livetiles.UpdateExchangeCalendarInfo('" + t.id + "', '" + type.split(/exchange.calendarinfo\:/gi)[1] + "');", 100);
+                    setTimeout("hap.livetiles.UpdateExchangeCalendarInfo('" + t.id + "', '" + t.type.split(/exchange.calendarinfo\:/gi)[1] + "');", 100);
                 });
                 hap.livetiles.RegisterTileHandler(/exchange.calendar\:/gi, function (type, initdata, t) {
                     t.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
