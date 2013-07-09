@@ -11,23 +11,5 @@ namespace HAP.Web.Controls {
     
     
     public partial class UpdateChecker {
-        
-        /// <summary>
-        /// currentv control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal currentv;
-        
-        /// <summary>
-        /// latestv control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal latestv;
     }
 }
