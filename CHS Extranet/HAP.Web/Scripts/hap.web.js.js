@@ -134,10 +134,11 @@ if (hap == null) {
             Init: function (data) {
                 if ($("#" + data[0].Data.Group).is(".me")) this.ShowMe(data);
                 else for (var i = 0; i < data.length; i++) {
-                    var found = false;
+                    var tile = new this.LiveTile(data[i].Type, data[i].Data);
                     for (var x = 0; x < this.TileHandlers.length; x++)
-                        if (data[i].Type.match(this.TileHandlers[x].type)) { found = true; this.Tiles.push(this.TileHandlers[x].func(data[i].Type, data[i].Data)); break; }
-                    if (!found) this.Tiles.push(new this.LiveTile(data[i].Type, data[i].Data));
+                        if (data[i].Type.match(this.TileHandlers[x].type)) { this.TileHandlers[x].func(data[i].Type, data[i].Data, tile); break; }
+                    tile.Render();
+                    this.Tiles.push(tile);
                 }
             },
             TileHandlers: [],
@@ -170,26 +171,25 @@ if (hap == null) {
                     }
             },
             RegisterDefaultTiles: function () {
-                hap.livetiles.RegisterTileHandler("exchange.unread", function (type, initdata) {
-                    this.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
-                    this.html = '<a id="' + this.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + ' class="width' + initdata.Width + ' height' + initdata.Height + '"' + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
-                    $("#" + initdata.Group).append(this.html);
-                    setTimeout("hap.livetiles.UpdateExchangeMail('" + this.id + "');", 100);
+                hap.livetiles.RegisterTileHandler("exchange.unread", function (type, initdata, t) {
+                    t.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
+                    t.html = '<a id="' + t.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + ' class="width' + initdata.Width + ' height' + initdata.Height + '"' + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
+                    setTimeout("hap.livetiles.UpdateExchangeMail('" + t.id + "');", 100);
                 });
-                hap.livetiles.RegisterTileHandler("exchange.appointments", function (type, initdata) {
-                    this.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
-                    this.html = '<a id="' + this.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + ' class="width' + initdata.Width + ' height' + initdata.Height + '"' + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
-                    $("#" + initdata.Group).append(this.html);
-                    $("#" + this.id).addClass("appointment");
-                    setTimeout("hap.livetiles.UpdateExchangeAppointments('" + this.id + "');", 100);
+                hap.livetiles.RegisterTileHandler("exchange.appointments", function (type, initdata, t) {
+                    t.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
+                    t.html = '<a id="' + t.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + ' class="width' + initdata.Width + ' height' + initdata.Height + '"' + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
+                    t.Render();
+                    $("#" + t.id).addClass("appointment");
+                    setTimeout("hap.livetiles.UpdateExchangeAppointments('" + t.id + "');", 100);
                 });
-                hap.livetiles.RegisterTileHandler(/exchange.calendarinfo\:/gi, function (type, initdata) {
-                    this.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
-                    this.html = '<a id="' + this.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + ' class="width' + initdata.Width + ' height' + initdata.Height + '"' + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
-                    $("#" + initdata.Group).append(this.html);
-                    $("#" + this.id).data("name", initdata.Name).data("mailbox", type.split(/exchange.calendarinfo\:/gi)[1]).addClass("appointment").click(function () {
+                hap.livetiles.RegisterTileHandler(/exchange.calendarinfo\:/gi, function (type, initdata, t) {
+                    t.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
+                    t.html = '<a id="' + t.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + ' class="width' + initdata.Width + ' height' + initdata.Height + '"' + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
+                    t.Render();
+                    $("#" + t.id).data("name", initdata.Name).data("mailbox", type.split(/exchange.calendarinfo\:/gi)[1]).addClass("appointment").click(function () {
                         $.ajax({
-                            url: hap.common.formatJSONUrl("~/api/livetiles/exchange/calendarinfo"), context: this, type: 'POST', dataType: 'json', data: '{ "Mailbox" : "' + $(this).data("mailbox") + '" }', contentType: 'application/JSON', success: function (data) {
+                            url: hap.common.formatJSONUrl("~/api/livetiles/exchange/calendarinfo"), context: t, type: 'POST', dataType: 'json', data: '{ "Mailbox" : "' + $(t).data("mailbox") + '" }', contentType: 'application/JSON', success: function (data) {
                                 var s = "";
                                 var url = $(this).attr("href");
                                 for (var i = 0; i < data.length; i++)
@@ -199,57 +199,57 @@ if (hap == null) {
                         });
                         return false;
                     });
-                    setTimeout("hap.livetiles.UpdateExchangeCalendarInfo('" + this.id + "', '" + type.split(/exchange.calendarinfo\:/gi)[1] + "');", 100);
+                    setTimeout("hap.livetiles.UpdateExchangeCalendarInfo('" + t.id + "', '" + type.split(/exchange.calendarinfo\:/gi)[1] + "');", 100);
                 });
-                hap.livetiles.RegisterTileHandler(/exchange.calendar\:/gi, function (type, initdata) {
-                    this.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
-                    this.html = '<a id="' + this.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + ' class="width' + initdata.Width + ' height' + initdata.Height + '"' + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
-                    $("#" + initdata.Group).append(this.html);
-                    $("#" + this.id).addClass("appointment");
-                    setTimeout("hap.livetiles.UpdateExchangeCalendar('" + this.id + "', '" + type.split(/exchange.calendar\:/gi)[1] + "');", 100);
+                hap.livetiles.RegisterTileHandler(/exchange.calendar\:/gi, function (type, initdata, t) {
+                    t.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
+                    t.html = '<a id="' + t.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + ' class="width' + initdata.Width + ' height' + initdata.Height + '"' + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
+                    t.Render();
+                    $("#" + t.id).addClass("appointment");
+                    setTimeout("hap.livetiles.UpdateExchangeCalendar('" + t.id + "', '" + type.split(/exchange.calendar\:/gi)[1] + "');", 100);
                 });
-                hap.livetiles.RegisterTileHandler(/^me/gi, function (type, initdata) {
-                    this.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
-                    this.html = '<a id="' + this.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + ' class="width' + initdata.Width + ' height' + initdata.Height + '"' + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
-                    $("#" + initdata.Group).append(this.html);
-                    $("#" + this.id).addClass("me");
+                hap.livetiles.RegisterTileHandler(/^me/gi, function (type, initdata, t) {
+                    t.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
+                    t.html = '<a id="' + t.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + ' class="width' + initdata.Width + ' height' + initdata.Height + '"' + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
+                    t.Render();
+                    $("#" + t.id).addClass("me");
                     $.ajax({
-                        url: hap.common.formatJSONUrl("~/api/livetiles/me"), type: 'GET', context: this.id, dataType: "json", contentType: 'application/JSON', success: function (data) {
+                        url: hap.common.formatJSONUrl("~/api/livetiles/me"), type: 'GET', context: t.id, dataType: "json", contentType: 'application/JSON', success: function (data) {
                             $("#" + this + " span label").html("<b>" + data.Name + "</b><br />" + data.Email);
                             if (data.Photo != "" && data.Photo != null) $("#" + this + " span i").css("background-image", "url(" + hap.common.resolveUrl(data.Photo) + ")");
                             setInterval("$('#" + this + " span i').animate({ height: 'toggle' });", 8000);
                         }, error: hap.common.jsonError
                     });
                 });
-                hap.livetiles.RegisterTileHandler("bookings", function (type, initdata) {
-                    this.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
-                    this.html = '<a id="' + this.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + ' class="width' + initdata.Width + ' height' + initdata.Height + '"' + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
-                    $("#" + initdata.Group).append(this.html);
-                    $("#" + this.id).addClass("appointment");
-                    setTimeout("hap.livetiles.UpdateBookings('" + this.id + "');", 100);
+                hap.livetiles.RegisterTileHandler("bookings", function (type, initdata, t) {
+                    t.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
+                    t.html = '<a id="' + t.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + ' class="width' + initdata.Width + ' height' + initdata.Height + '"' + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
+                    t.Render();
+                    $("#" + t.id).addClass("appointment");
+                    setTimeout("hap.livetiles.UpdateBookings('" + t.id + "');", 100);
                 });
-                hap.livetiles.RegisterTileHandler("helpdesk", function (type, initdata) {
+                hap.livetiles.RegisterTileHandler("helpdesk", function (type, initdata, t) {
                     size = "large";
-                    this.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
-                    this.html = '<a id="' + this.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + ' class="width' + initdata.Width + ' height' + initdata.Height + '"' + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
-                    $("#" + initdata.Group).append(this.html);
-                    $("#" + this.id).addClass("me");
-                    setInterval("$('#" + this.id + " > span > i').animate({ height: 'toggle' });", 10000);
-                    setTimeout("hap.livetiles.UpdateTickets('" + this.id + "');", 100);
+                    t.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
+                    t.html = '<a id="' + t.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + ' class="width' + initdata.Width + ' height' + initdata.Height + '"' + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
+                    t.Render();
+                    $("#" + t.id).addClass("me");
+                    setInterval("$('#" + t.id + " > span > i').animate({ height: 'toggle' });", 10000);
+                    setTimeout("hap.livetiles.UpdateTickets('" + t.id + "');", 100);
                 });
-                hap.livetiles.RegisterTileHandler(/^uptime\:/gi, function (type, initdata) {
-                    this.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
-                    this.html = '<a id="' + this.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + ' class="width' + initdata.Width + ' height' + initdata.Height + '"' + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
-                    $("#" + initdata.Group).append(this.html);
-                    $("#" + this.id).addClass("me");
-                    setTimeout("hap.livetiles.UpdateUptime('" + this.id + "', '" + type.substr(7) + "');", 100);
+                hap.livetiles.RegisterTileHandler(/^uptime\:/gi, function (type, initdata, t) {
+                    t.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
+                    t.html = '<a id="' + t.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + ' class="width' + initdata.Width + ' height' + initdata.Height + '"' + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
+                    t.Render();
+                    $("#" + t.id).addClass("me");
+                    setTimeout("hap.livetiles.UpdateUptime('" + t.id + "', '" + type.substr(7) + "');", 100);
                 });
-                hap.livetiles.RegisterTileHandler("myfiles", function (type, initdata) {
-                    this.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
-                    this.html = '<a id="' + this.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '" class="me' + ' width' + initdata.Width  + ' height' + initdata.Height + '"' + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
-                    $("#" + initdata.Group).append(this.html);
+                hap.livetiles.RegisterTileHandler("myfiles", function (type, initdata, t) {
+                    t.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
+                    t.html = '<a id="' + t.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '" class="me' + ' width' + initdata.Width  + ' height' + initdata.Height + '"' + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
+                    t.Render();
                     $.ajax({
-                        url: hap.common.formatJSONUrl("~/api/myfiles/drives"), type: 'GET', context: this.id, dataType: "json", contentType: 'application/JSON', success: function (data) {
+                        url: hap.common.formatJSONUrl("~/api/myfiles/drives"), type: 'GET', context: t.id, dataType: "json", contentType: 'application/JSON', success: function (data) {
                             var s = "";
                             for (var i = 0; i < (data.length > 3 ? 3 : data.length) ; i++)
                                 s += "<b>" + data[i].Name + "</b>" + (data[i].Space == -1 ? "<br /><br />" : '<br /><span class="progress"><label>' + data[i].Space + '%</label><u style="width: ' + data[i].Space + '%"></u></span>');
@@ -260,10 +260,30 @@ if (hap == null) {
                 });
             },
             LiveTile: function (type, initdata) {
-                this.id = (initdata.Group + initdata.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
-                if (type == "exchange.appointments" || type.match(/exchange.calendar\:/gi) || type == "bookings" || type == "helpdesk") size = "large";
-                this.html = '<a id="' + this.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + 'class="width' + initdata.Width  + ' height' + initdata.Height + '"' + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
-                $("#" + initdata.Group).append(this.html);
+                this.data = initdata;
+                this.type = type;
+                this.id = (this.data.Group + this.data.Name).replace(/[\s'\/\\\&\.\,\*]*/gi, "");
+                if (type == "exchange.appointments" || this.type.match(/exchange.calendar\:/gi) || this.type == "bookings" || this.type == "helpdesk") size = "large";
+                this.html = '<a id="' + this.id + '" href="' + hap.common.resolveUrl(this.data.Url) + '" target="' + this.data.Target + '" title="' + this.data.Description + '"' + 'class="width' + this.data.Width + ' height' + this.data.Height + '"' + (this.data.Color == '' ? '' : ' style="background-color: ' + this.data.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + this.data.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + this.data.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + this.data.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(this.data.Icon) + ');"></i><label></label></span>' + this.data.Name + '</a>';
+                this.Render = function () {
+                    if ($("#" + this.id).length > 0) return false;
+                    else {
+                        $("#" + this.data.Group).append($(this.html).attr("data-idname", this.data.Name));
+                        if (hap.admin) {
+                            $("#" + this.id).on("contextmenu", function (e) {
+                                if ($(".editmode").length > 0) {
+                                    var b = $(this).hasClass("selected");
+                                    $(".selected").removeClass("selected");
+                                    $("#sidebaredit").removeClass("show");
+                                    $("#contextbar").removeClass("selectactive");
+                                    if (!b) { $("#contextbar").addClass("selectactive"); $(this).addClass("selected"); }
+                                    return false;
+                                }
+                            });
+                        }
+                        return true;
+                    }
+                }
             },
             UpdateExchangeCalendarInfo: function (tileid, mailbox) {
                 $("#" + tileid + " span label").html($.datepicker.formatDate('D <b>d</b>', new Date()));
