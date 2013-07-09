@@ -57,65 +57,7 @@
 		</hap:CompressJS>
 	</div>
 	<div id="questionbox" title="Question"><span></span></div>
-	<div id="bookingform" title="Booking Form">
-		<p class="ui-state-highlight ui-corner-all" style="margin-bottom: 4px; padding: 4px 6px">
-			<span class="ui-icon ui-icon-info" style="float: left; margin-right: 5px;"></span>
-			New Booking for <span id="bfdate"></span> <span id="bfres"></span> during <span id="bflesson"></span>
-		</p>
-		<label for="bfyear">Year: </label><select id="bfyear"></select>
-		<label for="bfsubject">Subject: </label>
-		<select id="bfsubjects" onchange="subjectchance(this)">
-			<option value="" selected="selected">- Subject -</option>
-			<asp:Repeater runat="server" ID="subjects"><ItemTemplate><option value="<%#Container.DataItem %>"><%#Container.DataItem %></option></ItemTemplate></asp:Repeater>
-			<option value="CUSTOM">Custom</option>
-		</select>
-		<input type="text" id="bfsubject" />
-		<span id="subjecterror" style="display: none; color: red;">*</span>
-		<asp:PlaceHolder runat="server" ID="adminbookingpanel">
-		<div>
-			<asp:Label runat="server" AssociatedControlID="userlist" Text="User To Book For: " />
-			<asp:DropDownList runat="server" ID="userlist" />
-		</div>
-		</asp:PlaceHolder>
-		<div id="bfLaptops" class="bfType">
-			<div style="float: left;">
-				<span id="bflroom_span"><label for="bflroom">Room Required In: </label><input type="text" id="bflroom" style="width: 60px" /></span>
-                <span id="bflsroom_span" style="display: none;"><label for="bflsroom">Room Required In: </label><select id="bflsroom"></select></span>
-                <span id="bflroomerror" style="display: none;">*</span>
-				<label for="bflheadphones">Headphones?: </label><input type="checkbox" id="bflheadphones" />
-			</div>
 
-		</div>
-		<div id="bfEquipment" class="bfType">
-			<span id="bferoom_span"><label for="bferoom">Room Required In: </label><input type="text" id="bferoom" style="width: 60px" /></span>
-            <span id="bfesroom_span" style="display: none;"><label for="bfesroom">Room Required In: </label><select id="bfesroom"></select></span>
-            <span id="bferoomerror" style="display: none;">*</span>
-		</div>
-		<div id="bfLoan" class="bfType">
-			<span id="bfloroom_span"><label for="bfloroom">Room to be used In: </label><input type="text" id="bfloroom" style="width: 60px" /></span>
-            <span id="bflosroom_span" style="display: none;"><label for="bflosroom">Room Required In: </label><select id="bflosroom"></select></span>
-            <span id="bfloroomerror" style="display: none;">*</span>
-		</div>
-        <div id="bfquantrad" style="clear: both;">
-            <label for="bflquant">Quantity:&nbsp;</label>
-            <div id="bflquant" style="display: inline-block;">
-				<input type="radio" name="bflquant" id="bflquant-16" value="16" /><label for="bflquant-16">16</label>
-				<input type="radio" name="bflquant" id="bflquant-32" value="32" /><label for="bflquant-32">32</label>
-			</div>
-        </div>
-        <div id="bfquantnumb">
-            <label for="bfquantspin">Quantity:&nbsp;</label>
-            <input type="number" id="bfquantspin" style="width: 40px;" value="1" />/<span id="bfquantmax"></span>
-            <script>$("#bfquantspin").spinner();</script>
-        </div>
-        <div id="bfmultilesson">
-            <label for="bfmultiroom">Length: </label><select id="bfmultiroom"></select>
-        </div>
-        <div id="bfdisclaimer">
-            <label for="bfdisclaim"></label><input type="checkbox" class="noswitch" id="bfdisclaim" />
-        </div>
-        <div id="bfnote"><label for="bfnotes">Notes:</label><br /><textarea id="bfnotes" style="width: 99%;"></textarea></div>
-	</div>
 	<div id="bookingsystemcontent">
 	    <p class="ui-state-highlight ui-corner-all" style="padding: 2px 6px">
 		    <span class="ui-icon ui-icon-info" style="float: left; margin-right: 5px;"></span>
@@ -153,7 +95,65 @@
             </script>
         </div>
 	</div>
-	<hap:CompressJS runat="server" tag="div">
+	<div id="sidebaredit">
+        <h1>New Booking</h1>
+		<p class="ui-state-highlight ui-corner-all" style="margin-top: 0; padding: 4px 6px">
+			<span class="ui-icon ui-icon-info" style="float: left; margin-right: 5px;"></span>
+			New Booking for <span id="bfdate"></span> <span id="bfres"></span> during <span id="bflesson"></span>
+		</p>
+		<label for="bfyear">Year: </label><select id="bfyear"></select><br />
+		<label for="bfsubject">Subject: </label>
+		<select id="bfsubjects" onchange="subjectchance(this)">
+			<option value="" selected="selected">- Subject -</option>
+			<asp:Repeater runat="server" ID="subjects"><ItemTemplate><option value="<%#Container.DataItem %>"><%#Container.DataItem %></option></ItemTemplate></asp:Repeater>
+			<option value="CUSTOM">Custom</option>
+		</select>
+		<input type="text" id="bfsubject" />
+		<span id="subjecterror" style="display: none; color: red;">*</span><br />
+		<div id="bfLaptops" class="bfType">
+				<div id="bflroom_span"><label for="bflroom">Room Required In: </label><input type="text" id="bflroom" style="width: 60px" /></div>
+                <div id="bflsroom_span" style="display: none;"><label for="bflsroom">Room Required In: </label><select id="bflsroom"></select></div>
+                <div id="bflroomerror" style="display: none;">*</div>
+				<label for="bflheadphones">Headphones?: </label><input type="checkbox" id="bflheadphones" />
+		</div>
+		<div id="bfEquipment" class="bfType">
+			<span id="bferoom_span"><label for="bferoom">Room Required In: </label><input type="text" id="bferoom" style="width: 60px" /></span>
+            <span id="bfesroom_span" style="display: none;"><label for="bfesroom">Room Required In: </label><select id="bfesroom"></select></span>
+            <span id="bferoomerror" style="display: none;">*</span>
+		</div>
+		<div id="bfLoan" class="bfType">
+			<span id="bfloroom_span"><label for="bfloroom">Room to be used In: </label><input type="text" id="bfloroom" style="width: 60px" /></span>
+            <span id="bflosroom_span" style="display: none;"><label for="bflosroom">Room Required In: </label><select id="bflosroom"></select></span>
+            <span id="bfloroomerror" style="display: none;">*</span>
+		</div>
+        <div id="bfquantrad" style="clear: both;">
+            <label for="bflquant">Quantity:&nbsp;</label>
+            <div id="bflquant" style="display: inline-block;">
+				<input type="radio" name="bflquant" id="bflquant-16" value="16" /><label for="bflquant-16">16</label>
+				<input type="radio" name="bflquant" id="bflquant-32" value="32" /><label for="bflquant-32">32</label>
+			</div>
+        </div>
+        <div id="bfquantnumb">
+            <label for="bfquantspin">Quantity:&nbsp;</label>
+            <input type="number" id="bfquantspin" style="width: 40px;" value="1" />/<span id="bfquantmax"></span>
+            <script>$("#bfquantspin").spinner();</script>
+        </div>
+        <div id="bfmultilesson">
+            <label for="bfmultiroom">Length: </label><select id="bfmultiroom"></select>
+        </div>
+		<asp:PlaceHolder runat="server" ID="adminbookingpanel">
+		<div>
+			<asp:Label runat="server" AssociatedControlID="userlist" Text="User To Book For: " />
+			<asp:DropDownList runat="server" ID="userlist" />
+		</div>
+		</asp:PlaceHolder>
+        <div id="bfdisclaimer">
+            <label for="bfdisclaim"></label><input type="checkbox" class="noswitch" id="bfdisclaim" />
+        </div>
+        <div id="bfnote"><label for="bfnotes">Notes:</label><br /><textarea id="bfnotes" style="width: 99%;"></textarea></div>
+        <div class="buttons"><button id="bookbutton">Book</button><button onclick="$('#sidebaredit').removeClass('show'); return false;">Cancel</button></div>
+	</div>
+    <hap:CompressJS runat="server" tag="div">
 	<script>
 		var curdate, curres, curles, user, resources, date;
         var availbookings = [ 0, 0 ];
@@ -302,6 +302,85 @@
 		        if (res == user.isAdminOf[i]) return true;
 		    return false;
 		}
+		$("#bookbutton").click(function () {
+		    if (curres.Disclaimer != "" && !$("#bfdisclaimer input").is(":checked")) { alert(hap.common.getLocal('bookingsystem/nodisclaimer')); return; }
+		    var abort = false;
+		    if ($("#bfsubject").val().length == 0) { 
+		        $("#subjecterror").removeAttr("style").css("color", "red");
+		        abort = true;
+		    } else $("#subjecterror").css("display", "none");
+
+		    if (curres.Type == "Laptops" && $("#bflroom").val().length == 0) { 
+		        $("#bflroomerror").removeAttr("style").css("color", "red");
+		        abort = true;
+		    } else $("#bflroomerror").css("display", "none");
+
+		    if (curres.Type == "Equipment" && $("#bferoom").val().length == 0) { 
+		        $("#bferoomerror").removeAttr("style").css("color", "red");
+		        abort = true;
+		    } else $("#bferoomerror").css("display", "none");
+							
+		    if (curres.Type == "Loan" && $("#bfloroom").val().length == 0) { 
+		        $("#bfloroomerror").removeAttr("style").css("color", "red");
+		        abort = true;
+		    } else $("#bfloroomerror").css("display", "none");
+							
+
+		    var n1 = "";
+		    if ($("#bfyear option:selected").val() != null || $("#bfyear option:selected").val() != "") n1 = $("#bfyear option:selected").val();
+		    if (n1 != "") n1 += " ";
+		    n1 += $("#bfsubject").val();
+		    if (abort) return false;
+		    var d = '{ "booking": { "Room": "' + curres.Name + '", "Lesson": "' + (canmulti ? $("#bfmultiroom").val() : curles) + '", "Username": "' + (user.isBSAdmin ? $("#<%=userlist.ClientID %> option:selected").val() : user.username) + '", "Name": "' + n1 + '"';
+		    if (curres.Type == "Laptops") {
+		        d += ', "LTCount": ' + $("#bflquant input:checked").attr("value") + ', "LTRoom": "' + $("#bflroom").val() + '", "LTHeadPhones": ' + (($('#bflheadphones:checked').val() !== undefined) ? 'true' : 'false');
+		    }
+		    else if (curres.Type == "Equipment") {
+		        d += ', "EquipRoom": "' + $("#bferoom").val() + '"';
+		    }
+		    else if (curres.Type == "Loan") {
+		        d += ', "EquipRoom": "' + $("#bfloroom").val()  + '"';
+		    }
+		    else if (curres.Quantities.length > 0 && curres.CanShare && parseInt($("#bfquantspin").val()) < parseInt(curres.Quantities[curres.Quantities.length - 1])) {
+		        d += ', "Count": ' + $("#bfquantspin").val();
+		    }
+		    if (curres.Notes) {
+		        d += ', "Notes": "' + escape($("#bfnotes").val()) + '"';
+		    }
+
+		    d += " } }";
+		    $.ajax({
+		        type: 'POST',
+		        url: hap.common.formatJSONUrl('~/api/BookingSystem/Booking/' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear()),
+		        dataType: 'json',
+		        contentType: 'application/json',
+		        data: d,
+		        success: function (data) {
+		            curres.Data = data;
+		            curres.Render();
+		            $.ajax({
+		                type: 'GET',
+		                url: hap.common.formatJSONUrl("~/api/BookingSystem/Initial/" + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username),
+		                dataType: 'json',
+		                success: function (data) {
+		                    if (user.isBSAdmin) $("#val").html("This Week is a Week " + data[1]);
+		                    else {
+		                        if (data[0] >= 0) {
+		                            $("#val").html("You have " + data[0] + " bookings available to use this week. This Week is a Week " + data[1]);
+		                        } else {
+		                            $("#val").html("This Week is a Week " + data[1]);
+		                        }
+		                        availbookings = data;
+		                    }
+		                },
+		                error: hap.common.jsonError
+		            });
+		        },
+		        error: hap.common.jsonError
+		    });
+		    $("#sidebaredit").removeClass("show");
+		    return false;
+		});
 		function doBooking(res, lesson) {
 			if (availbookings[0] == 0 && !user.isBSAdmin) { 
 				alert("You have exceeded your allowed bookings, please contact an Admin if this is wrong");
@@ -431,100 +510,7 @@
 			    $("#bfdisclaimer label").html(curres.Disclaimer);
 			    $("#bfdisclaimer input").prop("checked", false);
 			} else { $("#bfdisclaimer").hide(); }
-			$("#bookingform").dialog({ 
-					modal: true, 
-					autoOpen: true,
-					minWidth: 500,
-					buttons: {
-					    "Book": function () {
-					        if (curres.Disclaimer != "" && !$("#bfdisclaimer input").is(":checked")) { alert(hap.common.getLocal('bookingsystem/nodisclaimer')); return; }
-							var abort = false;
-							if ($("#bfsubject").val().length == 0) { 
-								$("#subjecterror").removeAttr("style").css("color", "red");
-								abort = true;
-							} else $("#subjecterror").css("display", "none");
-
-							if (curres.Type == "Laptops" && $("#bflroom").val().length == 0) { 
-								$("#bflroomerror").removeAttr("style").css("color", "red");
-								abort = true;
-							} else $("#bflroomerror").css("display", "none");
-
-							if (curres.Type == "Equipment" && $("#bferoom").val().length == 0) { 
-								$("#bferoomerror").removeAttr("style").css("color", "red");
-								abort = true;
-							} else $("#bferoomerror").css("display", "none");
-							
-							if (curres.Type == "Loan" && $("#bfloroom").val().length == 0) { 
-							    $("#bfloroomerror").removeAttr("style").css("color", "red");
-							    abort = true;
-							} else $("#bfloroomerror").css("display", "none");
-							
-
-							var n1 = "";
-							if ($("#bfyear option:selected").val() != null || $("#bfyear option:selected").val() != "") n1 = $("#bfyear option:selected").val();
-							if (n1 != "") n1 += " ";
-							n1 += $("#bfsubject").val();
-							if (abort) return;
-							var d = '{ "booking": { "Room": "' + curres.Name + '", "Lesson": "' + (canmulti ? $("#bfmultiroom").val() : curles) + '", "Username": "' + (user.isBSAdmin ? $("#<%=userlist.ClientID %> option:selected").val() : user.username) + '", "Name": "' + n1 + '"';
-							if (curres.Type == "Laptops") {
-								d += ', "LTCount": ' + $("#bflquant input:checked").attr("value") + ', "LTRoom": "' + $("#bflroom").val() + '", "LTHeadPhones": ' + (($('#bflheadphones:checked').val() !== undefined) ? 'true' : 'false');
-							}
-							else if (curres.Type == "Equipment") {
-								d += ', "EquipRoom": "' + $("#bferoom").val() + '"';
-							}
-							else if (curres.Type == "Loan") {
-							    d += ', "EquipRoom": "' + $("#bfloroom").val()  + '"';
-							}
-							else if (curres.Quantities.length > 0 && curres.CanShare && parseInt($("#bfquantspin").val()) < parseInt(curres.Quantities[curres.Quantities.length - 1])) {
-							    d += ', "Count": ' + $("#bfquantspin").val();
-							}
-							console.log(curres.Quantities.length > 0);
-							console.log(curres.CanShare);
-							console.log(parseInt($("#bfquantspin").val()));
-							console.log(parseInt(curres.Quantities[curres.Quantities.length - 1]));
-							console.log(parseInt($("#bfquantspin").val()) < parseInt(curres.Quantities[curres.Quantities.length - 1]));
-							if (curres.Notes) {
-							    d += ', "Notes": "' + escape($("#bfnotes").val()) + '"';
-							}
-
-							d += " } }";
-							$.ajax({
-								type: 'POST',
-								url: hap.common.formatJSONUrl('~/api/BookingSystem/Booking/' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear()),
-								dataType: 'json',
-								contentType: 'application/json',
-								data: d,
-								success: function (data) {
-									curres.Data = data;
-									curres.Render();
-									$.ajax({
-										type: 'GET',
-										url: hap.common.formatJSONUrl("~/api/BookingSystem/Initial/" + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username),
-										dataType: 'json',
-										success: function (data) {
-											if (user.isBSAdmin) $("#val").html("This Week is a Week " + data[1]);
-											else {
-											    if (data[0] >= 0) {
-												$("#val").html("You have " + data[0] + " bookings available to use this week. This Week is a Week " + data[1]);
-											    } else {
-											        $("#val").html("This Week is a Week " + data[1]);
-											    }
-												availbookings = data;
-											}
-										},
-										error: hap.common.jsonError
-									});
-								},
-								error: hap.common.jsonError
-							});
-							
-							$(this).dialog("close");
-						},
-						"Cancel": function () {
-							$(this).dialog("close");
-						}
-					}
-				});
+			$("#sidebaredit").addClass("show");
 			return false;
 		}
 	    function doReturn(res, lesson, name) {
@@ -616,6 +602,7 @@
 			return false;
 		}
 		$(function () {
+		    $("button").button();
 			try {
 				if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curdate = new Date(window.location.href.split('#')[1].split('/')[2], window.location.href.split('#')[1].split('/')[1] - 1, window.location.href.split('#')[1].split('/')[0]);
 				else curdate = date;
