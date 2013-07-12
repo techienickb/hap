@@ -106,6 +106,19 @@ namespace HAP.Web.BookingSystem
             }
         }
 
+        protected string JSLessons
+        {
+            get
+            {
+                List<string> s = new List<string>();
+                foreach (Lesson l in config.BookingSystem.Lessons)
+                {
+                    s.Add("{" + string.Format("\"Name\": \"{0}\", \"Start\": \"{1}:{2}\", \"End\": \"{3}:{4}\", \"FromStart\": null, \"FromEnd\": null, \"Type\": \"{5}\"", l.Name, l.StartTime.Hour, l.StartTime.Minute, l.EndTime.Hour, l.EndTime.Minute, l.Type) + "}");
+                }
+                return "[" + string.Join(", ", s.ToArray()) + "]";
+            }
+        }
+
         protected string JSResources
         {
             get
@@ -127,7 +140,7 @@ namespace HAP.Web.BookingSystem
                             years1.Add("\"" + y.Trim() + "\"");
                         foreach (string q in r.Quantities.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                             quant.Add("\"" + q.Trim() + "\"");
-                        s.Add(string.Format("new resource(\"{0}\", \"{1}\", [ {2} ], [ {3} ], {4}, {5}, \"{6}\", [ {7} ], \"{8}\", {9}, {10})", r.Name, r.Type, string.Join(", ", years1.ToArray()), string.Join(", ", quant.ToArray()), isReadOnly(r.ReadOnlyTo, r.ReadWriteTo).ToString().ToLower(), isMultiLesson(r.MultiLessonTo, r.Admins).ToString().ToLower(), r.MaxMultiLesson, string.Join(", ", _rooms), r.Disclaimer, r.CanShare.ToString().ToLower(), r.EnableNotes.ToString().ToLower()));
+                        s.Add(string.Format("new resource(\"{0}\", \"{1}\", [ {2} ], [ {3} ], {4}, {5}, \"{6}\", [ {7} ], \"{8}\", {9}, {10}, {11})", r.Name, r.Type, string.Join(", ", years1.ToArray()), string.Join(", ", quant.ToArray()), isReadOnly(r.ReadOnlyTo, r.ReadWriteTo).ToString().ToLower(), isMultiLesson(r.MultiLessonTo, r.Admins).ToString().ToLower(), r.MaxMultiLesson, string.Join(", ", _rooms), r.Disclaimer, r.CanShare.ToString().ToLower(), r.EnableNotes.ToString().ToLower(), (r.Allowance.HasValue ? r.Allowance.Value.ToString() : "null")));
                     }
                 }
                 return "[" + string.Join(", ", s.ToArray()) + "]";
