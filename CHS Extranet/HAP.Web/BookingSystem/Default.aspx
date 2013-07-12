@@ -4,7 +4,7 @@
 	<link href="../style/bookingsystem.css" rel="stylesheet" type="text/css" />
     <style>
         #bookingday #resources, .col a, .col .share, #bookingday .head h1 { width: <%=Math.Round(100.00 / (config.BookingSystem.Lessons.Count + 1), 1)%>%; }
-        #bookingday #resources { min-height: <%=(60 * (rez.Count + 1)) %>px; }
+        #bookingday #resources { min-height: <%=(60 * (rez.Count + 1)) - 2 %>px; }
         #bookingday .body .col, #bookingday #resources div { height: <%=Math.Round(100.00 / (rez.Count + 1), 1) %>%; }
     </style>
 </asp:Content>
@@ -67,6 +67,7 @@
         <div id="bscontent">
 		    <div id="bookingday" class="tile-border-color">		
 			    <div class="body"<%=BodyCode[0] %> style="min-width: <%=(200 * (config.BookingSystem.Lessons.Count + 1)) + 2 %>px">
+                    <div id="time"></div>
 				    <div id="resources" class="tile-color">
                         <div class="head"><input type="button" id="picker" onclick="return showDatePicker();" /></div>
 					    <asp:Repeater runat="server" ID="resources1"><ItemTemplate><div><a href="<%#ResolveClientUrl("~/bookingsystem/r-" + Eval("Name").ToString()) %>"><%#Eval("Name") %></a></div></ItemTemplate></asp:Repeater>
@@ -91,6 +92,7 @@
                     if ($("#bookingsystemcontent").width() > $("#bookingday > .head").width() + 2)
                         $("#bookingsystemcontent").css("width", $("#bookingday > .head").width() + 2 + "px");
                     else $("#bookingsystemcontent").removeAttr("style");
+                    changeTime();
                 });
             </script>
         </div>
@@ -158,10 +160,10 @@
 	</div>
     <hap:CompressJS runat="server" tag="div">
 	<script>
-		var curdate, curres, curles, user, resources, date;
+		var curdate, curres, curles, user, resources, date, lessontimes;
         var availbookings = [ 0, 0 ];
         var canmulti = false;
-		function resource(name, type, years, quantities, readonly, multiroom, maxlessons, rooms, disclaimer, canshare, notes) {
+		function resource(name, type, years, quantities, readonly, multiroom, maxlessons, rooms, disclaimer, canshare, notes, allowance) {
 			this.Name = name;
 			this.Type = type;
 			this.Years = years;
@@ -174,6 +176,7 @@
 			this.Rooms = rooms;
 			this.Notes = notes;
 			this.CanShare = canshare;
+			this.Allowance = allowance;
 			this.Render = function() {
 			    var h1 = "";
 			    for (var x = 0; x < this.Data.length; x++) {
@@ -182,7 +185,10 @@
 			        for (var y = 0; y < this.Data[x].length; y++)
 			        {
 			            h += '<a onclick="return ';
-			            if (this.ReadOnly) h += "false";
+			            var ex1 = (this.Allowance != null && lessontimes[x].FromStart != null && lessontimes[x].FromStart <= this.Allowance && $.inArray(this.Name, user.isAdminOf) == -1);
+			            var ex2 = (lessontimes[x].FromEnd != null && lessontimes[x].FromEnd <= 0);
+			            var expired = ex1 || ex2;
+			            if (this.ReadOnly || expired) h += "false";
 			            else if (this.Data[x][y].Name == "FREE") h += "doBooking('" +  this.Name + "', '" + this.Data[x][y].Lesson + "');";
 			            else {
 			                if (this.Data[x][y].Static && $.inArray(this.Name, user.isAdminOf) != -1 && this.Type != "Loan") h += "doBooking('" + this.Name + "', '" + this.Data[x][y].Lesson + "');";
@@ -190,7 +196,7 @@
 			                else if (this.Data[x][y].Static == false && this.Type == "Loan" && (this.Data[x][y].Username.toLowerCase() == user.username.toLowerCase() || $.inArray(this.Name, user.isAdminOf) != -1)) h += "doReturn('" + this.Name + "', '" + this.Data[x][y].Lesson + "', '" + this.Data[x][y].Name + "');";
 			                else h += "false;";
 			            }
-			            h += '" href="#' + this.Name + '-' + this.Data[x][y].Lesson.toLowerCase().replace(/ /g, "") + '" class="' + (this.Data[x][y].Static ? 'static ' : '') + (this.Type == "Loan" ? 'loan ' : '') + ($.inArray(this.Name, user.isAdminOf) == -1 ? '' : 'admin') + ((this.Data[x][y].Username.toLowerCase() == user.username.toLowerCase() && $.inArray(this.Name, user.isAdminOf) == -1) ? ' bookie' : '') + ((this.Data[x][y].Name == "FREE" && !this.ReadOnly) ? ' free' : ' booked') + '">';
+			            h += '" href="#' + this.Name + '-' + this.Data[x][y].Lesson.toLowerCase().replace(/ /g, "") + '" class="' + (this.Data[x][y].Static ? 'static ' : '') + (this.Type == "Loan" ? 'loan ' : '') + ($.inArray(this.Name, user.isAdminOf) == -1 ? '' : 'admin') + ((this.Data[x][y].Username.toLowerCase() == user.username.toLowerCase() && $.inArray(this.Name, user.isAdminOf) == -1) ? ' bookie' : '') + ((this.Data[x][y].Name == "FREE" && !this.ReadOnly) ? ' free' : ' booked') + (expired ? " expired" : "") + '">';
 			            h += (this.Data[x][y].Static ? '<span class="state static" title="Timetabled Lesson"><i></i><span>Override</span></span>' : (this.Data[x][y].Name == "FREE" ? '<span class="state book" title="Book"><i></i><span>Book</span></span>' : (this.Type == "Loan" ? '<span class="state Return" title="Return"><i></i><span>Return</span></span>' : '<span class="state remove">' + (this.Data[x][y].Notes != null ? ('<i class="notes" title="Booking Notes:\n' + unescape(this.Data[x][y].Notes) + '"></i>') : '') + '<i title="Remove"></i><span title="Remove">Remove</span></span>')));
 			            h += this.Data[x][y].Name + '<span>' + this.Data[x][y].DisplayName;
 			            if (this.Data[x][y].Name == "FREE" || this.Data[x][y].Name == "UNAVAILABLE" || this.Data[x][y].Name == "CHARGING") { }
@@ -268,7 +274,7 @@
 			if (showCal == 0) { $("#datepicker").animate({ height: 'toggle' }); showCal = 1; }
 			return false;
 		}
-		function loadDate() {
+		function loadDate(norefresh) {
 			$("#val").html("Loading...");
 			$.ajax({
 				type: 'GET',
@@ -287,7 +293,7 @@
 				},
 				error: hap.common.jsonError
 			});
-			for (var i = 0; i < resources.length; i++) {
+			if (!norefresh) for (var i = 0; i < resources.length; i++) {
 				$("#" + resources[i].Name).html(" ");
 				resources[i].Refresh();
 			}
@@ -298,7 +304,12 @@
 			else curdate = date;
 			$('#datepicker').datepicker("setDate", curdate);
 			$("#picker").val($.datepicker.formatDate('d MM', curdate));
-			loadDate();
+			breakloc = null;
+			for (var i = 0; i < lessontimes.length; i++) lessontimes[i].FromStart = lessontimes[i].FromEnd = null;
+			$("#time").removeAttr("style");
+			changeTime();
+			if (breakloc == null) loadDate();
+			else loadDate(true);
 		});
 		function isAdminOf(res) {
 		    for (var i = 0; i < user.isAdminOf.length; i++)
@@ -649,13 +660,58 @@
 				else if (showCal == 1) showCal = 2;
 			});
 			$("#datepicker").click(function () { return false; });
-			loadDate();
+			changeTime();
+			if (breakloc == null) loadDate();
+			else loadDate(true);
+			setInterval("changeTime();", 6000);
 		});
+		var breakloc = null;
+		function changeTime() {
+		    $("#time").height($("#resources").height() - 30);
+		    for (var i = 0; i < lessontimes.length; i++)
+		    {
+		        var time1 = new Date(curdate.toDateString());
+		        time1.setHours(parseInt(lessontimes[i].Start.split(":")[0]));
+		        time1.setMinutes(parseInt(lessontimes[i].Start.split(":")[1]));
+
+		        var time2 = new Date(curdate.toDateString());
+		        time2.setHours(parseInt(lessontimes[i].End.split(":")[0]));
+		        time2.setMinutes(parseInt(lessontimes[i].End.split(":")[1]));
+
+		        if (new Date() < time1) {
+		            $("#time").scrollLeft($("#bookingday > .body > .head h1:eq(" + i + ")").position().left + 2);
+		            breakloc = null;
+		            break;
+		        }
+		        else if (new Date() >= time1 && new Date() <= time2) {
+		            var h = $("#bookingday > .body > .head h1:eq(" + i + ")");
+		            var tp = (new Date().getTime() - time1.getTime()) / 1000 / 60 / 60 * 100;
+		            $("#time").css("left", Math.round(h.position().left + 2 + (h.outerWidth() / 100 * tp)) + "px");
+		            for (var y = 0; y < lessontimes.length; y++) {
+		                var time3 = new Date(curdate.toDateString());
+		                time3.setHours(parseInt(lessontimes[y].Start.split(":")[0]));
+		                time3.setMinutes(parseInt(lessontimes[y].Start.split(":")[1]));
+		                lessontimes[y].FromStart = Math.round((time3.getTime() - new Date().getTime()) / 1000 / 60);
+		                time3 = new Date(curdate.toDateString());
+		                time3.setHours(parseInt(lessontimes[y].End.split(":")[0]));
+		                time3.setMinutes(parseInt(lessontimes[y].End.split(":")[1]));
+		                lessontimes[y].FromEnd = Math.round((time3.getTime() - new Date().getTime()) / 1000 / 60);
+		            }
+		            if (breakloc != i) for (var z = 0; z < resources.length; z++) {
+		                $("#" + resources[z].Name).html(" ");
+		                resources[z].Refresh();
+		            }
+		            breakloc = i;
+		            break;
+		        }
+		    }
+		}
 	</script>
 	</hap:CompressJS>
     <script>		
         user = { <%=JSUser %> };
         resources = <%=JSResources %>;
+        lessontimes = <%=JSLessons%>;
         date = new Date(<%try { %><%=CurrentDate.Year %>, <%=CurrentDate.Month - 1 %>, <%=CurrentDate.Day %> <% } catch { } %>);
     </script>
 </asp:Content>

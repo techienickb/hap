@@ -32,6 +32,7 @@ namespace HAP.Web.Configuration
             CanShare = node.Attributes["canshare"] == null ? false : bool.Parse(node.Attributes["canshare"].Value);
             ChargingPeriods = node.Attributes["chargingperiods"] == null ? 1 : int.Parse(node.Attributes["chargingperiods"].Value);
             EnableNotes = node.Attributes["enablenotes"] == null ? false : bool.Parse(node.Attributes["enablenotes"].Value);
+            if (node.Attributes["allowance"] != null) Allowance = int.Parse(node.Attributes["allowance"].Value);
         }
 
         public Rooms Rooms { get; set; }
@@ -53,6 +54,7 @@ namespace HAP.Web.Configuration
         public bool CanShare { get; set; }
         public string Disclaimer { get; set; }
         public bool EnableNotes { get; set; }
+        public int? Allowance { get; set; }
         public void InitRooms()
         {
             XmlElement e = node.OwnerDocument.CreateElement("rooms");

@@ -25,7 +25,7 @@ body.bookingdisplay, body.bookingdisplay form { padding: 0; margin: 0; width: 10
 #bookingday .body .col, #bookingday #resources div { min-height: 60px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; background: #fff; }
 #bookingday .body .col div { text-align: center; height: 100%; line-height: 60px; white-space: nowrap; text-overflow: ellipsis; }
 
-#bookingday #resources { color: #fff; padding: 0 0 2px 0; width: 156px; float: left; height: 100%; }
+#bookingday #resources { color: #fff; padding: 0; width: 156px; float: left; height: 100%; }
 
 
 #bookingday .body a, #bookingday .body .share, #bookingday h1 { display: block; position: relative; z-index: 10; margin: 2px 0 0 2px; float: left; font-size: 12px; min-width: 134px; padding: 10px 10px; min-height: 38px; height: 100%; background-color: #eee; text-decoration: none; color: #666; cursor: default; white-space: nowrap; text-overflow: ellipsis; }
@@ -43,8 +43,11 @@ body.bookingdisplay, body.bookingdisplay form { padding: 0; margin: 0; width: 10
 #bookingday .body a.admin:active, #bookingday .body a.bookie:hover, #bookingday .body a.free:hover { background-color: #ccc; }
 #bookingday .body .share a { min-height: 0; height: auto; margin: 0 -10px; float: none; display: block; width: 100%; padding-top: 5px; padding-bottom: 5px; }
 #bookingday .body .share { overflow: auto; padding: 0 10px; }
+#bookingday .body a.expired, #bookingday .body a.expired:hover, #bookingday .body a.expired:active { cursor: default; background-color: #eee; }
+#bookingday .body a.expired span, #bookingday .body a.expired span i { background: transparent!important; width: 0!important; }
 
 #bookingday .body a span i.notes { background: transparent url(../images/ui-icons_454545_256x240.png) no-repeat -131px -99px!important; }
+#bookingday .body #time { width: 2px; background: #0ca600; background-color: rgba(12, 166, 0, 0.25); position: absolute; top: 30px; left: 100%; z-index: 90; margin-left: -2px; }
 
 #bookingday .head, #bookingday .body.head .col div { height: 30px!important; line-height: 30px!important; background: #0060a6!important; color: #fff; min-height: 30px!important; }
 #bookingday h1 { background: transparent; text-align: center; line-height: 30px!important; height: 30px!important; color: #fff; padding-top: 0; padding-bottom: 0; font-weight: normal; font-size: 15px; }
