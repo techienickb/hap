@@ -198,11 +198,12 @@ span.hapswitch.on::after { content: 'on' }
 #contextbar.editmode.selectactive a:nth-of-type(2), #contextbar.editmode.selectactive a:nth-of-type(2):hover { color: #555; }
 #contextbar.editmode a:nth-of-type(2):hover { background-position: -477px 0; }
 
-#sidebaredit { background: #fff; width: 0; overflow: hidden; line-height: 30px; white-space: nowrap; position: absolute; left: 0; top: 0; bottom: 0; -moz-transition: width ease-in-out 0.2s; -o-transition: width ease-in-out 0.2s; -webkit-transition: inherit; transition: width ease-in-out 0.2s; }
+#sidebaredit { background: #fff; width: 0; overflow: hidden; line-height: 30px; position: fixed; left: 0; top: 40px; bottom: 0; -moz-transition: width ease-in-out 0.2s; -o-transition: width ease-in-out 0.2s; -webkit-transition: inherit; transition: width ease-in-out 0.2s; }
 #sidebaredit.show { width: 30%; border-right: solid 3px #004577; }
 #sidebaredit h1 { background: #00508a; color: #fff; font-weight: 100; padding: 5px 10px; margin: 0 0 10px; }
 #sidebaredit label { display: inline-block; width: 25%; text-align: right; padding-right: 10px; }
-#sidebaredit input { width: 70%; }
+#sidebaredit #bfdisclaimer label  { width: auto; }
+#sidebaredit input[@type=text] { width: 70%; }
 #sidebaredit .buttons { text-align: center; margin-top: 10px; }
 #sidebaredit button { font-size: 20px; }
 
