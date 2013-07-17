@@ -455,7 +455,7 @@
 			    return this.File.name.substr(0, this.File.name.lastIndexOf('.')) + Math.floor((Math.random()*100)+1) + this.File.name.substr(this.File.name.lastIndexOf('.'));
 			};
 			this.Start = function() {
-			    this.FileName = $("#uploadfilesrandom").is(":checked") ? this.FormatFileName() : this.File.name;
+			    this.FileName = ($("#uploadfilesrandom").is(":checked") ? this.FormatFileName() : this.File.name) + "";
 				if (this.File.name.indexOf('.') == -1) {
 				    alert(hap.common.getLocal("myfiles/upload/folderwarning").replace(/\%/g, this.FileName));
 					uploads.pop(this);
@@ -471,9 +471,9 @@
 					uploads.pop(this);
 					return false;
 				}
-
 		        $("#progresses").append('<div id="upload-' + this.FileName.replace(/[\\'\. \[\]\(\)\-]/g, "_") + '"><div class="progressbar" style="display: inline-block; width: 100px; height: 20px; vertical-align: middle; overflow: hidden;"></div> ' + this.FileName + '</div>');
 		        $("#upload-" + this.FileName.replace(/[\\'\. \[\]\(\)\-]/g, "_") + " .progressbar").progressbar({ value: 0 });
+		        console.log(hap.common.formatJSONUrl('~/api/MyFiles/Exists/' + this.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, "") + '/' + this.FileName));
 				$.ajax({
 					type: 'GET',
 					url: hap.common.formatJSONUrl('~/api/MyFiles/Exists/' + this.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, "") + '/' + this.FileName),
