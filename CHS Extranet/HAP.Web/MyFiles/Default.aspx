@@ -997,7 +997,7 @@
 			$("#uploaders").dialog({ autoOpen: false });
 			$("#googlesignin").dialog({ autoOpen: false });
 			$("#Views").animate({ height: 'toggle' });
-			$("#Tree").dynatree({ imagePath: "../images/setup/", selectMode: 1, minExpandLevel: 1, noLink: false, children: [{ icon: "../myfiles-i.png", title: hap.common.getLocal("myfiles/mydrives"), href: "#", isFolder: true, isLazy: true}], fx: { height: "toggle", duration: 200 },
+			$("#Tree").dynatree({ imagePath: "../images/setup/", debugLevel: 0, selectMode: 1, minExpandLevel: 1, noLink: false, children: [{ icon: "../myfiles-i.png", title: hap.common.getLocal("myfiles/mydrives"), href: "#", isFolder: true, isLazy: true}], fx: { height: "toggle", duration: 200 },
 				onLazyRead: function (node) {
 					if (node.data.href == "#") {
 						$.ajax({
