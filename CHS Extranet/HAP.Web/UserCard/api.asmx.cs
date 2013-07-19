@@ -52,7 +52,7 @@ namespace HAP.Web.UserCard
         public OU[] getControlledOUs(string OuDn)
         {
             List<OU> alObjects = new List<OU>();
-            DirectoryEntry directoryObject = new DirectoryEntry(string.Format("LDAP://{0}", OuDn));
+            DirectoryEntry directoryObject = ADUtils.DirectoryRoot;
             foreach (DirectoryEntry child in directoryObject.Children)
             {
                 string childPath = child.Path.ToString();
