@@ -127,7 +127,7 @@ namespace HAP.MyFiles
         public string[] Search(string query)
         {
             List<string> res = new List<string>();
-            DirectoryEntry root = new DirectoryEntry("LDAP://DC=" + hapConfig.Current.AD.UPN.Replace(".", ",DC="), hapConfig.Current.AD.User, hapConfig.Current.AD.Password);
+            DirectoryEntry root = HAP.AD.ADUtils.DirectoryRoot;
             DirectorySearcher searcher = new DirectorySearcher(root);
             searcher.PropertiesToLoad.Add("cn");
             searcher.PropertiesToLoad.Add("displayName");

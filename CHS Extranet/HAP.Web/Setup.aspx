@@ -12,7 +12,7 @@
         <link href="~/style/basestyle.css" rel="stylesheet" type="text/css" />
         <link href="style/setup.css" rel="stylesheet" type="text/css" />
         <link href="style/ui.dynatree.css" rel="stylesheet" type="text/css" />
-        <script src="Scripts/modernizer.js"></script>
+        <script src="Scripts/modernizr.js"></script>
         <script src="Scripts/jquery.min.js" type="text/javascript"></script>
         <script src="Scripts/jquery-ui.min.js" type="text/javascript"></script>
         <script src="Scripts/jquery.dynatree.js" type="text/javascript"></script>

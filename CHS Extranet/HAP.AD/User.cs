@@ -78,7 +78,7 @@ namespace HAP.AD
         {
             get
             {
-                PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, this.DomainName, this.UserName, this.Password);
+                PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, this.DomainName, null, ContextOptions.Negotiate | ContextOptions.SecureSocketLayer, this.UserName, this.Password);
                 UserPrincipal userp = UserPrincipal.FindByIdentity(pcontext, this.UserName);
                 return userp;
             }
@@ -90,7 +90,7 @@ namespace HAP.AD
             {
                 try
                 {
-                    PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, this.DomainName, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
+                    PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, this.DomainName, null, ContextOptions.Negotiate | ContextOptions.SecureSocketLayer, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
 
                     UserPrincipal userp = UserPrincipal.FindByIdentity(pcontext, this.UserName);
                     return userp;
