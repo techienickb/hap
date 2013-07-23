@@ -129,13 +129,13 @@ namespace HAP.AD
             get
             {
                 hapConfig config = hapConfig.Current;
-                return new DirectoryEntry(FriendlyDomainToLdapDomain(config.AD.UPN), config.AD.User, config.AD.Password, AuthenticationTypes.Secure | AuthenticationTypes.Sealing | AuthenticationTypes.Signing);
+                return new DirectoryEntry(FriendlyDomainToLdapDomain(config.AD.UPN), config.AD.User, config.AD.Password, AuthenticationTypes.SecureSocketsLayer | AuthenticationTypes.Secure | AuthenticationTypes.Sealing | AuthenticationTypes.Signing | AuthenticationTypes.Encryption);
             }
         }
 
         public static PrincipalContext GetPContext()
         {
-            return new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, null, ContextOptions.Negotiate | ContextOptions.SecureSocketLayer, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
+            return new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, null, ContextOptions.Negotiate | ContextOptions.SecureSocketLayer | ContextOptions.Sealing | ContextOptions.Signing, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
         }
 
         [DllImport("advapi32.dll")]
@@ -198,7 +198,7 @@ namespace HAP.AD
         /// <returns></returns>
         public static DirectoryEntry GetDirectoryEntry(string connStringName, string connUsername, string connPassword)
         {
-            return new DirectoryEntry(connStringName, connUsername, connPassword, AuthenticationTypes.Secure | AuthenticationTypes.Sealing | AuthenticationTypes.Signing);
+            return new DirectoryEntry(connStringName, connUsername, connPassword, AuthenticationTypes.Secure | AuthenticationTypes.Sealing | AuthenticationTypes.Signing | AuthenticationTypes.SecureSocketsLayer | AuthenticationTypes.Encryption);
         }
 
         /// <summary>
