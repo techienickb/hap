@@ -129,13 +129,13 @@ namespace HAP.AD
             get
             {
                 hapConfig config = hapConfig.Current;
-                return new DirectoryEntry(FriendlyDomainToLdapDomain(config.AD.UPN), config.AD.User, config.AD.Password, AuthenticationTypes.SecureSocketsLayer | AuthenticationTypes.Secure | AuthenticationTypes.Sealing | AuthenticationTypes.Signing | AuthenticationTypes.Encryption);
+                return new DirectoryEntry(FriendlyDomainToLdapDomain(config.AD.UPN), config.AD.User, config.AD.Password, AuthenticationTypes.Secure | AuthenticationTypes.Sealing | AuthenticationTypes.Signing);
             }
         }
 
         public static PrincipalContext GetPContext()
         {
-            return new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, null, ContextOptions.Negotiate | ContextOptions.SecureSocketLayer | ContextOptions.Sealing | ContextOptions.Signing, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
+            return new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, null, ContextOptions.Negotiate, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
         }
 
         [DllImport("advapi32.dll")]
@@ -198,7 +198,7 @@ namespace HAP.AD
         /// <returns></returns>
         public static DirectoryEntry GetDirectoryEntry(string connStringName, string connUsername, string connPassword)
         {
-            return new DirectoryEntry(connStringName, connUsername, connPassword, AuthenticationTypes.Secure | AuthenticationTypes.Sealing | AuthenticationTypes.Signing | AuthenticationTypes.SecureSocketsLayer | AuthenticationTypes.Encryption);
+            return new DirectoryEntry(connStringName, connUsername, connPassword, AuthenticationTypes.Secure | AuthenticationTypes.Sealing | AuthenticationTypes.Signing);
         }
 
         /// <summary>
@@ -358,7 +358,7 @@ namespace HAP.AD
             }
             else reloadres = true;
             if (reloadres)
-                using (var context = new PrincipalContext(ContextType.Domain, null, domainName, ContextOptions.Negotiate | ContextOptions.SecureSocketLayer))
+                using (var context = GetPContext())
                 {
                     try
                     {
@@ -399,7 +399,7 @@ namespace HAP.AD
             }
             else reloadres = true;
             if (reloadres)
-                using (var context = new PrincipalContext(ContextType.Domain, null, domainName, ContextOptions.Negotiate | ContextOptions.SecureSocketLayer))
+                using (var context = GetPContext())
                 {
                     try
                     {
@@ -431,7 +431,7 @@ namespace HAP.AD
                 throw new ProviderException(String.Format(ERROR_ROLE_NOT_FOUND, roleName));
 
             var results = new List<string>();
-            using (var context = new PrincipalContext(ContextType.Domain, null, domainName, ContextOptions.Negotiate | ContextOptions.SecureSocketLayer))
+            using (var context = GetPContext())
             {
                 try
                 {
