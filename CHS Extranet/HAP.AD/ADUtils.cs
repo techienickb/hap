@@ -50,7 +50,9 @@ namespace HAP.AD
             {
                 hapConfig config = hapConfig.Current;
                 List<UserInfo> results = new List<UserInfo>();
-                DirectoryEntry usersDE = new DirectoryEntry(OU, config.AD.User, config.AD.Password, AuthenticationTypes.Secure | AuthenticationTypes.Sealing | AuthenticationTypes.Signing);
+                DirectoryEntry usersDE;
+                if (hapConfig.Current.AD.SecureLDAP) usersDE = new DirectoryEntry(OU, config.AD.User, config.AD.Password, AuthenticationTypes.Secure | AuthenticationTypes.Sealing | AuthenticationTypes.Signing);
+                else usersDE = new DirectoryEntry(OU, config.AD.User, config.AD.Password);
                 DirectorySearcher ds = new DirectorySearcher(usersDE);
                 ds.Filter = "(&(objectClass=user)(sAMAccountName=*))";
                 ds.PropertiesToLoad.Add("sAMAccountName");
@@ -129,13 +131,15 @@ namespace HAP.AD
             get
             {
                 hapConfig config = hapConfig.Current;
-                return new DirectoryEntry(FriendlyDomainToLdapDomain(config.AD.UPN), config.AD.User, config.AD.Password, AuthenticationTypes.Secure | AuthenticationTypes.Sealing | AuthenticationTypes.Signing);
+                if (config.AD.SecureLDAP) return new DirectoryEntry(FriendlyDomainToLdapDomain(config.AD.UPN), config.AD.User, config.AD.Password, AuthenticationTypes.Secure | AuthenticationTypes.Sealing | AuthenticationTypes.Signing);
+                else return new DirectoryEntry(FriendlyDomainToLdapDomain(config.AD.UPN), config.AD.User, config.AD.Password);
             }
         }
 
         public static PrincipalContext GetPContext()
         {
-            return new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, null, ContextOptions.Negotiate, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
+            if (hapConfig.Current.AD.SecureLDAP) return new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, null, ContextOptions.Negotiate, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
+            else return new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
         }
 
         [DllImport("advapi32.dll")]
@@ -198,7 +202,8 @@ namespace HAP.AD
         /// <returns></returns>
         public static DirectoryEntry GetDirectoryEntry(string connStringName, string connUsername, string connPassword)
         {
-            return new DirectoryEntry(connStringName, connUsername, connPassword, AuthenticationTypes.Secure | AuthenticationTypes.Sealing | AuthenticationTypes.Signing);
+            if (hapConfig.Current.AD.SecureLDAP) return new DirectoryEntry(connStringName, connUsername, connPassword, AuthenticationTypes.Secure | AuthenticationTypes.Sealing | AuthenticationTypes.Signing);
+            else return new DirectoryEntry(connStringName, connUsername, connPassword);
         }
 
         /// <summary>
