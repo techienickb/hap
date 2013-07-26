@@ -289,7 +289,7 @@ namespace HAP.Web.Configuration
             }
             if (version.CompareTo(Version.Parse("9.4.0726.0")) < 0) //Perform v9.4 upgrade
             {
-                ((XmlElement)doc.SelectSingleNode("/hapConfig/ad")).SetAttribute("secureldap", "false");
+                ((XmlElement)doc.SelectSingleNode("/hapConfig/AD")).SetAttribute("secureldap", "false");
             }
             doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             doc.Save(ConfigPath);
