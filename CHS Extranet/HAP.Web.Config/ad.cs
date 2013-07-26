@@ -27,6 +27,7 @@ namespace HAP.Web.Configuration
             e.SetAttribute("upn", "");
             e.SetAttribute("studentsgroup", "");
             e.SetAttribute("usenestedlookups", "True");
+            e.SetAttribute("secureldap", "False");
             e.SetAttribute("maxlogonattempts", "4");
             e.SetAttribute("maxrecursions", "10");
             XmlElement ous = doc.CreateElement("OUs");
@@ -47,7 +48,11 @@ namespace HAP.Web.Configuration
             get { return el.GetAttribute("upn"); }
             set { el.SetAttribute("upn", value); }
         }
-
+        public bool SecureLDAP
+        {
+            get { return bool.Parse(el.GetAttribute("secureldap")); }
+            set { el.SetAttribute("secureldap", value.ToString()); }
+        }
         public bool UseNestedLookups
         {
             get { return bool.Parse(el.GetAttribute("usenestedlookups")); }

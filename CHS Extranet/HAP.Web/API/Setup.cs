@@ -388,7 +388,9 @@ namespace HAP.Web.API
                 HAP.AD.User _user = new AD.User();
                 _user.Authenticate(username, password, domain);
                 PrincipalContext pc = new PrincipalContext(ContextType.Domain, domain, null, ContextOptions.Negotiate | ContextOptions.SecureSocketLayer, username, password);
-                DirectoryEntry root = new DirectoryEntry("LDAP://DC=" + domain.Replace(".", ",DC="), username, password, AuthenticationTypes.Secure | AuthenticationTypes.Sealing | AuthenticationTypes.Signing);
+                DirectoryEntry root;
+                if (hapConfig.Current.AD.SecureLDAP) root = new DirectoryEntry("LDAP://DC=" + domain.Replace(".", ",DC="), username, password, AuthenticationTypes.Secure | AuthenticationTypes.Sealing | AuthenticationTypes.Signing);
+                else root = new DirectoryEntry("LDAP://DC=" + domain.Replace(".", ",DC="), username, password);
                 return FillNode(root);
             }
             catch (Exception ex) { HAP.Web.Logging.EventViewer.Log("Setup API", ex.ToString() + "\nMessage:\n" + ex.Message + "\nStack Trace:\n" + ex.StackTrace, System.Diagnostics.EventLogEntryType.Error); return null; }

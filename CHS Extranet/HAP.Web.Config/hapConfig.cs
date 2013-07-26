@@ -287,6 +287,10 @@ namespace HAP.Web.Configuration
             {
                 ((XmlElement)doc.SelectSingleNode("/hapConfig/bookingsystem")).SetAttribute("archive", "false");
             }
+            if (version.CompareTo(Version.Parse("9.4.0726.0")) < 0) //Perform v9.4 upgrade
+            {
+                ((XmlElement)doc.SelectSingleNode("/hapConfig/ad")).SetAttribute("secureldap", "false");
+            }
             doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             doc.Save(ConfigPath);
         }
