@@ -387,7 +387,9 @@ namespace HAP.Web.API
                 if (username.Length < 2 && password.Length < 2 && domain.Length < 2) throw new Exception("Invailid Domain/Credentials");
                 HAP.AD.User _user = new AD.User();
                 _user.Authenticate(username, password, domain);
-                PrincipalContext pc = new PrincipalContext(ContextType.Domain, domain, null, ContextOptions.Negotiate | ContextOptions.SecureSocketLayer, username, password);
+                PrincipalContext pc;
+                try { pc = new PrincipalContext(ContextType.Domain, domain, null, ContextOptions.Negotiate | ContextOptions.SecureSocketLayer, username, password); }
+                catch { pc = new PrincipalContext(ContextType.Domain, domain, username, password); }
                 DirectoryEntry root;
                 if (hapConfig.Current.AD.SecureLDAP) root = new DirectoryEntry("LDAP://DC=" + domain.Replace(".", ",DC="), username, password, AuthenticationTypes.Secure | AuthenticationTypes.Sealing | AuthenticationTypes.Signing);
                 else root = new DirectoryEntry("LDAP://DC=" + domain.Replace(".", ",DC="), username, password);
