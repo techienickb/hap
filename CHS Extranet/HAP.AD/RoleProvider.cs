@@ -39,7 +39,9 @@ namespace HAP.AD
                 List<string> roles = new List<string>();
                 try
                 {
-                    PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, null, ContextOptions.Negotiate | ContextOptions.SecureSocketLayer, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
+                    PrincipalContext pcontext;
+                    if (HAP.Web.Configuration.hapConfig.Current.AD.SecureLDAP) pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, null, ContextOptions.Negotiate, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
+                    else pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
                     UserPrincipal userp = UserPrincipal.FindByIdentity(pcontext, username);
                     foreach (Principal p in userp.GetGroups())
                     {
@@ -96,7 +98,8 @@ namespace HAP.AD
             if (!HAP.Web.Configuration.hapConfig.Current.AD.UseNestedLookups) return wtrp.GetUsersInRole(roleName);
             else if (HttpContext.Current.Cache["rolecache-" + roleName.ToLower()] == null)
             {
-                PrincipalContext pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, null, ContextOptions.Negotiate | ContextOptions.SecureSocketLayer, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
+                if (HAP.Web.Configuration.hapConfig.Current.AD.SecureLDAP) pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, null, ContextOptions.Negotiate, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
+                else pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
                 GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, roleName);
                 if (gp == null) return new string[] { };
                 List<string> users = new List<string>();
