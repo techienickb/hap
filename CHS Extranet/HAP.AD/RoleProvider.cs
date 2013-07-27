@@ -98,6 +98,7 @@ namespace HAP.AD
             if (!HAP.Web.Configuration.hapConfig.Current.AD.UseNestedLookups) return wtrp.GetUsersInRole(roleName);
             else if (HttpContext.Current.Cache["rolecache-" + roleName.ToLower()] == null)
             {
+                PrincipalContext pcontext;
                 if (HAP.Web.Configuration.hapConfig.Current.AD.SecureLDAP) pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, null, ContextOptions.Negotiate, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
                 else pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
                 GroupPrincipal gp = GroupPrincipal.FindByIdentity(pcontext, roleName);
