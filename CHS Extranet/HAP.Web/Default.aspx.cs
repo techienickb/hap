@@ -56,7 +56,7 @@ namespace HAP.Web
         protected string gettiles(object o)
         {
             List<string> s = new List<string>();
-            string group = ((HAP.Web.Configuration.LinkGroup)o).Name.Replace(" ", "").Replace("'", "").Replace(",", "").Replace(".", "").Replace("*", "").Replace("&", "").Replace("/", "").Replace("\\", "");
+            string group = ((HAP.Web.Configuration.LinkGroup)o).Name.Replace(" ", "").Replace("'", "").Replace(",", "").Replace(".", "").Replace("*", "").Replace("&", "").Replace("/", "").Replace("\\", "").Replace("(", "").Replace(")", "");
             foreach (HAP.Web.Configuration.Link link in ((HAP.Web.Configuration.LinkGroup)o).FilteredLinks)
             {
                 string s1 = "{ Type: \"" + link.Type;
