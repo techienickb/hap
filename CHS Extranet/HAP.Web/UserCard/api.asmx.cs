@@ -52,7 +52,9 @@ namespace HAP.Web.UserCard
         public OU[] getControlledOUs(string OuDn)
         {
             List<OU> alObjects = new List<OU>();
-            DirectoryEntry directoryObject = ADUtils.DirectoryRoot;
+            DirectoryEntry directoryObject;
+            if (hapConfig.Current.AD.SecureLDAP) directoryObject = new DirectoryEntry("LDAP://" + OuDn, hapConfig.Current.AD.User, hapConfig.Current.AD.Password, AuthenticationTypes.Secure | AuthenticationTypes.Sealing | AuthenticationTypes.Signing);
+            else directoryObject = new DirectoryEntry("LDAP://" + OuDn, hapConfig.Current.AD.User, hapConfig.Current.AD.Password);
             foreach (DirectoryEntry child in directoryObject.Children)
             {
                 string childPath = child.Path.ToString();
