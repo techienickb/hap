@@ -106,7 +106,9 @@
 		<label for="bfyear">Year: </label><select id="bfyear"></select><br />
 		<label for="bfsubject">Subject: </label>
 		<select id="bfsubjects" onchange="subjectchance(this)">
+            <%if (config.BookingSystem.Subjects.Count > 1) { %>
 			<option value="" selected="selected">- Subject -</option>
+            <%} %>
 			<asp:Repeater runat="server" ID="subjects"><ItemTemplate><option value="<%#Container.DataItem %>"><%#Container.DataItem %></option></ItemTemplate></asp:Repeater>
 			<option value="CUSTOM">Custom</option>
 		</select>
@@ -437,7 +439,7 @@
 			}
 		    try {
 		        $("#bfyear option").remove();
-		        $("#bfyear").append('<option value="">---</option>');
+                if (curres.Years.length > 1) $("#bfyear").append('<option value="">---</option>');
 		        for (var i = 0; i < curres.Years.length; i++)
 		            $("#bfyear").append('<option value="' + curres.Years[i] + '">' + curres.Years[i] + '</option>');
 		    } catch (e) { }

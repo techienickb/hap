@@ -47,9 +47,9 @@ namespace HAP.BookingSystem
             Template template = t["general"];
             if (t.ContainsKey(resource.Name)) template = t[resource.Name];
             string ltcount = "";
-            if (resource.Type == ResourceType.Room) location = booking.Room;
+            if (resource.Type == ResourceType.Room) { location = booking.Room; try { ltcount = booking.Count.ToString(); } catch { } }
             else if (resource.Type == ResourceType.Laptops) { location = booking.LTRoom; ltcount = booking.LTCount.ToString(); }
-            else if (resource.Type == ResourceType.Equipment || resource.Type == ResourceType.Loan) location = booking.EquipRoom;
+            else if (resource.Type == ResourceType.Equipment || resource.Type == ResourceType.Loan) { location = booking.EquipRoom; try { ltcount = booking.Count.ToString(); } catch { } }
 
             string summary = string.Format(template.Subject, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, ltcount, HttpUtility.UrlDecode(booking.Notes, System.Text.Encoding.Default));
             string description = string.Format(template.Content, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, ltcount, HttpUtility.UrlDecode(booking.Notes, System.Text.Encoding.Default));
@@ -123,9 +123,9 @@ namespace HAP.BookingSystem
             Template template = t["generaladmin"];
             if (t.ContainsKey(resource.Name)) template = t[resource.Name + "admin"];
             string ltcount = "";
-            if (resource.Type == ResourceType.Room) location = booking.Room;
+            if (resource.Type == ResourceType.Room) { location = booking.Room; try { ltcount = booking.Count.ToString(); } catch { } }
             else if (resource.Type == ResourceType.Laptops) { location = booking.LTRoom; ltcount = booking.LTCount.ToString(); }
-            else if (resource.Type == ResourceType.Equipment || resource.Type == ResourceType.Loan) location = booking.EquipRoom;
+            else if (resource.Type == ResourceType.Equipment || resource.Type == ResourceType.Loan) { location = booking.EquipRoom; try { ltcount = booking.Count.ToString(); } catch { } }
 
             string summary = string.Format(template.Subject, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, ltcount, HttpUtility.UrlDecode(booking.Notes, System.Text.Encoding.Default));
             string description = string.Format(template.Content, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, ltcount, HttpUtility.UrlDecode(booking.Notes, System.Text.Encoding.Default));
