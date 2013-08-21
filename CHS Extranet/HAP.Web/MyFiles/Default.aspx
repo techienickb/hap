@@ -988,7 +988,11 @@
 			return data.match(re);
 		}
 		$(function () {
-		    setTimeout(function() { $("#MyFiles").css("min-height", $("#hapContent").height() - 2); }, 100);
+		    $(window).resize(function () {
+		        $("#Tree").css("top", $("#search").position().top + $("#search").height()).css("height", $("#hapContent").height() - $("#search").height()); 
+		        $("#MyFiles").css("min-height", parseInt($("#hapContent").css("min-height").replace(/px/g, "")) - 2); 
+		        $("#Views").css("left", $('#view').position().left);
+		    });
 		    $("#properties").dialog({ autoOpen: false });
 		    $("#loadingbox").dialog({ autoOpen: false });
 			$("#preview").dialog({ autoOpen: false });
@@ -1374,12 +1378,8 @@
 	            else $("#progressstatus").dialog("close");
 	        }
 	    });
-		$(document).bind('keyup', function (event) { keys.shift = keys.ctrl = false; });
-		function closeUpload() { $("#uploaders").dialog("close"); };
-		$(window).resize(function () {
-		    setTimeout(function () { $("#Tree").css("top", $("#search").position().top + $("#search").height()).css("height", $("#hapContent").height() - $("#search").height()); $("#MyFiles").css("min-height", $("#hapContent").height() - 2); }, 50);
-		    $("#Views").css("left", $('#view').position().left);
-		});
+	    $(document).bind('keyup', function (event) { keys.shift = keys.ctrl = false; });
+	    function closeUpload() { $("#uploaders").dialog("close"); };
 		</script>
 	</hap:CompressJS>
 	<% if (FirstTime) { %> <script type="text/javascript">$(function () { $("#help").trigger("click"); });</script><%}  %>
