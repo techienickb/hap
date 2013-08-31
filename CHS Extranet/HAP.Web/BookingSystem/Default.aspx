@@ -358,7 +358,7 @@
 		    else if (curres.Type == "Loan") {
 		        d += ', "EquipRoom": "' + $("#bfloroom").val()  + '"';
 		    }
-		    else if (curres.Quantities.length > 0 && curres.CanShare && parseInt($("#bfquantspin").val()) < parseInt(curres.Quantities[curres.Quantities.length - 1])) {
+		    if (curres.Type != "Loan" && curres.Quantities.length > 0 && curres.CanShare && parseInt($("#bfquantspin").val()) < parseInt(curres.Quantities[curres.Quantities.length - 1])) {
 		        d += ', "Count": ' + $("#bfquantspin").val();
 		    }
 		    if (curres.Notes) {
