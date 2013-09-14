@@ -85,11 +85,15 @@ namespace HAP.AD
 
         public void RemoveExpiredCodes()
         {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/OneUseCodes.xml"));
-            foreach (XmlNode n in doc.SelectNodes("/OneUseCodes"))
-                if (DateTime.Parse(n.Attributes["expires"].Value) < DateTime.Now) doc.SelectSingleNode("/OneUseCodes").RemoveChild(n);
-            doc.Save(HttpContext.Current.Server.MapPath("~/App_Data/OneUseCodes.xml"));
+            try
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/OneUseCodes.xml"));
+                foreach (XmlNode n in doc.SelectNodes("/OneUseCodes"))
+                    if (DateTime.Parse(n.Attributes["expires"].Value) < DateTime.Now) doc.SelectSingleNode("/OneUseCodes").RemoveChild(n);
+                doc.Save(HttpContext.Current.Server.MapPath("~/App_Data/OneUseCodes.xml"));
+            }
+            catch { }
         }
 
     }

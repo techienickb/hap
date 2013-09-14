@@ -49,6 +49,11 @@ namespace HAP.Web.Configuration
             get { return el.GetAttribute("upn"); }
             set { el.SetAttribute("upn", value); }
         }
+        public bool AllowOneUseCodes
+        {
+            get { return bool.Parse(el.GetAttribute("allow1usecodes")); }
+            set { el.SetAttribute("allow1usecodes", value.ToString()); }
+        }
         public bool SecureLDAP
         {
             get { return bool.Parse(el.GetAttribute("secureldap")); }
