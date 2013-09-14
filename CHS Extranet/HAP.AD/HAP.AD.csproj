@@ -76,6 +76,7 @@
     <Compile Include="ADUtils.cs" />
     <Compile Include="API.cs" />
     <Compile Include="MembershipProvider.cs" />
+    <Compile Include="OneUse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoleProvider.cs" />
     <Compile Include="TokenGenerator.cs" />

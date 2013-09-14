@@ -30,6 +30,7 @@ namespace HAP.Web.Configuration
             e.SetAttribute("secureldap", "False");
             e.SetAttribute("maxlogonattempts", "4");
             e.SetAttribute("maxrecursions", "10");
+            e.SetAttribute("allow1usecodes", "False");
             XmlElement ous = doc.CreateElement("OUs");
             e.AppendChild(ous);
             doc.SelectSingleNode("/hapConfig").AppendChild(e);

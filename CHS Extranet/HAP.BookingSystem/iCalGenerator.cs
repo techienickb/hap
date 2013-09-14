@@ -46,13 +46,12 @@ namespace HAP.BookingSystem
             Templates t = new Templates();
             Template template = t["general"];
             if (t.ContainsKey(resource.Name)) template = t[resource.Name];
-            string ltcount = "";
-            if (resource.Type == ResourceType.Room) { location = booking.Room; try { ltcount = booking.Count.ToString(); } catch { } }
-            else if (resource.Type == ResourceType.Laptops) { location = booking.LTRoom; ltcount = booking.LTCount.ToString(); }
-            else if (resource.Type == ResourceType.Equipment || resource.Type == ResourceType.Loan) { location = booking.EquipRoom; try { ltcount = booking.Count.ToString(); } catch { } }
+            if (resource.Type == ResourceType.Room) { location = booking.Room; }
+            else if (resource.Type == ResourceType.Laptops) location = booking.LTRoom; 
+            else if (resource.Type == ResourceType.Equipment || resource.Type == ResourceType.Loan) location = booking.EquipRoom;
 
-            string summary = string.Format(template.Subject, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, ltcount, HttpUtility.UrlDecode(booking.Notes, System.Text.Encoding.Default));
-            string description = string.Format(template.Content, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, ltcount, HttpUtility.UrlDecode(booking.Notes, System.Text.Encoding.Default));
+            string summary = string.Format(template.Subject, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, booking.Count, HttpUtility.UrlDecode(booking.Notes, System.Text.Encoding.Default));
+            string description = string.Format(template.Content, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, booking.Count, HttpUtility.UrlDecode(booking.Notes, System.Text.Encoding.Default));
 
             sb.AppendLine("BEGIN:VCALENDAR");
             sb.AppendLine("VERSION:2.0");
@@ -122,13 +121,12 @@ namespace HAP.BookingSystem
             Templates t = new Templates();
             Template template = t["generaladmin"];
             if (t.ContainsKey(resource.Name)) template = t[resource.Name + "admin"];
-            string ltcount = "";
-            if (resource.Type == ResourceType.Room) { location = booking.Room; try { ltcount = booking.Count.ToString(); } catch { } }
-            else if (resource.Type == ResourceType.Laptops) { location = booking.LTRoom; ltcount = booking.LTCount.ToString(); }
-            else if (resource.Type == ResourceType.Equipment || resource.Type == ResourceType.Loan) { location = booking.EquipRoom; try { ltcount = booking.Count.ToString(); } catch { } }
+            if (resource.Type == ResourceType.Room) { location = booking.Room; }
+            else if (resource.Type == ResourceType.Laptops) { location = booking.LTRoom; }
+            else if (resource.Type == ResourceType.Equipment || resource.Type == ResourceType.Loan) { location = booking.EquipRoom; }
 
-            string summary = string.Format(template.Subject, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, ltcount, HttpUtility.UrlDecode(booking.Notes, System.Text.Encoding.Default));
-            string description = string.Format(template.Content, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, ltcount, HttpUtility.UrlDecode(booking.Notes, System.Text.Encoding.Default));
+            string summary = string.Format(template.Subject, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, booking.Count, HttpUtility.UrlDecode(booking.Notes, System.Text.Encoding.Default));
+            string description = string.Format(template.Content, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, booking.Count, HttpUtility.UrlDecode(booking.Notes, System.Text.Encoding.Default));
 
             List<UserInfo> uis = new List<UserInfo>();
 
@@ -236,8 +234,8 @@ namespace HAP.BookingSystem
             string description = "Cancellation of " + booking.Name + " in " + location + " during " + booking.Lesson + " on " + booking.Date.ToShortDateString();
             if (resource.Type == ResourceType.Laptops)
             {
-                summary += " with the " + booking.Room + " [" + booking.LTCount.ToString() + "]";
-                description += " with the " + booking.Room + " [" + booking.LTCount.ToString() + "]";
+                summary += " with the " + booking.Room + " [" + booking.Count + "]";
+                description += " with the " + booking.Room + " [" + booking.Count + "]";
             }
 
             sb.AppendLine("BEGIN:VCALENDAR");
@@ -315,8 +313,8 @@ namespace HAP.BookingSystem
             string description = "Cancellation of " + booking.Name + " in " + location + " during " + booking.Lesson + " on " + booking.Date.ToShortDateString();
             if (resource.Type == ResourceType.Laptops)
             {
-                summary += " with the " + booking.Room + " [" + booking.LTCount.ToString() + "]";
-                description += " with the " + booking.Room + " [" + booking.LTCount.ToString() + "]";
+                summary += " with the " + booking.Room + " [" + booking.Count + "]";
+                description += " with the " + booking.Room + " [" + booking.Count + "]";
             }
 
             sb.AppendLine("BEGIN:VCALENDAR");

@@ -109,7 +109,6 @@ namespace HAP.Web.API
                     if (config.BookingSystem.Resources[booking.Room].Type == ResourceType.Laptops)
                     {
                         node.SetAttribute("ltroom", booking.LTRoom);
-                        node.SetAttribute("ltcount", booking.LTCount.ToString());
                         node.SetAttribute("ltheadphones", booking.LTHeadPhones.ToString());
                     }
                     else if (config.BookingSystem.Resources[booking.Room].Type == ResourceType.Equipment || config.BookingSystem.Resources[booking.Room].Type == ResourceType.Loan)
@@ -117,6 +116,7 @@ namespace HAP.Web.API
                     node.SetAttribute("room", booking.Room);
                     node.SetAttribute("uid", booking.Username + DateTime.Now.ToString(iCalGenerator.DateFormat));
                     node.SetAttribute("username", booking.Username);
+                    node.SetAttribute("count", booking.Count.ToString());
                     node.SetAttribute("name", booking.Name);
                     if (booking.Count >= 0) node.SetAttribute("count", booking.Count.ToString());
                     if (!string.IsNullOrWhiteSpace(booking.Notes)) node.SetAttribute("notes", booking.Notes);
@@ -135,7 +135,7 @@ namespace HAP.Web.API
                                 node.SetAttribute("lesson", config.BookingSystem.Lessons[index - x].Name);
                                 node.SetAttribute("room", booking.Room);
                                 node.SetAttribute("ltroom", "--");
-                                node.SetAttribute("ltcount", booking.LTCount.ToString());
+                                node.SetAttribute("count", booking.Count.ToString());
                                 node.SetAttribute("ltheadphones", booking.LTHeadPhones.ToString());
                                 node.SetAttribute("username", "systemadmin");
                                 node.SetAttribute("name", "UNAVAILABLE");
@@ -150,7 +150,7 @@ namespace HAP.Web.API
                                     node.SetAttribute("lesson", config.BookingSystem.Lessons[index + x].Name);
                                     node.SetAttribute("room", booking.Room);
                                     node.SetAttribute("ltroom", "--");
-                                    node.SetAttribute("ltcount", booking.LTCount.ToString());
+                                    node.SetAttribute("count", booking.Count.ToString());
                                     node.SetAttribute("ltheadphones", booking.LTHeadPhones.ToString());
                                     node.SetAttribute("username", "systemadmin");
                                     node.SetAttribute("name", "CHARGING");

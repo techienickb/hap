@@ -630,6 +630,7 @@
     <Content Include="MyFiles\Default.aspx" />
     <Content Include="MyFiles\Homework.aspx" />
     <Content Include="MyFiles\oauth.aspx" />
+    <Content Include="OneUseCodes.aspx" />
     <Content Include="Scripts\excanvas.min.js" />
     <Content Include="Scripts\jqplot.cursor.min.js" />
     <Content Include="Scripts\jqplot.dateAxisRenderer.min.js" />
@@ -879,6 +880,13 @@
     </Compile>
     <Compile Include="MyFiles\oauth.aspx.designer.cs">
       <DependentUpon>oauth.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OneUseCodes.aspx.cs">
+      <DependentUpon>OneUseCodes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OneUseCodes.aspx.designer.cs">
+      <DependentUpon>OneUseCodes.aspx</DependentUpon>
     </Compile>
     <Compile Include="p.ashx.cs">
       <DependentUpon>p.ashx</DependentUpon>
