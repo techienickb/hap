@@ -188,10 +188,11 @@ if (hap == null) {
                         $.ajax({
                             url: hap.common.formatJSONUrl("~/api/livetiles/exchange/calendarinfo"), context: t, type: 'POST', dataType: 'json', data: '{ "Mailbox" : "' + $('#' + t.id).data("mailbox") + '" }', contentType: 'application/JSON', success: function (data) {
                                 var s = "";
-                                var url = $(this.id).attr("href");
+                                var url = $("#" + this.id).attr("href");
+                                var id = "#" + this.id;
                                 for (var i = 0; i < data.length; i++)
                                     s += '<span style="font-size: 20px; display: block;">' + data[i].Subject + '</span>From: ' + data[i].Start + " To: " + data[i].End + "<br />" + unescape(data[i].Body).replace('\n', '') + "<hr />";
-                                $("<div/>").html(s).dialog({ width: 800, height: 500, title: $(this.id).data("name"), autoOpen: true, buttons: { "Open": function() { window.location.href = url; }, "Close": function () { $(this).dialog("close"); } } });
+                                $("<div href=\"" + url + "\"/>").html(s).dialog({ width: 800, height: 500, title: $(id).data("name"), autoOpen: true, buttons: { "Open": function() { window.location.href = url; }, "Close": function () { $(this).dialog("close"); } } });
                             }, error: hap.common.jsonError
                         });
                         return false;
