@@ -146,6 +146,49 @@
         <div>
             <label for="bflstatic">Make static?: </label><input type="checkbox" id="bflstatic" />
         </div>
+        <div>
+            <label for="bfrecur">Recurance: </label><input type="checkbox" id="bfrecur" />
+            <div id="recurbox" style="display: none;">
+                <label for="recurweeks">Number of Weeks: </label><input type="number" id="recurweeks" value="0" />
+                <script>
+                    $(function () {
+                        setTimeout(function () {
+                            $("#bfrecur").prev().click(function () {
+                                if ($("#bfrecur").is(":checked")) $("#recurbox").show();
+                                else $("#recurbox").hide();
+                            });
+                        }, 100);
+
+                    });
+                    $("#recurweeks").val("0").spinner({ min: 1, spin: spins, change: spins });
+                    function spins(e, u) {
+                        $("#recurcheck").html('<span id="crecurcheck">Checking...</span>');
+                        recurs = [];
+                        for (var i = 1; i <= (u.value || $("#recurweeks").val()) ; i++) {
+                            var ndate = new Date(curdate.getTime() + i * 7 * 24 * 60 * 60 * 1000);
+                            recurs.push(ndate);
+                            $.ajax({
+                                type: 'GET',
+                                url: hap.common.formatJSONUrl('~/api/BookingSystem/LoadRoom/' + ndate.getDate() + '-' + (ndate.getMonth() + 1) + '-' + ndate.getFullYear() + '/' + curres.Name),
+                                dataType: 'json',
+                                context: ndate,
+                                success: function (data) {
+                                    $("#crecurcheck").remove();
+                                    var h = "";
+                                    for (var cr1 = 0; cr1 < data.length; cr1++)
+                                        if (data[cr1][0].Lesson == curles) {
+                                            $("#recurcheck").append("<div><span>" + this.getDate() + '-' + (this.getMonth() + 1) + '-' + this.getFullYear() + "</span>" + (data[cr1][0].Name == "FREE" ? "Available" : "Not Available") + "</div>");
+                                            recurs[recurs.indexOf(this)] = data[cr1][0].Name;
+                                        }
+                                },
+                                error: hap.common.jsonError
+                            });
+                        }
+                    }
+                </script>
+                <div id="recurcheck" style="padding-left: 10px;"></div>
+            </div>
+        </div>
 		</asp:PlaceHolder>
         <div id="bfdisclaimer">
             <label for="bfdisclaim"></label><input type="checkbox" class="noswitch" id="bfdisclaim" />
@@ -156,7 +199,8 @@
     <hap:CompressJS runat="server" tag="div">
 	<script>
 		var curdate, curres, curles, user, resources, date, lessontimes;
-        var availbookings = [ 0, 0 ];
+		var availbookings = [ 0, 0 ];
+		var recurs = [];
         var canmulti = false;
 		function resource(name, type, years, quantities, readonly, multiroom, maxlessons, rooms, disclaimer, canshare, notes, allowance) {
 			this.Name = name;
@@ -359,35 +403,43 @@
 		    }
 
 		    d += " } }";
-		    $.ajax({
-		        type: 'POST',
-		        url: hap.common.formatJSONUrl('~/api/BookingSystem/Booking/' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear()),
-		        dataType: 'json',
-		        contentType: 'application/json',
-		        data: d,
-		        success: function (data) {
-		            curres.Data = data;
-		            curres.Render();
+		    var recurcount = (($("#bfrecur").length > 0 && $("#bfrecur").is(":checked")) ? parseInt($("#recurweeks").val()) : 0) + 1;
+		    for (var recuri = 0; recuri < recurcount; recuri++) {
+		        var ndate = new Date(curdate.getTime() + recuri * 7 * 24 * 60 * 60 * 1000);
+                if (recuri == 0 || recurs[recuri-1] == "FREE")
 		            $.ajax({
-		                type: 'GET',
-		                url: hap.common.formatJSONUrl("~/api/BookingSystem/Initial/" + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username),
+		                type: 'POST',
+		                url: hap.common.formatJSONUrl('~/api/BookingSystem/Booking/' + ndate.getDate() + '-' + (ndate.getMonth() + 1) + '-' + ndate.getFullYear()),
 		                dataType: 'json',
+		                context: ndate,
+		                contentType: 'application/json',
+		                data: d,
 		                success: function (data) {
-		                    if (user.isBSAdmin) $("#val").html("This Week is a Week " + data[1]);
-		                    else {
-		                        if (data[0] >= 0) {
-		                            $("#val").html("You have " + data[0] + " bookings available to use this week. This Week is a Week " + data[1]);
-		                        } else {
-		                            $("#val").html("This Week is a Week " + data[1]);
-		                        }
-		                        availbookings = data;
+		                    if (this.getDate() == curdate.getDate()) {
+		                        curres.Data = data;
+		                        curres.Render();
+		                        $.ajax({
+		                            type: 'GET',
+		                            url: hap.common.formatJSONUrl("~/api/BookingSystem/Initial/" + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username),
+		                            dataType: 'json',
+		                            success: function (data) {
+		                                if (user.isBSAdmin) $("#val").html("This Week is a Week " + data[1]);
+		                                else {
+		                                    if (data[0] >= 0) {
+		                                        $("#val").html("You have " + data[0] + " bookings available to use this week. This Week is a Week " + data[1]);
+		                                    } else {
+		                                        $("#val").html("This Week is a Week " + data[1]);
+		                                    }
+		                                    availbookings = data;
+		                                }
+		                            },
+		                            error: hap.common.jsonError
+		                        });
 		                    }
 		                },
 		                error: hap.common.jsonError
 		            });
-		        },
-		        error: hap.common.jsonError
-		    });
+		    }
 		    $("#sidebaredit").removeClass("show");
 		    return false;
 		});
@@ -396,6 +448,7 @@
 				alert("You have exceeded your allowed bookings, please contact an Admin if this is wrong");
 				return false; 
 			}
+			recurs = [];
 			curles = lesson;
 			$("#bfdate").html($.datepicker.formatDate('d MM yy', curdate));
 			for (var i = 0; i < resources.length; i++)
@@ -436,6 +489,9 @@
 		        for (var i = 0; i < curres.Years.length; i++)
 		            $("#bfyear").append('<option value="' + curres.Years[i] + '">' + curres.Years[i] + '</option>');
 		    } catch (e) { }
+		    if ($("#bfrecur").length > 0) {
+		        if ($("#bfrecur").is(":checked")) $("#bfrecur").prev().trigger("click");
+		    }
 		    try {
 		        $("#bfquant, #bfquants, #bfquantspin").hide();
 		        $("#bfquantmax").html("");

@@ -69,12 +69,14 @@ body.bookingdisplay, body.bookingdisplay form { padding: 0; margin: 0; width: 10
 #hapHeader #hapTitle a { background-image: url(../api/tiles/icons/24/24/images/icons/metro/applications/calendar.png); background-position: 5px center; }
 #datepicker .ui-datepicker { border-top: 0; }
 
-#sidebaredit { top: 40px; z-index: 50; }
+#sidebaredit { top: 40px; z-index: 50; overflow-y: auto; }
 #sidebaredit.show { width: 50%; }
 #sidebaredit h1 { margin: 0; }
 #sidebaredit select, #sidebaredit input, #sidebaredit label { font-size: 16px; }
 #sidebaredit label { text-align: left; padding-left: 10px; }
 #sidebaredit input#bfsubject { width: 45% }
+#recurcheck { line-height: 14px; }
+#recurcheck span { display: inline-block; width: 80px; }
 
 @media only screen and (max-width: 1024px)  {
     #sidebaredit.show { width: 75%; }
