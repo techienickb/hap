@@ -27,7 +27,9 @@ British English Help Localised Resources
     <p>To get the full feature set</p>
     <h1><a href="%l" class="button">Click Here</a></h1>
     <p>and log in with your username and password</p>
-    <h2>To Logout, Close your browser</h2>]]>
+    <h2>To Logout, Close your browser</h2>
+    <p>To generate some One Use Codes to use to Logon to Untrusted Devices:</p>
+    <h1><a href="~/OneUseCodes.aspx" class="button">Click here</a></h1>]]>
   </impmsg>
   <myfiles>
     <w8app>

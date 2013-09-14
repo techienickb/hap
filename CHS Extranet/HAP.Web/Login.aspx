@@ -15,6 +15,7 @@
                 <asp:Label runat="server" AssociatedControlID="password">Password: </asp:Label>
                 <asp:TextBox TextMode="Password" runat="server" ID="password" Width="300px" />
             </div>
+            <asp:PlaceHolder runat="server" ID="oneusecodes">
             <div>
                 <a href="#" id="oucc">Use a One Use Code instead</a>
                 <div id="ouc" style="display: none;">
@@ -22,6 +23,21 @@
                     <asp:TextBox runat="server" ID="oneusecode" Width="300px" />
                 </div>
             </div>
+            <script>
+                $("#oucc").click(function () {
+                    if ($(this).html() == "Use a One Use Code instead") {
+                        $("#pw").val("").hide();
+                        $("#ouc").val("").show();
+                        $(this).html("Use a Password instead");
+                    } else {
+                        $("#pw").val("").show();
+                        $("#ouc").val("").hide();
+                        $(this).html("Use a One Use Code instead");
+                    }
+                    return false;
+                });
+            </script>
+            </asp:PlaceHolder>
             <asp:Literal runat="server" ID="message" />
             <div class="submit">
                 <asp:LinkButton runat="server" UseSubmitBehavior="true" ID="login" Text="Login" onclick="login_Click" Font-Size="200%" />
@@ -32,18 +48,6 @@
         </div>
         <script type="text/javascript">
             hap.load = hap.loadtypes.none;
-            $("#oucc").click(function () {
-                if ($(this).html() == "Use a One Use Code instead") {
-                    $("#pw").val("").hide();
-                    $("#ouc").val("").show();
-                    $(this).html("Use a Password instead");
-                } else {
-                    $("#pw").val("").show();
-                    $("#ouc").val("").hide();
-                    $(this).html("Use a One Use Code instead");
-                }
-                return false;
-            });
             $(document).ready(function () {
                 $("#<%=login.ClientID %>").button();
                 if ($("#<%=username.ClientID %>").val().length == 0) $("#<%=username.ClientID %>").focus();

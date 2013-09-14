@@ -17,6 +17,7 @@ namespace HAP.Web
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            oneusecodes.Visible = hapConfig.Current.AD.AllowOneUseCodes;
             HAP.AD.OneUse.Current.RemoveExpiredCodes();
             if (User.Identity.IsAuthenticated && !Page.IsPostBack && Request.QueryString.Count < 2) Response.Redirect("unauthorised.aspx");
             if (!Page.IsPostBack)

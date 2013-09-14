@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HAP.Web.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -16,6 +17,7 @@ namespace HAP.Web
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!hapConfig.Current.AD.AllowOneUseCodes) Response.Redirect("unauthorised.aspx");
             ExpireAllCodes.Visible = User.IsInRole("Domain Admins");
             gencodes.Visible = User.IsInRole("Domain Admins") || HttpContext.Current.Request.Cookies["token"].Value == "NTLM" || HttpContext.Current.Request.Cookies["token"].Value == "Negotiate";
             if (Request.QueryString["gencodes"] == "1")
@@ -34,8 +36,11 @@ namespace HAP.Web
                         }
 
                     }
-                    i++;
                 }
+                Response.Redirect("OneUseCodes.aspx?gencodes=2");
+            }
+            else if (Request.QueryString["gencodes"] == "2")
+            {
                 gencodes.Visible = false;
             }
             repeater.DataSource = HAP.AD.OneUse.Current.Values;
@@ -45,6 +50,8 @@ namespace HAP.Web
         protected void ExpireAllCodes_Click(object sender, EventArgs e)
         {
             HAP.AD.OneUse.Current.RemoveCodes();
+            repeater.DataSource = HAP.AD.OneUse.Current.Values;
+            repeater.DataBind();
         }
 
         protected void gencodes_Click(object sender, EventArgs e)
