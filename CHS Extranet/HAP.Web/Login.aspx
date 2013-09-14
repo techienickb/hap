@@ -11,9 +11,16 @@
                 <asp:TextBox runat="server" ID="username" Width="300px" AutoCompleteType="None" />
                 <asp:RequiredFieldValidator runat="server" ControlToValidate="username" ErrorMessage="*" ForeColor="Red" />
             </div>
-            <div>
+            <div id="pw">
                 <asp:Label runat="server" AssociatedControlID="password">Password: </asp:Label>
                 <asp:TextBox TextMode="Password" runat="server" ID="password" Width="300px" />
+            </div>
+            <div>
+                <a href="#" id="oucc">Use a One Use Code instead</a>
+                <div id="ouc" style="display: none;">
+                    <asp:Label runat="server" AssociatedControlID="oneusecode">One Use Code: </asp:Label>
+                    <asp:TextBox runat="server" ID="oneusecode" Width="300px" />
+                </div>
             </div>
             <asp:Literal runat="server" ID="message" />
             <div class="submit">
@@ -25,6 +32,18 @@
         </div>
         <script type="text/javascript">
             hap.load = hap.loadtypes.none;
+            $("#oucc").click(function () {
+                if ($(this).html() == "Use a One Use Code instead") {
+                    $("#pw").val("").hide();
+                    $("#ouc").val("").show();
+                    $(this).html("Use a Password instead");
+                } else {
+                    $("#pw").val("").show();
+                    $("#ouc").val("").hide();
+                    $(this).html("Use a One Use Code instead");
+                }
+                return false;
+            });
             $(document).ready(function () {
                 $("#<%=login.ClientID %>").button();
                 if ($("#<%=username.ClientID %>").val().length == 0) $("#<%=username.ClientID %>").focus();

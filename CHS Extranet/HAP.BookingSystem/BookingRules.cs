@@ -82,7 +82,6 @@ namespace HAP.BookingSystem
                                     if (r.Type == ResourceType.Laptops)
                                     {
                                         node.SetAttribute("ltroom", "--");
-                                        node.SetAttribute("ltcount", b.LTCount.ToString());
                                         node.SetAttribute("ltheadphones", b.LTHeadPhones.ToString());
                                     }
                                     node.SetAttribute("username", "systemadmin");
@@ -114,7 +113,6 @@ namespace HAP.BookingSystem
                                     if (r.Type == ResourceType.Laptops)
                                     {
                                         node.SetAttribute("ltroom", "--");
-                                        node.SetAttribute("ltcount", b.LTCount.ToString());
                                         node.SetAttribute("ltheadphones", b.LTHeadPhones.ToString());
                                     }
                                     else if (r.Type == ResourceType.Equipment) node.SetAttribute("equiproom", b.EquipRoom);
@@ -122,6 +120,7 @@ namespace HAP.BookingSystem
                                     node.SetAttribute("uid", b.uid);
                                     node.SetAttribute("username", b.Username);
                                     node.SetAttribute("name", b.Name);
+                                    node.SetAttribute("count", b.Count.ToString());
                                     doc.SelectSingleNode("/Bookings").AppendChild(node);
                                 }
                                 else

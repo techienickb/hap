@@ -291,6 +291,26 @@ namespace HAP.Web.Configuration
             {
                 ((XmlElement)doc.SelectSingleNode("/hapConfig/AD")).SetAttribute("secureldap", "false");
             }
+            if (version.CompareTo(Version.Parse("9.6.0914.2000")) < 0) //Perform v9.6 upgrade
+            {
+                ((XmlElement)doc.SelectSingleNode("/hapConfig/AD")).SetAttribute("allow1usecodes", "false");
+                XmlDocument doc2 = new XmlDocument();
+                doc2.Load(HttpContext.Current.Server.MapPath("~/App_Data/Bookings.xml"));
+                foreach (XmlNode n in doc2.SelectNodes("/Bookings/Booking"))
+                {
+                    XmlElement elem = n as XmlElement;
+                    if (elem.HasAttribute("ltcount")) { elem.SetAttribute("count", elem.GetAttribute("ltcount")); elem.RemoveAttribute("ltcount"); }
+                }
+                doc2.Save(HttpContext.Current.Server.MapPath("~/app_data/bookings.xml"));
+                doc2 = new XmlDocument();
+                doc2.Load(HttpContext.Current.Server.MapPath("~/app_data/staticbookings.xml"));
+                foreach (XmlNode n in doc.SelectNodes("/Bookings/Booking"))
+                {
+                    XmlElement elem = n as XmlElement;
+                    if (elem.HasAttribute("ltcount")) { elem.SetAttribute("count", elem.GetAttribute("ltcount")); elem.RemoveAttribute("ltcount"); }
+                }
+                doc2.Save(HttpContext.Current.Server.MapPath("~/app_data/staticbookings.xml"));
+            }
             doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             doc.Save(ConfigPath);
         }

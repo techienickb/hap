@@ -23,7 +23,6 @@ namespace HAP.BookingSystem
             this.Name = node.Attributes["name"].Value;
             this.Username = node.Attributes["username"].Value;
             this.Static = true;
-            if (node.Attributes["ltcount"] != null) this.LTCount = int.Parse(node.Attributes["ltcount"].Value);
             if (node.Attributes["ltroom"] != null) this.LTRoom = node.Attributes["ltroom"].Value;
             if (node.Attributes["ltheadphones"] != null) this.LTHeadPhones = bool.Parse(node.Attributes["ltheadphones"].Value);
             else this.LTHeadPhones = false;
@@ -45,7 +44,6 @@ namespace HAP.BookingSystem
             this.Name = node.Attributes["name"].Value;
             this.Username = node.Attributes["username"].Value;
             this.Static = Static;
-            if (node.Attributes["ltcount"] != null) this.LTCount = int.Parse(node.Attributes["ltcount"].Value);
             if (node.Attributes["ltroom"] != null) this.LTRoom = node.Attributes["ltroom"].Value;
             if (node.Attributes["ltheadphones"] != null) this.LTHeadPhones = bool.Parse(node.Attributes["ltheadphones"].Value);
             else this.LTHeadPhones = false;
@@ -67,7 +65,6 @@ namespace HAP.BookingSystem
             this.Name = node.Attributes["name"].Value;
             this.Username = node.Attributes["username"].Value;
             this.Static = false;
-            if (node.Attributes["ltcount"] != null) this.LTCount = int.Parse(node.Attributes["ltcount"].Value);
             if (node.Attributes["ltroom"] != null) this.LTRoom = node.Attributes["ltroom"].Value;
             if (node.Attributes["ltheadphones"] != null) this.LTHeadPhones = bool.Parse(node.Attributes["ltheadphones"].Value);
             else this.LTHeadPhones = false;
@@ -111,7 +108,6 @@ namespace HAP.BookingSystem
         public bool LTHeadPhones { get; set; }
         public string LTRoom { get; set; }
         public string EquipRoom { get; set; }
-        public int LTCount { get; set; }
         public int Count { get; set; }
         public bool Static { get; set; }
         public string uid { get; set; }
@@ -159,9 +155,12 @@ namespace HAP.BookingSystem
             this.Notes = b.Notes;
             try
             {
-                this.LTCount = b.LTCount;
                 this.LTHeadPhones = b.LTHeadPhones;
                 this.LTRoom = b.LTRoom;
+            }
+            catch { }
+            try
+            {
                 this.EquipRoom = b.EquipRoom;
             }
             catch { }
@@ -188,7 +187,6 @@ namespace HAP.BookingSystem
         public bool LTHeadPhones { get; set; }
         public string LTRoom { get; set; }
         public string EquipRoom { get; set; }
-        public int LTCount { get; set; }
         public int Count { get; set; }
         public bool Static { get; set; }
         public string Username { get; set; }

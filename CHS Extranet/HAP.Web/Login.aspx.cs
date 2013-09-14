@@ -17,6 +17,7 @@ namespace HAP.Web
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            HAP.AD.OneUse.Current.RemoveExpiredCodes();
             if (User.Identity.IsAuthenticated && !Page.IsPostBack && Request.QueryString.Count < 2) Response.Redirect("unauthorised.aspx");
             if (!Page.IsPostBack)
             {
@@ -53,6 +54,18 @@ namespace HAP.Web
             Title = string.Format(Title, HAP.Web.Configuration.hapConfig.Current.School.Name);
         }
 
+        protected bool IsValidCode(out string code)
+        {
+            if (HAP.AD.OneUse.Current.ContainsKey(oneusecode.Text) && HAP.AD.OneUse.Current[oneusecode.Text].Username.ToLower() == username.Text.ToLower())
+            {
+                code = HAP.AD.OneUse.Current[oneusecode.Text].Token;
+                HAP.AD.OneUse.Current.RemoveCode(oneusecode.Text);
+                return true;
+            }
+            code = "";
+            return false;
+        }
+
         protected void login_Click(object sender, EventArgs e)
         {
             if (Cache.Get("hapBannedIps") == null) HttpContext.Current.Cache.Insert("hapBannedIps", new List<Banned>());
@@ -71,8 +84,22 @@ namespace HAP.Web
                     return;
                 }
             }
+            string code;
             ban.Attempts++;
-            if (Membership.ValidateUser(username.Text.Trim(), password.Text.Trim()) && !ban.IsBanned)
+            if (oneusecode.Text.Length == 4 && IsValidCode(out code) && !ban.IsBanned && Membership.ValidateUser(username.Text.Trim(), HAP.AD.TokenGenerator.ConvertToPlain(code)))
+            {
+                HAP.Web.Logging.EventViewer.Log("HAP+ Logon", "Home Access Plus+ Logon\n\nUsername: " + username.Text, System.Diagnostics.EventLogEntryType.Information, true);
+                HAP.Data.SQL.WebEvents.Log(DateTime.Now, "Logon", username.Text, Request.UserHostAddress, Request.Browser.Platform, Request.Browser.Browser + " " + Request.Browser.Version, Request.UserHostName, Request.UserAgent);
+                FormsAuthentication.SetAuthCookie(username.Text, false);
+                HttpCookie tokenCookie = new HttpCookie("token", code);
+                tokenCookie.Secure = tokenCookie.HttpOnly = true;
+                if (Request.Cookies["token"] == null) Response.AppendCookie(tokenCookie);
+                else Response.SetCookie(tokenCookie);
+                bans.Remove(ban);
+                Cache.Insert("hapBannedIps", bans);
+                FormsAuthentication.RedirectFromLoginPage(username.Text, false);
+            }
+            else if (Membership.ValidateUser(username.Text.Trim(), password.Text.Trim()) && !ban.IsBanned)
             {
                 HAP.Web.Logging.EventViewer.Log("HAP+ Logon", "Home Access Plus+ Logon\n\nUsername: " + username.Text, System.Diagnostics.EventLogEntryType.Information, true);
                 HAP.Data.SQL.WebEvents.Log(DateTime.Now, "Logon", username.Text, Request.UserHostAddress, Request.Browser.Platform, Request.Browser.Browser + " " + Request.Browser.Version, Request.UserHostName, Request.UserAgent);
@@ -83,7 +110,8 @@ namespace HAP.Web
                 else Response.SetCookie(tokenCookie);
                 bans.Remove(ban);
                 Cache.Insert("hapBannedIps", bans);
-                FormsAuthentication.RedirectFromLoginPage(username.Text, false);
+                if (Request.QueryString["ReturnUrl"] == "OneUseCodes.aspx") Response.Redirect("OneUseCodes.aspx?gencodes=1");
+                else FormsAuthentication.RedirectFromLoginPage(username.Text, false);
             }
             else
             {

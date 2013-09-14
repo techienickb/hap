@@ -104,8 +104,7 @@
 			New Booking for <span id="bfdate"></span> <span id="bfres"></span> during <span id="bflesson"></span>
 		</p>
 		<label for="bfyear">Year: </label><select id="bfyear"></select><br />
-		<label for="bfsubject">Subject: </label>
-		<select id="bfsubjects" onchange="subjectchance(this)">
+		<label for="bfsubject">Subject: </label><select id="bfsubjects" onchange="subjectchance(this)">
             <%if (config.BookingSystem.Subjects.Count > 1) { %>
 			<option value="" selected="selected">- Subject -</option>
             <%} %>
@@ -130,16 +129,11 @@
             <span id="bflosroom_span" style="display: none;"><label for="bflosroom">Room Required In: </label><select id="bflosroom"></select></span>
             <span id="bfloroomerror" style="display: none;">*</span>
 		</div>
-        <div id="bfquantrad" style="clear: both;">
-            <label for="bflquant">Quantity:&nbsp;</label>
-            <div id="bflquant" style="display: inline-block;">
-				<input type="radio" name="bflquant" id="bflquant-16" value="16" /><label for="bflquant-16">16</label>
-				<input type="radio" name="bflquant" id="bflquant-32" value="32" /><label for="bflquant-32">32</label>
-			</div>
-        </div>
-        <div id="bfquantnumb">
-            <label for="bfquantspin">Quantity:&nbsp;</label>
-            <input type="number" id="bfquantspin" style="width: 40px;" value="1" />/<span id="bfquantmax"></span>
+        <div id="bfquant" style="clear: both;">
+            <label>Quantity:&nbsp;</label><div id="bfquants" style="display: inline-block;">
+				<input type="radio" name="bfquants" id="bfquants-16" value="16" /><label for="bfquants-16">16</label>
+				<input type="radio" name="bfquants" id="bfquants-32" value="32" /><label for="bfquants-32">32</label>
+			</div><input type="number" id="bfquantspin" style="width: 40px;" value="1" /><span id="bfquantmax"></span>
             <script>$("#bfquantspin").spinner();</script>
         </div>
         <div id="bfmultilesson">
@@ -147,8 +141,7 @@
         </div>
 		<asp:PlaceHolder runat="server" ID="adminbookingpanel">
 		<div>
-			<asp:Label runat="server" AssociatedControlID="userlist" Text="User To Book For: " />
-			<asp:DropDownList runat="server" ID="userlist" />
+			<asp:Label runat="server" AssociatedControlID="userlist" Text="User To Book For: " /><asp:DropDownList runat="server" ID="userlist" />
 		</div>
         <div>
             <label for="bflstatic">Make static?: </label><input type="checkbox" id="bflstatic" />
@@ -203,7 +196,7 @@
 			            h += this.Data[x][y].Name + '<span>' + this.Data[x][y].DisplayName;
 			            if (this.Data[x][y].Name == "FREE" || this.Data[x][y].Name == "UNAVAILABLE" || this.Data[x][y].Name == "CHARGING") { }
 			            else {
-			                if (this.Type == "Laptops") h += ' in ' + this.Data[x][y].LTRoom + ' [' + this.Data[x][y].LTCount + '|' + (this.Data[x][y].LTHeadPhones ? 'HP' : 'N-HP') + ']';
+			                if (this.Type == "Laptops") h += ' in ' + this.Data[x][y].LTRoom + ' [' + this.Data[x][y].Count + '|' + (this.Data[x][y].LTHeadPhones ? 'HP' : 'N-HP') + ']';
 			                else if (this.Data[x][y].Count != 0 && this.Quantities.length > 0 && this.CanShare && !this.Data[x][0].Static) { xy += this.Data[x][y].Count; h += ' [' + this.Data[x][y].Count + '/' + this.Quantities[this.Quantities.length - 1] +']'; }
 			                else if (this.Type == "Equipment" || this.Type == "Loan") h += ' in ' + this.Data[x][y].EquipRoom;
 			            }
@@ -319,7 +312,7 @@
 		    return false;
 		}
 		$("#bookbutton").click(function () {
-		    if (curres.Disclaimer != "" && !$("#bfdisclaimer input").is(":checked")) { alert(hap.common.getLocal('bookingsystem/nodisclaimer')); return; }
+		    if (curres.Disclaimer != "" && !$("#bfdisclaimer input").is(":checked")) { alert(hap.common.getLocal('bookingsystem/nodisclaimer')); return false; }
 		    var abort = false;
 		    if ($("#bfsubject").val().length == 0) { 
 		        $("#subjecterror").removeAttr("style").css("color", "red");
@@ -350,7 +343,7 @@
 		    var d = '{ "booking": { "Room": "' + curres.Name + '", "Lesson": "' + (canmulti ? $("#bfmultiroom").val() : curles) + '", "Username": "' + (user.isBSAdmin ? $("#<%=userlist.ClientID %> option:selected").val() : user.username) + '", "Name": "' + n1 + '"';
 		    if ($("#bflstatic").length > 0 && $("#bflstatic").is(":checked")) d +=  ', "Static": true';
 		    if (curres.Type == "Laptops") {
-		        d += ', "LTCount": ' + $("#bflquant input:checked").attr("value") + ', "LTRoom": "' + $("#bflroom").val() + '", "LTHeadPhones": ' + (($('#bflheadphones:checked').val() !== undefined) ? 'true' : 'false');
+		        d += ', "LTRoom": "' + $("#bflroom").val() + '", "LTHeadPhones": ' + (($('#bflheadphones:checked').val() !== undefined) ? 'true' : 'false');
 		    }
 		    else if (curres.Type == "Equipment") {
 		        d += ', "EquipRoom": "' + $("#bferoom").val() + '"';
@@ -358,8 +351,8 @@
 		    else if (curres.Type == "Loan") {
 		        d += ', "EquipRoom": "' + $("#bfloroom").val()  + '"';
 		    }
-		    if (curres.Type != "Loan" && curres.Type != "Laptops" && curres.Quantities.length > 0 && curres.CanShare && parseInt($("#bfquantspin").val()) < parseInt(curres.Quantities[curres.Quantities.length - 1])) {
-		        d += ', "Count": ' + $("#bfquantspin").val();
+		    if (curres.Type != "Loan" && curres.Quantities.length > 0 && parseInt($("#bfquantspin").val()) < parseInt(curres.Quantities[curres.Quantities.length - 1])) {
+		        d += ', "Count": ' + (curres.Quantities.length == 1 ? $("#bfquantspin").val() : $("#bflquant input:checked").attr("value"));
 		    }
 		    if (curres.Notes) {
 		        d += ', "Notes": "' + escape($("#bfnotes").val()) + '"';
@@ -444,29 +437,26 @@
 		            $("#bfyear").append('<option value="' + curres.Years[i] + '">' + curres.Years[i] + '</option>');
 		    } catch (e) { }
 		    try {
-		        if (curres.Type == "Laptops") {
-		            $("#bfquantrad").show();
-		            $("#bfquantnumb").hide();
-		            $("#bflquant input, #bflquant label").remove();
-		            var checked = '';
-		            if (curres.Quantities.length == 1 ) {
-		                checked = ' checked="checked" ';
+		        $("#bfquant, #bfquants, #bfquantspin").hide();
+		        $("#bfquantmax").html("");
+		        if (curres.CanShare || curres.Type == "Laptops") {
+		            $("#bfquant").show();
+		            if (curres.Quantities.length == 1) {
+		                $("#bfquantspin").show();
+		                var cr3 = curres.Quantities[0];
+		                for (var cr1 = 0; cr1 < curres.Data.length; cr1++)
+		                    if (curres.Data[cr1][0].Lesson == curles)
+		                        for (var cr2 = 0; cr2 < curres.Data[cr1].length; cr2++)
+		                            cr3 -= curres.Data[cr1][cr2].Count;
+		                $("#bfquantmax").html("&nbsp;/&nbsp;" + cr3);
+		                $("#bfquantspin").val(cr3).spinner( "option", "min", 1).spinner("option", "max", cr3);
 		            }
-		            for (var i = 0; i < curres.Quantities.length; i++)
-		                $("#bflquant").append('<input type="radio" name="bflquant" id="bflquant-' + curres.Quantities[i] + '" value="' + curres.Quantities[i] + '"' + checked + ' /><label for="bflquant-' + curres.Quantities[i] + '">' + curres.Quantities[i] + '</label>');
-		        } else if (curres.CanShare) {
-		            $("#bfquantrad").hide();
-		            $("#bfquantnumb").show();
-		            var cr3 = curres.Quantities[curres.Quantities.length - 1];
-		            for (var cr1 = 0; cr1 < curres.Data.length; cr1++)
-		                if (curres.Data[cr1][0].Lesson == curles)
-		                    for (var cr2 = 0; cr2 < curres.Data[cr1].length; cr2++)
-		                        cr3 -= curres.Data[cr1][cr2].Count;
-		            $("#bfquantmax").html(cr3);
-		            $("#bfquantspin").val(cr3).spinner( "option", "min", 1).spinner("option", "max", cr3);
-		        } else {
-		            $("#bfquantrad").hide();
-		            $("#bfquantnumb").hide();
+		            else {
+		                $("#bflquants").html("");
+		                for (var i = 0; i < curres.Quantities.length; i++)
+		                    $("#bflquants").append('<input type="radio" name="bfquants" id="bfquants-' + curres.Quantities[i] + '" value="' + curres.Quantities[i] + '"' + checked + ' /><label for="bfquants-' + curres.Quantities[i] + '">' + curres.Quantities[i] + '</label>');
+		                $("#bfquants").show().buttonset();
+		            }
 		        }
 		    } catch (e) { }
 		    try {
@@ -518,9 +508,6 @@
 		        $("#bfmultilesson").hide();
 		        canmulti = false; 
 		    }
-		    if (curres.Quantities.length > 0) $("#bfquant").show();
-		    else $("#bfquant").hide();
-			$("#bflquant").buttonset();
 			$("#bflesson").html(lesson);
 			if (curres.Disclaimer != "") {
 			    $("#bfdisclaimer").show();
