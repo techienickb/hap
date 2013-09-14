@@ -245,7 +245,9 @@
 							if (hap.hdadmin) {
 								$("#ticket-priority input:checked").removeAttr("checked");
 								$("#ticket-showto").val("");
-								$("#ticket-fixed").removeAttr("checked");
+								if ($("#ticket-fixed").is(":checked")) $("#ticket-fixed").prev().trigger("click");
+								if ($("#ticket-userinter").is(":checked")) $("#ticket-userinter").prev().trigger("click");
+								if ($("#ticket-faq").is(":checked")) $("#ticket-faq").prev().trigger("click");
 							}
 							var h = '<button style="float: right;" onclick="return updateTicket();">Update</button>' + (hap.hdadmin ? '<button style="float: right;" onclick="return assignTicket();">Assign</button>' : '') + '<div><label>Ticket ' + curticket + ': </label>' + data.Subject + '</div><div><label>Opened By: </label>' + data.DisplayName + ' (' + data.Username + ')</div><div><label>Opened on: </label>' + data.Date + '</div><div><label>Priority: </label>' + data.Priority + '</div><div><label>Status: </label>' + data.Status + '</div>' + (data.AssignedTo == "" ? "" : '<div><label>Assigned To:</label>' + data.AssignedTo + '</div>') + '<div class="notes tile-border-color">';
 							for (var i = 0; i < data.Notes.length; i++)
