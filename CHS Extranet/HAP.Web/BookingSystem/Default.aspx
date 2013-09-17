@@ -395,8 +395,8 @@
 		    else if (curres.Type == "Loan") {
 		        d += ', "EquipRoom": "' + $("#bfloroom").val()  + '"';
 		    }
-		    if (curres.Type != "Loan" && curres.Quantities.length > 0 && parseInt($("#bfquantspin").val()) < parseInt(curres.Quantities[curres.Quantities.length - 1])) {
-		        d += ', "Count": ' + (curres.Quantities.length == 1 ? $("#bfquantspin").val() : $("#bflquant input:checked").attr("value"));
+		    if (curres.Type != "Loan" && curres.Quantities.length > 0 && ($("#bfquants input").is(":checked") || parseInt($("#bfquantspin").val()) < parseInt(curres.Quantities[curres.Quantities.length - 1]))) {
+		        d += ', "Count": ' + (curres.Quantities.length == 1 ? $("#bfquantspin").val() : $("#bfquants input:checked").attr("value"));
 		    }
 		    if (curres.Notes) {
 		        d += ', "Notes": "' + escape($("#bfnotes").val()) + '"';
@@ -508,10 +508,10 @@
 		                $("#bfquantspin").val(cr3).spinner( "option", "min", 1).spinner("option", "max", cr3);
 		            }
 		            else {
-		                $("#bflquants").html("");
-		                for (var i = 0; i < curres.Quantities.length; i++)
-		                    $("#bflquants").append('<input type="radio" name="bfquants" id="bfquants-' + curres.Quantities[i] + '" value="' + curres.Quantities[i] + '"' + checked + ' /><label for="bfquants-' + curres.Quantities[i] + '">' + curres.Quantities[i] + '</label>');
-		                $("#bfquants").show().buttonset();
+		                $("#bfquants").html("").show();
+		                for (var i = 0; i < curres.Quantities.length; i++) 
+		                    $("#bfquants").append('<input type="radio" name="bfquants" id="bfquants-' + curres.Quantities[i] + '" value="' + curres.Quantities[i] + '" /><label for="bfquants-' + curres.Quantities[i] + '">' + curres.Quantities[i] + '</label>');
+		                $("#bfquants").buttonset();
 		            }
 		        }
 		    } catch (e) { }
@@ -722,9 +722,8 @@
 		        var time2 = new Date(curdate.toDateString());
 		        time2.setHours(parseInt(lessontimes[i].End.split(":")[0]));
 		        time2.setMinutes(parseInt(lessontimes[i].End.split(":")[1]));
-
 		        if (new Date() < time1) {
-		            $("#time").scrollLeft($("#bookingday > .body > .head h1:eq(" + i + ")").position().left + 2);
+		            $("#time").css("left", ($("#bookingday > .body > .head h1:eq(" + i + ")").position().left + 2) + "px");
 		            breakloc = null;
 		            break;
 		        }
