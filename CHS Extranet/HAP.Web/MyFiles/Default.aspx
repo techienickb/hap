@@ -473,7 +473,6 @@
 				}
 		        $("#progresses").append('<div id="upload-' + this.FileName.replace(/[\\'\. \[\]\(\)\-]/g, "_") + '"><div class="progressbar" style="display: inline-block; width: 100px; height: 20px; vertical-align: middle; overflow: hidden;"></div> ' + this.FileName + '</div>');
 		        $("#upload-" + this.FileName.replace(/[\\'\. \[\]\(\)\-]/g, "_") + " .progressbar").progressbar({ value: 0 });
-		        console.log(hap.common.formatJSONUrl('~/api/MyFiles/Exists/' + this.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, "") + '/' + this.FileName));
 				$.ajax({
 					type: 'GET',
 					url: hap.common.formatJSONUrl('~/api/MyFiles/Exists/' + this.Path.replace(/\\/gi, "/").replace(/\.\.\/Download\//gi, "") + '/' + this.FileName),
@@ -811,7 +810,7 @@
 						'con-skydrive' : function (t) {
 						    if (SelectedItems().length > 1) { alert(hap.common.getLocal("myfiles/only1")); return false; }
 						    WL.init({ client_id: '<%=config.MyFiles.LiveAppId%>', redirect_uri: hap.common.resolveUrl("~/myfiles/oauth.aspx"), scope: 'wl.skydrive_update', response_type: 'token' });
-						    WL.login({scope: 'wl.skydrive_update' }, function () { console.log("Windows Live Logged In");
+						    WL.login({scope: 'wl.skydrive_update' }, function () { 
 						        $("#loadingbox").dialog({ autoOpen: true, modal: true });
 						        $.ajax({
 						            type: 'POST',
