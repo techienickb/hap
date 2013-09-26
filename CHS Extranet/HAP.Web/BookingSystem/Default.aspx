@@ -384,7 +384,7 @@
 		    if (n1 != "") n1 += " ";
 		    n1 += $("#bfsubject").val();
 		    if (abort) return false;
-		    var d = '{ "booking": { "Room": "' + curres.Name + '", "Lesson": "' + (canmulti ? $("#bfmultiroom").val() : curles) + '", "Username": "' + (user.isBSAdmin ? $("#<%=userlist.ClientID %> option:selected").val() : user.username) + '", "Name": "' + n1 + '"';
+		    var d = '{ "booking": { "Room": "' + curres.Name + '", "Lesson": "' + (canmulti && $("#bfmultiroom").val() != null ? $("#bfmultiroom").val() : curles) + '", "Username": "' + (user.isBSAdmin ? $("#<%=userlist.ClientID %> option:selected").val() : user.username) + '", "Name": "' + n1 + '"';
 		    if ($("#bflstatic").length > 0 && $("#bflstatic").is(":checked")) d +=  ', "Static": true';
 		    if (curres.Type == "Laptops") {
 		        d += ', "LTRoom": "' + $("#bflroom").val() + '", "LTHeadPhones": ' + (($('#bflheadphones:checked').val() !== undefined) ? 'true' : 'false');
