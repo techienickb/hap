@@ -69,7 +69,7 @@ body.bookingdisplay, body.bookingdisplay form { padding: 0; margin: 0; width: 10
 #hapHeader #hapTitle a { background-image: url(../api/tiles/icons/24/24/images/icons/metro/applications/calendar.png); background-position: 5px center; }
 #datepicker .ui-datepicker { border-top: 0; }
 
-#sidebaredit { top: 40px; z-index: 50; overflow-y: auto; }
+#sidebaredit { top: 40px; z-index: 91; overflow-y: auto; }
 #sidebaredit.show { width: 50%; }
 #sidebaredit h1 { margin: 0; }
 #sidebaredit select, #sidebaredit input, #sidebaredit label { font-size: 16px; }
