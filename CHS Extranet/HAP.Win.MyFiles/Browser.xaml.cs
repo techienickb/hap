@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,6 +26,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.Web.Http;
+using Windows.Web.Http.Headers;
 
 // The Items Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234233
 
@@ -60,14 +60,12 @@ namespace HAP.Win.MyFiles
         {
             loading.IsIndeterminate = true;
             path = navigationParameter as string;
+            HttpClient c = new HttpClient(HAPSettings.certfilter);
             bool tokengood = false;
-            HttpClientHandler h = new HttpClientHandler();
-            h.CookieContainer = new CookieContainer();
-            h.UseCookies = true;
             try
             {
-                h.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie("token", HAPSettings.CurrentToken[0]));
-                h.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie(HAPSettings.CurrentToken[2], HAPSettings.CurrentToken[1]));
+                c.DefaultRequestHeaders.Cookie.Add(new HttpCookiePairHeaderValue("token", HAPSettings.CurrentToken[0]));
+                c.DefaultRequestHeaders.Cookie.Add(new HttpCookiePairHeaderValue(HAPSettings.CurrentToken[2], HAPSettings.CurrentToken[1]));
                 tokengood = true;
             }
             catch
@@ -80,14 +78,13 @@ namespace HAP.Win.MyFiles
             }
             if (tokengood)
             {
-                HttpClient c = new HttpClient(h);
-                c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                c.DefaultRequestHeaders.Accept.Add(new HttpMediaTypeWithQualityHeaderValue("application/json"));
                 try
                 {
                     if (path == "")
                     {
                         pageTitle.Text = "My Drives";
-                        bottomAppBar.IsEnabled = downloadbutton.IsEnabled = uploadbutton.IsEnabled = false;
+                        bottomAppBar.IsEnabled = downloadbutton.IsEnabled = deletebutton.IsEnabled = uploadbutton.IsEnabled = false;
                         JSONDrive[] drives = JsonConvert.DeserializeObject<JSONDrive[]>(await c.GetStringAsync(new Uri(HAPSettings.CurrentSite.Address, "./api/myfiles/drives")));
                         itemsViewSource.Source = drives;
                         driveGridView.Visibility = Windows.UI.Xaml.Visibility.Visible;
@@ -97,7 +94,7 @@ namespace HAP.Win.MyFiles
                     else
                     {
                         pageTitle.Text = path.Replace("/", "\\").Replace("\\", " \\ ");
-                        JSONFile[] files = JsonConvert.DeserializeObject<JSONFile[]>(await c.GetStringAsync(new Uri(HAPSettings.CurrentSite.Address, "./api/myfiles/" + path.Replace('\\', '/'))));
+                        JSONFile[] files = JsonConvert.DeserializeObject<JSONFile[]>(await c.GetStringAsync(new Uri(HAPSettings.CurrentSite.Address, "./api/myfiles/" + path.Replace('\\', '/') + DateTime.Now.Ticks)));
                         itemsViewSource.Source = files;
                         driveGridView.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                         fileGridView.Visibility = Windows.UI.Xaml.Visibility.Visible;
@@ -289,12 +286,12 @@ namespace HAP.Win.MyFiles
             if (fileGridView.SelectedItem != null && fileGridView.SelectedItem is JSONFile)
             {
                 JSONFile file = ((JSONFile)fileGridView.SelectedItem);
-                if (file.Type != null && file.Type == "Directory") { downloadbutton.IsEnabled = false; uploadbutton.IsEnabled = bottomAppBar.IsOpen = file.Permissions.Modify; }
-                else { downloadbutton.IsEnabled = bottomAppBar.IsOpen = true; uploadbutton.IsEnabled = false; }
+                if (file.Type != null && file.Type == "Directory") { downloadbutton.IsEnabled = deletebutton.IsEnabled = false; uploadbutton.IsEnabled = bottomAppBar.IsOpen = file.Permissions.Modify; }
+                else { downloadbutton.IsEnabled = bottomAppBar.IsOpen = true; deletebutton.IsEnabled = file.Permissions.Delete; uploadbutton.IsEnabled = false; }
             }
             else
             {
-                downloadbutton.IsEnabled = bottomAppBar.IsOpen = false; uploadbutton.IsEnabled = Params == null ? false : Params.Properties.Permissions.Modify;
+                downloadbutton.IsEnabled = deletebutton.IsEnabled = bottomAppBar.IsOpen = false; uploadbutton.IsEnabled = Params == null ? false : Params.Properties.Permissions.Modify;
             }
             //}
             //catch { downloadbutton.IsEnabled = bottomAppBar.IsOpen = uploadbutton.IsEnabled = false; }
@@ -473,6 +470,91 @@ namespace HAP.Win.MyFiles
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             upload();
+        }
+
+        private void deletebutton_Click(object sender, RoutedEventArgs e)
+        {
+            JSONFile file = ((JSONFile)fileGridView.SelectedItem);
+            pro.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            pro.Value = 0;
+            loading.IsIndeterminate = true;
+            fileGridView.IsEnabled = false;
+
+            deletefile(file);
+        }
+
+        async void deletefile(JSONFile jfile)
+        {
+            HttpClient c = new HttpClient(HAPSettings.certfilter);
+            c.DefaultRequestHeaders.Cookie.Add(new HttpCookiePairHeaderValue("token", HAPSettings.CurrentToken[0]));
+            c.DefaultRequestHeaders.Cookie.Add(new HttpCookiePairHeaderValue(HAPSettings.CurrentToken[2], HAPSettings.CurrentToken[1]));
+            c.DefaultRequestHeaders.Accept.Add(new Windows.Web.Http.Headers.HttpMediaTypeWithQualityHeaderValue("application/json"));
+            HttpStringContent sc = new HttpStringContent("[ \"" + jfile.Path.Replace("../Download/", "").Replace("\\", "/") + "\" ]", Windows.Storage.Streams.UnicodeEncoding.Utf8, "application/json");
+            string sc1 = null;
+
+            MessageDialog mes = new MessageDialog("Are you sure you want to delete?\n\n" + jfile.Name);
+            mes.Commands.Add(new UICommand("Yes"));
+            mes.Commands.Add(new UICommand("No"));
+            mes.DefaultCommandIndex = 0;
+            IUICommand x = await mes.ShowAsync();
+            try
+            {
+                var cr = await c.PostAsync(new Uri(HAPSettings.CurrentSite.Address, "./api/myfiles/delete" + "?" + DateTime.Now.Ticks), sc);
+                sc1 = await cr.Content.ReadAsStringAsync();
+            }
+            catch (Exception ex)
+            {
+                MessageDialog mes2 = new MessageDialog("Error Deleting file\n\n" + ex.ToString());
+                mes2.Commands.Add(new UICommand("OK"));
+                mes2.DefaultCommandIndex = 0;
+                mes2.ShowAsync();
+            }
+
+
+            var ignored2 = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, reload);
+        }
+
+        private async void reload()
+        {
+            try
+            {
+                HttpClient c = new HttpClient(HAPSettings.certfilter);
+                c.DefaultRequestHeaders.Cookie.Add(new HttpCookiePairHeaderValue("token", HAPSettings.CurrentToken[0]));
+                c.DefaultRequestHeaders.Cookie.Add(new HttpCookiePairHeaderValue(HAPSettings.CurrentToken[2], HAPSettings.CurrentToken[1]));
+                c.DefaultRequestHeaders.Accept.Add(new Windows.Web.Http.Headers.HttpMediaTypeWithQualityHeaderValue("application/json"));
+                if (path == "")
+                {
+                    bottomAppBar.IsEnabled = downloadbutton.IsEnabled = deletebutton.IsEnabled = uploadbutton.IsEnabled = false;
+                    JSONDrive[] drives = JsonConvert.DeserializeObject<JSONDrive[]>(await c.GetStringAsync(new Uri(HAPSettings.CurrentSite.Address, "./api/myfiles/drives")));
+                    itemsViewSource.Source = drives;
+                    driveGridView.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                    fileGridView.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                    driveGridView.SelectedIndex = -1;
+                }
+                else
+                {
+                    JSONFile[] files = JsonConvert.DeserializeObject<JSONFile[]>(await c.GetStringAsync(new Uri(HAPSettings.CurrentSite.Address, "./api/myfiles/" + path.Replace('\\', '/') + "?" + DateTime.Now.Ticks)));
+                    itemsViewSource.Source = files;
+                    driveGridView.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                    fileGridView.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                    fileGridView.SelectedIndex = -1;
+                    JSONUploadParams prop = JsonConvert.DeserializeObject<JSONUploadParams>(await c.GetStringAsync(new Uri(HAPSettings.CurrentSite.Address, "./api/myfiles/UploadParams/" + path.Replace('\\', '/'))));
+                    Params = prop;
+                    bottomAppBar.IsEnabled = prop.Properties.Permissions.ReadData;
+                    uploadbutton.IsEnabled = prop.Properties.Permissions.AppendData;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageDialog mes = new MessageDialog(ex.ToString(), "An error has occured processing this request");
+                mes.Commands.Add(new UICommand("OK"));
+                mes.DefaultCommandIndex = 0;
+                mes.ShowAsync();
+                Frame.GoBack();
+            }
+            pro.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            loading.IsIndeterminate = false;
+            fileGridView.IsEnabled = true;
         }
     }
 }

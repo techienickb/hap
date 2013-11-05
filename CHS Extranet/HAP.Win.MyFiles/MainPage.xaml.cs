@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Security.Cryptography.Certificates;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -17,6 +17,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.Web.Http;
+using Windows.Web.Http.Filters;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -66,7 +68,7 @@ namespace HAP.Win.MyFiles
             Uri url = null;
             try
             {
-                url = new Uri(new Uri(s), "./api/ad");
+                url = new Uri(new Uri(s), "./api/ad/?" + DateTime.Now.Ticks);
             }
             catch
             {
@@ -79,8 +81,9 @@ namespace HAP.Win.MyFiles
             }
             if (url != null)
             {
-                HttpClient c = new HttpClient();
-                StringContent sc = new StringContent("{ \"username\": \"" + username.Text + "\", \"password\": \"" + password.Password + "\" }", Encoding.UTF8, "application/json");
+                HttpClient c = new HttpClient(HAPSettings.certfilter);
+                c.DefaultRequestHeaders.Accept.Add(new Windows.Web.Http.Headers.HttpMediaTypeWithQualityHeaderValue("application/json"));
+                HttpStringContent sc = new HttpStringContent("{ \"username\": \"" + username.Text + "\", \"password\": \"" + password.Password + "\" }", Windows.Storage.Streams.UnicodeEncoding.Utf8, "application/json");
                 string sc1 = null;
                 try
                 {

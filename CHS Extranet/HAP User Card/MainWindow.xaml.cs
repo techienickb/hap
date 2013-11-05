@@ -184,8 +184,8 @@ namespace HAP.UserCard
                 Web.getInitCompletedEventArgs e = data as Web.getInitCompletedEventArgs;
                 if (e.Error != null)
                 {
-                    MessageBox.Show("Error:\n" + e.Error.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     Close();
+                    return;
                 }
                 Init = e.Result;
                 Dispatcher.BeginInvoke(new Action(UpdateUser));

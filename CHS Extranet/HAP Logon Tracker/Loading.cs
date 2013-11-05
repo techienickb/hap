@@ -34,6 +34,7 @@ namespace HAP.Logon.Tracker
             this.api.LogonCompleted += new Tracker.api.LogonCompletedEventHandler(api_LogonCompleted);
             this.api.ClearCompleted += new Tracker.api.ClearCompletedEventHandler(api_ClearCompleted);
             this.action = action;
+            this.api.Timeout = 60000;
             this.Hide();
             if (action == Action.Clear) label1.Text = "Refreshing the Tracker...";
             else label1.Text = "Registering your Logon...";

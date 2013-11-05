@@ -108,6 +108,7 @@
             <Grid>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                     <Button Name="downloadbutton" Style="{StaticResource DownloadAppBarButtonStyle}" Click="Button_Click"/>
+                    <Button Name="deletebutton" Style="{StaticResource DeleteAppBarButtonStyle}" Click="deletebutton_Click"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button Name="uploadbutton" Style="{StaticResource UploadAppBarButtonStyle}" Click="Button_Click_1"/>
