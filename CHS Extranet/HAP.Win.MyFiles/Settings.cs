@@ -11,11 +11,27 @@ using System.Net;
 using System.IO;
 using Windows.UI.Popups;
 using Newtonsoft.Json;
+using Windows.Web.Http.Filters;
+using Windows.Security.Cryptography.Certificates;
 
 namespace HAP.Win.MyFiles
 {
     public class HAPSettings
     {
+
+        public static HttpBaseProtocolFilter certfilter
+        {
+            get
+            {
+                HttpBaseProtocolFilter aHBPF = new HttpBaseProtocolFilter();
+                aHBPF.IgnorableServerCertificateErrors.Add(ChainValidationResult.Untrusted);
+                aHBPF.IgnorableServerCertificateErrors.Add(ChainValidationResult.IncompleteChain);
+                aHBPF.IgnorableServerCertificateErrors.Add(ChainValidationResult.RevocationFailure);
+                aHBPF.AllowAutoRedirect = true;
+                return aHBPF;
+            }
+        }
+
         public void InitHandlers()
         {
             Windows.Storage.ApplicationData.Current.DataChanged += new TypedEventHandler<ApplicationData, object>(DataChangeHandler);

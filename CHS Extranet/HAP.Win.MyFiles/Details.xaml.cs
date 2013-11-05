@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.Data.Xml.Dom;
@@ -27,6 +25,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.Web.Http;
+using Windows.Web.Http.Headers;
 
 // The Item Detail Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234232
 
@@ -68,14 +68,12 @@ namespace HAP.Win.MyFiles
                 Frame.GoBack();
                 return;
             }
+            HttpClient c = new HttpClient(HAPSettings.certfilter);
             bool tokengood = false;
-            HttpClientHandler h = new HttpClientHandler();
-            h.CookieContainer = new CookieContainer();
-            h.UseCookies = true;
             try
             {
-                h.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie("token", HAPSettings.CurrentToken[0]));
-                h.CookieContainer.Add(HAPSettings.CurrentSite.Address, new Cookie(HAPSettings.CurrentToken[2], HAPSettings.CurrentToken[1]));
+                c.DefaultRequestHeaders.Cookie.Add(new HttpCookiePairHeaderValue("token", HAPSettings.CurrentToken[0]));
+                c.DefaultRequestHeaders.Cookie.Add(new HttpCookiePairHeaderValue(HAPSettings.CurrentToken[2], HAPSettings.CurrentToken[1]));
                 tokengood = true;
             }
             catch
@@ -88,11 +86,10 @@ namespace HAP.Win.MyFiles
             }
             if (tokengood)
             {
-                HttpClient c = new HttpClient(h);
-                c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                c.DefaultRequestHeaders.Accept.Add(new HttpMediaTypeWithQualityHeaderValue("application/json"));
                 try
                 {
-                    JSONProperties prop = JsonConvert.DeserializeObject<JSONProperties>(await c.GetStringAsync(new Uri(HAPSettings.CurrentSite.Address, "./api/myfiles/Properties/" + Path.Replace('\\', '/').Replace("../Download/", ""))));
+                    JSONProperties prop = JsonConvert.DeserializeObject<JSONProperties>(await c.GetStringAsync(new Uri(HAPSettings.CurrentSite.Address, "./api/myfiles/Properties/" + Path.Replace('\\', '/').Replace("../Download/", "") + "?" + DateTime.Now.Ticks)));
                     DataContext = prop;
                     pageTitle.Text = prop.Name;
                 }
