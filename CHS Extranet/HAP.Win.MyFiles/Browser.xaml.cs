@@ -94,7 +94,7 @@ namespace HAP.Win.MyFiles
                     else
                     {
                         pageTitle.Text = path.Replace("/", "\\").Replace("\\", " \\ ");
-                        JSONFile[] files = JsonConvert.DeserializeObject<JSONFile[]>(await c.GetStringAsync(new Uri(HAPSettings.CurrentSite.Address, "./api/myfiles/" + path.Replace('\\', '/') + DateTime.Now.Ticks)));
+                        JSONFile[] files = JsonConvert.DeserializeObject<JSONFile[]>(await c.GetStringAsync(new Uri(HAPSettings.CurrentSite.Address, "./api/myfiles/" + path.Replace('\\', '/') + "?" + DateTime.Now.Ticks)));
                         itemsViewSource.Source = files;
                         driveGridView.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                         fileGridView.Visibility = Windows.UI.Xaml.Visibility.Visible;
