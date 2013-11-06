@@ -201,15 +201,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HAP User Card"
-        "ProductCode" = "8:{5051A07A-D3E9-4DCA-8677-3B5C00BB163A}"
-        "PackageCode" = "8:{B52B2324-0CD0-4207-B60D-91C17FD8D5D1}"
+        "ProductCode" = "8:{F9053285-AB30-4EC2-87A0-48ABCA30BB7F}"
+        "PackageCode" = "8:{38B43717-04AE-4D0A-8D0F-D2C2FD9D3A9F}"
         "UpgradeCode" = "8:{0CF47738-A77D-412C-BBDE-703A91AFCF26}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:4.0.0"
+        "ProductVersion" = "8:4.1.0"
         "Manufacturer" = "8:nb development"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://hap.codeplex.com"
@@ -737,7 +737,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_6B0C790E4D0541E08029F29A0E13A882"
             {
-            "SourcePath" = "8:..\\HAP User Card\\obj\\x86\\Debug\\HAP User Card.exe"
+            "SourcePath" = "8:..\\HAP User Card\\obj\\x86\\Release\\HAP User Card.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_E33176755DA74BE6811343A9DFA22840"
