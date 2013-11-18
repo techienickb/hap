@@ -13,6 +13,8 @@ using System.Net;
 using System.DirectoryServices.AccountManagement;
 using HAP.BookingSystem;
 using HAP.AD;
+using System.Security.Cryptography.X509Certificates;
+using System.Net.Security;
 
 namespace HAP.BookingSystem
 {
@@ -96,7 +98,7 @@ namespace HAP.BookingSystem
             AlternateView av = AlternateView.CreateAlternateViewFromString(sb.ToString(), new ContentType("text/calendar; method=REQUEST; name=ITBooking.ics"));
             av.TransferEncoding = TransferEncoding.SevenBit;
             mes.AlternateViews.Add(av);
-
+            ServicePointManager.ServerCertificateValidationCallback = delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
             //mes.Attachments.Add(new Attachment(file.FullName, "text/calendar; method=REQUEST; name=ITBooking.ics"));
             SmtpClient client = new SmtpClient(config.SMTP.Server);
             if (!string.IsNullOrEmpty(config.SMTP.User))
@@ -198,7 +200,7 @@ namespace HAP.BookingSystem
             AlternateView av = AlternateView.CreateAlternateViewFromString(sb.ToString(), new ContentType("text/calendar; method=REQUEST; name=ITBooking.ics"));
             av.TransferEncoding = TransferEncoding.SevenBit;
             mes.AlternateViews.Add(av);
-
+            ServicePointManager.ServerCertificateValidationCallback = delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
             //mes.Attachments.Add(new Attachment(file.FullName, "text/calendar; method=REQUEST; name=ITBooking.ics"));
             SmtpClient client = new SmtpClient(config.SMTP.Server);
             if (!string.IsNullOrEmpty(config.SMTP.User))
@@ -276,7 +278,7 @@ namespace HAP.BookingSystem
             AlternateView av = AlternateView.CreateAlternateViewFromString(sb.ToString(), new ContentType("text/calendar; method=CANCEL; name=ITBooking.ics"));
             av.TransferEncoding = TransferEncoding.SevenBit;
             mes.AlternateViews.Add(av);
-
+            ServicePointManager.ServerCertificateValidationCallback = delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
             //mes.Attachments.Add(new Attachment(file.FullName, "text/calendar; method=REQUEST; name=ITBooking.ics"));
             SmtpClient client = new SmtpClient(config.SMTP.Server);
             if (!string.IsNullOrEmpty(config.SMTP.User))
@@ -368,7 +370,7 @@ namespace HAP.BookingSystem
             AlternateView av = AlternateView.CreateAlternateViewFromString(sb.ToString(), new ContentType("text/calendar; method=CANCEL; name=ITBooking.ics"));
             av.TransferEncoding = TransferEncoding.SevenBit;
             mes.AlternateViews.Add(av);
-
+            ServicePointManager.ServerCertificateValidationCallback = delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
             //mes.Attachments.Add(new Attachment(file.FullName, "text/calendar; method=REQUEST; name=ITBooking.ics"));
             SmtpClient client = new SmtpClient(config.SMTP.Server);
             if (!string.IsNullOrEmpty(config.SMTP.User))

@@ -12,6 +12,8 @@ using System.DirectoryServices.AccountManagement;
 using HAP.Web.Configuration;
 using System.Net.Mail;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
+using System.Net.Security;
 
 namespace HAP.HelpDesk
 {
@@ -71,7 +73,7 @@ namespace HAP.HelpDesk
                     HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />")).Replace("{2}",
                     ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].DisplayName).Replace("{3}",
                     HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath);
-
+                ServicePointManager.ServerCertificateValidationCallback = delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
                 SmtpClient smtp = new SmtpClient(hapConfig.Current.SMTP.Server, hapConfig.Current.SMTP.Port);
                 if (!string.IsNullOrEmpty(hapConfig.Current.SMTP.User))
                     smtp.Credentials = new NetworkCredential(hapConfig.Current.SMTP.User, hapConfig.Current.SMTP.Password);
@@ -145,7 +147,7 @@ namespace HAP.HelpDesk
                     emailnote).Replace("{3}",
                     (State == "Fixed" ? Localizable.Localize("helpdesk/reopen") : Localizable.Localize("helpdesk/update"))).Replace("{4}",
                     HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath).Replace("{5}", HttpContext.Current.User.Identity.Name).Replace("{6}", user.DisplayName).Replace("{7}", currentuser.DisplayName).Replace("{8}", ft.Subject);
-
+                ServicePointManager.ServerCertificateValidationCallback = delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
                 SmtpClient smtp = new SmtpClient(hapConfig.Current.SMTP.Server, hapConfig.Current.SMTP.Port);
                 if (!string.IsNullOrEmpty(hapConfig.Current.SMTP.User))
                     smtp.Credentials = new NetworkCredential(hapConfig.Current.SMTP.User, hapConfig.Current.SMTP.Password);
@@ -174,7 +176,7 @@ namespace HAP.HelpDesk
                         emailnote).Replace("{3}",
                         (State == "Fixed" ? Localizable.Localize("helpdesk/reopen") : Localizable.Localize("helpdesk/update"))).Replace("{4}",
                         HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath).Replace("{8}", ft.Subject);
-
+                    ServicePointManager.ServerCertificateValidationCallback = delegate(object s1, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
                     SmtpClient smtp = new SmtpClient(hapConfig.Current.SMTP.Server, hapConfig.Current.SMTP.Port);
                     if (!string.IsNullOrEmpty(hapConfig.Current.SMTP.User))
                         smtp.Credentials = new NetworkCredential(hapConfig.Current.SMTP.User, hapConfig.Current.SMTP.Password);
@@ -199,7 +201,7 @@ namespace HAP.HelpDesk
                 mes.Body = fs.ReadToEnd().Replace("{0}", Id).Replace("{3}",
                     (State == "Fixed" ? Localizable.Localize("helpdesk/reopen") : Localizable.Localize("helpdesk/update"))).Replace("{4}",
                     HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath).Replace("{8}", ft.Subject);
-
+                ServicePointManager.ServerCertificateValidationCallback = delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
                 SmtpClient smtp = new SmtpClient(hapConfig.Current.SMTP.Server, hapConfig.Current.SMTP.Port);
                 if (!string.IsNullOrEmpty(hapConfig.Current.SMTP.User))
                     smtp.Credentials = new NetworkCredential(hapConfig.Current.SMTP.User, hapConfig.Current.SMTP.Password);
@@ -265,7 +267,7 @@ namespace HAP.HelpDesk
                     Room).Replace("{4}",
                     ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].DisplayName).Replace("{5}",
                     HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath);
-
+                ServicePointManager.ServerCertificateValidationCallback = delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
                 SmtpClient smtp = new SmtpClient(hapConfig.Current.SMTP.Server, hapConfig.Current.SMTP.Port);
                 if (!string.IsNullOrEmpty(hapConfig.Current.SMTP.User))
                     smtp.Credentials = new NetworkCredential(hapConfig.Current.SMTP.User, hapConfig.Current.SMTP.Password);
@@ -330,7 +332,7 @@ namespace HAP.HelpDesk
                     HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />")).Replace("{3}",
                     ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].DisplayName).Replace("{4}",
                     HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath);
-
+                ServicePointManager.ServerCertificateValidationCallback = delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
                 SmtpClient smtp = new SmtpClient(hapConfig.Current.SMTP.Server, hapConfig.Current.SMTP.Port);
                 if (!string.IsNullOrEmpty(hapConfig.Current.SMTP.User))
                     smtp.Credentials = new NetworkCredential(hapConfig.Current.SMTP.User, hapConfig.Current.SMTP.Password);
@@ -359,7 +361,7 @@ namespace HAP.HelpDesk
                         Room).Replace("{4}",
                         ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].DisplayName).Replace("{5}",
                         HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath);
-
+                    ServicePointManager.ServerCertificateValidationCallback = delegate(object s1, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
                     SmtpClient smtp = new SmtpClient(hapConfig.Current.SMTP.Server, hapConfig.Current.SMTP.Port);
                     if (!string.IsNullOrEmpty(hapConfig.Current.SMTP.User))
                         smtp.Credentials = new NetworkCredential(hapConfig.Current.SMTP.User, hapConfig.Current.SMTP.Password);
