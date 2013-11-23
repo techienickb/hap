@@ -27,6 +27,19 @@ namespace HAP.Data.Tracker
             Save(doc);
         }
 
+        public static trackerlogentrysmall[] Poll(string Username, string Computer, string DomainName, string IP, string LogonServer, string OS)
+        {
+            List<trackerlogentrysmall> ll = new List<trackerlogentrysmall>();
+            XmlDocument doc = Doc;
+            hapConfig hap = hapConfig.Current;
+            foreach (XmlNode node in doc.SelectNodes(string.Format("/Tracker/Event[@logoffdatetime='' and @username='{0}' and @domainname='{1}']", Username, DomainName)))
+            {
+                trackerlogentrysmall le = new trackerlogentrysmall(node);
+                if (le.ComputerName != Computer && le.DomainName != DomainName) ll.Add(le);
+            }
+            return ll.ToArray();
+        }
+
         public static trackerlogentrysmall[] Logon(string Username, string Computer, string DomainName, string IP, string LogonServer, string OS)
         {
             List<trackerlogentrysmall> ll = new List<trackerlogentrysmall>();
@@ -40,12 +53,9 @@ namespace HAP.Data.Tracker
             e.SetAttribute("ip", IP);
             e.SetAttribute("os", OS);
             e.SetAttribute("logonserver", LogonServer);
-            hapConfig hap = hapConfig.Current;
-            foreach (XmlNode node in doc.SelectNodes(string.Format("/Tracker/Event[@logoffdatetime='' and @username='{0}' and @domainname='{1}']", Username, DomainName)))
-                ll.Add(new trackerlogentrysmall(node));
             doc.SelectSingleNode("/Tracker").AppendChild(e);
             Save(doc);
-            return ll.ToArray();
+            return Poll(Username, Computer, DomainName, IP, LogonServer, OS);
         }
 
         public static trackerlogentry[] GetLogs(bool loadall)
