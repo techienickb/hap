@@ -1,4 +1,4 @@
-﻿namespace HAP.Logon.Tracker
+﻿namespace HAP.Tracker.UI
 {
     partial class OverrideCode
     {

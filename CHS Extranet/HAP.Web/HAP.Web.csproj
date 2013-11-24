@@ -1019,6 +1019,10 @@
       <Project>{ed1514ff-9e76-4fc3-9238-68653b50f9c4}</Project>
       <Name>HAP.MyFiles</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HAP.Tracker\HAP.Tracker.csproj">
+      <Project>{8a57d4c2-d59d-4d1e-9b83-62946a4e778d}</Project>
+      <Name>HAP.Tracker</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HAP.Web.Config\HAP.Web.Configuration.csproj">
       <Project>{1F2CFBBF-1C06-4CAC-BB4B-5551BF6A398C}</Project>
       <Name>HAP.Web.Configuration</Name>

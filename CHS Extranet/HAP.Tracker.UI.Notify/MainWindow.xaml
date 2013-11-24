@@ -1,0 +1,43 @@
+﻿<Window x:Class="HAP.Tracker.UI.Notify.MainWindow" AllowsTransparency="True" TouchDown="Window_TouchDown" TouchMove="Window_TouchMove"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Loaded="Window_Loaded" MouseDown="Window_MouseDown" MouseMove="Window_MouseMove" MouseUp="Window_MouseUp" MouseLeave="Window_MouseLeave"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" BorderThickness="1" BorderBrush="#FFCBCBCB" Name="window" Closing="window_Closing"
+        Title="New Logon Detected" Height="102" Width="400" Visibility="Collapsed" Opacity="0" ResizeMode="NoResize" ShowInTaskbar="False" Topmost="True" WindowStyle="None" TouchUp="Window_TouchUp" >
+    <Window.Resources>
+        <Storyboard x:Key="openStoryBoard" Name="openStoryBoard" Completed="closeStoryBoard_Completed">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" />
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" BeginTime="0:0:30" From="1" To="0" />
+        </Storyboard>
+        <Storyboard x:Key="closeStoryBoard" Name="closeStoryBoard" Completed="closeStoryBoard_Completed">
+            <DoubleAnimation Storyboard.Target="{Binding ElementName='window'}" Storyboard.TargetProperty="(Window.Opacity)" BeginTime="0" From="1" To="0"/>
+        </Storyboard>
+        <Style x:Key="closebutton" TargetType="TextBlock">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#FFCBCBCB" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseDirectlyOver" Value="True">
+                    <Setter Property="Background" Value="Red" />
+                    <Setter Property="Foreground" Value="White" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Image Source="History.png" HorizontalAlignment="Left" />
+        <StackPanel Orientation="Vertical" Margin="105,0,0,0">
+            <TextBlock Text="New Logon Detected" Foreground="#FF0047C3" FontSize="16" Margin="0,5,0,5" />
+            <TextBlock Text="I've detected your username being used on" FontSize="13" />
+            <TextBlock Text="another computer" FontSize="13" Margin="0,0,0,5" />
+            <TextBlock Text="Click here for more information" />
+        </StackPanel>
+        <TextBlock Text="X" HorizontalAlignment="Right" VerticalAlignment="Top" FontSize="16" Margin="0,-3" Padding="6,2.5" RenderTransformOrigin="0.5,0.5" Style="{DynamicResource closebutton}" MouseUp="TextBlock_MouseUp" >
+            <TextBlock.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleY="0.8"/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </TextBlock.RenderTransform>
+        </TextBlock>
+    </Grid>
+</Window>

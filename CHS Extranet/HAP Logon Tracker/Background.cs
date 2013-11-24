@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace HAP.Logon.Tracker
+namespace HAP.Tracker.UI
 {
     public partial class Background : Form
     {

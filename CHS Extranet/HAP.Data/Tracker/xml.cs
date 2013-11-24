@@ -27,7 +27,7 @@ namespace HAP.Data.Tracker
             Save(doc);
         }
 
-        public static trackerlogentrysmall[] Poll(string Username, string Computer, string DomainName, string IP, string LogonServer, string OS)
+        public static trackerlogentrysmall[] Poll(string Username, string Computer, string DomainName)
         {
             List<trackerlogentrysmall> ll = new List<trackerlogentrysmall>();
             XmlDocument doc = Doc;
@@ -35,7 +35,7 @@ namespace HAP.Data.Tracker
             foreach (XmlNode node in doc.SelectNodes(string.Format("/Tracker/Event[@logoffdatetime='' and @username='{0}' and @domainname='{1}']", Username, DomainName)))
             {
                 trackerlogentrysmall le = new trackerlogentrysmall(node);
-                if (le.ComputerName != Computer && le.DomainName != DomainName) ll.Add(le);
+                if (le.ComputerName != Computer) ll.Add(le);
             }
             return ll.ToArray();
         }
@@ -44,6 +44,11 @@ namespace HAP.Data.Tracker
         {
             List<trackerlogentrysmall> ll = new List<trackerlogentrysmall>();
             XmlDocument doc = Doc;
+            foreach (XmlNode node in doc.SelectNodes(string.Format("/Tracker/Event[@logoffdatetime='' and @username='{0}' and @domainname='{1}']", Username, DomainName)))
+            {
+                trackerlogentrysmall le = new trackerlogentrysmall(node);
+                if (le.ComputerName == Computer) ((XmlElement)node).SetAttribute("logoffdatetime", DateTime.Now.ToString("s"));
+            }
             XmlElement e = doc.CreateElement("Event");
             e.SetAttribute("logondatetime", DateTime.Now.ToString("s"));
             e.SetAttribute("logoffdatetime", "");
@@ -55,7 +60,7 @@ namespace HAP.Data.Tracker
             e.SetAttribute("logonserver", LogonServer);
             doc.SelectSingleNode("/Tracker").AppendChild(e);
             Save(doc);
-            return Poll(Username, Computer, DomainName, IP, LogonServer, OS);
+            return Poll(Username, Computer, DomainName);
         }
 
         public static trackerlogentry[] GetLogs(bool loadall)

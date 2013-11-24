@@ -94,6 +94,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Tracker", "HAP.Tracker\HAP.Tracker.csproj", "{8A57D4C2-D59D-4D1E-9B83-62946A4E778D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tracker", "Tracker", "{A3251197-8D0F-449B-AFE5-173CCC35F043}"
+	ProjectSection(SolutionItems) = preProject
+		HAP.Data\Tracker\Logons.cs = HAP.Data\Tracker\Logons.cs
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Tracker.UI.Notify", "HAP.Tracker.UI.Notify\HAP.Tracker.UI.Notify.csproj", "{06615BDD-F660-4A8D-9634-B9703E1AE2D3}"
 EndProject
