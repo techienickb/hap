@@ -19,11 +19,11 @@ namespace HAP.Data.SQL
         }
 
 
-        public static trackerlogentrysmall[] Poll(string Username, string Computer, string DomainName, string IP, string LogonServer, string OS)
+        public static trackerlogentrysmall[] Poll(string Username, string Computer, string DomainName)
         {
             sql2linqDataContext sdc = new sql2linqDataContext(ConfigurationManager.ConnectionStrings[hapConfig.Current.Tracker.Provider].ConnectionString);
             List<trackerlogentrysmall> ll = new List<trackerlogentrysmall>();
-            foreach (TrackerEvent te in sdc.TrackerEvents.Where(t => t.Username == Username && t.domainname == DomainName && !t.LogoffDateTime.HasValue && t.ComputerName != Computer && t.domainname != DomainName))
+            foreach (TrackerEvent te in sdc.TrackerEvents.Where(t => t.Username == Username && t.domainname == DomainName && !t.LogoffDateTime.HasValue && t.ComputerName != Computer))
                 ll.Add(new trackerlogentrysmall(te.ComputerName, te.Username, te.domainname, te.LogonDateTime));
             return ll.ToArray();
         }
@@ -31,6 +31,8 @@ namespace HAP.Data.SQL
         public static trackerlogentrysmall[] Logon(string Username, string Computer, string DomainName, string IP, string LogonServer, string OS)
         {
             sql2linqDataContext sdc = new sql2linqDataContext(ConfigurationManager.ConnectionStrings[hapConfig.Current.Tracker.Provider].ConnectionString);
+            if (sdc.TrackerEvents.Count(t => t.Username == Username && t.domainname == DomainName && !t.LogoffDateTime.HasValue && t.ComputerName == Computer) > 0)
+                Clear(Computer, DomainName);
             TrackerEvent newe = new TrackerEvent();
             newe.LogonDateTime = DateTime.Now;
             newe.logonserver = LogonServer;
@@ -41,7 +43,7 @@ namespace HAP.Data.SQL
             newe.os = OS;
             sdc.TrackerEvents.InsertOnSubmit(newe);
             sdc.SubmitChanges();
-            return Poll(Username, Computer, DomainName, IP, LogonServer, OS);
+            return Poll(Username, Computer, DomainName);
         }
 
         public static trackerlogentry[] GetLogs(bool loadall)

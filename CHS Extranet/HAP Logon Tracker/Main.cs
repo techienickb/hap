@@ -10,7 +10,7 @@ using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
 
-namespace HAP.Logon.Tracker
+namespace HAP.Tracker.UI
 {
     public partial class Main : Form
     {
@@ -28,20 +28,20 @@ namespace HAP.Logon.Tracker
             Done.Enabled = false;
         }
 
-        public api.api API { get; set; }
         private bool KeepOpen;
         private bool Override;
         private string code;
-        private api.UT Usertype;
+        private UT Usertype;
         public int MaxLogons { get; set; }
-        public void SetGrid(api.LogonsList data)
+        public string baseurl { get; set; }
+        public void SetGrid(LogonsList data)
         {
             code = data.OverrideCode;
             MaxLogons = data.MaxLogons;
             Usertype = data.UserType;
-            label2.Text = (Usertype == api.UT.Student) ? string.Format(label2.Text, MaxLogons) : "Check you logged on to these computers";
-            foreach (api.trackerlogentrysmall entry in data.Logons)
-                dataGridView1.Rows.Add(entry.ComputerName, entry.DomainName, entry.LogOnDateTime.ToString("f"), "Logoff");
+            label2.Text = (Usertype == UT.Student) ? string.Format(label2.Text, MaxLogons) : "Check you logged on to these computers";
+            foreach (trackerlogentrysmall entry in data.Logons)
+                dataGridView1.Rows.Add(entry.ComputerName, entry.DomainName, entry.LogOnDateTime, "Logoff");
             CheckCount();
         }
 
@@ -62,28 +62,28 @@ namespace HAP.Logon.Tracker
         {
             if (e.ColumnIndex == 3)
             {
-                API.RemoteLogoffCompleted += new api.RemoteLogoffCompletedEventHandler(API_RemoteLogoffCompleted);
-                API.RemoteLogoffAsync(dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString(), dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString(), e.RowIndex);
+                WebClient c = new WebClient();
+                c.Headers.Add(HttpRequestHeader.ContentType, "application/json");
+                c.Headers.Add(HttpRequestHeader.Accept, "application/json");
+                c.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
+                c.UploadStringCompleted += c_RemoteLogoff;
+                c.UploadStringAsync(new Uri(new Uri(baseurl), "./api/tracker/RemoteLogoff"), "POST", "{ \"Computer\": \"" + dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString() + "\", \"DomainName\":\"" + dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString() + "\" }", e.RowIndex);
                 this.Enabled = false;
                 this.Cursor = Cursors.AppStarting;
             }
         }
 
-        void API_RemoteLogoffCompleted(object sender, AsyncCompletedEventArgs e)
+        void c_RemoteLogoff(object sender, UploadStringCompletedEventArgs e)
         {
-            if (InvokeRequired) BeginInvoke(new api.RemoteLogoffCompletedEventHandler(API_RemoteLogoffCompleted), sender, e);
-            else
+            try
             {
-                try
-                {
-                    if (e.Error != null) MessageBox.Show(this, e.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    else dataGridView1.Rows.RemoveAt((int)e.UserState);
-                }
-                catch { }
-                this.Enabled = true;
-                this.Cursor = Cursors.Default;
-                CheckCount();
+                if (e.Error != null) MessageBox.Show(this, e.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else dataGridView1.Rows.RemoveAt((int)e.UserState);
             }
+            catch { }
+            this.Enabled = true;
+            this.Cursor = Cursors.Default;
+            CheckCount();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -95,7 +95,12 @@ namespace HAP.Logon.Tracker
             }
             else if (MessageBox.Show(this, "Clicking this button will result in the system logging you off.", "Logoff?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.OK)
             {
-                API.RemoteLogoffAsync(Dns.GetHostName(), Environment.UserDomainName);
+                WebClient c = new WebClient();
+                c.Headers.Add(HttpRequestHeader.ContentType, "application/json");
+                c.Headers.Add(HttpRequestHeader.Accept, "application/json");
+                c.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
+                c.UploadStringCompleted += c_RemoteLogoff;
+                c.UploadStringAsync(new Uri(new Uri(baseurl), "./api/tracker/RemoteLogoff"), "POST", "{ \"Computer\": \"" + Dns.GetHostName() + "\", \"DomainName\":\"" + Environment.UserDomainName + "\" }");
                 this.Hide();
             }
             Override = false;

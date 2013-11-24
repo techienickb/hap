@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace HAP.Logon.Tracker
+namespace HAP.Tracker.UI
 {
     static class Program
     {
@@ -16,9 +16,10 @@ namespace HAP.Logon.Tracker
             Application.SetCompatibleTextRenderingDefault(false);
             bool silent = false;
             foreach (string s in args)
-                if (s.ToLower().EndsWith("silent")) { silent = true; break; }
+                if (s.ToLower().EndsWith("silent")) silent = true;
             if (args.Length == 0) Application.Run(new Loading(Action.Logon, "https://folders.crickhowell-hs.powys.sch.uk/hap/", silent));
-            else if (args[0].StartsWith("http")) Application.Run(new Loading(Action.Clear, args[0], silent));
+            else if (args[0].StartsWith("http")) Application.Run(new Loading(Action.Clear, args[0], true));
+            else if (args[0].StartsWith("poll")) Application.Run(new Loading(Action.Poll, args[1], true));
             else Application.Run(new Loading(Action.Logon, args[1], silent));
         }
     }

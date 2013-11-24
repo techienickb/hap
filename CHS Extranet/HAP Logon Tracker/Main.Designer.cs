@@ -1,4 +1,4 @@
-﻿namespace HAP.Logon.Tracker
+﻿namespace HAP.Tracker.UI
 {
     partial class Main
     {
@@ -50,8 +50,8 @@
             // pictureBox1
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.White;
-            this.pictureBox1.Image = global::HAP.Logon.Tracker.Properties.Resources.History;
-            this.pictureBox1.Location = new System.Drawing.Point(26, 4);
+            this.pictureBox1.Image = global::HAP.Tracker.UI.Properties.Resources.History;
+            this.pictureBox1.Location = new System.Drawing.Point(62, 4);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(96, 96);
@@ -179,10 +179,10 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Segoe UI", 48F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(137, 9);
+            this.label3.Font = new System.Drawing.Font("Segoe UI Light", 48F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(173, 9);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(441, 86);
+            this.label3.Size = new System.Drawing.Size(413, 86);
             this.label3.TabIndex = 5;
             this.label3.Text = "Logon Tracker";
             // 

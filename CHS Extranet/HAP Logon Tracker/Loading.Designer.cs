@@ -1,4 +1,4 @@
-﻿namespace HAP.Logon.Tracker
+﻿namespace HAP.Tracker.UI
 {
     partial class Loading
     {
@@ -39,7 +39,7 @@
             // pictureBox1
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.White;
-            this.pictureBox1.Image = global::HAP.Logon.Tracker.Properties.Resources.History;
+            this.pictureBox1.Image = global::HAP.Tracker.UI.Properties.Resources.History;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(98, 98);

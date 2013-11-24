@@ -10,14 +10,15 @@ using System.IO;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Diagnostics;
+using Newtonsoft.Json;
 
-namespace HAP.Logon.Tracker
+namespace HAP.Tracker.UI
 {
     public partial class Loading : Form
     {
         private Action action;
-        private api.api api;
         private bool silent;
+        private string baseurl;
 
         private static bool ValidateRemoteCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors policyErrors)
         {
@@ -28,71 +29,75 @@ namespace HAP.Logon.Tracker
         {
             ServicePointManager.ServerCertificateValidationCallback += new RemoteCertificateValidationCallback(ValidateRemoteCertificate);
             InitializeComponent();
-            this.api = new api.api();
             this.silent = silent;
-            this.api.Url = new Uri(new Uri(baseurl), "tracker/api.asmx").ToString();
-            this.api.LogonCompleted += new Tracker.api.LogonCompletedEventHandler(api_LogonCompleted);
-            this.api.ClearCompleted += new Tracker.api.ClearCompletedEventHandler(api_ClearCompleted);
             this.action = action;
-            this.api.Timeout = 60000;
-            this.Hide();
+            this.baseurl = baseurl;
             if (action == Action.Clear) label1.Text = "Refreshing the Tracker...";
             else label1.Text = "Registering your Logon...";
             this.Text = "Logon Tracker - " + label1.Text;
         }
 
-        void  api_ClearCompleted(object sender, AsyncCompletedEventArgs e)
-        {
-            if (e.Error != null)
-            {
-                try
-                {
-                    if (!EventLog.SourceExists("Home Access Plus"))
-                        EventLog.CreateEventSource("Home Access Plus+", "Application");
-                    EventLog.WriteEntry("Home Access Plus+", "An error occurred in the Logon Tracker\r\n\r\nError: " + e.Error.Message, EventLogEntryType.Error);
-                }
-                catch { }
-            }
-            Close();
-        }
-
-        void  api_LogonCompleted(object sender, api.LogonCompletedEventArgs e)
-        {
-            if (e.Error != null) {
-                try
-                {
-                    if (!EventLog.SourceExists("Home Access Plus"))
-                        EventLog.CreateEventSource("Home Access Plus+", "Application");
-                    EventLog.WriteEntry("Home Access Plus+", "An error occurred in the Logon Tracker\r\n\r\nError: " + e.Error.Message, EventLogEntryType.Error);
-                }
-                catch { }
-            }
-            else
-            {
-                if (e.Result.Logons.Length > 0)
-                {
-                    Background bg = new Background();
-                    bg.Main.SetGrid(e.Result);
-                    bg.Main.API = api;
-                    bg.ShowDialog(this);
-                }
-            }
-            Close();
-        }
-
         private void Loading_Load(object sender, EventArgs e)
         {
-            if (action == Action.Clear) api.ClearAsync(Dns.GetHostName(), Environment.UserDomainName);
+            if (this.silent) this.Hide();
+            WebClient c = new WebClient();
+            c.Headers.Add(HttpRequestHeader.ContentType, "application/json");
+            c.Headers.Add(HttpRequestHeader.Accept, "application/json");
+            c.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
+            if (action == Action.Clear)
+            {
+                c.UploadStringCompleted += c_ClearCompleted;
+                c.UploadStringAsync(new Uri(new Uri(baseurl), "./api/tracker/clear"), "POST", "{ \"Computer\": \"" + Dns.GetHostName() + "\", \"DomainName\":\"" + Environment.UserDomainName + "\" }");
+            }
+            else if (action == Action.Poll)
+            {
+                string ip1 = "";
+                foreach (IPAddress ip in Dns.GetHostEntry(Dns.GetHostName()).AddressList)
+                    if (ip.ToString().Contains(".")) { ip1 = ip.ToString(); break; }
+
+                c.UploadStringCompleted += c_UploadStringCompleted;
+                c.UploadStringAsync(new Uri(new Uri(baseurl), "./api/tracker/poll"), "POST", "{ \"Username\": \"" + Environment.UserName + "\", \"Computer\": \"" + Dns.GetHostName() + "\", \"DomainName\":\"" + Environment.UserDomainName + "\" }");
+            }
             else
             {
                 string ip1 = "";
                 foreach (IPAddress ip in Dns.GetHostEntry(Dns.GetHostName()).AddressList)
                     if (ip.ToString().Contains(".")) { ip1 = ip.ToString(); break; }
-                api.LogonAsync(Environment.UserName, Dns.GetHostName(), Environment.UserDomainName, ip1, Environment.GetEnvironmentVariable("logonserver"), Environment.OSVersion.VersionString);
+
+                c.UploadStringCompleted += c_UploadStringCompleted;
+                c.UploadStringAsync(new Uri(new Uri(baseurl), "./api/tracker/logon"), "POST", "{ \"Username\": \"" + Environment.UserName + "\", \"Computer\": \"" + Dns.GetHostName() + "\", \"DomainName\":\"" + Environment.UserDomainName + "\", \"IP\": \"" + ip1 + "\", \"LogonServer\": \"" + Environment.GetEnvironmentVariable("logonserver") + "\", \"os\": \"" + Environment.OSVersion.VersionString + "\" }");
             }
             
         }
+
+        void c_ClearCompleted(object sender, UploadStringCompletedEventArgs e)
+        {
+            Close();
+        }
+
+        void c_UploadStringCompleted(object sender, UploadStringCompletedEventArgs e)
+        {
+            if (e.Error == null)
+            {
+                LogonsList list = JsonConvert.DeserializeObject<LogonsList>(e.Result);
+                if (list.Logons.Length > 0)
+                {
+                    Background bg = new Background();
+                    bg.Main.SetGrid(list);
+                    bg.Main.baseurl = baseurl;
+                    bg.ShowDialog(this);
+                }
+            }
+            if (action == Action.Logon)
+            {
+                Process proc = new Process();
+                proc.StartInfo.FileName = "HAP Logon Tracker Notifier.exe";
+                proc.StartInfo.Arguments = baseurl;
+                proc.Start();
+            }
+            Close();
+        }
     }
 
-    public enum Action { Logon, Clear, RemoteLogoff }
+    public enum Action { Logon, Clear, RemoteLogoff, Poll }
 }
