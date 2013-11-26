@@ -77,7 +77,7 @@ namespace HAP.Tracker
 
         public static trackerlogentrysmall Convert(HAP.Data.Tracker.trackerlogentrysmall o)
         {
-            return new trackerlogentrysmall(o.ComputerName, o.UserName, o.DomainName, o.LogOnDateTime.ToString("f"));
+            return new trackerlogentrysmall(o.ComputerName, o.UserName, o.DomainName, o.LogOnDateTime.ToString());
         }
         public static trackerlogentrysmall[] Convert(HAP.Data.Tracker.trackerlogentrysmall[] o)
         {

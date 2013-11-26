@@ -91,7 +91,7 @@ namespace HAP.Tracker.UI
             if (action == Action.Logon)
             {
                 Process proc = new Process();
-                proc.StartInfo.FileName = "HAP Logon Tracker Notifier.exe";
+                proc.StartInfo.FileName = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "HAP Logon Tracker Notifier.exe");
                 proc.StartInfo.Arguments = baseurl;
                 proc.Start();
             }

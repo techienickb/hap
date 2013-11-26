@@ -51,15 +51,15 @@ namespace HAP.Tracker.UI.Notify
             //start a loop until the program closes
             while (poll)
             {
-                if (lastDT.AddMinutes(2) < DateTime.Now)
+                if (lastDT.AddSeconds(30) < DateTime.Now)
                 {
                     WebClient c = new WebClient();
                     c.Headers.Add(HttpRequestHeader.ContentType, "application/json");
                     c.Headers.Add(HttpRequestHeader.Accept, "application/json");
                     c.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
-                    this.lastDT = DateTime.Now;
                     c.UploadStringCompleted += c_UploadStringCompleted;
                     c.UploadStringAsync(new Uri(App.BaseUrl, "./api/tracker/poll"), "POST", "{ \"Username\": \"" + Environment.UserName + "\", \"Computer\": \"" + Dns.GetHostName() + "\", \"DomainName\":\"" + Environment.UserDomainName + "\" }");
+                    this.lastDT = DateTime.Now;
                 }
                 Thread.Sleep(100);
             }
@@ -70,18 +70,16 @@ namespace HAP.Tracker.UI.Notify
             if (e.Error == null)
             {
                 LogonsList list = JsonConvert.DeserializeObject<LogonsList>(e.Result);
-                if (list.Logons.Count(l => DateTime.Parse(l.LogOnDateTime) > lastDT) > 0)
+                if (list.Logons.Count(l => DateTime.Parse(l.LogOnDateTime) > lastDT.AddSeconds(-30)) > 0)
                     Dispatcher.BeginInvoke(new Action(ShowMe));
             }
         }
 
         void ShowMe()
         {
-            if (Visibility != System.Windows.Visibility.Visible)
-            {
-                Visibility = System.Windows.Visibility.Visible;
-                ((System.Windows.Media.Animation.Storyboard)FindResource("openStoryBoard")).Begin();
-            }
+            Visibility = System.Windows.Visibility.Visible;
+            Show();
+            Opacity = 1;
         }
 
         Point start;
@@ -97,10 +95,14 @@ namespace HAP.Tracker.UI.Notify
             else if (start == e.GetTouchPoint(this).Position)
             {
                 Process proc = new Process();
-                proc.StartInfo.FileName = "HAP Logon Tracker.exe";
+                proc.StartInfo.FileName = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "HAP Logon Tracker.exe");
                 proc.StartInfo.Arguments = "poll " + App.BaseUrl.ToString();
-                proc.Start();
-                ((System.Windows.Media.Animation.Storyboard)FindResource("closeStoryBoard")).Begin();
+                try { proc.Start(); }
+                catch
+                {
+                    proc.StartInfo.FileName = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.SystemX86), "HAP Logon Tracker.exe");
+                    proc.Start();
+                }
             }
         }
 
@@ -132,9 +134,14 @@ namespace HAP.Tracker.UI.Notify
             else if (start == e.GetPosition(this))
             {
                 Process proc = new Process();
-                proc.StartInfo.FileName = "HAP Logon Tracker.exe";
+                proc.StartInfo.FileName = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "HAP Logon Tracker.exe");
                 proc.StartInfo.Arguments = "poll " + App.BaseUrl.ToString();
-                proc.Start();
+                try { proc.Start(); }
+                catch
+                {
+                    proc.StartInfo.FileName = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.SystemX86), "HAP Logon Tracker.exe");
+                    proc.Start();
+                }
                 ((System.Windows.Media.Animation.Storyboard)FindResource("closeStoryBoard")).Begin();
             }
         }
@@ -149,7 +156,7 @@ namespace HAP.Tracker.UI.Notify
 
         private void closeStoryBoard_Completed(object sender, EventArgs e)
         {
-            Visibility = System.Windows.Visibility.Collapsed;
+            Hide();
             Width = 400;
             Left = System.Windows.SystemParameters.PrimaryScreenWidth - Width;
         }
