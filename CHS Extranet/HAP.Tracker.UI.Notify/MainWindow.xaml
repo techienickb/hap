@@ -1,12 +1,9 @@
-﻿<Window x:Class="HAP.Tracker.UI.Notify.MainWindow" AllowsTransparency="True" TouchDown="Window_TouchDown" TouchMove="Window_TouchMove"
+﻿
+<Window x:Class="HAP.Tracker.UI.Notify.MainWindow" AllowsTransparency="True" TouchDown="Window_TouchDown" TouchMove="Window_TouchMove"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Loaded="Window_Loaded" MouseDown="Window_MouseDown" MouseMove="Window_MouseMove" MouseUp="Window_MouseUp" MouseLeave="Window_MouseLeave"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" BorderThickness="1" BorderBrush="#FFCBCBCB" Name="window" Closing="window_Closing"
         Title="New Logon Detected" Height="102" Width="400" Visibility="Collapsed" Opacity="0" ResizeMode="NoResize" ShowInTaskbar="False" Topmost="True" WindowStyle="None" TouchUp="Window_TouchUp" >
     <Window.Resources>
-        <Storyboard x:Key="openStoryBoard" Name="openStoryBoard" Completed="closeStoryBoard_Completed">
-            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" />
-            <DoubleAnimation Storyboard.TargetProperty="Opacity" BeginTime="0:0:30" From="1" To="0" />
-        </Storyboard>
         <Storyboard x:Key="closeStoryBoard" Name="closeStoryBoard" Completed="closeStoryBoard_Completed">
             <DoubleAnimation Storyboard.Target="{Binding ElementName='window'}" Storyboard.TargetProperty="(Window.Opacity)" BeginTime="0" From="1" To="0"/>
         </Storyboard>

@@ -41,7 +41,7 @@ namespace HAP.Tracker.UI
             Usertype = data.UserType;
             label2.Text = (Usertype == UT.Student) ? string.Format(label2.Text, MaxLogons) : "Check you logged on to these computers";
             foreach (trackerlogentrysmall entry in data.Logons)
-                dataGridView1.Rows.Add(entry.ComputerName, entry.DomainName, entry.LogOnDateTime, "Logoff");
+                dataGridView1.Rows.Add(entry.ComputerName, entry.DomainName, DateTime.Parse(entry.LogOnDateTime).ToString("f"), "Logoff");
             CheckCount();
         }
 
