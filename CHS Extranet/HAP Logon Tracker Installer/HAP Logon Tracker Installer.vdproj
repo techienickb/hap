@@ -15,6 +15,24 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_16AB5CCAA3C28F37AA35884948D6DF6A"
+        "OwnerKey" = "8:_A65F893BDC0C4D3CA18D6A2948DB34E8"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_16AB5CCAA3C28F37AA35884948D6DF6A"
+        "OwnerKey" = "8:_A97940507EC144FD845A505AEDC0B09B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A65F893BDC0C4D3CA18D6A2948DB34E8"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_A97940507EC144FD845A505AEDC0B09B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -23,6 +41,18 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_A97940507EC144FD845A505AEDC0B09B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_16AB5CCAA3C28F37AA35884948D6DF6A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_A65F893BDC0C4D3CA18D6A2948DB34E8"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -89,10 +119,10 @@
             "ComponentsUrl" = "8:"
                 "Items"
                 {
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Net.Framework.3.5.SP1"
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
                     {
-                    "Name" = "8:.NET Framework 3.5 SP1"
-                    "ProductCode" = "8:Microsoft.Net.Framework.3.5.SP1"
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
                     }
                     "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
                     {
@@ -122,7 +152,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:.NETFramework,Version=v2.0"
+                "FrameworkVersion" = "8:.NETFramework,Version=v4.0,Profile=Client"
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=131000"
                 }
@@ -130,6 +160,37 @@
         }
         "File"
         {
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_16AB5CCAA3C28F37AA35884948D6DF6A"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_16AB5CCAA3C28F37AA35884948D6DF6A"
+                    {
+                    "Name" = "8:Newtonsoft.Json.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Newtonsoft.Json.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_58116FF90CDA4CF08D407CF0B83FF282"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
@@ -175,15 +236,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HAP Logon Tracker"
-        "ProductCode" = "8:{34B3B419-B8AC-45F1-A32A-C5743F62C23A}"
-        "PackageCode" = "8:{486E5A7A-53F7-4FA8-918E-9C55DB607087}"
+        "ProductCode" = "8:{B4D4A036-9694-49D0-A0A8-33A7E8426982}"
+        "PackageCode" = "8:{A2404FBB-DBDA-4E2B-881D-14324D8819CE}"
         "UpgradeCode" = "8:{41BAC840-CB78-47EF-859E-15CC9CA146CD}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:4.2.0"
+        "ProductVersion" = "8:5.0.0"
         "Manufacturer" = "8:nb development"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://hap.codeplex.com"
@@ -639,6 +700,34 @@
         }
         "ProjectOutput"
         {
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_A65F893BDC0C4D3CA18D6A2948DB34E8"
+            {
+            "SourcePath" = "8:..\\HAP.Tracker.UI.Notify\\obj\\Release\\HAP Logon Tracker Notifier.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_58116FF90CDA4CF08D407CF0B83FF282"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{06615BDD-F660-4A8D-9634-B9703E1AE2D3}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_A97940507EC144FD845A505AEDC0B09B"
             {
             "SourcePath" = "8:..\\HAP Logon Tracker\\obj\\x86\\Release\\HAP Logon Tracker.exe"
