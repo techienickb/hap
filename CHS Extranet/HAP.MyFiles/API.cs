@@ -22,6 +22,7 @@ using System.Collections.Specialized;
 using ICSharpCode.SharpZipLib.Zip;
 using System.Web.Configuration;
 using System.Configuration;
+using ICSharpCode.SharpZipLib.Core;
 
 namespace HAP.MyFiles
 {
@@ -115,27 +116,123 @@ namespace HAP.MyFiles
             user.ImpersonateContained();
             try
             {
-                ZipFile zip = System.IO.File.Exists(z) ? new ZipFile(z) : ZipFile.Create(z);
-                zip.BeginUpdate();
-                foreach (string path in Paths)
+                if (System.IO.File.Exists(z))
                 {
-                    try
+                    ZipFile zipFile = new ZipFile(z);
+                    zipFile.BeginUpdate();
+
+                    foreach (string path in Paths)
                     {
-                        string p = Converter.DriveToUNC(path.Remove(0, 1), path.Substring(0, 1), out mapping, user);
-                        FileAttributes attr = System.IO.File.GetAttributes(p);
-                        if ((attr & FileAttributes.Directory) == FileAttributes.Directory) zip.AddDirectory(p);
-                        else zip.Add(p);
+                        try
+                        {
+                            string p = Converter.DriveToUNC(path.Remove(0, 1), path.Substring(0, 1), out mapping, user);
+                            string dirpath = Path.GetDirectoryName(p);
+                            int folderOffset = dirpath.Length + (dirpath.EndsWith("\\") ? 0 : 1);
+                            FileAttributes attr = System.IO.File.GetAttributes(p);
+                            if ((attr & FileAttributes.Directory) == FileAttributes.Directory) UpdateFolder(p, dirpath, zipFile);
+                            else
+                            {
+                                string entryName = p.Substring(folderOffset);
+                                entryName = ZipEntry.CleanName(entryName);
+                                zipFile.Add(p, p.Substring(folderOffset));
+                            }
+                        }
+                        catch { }
                     }
-                    catch { }
+                    zipFile.CommitUpdate();
+                    zipFile.Close();
                 }
-                zip.CommitUpdate();
-                zip.Close();
+                else
+                {
+                    FileStream fsOut = System.IO.File.Create(z);
+                    ZipOutputStream zipStream = new ZipOutputStream(fsOut);
+                    zipStream.SetLevel(3);
+                    foreach (string path in Paths)
+                    {
+                        try
+                        {
+                            string p = Converter.DriveToUNC(path.Remove(0, 1), path.Substring(0, 1), out mapping, user);
+                            string dirpath = Path.GetDirectoryName(p);
+                            int folderOffset = dirpath.Length + (dirpath.EndsWith("\\") ? 0 : 1);
+                            FileAttributes attr = System.IO.File.GetAttributes(p);
+                            if ((attr & FileAttributes.Directory) == FileAttributes.Directory) CompressFolder(p, zipStream, folderOffset);
+                            else
+                            {
+                                FileInfo fi = new FileInfo(p);
+
+                                string entryName = p.Substring(folderOffset);
+                                entryName = ZipEntry.CleanName(entryName);
+                                ZipEntry newEntry = new ZipEntry(entryName);
+                                newEntry.DateTime = fi.LastWriteTime;
+                                newEntry.Size = fi.Length;
+
+                                zipStream.PutNextEntry(newEntry);
+                                byte[] buffer = new byte[4096];
+                                using (FileStream streamReader = System.IO.File.OpenRead(p))
+                                {
+                                    StreamUtils.Copy(streamReader, zipStream, buffer);
+                                }
+                                zipStream.CloseEntry();
+                            }
+                        }
+                        catch { }
+                    }
+                    
+                    zipStream.IsStreamOwner = true; // Makes the Close also Close the underlying stream
+                    zipStream.Close();
+                }
             }
             finally
             {
                 user.EndContainedImpersonate();
             }
             return true;
+        }
+
+        private void UpdateFolder(string P, string Root, ZipFile zipFile)
+        {
+            foreach (string path in Directory.GetFiles(P))
+            {
+                try
+                {
+                    string dirpath = Path.GetDirectoryName(Root);
+                    int folderOffset = dirpath.Length + (dirpath.EndsWith("\\") ? 0 : 1);
+                    FileAttributes attr = System.IO.File.GetAttributes(path);
+                    if ((attr & FileAttributes.Directory) == FileAttributes.Directory) UpdateFolder(path, Root, zipFile);
+                    else zipFile.Add(path, path.Substring(folderOffset));
+                }
+                catch { }
+            }
+        }
+
+        private void CompressFolder(string path, ZipOutputStream zipStream, int folderOffset)
+        {
+            string[] files = Directory.GetFiles(path);
+
+            foreach (string filename in files)
+            {
+
+                FileInfo fi = new FileInfo(filename);
+
+                string entryName = filename.Substring(folderOffset);
+                entryName = ZipEntry.CleanName(entryName);
+                ZipEntry newEntry = new ZipEntry(entryName);
+                newEntry.DateTime = fi.LastWriteTime;
+                newEntry.Size = fi.Length;
+
+                zipStream.PutNextEntry(newEntry);
+                byte[] buffer = new byte[4096];
+                using (FileStream streamReader = System.IO.File.OpenRead(filename))
+                {
+                    StreamUtils.Copy(streamReader, zipStream, buffer);
+                }
+                zipStream.CloseEntry();
+            }
+            string[] folders = Directory.GetDirectories(path);
+            foreach (string folder in folders)
+            {
+                CompressFolder(folder, zipStream, folderOffset);
+            }
         }
 
         [OperationContract]
