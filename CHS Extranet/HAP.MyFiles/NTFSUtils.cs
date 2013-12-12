@@ -365,6 +365,7 @@ namespace HAP.MyFiles
             NTFSPerms perms = new NTFSPerms();
             perms.AppendData = canAppendData();
             perms.CreateDirs = canCreateDirectories();
+            perms.CreateFiles = canCreateFiles();
             perms.Delete = canDelete();
             perms.DeleteSubDirsOrFiles = canDeleteSubdirectoriesAndFiles();
             perms.Execute = canExecuteFile();

@@ -24,5 +24,6 @@ namespace HAP.MyFiles
         public bool WriteAttr { get; set; }
         public bool WriteData { get; set; }
         public bool WriteExAttr { get; set; }
+        public bool CreateFiles { get; set; }
     }
 }
