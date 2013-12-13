@@ -21,12 +21,10 @@ namespace HAP.Web.Tracker
         {
             //archive.Visible = hapConfig.Current.Tracker.Provider == "XML";
             Dictionary<DateTime, int> data = new Dictionary<DateTime, int>();
-            List<DateTime> d = new List<DateTime>();
             foreach (trackerlogentry entry in trackerlog.CurrentFull)
             {
                 DateTime dt = new DateTime(entry.LogOnDateTime.Year, entry.LogOnDateTime.Month, 1);
                 DateTime dt1 = new DateTime(entry.LogOnDateTime.Year, entry.LogOnDateTime.Month, entry.LogOnDateTime.Day, 12, 0, 0);
-                if (!d.Contains(dt)) d.Add(dt);
                 if (!data.ContainsKey(dt1)) data.Add(dt1, 1);
                 else data[dt1]++;
             }
@@ -34,8 +32,6 @@ namespace HAP.Web.Tracker
             foreach (DateTime dt2 in data.Keys)
                 s.Add(string.Format("['{0}', {1}]", dt2.ToString("yyyy-MM-dd h:mmtt"), data[dt2]));
             Data = string.Join(", ", s.ToArray());
-            dates.DataSource = d.ToArray();
-            dates.DataBind();
         }
 
         protected string Data { get; set; }

@@ -80,6 +80,31 @@ namespace HAP.Tracker
             return Clear(Computer, DomainName);
         }
 
+        [OperationContract]
+        [WebInvoke(UriTemplate = "/{Year}/{Month}", Method = "GET", ResponseFormat = WebMessageFormat.Json)]
+        public DataResult MonthData(string Year, string Month)
+        {
+            DataResult res = new DataResult();
+            Dictionary<DateTime, int> data = new Dictionary<DateTime, int>();
+            trackerlog tlog = new trackerlog(int.Parse(Year), int.Parse(Month));
+            int dim = dim = DateTime.DaysInMonth(int.Parse(Year), int.Parse(Month));
+            for (int x = 0; x < dim; x++)
+            {
+                int y = 0;
+                y = tlog.Count(t => t.LogOnDateTime.Day == x + 1);
+                DateTime dt = new DateTime(int.Parse(Year), int.Parse(Month), x + 1, 0, 0, 0);
+                data.Add(dt, y);
+            }
+            List<object> s = new List<object>();
+            foreach (DateTime dt2 in data.Keys)
+                s.Add(new object[] { dt2.ToString("yyyy-MM-dd h:mmtt"), data[dt2] });
+            res.LineData = s.ToArray();
+            List<string[]> l = new List<string[]>();
+            foreach (HAP.Data.Tracker.trackerlogentry e in tlog) l.Add(new string[] { e.ComputerName, e.IP, e.UserName, e.DomainName, e.LogonServer, e.OS, e.LogOnDateTime.ToString(), e.LogOffDateTime.HasValue ? e.LogOffDateTime.Value.ToString() : "" });
+            res.Data = l.ToArray();
+            return res;
+        }
+
         bool isAdmin(string username)
         {
             foreach (string s in Roles.GetRolesForUser(username))
@@ -94,4 +119,11 @@ namespace HAP.Tracker
             return false;
         }
     }
+
+    public class DataResult
+    {
+        public object[] LineData { get; set; }
+        public string[][] Data { get; set; }
+    }
+
 }
