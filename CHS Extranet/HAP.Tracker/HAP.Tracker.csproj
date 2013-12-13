@@ -64,6 +64,7 @@
     <Compile Include="API.cs" />
     <Compile Include="Logons.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="trackerlog.cs" />
     <Compile Include="trackerlogentry.cs" />
   </ItemGroup>
   <ItemGroup>

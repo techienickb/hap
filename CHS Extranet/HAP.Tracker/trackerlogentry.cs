@@ -44,7 +44,10 @@ namespace HAP.Tracker
             this.LogOffDateTime = null;
         }
 
-
+        public static trackerlogentry Convert(HAP.Data.Tracker.trackerlogentry o)
+        {
+            return new trackerlogentry(o.IP, o.ComputerName, o.UserName, o.DomainName, o.LogonServer, o.OS, o.LogOnDateTime.ToString()) { LogOffDateTime = o.LogOffDateTime.HasValue ? o.LogOffDateTime.Value.ToString() : "" };
+        }
 
         public trackerlogentry()
         {
