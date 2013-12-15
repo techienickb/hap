@@ -8,6 +8,7 @@ using System.Web.Routing;
 using HAP.Web.routing;
 using System.Diagnostics;
 using HAP.Web.Configuration;
+using Microsoft.Win32;
 
 namespace HAP.Web
 {
@@ -16,17 +17,22 @@ namespace HAP.Web
 
         protected void Application_Start(object sender, EventArgs e)
         {
-            if (!hapConfig.Current.FirstRun && !EventLog.SourceExists("Home Access Plus+"))
+            if (!hapConfig.Current.FirstRun)
             {
-                HAP.AD.User _user = new HAP.AD.User();
-                _user.Authenticate(hapConfig.Current.AD.User, hapConfig.Current.AD.Password);
-                try
+                RegistryKey EventSource = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Services\EventLog\Application\Home Access Plus+");
+
+                if (EventSource == null)
                 {
-                    _user.ImpersonateContained();
-                    EventLog.CreateEventSource("Home Access Plus+", "Application");
+                    HAP.AD.User _user = new HAP.AD.User();
+                    _user.Authenticate(hapConfig.Current.AD.User, hapConfig.Current.AD.Password);
+                    try
+                    {
+                        _user.ImpersonateContained();
+                        EventLog.CreateEventSource("Home Access Plus+", "Application");
+                    }
+                    catch { }
+                    finally { _user.EndContainedImpersonate(); }
                 }
-                catch { }
-                finally { _user.EndContainedImpersonate(); }
             }
             HttpContext.Current.Cache.Insert("hapBannedIps", new List<Banned>());
             API.APIRoutes.Register(RouteTable.Routes);
