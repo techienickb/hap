@@ -315,7 +315,10 @@ namespace HAP.Web
             try
             {
                 Config.Save();
-                if (!EventLog.SourceExists("Home Access Plus+"))
+
+                RegistryKey EventSource = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Services\EventLog\Application\Home Access Plus+");
+
+                if (EventSource == null)
                 {
                     HAP.AD.User _user = new HAP.AD.User();
                     _user.Authenticate(Config.AD.User, Config.AD.Password);
@@ -324,7 +327,10 @@ namespace HAP.Web
                         _user.ImpersonateContained();
                         EventLog.CreateEventSource("Home Access Plus+", "Application");
                     }
-                    catch { }
+                    catch (Exception ex)
+                    {
+                        error.Visible = true; errormessage.Text = "Error Creating Event Log Source"; errormessagemore.Text = ex.Message + "<br /><br />" + ex.StackTrace;
+                    }
                     finally { _user.EndContainedImpersonate(); }
                 }
                 Response.Redirect("~/Setup.aspx?Saved=1");
