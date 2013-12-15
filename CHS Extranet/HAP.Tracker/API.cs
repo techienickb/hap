@@ -90,10 +90,12 @@ namespace HAP.Tracker
             int dim = dim = DateTime.DaysInMonth(int.Parse(Year), int.Parse(Month));
             for (int x = 0; x < dim; x++)
             {
-                int y = 0;
-                y = tlog.Count(t => t.LogOnDateTime.Day == x + 1);
-                DateTime dt = new DateTime(int.Parse(Year), int.Parse(Month), x + 1, 0, 0, 0);
-                data.Add(dt, y);
+                for (int y = 0; y < 24; y++)
+                    data.Add(new DateTime(int.Parse(Year), int.Parse(Month), x + 1, y, 0, 0), tlog.Count(t => (t.LogOnDateTime.Day == x + 1) && t.LogOnDateTime.Hour == y));
+                //int y = 0;
+                //y = tlog.Count(t => t.LogOnDateTime.Day == x + 1);
+                //DateTime dt = new DateTime(int.Parse(Year), int.Parse(Month), x + 1, 0, 0, 0);
+                //data.Add(dt, y);
             }
             List<object> s = new List<object>();
             foreach (DateTime dt2 in data.Keys)
@@ -103,6 +105,17 @@ namespace HAP.Tracker
             foreach (HAP.Data.Tracker.trackerlogentry e in tlog) l.Add(new string[] { e.ComputerName, e.IP, e.UserName, e.DomainName, e.LogonServer, e.OS, e.LogOnDateTime.ToString(), e.LogOffDateTime.HasValue ? e.LogOffDateTime.Value.ToString() : "" });
             res.Data = l.ToArray();
             return res;
+        }
+
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "/Live", Method = "GET", ResponseFormat = WebMessageFormat.Json)]
+        public string[][] LiveLogons()
+        {
+            trackerlog tlog = trackerlog.Current;
+            List<string[]> l = new List<string[]>();
+            foreach (HAP.Data.Tracker.trackerlogentry e in tlog) l.Add(new string[] { e.ComputerName, e.IP, e.UserName, e.DomainName, e.LogonServer, e.OS, e.LogOnDateTime.ToString(), e.LogOffDateTime.HasValue ? e.LogOffDateTime.Value.ToString() : "" });
+            return l.ToArray();
         }
 
         bool isAdmin(string username)
