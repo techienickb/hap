@@ -58,7 +58,7 @@
             $.getJSON("../api/tracker/web/" + $('#datepicker').datepicker("getDate").getFullYear() + "/" + ($('#datepicker').datepicker("getDate").getMonth() + 1) + "/" + $('#datepicker').datepicker("getDate").getDate(), function (data) {
                 plot1.destroy();
                 plot1 = $.jqplot('chartdiv', [data.LineData], {
-                    title: ($('#datepicker').datepicker("getDate").getDate() + '/' + $('#datepicker').datepicker("getDate").getMonth() + 1) + '/' + $('#datepicker').datepicker("getDate").getFullYear() + ' Tracker Results',
+                    title: $('#datepicker').datepicker("getDate").getDate() + '/' + ($('#datepicker').datepicker("getDate").getMonth() + 1) + '/' + $('#datepicker').datepicker("getDate").getFullYear() + ' Tracker Results',
                     axes: { yaxis: { min: 0 }, xaxis: { renderer: $.jqplot.DateAxisRenderer } },
                     series: [{ lineWidth: 2, markerOptions: { style: 'filledCircle', lineWidth: 1, size: 4 } }],
                     highlighter: { show: true },
