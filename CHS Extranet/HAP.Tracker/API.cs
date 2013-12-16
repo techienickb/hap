@@ -16,6 +16,7 @@ using System.Net.Security;
 using System.Web.Security;
 using HAP.Data.Tracker;
 using System.Management;
+using HAP.Data.SQL;
 
 namespace HAP.Tracker
 {
@@ -87,7 +88,7 @@ namespace HAP.Tracker
             DataResult res = new DataResult();
             Dictionary<DateTime, int> data = new Dictionary<DateTime, int>();
             trackerlog tlog = new trackerlog(int.Parse(Year), int.Parse(Month));
-            int dim = dim = DateTime.DaysInMonth(int.Parse(Year), int.Parse(Month));
+            int dim = DateTime.DaysInMonth(int.Parse(Year), int.Parse(Month));
             for (int x = 0; x < dim; x++)
             {
                 for (int y = 0; y < 24; y++)
@@ -105,6 +106,44 @@ namespace HAP.Tracker
             foreach (HAP.Data.Tracker.trackerlogentry e in tlog) l.Add(new string[] { e.ComputerName, e.IP, e.UserName, e.DomainName, e.LogonServer, e.OS, e.LogOnDateTime.ToString(), e.LogOffDateTime.HasValue ? e.LogOffDateTime.Value.ToString() : "" });
             res.Data = l.ToArray();
             return res;
+        }
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "/Web/{Year}/{Month}/{Day}", Method = "GET", ResponseFormat = WebMessageFormat.Json)]
+        public DataResult WebDayData(string Year, string Month, string Day)
+        {
+            DataResult res = new DataResult();
+            Dictionary<DateTime, int> data = new Dictionary<DateTime, int>();
+            WebTrackerEvent[] wlog = WebEvents.Events.Where(we => we.DateTime.Year == int.Parse(Year) && we.DateTime.Month == int.Parse(Month) && we.DateTime.Day == int.Parse(Day)).ToArray();
+            for (int y = 0; y < 24; y++)
+                for (int x = 0; x < 60; x ++)
+                    data.Add(new DateTime(int.Parse(Year), int.Parse(Month), int.Parse(Day), y, x, 0), wlog.Count(t => (t.DateTime.Hour == y) && (t.DateTime.Minute == x)));
+            List<object> s = new List<object>();
+            foreach (DateTime dt2 in data.Keys)
+                s.Add(new object[] { dt2.ToString("yyyy-MM-dd h:mmtt"), data[dt2] });
+            res.LineData = s.ToArray();
+            List<string[]> l = new List<string[]>();
+            foreach (WebTrackerEvent e in wlog) l.Add(new string[] { e.DateTime.ToShortTimeString(), e.EventType, e.ComputerName, e.Username, e.Browser, e.OS, e.Details });
+            res.Data = l.ToArray();
+            return res;
+        }
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "/Web/{Year}/{Month}", Method = "GET", ResponseFormat = WebMessageFormat.Json)]
+        public object[] WebMonthData(string Year, string Month)
+        {
+            Dictionary<DateTime, int> data = new Dictionary<DateTime, int>();
+            WebTrackerEvent[] wlog = WebEvents.Events.Where(we => we.DateTime.Year == int.Parse(Year) && we.DateTime.Month == int.Parse(Month)).ToArray();
+            int dim = DateTime.DaysInMonth(int.Parse(Year), int.Parse(Month));
+            for (int x = 0; x < dim; x++)
+            {
+                for (int y = 0; y < 24; y++)
+                    data.Add(new DateTime(int.Parse(Year), int.Parse(Month), x + 1, y, 0, 0), wlog.Count(t => (t.DateTime.Day == x + 1) && t.DateTime.Hour == y));
+            }
+            List<object> s = new List<object>();
+            foreach (DateTime dt2 in data.Keys)
+                s.Add(new object[] { dt2.ToString("yyyy-MM-dd h:mmtt"), data[dt2] });
+            return s.ToArray();
         }
 
 
