@@ -710,7 +710,6 @@
     <Content Include="style\ui.dynatree.css" />
     <Content Include="Timetable.aspx" />
     <Content Include="Tracker\api.asmx" />
-    <Content Include="Tracker\log.aspx" />
     <Content Include="Tracker\logontracker-small.png" />
     <Content Include="images\statusicons\priority_high.png" />
     <Content Include="images\statusicons\priority_low.png" />
@@ -754,8 +753,6 @@
     <Content Include="Tracker\live.aspx" />
     <Content Include="Tracker\logontracker.png" />
     <Content Include="Tracker\logs.aspx" />
-    <Content Include="Tracker\tracker.css" />
-    <Content Include="Tracker\WebLog.aspx" />
     <Content Include="Tracker\WebLogs.aspx" />
     <Content Include="Tracker\XML2SQL.aspx" />
     <Content Include="unauthorised.aspx" />
@@ -955,21 +952,7 @@
     <Compile Include="Tracker\live.aspx.designer.cs">
       <DependentUpon>live.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Tracker\log.aspx.cs">
-      <DependentUpon>log.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Tracker\log.aspx.designer.cs">
-      <DependentUpon>log.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Tracker\trackerlog.cs" />
-    <Compile Include="Tracker\WebLog.aspx.cs">
-      <DependentUpon>WebLog.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Tracker\WebLog.aspx.designer.cs">
-      <DependentUpon>WebLog.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Tracker\WebLogs.aspx.cs">
       <DependentUpon>WebLogs.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
