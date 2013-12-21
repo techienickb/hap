@@ -97,6 +97,8 @@ namespace HAP.Web.Configuration
             e.Attributes["url"].Value = link.Url;
             e.Attributes["icon"].Value = link.Icon;
             e.Attributes["target"].Value = link.Target;
+            e.Attributes["width"].Value = link.Width;
+            e.Attributes["height"].Value = link.Height;
             base.Insert(x, new Link(e));
         }
 
