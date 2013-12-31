@@ -36,7 +36,7 @@ namespace HAP.AD
             if (!HAP.Web.Configuration.hapConfig.Current.AD.UseNestedLookups) return wtrp.GetRolesForUser(username);
             else if (HttpContext.Current.Cache["userrolecache-" + username.ToLower()] == null)
             {
-                List<string> roles = new List<string>();
+                List<string> roles = new List<string> { "Authenticated Users" };
                 try
                 {
                     PrincipalContext pcontext;

@@ -18,7 +18,6 @@ namespace HAP.Web.Configuration
             UNC = HttpContext.Current.Server.HtmlDecode(node.InnerText);
             EnableReadTo = node.Attributes["enablereadto"].Value;
             EnableWriteTo = node.Attributes["enablewriteto"].Value;
-            EnableMove = bool.Parse(node.Attributes["enablemove"].Value);
             UsageMode = (MappingUsageMode)Enum.Parse(typeof(MappingUsageMode), node.Attributes["usagemode"].Value);
         }
 
@@ -27,7 +26,6 @@ namespace HAP.Web.Configuration
         public string UNC { get; set; }
         public string EnableReadTo { get; set; }
         public string EnableWriteTo { get; set; }
-        public bool EnableMove { get; set; }
         public MappingUsageMode UsageMode { get; set; }
     }
 

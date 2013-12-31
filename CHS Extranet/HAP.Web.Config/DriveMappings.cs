@@ -17,7 +17,7 @@ namespace HAP.Web.Configuration
             this.node = doc.SelectSingleNode("/hapConfig/myfiles/mappings");
             foreach (XmlNode n in node.ChildNodes) base.Add(new MappingKey(n.Attributes["drive"].Value.ToCharArray()[0], HttpContext.Current.Server.HtmlDecode(n.InnerText)), new DriveMapping(n));
         }
-        public void Add(char Drive, string Name, string UNC, string EnableReadTo, string EnableWriteTo, bool EnableMove, MappingUsageMode UsageMode)
+        public void Add(char Drive, string Name, string UNC, string EnableReadTo, string EnableWriteTo, MappingUsageMode UsageMode)
         {
             XmlElement e = doc.CreateElement("mapping");
             e.SetAttribute("drive", Drive.ToString());
@@ -25,7 +25,6 @@ namespace HAP.Web.Configuration
             e.InnerText = HttpContext.Current.Server.HtmlEncode(UNC);
             e.SetAttribute("enablereadto", EnableReadTo);
             e.SetAttribute("enablewriteto", EnableWriteTo);
-            e.SetAttribute("enablemove", EnableMove.ToString());
             e.SetAttribute("usagemode", UsageMode.ToString());
             doc.SelectSingleNode("/hapConfig/myfiles/mappings").AppendChild(e);
             base.Add(new MappingKey(Drive, UNC), new DriveMapping(e));
@@ -44,7 +43,6 @@ namespace HAP.Web.Configuration
             e.InnerText = HttpContext.Current.Server.HtmlEncode(New.UNC);
             e.Attributes["enablereadto"].Value = New.EnableReadTo;
             e.Attributes["enablewriteto"].Value = New.EnableWriteTo;
-            e.Attributes["enablemove"].Value = New.EnableMove.ToString();
             e.Attributes["usagemode"].Value = New.UsageMode.ToString();
             base.Add(new MappingKey(New.Drive, New.UNC), new DriveMapping(e));
         }

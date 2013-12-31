@@ -7,4 +7,7 @@
         <p>You have attempted to access a restricted resource</p>
         <input type="button" value="&lt; Go Back" onclick="window.history.back(-1);" />
     </div>
+    <script>
+        $("input").button();
+    </script>
 </asp:Content>

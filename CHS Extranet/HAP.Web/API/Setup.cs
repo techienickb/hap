@@ -74,11 +74,11 @@ namespace HAP.Web.API
 
         [OperationContract]
         [WebInvoke(Method="POST", RequestFormat=WebMessageFormat.Json, ResponseFormat=WebMessageFormat.Json, UriTemplate="/AddMapping", BodyStyle=WebMessageBodyStyle.Wrapped)]
-        public int AddMapping(string drive, string name, string unc, string enablereadto, string enablewriteto, bool enablemove, string usagemode)
+        public int AddMapping(string drive, string name, string unc, string enablereadto, string enablewriteto, string usagemode)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
             unc = unc.Replace('/', '\\');
-            Config.MyFiles.Mappings.Add(drive.ToCharArray()[0], name, unc, enablereadto, enablewriteto, enablemove, (MappingUsageMode)Enum.Parse(typeof(MappingUsageMode), usagemode));
+            Config.MyFiles.Mappings.Add(drive.ToCharArray()[0], name, unc, enablereadto, enablewriteto, (MappingUsageMode)Enum.Parse(typeof(MappingUsageMode), usagemode));
             return 0;
         }
 
@@ -87,18 +87,17 @@ namespace HAP.Web.API
         public int RemoveMapping(string drive, string unc)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
-            Config.MyFiles.Mappings.Remove(new MappingKey(drive.ToCharArray()[0], unc));
+            Config.MyFiles.Mappings.Remove(new MappingKey(drive.ToCharArray()[0], unc.Replace('/', '\\')));
             return 0;
         }
 
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "/UpdateMapping", BodyStyle = WebMessageBodyStyle.Wrapped)]
         [OperationContract]
-        public int UpdateMapping(string origdrive, string origunc, string drive, string name, string unc, string enablereadto, string enablewriteto, bool enablemove, string usagemode)
+        public int UpdateMapping(string origdrive, string origunc, string drive, string name, string unc, string enablereadto, string enablewriteto, string usagemode)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
-            DriveMapping m = Config.MyFiles.Mappings[new MappingKey(origdrive.ToCharArray()[0], origunc)];
+            DriveMapping m = Config.MyFiles.Mappings.Single(ma => ma.Key.Drive == origdrive.ToCharArray()[0] && ma.Key.UNC == origunc.Replace('/', '\\')).Value;
             m.Drive = drive.ToCharArray()[0];
-            m.EnableMove = enablemove;
             m.UsageMode = (MappingUsageMode)Enum.Parse(typeof(MappingUsageMode), usagemode);
             m.Name = name;
             m.UNC = unc.Replace('/', '\\');

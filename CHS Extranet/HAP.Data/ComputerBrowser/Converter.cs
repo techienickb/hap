@@ -51,7 +51,6 @@ namespace HAP.Data.ComputerBrowser
             string s = DriveToUNC(RoutingPath, RoutingDrive, out u, user);
             UNCPath u1 = new UNCPath();
             u1.Drive = u.Drive.ToString();
-            u1.EnableMove = u.EnableMove;
             u1.EnableReadTo = u.EnableReadTo;
             u1.EnableWriteTo = u.EnableWriteTo;
             u1.Name = u.Name;
@@ -67,7 +66,6 @@ namespace HAP.Data.ComputerBrowser
             string s = DriveToUNC(RoutingPath, RoutingDrive, out u);
             UNCPath u1 = new UNCPath();
             u1.Drive = u.Drive.ToString();
-            u1.EnableMove = u.EnableMove;
             u1.EnableReadTo = u.EnableReadTo;
             u1.EnableWriteTo = u.EnableWriteTo;
             u1.Name = u.Name;
@@ -231,7 +229,6 @@ namespace HAP.Data.ComputerBrowser
         {
             UNCPath Unc = new UNCPath();
             Unc.Drive = unc.Drive.ToString();
-            Unc.EnableMove = unc.EnableMove;
             Unc.EnableReadTo = unc.EnableReadTo;
             Unc.EnableWriteTo = unc.EnableWriteTo;
             Unc.Name = unc.Name;

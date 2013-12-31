@@ -138,7 +138,8 @@ namespace HAP.MyFiles
             System.Security.Principal.WindowsIdentity principal) {
             this._path = path;
             this._principal = principal;
-            string username = _principal.Name.Contains('\\') ? _principal.Name.Substring(_principal.Name.IndexOf('\\') + 1) : _principal.Name;
+            string username = _principal.Name;
+            string domain = _principal.Name.Contains('\\') ? _principal.Name.Substring(0, _principal.Name.IndexOf('\\')) : "";
             try {
                 System.IO.FileInfo fi = new System.IO.FileInfo(_path);
                 AuthorizationRuleCollection acl = fi.GetAccessControl().GetAccessRules
@@ -146,7 +147,7 @@ namespace HAP.MyFiles
                 for (int i = 0; i < acl.Count; i++) {
                     System.Security.AccessControl.FileSystemAccessRule rule = 
                            (System.Security.AccessControl.FileSystemAccessRule)acl[i];
-                    if (rule.IdentityReference.Value.ToLower().EndsWith(username.ToLower())) {
+                    if (rule.IdentityReference.Value.ToLower() == username.ToLower()) {
                         if (System.Security.AccessControl.AccessControlType.Deny.Equals
                                 (rule.AccessControlType)) {
                             if (contains(FileSystemRights.AppendData,rule)) 
@@ -228,12 +229,12 @@ namespace HAP.MyFiles
                     }
                 }
 
-                string[] groups = Roles.GetRolesForUser(_principal.Name.Contains('\\') ? _principal.Name.Substring(_principal.Name.IndexOf('\\') + 1) : _principal.Name);
+                string[] groups = Roles.GetRolesForUser(_principal.Name);
                 for (int j = 0; j < groups.Length; j++) {
                     for (int i = 0; i < acl.Count; i++) {
                         System.Security.AccessControl.FileSystemAccessRule rule = 
                             (System.Security.AccessControl.FileSystemAccessRule)acl[i];
-                        if (rule.IdentityReference.Value.ToLower().EndsWith(groups[j].ToLower())) {
+                        if (rule.IdentityReference.Value.ToLower().EndsWith(groups[j] == "Authenticated Users" ? groups[j].ToLower() : (domain.ToLower() + '\\' + groups[j].ToLower()))) {
                             if (System.Security.AccessControl.AccessControlType.
                                 Deny.Equals(rule.AccessControlType)) {
                                 if (contains(FileSystemRights.AppendData,rule)) 
