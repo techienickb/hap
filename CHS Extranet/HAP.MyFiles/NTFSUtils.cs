@@ -234,7 +234,8 @@ namespace HAP.MyFiles
                     for (int i = 0; i < acl.Count; i++) {
                         System.Security.AccessControl.FileSystemAccessRule rule = 
                             (System.Security.AccessControl.FileSystemAccessRule)acl[i];
-                        if (rule.IdentityReference.Value.ToLower().EndsWith(groups[j] == "Authenticated Users" ? groups[j].ToLower() : (domain.ToLower() + '\\' + groups[j].ToLower()))) {
+                        if (rule.IdentityReference.Value.ToLower().EndsWith(groups[j] == "Authenticated Users" || groups[j] == "Administrators"  ? groups[j].ToLower() : (domain.ToLower() + '\\' + groups[j].ToLower())))
+                        {
                             if (System.Security.AccessControl.AccessControlType.
                                 Deny.Equals(rule.AccessControlType)) {
                                 if (contains(FileSystemRights.AppendData,rule)) 
