@@ -727,7 +727,7 @@
                                         $.ajax({
                                             type: 'POST',
                                             url: 'API/Setup/AddMapping',
-                                            data: '{ "drive": "' + $("#mappingDrive").val().toUpperCase() + '", "name": "' + $("#mappingName").val() + '", "unc": "' + $("#mappingUNC").val().replace(/\\/g, "/") + '", "enablemove": true, "enablereadto": "' + $("#mappingEnableReadTo").val() + '", "enablewriteto": "' + $("#mappingEnableWriteTo").val() + '", "usagemode": "' + ($("mappingUsageModeDriveSpace").is(":checked") ? "DriveSpace" : "Quota") + '" }',
+                                            data: '{ "drive": "' + $("#mappingDrive").val().toUpperCase() + '", "name": "' + $("#mappingName").val() + '", "unc": "' + $("#mappingUNC").val().replace(/\\/g, "/") + '", "enablereadto": "' + $("#mappingEnableReadTo").val() + '", "enablewriteto": "' + $("#mappingEnableWriteTo").val() + '", "usagemode": "' + ($("mappingUsageModeDriveSpace").is(":checked") ? "DriveSpace" : "Quota") + '" }',
                                             contentType: 'application/json',
                                             dataType: 'json',
                                             success: OnMappingAddSuccess,
@@ -748,7 +748,7 @@
                                 var data = response.AddMappingResult;
                                 if (data != 0) alert(data);
                                 else {
-                                    $("#mappings").append('<div class="homepagelink"><button title="Remove" onclick="return removemapping(this);">X</button><a href="#mapping" class="mapping" title="Edit" onclick="return editmapping(this);"><img src="<%#ResolveUrl("~/images/icons/netdrive.png") %>" alt="" /><b>' + $("#mappingDrive").val().toUpperCase() + '</b><i>' + $("#mappingUNC").val() + '</i><span class="name">' + $("#mappingName").val() + '</span><span class="ert">' + $("#mappingEnableReadTo").val() + '</span><span class="ewt">' + $("#mappingEnableWriteTo").val() + '</span><dd>' + ($("mappingUsageModeDriveSpace").is(":checked") ? "DriveSpace" : "Quota") + '</dd></a></div>');
+                                    $("#mappings").append('<div class="homepagelink"><button title="Remove" onclick="return removemapping(this);">X</button><a href="#mapping" class="mapping" title="Edit" onclick="return editmapping(this);"><img src="<%#ResolveUrl("~/images/icons/netdrive.png") %>" alt="" /><b>' + $("#mappingDrive").val().toUpperCase() + '</b><i>' + $("#mappingUNC").val() + '</i><span class="name">' + $("#mappingName").val() + '</span><span class="ert">' + $("#mappingEnableReadTo").val() + '</span><span class="ewt">' + $("#mappingEnableWriteTo").val() + '</span><dd>' + ($("#mappingUsageModeDriveSpace").is(":checked") ? "DriveSpace" : "Quota") + '</dd></a></div>');
                                     resetButtons();
                                 }
                             }
@@ -775,7 +775,7 @@
                                         $.ajax({
                                             type: 'POST',
                                             url: 'API/Setup/UpdateMapping',
-                                            data: '{ "origdrive": "' + tempe.children("a").children("b").html() + '", "origunc": "' + tempe.children("a").children("i").html() + '", "drive": "' + $("#mappingDrive").val().toUpperCase() + '", "name": "' + $("#mappingName").val() + '", "unc": "' + $("#mappingUNC").val().replace(/\\/g, "/") + '", "enablemove": true, "enablereadto": "' + $("#mappingEnableReadTo").val() + '", "enablewriteto": "' + $("#mappingEnableWriteTo").val() + '", "usagemode": "' + ($("mappingUsageModeDriveSpace").attr("checked") ? "DriveSpace" : "Quota") + '" }',
+                                            data: '{ "origdrive": "' + tempe.children("a").children("b").html() + '", "origunc": "' + tempe.children("a").children("i").html().replace(/\\/g, "/") + '", "drive": "' + $("#mappingDrive").val().toUpperCase() + '", "name": "' + $("#mappingName").val() + '", "unc": "' + $("#mappingUNC").val().replace(/\\/g, "/") + '", "enablereadto": "' + $("#mappingEnableReadTo").val() + '", "enablewriteto": "' + $("#mappingEnableWriteTo").val() + '", "usagemode": "' + ($("#mappingUsageModeDriveSpace").is(":checked") ? "DriveSpace" : "Quota") + '" }',
                                             contentType: 'application/json',
                                             dataType: 'json',
                                             success: OnMappingUpdateSuccess,
@@ -812,7 +812,7 @@
                             $.ajax({
                                 type: 'POST',
                                 url: 'API/Setup/RemoveMapping',
-                                data: '{ "drive": "' + tempe.children("a").children("b").html() + '", "unc", "' + tempe.children("a").children("i").html() + '" }',
+                                data: '{ "drive": "' + tempe.children("a").children("b").html() + '", "unc": "' + tempe.children("a").children("i").html().replace(/\\/g, "/") + '" }',
                                 contentType: 'application/json',
                                 dataType: 'json',
                                 success: OnMappingRemoveSuccess,

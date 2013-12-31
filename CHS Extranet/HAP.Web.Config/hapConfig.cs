@@ -311,6 +311,11 @@ namespace HAP.Web.Configuration
                 }
                 doc2.Save(HttpContext.Current.Server.MapPath("~/app_data/staticbookings.xml"));
             }
+            if (version.CompareTo(Version.Parse("10.0.0.0")) < 0) //Perform v10 upgrade
+            {
+                foreach (XmlNode n in doc.SelectNodes("/hapConfig/myfiles/mappings/mapping"))
+                    if (n.Attributes.GetNamedItem("enablemove") != null) n.Attributes.RemoveNamedItem("enablemove");
+            }
             doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             doc.Save(ConfigPath);
         }

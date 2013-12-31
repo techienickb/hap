@@ -1,4 +1,4 @@
-﻿/*HAP.Web.JS.js - Copyright © 2012 nb development - Version 4 */
+﻿/*HAP.Web.JS.js - Copyright © 2014 nb development - Version 4 */
 if (hap == null) {
     var hap = {
         root: "/hap/",
