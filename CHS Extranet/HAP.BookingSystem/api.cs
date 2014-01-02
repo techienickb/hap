@@ -249,6 +249,77 @@ namespace HAP.Web.API
             return bookings.ToArray();
         }
 
+        public IEnumerable<DateTime> EachDay(DateTime from, DateTime thru)
+        {
+            for (var day = from.Date; day.Date <= thru.Date; day = day.AddDays(1))
+                yield return day;
+        }
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/Load/{StartDate}/{EndDate}")]
+        public JSONBooking[][] Load(string StartDate, string EndDate)
+        {
+            List<JSONBooking[]> bookings = new List<JSONBooking[]>();
+            DateTime start = DateTime.Parse(StartDate);
+            DateTime end = DateTime.Parse(EndDate);
+            foreach (DateTime day in EachDay(start, end)) {
+                HAP.BookingSystem.BookingSystem bs = new HAP.BookingSystem.BookingSystem(day);
+                List<JSONBooking> js = new List<JSONBooking>();
+                foreach (Lesson lesson in hapConfig.Current.BookingSystem.Lessons)
+                {
+                    DateTime d = day.Date.AddHours(lesson.StartTime.Hour).AddMinutes(lesson.StartTime.Minute).AddSeconds(lesson.StartTime.Second);
+                    DateTime d2 = day.Date.AddHours(lesson.EndTime.Hour).AddMinutes(lesson.EndTime.Minute).AddSeconds(lesson.EndTime.Second);
+                    int a = 0;
+                    foreach (Resource r in hapConfig.Current.BookingSystem.Resources.Values)
+                    {
+                        if (isVisible(r.ShowTo, r.HideFrom))
+                            foreach (Booking b in bs.getBooking(r.Name, lesson.Name))
+                            {
+                                JSONBooking j = new JSONBooking(b);
+                                j.Date = d.AddSeconds(a).ToString("yyyy-MM-ddTHH:mm:ssZ");
+                                j.Date2 = d2.ToString("yyyy-MM-ddTHH:mm:ssZ");
+                                if (b.Resource.Type == ResourceType.Loan) j.Lesson = lesson.Name;
+                                js.Add(j);
+                            }
+                        a++;
+                    }
+                }
+                bookings.Add(js.ToArray());
+            }
+            WebOperationContext.Current.OutgoingResponse.Format = WebMessageFormat.Json;
+            return bookings.ToArray();
+        }
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/Load/{StartDate}/{EndDate}/{Resource}")]
+        public JSONBooking[][] LoadResource(string StartDate, string EndDate, string Resource)
+        {
+            List<JSONBooking[]> bookings = new List<JSONBooking[]>();
+            DateTime start = DateTime.Parse(StartDate);
+            DateTime end = DateTime.Parse(EndDate);
+            foreach (DateTime day in EachDay(start, end))
+            {
+                HAP.BookingSystem.BookingSystem bs = new HAP.BookingSystem.BookingSystem(day);
+                List<JSONBooking> js = new List<JSONBooking>();
+                foreach (Lesson lesson in hapConfig.Current.BookingSystem.Lessons)
+                {
+                    DateTime d = day.Date.AddHours(lesson.StartTime.Hour).AddMinutes(lesson.StartTime.Minute).AddSeconds(lesson.StartTime.Second);
+                    DateTime d2 = day.Date.AddHours(lesson.EndTime.Hour).AddMinutes(lesson.EndTime.Minute).AddSeconds(lesson.EndTime.Second);
+                    foreach (Booking b in bs.getBooking(Resource, lesson.Name))
+                    {
+                        JSONBooking j = new JSONBooking(b);
+                        j.Date = d.ToString("yyyy-MM-ddTHH:mm:ssZ");
+                        j.Date2 = d2.ToString("yyyy-MM-ddTHH:mm:ssZ");
+                        if (b.Resource.Type == ResourceType.Loan) j.Lesson = lesson.Name;
+                        js.Add(j);
+                    }
+                }
+                bookings.Add(js.ToArray());
+            }
+            WebOperationContext.Current.OutgoingResponse.Format = WebMessageFormat.Json;
+            return bookings.ToArray();
+        }
+
         [OperationContract]
         [WebGet(ResponseFormat=WebMessageFormat.Json, UriTemplate="/Initial/{Date}/{Username}")]
         public int[] Initial(string Username, string Date)
@@ -309,6 +380,18 @@ namespace HAP.Web.API
         {
             if (new HAP.AD.User(Username).IsMemberOf(GroupPrincipal.FindByIdentity(AD.ADUtils.GetPContext(), "Domain Admins"))) return true;
             return isBSAdmin(Username);
+        }
+
+        private bool isVisible(string showto, string hidefrom)
+        {
+            if (showto == "All" || isBSAdmin(HttpContext.Current.User.Identity.Name) || HttpContext.Current.User.IsInRole("Domain Admins")) return true;
+            foreach (string s in hidefrom.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                if (HttpContext.Current.User.Identity.Name.ToLower().Equals(s.ToLower().Trim())) return false;
+                else if (HttpContext.Current.User.IsInRole(s.Trim())) return false;
+            foreach (string s in showto.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                if (HttpContext.Current.User.Identity.Name.ToLower().Equals(s.ToLower().Trim())) return true;
+                else if (HttpContext.Current.User.IsInRole(s.Trim())) return true;
+            return false;
         }
 
         private bool isBSAdmin(string Username)

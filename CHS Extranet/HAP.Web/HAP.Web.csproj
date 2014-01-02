@@ -104,6 +104,7 @@
     </Content>
     <Content Include="App_LocalResources\en-gb\Strings.xml" />
     <Content Include="BookingSystem\admin\Default.aspx" />
+    <Content Include="BookingSystem\Cal.aspx" />
     <Content Include="BookingSystem\Display.aspx" />
     <Content Include="BookingSystem\loading.gif" />
     <Content Include="BookingSystem\Default.aspx" />
@@ -116,6 +117,7 @@
     <Content Include="Controls\UpdateChecker.ascx" />
     <Content Include="ExampleCustomTile.js" />
     <Content Include="haplogo-icon.ico" />
+    <Content Include="style\fullcalendar.css" />
     <Content Include="HelpDesk\newassignticket.htm" />
     <Content Include="HelpDesk\Default.aspx" />
     <Content Include="images\120-arrow.png" />
@@ -643,6 +645,7 @@
     <Content Include="MyFiles\oauth.aspx" />
     <Content Include="OneUseCodes.aspx" />
     <Content Include="Scripts\excanvas.min.js" />
+    <Content Include="Scripts\fullcalendar.min.js" />
     <Content Include="Scripts\jqplot.cursor.min.js" />
     <Content Include="Scripts\jqplot.dateAxisRenderer.min.js" />
     <Content Include="Scripts\jqplot.highlighter.min.js" />
@@ -663,6 +666,7 @@
     <Content Include="Scripts\modernizr.js" />
     <Content Include="style\bookingpopup.css" />
     <Content Include="style\editor.css" />
+    <Content Include="style\fullcalendar.print.css" />
     <Content Include="style\jquery.dataTables.css" />
     <Content Include="style\jquery.jqplot.css" />
     <Content Include="style\jquery.mobile-1.0.css" />
@@ -788,6 +792,13 @@
       <DependentUpon>api.ashx</DependentUpon>
     </Compile>
     <Compile Include="BookingSystem\BigBookingCalendar.cs" />
+    <Compile Include="BookingSystem\Cal.aspx.cs">
+      <DependentUpon>Cal.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BookingSystem\Cal.aspx.designer.cs">
+      <DependentUpon>Cal.aspx</DependentUpon>
+    </Compile>
     <Compile Include="BookingSystem\Display.aspx.cs">
       <DependentUpon>Display.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

@@ -12,7 +12,8 @@
 <asp:Content runat="server" ContentPlaceHolderID="viewport"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" /></asp:Content>
 <asp:Content ContentPlaceHolderID="header" runat="server">
 	<asp:HyperLink runat="server" NavigateUrl="Admin/" ID="adminlink" Text="Control Panel" style="float: right;" />
-	<a href="OverviewCalendar.aspx" id="overview" style="float: right;">Overview</a>
+	<a href="OverviewCalendar.aspx" id="overview">Overview</a>
+    <a href="Cal.aspx" id="wv">Weekview</a>
 	<a id="help" href="#" style="float: right;" onclick="hap.help.Load('bookingsystem/index'); return false;"><hap:LocalResource StringPath="help" runat="server" /></a>
 </asp:Content>
 <asp:Content ContentPlaceHolderID="body" runat="server">
@@ -338,11 +339,11 @@
 			}
 		}
 		$(window).hashchange(function () {
-			
 			if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curdate = new Date(window.location.href.split('#')[1].split('/')[2], window.location.href.split('#')[1].split('/')[1] - 1, window.location.href.split('#')[1].split('/')[0]);
 			else curdate = date;
 			$('#datepicker').datepicker("setDate", curdate);
 			$("#picker").val($.datepicker.formatDate('d MM', curdate));
+			$("#wv").attr("href", "cal.aspx#" + $.datepicker.formatDate('dd/mm/yy', curdate))
 			breakloc = null;
 			for (var i = 0; i < lessontimes.length; i++) lessontimes[i].FromStart = lessontimes[i].FromEnd = null;
 			$("#time").removeAttr("style");

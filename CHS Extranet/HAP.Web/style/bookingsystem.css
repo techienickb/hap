@@ -84,3 +84,27 @@ body.bookingdisplay, body.bookingdisplay form { padding: 0; margin: 0; width: 10
 @media only screen and (max-width: 800px)  {
     #sidebaredit.show { width: 100%; border: 0; }
 }
+
+.fc-event {
+    background-color: #ccc;
+    color: #333;
+    border-color: #bbb;
+    border-radius: 0;
+}
+
+a.fc-event {
+    background-color: #EEEEEE;
+}
+
+a.fc-event:hover {
+    background-color: #dedede;
+    color: #000;
+}
+
+.ui-tooltip {
+    color: #000;
+    text-transform: uppercase;
+    box-shadow: 0 0 7px black;
+    z-index: 200;
+    width: 200px!important;
+}

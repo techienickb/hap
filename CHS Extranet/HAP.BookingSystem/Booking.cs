@@ -190,6 +190,7 @@ namespace HAP.BookingSystem
         public int Count { get; set; }
         public bool Static { get; set; }
         public string Username { get; set; }
+        public string Date2 { get; set; }
         public string Date { get; set; }
         public string Notes { get; set; }
         public int CompareTo(object obj)

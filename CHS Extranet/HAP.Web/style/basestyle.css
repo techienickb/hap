@@ -4,7 +4,7 @@
 
 html, body { padding: 0; margin: 0; }
 
-.tile-color, #datepicker .ui-datepicker-header { background: #0060a6; border-color: #0060a6; }
+.tile-color, #datepicker .ui-datepicker-header, .fc-content .ui-widget-header { background: #0060a6; border-color: #0060a6; }
 .tile-border-color, #datepicker .ui-datepicker { border-color: #0060a6; }
 .tile-color-font { color: #0060a6; }
 .tiles a { background-color: #0060a6; color: #fff; border-color: #0060a6; }
