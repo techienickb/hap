@@ -649,6 +649,7 @@
     <Content Include="Scripts\jqplot.cursor.min.js" />
     <Content Include="Scripts\jqplot.dateAxisRenderer.min.js" />
     <Content Include="Scripts\jqplot.highlighter.min.js" />
+    <Content Include="App_Data\Timetables.RptDef" />
     <None Include="Scripts\jquery-vsdoc.js" />
     <Content Include="Scripts\jquery.dataTables.js" />
     <Content Include="Scripts\jquery.event.move.js" />
@@ -1024,6 +1025,10 @@
     <ProjectReference Include="..\HAP.MyFiles\HAP.MyFiles.csproj">
       <Project>{ed1514ff-9e76-4fc3-9238-68653b50f9c4}</Project>
       <Name>HAP.MyFiles</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HAP.Timetable\HAP.Timetable.csproj">
+      <Project>{1a0e71ea-2860-4e47-acd6-0fde50e7f659}</Project>
+      <Name>HAP.Timetable</Name>
     </ProjectReference>
     <ProjectReference Include="..\HAP.Tracker\HAP.Tracker.csproj">
       <Project>{8a57d4c2-d59d-4d1e-9b83-62946a4e778d}</Project>

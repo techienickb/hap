@@ -10,8 +10,7 @@ if (hap == null) {
         common: {
             jsonError: function (xhr, ajaxOptions, thrownError) {
                 try {
-                    alert(thrownError);
-                    if (xhr.responseText.match(/\<!doctype html/gi) && thrownError != "Not Found") window.location.reload();
+                    if (xhr.responseText.match(/\<!doctype html/gi) && thrownError != "Not Found" && thrownError != "Internal Server Error") window.location.reload();
                     else {
                         if (jQuery.parseJSON(xhr.responseText).Message == "Length of the data to decrypt is invalid." || jQuery.parseJSON(xhr.responseText).Message == "Invalid length for a Base-64 char array.") hap.help.Load("impmsg");
                         else {
