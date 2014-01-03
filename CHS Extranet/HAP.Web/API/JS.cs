@@ -14,6 +14,8 @@ using System.Xml;
 using System.Reflection;
 using System.Collections;
 using System.Text.RegularExpressions;
+using System.Text;
+using System.Globalization;
 
 namespace HAP.Web.API
 {
@@ -71,23 +73,59 @@ namespace HAP.Web.API
             else 
             {
                 if (JSType == API.JSType.CSS) context.Response.ContentType = "text/css";
-                context.Response.Write("/* " + context.Request.UrlReferrer.ToString() + " */");
-                foreach (string s in GetPaths(context.Request.UrlReferrer.ToString()))
+                string[] paths = GetPaths(context.Request.UrlReferrer.ToString());
+                int status = 200;
+                if (paths.Length > 0)
                 {
-                    context.Response.Write("\n/* " + s + "* /\n");
-                    StreamReader sr = File.OpenText(context.Server.MapPath(s));
-                    string f = "";
-                    if (JSType != API.JSType.CSS)
-                        while (!sr.EndOfStream)
+                    DateTime lastModified = File.GetLastWriteTimeUtc(context.Server.MapPath(paths[0]));
+
+                    foreach (string s in paths)
+                    {
+                        DateTime l = File.GetLastWriteTimeUtc(context.Server.MapPath(s));
+                        if (lastModified == null || lastModified < l) lastModified = l;
+                        context.Response.AddFileDependency(context.Server.MapPath(s));
+                    }
+                    lastModified = new DateTime(lastModified.Year, lastModified.Month, lastModified.Day, lastModified.Hour, lastModified.Minute, lastModified.Second, 0, DateTimeKind.Utc);
+
+                    context.Response.Cache.SetETagFromFileDependencies();
+                    context.Response.Cache.SetLastModifiedFromFileDependencies();
+                    context.Response.Cache.SetCacheability(HttpCacheability.Public);
+
+
+                    if (context.Request.Headers["If-Modified-Since"] != null)
+                    {
+                        status = 304;
+                        DateTime modifiedSinceDate = DateTime.UtcNow;
+                        if (DateTime.TryParse(context.Request.Headers["If-Modified-Since"], out modifiedSinceDate))
                         {
-                            f += sr.ReadLine();
+                            if (lastModified != modifiedSinceDate)
+                                status = 200;
                         }
-                    else f = sr.ReadToEnd();
-                    sr.Close();
-                    if (JSType != API.JSType.CSS)
-                        f = f.Replace("\t", "").Replace("  ", " ").Replace("  ", " ");
-                    context.Response.Write(f);
+                    }
                 }
+                context.Response.StatusCode = status;
+                if (status == 200)
+                {
+
+                    foreach (string s in paths)
+                    {
+                        context.Response.Write("\n/* " + s + "* /\n");
+                        StreamReader sr = File.OpenText(context.Server.MapPath(s));
+                        string f = "";
+                        if (JSType != API.JSType.CSS)
+                            while (!sr.EndOfStream)
+                            {
+                                f += sr.ReadLine();
+                            }
+                        else f = sr.ReadToEnd();
+                        sr.Close();
+                        if (JSType != API.JSType.CSS)
+                            f = f.Replace("\t", "").Replace("  ", " ").Replace("  ", " ");
+                        context.Response.Write(f);
+                    }
+
+                }
+
             }
         }
 
