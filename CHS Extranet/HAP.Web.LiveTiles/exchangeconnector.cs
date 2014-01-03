@@ -99,6 +99,60 @@ namespace HAP.Web.LiveTiles
             return s.ToArray();
         }
 
+        public static Appointment[] Appointments(DateTime From, DateTime To)
+        {
+            ServicePointManager.ServerCertificateValidationCallback =
+            delegate(Object obj, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
+            {
+                // Replace this line with code to validate server certificate.
+                return true;
+            };
+
+            ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
+            service.Url = new Uri("https://" + HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange + "/ews/exchange.asmx");
+            HAP.AD.User u = ((HAP.AD.User)Membership.GetUser());
+            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Configuration.AuthMode.Forms && string.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser))
+            {
+                HttpCookie token = HttpContext.Current.Request.Cookies["token"];
+                if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
+                service.Credentials = new NetworkCredential((hapConfig.Current.SMTP.EWSUseEmailoverAN ? u.Email : u.UserName), TokenGenerator.ConvertToPlain(token.Value), HAP.Web.Configuration.hapConfig.Current.AD.UPN);
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser))
+                {
+                    u.ImpersonateContained();
+                    service.UseDefaultCredentials = true;
+                    //service.Credentials = CredentialCache.DefaultNetworkCredentials;
+                }
+                else
+                {
+                    service.Credentials = new NetworkCredential(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser, HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationPassword, HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationDomain);
+                    service.ImpersonatedUserId = new ImpersonatedUserId(ConnectingIdType.SmtpAddress, u.Email);
+                }
+            }
+            Appointment[] app = service.FindAppointments(WellKnownFolderName.Calendar, new CalendarView(From, To.AddDays(1))).ToArray();
+            if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Configuration.AuthMode.Windows || !string.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser))
+                u.EndContainedImpersonate();
+            return app;
+        }
+
+        public static Appointment[] Appointments(DateTime From, DateTime To, string mailbox)
+        {
+            ServicePointManager.ServerCertificateValidationCallback =
+            delegate(Object obj, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
+            {
+                // Replace this line with code to validate server certificate.
+                return true;
+            };
+
+            ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
+            service.Url = new Uri("https://" + HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange + "/ews/exchange.asmx");
+            service.Credentials = new NetworkCredential(HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password, HAP.Web.Configuration.hapConfig.Current.AD.UPN);
+            FolderId fid = new FolderId(WellKnownFolderName.Calendar, new Mailbox(mailbox));
+            return service.FindAppointments(fid, new CalendarView(From, To.AddDays(1))).ToArray();
+        }
+
         public static string[] Appointments(string mailbox)
         {
             ServicePointManager.ServerCertificateValidationCallback =

@@ -7,6 +7,8 @@ using System.Web.UI.WebControls;
 using HAP.AD;
 using System.Xml;
 using System.Web.Security;
+using HAP.BookingSystem;
+using HAP.Web.Configuration;
 
 namespace HAP.Web
 {
@@ -22,23 +24,37 @@ namespace HAP.Web
             {
                 adminconverter.Visible = User.IsInRole("Domain Admins");
                 Response.Cache.SetCacheability(HttpCacheability.NoCache);
-                if (User.IsInRole(HAP.Web.Configuration.hapConfig.Current.AD.StudentsGroup))
-                {
-                    RenderTimetable(ADUser.EmployeeID);
-                    tt.Visible = true;
-                }
-                else
-                {
-                    message.Text = "You are a staff user, you will not get a timetable on this system, please use SIMS";
-                    tt.Visible = false;
-                }
             }
         }
 
-        private void RenderTimetable(string _upn)
+        protected string JSLessons
         {
-            ttds.SelectParameters[0].DefaultValue = _upn;
-            tt.DataBind();
+            get
+            {
+                List<string> s = new List<string>();
+                foreach (Lesson l in config.BookingSystem.Lessons)
+                {
+                    s.Add("{" + string.Format("\"Name\": \"{0}\", \"Start\": \"{1}:{2}\", \"End\": \"{3}:{4}\", \"FromStart\": null, \"FromEnd\": null, \"Type\": \"{5}\"", l.Name, l.StartTime.Hour, l.StartTime.Minute, l.EndTime.Hour, l.EndTime.Minute, l.Type) + "}");
+                }
+                return string.Join(", ", s.ToArray());
+            }
+        }
+
+        protected string JSTermDates
+        {
+            get
+            {
+                List<string> terms = new List<string>();
+                foreach (Term t in new HAP.BookingSystem.Terms())
+                    terms.Add("{ " + string.Format(" name: '{0}', start: new Date({1}, {2}, {3}), end: new Date({4}, {5}, {6})",
+                        t.Name,
+                        t.StartDate.Year, t.StartDate.Month - 1, t.StartDate.Day,
+                        t.EndDate.Year, t.EndDate.Month - 1, t.EndDate.Day) + ", halfterm: { " +
+                        string.Format("start: new Date({0}, {1}, {2}), end: new Date({3}, {4}, {5})",
+                        t.HalfTerm.StartDate.Year, t.HalfTerm.StartDate.Month - 1, t.HalfTerm.StartDate.Day,
+                        t.HalfTerm.EndDate.Year, t.HalfTerm.EndDate.Month - 1, t.HalfTerm.EndDate.Day) + " } }");
+                return string.Join(", ", terms.ToArray());
+            }
         }
 
         protected void convert_Click(object sender, EventArgs e)
@@ -76,13 +92,6 @@ namespace HAP.Web
             }
             doc.Save(Server.MapPath("~/app_data/timetables.xml"));
             message.Text = "Import Done";
-        }
-
-        protected void impersonate_Click(object sender, EventArgs e)
-        {
-            if (upn.Text.Length == 0) RenderTimetable(new User(un.Text).EmployeeID);
-            else RenderTimetable(upn.Text);
-            tt.Visible = true;
         }
     }
 }

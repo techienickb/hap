@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Xml;
 
-namespace HAP.Data.Timetables
+namespace HAP.Timetable
 {
 	public class Timetables
 	{
@@ -16,7 +16,7 @@ namespace HAP.Data.Timetables
 			List<TimetableDay> days = new List<TimetableDay>();
 			foreach (XmlNode n in doc.SelectNodes("/timetables/record[@upn='" + UPN + "']"))
 			{
-				TimetableRecord tr = new TimetableRecord(n);
+				TimetableRecord tr = TimetableRecord.Prase(n);
 				try
 				{
 					if (days.Count(d => d.Day == int.Parse(tr.SortRef.Split(new char[] { ':' })[0].Remove(0, 3))) == 0)
@@ -34,6 +34,9 @@ namespace HAP.Data.Timetables
 				}
 			}
 			days.Sort();
+            List<JSTimetableDay> days2 = new List<JSTimetableDay>();
+            foreach (TimetableDay d in days)
+                days2.Add(JSTimetableDay.Parse(d));
 			return days.ToArray();
 		}
 	}
