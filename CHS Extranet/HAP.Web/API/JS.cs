@@ -11,43 +11,144 @@ using HAP.Data.ComputerBrowser;
 using System.Web.Security;
 using System.Web.SessionState;
 using System.Xml;
+using System.Reflection;
+using System.Collections;
+using System.Text.RegularExpressions;
 
 namespace HAP.Web.API
 {
     public class JSHandler : IRouteHandler
     {
+        public JSHandler(JSType type)
+        {
+            JSType = type;
+        }
+        public JSType JSType { get; set; }
         public IHttpHandler GetHttpHandler(RequestContext requestContext)
         {
-            return new JS();
+            return new JS(JSType);
         }
     }
 
+    public enum JSType { CSS, Start, BeforeHAP, HAP, AfterHAP, End }
+
     public class JS : IHttpHandler, IRequiresSessionState
     {
+        public JS(JSType type)
+        {
+            JSType = type;
+        }
+
+        public JSType JSType { get; set; }
+
         public bool IsReusable { get { return true; } }
 
         public void ProcessRequest(HttpContext context)
         {
             context.Response.Clear();
             context.Response.ContentType = "text/plain";
-            string s = "";
-            StreamReader sr = File.OpenText(context.Server.MapPath("~/Scripts/hap.web.js.js"));
-            while (!sr.EndOfStream)
+            if (JSType == API.JSType.HAP)
             {
-                s += sr.ReadLine();
+                string s = "";
+                StreamReader sr = File.OpenText(context.Server.MapPath("~/Scripts/hap.web.js.js"));
+                while (!sr.EndOfStream)
+                {
+                    s += sr.ReadLine();
+                }
+                sr.Close();
+                s = s.Replace("root: \"/hap/\",", "root: \"" + VirtualPathUtility.ToAbsolute("~/") + "\",");
+                if (HttpContext.Current.User.Identity.IsAuthenticated)
+                {
+                    s = s.Replace("user: \"\",", "user: \"" + ((HAP.AD.User)Membership.GetUser()).UserName + "\",");
+                    s = s.Replace("admin: false,", "admin: " + HttpContext.Current.User.IsInRole("Domain Admins").ToString().ToLower() + ",");
+                    s = s.Replace("bsadmin: false,", "admin: " + isBSAdmin.ToString().ToLower() + ",");
+                    s = s.Replace("hdadmin: false,", "admin: " + isHDAdmin.ToString().ToLower() + ",");
+                }
+                s = s.Replace("\t", "").Replace("  ", " ").Replace("  ", " ");
+                s = s.Replace("localization: []", "localization: [" + string.Join(", ", BuildLocalization(_locals.SelectSingleNode("/hapStrings"), "")) + "]");
+                context.Response.Write(s);
             }
-            sr.Close();
-            s = s.Replace("root: \"/hap/\",", "root: \"" + VirtualPathUtility.ToAbsolute("~/") + "\",");
-            if (HttpContext.Current.User.Identity.IsAuthenticated)
+            else 
             {
-                s = s.Replace("user: \"\",", "user: \"" + ((HAP.AD.User)Membership.GetUser()).UserName + "\",");
-                s = s.Replace("admin: false,", "admin: " + HttpContext.Current.User.IsInRole("Domain Admins").ToString().ToLower() + ",");
-                s = s.Replace("bsadmin: false,", "admin: " + isBSAdmin.ToString().ToLower() + ",");
-                s = s.Replace("hdadmin: false,", "admin: " + isHDAdmin.ToString().ToLower() + ",");
+                if (JSType == API.JSType.CSS) context.Response.ContentType = "text/css";
+                context.Response.Write("/* " + context.Request.UrlReferrer.ToString() + " */");
+                foreach (string s in GetPaths(context.Request.UrlReferrer.ToString()))
+                {
+                    context.Response.Write("\n/* " + s + "* /\n");
+                    StreamReader sr = File.OpenText(context.Server.MapPath(s));
+                    string f = "";
+                    if (JSType != API.JSType.CSS)
+                        while (!sr.EndOfStream)
+                        {
+                            f += sr.ReadLine();
+                        }
+                    else f = sr.ReadToEnd();
+                    sr.Close();
+                    if (JSType != API.JSType.CSS)
+                        f = f.Replace("\t", "").Replace("  ", " ").Replace("  ", " ");
+                    context.Response.Write(f);
+                }
             }
-            s = s.Replace("\t", "").Replace("  ", " ").Replace("  ", " ");
-            s = s.Replace("localization: []", "localization: [" + string.Join(", ", BuildLocalization(_locals.SelectSingleNode("/hapStrings"), "")) + "]");
-            context.Response.Write(s);
+        }
+
+        public string[] GetPaths(string Referrer)
+        {
+            List<string> s = new List<string>();
+            foreach (RegistrationPath path in GetPaths())
+            {
+                bool load = false;
+                foreach (string s1 in path.LoadOn)
+                {
+                    if (s1.ToLower() == "all") { load = true; break; }
+                    Regex r = new Regex(s1, RegexOptions.IgnoreCase);
+                    if (r.IsMatch(Referrer)) { load = true; break; }
+                }
+                if (load) s.Add(path.Path);
+            }
+            return s.ToArray();
+        }
+
+        public RegistrationPath[] GetPaths()
+        {
+            List<RegistrationPath> paths = new List<RegistrationPath>();
+            foreach (IRegister reg in GetPlugins())
+                try
+                {
+                    if (JSType == API.JSType.CSS)
+                        paths.AddRange(reg.RegisterCSS());
+                    else if (JSType == API.JSType.Start)
+                        paths.AddRange(reg.RegisterJSStart());
+                    else if (JSType == API.JSType.BeforeHAP)
+                        paths.AddRange(reg.RegisterJSBeforeHAP());
+                    else if (JSType == API.JSType.AfterHAP)
+                        paths.AddRange(reg.RegisterJSAfterHAP());
+                    else if (JSType == API.JSType.End)
+                        paths.AddRange(reg.RegisterJSEnd());
+                }
+                catch { }
+            return paths.ToArray();
+        }
+
+        public IRegister[] GetPlugins()
+        {
+            List<IRegister> plugins = new List<IRegister>();
+            //load apis in the bin folder
+            foreach (FileInfo assembly in new DirectoryInfo(HttpContext.Current.Server.MapPath("~/bin/")).GetFiles("*.dll").Where(fi => fi.Name != "HAP.Web.dll" && fi.Name != "HAP.Web.Configuration.dll"))
+            {
+                Assembly a = Assembly.LoadFrom(assembly.FullName);
+                foreach (Type type in a.GetTypes())
+                {
+                    if (!type.IsClass || type.IsNotPublic) continue;
+                    Type[] interfaces = type.GetInterfaces();
+                    if (((IList)interfaces).Contains(typeof(IRegister)))
+                    {
+                        object obj = Activator.CreateInstance(type);
+                        IRegister t = (IRegister)obj;
+                        plugins.Add(t);
+                    }
+                }
+            }
+            return plugins.ToArray();
         }
 
         public bool isBSAdmin

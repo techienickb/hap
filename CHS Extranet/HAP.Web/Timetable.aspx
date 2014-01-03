@@ -1,9 +1,6 @@
 ﻿<%@ Page Title="Crickhowell High School - Home Access Plus+ - Timetable" Language="C#" MasterPageFile="~/Masterpage.master" AutoEventWireup="true" CodeBehind="Timetable.aspx.cs" Inherits="HAP.Web.Timetable" %>
 <asp:Content runat="server" ContentPlaceHolderID="head">
-    <link href="style/fullcalendar.css" rel="stylesheet" type="text/css" />
-    <link href="style/fullcalendar.print.css" rel="stylesheet" type="text/css" media="print" />
-    <link href="style/timetable.css" rel="stylesheet" type="text/css" />
-    <script src="Scripts/fullcalendar.min.js"></script>
+
 </asp:Content>
 <asp:Content ContentPlaceHolderID="title" runat="server"><asp:HyperLink runat="server" NavigateUrl="~/timetable.aspx"><hap:LocalResource runat="server" StringPath="timetable/my" /></asp:HyperLink></asp:Content>
 <asp:Content ContentPlaceHolderID="header" runat="server">
