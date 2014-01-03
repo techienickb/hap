@@ -48,9 +48,32 @@ namespace HAP.Web.API
         public void ProcessRequest(HttpContext context)
         {
             context.Response.ContentType = "image/png";
-            MemoryStream m = new MemoryStream();
-            Image.FromFile(HAP.Web.LiveTiles.IconCache.GetIcon(Icon, Size)).Save(m, ImageFormat.Png);
-            m.WriteTo(context.Response.OutputStream);
+            string file = HAP.Web.LiveTiles.IconCache.GetIcon(Icon, Size);
+            DateTime lastModified = File.GetLastWriteTimeUtc(file);
+            lastModified = new DateTime(lastModified.Year, lastModified.Month, lastModified.Day, lastModified.Hour, lastModified.Minute, lastModified.Second, 0, DateTimeKind.Utc);
+
+            context.Response.AddFileDependency(file);
+            context.Response.Cache.SetETagFromFileDependencies();
+            context.Response.Cache.SetLastModifiedFromFileDependencies();
+            context.Response.Cache.SetCacheability(HttpCacheability.Public);
+            int status = 200;
+            if (context.Request.Headers["If-Modified-Since"] != null)
+            {
+                status = 304;
+                DateTime modifiedSinceDate = DateTime.UtcNow;
+                if (DateTime.TryParse(context.Request.Headers["If-Modified-Since"], out modifiedSinceDate))
+                {
+                    if (lastModified != modifiedSinceDate)
+                        status = 200;
+                }
+            }
+            context.Response.StatusCode = status;
+            if (status == 200)
+            {
+                MemoryStream m = new MemoryStream();
+                Image.FromFile(HAP.Web.LiveTiles.IconCache.GetIcon(Icon, Size)).Save(m, ImageFormat.Png);
+                m.WriteTo(context.Response.OutputStream);
+            }
         }
 
     }
