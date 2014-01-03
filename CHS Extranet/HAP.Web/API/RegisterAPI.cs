@@ -14,7 +14,15 @@ namespace HAP.Web.API
         public static void Register(RouteCollection collection)
         {
             RouteTable.Routes.Add(new Route("api/test", new TestHandler()));
-            RouteTable.Routes.Add(new Route("api/js", new JSHandler()));
+
+            RouteTable.Routes.Add(new Route("api/css", new JSHandler(JSType.CSS)));
+            RouteTable.Routes.Add(new Route("api/js/start", new JSHandler(JSType.Start)));
+            RouteTable.Routes.Add(new Route("api/js/beforehap", new JSHandler(JSType.BeforeHAP)));
+            RouteTable.Routes.Add(new Route("api/js/hap", new JSHandler(JSType.HAP)));
+            RouteTable.Routes.Add(new Route("api/js/afterhap", new JSHandler(JSType.AfterHAP)));
+            RouteTable.Routes.Add(new Route("api/js/end", new JSHandler(JSType.End)));
+
+
             RouteTable.Routes.Add(new Route("api/mypic", new MyPicHandler()));
             RouteTable.Routes.Add(new Route("api/tiles/icons/{width}/{height}/{*path}", new TileIconHandler()));
             RouteTable.Routes.Add(new Route("api/mycomputer/thumb/{*path}", new ThumbsHandler()));
