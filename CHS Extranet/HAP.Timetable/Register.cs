@@ -11,8 +11,8 @@ namespace HAP.Timetable
         public RegistrationPath[] RegisterCSS()
         {
             return new RegistrationPath[] { 
-                new RegistrationPath { Path = "~/style/fullcalendar.css", LoadOn = new string[] { "/hap/timetable.aspx" }}, 
-                new RegistrationPath { Path = "~/style/timetable.css", LoadOn = new string[] { "/hap/timetable.aspx" }} 
+                new RegistrationPath { Path = "~/style/fullcalendar.css", LoadOn = new string[] { "/timetable.aspx" }}, 
+                new RegistrationPath { Path = "~/style/timetable.css", LoadOn = new string[] { "/timetable.aspx" }} 
             };
         }
 
