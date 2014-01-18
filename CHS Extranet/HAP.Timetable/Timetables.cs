@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Xml;
 
@@ -19,13 +20,21 @@ namespace HAP.Timetable
 				TimetableRecord tr = TimetableRecord.Prase(n);
 				try
 				{
-					if (days.Count(d => d.Day == int.Parse(tr.SortRef.Split(new char[] { ':' })[0].Remove(0, 3))) == 0)
-					{
-						TimetableDay day = new TimetableDay();
-						day.Day = int.Parse(tr.SortRef.Split(new char[] { ':' })[0].Remove(0, 3));
-						days.Add(day);
-					}
-					TimetableDay td = days.Single(d => d.Day == int.Parse(tr.SortRef.Split(new char[] { ':' })[0].Remove(0, 3)));
+                    int day = 0;
+                    if (new Regex("\\d\\w{3}:\\d").IsMatch(tr.SortRef))
+                    {
+                        int weeknum = int.Parse(tr.SortRef.Substring(0, 1));
+                        day = DayToInt(tr.SortRef.Substring(1, 3));
+                        day = day + (weeknum * 5) - 5;
+                    }
+                    else day = int.Parse(tr.SortRef.Split(new char[] { ':' })[0].Remove(0, 3));
+                    if (days.Count(d => d.Day == day) == 0)
+                    {
+                        TimetableDay day1 = new TimetableDay();
+                        day1.Day = day;
+                        days.Add(day1);
+                    }
+                    TimetableDay td = days.Single(d => d.Day == day);
 					if (td.Lessons.Count(t => t.SortRef == tr.SortRef) == 0) td.Lessons.Add(tr);
 					td.Lessons.Sort();
 				}
@@ -39,5 +48,17 @@ namespace HAP.Timetable
                 days2.Add(JSTimetableDay.Parse(d));
 			return days.ToArray();
 		}
+
+        static int DayToInt(string day)
+        {
+            switch (day.ToLower())
+            {
+                case "mon": return 1;
+                case "tue": return 2;
+                case "wed": return 3;
+                case "thu": return 4;
+                default: return 5;
+            }
+        }
 	}
 }
