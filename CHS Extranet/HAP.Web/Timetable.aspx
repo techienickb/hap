@@ -60,7 +60,7 @@
                                 for (var x = dates[0].getDay() - 1; x < dates.length; x++) {
                                     for (var y = 0; y < timetable[x + add].Lessons.length; y++) {
                                         var d = new Date(dates[x].setHours(parseInt(timetable[x + add].Lessons[y].StartTime.split(/\:/g)[0])));
-                                        d = new Date(d.setMinutes(parseInt(timetable[x * data].Lessons[y].StartTime.split(/\:/g)[1])));
+                                        d = new Date(d.setMinutes(parseInt(timetable[x + add].Lessons[y].StartTime.split(/\:/g)[1])));
                                         var d2 = new Date(dates[x].setHours(parseInt(timetable[x + add].Lessons[y].EndTime.split(/\:/g)[0])));
                                         d2 = new Date(d2.setMinutes(parseInt(timetable[x + add].Lessons[y].EndTime.split(/\:/g)[1])));
                                         events.push({
