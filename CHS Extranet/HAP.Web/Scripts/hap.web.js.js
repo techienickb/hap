@@ -254,7 +254,7 @@ if (hap == null) {
             LiveTile: function (type, initdata) {
                 this.data = initdata;
                 this.type = type;
-                this.id = (this.data.Group + this.data.Name).replace(/[\s'\/\\\&\.\,\*\(\)@]*/gi, "");
+                this.id = (this.data.Group + this.data.Name).replace(/['\/\\\&\.\,\?\!\£\$\%\^\*\(\)@]*/gi, "").replace(/\s/gi, '_');
                 if (type == "exchange.appointments" || this.type.match(/exchange.calendar\:/gi) || this.type == "bookings" || this.type == "helpdesk") size = "large";
                 this.html = '<a id="' + this.id + '" href="' + hap.common.resolveUrl(this.data.Url) + '" target="' + this.data.Target + '" title="' + this.data.Description + '"' + 'class="width' + this.data.Width + ' height' + this.data.Height + '"' + (this.data.Color == '' ? '' : ' style="background-color: ' + this.data.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + this.data.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + this.data.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + this.data.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(this.data.Icon) + ');"></i><label></label></span>' + this.data.Name + '</a>';
                 this.Render = function () {

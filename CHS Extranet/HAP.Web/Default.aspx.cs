@@ -61,7 +61,7 @@ namespace HAP.Web
             {
                 string s1 = "{ Type: \"" + link.Type;
                 s1 += "\" , Data: {  Group: \"" + group;
-                s1 += "\", Name: \"" + link.Name.Replace(" ", "").Replace("'", "").Replace(",", "").Replace(".", "").Replace("*", "").Replace("&", "").Replace("/", "").Replace("\\", "").Replace("(", "").Replace(")", "").Replace("?", "") + "\", Url: \"" + link.Url;
+                s1 += "\", Name: \"" + link.Name + "\", Url: \"" + link.Url;
                 s1 += "\", Target: \"" + link.Target;
                 s1 += "\", Description: \"" + link.Description;
                 s1 += "\", Width: \"" + link.Width;

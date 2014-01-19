@@ -328,6 +328,7 @@ namespace HAP.Web.API
         public int UpdateLinkGroupOrder(string groups)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
+            if (Config == null) Config = hapConfig.Current;
             Config.Homepage.Groups.ReOrder(groups.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries));
             return 0;
         }
@@ -337,6 +338,8 @@ namespace HAP.Web.API
         public int UpdateLink(string group, string origname, string name, string desc, string icon, string url, string target, string showto, string width, string height)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
+            bool temp = true;
+            if (Config == null) { Config = hapConfig.Current; temp = false; }
             Link l = Config.Homepage.Groups[group].Single(a => a.Name == origname);
             l.ShowTo = showto;
             l.Description = desc;
@@ -347,6 +350,7 @@ namespace HAP.Web.API
             l.Width = width;
             l.Height = height;
             Config.Homepage.Groups[group].UpdateLink(origname, l);
+            if (!temp) Config.Save();
             return 0;
         }
 
@@ -355,7 +359,10 @@ namespace HAP.Web.API
         public int AddLink(string group, string name, string desc, string icon, string url, string target, string showto, string width, string height)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
+            bool temp = true;
+            if (Config == null) { Config = hapConfig.Current; temp = false; }
             Config.Homepage.Groups[group].Add(name, showto, desc, url, icon, target, width, height);
+            if (!temp) Config.Save();
             return 0;
         }
 
@@ -364,7 +371,10 @@ namespace HAP.Web.API
         public int RemoveLink(string group, string name)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
+            bool temp = true;
+            if (Config == null) { Config = hapConfig.Current; temp = false; }
             Config.Homepage.Groups[group].Remove(name);
+            if (!temp) Config.Save();
             return 0;
         }
 
@@ -373,7 +383,10 @@ namespace HAP.Web.API
         public int UpdateLinkOrder(string group, string links)
         {
             hapConfig Config = HttpContext.Current.Cache["tempConfig"] as hapConfig;
+            bool temp = true;
+            if (Config == null) { Config = hapConfig.Current; temp = false; }
             Config.Homepage.Groups[group.Remove(0, 9).Replace('_', ' ')].ReOrder(links.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries));
+            if (!temp) Config.Save();
             return 0;
         }
 
