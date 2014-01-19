@@ -50,7 +50,7 @@
                 <a id="leftscroll" href="#left"></a>
             </div>
             <% if (User.IsInRole("Domain Admins")) { %>
-            <div id="sidebaredit">
+            <div id="sidebaredit" style="margin-top: -40px">
                 <h1>Tile Editor</h1>
                 <input type="hidden" id="edit-data" />
                 <label for="edit-name">Name: </label><input type="text" id="edit-name" /><br />
@@ -58,6 +58,8 @@
                 <label for="edit-url">Url: </label><input type="text" id="edit-url" /><br />
                 <label for="edit-target">Target: </label><input type="text" id="edit-target" /><br />
                 <label for="edit-icon">Icon: </label><input type="text" id="edit-icon" /><br />
+                <label for="edit-width">Width: </label><select id="edit-width"><option>1</option><option>2</option><option>3</option></select><br />
+                <label for="edit-height">Height: </label><select id="edit-height"><option>1</option><option>2</option><option>3</option></select><br />
                 <div class="buttons">
                     <button id="edit-save">Save</button><button id="edit-cancel">Cancel</button>
                 </div>
@@ -86,6 +88,8 @@
                         $("#edit-description").val(tile.data.Description);
                         $("#edit-url").val(tile.data.Url);
                         $("#edit-target").val(tile.data.Target);
+                        $("#edit-width").val(tile.data.Width);
+                        $("#edit-height").val(tile.data.Height);
                         $("#edit-icon").val("~/" + tile.data.Icon.split(/\/64\/64\//gi)[1]);
                     }
                     return false;
@@ -96,7 +100,7 @@
                         $.ajax({
                             type: 'POST',
                             url: 'API/Setup/AddLink',
-                            data: '{ "group": "' + $("#HomeButtonsHeader .active a").html() + '", "name": "' + $("#edit-name").val() + '", "desc": "' + $("#edit-description").val() + '", "icon": "' + $("#edit-icon").val() + '", "url": "' + $("#edit-url").val() + '", "target": "' + $("#edit-target").val() + '", "showto": "Inherit", "width": "1", "height": "1" }',
+                            data: '{ "group": "' + $("#HomeButtonsHeader .active a").html() + '", "name": "' + $("#edit-name").val() + '", "desc": "' + $("#edit-description").val() + '", "icon": "' + $("#edit-icon").val() + '", "url": "' + $("#edit-url").val() + '", "target": "' + $("#edit-target").val() + '", "showto": "Inherit", "width": "' + $("#edit-width").val() + '", "height": "' + $("#edit-height").val() + '" }',
                             contentType: 'application/json',
                             dataType: 'json',
                             success: function (data) {
@@ -108,7 +112,7 @@
                         $.ajax({
                             type: 'POST',
                             url: 'API/Setup/UpdateLink',
-                            data: '{ "group": "' + $("#HomeButtonsHeader .active a").html() + '", "origname": "' + $("#edit-data").val() + '", "name": "' + $("#edit-name").val() + '", "desc": "' + $("#edit-description").val() + '", "icon": "' + $("#edit-icon").val() + '", "url": "' + $("#edit-url").val() + '", "target": "' + $("#edit-target").val() + '", "showto": "Inherit", "width": "1", "height": "1" }',
+                            data: '{ "group": "' + $("#HomeButtonsHeader .active a").html() + '", "origname": "' + $("#edit-data").val() + '", "name": "' + $("#edit-name").val() + '", "desc": "' + $("#edit-description").val() + '", "icon": "' + $("#edit-icon").val() + '", "url": "' + $("#edit-url").val() + '", "target": "' + $("#edit-target").val() + '", "showto": "Inherit", "width": "' + $("#edit-width").val() + '", "height": "' + $("#edit-height").val() + '" }',
                             contentType: 'application/json',
                             dataType: 'json',
                             success: function (data) {

@@ -107,7 +107,7 @@ namespace HAP.Web.Configuration
             foreach (string name in Names)
             {
                 string n = name.Remove(0, 4).Replace('_', ' ');
-                XmlNode tempnode = doc.SelectSingleNode("/hapConfig/Homepage/Links/Group[@name='" + this.Name + "']/Link[@name='" + n + "']");
+                XmlNode tempnode = doc.SelectSingleNode("/hapConfig/Homepage/Links/Group[@name='" + this.Name + "']/Link[@name='" + n + "']").Clone();
                 doc.SelectSingleNode("/hapConfig/Homepage/Links/Group[@name='" + this.Name + "']").RemoveChild(doc.SelectSingleNode("/hapConfig/Homepage/Links/Group[@name='" + this.Name + "']/Link[@name='" + n + "']"));
                 doc.SelectSingleNode("/hapConfig/Homepage/Links/Group[@name='" + this.Name + "']").AppendChild(tempnode);
             }
