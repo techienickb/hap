@@ -117,9 +117,9 @@
     <Content Include="Controls\UpdateChecker.ascx" />
     <Content Include="ExampleCustomTile.js" />
     <Content Include="haplogo-icon.ico" />
+    <Content Include="HelpDesk\Default.aspx" />
     <Content Include="style\fullcalendar.css" />
     <Content Include="HelpDesk\newassignticket.htm" />
-    <Content Include="HelpDesk\Default.aspx" />
     <Content Include="images\120-arrow.png" />
     <Content Include="images\ajax-loader.png" />
     <Content Include="images\arrow-collapse.png" />
@@ -668,6 +668,7 @@
     <Content Include="style\bookingpopup.css" />
     <Content Include="style\editor.css" />
     <Content Include="style\fullcalendar.print.css" />
+    <Content Include="style\helpdesk2.css" />
     <Content Include="style\jquery.dataTables.css" />
     <Content Include="style\jquery.jqplot.css" />
     <Content Include="style\jquery.mobile-1.0.css" />

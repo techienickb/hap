@@ -10,7 +10,7 @@
 namespace HAP.Web.HelpDesk {
     
     
-    public partial class New {
+    public partial class Xml {
         
         /// <summary>
         /// userlist2 control.
