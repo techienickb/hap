@@ -21,7 +21,13 @@ namespace HAP.Web.Configuration
             XmlElement e = doc.CreateElement("HelpDesk");
             e.SetAttribute("admins", "Domain Admins");
             e.SetAttribute("firstlineemails", "");
+            e.SetAttribute("provider", "xml");
             doc.SelectSingleNode("/hapConfig").AppendChild(e);
+        }
+        public string Provider
+        {
+            get { return el.GetAttribute("provider"); }
+            set { el.SetAttribute("provider", value); }
         }
         public string Admins
         {

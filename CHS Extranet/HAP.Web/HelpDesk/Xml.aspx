@@ -1,7 +1,7 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="HAP.Web.HelpDesk.New" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true" CodeBehind="Xml.aspx.cs" Inherits="HAP.Web.HelpDesk.Xml" %>
 <asp:Content ContentPlaceHolderID="head" runat="server">
 	<script src="../Scripts/jquery.ba-hashchange.min.js" type="text/javascript"></script>
-	<link href="../style/helpdesk.css" rel="stylesheet" type="text/css" />
+	<link href="../style/helpdesk2.css" rel="stylesheet" type="text/css" />
 </asp:Content>
 <asp:Content runat="server" ContentPlaceHolderID="viewport"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" /></asp:Content>
 <asp:Content ContentPlaceHolderID="title" runat="server"><asp:HyperLink runat="server" NavigateUrl="~/HelpDesk/"><hap:LocalResource runat="server" StringPath="helpdesk/helpdesk" /></asp:HyperLink></asp:Content>

@@ -1,0 +1,16 @@
+﻿#tabs { padding: 10px; background: #fff; }
+
+#toolbar a.active { background: #fff; color: #0060a6; }
+.ticket .notes { overflow: auto; height: 400px; margin-top: 5px; border-width: 1px; border-style: solid; padding: 10px }
+.ticket .notes pre { white-space: normal; }
+
+#newticket div, .ticket div, #updateticket div { overflow: hidden; }
+#newticket div label, .ticket div label, #updateticket div label { float: left; width: 100px; }
+
+
+#opentickets a { display: inline-block; padding: 3px 0 3px 24px; }
+#opentickets a.Low { background: transparent url(../images/statusicons/priority_low.png)  no-repeat left top; }
+#opentickets a.High { background: transparent url(../images/statusicons/priority_high.png)  no-repeat left top; }
+#archivedbody a span, #closedtickets a span, #opentickets a span { font-size: 72%; color: #808080; }
+
+#hapHeader #hapTitle a { background-image: url(../api/tiles/icons/24/24/images/icons/metro/folders-os/help.png); background-position: 5px center; }

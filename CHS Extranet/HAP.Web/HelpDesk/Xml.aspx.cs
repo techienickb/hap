@@ -10,9 +10,9 @@ using System.Xml;
 
 namespace HAP.Web.HelpDesk
 {
-    public partial class New : HAP.Web.Controls.Page
+    public partial class Xml : HAP.Web.Controls.Page
     {
-        public New() { this.SectionTitle = Localize("helpdesk/helpdesk"); }
+        public Xml() { this.SectionTitle = Localize("helpdesk/helpdesk"); }
 
         public bool isHDAdmin
         {
