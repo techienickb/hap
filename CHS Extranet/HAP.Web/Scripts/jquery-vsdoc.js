@@ -4,11 +4,11 @@
 * intended to be used only for design-time IntelliSense.  Please use the
 * standard jQuery library for all runtime use.
 *
-* Comment version: 1.10.2
+* Comment version: 1.11.0
 */
 
 /*!
-* jQuery JavaScript Library v1.10.2
+* jQuery JavaScript Library v1.11.0
 * http://jquery.com/
 *
 * Includes Sizzle.js
@@ -26,13 +26,13 @@
         ///     1: Accepts a string containing a CSS selector which is then used to match a set of elements.
         ///     &#10;    1.1 - $(selector, context) 
         ///     &#10;    1.2 - $(element) 
-        ///     &#10;    1.3 - $(object) 
-        ///     &#10;    1.4 - $(elementArray) 
+        ///     &#10;    1.3 - $(elementArray) 
+        ///     &#10;    1.4 - $(object) 
         ///     &#10;    1.5 - $(jQuery object) 
         ///     &#10;    1.6 - $()
         ///     &#10;2: Creates DOM elements on the fly from the provided string of raw HTML.
         ///     &#10;    2.1 - $(html, ownerDocument) 
-        ///     &#10;    2.2 - $(html, props)
+        ///     &#10;    2.2 - $(html, attributes)
         ///     &#10;3: Binds a function to be executed when the DOM has finished loading.
         ///     &#10;    3.1 - $(callback)
         /// </summary>
@@ -131,7 +131,7 @@
             }
         }
 
-        jQuery.map(props, createTween, animation);
+        createTweens(animation, props);
 
         if (jQuery.isFunction(animation.opts.start)) {
             animation.opts.start.call(elem, animation);
@@ -158,6 +158,7 @@
         /// <param name="options" type="String">
         ///     An optional list of space-separated flags that change how the callback list behaves.
         /// </param>
+        /// <returns type="Callbacks" />
 
 
         // Convert options from String-formatted to Object-formatted if needed
@@ -271,7 +272,6 @@
                 // Remove all callbacks from the list
                 empty: function () {
                     list = [];
-                    firingLength = 0;
                     return this;
                 },
                 // Have the list do nothing anymore
@@ -322,6 +322,13 @@
         return self;
     };
     jQuery.Deferred = function (func) {
+        /// <summary>
+        ///     A constructor function that returns a chainable utility object with methods to register multiple callbacks into callback queues, invoke callback queues, and relay the success or failure state of any synchronous or asynchronous function.
+        /// </summary>
+        /// <param name="func" type="Function">
+        ///     A function that is called just before the constructor returns.
+        /// </param>
+        /// <returns type="Deferred" />
 
         var tuples = [
 				// action, add listener, listener list, final state
@@ -449,17 +456,6 @@
 
         return internalData(elem, name, data, true);
     };
-    jQuery._evalUrl = function (url) {
-
-        return jQuery.ajax({
-            url: url,
-            type: "GET",
-            dataType: "script",
-            async: false,
-            global: false,
-            "throws": true
-        });
-    };
     jQuery._queueHooks = function (elem, type) {
 
         var key = type + "queueHooks";
@@ -547,7 +543,7 @@
         /// <param name="url" type="String">
         ///     A string containing the URL to which the request is sent.
         /// </param>
-        /// <param name="options" type="Object">
+        /// <param name="options" type="PlainObject">
         ///     A set of key/value pairs that configure the Ajax request. All settings are optional. A default can be set for any option with $.ajaxSetup(). See jQuery.ajax( settings ) below for a complete list of all settings.
         /// </param>
 
@@ -690,8 +686,8 @@
             parts = rurl.exec(s.url.toLowerCase());
             s.crossDomain = !!(parts &&
 				(parts[1] !== ajaxLocParts[1] || parts[2] !== ajaxLocParts[2] ||
-					(parts[3] || (parts[1] === "http:" ? "80" : "443")) !==
-						(ajaxLocParts[3] || (ajaxLocParts[1] === "http:" ? "80" : "443")))
+					(parts[3] || (parts[1] === "http:" ? 80 : 443)) !=
+						(ajaxLocParts[3] || (ajaxLocParts[1] === "http:" ? 80 : 443)))
 			);
         }
 
@@ -852,19 +848,13 @@
             // Set readyState
             jqXHR.readyState = status > 0 ? 4 : 0;
 
-            // Determine if successful
-            isSuccess = status >= 200 && status < 300 || status === 304;
-
             // Get response data
             if (responses) {
                 response = ajaxHandleResponses(s, jqXHR, responses);
             }
 
-            // Convert no matter what (that way responseXXX fields are always set)
-            response = ajaxConvert(s, response, jqXHR, isSuccess);
-
             // If successful, handle type chaining
-            if (isSuccess) {
+            if (status >= 200 && status < 300 || status === 304) {
 
                 // Set the If-Modified-Since and/or If-None-Match header, if in ifModified mode.
                 if (s.ifModified) {
@@ -879,18 +869,21 @@
                 }
 
                 // if no content
-                if (status === 204 || s.type === "HEAD") {
+                if (status === 204) {
+                    isSuccess = true;
                     statusText = "nocontent";
 
                     // if not modified
                 } else if (status === 304) {
+                    isSuccess = true;
                     statusText = "notmodified";
 
                     // If we have data, let's convert it
                 } else {
-                    statusText = response.state;
-                    success = response.data;
-                    error = response.error;
+                    isSuccess = ajaxConvert(s, response);
+                    statusText = isSuccess.state;
+                    success = isSuccess.data;
+                    error = isSuccess.error;
                     isSuccess = !error;
                 }
             } else {
@@ -977,7 +970,7 @@
         }
     };
     jQuery.ajaxSettings = {
-        "url": 'http://jqueryvsdocgen.azurewebsites.net/?ver=1.10.2&newLineMethod=xml',
+        "url": 'http://localhost:25812/',
         "type": 'GET',
         "isLocal": false,
         "global": true,
@@ -995,7 +988,7 @@
         /// <summary>
         ///     Set default values for future Ajax requests.
         /// </summary>
-        /// <param name="target" type="Object">
+        /// <param name="target" type="PlainObject">
         ///     A set of key/value pairs that configure the default Ajax request. All options are optional.
         /// </param>
 
@@ -1008,6 +1001,16 @@
 			ajaxExtend(jQuery.ajaxSettings, target);
     };
     jQuery.ajaxTransport = function (dataTypeExpression, func) {
+        /// <summary>
+        ///     Creates an object that handles the actual transmission of Ajax data.
+        /// </summary>
+        /// <param name="dataTypeExpression" type="String">
+        ///     A string identifying the data type to use
+        /// </param>
+        /// <param name="func" type="Function">
+        ///     A handler to return the new transport object to use with the data type provided in the first argument.
+        /// </param>
+        /// <returns type="undefined" />
 
 
         if (typeof dataTypeExpression !== "string") {
@@ -1036,7 +1039,7 @@
     };
     jQuery.attr = function (elem, name, value) {
 
-        var hooks, ret,
+        var hooks, notxml, ret,
 			nType = elem.nodeType;
 
         // don't get/set attributes on text, comment and attribute nodes
@@ -1049,12 +1052,13 @@
             return jQuery.prop(elem, name, value);
         }
 
+        notxml = nType !== 1 || !jQuery.isXMLDoc(elem);
+
         // All attributes are lowercase
         // Grab necessary hook if one is defined
-        if (nType !== 1 || !jQuery.isXMLDoc(elem)) {
+        if (notxml) {
             name = name.toLowerCase();
-            hooks = jQuery.attrHooks[name] ||
-				(jQuery.expr.match.bool.test(name) ? boolHook : nodeHook);
+            hooks = jQuery.attrHooks[name] || (rboolean.test(name) ? boolHook : nodeHook);
         }
 
         if (value !== undefined) {
@@ -1062,7 +1066,7 @@
             if (value === null) {
                 jQuery.removeAttr(elem, name);
 
-            } else if (hooks && "set" in hooks && (ret = hooks.set(elem, value, name)) !== undefined) {
+            } else if (hooks && notxml && "set" in hooks && (ret = hooks.set(elem, value, name)) !== undefined) {
                 return ret;
 
             } else {
@@ -1070,11 +1074,16 @@
                 return value;
             }
 
-        } else if (hooks && "get" in hooks && (ret = hooks.get(elem, name)) !== null) {
+        } else if (hooks && notxml && "get" in hooks && (ret = hooks.get(elem, name)) !== null) {
             return ret;
 
         } else {
-            ret = jQuery.find.attr(elem, name);
+
+            // In IE9+, Flash objects don't have .getAttribute (#12945)
+            // Support: IE9+
+            if (typeof elem.getAttribute !== core_strundefined) {
+                ret = elem.getAttribute(name);
+            }
 
             // Non-existent attributes return null, we normalize to undefined
             return ret == null ?
@@ -1325,13 +1334,13 @@
     };
     jQuery.contains = function (context, elem) {
         /// <summary>
-        ///     Check to see if a DOM element is within another DOM element.
+        ///     Check to see if a DOM element is a descendant of another DOM element.
         /// </summary>
         /// <param name="context" domElement="true">
         ///     The DOM element that may contain the other element.
         /// </param>
         /// <param name="elem" domElement="true">
-        ///     The DOM element that may be contained by the other element.
+        ///     The DOM element that may be contained by (a descendant of) the other element.
         /// </param>
         /// <returns type="Boolean" />
 
@@ -1562,7 +1571,6 @@
     jQuery.expr = {
         "cacheLength": 50,
         "match": {},
-        "attrHandle": {},
         "find": {},
         "relative": {},
         "preFilter": {},
@@ -1570,6 +1578,7 @@
         "pseudos": {},
         "filters": {},
         "setFilters": {},
+        "attrHandle": {},
         ":": {}
     };
     jQuery.extend = function () {
@@ -1656,17 +1665,13 @@
     };
     jQuery.filter = function (expr, elems, not) {
 
-        var elem = elems[0];
-
         if (not) {
             expr = ":not(" + expr + ")";
         }
 
-        return elems.length === 1 && elem.nodeType === 1 ?
-			jQuery.find.matchesSelector(elem, expr) ? [elem] : [] :
-			jQuery.find.matches(expr, jQuery.grep(elems, function (elem) {
-			    return elem.nodeType === 1;
-			}));
+        return elems.length === 1 ?
+			jQuery.find.matchesSelector(elems[0], expr) ? [elems[0]] : [] :
+			jQuery.find.matches(expr, elems);
     };
     jQuery.find = function Sizzle(selector, context, results, seed) {
 
@@ -1689,7 +1694,7 @@
             return [];
         }
 
-        if (documentIsHTML && !seed) {
+        if (!documentIsXML && !seed) {
 
             // Shortcuts
             if ((match = rquickExpr.exec(selector))) {
@@ -1720,19 +1725,20 @@
 
                     // Speed-up: Sizzle("TAG")
                 } else if (match[2]) {
-                    push.apply(results, context.getElementsByTagName(selector));
+                    push.apply(results, slice.call(context.getElementsByTagName(selector), 0));
                     return results;
 
                     // Speed-up: Sizzle(".CLASS")
-                } else if ((m = match[3]) && support.getElementsByClassName && context.getElementsByClassName) {
-                    push.apply(results, context.getElementsByClassName(m));
+                } else if ((m = match[3]) && support.getByClassName && context.getElementsByClassName) {
+                    push.apply(results, slice.call(context.getElementsByClassName(m), 0));
                     return results;
                 }
             }
 
             // QSA path
-            if (support.qsa && (!rbuggyQSA || !rbuggyQSA.test(selector))) {
-                nid = old = expando;
+            if (support.qsa && !rbuggyQSA.test(selector)) {
+                old = true;
+                nid = expando;
                 newContext = context;
                 newSelector = nodeType === 9 && selector;
 
@@ -1760,9 +1766,9 @@
 
                 if (newSelector) {
                     try {
-                        push.apply(results,
-                            newContext.querySelectorAll(newSelector)
-                        );
+                        push.apply(results, slice.call(newContext.querySelectorAll(
+                            newSelector
+                        ), 0));
                         return results;
                     } catch (qsaError) {
                     } finally {
@@ -1778,7 +1784,7 @@
         return select(selector.replace(rtrim, "$1"), context, results, seed);
     };
     jQuery.fn = {
-        "jquery": '1.10.2',
+        "jquery": '1.11.0',
         "selector": '',
         "length": 0
     };
@@ -1800,7 +1806,7 @@
         ///     A string containing the URL to which the request is sent.
         /// </param>
         /// <param name="data" type="String">
-        ///     A map or string that is sent to the server with the request.
+        ///     A plain object or string that is sent to the server with the request.
         /// </param>
         /// <param name="callback" type="Function">
         ///     A callback function that is executed if the request succeeds.
@@ -1831,8 +1837,8 @@
         /// <param name="url" type="String">
         ///     A string containing the URL to which the request is sent.
         /// </param>
-        /// <param name="data" type="Object">
-        ///     A map or string that is sent to the server with the request.
+        /// <param name="data" type="PlainObject">
+        ///     A plain object or string that is sent to the server with the request.
         /// </param>
         /// <param name="callback" type="Function">
         ///     A callback function that is executed if the request succeeds.
@@ -1934,7 +1940,7 @@
         /// <summary>
         ///     Search for a specified value within an array and return its index (or -1 if not found).
         /// </summary>
-        /// <param name="elem" type="Object">
+        /// <param name="elem" type="Anything">
         ///     The value to search for.
         /// </param>
         /// <param name="arr" type="Array">
@@ -1967,7 +1973,7 @@
     };
     jQuery.isEmptyObject = function (obj) {
         /// <summary>
-        ///     Check to see if an object is empty (contains no properties).
+        ///     Check to see if an object is empty (contains no enumerable properties).
         /// </summary>
         /// <param name="obj" type="Object">
         ///     The object that will be checked to see if it's empty.
@@ -1984,7 +1990,7 @@
         /// <summary>
         ///     Determine if the argument passed is a Javascript function object.
         /// </summary>
-        /// <param name="obj" type="Object">
+        /// <param name="obj" type="PlainObject">
         ///     Object to test whether or not it is a function.
         /// </param>
         /// <returns type="boolean" />
@@ -1995,7 +2001,7 @@
         /// <summary>
         ///     Determines whether its argument is a number.
         /// </summary>
-        /// <param name="obj" type="Object">
+        /// <param name="obj" type="PlainObject">
         ///     The value to be tested.
         /// </param>
         /// <returns type="Boolean" />
@@ -2006,12 +2012,10 @@
         /// <summary>
         ///     Check to see if an object is a plain object (created using "{}" or "new Object").
         /// </summary>
-        /// <param name="obj" type="Object">
+        /// <param name="obj" type="PlainObject">
         ///     The object that will be checked to see if it's a plain object.
         /// </param>
         /// <returns type="Boolean" />
-
-        var key;
 
         // Must be an Object.
         // Because of IE, we also have to check the presence of the constructor property.
@@ -2032,16 +2036,10 @@
             return false;
         }
 
-        // Support: IE<9
-        // Handle iteration over inherited properties before own properties.
-        if (jQuery.support.ownLast) {
-            for (key in obj) {
-                return core_hasOwn.call(obj, key);
-            }
-        }
-
         // Own properties are enumerated firstly, so to speed up,
         // if last one is own, then all properties are own.
+
+        var key;
         for (key in obj) { }
 
         return key === undefined || core_hasOwn.call(obj, key);
@@ -2051,12 +2049,11 @@
         /// <summary>
         ///     Determine whether the argument is a window.
         /// </summary>
-        /// <param name="obj" type="Object">
+        /// <param name="obj" type="PlainObject">
         ///     Object to test whether or not it is a window.
         /// </param>
         /// <returns type="boolean" />
 
-        /* jshint eqeqeq: false */
         return obj != null && obj == obj.window;
     };
     jQuery.isXMLDoc = function (elem) {
@@ -2078,7 +2075,7 @@
         /// <summary>
         ///     Convert an array-like object into a true JavaScript array.
         /// </summary>
-        /// <param name="arr" type="Object">
+        /// <param name="arr" type="PlainObject">
         ///     Any object to turn into a native Array.
         /// </param>
         /// <returns type="Array" />
@@ -2192,9 +2189,9 @@
         return jQuery;
     };
     jQuery.noData = {
-        "applet": true,
         "embed": true,
-        "object": 'clsid:D27CDB6E-AE6D-11cf-96B8-444553540000'
+        "object": 'clsid:D27CDB6E-AE6D-11cf-96B8-444553540000',
+        "applet": true
     };
     jQuery.nodeName = function (elem, name) {
 
@@ -2204,7 +2201,7 @@
         /// <summary>
         ///     An empty function.
         /// </summary>
-        /// <returns type="Function" />
+        /// <returns type="undefined" />
     };
     jQuery.now = function () {
         /// <summary>
@@ -2261,6 +2258,19 @@
         return s.join("&").replace(r20, "+");
     };
     jQuery.parseHTML = function (data, context, keepScripts) {
+        /// <summary>
+        ///     Parses a string into an array of DOM nodes.
+        /// </summary>
+        /// <param name="data" type="String">
+        ///     HTML string to be parsed
+        /// </param>
+        /// <param name="context" domElement="true">
+        ///     DOM element to serve as the context in which the HTML fragment will be created
+        /// </param>
+        /// <param name="keepScripts" type="Boolean">
+        ///     A Boolean indicating whether to include scripts passed in the HTML string
+        /// </param>
+        /// <returns type="Array" />
 
         if (!data || typeof data !== "string") {
             return null;
@@ -2360,7 +2370,7 @@
         ///     A string containing the URL to which the request is sent.
         /// </param>
         /// <param name="data" type="String">
-        ///     A map or string that is sent to the server with the request.
+        ///     A plain object or string that is sent to the server with the request.
         /// </param>
         /// <param name="callback" type="Function">
         ///     A callback function that is executed if the request succeeds.
@@ -2403,29 +2413,35 @@
         }
 
         if (value !== undefined) {
-            return hooks && "set" in hooks && (ret = hooks.set(elem, value, name)) !== undefined ?
-                ret :
-				(elem[name] = value);
+            if (hooks && "set" in hooks && (ret = hooks.set(elem, value, name)) !== undefined) {
+                return ret;
+
+            } else {
+                return (elem[name] = value);
+            }
 
         } else {
-            return hooks && "get" in hooks && (ret = hooks.get(elem, name)) !== null ?
-                ret :
-				elem[name];
+            if (hooks && "get" in hooks && (ret = hooks.get(elem, name)) !== null) {
+                return ret;
+
+            } else {
+                return elem[name];
+            }
         }
     };
     jQuery.propFix = {
+        "tabindex": 'tabIndex',
+        "readonly": 'readOnly',
         "for": 'htmlFor',
         "class": 'className',
-        "tabindex": {},
-        "readonly": {},
-        "maxlength": {},
-        "cellspacing": {},
-        "cellpadding": {},
-        "rowspan": {},
-        "colspan": {},
-        "usemap": {},
-        "frameborder": {},
-        "contenteditable": {}
+        "maxlength": 'maxLength',
+        "cellspacing": 'cellSpacing',
+        "cellpadding": 'cellPadding',
+        "rowspan": 'rowSpan',
+        "colspan": 'colSpan',
+        "usemap": 'useMap',
+        "frameborder": 'frameBorder',
+        "contenteditable": 'contentEditable'
     };
     jQuery.propHooks = {
         "tabIndex": {},
@@ -2435,13 +2451,18 @@
         /// <summary>
         ///     Takes a function and returns a new one that will always have a particular context.
         ///     &#10;1 - jQuery.proxy(function, context) 
-        ///     &#10;2 - jQuery.proxy(context, name)
+        ///     &#10;2 - jQuery.proxy(context, name) 
+        ///     &#10;3 - jQuery.proxy(function, context, additionalArguments) 
+        ///     &#10;4 - jQuery.proxy(context, name, additionalArguments)
         /// </summary>
         /// <param name="fn" type="Function">
         ///     The function whose context will be changed.
         /// </param>
-        /// <param name="context" type="Object">
+        /// <param name="context" type="PlainObject">
         ///     The object to which the context (this) of the function should be set.
+        /// </param>
+        /// <param name="" type="Anything">
+        ///     Any number of arguments to be passed to the function referenced in the function argument.
         /// </param>
         /// <returns type="Function" />
 
@@ -2547,15 +2568,14 @@
                 propName = jQuery.propFix[name] || name;
 
                 // Boolean attributes get special treatment (#10870)
-                if (jQuery.expr.match.bool.test(name)) {
-                    // Set corresponding property to false
-                    if (getSetInput && getSetAttribute || !ruseDefault.test(name)) {
-                        elem[propName] = false;
-                        // Support: IE<9
-                        // Also clear defaultChecked/defaultSelected (if appropriate)
-                    } else {
+                if (rboolean.test(name)) {
+                    // Set corresponding property to false for boolean attributes
+                    // Also clear defaultChecked/defaultSelected (if appropriate) for IE<8
+                    if (!getSetAttribute && ruseDefault.test(name)) {
                         elem[jQuery.camelCase("default-" + name)] =
 							elem[propName] = false;
+                    } else {
+                        elem[propName] = false;
                     }
 
                     // See #9699 for explanation of this approach (setting first, then removal)
@@ -2709,13 +2729,14 @@
         "optSelected": false,
         "enctype": true,
         "html5Clone": true,
-        "inlineBlockNeedsLayout": false,
-        "shrinkWrapBlocks": false,
-        "pixelPosition": true,
+        "boxModel": true,
         "deleteExpando": true,
         "noCloneEvent": true,
+        "inlineBlockNeedsLayout": false,
+        "shrinkWrapBlocks": false,
         "reliableMarginRight": true,
         "boxSizingReliable": false,
+        "pixelPosition": true,
         "noCloneChecked": false,
         "optDisabled": true,
         "input": true,
@@ -2726,11 +2747,11 @@
         "changeBubbles": true,
         "focusinBubbles": true,
         "clearCloneStyle": false,
-        "ownLast": false,
         "cors": true,
         "ajax": true,
         "reliableHiddenOffsets": true,
-        "boxSizing": true
+        "boxSizing": true,
+        "doesNotIncludeMarginInBodyOffset": true
     };
     jQuery.swap = function (elem, options, callback, args) {
 
@@ -2800,7 +2821,7 @@
         /// <summary>
         ///     Determine the internal JavaScript [[Class]] of an object.
         /// </summary>
-        /// <param name="obj" type="Object">
+        /// <param name="obj" type="PlainObject">
         ///     Object to get the internal JavaScript [[Class]] of.
         /// </param>
         /// <returns type="String" />
@@ -2823,17 +2844,16 @@
 
         var elem,
             duplicates = [],
-            j = 0,
-            i = 0;
+            i = 1,
+            j = 0;
 
         // Unless we *know* we can detect duplicates, assume their presence
         hasDuplicate = !support.detectDuplicates;
-        sortInput = !support.sortStable && results.slice(0);
         results.sort(sortOrder);
 
         if (hasDuplicate) {
-            while ((elem = results[i++])) {
-                if (elem === results[i]) {
+            for (; (elem = results[i]) ; i++) {
+                if (elem === results[i - 1]) {
                     j = duplicates.push(i);
                 }
             }
@@ -3008,6 +3028,13 @@
         return this.pushStack(jQuery.unique(all));
     };
     jQuery.prototype.addBack = function (selector) {
+        /// <summary>
+        ///     Add the previous set of elements on the stack to the current set, optionally filtered by a selector.
+        /// </summary>
+        /// <param name="selector" type="String">
+        ///     A string containing a selector expression to match the current set of elements against.
+        /// </param>
+        /// <returns type="jQuery" />
 
         return this.add(selector == null ?
 			this.prevObject : this.prevObject.filter(selector)
@@ -3020,7 +3047,7 @@
         ///     &#10;2 - addClass(function(index, currentClass))
         /// </summary>
         /// <param name="value" type="String">
-        ///     One or more class names to be added to the class attribute of each matched element.
+        ///     One or more space-separated classes to be added to the class attribute of each matched element.
         /// </param>
         /// <returns type="jQuery" />
 
@@ -3075,7 +3102,7 @@
         /// </param>
         /// <returns type="jQuery" />
 
-        return this.domManip(arguments, function (elem) {
+        return this.domManip(arguments, false, function (elem) {
             if (this.parentNode) {
                 this.parentNode.insertBefore(elem, this.nextSibling);
             }
@@ -3083,7 +3110,7 @@
     };
     jQuery.prototype.ajaxComplete = function (fn) {
         /// <summary>
-        ///     Register a handler to be called when Ajax requests complete. This is an Ajax Event.
+        ///     Register a handler to be called when Ajax requests complete. This is an AjaxEvent.
         /// </summary>
         /// <param name="fn" type="Function">
         ///     The function to be invoked.
@@ -3163,10 +3190,10 @@
         ///     &#10;1 - animate(properties, duration, easing, complete) 
         ///     &#10;2 - animate(properties, options)
         /// </summary>
-        /// <param name="prop" type="Object">
-        ///     A map of CSS properties that the animation will move toward.
+        /// <param name="prop" type="PlainObject">
+        ///     An object of CSS properties and values that the animation will move toward.
         /// </param>
-        /// <param name="speed" type="Number">
+        /// <param name="speed" type="">
         ///     A string or number determining how long the animation will run.
         /// </param>
         /// <param name="easing" type="String">
@@ -3210,10 +3237,9 @@
         /// </param>
         /// <returns type="jQuery" />
 
-        return this.domManip(arguments, function (elem) {
+        return this.domManip(arguments, true, function (elem) {
             if (this.nodeType === 1 || this.nodeType === 11 || this.nodeType === 9) {
-                var target = manipulationTarget(this, elem);
-                target.appendChild(elem);
+                this.appendChild(elem);
             }
         });
     };
@@ -3248,7 +3274,7 @@
         ///     &#10;    1.1 - attr(attributeName)
         ///     &#10;2: Set one or more attributes for the set of matched elements.
         ///     &#10;    2.1 - attr(attributeName, value) 
-        ///     &#10;    2.2 - attr(map) 
+        ///     &#10;    2.2 - attr(attributes) 
         ///     &#10;    2.3 - attr(attributeName, function(index, attr))
         /// </summary>
         /// <param name="name" type="String">
@@ -3275,7 +3301,7 @@
         /// </param>
         /// <returns type="jQuery" />
 
-        return this.domManip(arguments, function (elem) {
+        return this.domManip(arguments, false, function (elem) {
             if (this.parentNode) {
                 this.parentNode.insertBefore(elem, this);
             }
@@ -3292,7 +3318,7 @@
         ///     A string containing one or more DOM event types, such as "click" or "submit," or custom event names.
         /// </param>
         /// <param name="data" type="Object">
-        ///     A map of data that will be passed to the event handler.
+        ///     An object containing data that will be passed to the event handler.
         /// </param>
         /// <param name="fn" type="Function">
         ///     A function to execute each time the event is triggered.
@@ -3309,7 +3335,7 @@
         ///     &#10;3 - blur()
         /// </summary>
         /// <param name="data" type="Object">
-        ///     A map of data that will be passed to the event handler.
+        ///     An object containing data that will be passed to the event handler.
         /// </param>
         /// <param name="fn" type="Function">
         ///     A function to execute each time the event is triggered.
@@ -3328,7 +3354,7 @@
         ///     &#10;3 - change()
         /// </summary>
         /// <param name="data" type="Object">
-        ///     A map of data that will be passed to the event handler.
+        ///     An object containing data that will be passed to the event handler.
         /// </param>
         /// <param name="fn" type="Function">
         ///     A function to execute each time the event is triggered.
@@ -3350,7 +3376,7 @@
 
         var ret = jQuery.map(this, fn, until);
 
-        if (name.slice(-5) !== "Until") {
+        if (!runtil.test(name)) {
             selector = until;
         }
 
@@ -3358,16 +3384,10 @@
             ret = jQuery.filter(selector, ret);
         }
 
-        if (this.length > 1) {
-            // Remove duplicates
-            if (!guaranteedUnique[name]) {
-                ret = jQuery.unique(ret);
-            }
+        ret = this.length > 1 && !guaranteedUnique[name] ? jQuery.unique(ret) : ret;
 
-            // Reverse order for parents* and prev-derivatives
-            if (rparentsprev.test(name)) {
-                ret = ret.reverse();
-            }
+        if (this.length > 1 && rparentsprev.test(name)) {
+            ret = ret.reverse();
         }
 
         return this.pushStack(ret);
@@ -3391,7 +3411,7 @@
         ///     &#10;3 - click()
         /// </summary>
         /// <param name="data" type="Object">
-        ///     A map of data that will be passed to the event handler.
+        ///     An object containing data that will be passed to the event handler.
         /// </param>
         /// <param name="fn" type="Function">
         ///     A function to execute each time the event is triggered.
@@ -3425,12 +3445,12 @@
     };
     jQuery.prototype.closest = function (selectors, context) {
         /// <summary>
-        ///     1: Get the first element that matches the selector, beginning at the current element and progressing up through the DOM tree.
+        ///     1: For each element in the set, get the first element that matches the selector by testing the element itself and traversing up through its ancestors in the DOM tree.
         ///     &#10;    1.1 - closest(selector) 
         ///     &#10;    1.2 - closest(selector, context) 
         ///     &#10;    1.3 - closest(jQuery object) 
         ///     &#10;    1.4 - closest(element)
-        ///     &#10;2: Gets an array of all the elements and selectors matched against the current element up through the DOM tree.
+        ///     &#10;2: Get an array of all the elements and selectors matched against the current element up through the DOM tree.
         ///     &#10;    2.1 - closest(selectors, context)
         /// </summary>
         /// <param name="selectors" type="String">
@@ -3450,18 +3470,14 @@
 				0;
 
         for (; i < l; i++) {
-            for (cur = this[i]; cur && cur !== context; cur = cur.parentNode) {
-                // Always skip document fragments
-                if (cur.nodeType < 11 && (pos ?
-					pos.index(cur) > -1 :
+            cur = this[i];
 
-                    // Don't pass non-elements to Sizzle
-					cur.nodeType === 1 &&
-						jQuery.find.matchesSelector(cur, selectors))) {
-
-                    cur = ret.push(cur);
+            while (cur && cur.ownerDocument && cur !== context && cur.nodeType !== 11) {
+                if (pos ? pos.index(cur) > -1 : jQuery.find.matchesSelector(cur, selectors)) {
+                    ret.push(cur);
                     break;
                 }
+                cur = cur.parentNode;
             }
         }
 
@@ -3480,7 +3496,7 @@
 
         var ret = jQuery.map(this, fn, until);
 
-        if (name.slice(-5) !== "Until") {
+        if (!runtil.test(name)) {
             selector = until;
         }
 
@@ -3488,16 +3504,10 @@
             ret = jQuery.filter(selector, ret);
         }
 
-        if (this.length > 1) {
-            // Remove duplicates
-            if (!guaranteedUnique[name]) {
-                ret = jQuery.unique(ret);
-            }
+        ret = this.length > 1 && !guaranteedUnique[name] ? jQuery.unique(ret) : ret;
 
-            // Reverse order for parents* and prev-derivatives
-            if (rparentsprev.test(name)) {
-                ret = ret.reverse();
-            }
+        if (this.length > 1 && rparentsprev.test(name)) {
+            ret = ret.reverse();
         }
 
         return this.pushStack(ret);
@@ -3510,12 +3520,13 @@
     };
     jQuery.prototype.css = function (name, value) {
         /// <summary>
-        ///     1: Get the value of a style property for the first element in the set of matched elements.
-        ///     &#10;    1.1 - css(propertyName)
-        ///     &#10;2: Set one or more CSS properties for the  set of matched elements.
+        ///     1: Get the value of style properties for the first element in the set of matched elements.
+        ///     &#10;    1.1 - css(propertyName) 
+        ///     &#10;    1.2 - css(propertyNames)
+        ///     &#10;2: Set one or more CSS properties for the set of matched elements.
         ///     &#10;    2.1 - css(propertyName, value) 
         ///     &#10;    2.2 - css(propertyName, function(index, value)) 
-        ///     &#10;    2.3 - css(map)
+        ///     &#10;    2.3 - css(properties)
         /// </summary>
         /// <param name="name" type="String">
         ///     A CSS property name.
@@ -3551,7 +3562,7 @@
         ///     1: Store arbitrary data associated with the matched elements.
         ///     &#10;    1.1 - data(key, value) 
         ///     &#10;    1.2 - data(obj)
-        ///     &#10;2: Returns value at named data store for the first element in the jQuery collection, as set by data(name, value).
+        ///     &#10;2: Return the value at the named data store for the first element in the jQuery collection, as set by data(name, value) or by an HTML5 data-* attribute.
         ///     &#10;    2.1 - data(key) 
         ///     &#10;    2.2 - data()
         /// </summary>
@@ -3564,12 +3575,9 @@
         /// <returns type="jQuery" />
 
         var attrs, name,
-			data = null,
+			elem = this[0],
 			i = 0,
-			elem = this[0];
-
-        // Special expections of .data basically thwart jQuery.access,
-        // so implement the relevant behavior ourselves
+			data = null;
 
         // Gets all values
         if (key === undefined) {
@@ -3581,7 +3589,7 @@
                     for (; i < attrs.length; i++) {
                         name = attrs[i].name;
 
-                        if (name.indexOf("data-") === 0) {
+                        if (!name.indexOf("data-")) {
                             name = jQuery.camelCase(name.slice(5));
 
                             dataAttr(elem, name, data[name]);
@@ -3601,16 +3609,17 @@
             });
         }
 
-        return arguments.length > 1 ?
+        return jQuery.access(this, function (value) {
 
-			// Sets one value
-			this.each(function () {
-			    jQuery.data(this, key, value);
-			}) :
+            if (value === undefined) {
+                // Try to fetch any internally stored data first
+                return elem ? dataAttr(elem, key, jQuery.data(elem, key)) : null;
+            }
 
-			// Gets one value
-			// Try to fetch any internally stored data first
-			elem ? dataAttr(elem, key, jQuery.data(elem, key)) : null;
+            this.each(function () {
+                jQuery.data(this, key, value);
+            });
+        }, null, value, arguments.length > 1, null, true);
     };
     jQuery.prototype.dblclick = function (data, fn) {
         /// <summary>
@@ -3620,7 +3629,7 @@
         ///     &#10;3 - dblclick()
         /// </summary>
         /// <param name="data" type="Object">
-        ///     A map of data that will be passed to the event handler.
+        ///     An object containing data that will be passed to the event handler.
         /// </param>
         /// <param name="fn" type="Function">
         ///     A function to execute each time the event is triggered.
@@ -3667,7 +3676,7 @@
         ///     A string containing one or more space-separated JavaScript event types, such as "click" or "keydown," or custom event names.
         /// </param>
         /// <param name="data" type="Object">
-        ///     A map of data that will be passed to the event handler.
+        ///     An object containing data that will be passed to the event handler.
         /// </param>
         /// <param name="fn" type="Function">
         ///     A function to execute at the time the event is triggered.
@@ -3700,7 +3709,7 @@
 
         return this.remove(selector, true);
     };
-    jQuery.prototype.domManip = function (args, callback, allowIntersection) {
+    jQuery.prototype.domManip = function (args, table, callback) {
 
 
         // Flatten any nested arrays
@@ -3720,14 +3729,14 @@
             return this.each(function (index) {
                 var self = set.eq(index);
                 if (isFunction) {
-                    args[0] = value.call(this, index, self.html());
+                    args[0] = value.call(this, index, table ? self.html() : undefined);
                 }
-                self.domManip(args, callback, allowIntersection);
+                self.domManip(args, table, callback);
             });
         }
 
         if (l) {
-            fragment = jQuery.buildFragment(args, this[0].ownerDocument, false, !allowIntersection && this);
+            fragment = jQuery.buildFragment(args, this[0].ownerDocument, false, this);
             first = fragment.firstChild;
 
             if (fragment.childNodes.length === 1) {
@@ -3735,6 +3744,7 @@
             }
 
             if (first) {
+                table = table && jQuery.nodeName(first, "tr");
                 scripts = jQuery.map(getAll(fragment, "script"), disableScript);
                 hasScripts = scripts.length;
 
@@ -3752,7 +3762,13 @@
                         }
                     }
 
-                    callback.call(this[i], node, i);
+                    callback.call(
+						table && jQuery.nodeName(this[i], "table") ?
+							findOrAppend(this[i], "tbody") :
+							this[i],
+						node,
+						i
+					);
                 }
 
                 if (hasScripts) {
@@ -3769,7 +3785,14 @@
 
                             if (node.src) {
                                 // Hope ajax is available...
-                                jQuery._evalUrl(node.src);
+                                jQuery.ajax({
+                                    url: node.src,
+                                    type: "GET",
+                                    dataType: "script",
+                                    async: false,
+                                    global: false,
+                                    "throws": true
+                                });
                             } else {
                                 jQuery.globalEval((node.text || node.textContent || node.innerHTML || "").replace(rcleanScript, ""));
                             }
@@ -3854,7 +3877,7 @@
         ///     &#10;2 - error(eventData, handler(eventObject))
         /// </summary>
         /// <param name="data" type="Object">
-        ///     A map of data that will be passed to the event handler.
+        ///     An object containing data that will be passed to the event handler.
         /// </param>
         /// <param name="fn" type="Function">
         ///     A function to execute each time the event is triggered.
@@ -3932,10 +3955,11 @@
     jQuery.prototype.fadeIn = function (speed, easing, callback) {
         /// <summary>
         ///     Display the matched elements by fading them to opaque.
-        ///     &#10;1 - fadeIn(duration, callback) 
-        ///     &#10;2 - fadeIn(duration, easing, callback)
+        ///     &#10;1 - fadeIn(duration, complete) 
+        ///     &#10;2 - fadeIn(options) 
+        ///     &#10;3 - fadeIn(duration, easing, complete)
         /// </summary>
-        /// <param name="speed" type="Number">
+        /// <param name="speed" type="">
         ///     A string or number determining how long the animation will run.
         /// </param>
         /// <param name="easing" type="String">
@@ -3951,10 +3975,11 @@
     jQuery.prototype.fadeOut = function (speed, easing, callback) {
         /// <summary>
         ///     Hide the matched elements by fading them to transparent.
-        ///     &#10;1 - fadeOut(duration, callback) 
-        ///     &#10;2 - fadeOut(duration, easing, callback)
+        ///     &#10;1 - fadeOut(duration, complete) 
+        ///     &#10;2 - fadeOut(options) 
+        ///     &#10;3 - fadeOut(duration, easing, complete)
         /// </summary>
-        /// <param name="speed" type="Number">
+        /// <param name="speed" type="">
         ///     A string or number determining how long the animation will run.
         /// </param>
         /// <param name="easing" type="String">
@@ -3970,8 +3995,8 @@
     jQuery.prototype.fadeTo = function (speed, to, easing, callback) {
         /// <summary>
         ///     Adjust the opacity of the matched elements.
-        ///     &#10;1 - fadeTo(duration, opacity, callback) 
-        ///     &#10;2 - fadeTo(duration, opacity, easing, callback)
+        ///     &#10;1 - fadeTo(duration, opacity, complete) 
+        ///     &#10;2 - fadeTo(duration, opacity, easing, complete)
         /// </summary>
         /// <param name="speed" type="Number">
         ///     A string or number determining how long the animation will run.
@@ -3997,8 +4022,10 @@
     jQuery.prototype.fadeToggle = function (speed, easing, callback) {
         /// <summary>
         ///     Display or hide the matched elements by animating their opacity.
+        ///     &#10;1 - fadeToggle(duration, easing, complete) 
+        ///     &#10;2 - fadeToggle(options)
         /// </summary>
-        /// <param name="speed" type="Number">
+        /// <param name="speed" type="">
         ///     A string or number determining how long the animation will run.
         /// </param>
         /// <param name="easing" type="String">
@@ -4024,7 +4051,7 @@
         /// </param>
         /// <returns type="jQuery" />
 
-        return this.pushStack(winnow(this, selector || [], false));
+        return this.pushStack(winnow(this, selector, true));
     };
     jQuery.prototype.find = function (selector) {
         /// <summary>
@@ -4038,12 +4065,11 @@
         /// </param>
         /// <returns type="jQuery" />
 
-        var i,
-			ret = [],
-			self = this,
-			len = self.length;
+        var i, ret, self,
+			len = this.length;
 
         if (typeof selector !== "string") {
+            self = this;
             return this.pushStack(jQuery(selector).filter(function () {
                 for (i = 0; i < len; i++) {
                     if (jQuery.contains(self[i], this)) {
@@ -4053,16 +4079,24 @@
             }));
         }
 
+        ret = [];
         for (i = 0; i < len; i++) {
-            jQuery.find(selector, self[i], ret);
+            jQuery.find(selector, this[i], ret);
         }
 
         // Needed because $( selector, context ) becomes $( context ).find( selector )
         ret = this.pushStack(len > 1 ? jQuery.unique(ret) : ret);
-        ret.selector = this.selector ? this.selector + " " + selector : selector;
+        ret.selector = (this.selector ? this.selector + " " : "") + selector;
         return ret;
     };
     jQuery.prototype.finish = function (type) {
+        /// <summary>
+        ///     Stop the currently-running animation, remove all queued animations, and complete all animations for the matched elements.
+        /// </summary>
+        /// <param name="type" type="String">
+        ///     The name of the queue in which to stop animations.
+        /// </param>
+        /// <returns type="jQuery" />
 
         if (type !== false) {
             type = type || "fx";
@@ -4120,7 +4154,7 @@
         ///     &#10;3 - focus()
         /// </summary>
         /// <param name="data" type="Object">
-        ///     A map of data that will be passed to the event handler.
+        ///     An object containing data that will be passed to the event handler.
         /// </param>
         /// <param name="fn" type="Function">
         ///     A function to execute each time the event is triggered.
@@ -4138,7 +4172,7 @@
         ///     &#10;2 - focusin(eventData, handler(eventObject))
         /// </summary>
         /// <param name="data" type="Object">
-        ///     A map of data that will be passed to the event handler.
+        ///     An object containing data that will be passed to the event handler.
         /// </param>
         /// <param name="fn" type="Function">
         ///     A function to execute each time the event is triggered.
@@ -4156,7 +4190,7 @@
         ///     &#10;2 - focusout(eventData, handler(eventObject))
         /// </summary>
         /// <param name="data" type="Object">
-        ///     A map of data that will be passed to the event handler.
+        ///     An object containing data that will be passed to the event handler.
         /// </param>
         /// <param name="fn" type="Function">
         ///     A function to execute each time the event is triggered.
@@ -4278,10 +4312,11 @@
         /// <summary>
         ///     Hide the matched elements.
         ///     &#10;1 - hide() 
-        ///     &#10;2 - hide(duration, callback) 
-        ///     &#10;3 - hide(duration, easing, callback)
+        ///     &#10;2 - hide(duration, complete) 
+        ///     &#10;3 - hide(options) 
+        ///     &#10;4 - hide(duration, easing, complete)
         /// </summary>
-        /// <param name="speed" type="Number">
+        /// <param name="speed" type="">
         ///     A string or number determining how long the animation will run.
         /// </param>
         /// <param name="easing" type="String">
@@ -4638,16 +4673,14 @@
         /// </param>
         /// <returns type="Boolean" />
 
-        return !!winnow(
-			this,
-
-			// If this is a positional/relative selector, check membership in the returned set
-			// so $("p:first").is("p:last") won't return true for a doc with two "p".
-			typeof selector === "string" && rneedsContext.test(selector) ?
-				jQuery(selector) :
-				selector || [],
-			false
-		).length;
+        return !!selector && (
+			typeof selector === "string" ?
+				// If this is a positional/relative selector, check membership in the returned set
+				// so $("p:first").is("p:last") won't return true for a doc with two "p".
+				rneedsContext.test(selector) ?
+					jQuery(selector, this.context).index(this[0]) >= 0 :
+					jQuery.filter(selector, this).length > 0 :
+				this.filter(selector).length > 0);
     };
     jQuery.prototype.keydown = function (data, fn) {
         /// <summary>
@@ -4656,8 +4689,8 @@
         ///     &#10;2 - keydown(eventData, handler(eventObject)) 
         ///     &#10;3 - keydown()
         /// </summary>
-        /// <param name="data" type="Object">
-        ///     A map of data that will be passed to the event handler.
+        /// <param name="data" type="PlainObject">
+        ///     An object containing data that will be passed to the event handler.
         /// </param>
         /// <param name="fn" type="Function">
         ///     A function to execute each time the event is triggered.
@@ -4675,8 +4708,8 @@
         ///     &#10;2 - keypress(eventData, handler(eventObject)) 
         ///     &#10;3 - keypress()
         /// </summary>
-        /// <param name="data" type="Object">
-        ///     A map of data that will be passed to the event handler.
+        /// <param name="data" type="PlainObject">
+        ///     An object containing data that will be passed to the event handler.
         /// </param>
         /// <param name="fn" type="Function">
         ///     A function to execute each time the event is triggered.
@@ -4694,8 +4727,8 @@
         ///     &#10;2 - keyup(eventData, handler(eventObject)) 
         ///     &#10;3 - keyup()
         /// </summary>
-        /// <param name="data" type="Object">
-        ///     A map of data that will be passed to the event handler.
+        /// <param name="data" type="PlainObject">
+        ///     An object containing data that will be passed to the event handler.
         /// </param>
         /// <param name="fn" type="Function">
         ///     A function to execute each time the event is triggered.
@@ -4727,7 +4760,7 @@
         ///     A string containing the URL to which the request is sent.
         /// </param>
         /// <param name="params" type="String">
-        ///     A map or string that is sent to the server with the request.
+        ///     A plain object or string that is sent to the server with the request.
         /// </param>
         /// <param name="callback" type="Function">
         ///     A callback function that is executed when the request completes.
@@ -4809,8 +4842,8 @@
         ///     &#10;2 - mousedown(eventData, handler(eventObject)) 
         ///     &#10;3 - mousedown()
         /// </summary>
-        /// <param name="data" type="Object">
-        ///     A map of data that will be passed to the event handler.
+        /// <param name="data" type="PlainObject">
+        ///     An object containing data that will be passed to the event handler.
         /// </param>
         /// <param name="fn" type="Function">
         ///     A function to execute each time the event is triggered.
@@ -4828,8 +4861,8 @@
         ///     &#10;2 - mouseenter(eventData, handler(eventObject)) 
         ///     &#10;3 - mouseenter()
         /// </summary>
-        /// <param name="data" type="Object">
-        ///     A map of data that will be passed to the event handler.
+        /// <param name="data" type="PlainObject">
+        ///     An object containing data that will be passed to the event handler.
         /// </param>
         /// <param name="fn" type="Function">
         ///     A function to execute each time the event is triggered.
@@ -4847,8 +4880,8 @@
         ///     &#10;2 - mouseleave(eventData, handler(eventObject)) 
         ///     &#10;3 - mouseleave()
         /// </summary>
-        /// <param name="data" type="Object">
-        ///     A map of data that will be passed to the event handler.
+        /// <param name="data" type="PlainObject">
+        ///     An object containing data that will be passed to the event handler.
         /// </param>
         /// <param name="fn" type="Function">
         ///     A function to execute each time the event is triggered.
@@ -4866,8 +4899,8 @@
         ///     &#10;2 - mousemove(eventData, handler(eventObject)) 
         ///     &#10;3 - mousemove()
         /// </summary>
-        /// <param name="data" type="Object">
-        ///     A map of data that will be passed to the event handler.
+        /// <param name="data" type="PlainObject">
+        ///     An object containing data that will be passed to the event handler.
         /// </param>
         /// <param name="fn" type="Function">
         ///     A function to execute each time the event is triggered.
@@ -4885,8 +4918,8 @@
         ///     &#10;2 - mouseout(eventData, handler(eventObject)) 
         ///     &#10;3 - mouseout()
         /// </summary>
-        /// <param name="data" type="Object">
-        ///     A map of data that will be passed to the event handler.
+        /// <param name="data" type="PlainObject">
+        ///     An object containing data that will be passed to the event handler.
         /// </param>
         /// <param name="fn" type="Function">
         ///     A function to execute each time the event is triggered.
@@ -4904,8 +4937,8 @@
         ///     &#10;2 - mouseover(eventData, handler(eventObject)) 
         ///     &#10;3 - mouseover()
         /// </summary>
-        /// <param name="data" type="Object">
-        ///     A map of data that will be passed to the event handler.
+        /// <param name="data" type="PlainObject">
+        ///     An object containing data that will be passed to the event handler.
         /// </param>
         /// <param name="fn" type="Function">
         ///     A function to execute each time the event is triggered.
@@ -4923,8 +4956,8 @@
         ///     &#10;2 - mouseup(eventData, handler(eventObject)) 
         ///     &#10;3 - mouseup()
         /// </summary>
-        /// <param name="data" type="Object">
-        ///     A map of data that will be passed to the event handler.
+        /// <param name="data" type="PlainObject">
+        ///     An object containing data that will be passed to the event handler.
         /// </param>
         /// <param name="fn" type="Function">
         ///     A function to execute each time the event is triggered.
@@ -4946,7 +4979,7 @@
 
         var ret = jQuery.map(this, fn, until);
 
-        if (name.slice(-5) !== "Until") {
+        if (!runtil.test(name)) {
             selector = until;
         }
 
@@ -4954,16 +4987,10 @@
             ret = jQuery.filter(selector, ret);
         }
 
-        if (this.length > 1) {
-            // Remove duplicates
-            if (!guaranteedUnique[name]) {
-                ret = jQuery.unique(ret);
-            }
+        ret = this.length > 1 && !guaranteedUnique[name] ? jQuery.unique(ret) : ret;
 
-            // Reverse order for parents* and prev-derivatives
-            if (rparentsprev.test(name)) {
-                ret = ret.reverse();
-            }
+        if (this.length > 1 && rparentsprev.test(name)) {
+            ret = ret.reverse();
         }
 
         return this.pushStack(ret);
@@ -4979,7 +5006,7 @@
 
         var ret = jQuery.map(this, fn, until);
 
-        if (name.slice(-5) !== "Until") {
+        if (!runtil.test(name)) {
             selector = until;
         }
 
@@ -4987,16 +5014,10 @@
             ret = jQuery.filter(selector, ret);
         }
 
-        if (this.length > 1) {
-            // Remove duplicates
-            if (!guaranteedUnique[name]) {
-                ret = jQuery.unique(ret);
-            }
+        ret = this.length > 1 && !guaranteedUnique[name] ? jQuery.unique(ret) : ret;
 
-            // Reverse order for parents* and prev-derivatives
-            if (rparentsprev.test(name)) {
-                ret = ret.reverse();
-            }
+        if (this.length > 1 && rparentsprev.test(name)) {
+            ret = ret.reverse();
         }
 
         return this.pushStack(ret);
@@ -5017,7 +5038,7 @@
 
         var ret = jQuery.map(this, fn, until);
 
-        if (name.slice(-5) !== "Until") {
+        if (!runtil.test(name)) {
             selector = until;
         }
 
@@ -5025,16 +5046,10 @@
             ret = jQuery.filter(selector, ret);
         }
 
-        if (this.length > 1) {
-            // Remove duplicates
-            if (!guaranteedUnique[name]) {
-                ret = jQuery.unique(ret);
-            }
+        ret = this.length > 1 && !guaranteedUnique[name] ? jQuery.unique(ret) : ret;
 
-            // Reverse order for parents* and prev-derivatives
-            if (rparentsprev.test(name)) {
-                ret = ret.reverse();
-            }
+        if (this.length > 1 && rparentsprev.test(name)) {
+            ret = ret.reverse();
         }
 
         return this.pushStack(ret);
@@ -5052,13 +5067,13 @@
         /// </param>
         /// <returns type="jQuery" />
 
-        return this.pushStack(winnow(this, selector || [], true));
+        return this.pushStack(winnow(this, selector, false));
     };
     jQuery.prototype.off = function (types, selector, fn) {
         /// <summary>
         ///     Remove an event handler.
         ///     &#10;1 - off(events, selector, handler(eventObject)) 
-        ///     &#10;2 - off(events-map, selector)
+        ///     &#10;2 - off(events, selector)
         /// </summary>
         /// <param name="types" type="String">
         ///     One or more space-separated event types and optional namespaces, or just namespaces, such as "click", "keydown.myPlugin", or ".myPlugin".
@@ -5109,7 +5124,7 @@
         ///     &#10;    2.1 - offset(coordinates) 
         ///     &#10;    2.2 - offset(function(index, coords))
         /// </summary>
-        /// <param name="options" type="Object">
+        /// <param name="options" type="PlainObject">
         ///     An object containing the properties top and left, which are integers indicating the new top and left coordinates for the elements.
         /// </param>
         /// <returns type="jQuery" />
@@ -5156,18 +5171,18 @@
         /// <returns type="jQuery" />
 
         return this.map(function () {
-            var offsetParent = this.offsetParent || docElem;
+            var offsetParent = this.offsetParent || document.documentElement;
             while (offsetParent && (!jQuery.nodeName(offsetParent, "html") && jQuery.css(offsetParent, "position") === "static")) {
                 offsetParent = offsetParent.offsetParent;
             }
-            return offsetParent || docElem;
+            return offsetParent || document.documentElement;
         });
     };
     jQuery.prototype.on = function (types, selector, data, fn, /*INTERNAL*/ one) {
         /// <summary>
         ///     Attach an event handler function for one or more events to the selected elements.
         ///     &#10;1 - on(events, selector, data, handler(eventObject)) 
-        ///     &#10;2 - on(events-map, selector, data)
+        ///     &#10;2 - on(events, selector, data)
         /// </summary>
         /// <param name="types" type="String">
         ///     One or more space-separated event types and optional namespaces, such as "click" or "keydown.myPlugin".
@@ -5240,7 +5255,7 @@
         ///     Attach a handler to an event for the elements. The handler is executed at most once per element.
         ///     &#10;1 - one(events, data, handler(eventObject)) 
         ///     &#10;2 - one(events, selector, data, handler(eventObject)) 
-        ///     &#10;3 - one(events-map, selector, data)
+        ///     &#10;3 - one(events, selector, data)
         /// </summary>
         /// <param name="types" type="String">
         ///     One or more space-separated event types and optional namespaces, such as "click" or "keydown.myPlugin".
@@ -5355,7 +5370,7 @@
 
         var ret = jQuery.map(this, fn, until);
 
-        if (name.slice(-5) !== "Until") {
+        if (!runtil.test(name)) {
             selector = until;
         }
 
@@ -5363,16 +5378,10 @@
             ret = jQuery.filter(selector, ret);
         }
 
-        if (this.length > 1) {
-            // Remove duplicates
-            if (!guaranteedUnique[name]) {
-                ret = jQuery.unique(ret);
-            }
+        ret = this.length > 1 && !guaranteedUnique[name] ? jQuery.unique(ret) : ret;
 
-            // Reverse order for parents* and prev-derivatives
-            if (rparentsprev.test(name)) {
-                ret = ret.reverse();
-            }
+        if (this.length > 1 && rparentsprev.test(name)) {
+            ret = ret.reverse();
         }
 
         return this.pushStack(ret);
@@ -5388,7 +5397,7 @@
 
         var ret = jQuery.map(this, fn, until);
 
-        if (name.slice(-5) !== "Until") {
+        if (!runtil.test(name)) {
             selector = until;
         }
 
@@ -5396,16 +5405,10 @@
             ret = jQuery.filter(selector, ret);
         }
 
-        if (this.length > 1) {
-            // Remove duplicates
-            if (!guaranteedUnique[name]) {
-                ret = jQuery.unique(ret);
-            }
+        ret = this.length > 1 && !guaranteedUnique[name] ? jQuery.unique(ret) : ret;
 
-            // Reverse order for parents* and prev-derivatives
-            if (rparentsprev.test(name)) {
-                ret = ret.reverse();
-            }
+        if (this.length > 1 && rparentsprev.test(name)) {
+            ret = ret.reverse();
         }
 
         return this.pushStack(ret);
@@ -5426,7 +5429,7 @@
 
         var ret = jQuery.map(this, fn, until);
 
-        if (name.slice(-5) !== "Until") {
+        if (!runtil.test(name)) {
             selector = until;
         }
 
@@ -5434,16 +5437,10 @@
             ret = jQuery.filter(selector, ret);
         }
 
-        if (this.length > 1) {
-            // Remove duplicates
-            if (!guaranteedUnique[name]) {
-                ret = jQuery.unique(ret);
-            }
+        ret = this.length > 1 && !guaranteedUnique[name] ? jQuery.unique(ret) : ret;
 
-            // Reverse order for parents* and prev-derivatives
-            if (rparentsprev.test(name)) {
-                ret = ret.reverse();
-            }
+        if (this.length > 1 && rparentsprev.test(name)) {
+            ret = ret.reverse();
         }
 
         return this.pushStack(ret);
@@ -5503,10 +5500,9 @@
         /// </param>
         /// <returns type="jQuery" />
 
-        return this.domManip(arguments, function (elem) {
+        return this.domManip(arguments, true, function (elem) {
             if (this.nodeType === 1 || this.nodeType === 11 || this.nodeType === 9) {
-                var target = manipulationTarget(this, elem);
-                target.insertBefore(elem, target.firstChild);
+                this.insertBefore(elem, this.firstChild);
             }
         });
     };
@@ -5546,7 +5542,7 @@
 
         var ret = jQuery.map(this, fn, until);
 
-        if (name.slice(-5) !== "Until") {
+        if (!runtil.test(name)) {
             selector = until;
         }
 
@@ -5554,16 +5550,10 @@
             ret = jQuery.filter(selector, ret);
         }
 
-        if (this.length > 1) {
-            // Remove duplicates
-            if (!guaranteedUnique[name]) {
-                ret = jQuery.unique(ret);
-            }
+        ret = this.length > 1 && !guaranteedUnique[name] ? jQuery.unique(ret) : ret;
 
-            // Reverse order for parents* and prev-derivatives
-            if (rparentsprev.test(name)) {
-                ret = ret.reverse();
-            }
+        if (this.length > 1 && rparentsprev.test(name)) {
+            ret = ret.reverse();
         }
 
         return this.pushStack(ret);
@@ -5579,7 +5569,7 @@
 
         var ret = jQuery.map(this, fn, until);
 
-        if (name.slice(-5) !== "Until") {
+        if (!runtil.test(name)) {
             selector = until;
         }
 
@@ -5587,16 +5577,10 @@
             ret = jQuery.filter(selector, ret);
         }
 
-        if (this.length > 1) {
-            // Remove duplicates
-            if (!guaranteedUnique[name]) {
-                ret = jQuery.unique(ret);
-            }
+        ret = this.length > 1 && !guaranteedUnique[name] ? jQuery.unique(ret) : ret;
 
-            // Reverse order for parents* and prev-derivatives
-            if (rparentsprev.test(name)) {
-                ret = ret.reverse();
-            }
+        if (this.length > 1 && rparentsprev.test(name)) {
+            ret = ret.reverse();
         }
 
         return this.pushStack(ret);
@@ -5617,7 +5601,7 @@
 
         var ret = jQuery.map(this, fn, until);
 
-        if (name.slice(-5) !== "Until") {
+        if (!runtil.test(name)) {
             selector = until;
         }
 
@@ -5625,16 +5609,10 @@
             ret = jQuery.filter(selector, ret);
         }
 
-        if (this.length > 1) {
-            // Remove duplicates
-            if (!guaranteedUnique[name]) {
-                ret = jQuery.unique(ret);
-            }
+        ret = this.length > 1 && !guaranteedUnique[name] ? jQuery.unique(ret) : ret;
 
-            // Reverse order for parents* and prev-derivatives
-            if (rparentsprev.test(name)) {
-                ret = ret.reverse();
-            }
+        if (this.length > 1 && rparentsprev.test(name)) {
+            ret = ret.reverse();
         }
 
         return this.pushStack(ret);
@@ -5646,7 +5624,7 @@
         /// <param name="type" type="String">
         ///     The type of queue that needs to be observed.
         /// </param>
-        /// <param name="obj" type="Object">
+        /// <param name="obj" type="PlainObject">
         ///     Object onto which the promise methods have to be attached
         /// </param>
         /// <returns type="Promise" />
@@ -5684,7 +5662,7 @@
         ///     &#10;    1.1 - prop(propertyName)
         ///     &#10;2: Set one or more properties for the set of matched elements.
         ///     &#10;    2.1 - prop(propertyName, value) 
-        ///     &#10;    2.2 - prop(map) 
+        ///     &#10;    2.2 - prop(properties) 
         ///     &#10;    2.3 - prop(propertyName, function(index, oldPropertyValue))
         /// </summary>
         /// <param name="name" type="String">
@@ -5729,7 +5707,7 @@
         /// <summary>
         ///     1: Show the queue of functions to be executed on the matched elements.
         ///     &#10;    1.1 - queue(queueName)
-        ///     &#10;2: Manipulate the queue of functions to be executed on the matched elements.
+        ///     &#10;2: Manipulate the queue of functions to be executed, once for each matched element.
         ///     &#10;    2.1 - queue(queueName, newQueue) 
         ///     &#10;    2.2 - queue(queueName, callback( next ))
         /// </summary>
@@ -5790,20 +5768,20 @@
         /// <returns type="jQuery" />
 
         var elem,
-			elems = selector ? jQuery.filter(selector, this) : this,
 			i = 0;
 
-        for (; (elem = elems[i]) != null; i++) {
-
-            if (!keepData && elem.nodeType === 1) {
-                jQuery.cleanData(getAll(elem));
-            }
-
-            if (elem.parentNode) {
-                if (keepData && jQuery.contains(elem.ownerDocument, elem)) {
-                    setGlobalEval(getAll(elem, "script"));
+        for (; (elem = this[i]) != null; i++) {
+            if (!selector || jQuery.filter(selector, [elem]).length > 0) {
+                if (!keepData && elem.nodeType === 1) {
+                    jQuery.cleanData(getAll(elem));
                 }
-                elem.parentNode.removeChild(elem);
+
+                if (elem.parentNode) {
+                    if (keepData && jQuery.contains(elem.ownerDocument, elem)) {
+                        setGlobalEval(getAll(elem, "script"));
+                    }
+                    elem.parentNode.removeChild(elem);
+                }
             }
         }
 
@@ -5889,7 +5867,7 @@
         ///     Remove a property for the set of matched elements.
         /// </summary>
         /// <param name="name" type="String">
-        ///     The name of the property to set.
+        ///     The name of the property to remove.
         /// </param>
         /// <returns type="jQuery" />
 
@@ -5927,42 +5905,34 @@
 
         return this.pushStack(ret);
     };
-    jQuery.prototype.replaceWith = function () {
+    jQuery.prototype.replaceWith = function (value) {
         /// <summary>
-        ///     Replace each element in the set of matched elements with the provided new content.
+        ///     Replace each element in the set of matched elements with the provided new content and return the set of elements that was removed.
         ///     &#10;1 - replaceWith(newContent) 
         ///     &#10;2 - replaceWith(function)
         /// </summary>
-        /// <param name="" type="jQuery">
+        /// <param name="value" type="jQuery">
         ///     The content to insert. May be an HTML string, DOM element, or jQuery object.
         /// </param>
         /// <returns type="jQuery" />
 
-        var
-			// Snapshot the DOM in case .domManip sweeps something relevant into its fragment
-			args = jQuery.map(this, function (elem) {
-			    return [elem.nextSibling, elem.parentNode];
-			}),
-			i = 0;
+        var isFunc = jQuery.isFunction(value);
 
-        // Make the changes, replacing each context element with the new content
-        this.domManip(arguments, function (elem) {
-            var next = args[i++],
-				parent = args[i++];
+        // Make sure that the elements are removed from the DOM before they are inserted
+        // this can help fix replacing a parent with child elements
+        if (!isFunc && typeof value !== "string") {
+            value = jQuery(value).not(this).detach();
+        }
+
+        return this.domManip([value], true, function (elem) {
+            var next = this.nextSibling,
+				parent = this.parentNode;
 
             if (parent) {
-                // Don't use the snapshot next if it has moved (#13810)
-                if (next && next.parentNode !== parent) {
-                    next = this.nextSibling;
-                }
                 jQuery(this).remove();
                 parent.insertBefore(elem, next);
             }
-            // Allow new content to include elements from the context set
-        }, true);
-
-        // Force removal if there was no new content (e.g., from empty arguments)
-        return i ? this : this.remove();
+        });
     };
     jQuery.prototype.resize = function (data, fn) {
         /// <summary>
@@ -5971,8 +5941,8 @@
         ///     &#10;2 - resize(eventData, handler(eventObject)) 
         ///     &#10;3 - resize()
         /// </summary>
-        /// <param name="data" type="Object">
-        ///     A map of data that will be passed to the event handler.
+        /// <param name="data" type="PlainObject">
+        ///     An object containing data that will be passed to the event handler.
         /// </param>
         /// <param name="fn" type="Function">
         ///     A function to execute each time the event is triggered.
@@ -5990,8 +5960,8 @@
         ///     &#10;2 - scroll(eventData, handler(eventObject)) 
         ///     &#10;3 - scroll()
         /// </summary>
-        /// <param name="data" type="Object">
-        ///     A map of data that will be passed to the event handler.
+        /// <param name="data" type="PlainObject">
+        ///     An object containing data that will be passed to the event handler.
         /// </param>
         /// <param name="fn" type="Function">
         ///     A function to execute each time the event is triggered.
@@ -6036,7 +6006,7 @@
     };
     jQuery.prototype.scrollTop = function (val) {
         /// <summary>
-        ///     1: Get the current vertical position of the scroll bar for the first element in the set of matched elements.
+        ///     1: Get the current vertical position of the scroll bar for the first element in the set of matched elements or set the vertical position of the scroll bar for every matched element.
         ///     &#10;    1.1 - scrollTop()
         ///     &#10;2: Set the current vertical position of the scroll bar for each of the set of matched elements.
         ///     &#10;    2.1 - scrollTop(value)
@@ -6073,8 +6043,8 @@
         ///     &#10;2 - select(eventData, handler(eventObject)) 
         ///     &#10;3 - select()
         /// </summary>
-        /// <param name="data" type="Object">
-        ///     A map of data that will be passed to the event handler.
+        /// <param name="data" type="PlainObject">
+        ///     An object containing data that will be passed to the event handler.
         /// </param>
         /// <param name="fn" type="Function">
         ///     A function to execute each time the event is triggered.
@@ -6127,10 +6097,11 @@
         /// <summary>
         ///     Display the matched elements.
         ///     &#10;1 - show() 
-        ///     &#10;2 - show(duration, callback) 
-        ///     &#10;3 - show(duration, easing, callback)
+        ///     &#10;2 - show(duration, complete) 
+        ///     &#10;3 - show(options) 
+        ///     &#10;4 - show(duration, easing, complete)
         /// </summary>
-        /// <param name="speed" type="Number">
+        /// <param name="speed" type="">
         ///     A string or number determining how long the animation will run.
         /// </param>
         /// <param name="easing" type="String">
@@ -6156,7 +6127,7 @@
 
         var ret = jQuery.map(this, fn, until);
 
-        if (name.slice(-5) !== "Until") {
+        if (!runtil.test(name)) {
             selector = until;
         }
 
@@ -6164,16 +6135,10 @@
             ret = jQuery.filter(selector, ret);
         }
 
-        if (this.length > 1) {
-            // Remove duplicates
-            if (!guaranteedUnique[name]) {
-                ret = jQuery.unique(ret);
-            }
+        ret = this.length > 1 && !guaranteedUnique[name] ? jQuery.unique(ret) : ret;
 
-            // Reverse order for parents* and prev-derivatives
-            if (rparentsprev.test(name)) {
-                ret = ret.reverse();
-            }
+        if (this.length > 1 && rparentsprev.test(name)) {
+            ret = ret.reverse();
         }
 
         return this.pushStack(ret);
@@ -6203,10 +6168,11 @@
     jQuery.prototype.slideDown = function (speed, easing, callback) {
         /// <summary>
         ///     Display the matched elements with a sliding motion.
-        ///     &#10;1 - slideDown(duration, callback) 
-        ///     &#10;2 - slideDown(duration, easing, callback)
+        ///     &#10;1 - slideDown(duration, complete) 
+        ///     &#10;2 - slideDown(options) 
+        ///     &#10;3 - slideDown(duration, easing, complete)
         /// </summary>
-        /// <param name="speed" type="Number">
+        /// <param name="speed" type="">
         ///     A string or number determining how long the animation will run.
         /// </param>
         /// <param name="easing" type="String">
@@ -6222,10 +6188,11 @@
     jQuery.prototype.slideToggle = function (speed, easing, callback) {
         /// <summary>
         ///     Display or hide the matched elements with a sliding motion.
-        ///     &#10;1 - slideToggle(duration, callback) 
-        ///     &#10;2 - slideToggle(duration, easing, callback)
+        ///     &#10;1 - slideToggle(duration, complete) 
+        ///     &#10;2 - slideToggle(options) 
+        ///     &#10;3 - slideToggle(duration, easing, complete)
         /// </summary>
-        /// <param name="speed" type="Number">
+        /// <param name="speed" type="">
         ///     A string or number determining how long the animation will run.
         /// </param>
         /// <param name="easing" type="String">
@@ -6241,10 +6208,11 @@
     jQuery.prototype.slideUp = function (speed, easing, callback) {
         /// <summary>
         ///     Hide the matched elements with a sliding motion.
-        ///     &#10;1 - slideUp(duration, callback) 
-        ///     &#10;2 - slideUp(duration, easing, callback)
+        ///     &#10;1 - slideUp(duration, complete) 
+        ///     &#10;2 - slideUp(options) 
+        ///     &#10;3 - slideUp(duration, easing, complete)
         /// </summary>
-        /// <param name="speed" type="Number">
+        /// <param name="speed" type="">
         ///     A string or number determining how long the animation will run.
         /// </param>
         /// <param name="easing" type="String">
@@ -6330,8 +6298,8 @@
         ///     &#10;2 - submit(eventData, handler(eventObject)) 
         ///     &#10;3 - submit()
         /// </summary>
-        /// <param name="data" type="Object">
-        ///     A map of data that will be passed to the event handler.
+        /// <param name="data" type="PlainObject">
+        ///     An object containing data that will be passed to the event handler.
         /// </param>
         /// <param name="fn" type="Function">
         ///     A function to execute each time the event is triggered.
@@ -6374,9 +6342,10 @@
         ///     1: Bind two or more handlers to the matched elements, to be executed on alternate clicks.
         ///     &#10;    1.1 - toggle(handler(eventObject), handler(eventObject), handler(eventObject))
         ///     &#10;2: Display or hide the matched elements.
-        ///     &#10;    2.1 - toggle(duration, callback) 
-        ///     &#10;    2.2 - toggle(duration, easing, callback) 
-        ///     &#10;    2.3 - toggle(showOrHide)
+        ///     &#10;    2.1 - toggle(duration, complete) 
+        ///     &#10;    2.2 - toggle(options) 
+        ///     &#10;    2.3 - toggle(duration, easing, complete) 
+        ///     &#10;    2.4 - toggle(showOrHide)
         /// </summary>
         /// <param name="speed" type="Function">
         ///     A function to execute every even time the element is clicked.
@@ -6457,7 +6426,7 @@
         /// <param name="type" type="String">
         ///     A string containing a JavaScript event type, such as click or submit.
         /// </param>
-        /// <param name="data" type="Object">
+        /// <param name="data" type="PlainObject">
         ///     Additional parameters to pass along to the event handler.
         /// </param>
         /// <returns type="jQuery" />
@@ -6530,7 +6499,7 @@
         ///     &#10;2 - unload(eventData, handler(eventObject))
         /// </summary>
         /// <param name="data" type="Object">
-        ///     A map of data that will be passed to the event handler.
+        ///     A plain object of data that will be passed to the event handler.
         /// </param>
         /// <param name="fn" type="Function">
         ///     A function to execute each time the event is triggered.
@@ -6561,7 +6530,7 @@
         ///     &#10;    2.1 - val(value) 
         ///     &#10;    2.2 - val(function(index, value))
         /// </summary>
-        /// <param name="value" type="String">
+        /// <param name="value" type="Array">
         ///     A string of text or an array of strings corresponding to the value of each matched element to set as selected/checked.
         /// </param>
         /// <returns type="jQuery" />
@@ -6592,14 +6561,15 @@
         isFunction = jQuery.isFunction(value);
 
         return this.each(function (i) {
-            var val;
+            var val,
+				self = jQuery(this);
 
             if (this.nodeType !== 1) {
                 return;
             }
 
             if (isFunction) {
-                val = value.call(this, i, jQuery(this).val());
+                val = value.call(this, i, self.val());
             } else {
                 val = value;
             }

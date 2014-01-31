@@ -100,15 +100,23 @@ namespace HAP.Web.API
                 if (!isAuth(Path.GetExtension(context.Request.Headers["X_FILENAME"]))) throw new UnauthorizedAccessException(_doc.SelectSingleNode("/hapStrings/myfiles/upload/filetypeerror").InnerText);
                 DriveMapping m;
                 string path = Path.Combine(Converter.DriveToUNC('\\' + RoutingPath, RoutingDrive, out m, ADUser), context.Request.Headers["X_FILENAME"]);
-                HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.Upload", ADUser.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Uploading of: " + context.Request.Headers["X_FILENAME"] + " to: " + path);
+                HAP.Data.SQL.WebEvents.Log(DateTime.Now, context.Request.Cookies["HAPSecure"] == null ? "MyFiles.Upload" : "MyFiles.SecureUpload", ADUser.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Uploading of: " + context.Request.Headers["X_FILENAME"] + " to: " + path);
                 try
                 {
                     ADUser.ImpersonateContained();
-                    Stream inputStream = context.Request.InputStream;
-                    FileStream fileStream = new FileStream(path, FileMode.OpenOrCreate);
+                    if (context.Request.Cookies["HAPSecure"] != null)
+                    {
+                        HttpPostedFile file = context.Request.Files[0];
+                        file.SaveAs(path);
+                    }
+                    else
+                    {
+                        Stream inputStream = context.Request.InputStream;
+                        FileStream fileStream = new FileStream(path, FileMode.OpenOrCreate);
 
-                    inputStream.CopyTo(fileStream);
-                    fileStream.Close();
+                        inputStream.CopyTo(fileStream);
+                        fileStream.Close();
+                    }
                 }
                 finally { ADUser.EndContainedImpersonate(); }
 
