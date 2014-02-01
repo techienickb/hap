@@ -88,7 +88,7 @@ namespace HAP.HelpDesk
 
         [OperationContract]
         [WebInvoke(Method = "PUT", UriTemplate = "/AdminTicket/{Id}", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public FullTicket UpdateAdminTicket(string Id, string Note, string State, string Priority, string ShowTo, string FAQ, string Subject, string AssignTo)
+        public FullTicket UpdateAdminTicket(string Id, string Note, string State, string Priority, string ShowTo, string FAQ, string Subject, string AssignTo, bool HideNote)
         {
             HAP.Data.SQL.WebEvents.Log(DateTime.Now, "HelpDesk.UpdateAdmin", HttpContext.Current.User.Identity.Name, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Updating Admin Ticket " + Id);
 
@@ -99,6 +99,7 @@ namespace HAP.HelpDesk
             XmlElement node = doc.CreateElement("Note");
             node.SetAttribute("datetime", DateTime.Now.ToString("u"));
             node.SetAttribute("username", HttpContext.Current.User.Identity.Name);
+            node.SetAttribute("hide", HideNote.ToString());
             if (string.IsNullOrEmpty(Note)) node.InnerXml = string.IsNullOrEmpty(AssignTo) ? "<![CDATA[No Note Information Added]]>" : "<![CDATA[Assigned to: " + AssignTo + "]]>";
             else node.InnerXml = "<![CDATA[" + HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />") + "]]>";
             ticket.AppendChild(node);
@@ -127,13 +128,13 @@ namespace HAP.HelpDesk
             doc = new XmlDocument();
             doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
             FullTicket ft = new FullTicket(doc.SelectSingleNode("/Tickets/Ticket[@id='" + Id + "']"));
-            foreach (Note not in ft.Notes)
+            foreach (Note not in ft.Notes.Where(n => !n.Hide))
                 emailnote += not.DisplayName + " on " + not.Date.ToString() + "<br />" + HttpUtility.UrlDecode(not.NoteText, System.Text.Encoding.Default).Replace("\n", "<br />") + "<hr />";
             
 
             UserInfo user = ADUtils.FindUserInfos(ticket.SelectNodes("Note")[0].Attributes["username"].Value)[0];
             UserInfo currentuser = ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0];
-            if (hapConfig.Current.SMTP.Enabled && user.Email != null && !string.IsNullOrEmpty(user.Email))
+            if (hapConfig.Current.SMTP.Enabled && user.Email != null && !string.IsNullOrEmpty(user.Email) && !HideNote)
             {
                 MailMessage mes = new MailMessage();
                 mes.Subject = Localizable.Localize("helpdesk/tickedhasbeen").Replace("#", "#" + Id).Replace("%", !isOpen(State) ? Localizable.Localize("helpdesk/closed") : Localizable.Localize("helpdesk/updated"));

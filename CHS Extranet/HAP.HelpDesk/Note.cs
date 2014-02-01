@@ -15,6 +15,7 @@ namespace HAP.HelpDesk
         public string Username { get; set; }
         public string DisplayName { get; set; }
         public string NoteText { get; set; }
+        public bool Hide { get; set; }
 
         public Note(XmlNode node)
         {
@@ -28,6 +29,7 @@ namespace HAP.HelpDesk
                 DisplayName = ADUtils.FindUserInfos(node.Attributes["username"].Value)[0].DisplayName;
             }
             catch { DisplayName = "UNKNOWN"; }
+            Hide = (node.Attributes["hide"] != null) ? bool.Parse(node.Attributes["hide"].Value) : false;
         }
     }
 }
