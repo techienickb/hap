@@ -22,7 +22,37 @@ namespace HAP.Web.Configuration
             e.SetAttribute("admins", "Domain Admins");
             e.SetAttribute("firstlineemails", "");
             e.SetAttribute("provider", "xml");
+            e.SetAttribute("priorities", "Low, Normal, High");
+            e.SetAttribute("useropenstates", "New, Updated");
+            e.SetAttribute("userclosedstates", "Fixed, No Action Needed, Self Fixed");
+            e.SetAttribute("openstates", "New, Investigating, User Attention Needed, With 1st Line Support, With 2nd Line Support, With 3rd Line Support, Item Ordered, Waiting");
+            e.SetAttribute("closedstates", "Resolved, Fixed, Timed Out, No Action Needed");
             doc.SelectSingleNode("/hapConfig").AppendChild(e);
+        }
+        public string Priorities
+        {
+            get { return el.GetAttribute("priorities"); }
+            set { el.SetAttribute("priorities", value); }
+        }
+        public string UserClosedStates
+        {
+            get { return el.GetAttribute("userclosedstates"); }
+            set { el.SetAttribute("userclosedstates", value); }
+        }
+        public string UserOpenStates
+        {
+            get { return el.GetAttribute("useropenstates"); }
+            set { el.SetAttribute("useropenstates", value); }
+        }
+        public string ClosedStates
+        {
+            get { return el.GetAttribute("closedstates"); }
+            set { el.SetAttribute("closedstates", value); }
+        }
+        public string OpenStates
+        {
+            get { return el.GetAttribute("openstates"); }
+            set { el.SetAttribute("openstates", value); }
         }
         public string Provider
         {

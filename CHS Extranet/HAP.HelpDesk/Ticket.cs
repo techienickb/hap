@@ -21,6 +21,7 @@ namespace HAP.HelpDesk
         public bool FAQ { get; set; }
         public string ShowTo { get; set; }
         public string AssignedTo { get; set; }
+        public string ReadBy { get; set; }
 
         public Ticket(XmlNode node)
         {
@@ -45,6 +46,7 @@ namespace HAP.HelpDesk
             catch { DisplayName = "UNKNOWN"; }
             FAQ = false;
             if (node.Attributes["faq"] != null) FAQ = bool.Parse(node.Attributes["faq"].Value);
+            ReadBy = node.Attributes["readby"] != null ? node.Attributes["readby"].Value : "";
         }
     }
 

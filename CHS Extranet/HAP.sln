@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{7F80432C-70D9-4AAA-9FE3-6398471FC04D}"
 	ProjectSection(SolutionItems) = preProject
@@ -99,9 +99,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Tracker.UI.Notify", "HA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Timetable", "HAP.Timetable\HAP.Timetable.csproj", "{1A0E71EA-2860-4E47-ACD6-0FDE50E7F659}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Win.DirectEdit", "HAP.Windows.DirectEdit\HAP.Win.DirectEdit.csproj", "{9970A04C-B866-460E-9FF2-527BCE0A701A}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 27
+		SccNumberOfProjects = 28
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs08
 		SccLocalPath0 = .
@@ -194,6 +196,9 @@ Global
 		SccProjectUniqueName26 = HAP.Timetable\\HAP.Timetable.csproj
 		SccProjectName26 = HAP.Timetable
 		SccLocalPath26 = HAP.Timetable
+		SccProjectUniqueName27 = HAP.Windows.DirectEdit\\HAP.Win.DirectEdit.csproj
+		SccProjectName27 = HAP.Windows.DirectEdit
+		SccLocalPath27 = HAP.Windows.DirectEdit
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Notify|Any CPU = Debug Notify|Any CPU
@@ -1139,6 +1144,41 @@ Global
 		{1A0E71EA-2860-4E47-ACD6-0FDE50E7F659}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{1A0E71EA-2860-4E47-ACD6-0FDE50E7F659}.Release|x64.ActiveCfg = Release|Any CPU
 		{1A0E71EA-2860-4E47-ACD6-0FDE50E7F659}.Release|x86.ActiveCfg = Release|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Debug Notify|Any CPU.ActiveCfg = Debug|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Debug Notify|Any CPU.Build.0 = Debug|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Debug Notify|ARM.ActiveCfg = Debug|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Debug Notify|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Debug Notify|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Debug Notify|x64.ActiveCfg = Debug|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Debug Notify|x86.ActiveCfg = Debug|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Debug WinRT|Any CPU.ActiveCfg = Debug|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Debug WinRT|Any CPU.Build.0 = Debug|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Debug WinRT|ARM.ActiveCfg = Debug|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Debug WinRT|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Debug WinRT|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Debug WinRT|x64.ActiveCfg = Debug|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Debug WinRT|x86.ActiveCfg = Debug|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Release WinRT|Any CPU.ActiveCfg = Release|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Release WinRT|Any CPU.Build.0 = Release|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Release WinRT|ARM.ActiveCfg = Release|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Release WinRT|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Release WinRT|Mixed Platforms.Build.0 = Release|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Release WinRT|x64.ActiveCfg = Release|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Release WinRT|x86.ActiveCfg = Release|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Release|ARM.ActiveCfg = Release|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Release|x64.ActiveCfg = Release|Any CPU
+		{9970A04C-B866-460E-9FF2-527BCE0A701A}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,8 +1,8 @@
 ﻿#tabs { background: #fff; position: fixed; top: 80px; bottom:45px; left: 0; width: 400px; padding: 10px 0; overflow: auto; }
 
 #toolbar a.active { background: #fff; color: #0060a6; }
-.ticket .notes { min-height: 400px; margin-top: 5px; padding: 10px }
-.ticket .notes pre { white-space: normal; }
+#notes { margin-top: 5px; padding: 10px }
+#notes pre { white-space: normal; }
 
 #newticket div, .ticket div, #updateticket div { overflow: hidden; }
 #newticket div label, .ticket div label, #updateticket div label { float: left; width: 100px; }
@@ -13,14 +13,36 @@
 #opentickets a.High { background: transparent url(../images/statusicons/priority_high.png)  no-repeat left top; }
 #archivedbody a span, #faqs a span, #closedtickets a span, #opentickets a span { font-size: 10px; color: #222; display: block; padding-top: 2px; }
 
+#archivedbody a.unread, #faqs a.unread, #closedtickets a.unread, #opentickets a.unread { font-weight: bold; }
+
 #archivedbody a:hover, #faqs a:hover, #closedtickets a:hover, #opentickets a:hover { background-color: #e6f2fa; }
 #archivedbody a.selected, #faqs a.selected, #closedtickets a.selected, #opentickets a.selected { background-color: #cde6f7; }
 
 #HDmain { padding-left: 400px; background: #fff; }
 #HDmain > div { padding: 140px 10px 50px 10px; }
-#HDtop { position: fixed; top: 80px; left: 400px; right: 0; border-bottom: solid 1px #ddd; background: #fff; padding: 10px; }
+#HDmain > #stats, #HDmain > #newticket { padding-top: 20px; }
+#HDtop { position: fixed; top: 80px; left: 400px; right: 0; border-bottom: solid 1px #ddd; background: #fff; padding: 10px; z-index: 80; }
 #HDsubject { font-size: 14px; }
+
+.nocontrol #newnote { display: none; }
 
 #mainfooter { position: fixed; bottom: 0; left: 0; right: 0; }
 
 #hapHeader #hapTitle a { background-image: url(../api/tiles/icons/24/24/images/icons/metro/folders-os/help.png); background-position: 5px center; }
+#HDtop div label { display: inline-block; width: 90px; }
+
+@media screen and (max-width:632px) {
+    #HDtop, #HDmain { position: static; padding: 0; margin: 0; padding-left: 20px; }
+    #HDmain > #newticket { padding-top: 80px; }
+    #tabs { top: 150px; }
+    #tabs.ticketactive { overflow-x: hidden; width: 20px; z-index: 81; }
+    #tabs.ticketactive > div { width: 400px; }
+    #toolbar a {
+        font-size: 0;
+    }
+
+    #toolbar a::first-letter {
+        line-height: 36px;
+        font-size: 18px;
+    }
+}

@@ -8,66 +8,10 @@
 <asp:Content runat="server" ContentPlaceHolderID="viewport"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" /></asp:Content>
 <asp:Content ContentPlaceHolderID="title" runat="server"><asp:HyperLink runat="server" NavigateUrl="~/HelpDesk/"><hap:LocalResource runat="server" StringPath="helpdesk/helpdesk" /></asp:HyperLink></asp:Content>
 <asp:Content ContentPlaceHolderID="header" runat="server">
-    <div id="toolbar">
-        <a id="opentickets-link" href="#opentickets" onclick="return false;"><hap:LocalResource StringPath="helpdesk/opentickets" runat="server" /></a>
-        <a id="closedtickets-link" href="#closedtickets" onclick="return false;"><hap:LocalResource StringPath="helpdesk/closedtickets" runat="server" /></a>
-        <%if (isHDAdmin || hasArch) { %>
-        <a id="archivedtickets-link" href="#archivedtickets" onclick="return false;"><hap:LocalResource StringPath="helpdesk/archivedtickets" runat="server" /></a>
-        <%} %>
-	    <a href="#newticket" id="newticket-link"><hap:LocalResource StringPath="helpdesk/newtickets" runat="server" /></a>
-	    <a href="#faqs" id="faq-link" onclick="return false;"><hap:LocalResource StringPath="helpdesk/faqs" runat="server" /></a>
-        <%if (isHDAdmin) { %>
-        <a href="#stats" id="stats-link"><hap:LocalResource runat="server" StringPath="helpdesk/stats" /></a>
-        <%} %>
-        <%if (isUpgrade) { %>
-        <asp:LinkButton runat="server" ID="migrate" Text="Migrate to SQL" OnClick="migrate_Click" />
-        <%} %>
-    </div>
+    <div id="toolbar"><a id="opentickets-link" href="#opentickets" onclick="return false;"><hap:LocalResource StringPath="helpdesk/opentickets" runat="server" /></a><a id="closedtickets-link" href="#closedtickets" onclick="return false;"><hap:LocalResource StringPath="helpdesk/closedtickets" runat="server" /></a><%if (isHDAdmin || hasArch) { %><a id="archivedtickets-link" href="#archivedtickets" onclick="return false;"><hap:LocalResource StringPath="helpdesk/archivedtickets" runat="server" /></a><%} %><a href="#faqs" id="faq-link" onclick="return false;"><hap:LocalResource StringPath="helpdesk/faqs" runat="server" /></a><a href="#newticket" id="newticket-link"><hap:LocalResource StringPath="helpdesk/newtickets" runat="server" /></a><%if (isHDAdmin) { %><a href="#stats" id="stats-link"><hap:LocalResource runat="server" StringPath="helpdesk/stats" /></a><%} %><%if (isUpgrade) { %><asp:LinkButton runat="server" ID="migrate" Text="Migrate to SQL" OnClick="migrate_Click" Visible="false" /><%} %></div>
 </asp:Content>
 <asp:Content ContentPlaceHolderID="body" runat="server">
     <div id="hap-HD">
-    <div id="assignticket">
-        <div>
-			<asp:Label runat="server" AssociatedControlID="userlist2" Text="Assign To: " />
-			<asp:DropDownList runat="server" ID="userlist2" />
-		</div>
-    </div>
-	<div id="updateticket" title="Update Ticket">
-		<asp:PlaceHolder runat="server" id="adminupdatepanel">
-		<div>
-			<label for="ticket-subject"><hap:LocalResource StringPath="helpdesk/subject" runat="server" />: </label>
-			<input type="text" id="ticket-subject" />
-		</div>
-		<div>
-			<label for="ticket-priority"><hap:LocalResource StringPath="helpdesk/Priority" runat="server" />: </label>
-			<div id="ticket-priority">
-				<input type="radio" value="Low" id="ticket-priority-low" name="ticket-priority" /><label for="ticket-priority-low"><hap:LocalResource StringPath="helpdesk/low" runat="server" /></label>
-				<input type="radio" value="Normal" id="ticket-priority-normal" name="ticket-priority" /><label for="ticket-priority-normal"><hap:LocalResource StringPath="helpdesk/normal" runat="server" /></label>
-				<input type="radio" value="High" id="ticket-priority-high" name="ticket-priority" /><label for="ticket-priority-high"><hap:LocalResource StringPath="helpdesk/high" runat="server" /></label>
-			</div>
-		</div>
-		<div>
-			<label for="ticket-showto"><hap:LocalResource StringPath="helpdesk/makeaware" runat="server" />: </label>
-			<input type="text" id="ticket-showto" /> <hap:LocalResource StringPath="helpdesk/csloun" runat="server" />
-		</div>
-		<div>
-			<label for="ticket-fixed"><hap:LocalResource StringPath="helpdesk/fixed" runat="server" />: </label>
-			<input type="checkbox" id="ticket-fixed" />
-		</div>
-		<div>
-			<label for="ticket-userinter"><hap:LocalResource StringPath="helpdesk/userinter" runat="server" />: </label>
-			<input type="checkbox" id="ticket-userinter" />
-		</div>
-		<div>
-			<label for="ticket-faq"><hap:LocalResource StringPath="helpdesk/markasfaq" runat="server" />: </label>
-			<input type="checkbox" id="ticket-faq" />
-		</div>
-		</asp:PlaceHolder>
-		<div>
-			<label for="ticket-note"><hap:LocalResource StringPath="helpdesk/note" runat="server" />: </label>
-		</div>
-		<textarea id="ticket-note" style="width: 100%; height: 200px;" rows="8" cols="10"></textarea>
-	</div>
 	<div id="tabs">
 		<div id="opentickets">
             <div style="text-align: center;"><img src="../images/metroloading.gif" /></div>
@@ -97,7 +41,7 @@
 		                            contentType: 'application/json',
 		                            success: function (data) {
 		                                var x = "";
-		                                for (var i = 0; i < data.length; i++) x += '<div><a href="#ticket-' + $("#<%=archiveddates.ClientID%>").val() + '/' + data[i].Id + '" class="' + data[i].Priority.replace(/ /g, "-") + '">' + data[i].Subject + ' <span>' + data[i].Id + ' - ' + data[i].Username + (data[i].AssignedTo == '' ? '' : (' -> ' + data[i].AssignedTo)) + ' - ' + data[i].Date + '</span></a></div>';
+		                                for (var i = 0; i < data.length; i++) x += '<div><a href="#ticket-' + $("#<%=archiveddates.ClientID%>").val() + '/' + data[i].Id + '" id="#ticket-' + $("#<%=archiveddates.ClientID%>").val() + '/' + data[i].Id + '" class="' + data[i].Priority.replace(/ /g, "-") + '">' + data[i].Subject + ' <span>' + data[i].Id + ' - ' + data[i].Username + (data[i].AssignedTo == '' ? '' : (' -> ' + data[i].AssignedTo)) + ' - ' + data[i].Date + '</span></a></div>';
 		                                if (data.length == 0) x = "No Tickets";
 		                                $("#archivedbody").html(x);
 		                                $("#archivedloading").hide();
@@ -150,6 +94,44 @@
             </div>
         </div>
         <%} %>
+        <div id="currentticket" style="display: none;">
+            <div style="text-align: center;" id="curtick-loading"><img src="../images/metroloading.gif" /><br /><hap:LocalResource runat="server" StringPath="loading" /></div>
+            <div id="HDtop">
+                <div style="float: right;" id="HDcontrols">
+                    <div style="text-align: right;">
+                        <button onclick="return assignTicket();" class="hdadmin">Assign</button>
+                        <button onclick="return setFAQ();" class="hdadmin">FAQ</button>
+                        <button onclick="return updateTicket();">Update</button>
+                    </div>
+                    <div>
+                        <div class="hdadmin"><label>Users Aware: </label><input type="text" id="ticket-AwareI" /></div>
+                        <div class="hdadmin"><label>Show To: </label><input type="text" id="ticket-ShowToI" /></div>
+                    </div>
+                </div>
+                <div id="HDsubject">
+                    <label>Ticket: </label><span id="ticket-Subject"></span><input type="text" class="hdadmin" id="ticket-SubjectI" />
+                </div>
+                <div><label>Opened By: </label><span id="ticket-Username"></span></div>
+                <div><label>Opened on: </label><span id="ticket-Date"></span></div>
+                <div>
+                    <label>Priority: </label><span id="ticket-Priority"></span><select id="ticket-PriorityI"><%foreach (string s in config.HelpDesk.Priorities.Split(new char[] { ',' })) { %><option><%=s.Trim() %></option><%} %></select>
+                </div>
+                <div>
+                    <label>Status: </label><span id="ticket-Status"></span><select id="ticket-StatusI">
+                        <optgroup id="closedstates" label="Open States"><%foreach (string s in (isHDAdmin ? config.HelpDesk.OpenStates : config.HelpDesk.UserOpenStates).Split(new char[] { ',' })) { %><option><%=s.Trim() %></option><%} %></optgroup>
+                        <optgroup id="openstates" label="Closed States"><%foreach (string s in (isHDAdmin ? config.HelpDesk.ClosedStates : config.HelpDesk.UserClosedStates).Split(new char[] { ',' })) { %><option><%=s.Trim() %></option><%}%></optgroup>
+                    </select>
+                </div>
+                <div class="hdadmin"><label>Assigned To: </label><span id="ticket-AssignedTo"></span><asp:DropDownList runat="server" ID="userlist2" /></div>
+            </div>
+            <div id="notes">
+            </div>
+            <div id="newnote">
+                <label for="ticket-note">New Notes:</label><br />
+                <textarea id="ticket-note" style="width: 100%; height: 200px;" rows="8" cols="10"></textarea>
+            </div>
+            <div style="text-align: right;" id="HDlowercontrols"><button onclick="return updateTicket();">Update</button></div>
+        </div>
 	    <div id="newticket">
 		    <div>
 			    <label for="newticket-subject"><hap:LocalResource StringPath="helpdesk/issue" runat="server" />: </label>
@@ -193,95 +175,109 @@
 	<script>
 		var curticket;
 		var st = "";
+		function loadTicket() {
+		    $("#tabs a.selected").removeClass("selected");
+		    $("#newticket-link").removeClass("active");
+		    $("#tabs").removeClass("ticketactive");
+		    $("#HDmain > div").hide();
+		    if (curticket != null) {
+		        $("#tabs").addClass("ticketactive");
+		        $("#currentticket").show();
+		        $("#curtick-loading").show();
+		        var stringticket = curticket.match(/\//gi) ? curticket.split(/\//g)[1] : curticket;
+		        $("#ticket_" + stringticket).addClass("selected").removeClass("unread");
+		        $('<div id="ticket-' + curticket.replace(/\//gi, "_") + '" class="ticket">Loading Ticket ' + stringticket + '...</div>').appendTo("#curtick-loading");
+		        if (curticket.match(/\//gi)) { $("#HDcontrols, #HDlowercontrols").hide(); $("#currentticket").addClass("nocontrol"); }
+		        else { $("#HDcontrols, #HDlowercontrols").show(); $("#currentticket").removeClass("nocontrol"); }
+		        $.ajax({
+		            type: 'GET',
+		            url: hap.common.formatJSONUrl("~/api/HelpDesk/" + (curticket.match(/\//gi) ? 'A' : '') + "Ticket/" + curticket),
+		            dataType: 'json',
+		            contentType: 'application/json',
+		            success: function (data) {
+		                renderTicket(data);
+		            }, error: hap.common.jsonError
+		        });
+		    } 
+		}
+
+		function renderTicket(data) {
+		    if (data.FAQ) { $("#HDcontrols, #HDlowercontrols").hide(); $("#currentticket").addClass("nocontrol"); }
+		    $("#ticket-note, #ticket-AwareI").val("");
+		    $(".ui-tabs-selected a span").html("Ticket: " + data.Subject);
+		    $("#ticket-Subject").html(data.Subject).prev().html("Ticket " + (curticket.match(/\//gi) ? curticket.split(/\//g)[1] : curticket) + ": ");
+		    $("#ticket-Username").html(data.Username);
+		    $("#ticket-Date").html(data.Date);
+		    $("#ticket-Priority").html(data.Priority);
+		    $("#ticket-Status").html(data.Status);
+		    $("#ticket-AssignedTo").html(data.AssignedTo);
+		    $("#curtick-loading").hide();
+		    $("#curtick-loading .ticket").remove();
+		    $("ticket-ShowToI").val(data.ShowTo);
+		    var h = "";
+		    for (var i = 0; i < data.Notes.length; i++)
+		        h += data.Notes[i].DisplayName + ' ' + data.Notes[i].Date + '<br /><pre>' + unescape(data.Notes[i].NoteText).replace(/\+/g, ' ') + '</pre>';
+		    $("#notes").html(h);
+		    $("button").button();
+		}
+
 		function assignTicket() {
-		    $("#assignticket").dialog({
-		        autoOpen: true, buttons: {
-		            "Assign": function () {
-		                var url = hap.common.resolveUrl("~/api/HelpDesk/AdminTicket/") + curticket + '?' + window.JSON.stringify(new Date());
-		                var data = '{ "Note": "", "State": "", "Priority": "", "ShowTo": "", "FAQ": "", "AssignTo": "' + $("#<%=userlist2.ClientID%>").val() + '", "Subject": "" }';
-		                $.ajax({
-		                    type: 'PUT',
-		                    url: url,
-		                    dataType: 'json',
-		                    data: data,
-		                    contentType: 'application/json',
-		                    error: hap.common.jsonError,
-		                    success: function (data) {
-		                        var h = '<button style="float: right;" onclick="return updateTicket();">Update</button>' + (hap.hdadmin ? '<button style="float: right;" onclick="return assignTicket();">Assign</button>' : '') + '<div><label>Ticket ' + curticket + ': </label>' + data.Subject + '</div><div><label>Opened By: </label>' + data.DisplayName + ' (' + data.Username + ')</div><div><label>Opened on: </label>' + data.Date + '</div><div><label>Priority: </label>' + data.Priority + '</div><div><label>Status: </label>' + data.Status + '</div>' + (data.AssignedTo == "" ? "" : '<div><label>Assigned To:</label>' + data.AssignedTo + '</div>') + '<div class="notes tile-border-color">';
-		                        for (var i = 0; i < data.Notes.length; i++)
-		                            h += data.Notes[i].DisplayName + ' ' + data.Notes[i].Date + '<br /><pre>' + unescape(data.Notes[i].NoteText).replace(/\+/g, ' ') + '</pre>';
-		                        h += '</div>';
-		                        $("#ticket-" + curticket).html(h);
-		                        st = data.ShowTo;
-		                        $("button").button();
-		                        Update();
-		                    }
-		                });
-		                $(this).dialog("close");
-		            }, "Close": function () {
-		                $(this).dialog("close");
-		            }
+		    $("#curtick-loading").show();
+		    var url = hap.common.resolveUrl("~/api/HelpDesk/AdminTicket/") + curticket + '?' + window.JSON.stringify(new Date());
+		    var data = '{ "Note": "", "State": "", "Priority": "", "ShowTo": "", "FAQ": "", "AssignTo": "' + $("#<%=userlist2.ClientID%>").val() + '", "Subject": "" }';
+		    $.ajax({
+		        type: 'PUT',
+		        url: url,
+		        dataType: 'json',
+		        data: data,
+		        contentType: 'application/json',
+		        error: hap.common.jsonError,
+		        success: function (data) {
+		            Update();
+		            renderTicket(data);
 		        }
 		    });
-		    return false;
 		}
-		function updateTicket() {
-			$("#ticket-showto").val(st);
-			if ($("#ticket-priority") != null) { 
-			    $("#ticket-priority").buttonset();
-			    $("#newticket-priority-normal").attr("checked", "checked");
-			}
-			$("#ticket-subject").val($("#sub").text());
-			$("#updateticket").dialog({ autoOpen: true, minWidth: 600, minHeight: 400, buttons: {
-				"Update": function () {
-					var data = '{ "Note": "' + escape($("#ticket-note").val()) + '", "State": ';
-					var url = hap.common.formatJSONUrl("~/api/HelpDesk/Ticket/" + curticket);
-					if (hap.hdadmin) {
-						data += ($("#ticket-fixed").is(":checked") ? '"Fixed"' : ('"' + ($("#ticket-userinter").is(":checked") ? hap.common.getLocal("helpdesk/userinter") : "With IT") + '"')) + ', "Priority": "' + $("#ticket-priority input:checked").attr("value") + '", "ShowTo": "' + $("#ticket-showto").val() + '", "FAQ": "' + ($("#ticket-faq").is(":checked") ? 'true' : 'false') + '", "AssignTo": "", "Subject": "' + $("#ticket-subject").val() + '"';
-						url = hap.common.resolveUrl("~/api/HelpDesk/AdminTicket/") + curticket + '?' + window.JSON.stringify(new Date());
-					} else data += '"New"';
-					data += ' }';
-					$.ajax({
-						type: 'PUT',
-						url: url,
-						dataType: 'json',
-						data: data,
-						contentType: 'application/json',
-						error: hap.common.jsonError,
-						success: function (data) {
-							$("#ticket-note").val("");
-							if (hap.hdadmin) {
-								$("#ticket-priority input:checked").removeAttr("checked");
-								$("#ticket-showto").val("");
-								if ($("#ticket-fixed").is(":checked")) $("#ticket-fixed").prev().trigger("click");
-								if ($("#ticket-userinter").is(":checked")) $("#ticket-userinter").prev().trigger("click");
-								if ($("#ticket-faq").is(":checked")) $("#ticket-faq").prev().trigger("click");
-							}
-							var h = '<button style="float: right;" onclick="return updateTicket();">Update</button>' + (hap.hdadmin ? '<button style="float: right;" onclick="return assignTicket();">Assign</button>' : '') + '<div><label>Ticket ' + curticket + ': </label>' + data.Subject + '</div><div><label>Opened By: </label>' + data.DisplayName + ' (' + data.Username + ')</div><div><label>Opened on: </label>' + data.Date + '</div><div><label>Priority: </label>' + data.Priority + '</div><div><label>Status: </label>' + data.Status + '</div>' + (data.AssignedTo == "" ? "" : '<div><label>Assigned To:</label>' + data.AssignedTo + '</div>') + '<div class="notes tile-border-color">';
-							for (var i = 0; i < data.Notes.length; i++)
-								h += data.Notes[i].DisplayName + ' ' + data.Notes[i].Date + '<br /><pre>' + unescape(data.Notes[i].NoteText).replace(/\+/g, ' ') + '</pre>';
-							h += '</div>';
-							$("#ticket-" + curticket).html(h);
-							st = data.ShowTo;
-							$("button").button();
-                            Update();
-						}
-					});
-					$(this).dialog("close");
-				},
-				"Cancel": function () {
-					$("#ticket-note").val("");
-					if ($("#ticket-priority") != null) {
-						$("#ticket-priority input:checked").removeAttr("checked");
-						$("#ticket-showto").val("");
-						$("#ticket-fixed").removeAttr("checked");
-					}
-					$(this).dialog("close");
+	    function updateTicket() {
+	        $("#curtick-loading").show();
+	        var s = $("#ticket-StatusI").val();
+	        if (s == "User Attention Needed" && !hap.hdadmin) s = "Investigating";
+		    var data = '{ "Note": "' + escape($("#ticket-note").val()) + '", "State": "' + s + '", "Priority": "' + $("#ticket-PriorityI").val() + '", "ShowTo": "' + $("#ticket-ShowToI").val() + '", "FAQ": "false", "AssignTo": "", "Subject": "' + $("#ticket-SubjectI").val() + '" }';
+		    var url = (hap.hdadmin) ? hap.common.formatJSONUrl("~/api/HelpDesk/AdminTicket/" + curticket) : hap.common.formatJSONUrl("~/api/HelpDesk/Ticket/" + curticket);
+			$.ajax({
+				type: 'PUT',
+				url: url,
+				dataType: 'json',
+				data: data,
+				contentType: 'application/json',
+				error: hap.common.jsonError,
+				success: function (data) {
+				    renderTicket(data);
+					Update();
 				}
-			}
 			});
 			return false;
 		}
+
+	    function setFAQ() {
+	        $("#curtick-loading").show();
+	        var s = $("#ticket-StatusI").val();
+	        var data = '{ "Note": "' + escape($("#ticket-note").val()) + '", "State": "' + + '", "Priority": "' + $("#ticket-PriorityI").val() + '", "ShowTo": "' + $("#ticket-ShowToI").val() + '", "FAQ": "true", "AssignTo": "", "Subject": "' + $("#ticket-SubjectI").val() + '" }';
+	        var url = (hap.hdadmin) ? hap.common.formatJSONUrl("~/api/HelpDesk/Ticket/" + curticket) : hap.common.formatJSONUrl("~/api/HelpDesk/AdminTicket/" + curticket);
+	        $.ajax({
+	            type: 'PUT',
+	            url: url,
+	            dataType: 'json',
+	            data: data,
+	            contentType: 'application/json',
+	            error: hap.common.jsonError,
+	            success: function (data) {
+	                renderTicket(data);
+	                Update();
+	            }
+	        });
+	        return false;
+	    }
 
 	    function fileTicket() {
 	        if ($("#newticket-subject").val().length == 0) { alert("Ticket Subject needs to be entered"); return; }
@@ -312,45 +308,27 @@
 			});
 			return false;
 		}
-
-		function loadTicket() {
-		    $(".ticket").remove();
-		    $("#tabs a.selected").removeClass("selected")
-			if (curticket != null) {
-			    $("#HDmain > div").hide();
-			    $("#ticket_" + curticket).addClass("selected");
-			    var stringticket = curticket.match(/\//gi) ? curticket.split(/\//g)[1] : curticket;
-			    $('<div id="ticket-' + curticket.replace(/\//gi, "_") + '" class="ticket">Loading Ticket ' + stringticket + '...</div>').appendTo("#HDmain");
-				$.ajax({
-					type: 'GET',
-					url: hap.common.formatJSONUrl("~/api/HelpDesk/" + (curticket.match(/\//gi) ? 'A' : '') + "Ticket/" + curticket),
-					dataType: 'json',
-					contentType: 'application/json',
-					success: function (data) {
-						$(".ui-tabs-selected a span").html("Ticket: " + data.Subject);
-						var h = (curticket.match(/\//gi) ? '' : ('<div id="HDtop"><button style="float: right;" onclick="return updateTicket();">Update</button>' + (hap.hdadmin ? '<button style="float: right;" onclick="return assignTicket();">Assign</button>' : ''))) + '<div id="HDsubject"><label>Ticket ' + (curticket.match(/\//gi) ? curticket.split(/\//g)[1] : curticket) + ': </label><span id="sub">' + data.Subject + '</span></div><div><label>Opened By: </label>' + data.DisplayName + ' (' + data.Username + ')</div><div><label>Opened on: </label>' + data.Date + '</div><div><label>Priority: </label>' + data.Priority + '</div><div><label>Status: </label>' + data.Status + '</div>' + (data.AssignedTo == "" ? "" : '<div><label>Assigned To:</label>' + data.AssignedTo + '</div>') + '</div><div class="notes">';
-						for (var i = 0; i < data.Notes.length; i++)
-							h += data.Notes[i].DisplayName + ' ' + data.Notes[i].Date + '<br /><pre>' + unescape(data.Notes[i].NoteText).replace(/\+/g, ' ') + '</pre>';
-						h += '</div>';
-						$("#ticket-" + curticket.replace(/\//gi, "_")).html(h);
-						$("button").button();
-                    },  error: hap.common.jsonError
-				});
-			}
-		}
 		$(window).hashchange(function () {
 			if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curticket = window.location.href.split('#')[1].substr(7);
 			else curticket = null;
 			loadTicket();
 		});
 		$(function () {
+		    $("#HDtop div span").click(function () {
+		        var next = $(this).next();
+		        if (!hap.hdadmin && $(this).parent().hasClass("hdadmin") || $("#currentticket").hasClass("nocontrol")) return;
+		        if (next.is("input") || next.is("select")) next.val($(this).hide().text()).show().focus();
+		    }).next("input[type=text],select").hide().focusout(function () {
+		        $(this).prev().show().text($(this).hide().val());
+		    });
+		    if (!hap.hdadmin) $("#HDtop .hdadmin").hide();
 		    $("#updateticket, #assignticket").dialog({ autoOpen: false });
 		    $("#tabs > div, #HDmain > div").hide();
 		    $("#toolbar a").click(function () {
-		        $("#toolbar a").removeClass("active");
-		        $("#tabs > div, #HDmain > div").hide();
+		        if ($(this).index() < 5) $("#updateticket, #assignticket").dialog("close");
+		        if ($(this).index() > 3) { $("#HDmain > div").hide(); window.location.href = "#"; $("#newticket-link, #stats-link").removeClass("active"); $("#tabs").addClass("ticketactive"); }
+		        else { $("#tabs > div, #newticket, #stats").hide(); $("#toolbar a").removeClass("active"); }
 		        $($(this).addClass("active").attr("href")).show();
-		        if ($(this).index() < 5) { window.location.href = "#"; $("#updateticket, #assignticket").dialog("close"); }
 		        return false;
 		    });
 			$("button, .button, input[type=submit]").button();
@@ -360,6 +338,11 @@
 			loadTicket();
 			Update();
 		});
+		function isRead(o) {
+		    for (var i = 0; i < o.split(/,/g).length; i++)
+		        if ($.trim(o.split(/,/g)[i].toLowerCase()) == hap.user.toLowerCase()) return true;
+		    return false;
+		}
 		function Update() {
 		    $.ajax({
 		        type: 'GET',
@@ -368,9 +351,10 @@
 				contentType: 'application/json',
 				success: function (data) {
 				    var x = "";
-				    for (var i = 0; i < data.length; i++) x += '<div><a href="#ticket-' + data[i].Id + '" class="' + data[i].Priority.replace(/ /g, "-") + '" id="ticket_' + data[i].Id + '">' + data[i].Subject + ' <span>' + data[i].Id + ' - ' + data[i].Username + (data[i].AssignedTo == '' ? '' : (' -> ' + data[i].AssignedTo)) + ' - ' + data[i].Date + '</span></a></div>';
+				    for (var i = 0; i < data.length; i++) x += '<div><a href="#ticket-' + data[i].Id + '" class="' + data[i].Priority.replace(/ /g, "-") + ' ' + (isRead(data[i].ReadBy) ? '' : 'unread') + '" id="ticket_' + data[i].Id + '">' + data[i].Subject + ' <span>' + data[i].Id + ' - ' + data[i].Username + (data[i].AssignedTo == '' ? '' : (' -> ' + data[i].AssignedTo)) + ' - ' + data[i].Date + '</span></a></div>';
 				    if (data.length == 0) x = "No Tickets";
 				    $("#opentickets").html(x);
+				    $("#ticket_" + curticket).addClass("selected").removeClass("unread");
 				}, error: hap.common.jsonError
 			});
             $.ajax({
@@ -380,9 +364,10 @@
 				contentType: 'application/json',
 				success: function (data) {
 				    var x = "";
-				    for (var i = 0; i < data.length; i++) x += '<div><a href="#ticket-' + data[i].Id + '" class="' + data[i].Priority.replace(/ /g, "-") + '" id="ticket_' + data[i].Id + '">' + data[i].Subject + ' <span>' + data[i].Id + ' - ' + data[i].Username + (data[i].AssignedTo == '' ? '' : (' -> ' + data[i].AssignedTo)) + ' - ' + data[i].Date + '</span></a></div>';
+				    for (var i = 0; i < data.length; i++) x += '<div><a href="#ticket-' + data[i].Id + '" class="' + data[i].Priority.replace(/ /g, "-") + ' ' + (isRead(data[i].ReadBy) ? '' : 'unread') + '" id="ticket_' + data[i].Id + '">' + data[i].Subject + ' <span>' + data[i].Id + ' - ' + data[i].Username + (data[i].AssignedTo == '' ? '' : (' -> ' + data[i].AssignedTo)) + ' - ' + data[i].Date + '</span></a></div>';
 				    if (data.length == 0) x = "No Tickets";
 				    $("#closedtickets").html(x);
+				    $("#ticket_" + curticket).addClass("selected").removeClass("unread");
 				}, error: hap.common.jsonError
 			});
             $.ajax({
@@ -393,10 +378,11 @@
                 success: function (data) {
                     var x = "";
                     for (var i = 0; i < data.length; i++) {
-                        x += '<div><a href="#ticket-' + data[i].Id + '" class="' + data[i].Priority.replace(/ /g, "-") + '" id="ticket_' + data[i].Id + '">' + data[i].Subject + '</a></div>'
+                        x += '<div><a href="#ticket-' + data[i].Id + '" class="' + data[i].Priority.replace(/ /g, "-") + ' ' + (isRead(data[i].ReadBy) ? '' : 'unread') + '" id="ticket_' + data[i].Id + '">' + data[i].Subject + '</a></div>'
                     }
                     if (data.length == 0) x = "No FAQs";
                     $("#faqs").html(x);
+                    $("#ticket_" + curticket).addClass("selected").removeClass("unread");
                 }, error: hap.common.jsonError
             });
             if (hap.hdadmin) {
