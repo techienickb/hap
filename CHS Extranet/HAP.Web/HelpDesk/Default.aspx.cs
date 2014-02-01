@@ -47,12 +47,11 @@ namespace HAP.Web.HelpDesk
                 { 
                     users.Add(s.Trim().ToLower()); 
                 }
-            adminbookingpanel.Visible = adminupdatepanel.Visible = archiveadmin.Visible = isHDAdmin;
             foreach (FileInfo f in new DirectoryInfo(Server.MapPath("~/app_data/")).GetFiles("Tickets_*.xml", SearchOption.TopDirectoryOnly))
                 archiveddates.Items.Add(new ListItem(f.Name.Remove(f.Name.LastIndexOf('.')).Remove(0, 8).Replace("_", " to "), f.Name.Remove(f.Name.LastIndexOf('.')).Remove(0, 7)));
             hasArch = archiveddates.Items.Count > 0;
             if (hasArch) archiveddates.Items.Insert(0, new ListItem("--- Select ---", ""));
-            if (adminupdatepanel.Visible)
+            if (isHDAdmin)
             {
                 userlist.Items.Clear();
                 userlist2.Items.Clear();

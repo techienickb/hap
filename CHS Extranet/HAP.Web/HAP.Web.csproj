@@ -668,7 +668,6 @@
     <Content Include="style\bookingpopup.css" />
     <Content Include="style\editor.css" />
     <Content Include="style\fullcalendar.print.css" />
-    <Content Include="style\helpdesk2.css" />
     <Content Include="style\jquery.dataTables.css" />
     <Content Include="style\jquery.jqplot.css" />
     <Content Include="style\jquery.mobile-1.0.css" />

@@ -22,24 +22,6 @@ namespace HAP.Web.HelpDesk {
         protected global::System.Web.UI.WebControls.LinkButton migrate;
         
         /// <summary>
-        /// userlist2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList userlist2;
-        
-        /// <summary>
-        /// adminupdatepanel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder adminupdatepanel;
-        
-        /// <summary>
         /// archiveddates control.
         /// </summary>
         /// <remarks>
@@ -83,6 +65,15 @@ namespace HAP.Web.HelpDesk {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton archivetickets;
+        
+        /// <summary>
+        /// userlist2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList userlist2;
         
         /// <summary>
         /// adminbookingpanel control.

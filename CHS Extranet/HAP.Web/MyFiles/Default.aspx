@@ -642,7 +642,7 @@
 						if (event.target.files != null || event.dataTransfer != null) {
 							event.preventDefault();
 							subdrop = true;
-							$("#uploadprogress").slideDown('slow');
+							$("#uploadprogress").show().slideDown('slow');
 							var item = null;
 							for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
 							for (var i = 0; i < (event.target.files || event.dataTransfer.files).length; i++) {
@@ -968,7 +968,7 @@
 							if (event.target.files != null || event.dataTransfer != null) {
 								event.preventDefault();
 								if (subdrop) { subdrop = false; return; }
-								$("#uploadprogress").slideDown('slow');
+								$("#uploadprogress").show().slideDown('slow');
 								for (var i = 0; i < (event.target.files || event.dataTransfer.files).length; i++) {
 									var file = new Upload((event.target.files || event.dataTransfer.files)[i], (curpath.length == 2 ? curitem.Location.substr(0, curitem.Location.length -1 ) : curitem.Location).replace(/:/g, ""));
 									uploads.push(file);
@@ -1077,7 +1077,7 @@
 								$(nodeSpan).children("a")[0].ondrop = function (event) {
 									if (event.target.files != null || event.dataTransfer != null) {
 										event.preventDefault();
-										$("#uploadprogress").slideDown('slow');
+										$("#uploadprogress").show().slideDown('slow');
 										var files;
 										if (event.target.files != null) files = event.target.files;
 										else if (event.dataTransfer != null && event.dataTransfer.files != null) files = event.dataTransfer.files;
@@ -1338,7 +1338,7 @@
 					$("#uploaders iframe").remove();
 					$("#uploaders").dialog({ autoOpen: true, resizable: false, modal: true, buttons: { 
 						"Upload": function() { 
-							$("#uploadprogress").slideDown('slow');
+							$("#uploadprogress").show().slideDown('slow');
 							for (var i = 0; i < $("#uploadedfiles")[0].files.length; i++) {
 								var file = new Upload(($("#uploadedfiles")[0].files)[i], (curpath.length == 2 ? curitem.Location.substr(0, curitem.Location.length -1 ) : curitem.Location).replace(/:/g, ""));
 								uploads.push(file);

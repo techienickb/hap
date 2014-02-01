@@ -311,9 +311,15 @@ namespace HAP.Web.Configuration
                 }
                 doc2.Save(HttpContext.Current.Server.MapPath("~/app_data/staticbookings.xml"));
             }
-            if (version.CompareTo(Version.Parse("10.0.0121.0")) < 0) //Perform v10 upgrade
+            if (version.CompareTo(Version.Parse("10.0.0201.2100")) < 0) //Perform v10 upgrade
             {
-                ((XmlElement)doc.SelectSingleNode("/hapConfig/HelpDesk")).SetAttribute("provider", "xml");
+                XmlElement hd = doc.SelectSingleNode("/hapConfig/HelpDesk") as XmlElement;
+                hd.SetAttribute("provider", "xml");
+                hd.SetAttribute("priorities", "Low, Normal, High");
+                hd.SetAttribute("openstates", "New, With IT, Investigating, User Attention Needed, With 1st Line Support, With 2nd Line Support, With 3rd Line Support, Item Ordered, Waiting");
+                hd.SetAttribute("closedstates", "Resolved, Fixed, Timed Out, No Action Needed");
+                hd.SetAttribute("useropenstates", "New, Updated");
+                hd.SetAttribute("userclosedstates", "Fixed, No Action Needed, Self Fixed");
             }
             doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             doc.Save(ConfigPath);

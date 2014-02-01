@@ -14,6 +14,7 @@ using System.Net.Mail;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
+using System.Threading;
 
 namespace HAP.HelpDesk
 {
@@ -31,13 +32,15 @@ namespace HAP.HelpDesk
 
         [OperationContract]
         [WebInvoke(Method = "PUT", UriTemplate = "/Ticket/{Id}", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public FullTicket UpdateTicket(string Id, string Note)
+        public FullTicket UpdateTicket(string Id, string Note, string State, string Priority, string ShowTo, string FAQ, string Subject, string AssignTo)
         {
             HAP.Data.SQL.WebEvents.Log(DateTime.Now, "HelpDesk.Update", HttpContext.Current.User.Identity.Name, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Updating Ticket " + Id);
             XmlDocument doc = new XmlDocument();
             doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
-            XmlNode ticket = doc.SelectSingleNode("/Tickets/Ticket[@id='" + Id + "']");
-            ticket.Attributes["status"].Value = "New";
+            XmlElement ticket = doc.SelectSingleNode("/Tickets/Ticket[@id='" + Id + "']") as XmlElement;
+            ticket.SetAttribute("status", "New");
+            if (!string.IsNullOrEmpty(State)) ticket.Attributes["status"].Value = State;
+            ticket.SetAttribute("readby", HttpContext.Current.User.Identity.Name);
             XmlElement node = doc.CreateElement("Note");
             node.SetAttribute("datetime", DateTime.Now.ToString("u"));
             node.SetAttribute("username", HttpContext.Current.User.Identity.Name);
@@ -109,6 +112,8 @@ namespace HAP.HelpDesk
             if (ticket.Attributes["faq"] == null) ticket.Attributes.Append(doc.CreateAttribute("faq"));
             ticket.Attributes["faq"].Value = string.IsNullOrWhiteSpace(FAQ) ? "false" : FAQ;
 
+            ((XmlElement)ticket).SetAttribute("readby", HttpContext.Current.User.Identity.Name);
+
             XmlWriterSettings set = new XmlWriterSettings();
             set.Indent = true;
             set.IndentChars = "   ";
@@ -131,7 +136,7 @@ namespace HAP.HelpDesk
             if (hapConfig.Current.SMTP.Enabled && user.Email != null && !string.IsNullOrEmpty(user.Email))
             {
                 MailMessage mes = new MailMessage();
-                mes.Subject = Localizable.Localize("helpdesk/tickedhasbeen").Replace("#", "#" + Id).Replace("%", State == "Fixed" ? Localizable.Localize("helpdesk/closed") : Localizable.Localize("helpdesk/updated"));
+                mes.Subject = Localizable.Localize("helpdesk/tickedhasbeen").Replace("#", "#" + Id).Replace("%", !isOpen(State) ? Localizable.Localize("helpdesk/closed") : Localizable.Localize("helpdesk/updated"));
                 mes.From = mes.Sender = new MailAddress(currentuser.Email, currentuser.DisplayName);
                 mes.ReplyToList.Add(mes.From);
 
@@ -143,9 +148,9 @@ namespace HAP.HelpDesk
                 StreamReader fs = template.OpenText();
 
                 mes.Body = fs.ReadToEnd().Replace("{0}", Id).Replace("{1}",
-                    (State == "Fixed" ? Localizable.Localize("helpdesk/closed") : Localizable.Localize("helpdesk/updated"))).Replace("{2}",
+                    (!isOpen(State) ? Localizable.Localize("helpdesk/closed") : Localizable.Localize("helpdesk/updated"))).Replace("{2}",
                     emailnote).Replace("{3}",
-                    (State == "Fixed" ? Localizable.Localize("helpdesk/reopen") : Localizable.Localize("helpdesk/update"))).Replace("{4}",
+                    (!isOpen(State) ? Localizable.Localize("helpdesk/reopen") : Localizable.Localize("helpdesk/update"))).Replace("{4}",
                     HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath).Replace("{5}", HttpContext.Current.User.Identity.Name).Replace("{6}", user.DisplayName).Replace("{7}", currentuser.DisplayName).Replace("{8}", ft.Subject);
                 ServicePointManager.ServerCertificateValidationCallback = delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
                 SmtpClient smtp = new SmtpClient(hapConfig.Current.SMTP.Server, hapConfig.Current.SMTP.Port);
@@ -172,9 +177,9 @@ namespace HAP.HelpDesk
                     StreamReader fs = template.OpenText();
 
                     mes.Body = fs.ReadToEnd().Replace("{0}", Id).Replace("{1}",
-                        (State == "Fixed" ? Localizable.Localize("helpdesk/closed") : Localizable.Localize("helpdesk/updated"))).Replace("{2}",
+                        (!isOpen(State) ? Localizable.Localize("helpdesk/closed") : Localizable.Localize("helpdesk/updated"))).Replace("{2}",
                         emailnote).Replace("{3}",
-                        (State == "Fixed" ? Localizable.Localize("helpdesk/reopen") : Localizable.Localize("helpdesk/update"))).Replace("{4}",
+                        (!isOpen(State) ? Localizable.Localize("helpdesk/reopen") : Localizable.Localize("helpdesk/update"))).Replace("{4}",
                         HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath).Replace("{8}", ft.Subject);
                     ServicePointManager.ServerCertificateValidationCallback = delegate(object s1, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
                     SmtpClient smtp = new SmtpClient(hapConfig.Current.SMTP.Server, hapConfig.Current.SMTP.Port);
@@ -199,7 +204,7 @@ namespace HAP.HelpDesk
                 StreamReader fs = template.OpenText();
 
                 mes.Body = fs.ReadToEnd().Replace("{0}", Id).Replace("{3}",
-                    (State == "Fixed" ? Localizable.Localize("helpdesk/reopen") : Localizable.Localize("helpdesk/update"))).Replace("{4}",
+                    (!isOpen(State) ? Localizable.Localize("helpdesk/reopen") : Localizable.Localize("helpdesk/update"))).Replace("{4}",
                     HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath).Replace("{8}", ft.Subject);
                 ServicePointManager.ServerCertificateValidationCallback = delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
                 SmtpClient smtp = new SmtpClient(hapConfig.Current.SMTP.Server, hapConfig.Current.SMTP.Port);
@@ -230,6 +235,7 @@ namespace HAP.HelpDesk
             ticket.SetAttribute("subject", HttpUtility.UrlDecode(Subject, System.Text.Encoding.Default));
             ticket.SetAttribute("priority", "Normal");
             ticket.SetAttribute("status", "New");
+            ticket.SetAttribute("readby", HttpContext.Current.User.Identity.Name);
             XmlElement node = doc.CreateElement("Note");
             node.SetAttribute("datetime", DateTime.Now.ToUniversalTime().ToString("u"));
             node.SetAttribute("username", HttpContext.Current.User.Identity.Name);
@@ -296,6 +302,7 @@ namespace HAP.HelpDesk
             ticket.SetAttribute("subject", HttpUtility.UrlDecode(Subject, System.Text.Encoding.Default));
             ticket.SetAttribute("priority", Priority == "" ? "Normal": Priority);
             ticket.SetAttribute("status", "New");
+            ticket.SetAttribute("readby", HttpContext.Current.User.Identity.Name);
             XmlElement node = doc.CreateElement("Note");
             node.SetAttribute("datetime", DateTime.Now.ToUniversalTime().ToString("u"));
             node.SetAttribute("username", User);
@@ -378,6 +385,15 @@ namespace HAP.HelpDesk
             return AllTickets("", State);
         }
 
+        public bool isOpen(string state)
+        {
+            foreach (string s in hapConfig.Current.HelpDesk.UserOpenStates.Split(new char[] { ',' }))
+                if (state == s.Trim()) return true;
+            foreach (string s in hapConfig.Current.HelpDesk.OpenStates.Split(new char[] { ',' }))
+                if (state == s.Trim()) return true;
+            return false;
+        }
+
         [OperationContract]
         [WebGet(UriTemplate = "ATickets/{Archive}/{State}", ResponseFormat = WebMessageFormat.Json)]
         public Ticket[] AllTickets(string Archive, string State)
@@ -386,8 +402,24 @@ namespace HAP.HelpDesk
             doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets" + Archive + ".xml"));
             List<Ticket> tickets = new List<Ticket>();
             string xpath = string.Format("/Tickets/Ticket[@status{0}]", State == "Open" ? "!='Fixed'" : "='Fixed'");
-            foreach (XmlNode node in doc.SelectNodes(xpath))
-                tickets.Add(new Ticket(node));
+            foreach (XmlNode node in doc.SelectNodes(xpath)) {
+                Ticket t = new Ticket(node);
+                bool add = false;
+                if (State == "Open") {
+                    foreach (string s in hapConfig.Current.HelpDesk.UserOpenStates.Split(new char[] { ',' }))
+                        if (t.Status == s.Trim()) { add = true; break; }
+                    if (!add) foreach (string s in hapConfig.Current.HelpDesk.OpenStates.Split(new char[] {','}))
+                        if (t.Status == s.Trim()) { add = true; break; }
+                }
+                else
+                {
+                    foreach (string s in hapConfig.Current.HelpDesk.UserClosedStates.Split(new char[] { ',' }))
+                        if (t.Status == s.Trim()) { add = true; break; }
+                    if (!add) foreach (string s in hapConfig.Current.HelpDesk.ClosedStates.Split(new char[] { ',' }))
+                            if (t.Status == s.Trim()) { add = true; break; }
+                }
+                if (add) tickets.Add(t);
+            }
             return tickets.ToArray();
         }
 
@@ -402,14 +434,8 @@ namespace HAP.HelpDesk
         [WebGet(UriTemplate = "ATickets/{Archive}/{State}/{Username}", ResponseFormat = WebMessageFormat.Json)]
         public Ticket[] Tickets(string Archive, string State, string Username)
         {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets" + Archive + ".xml"));
             List<Ticket> tickets = new List<Ticket>();
-            string xpath = string.Format("/Tickets/Ticket[@status{0}]", State == "Open" ? "!='Fixed'" : "='Fixed'");
-
-            foreach (XmlNode node in doc.SelectNodes(xpath))
-                if (node.SelectNodes("Note")[0].Attributes["username"].Value.ToLower() == Username.ToLower() || (node.Attributes["assignedto"] != null && contains(node.Attributes["assignedto"].Value, Username)) || (node.Attributes["showto"] != null && contains(node.Attributes["showto"].Value, Username)))
-                    tickets.Add(new Ticket(node));
+            tickets.AddRange(AllTickets(Archive, State).Where(t => t.Username.ToLower() == Username.ToLower() || t.AssignedTo.ToLower().Contains(Username.ToLower()) || t.ShowTo.ToLower().Contains(Username.ToLower())));
             if (State != "Open") tickets.Reverse();
             return tickets.ToArray();
         }
@@ -427,7 +453,28 @@ namespace HAP.HelpDesk
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets" + Archive + ".xml"));
-            return new FullTicket(doc.SelectSingleNode("/Tickets/Ticket[@id='" + TicketId + "']"));
+            XmlElement ticket = doc.SelectSingleNode("/Tickets/Ticket[@id='" + TicketId + "']") as XmlElement;
+            FullTicket ft = new FullTicket(ticket);
+            bool needed = true;
+            if (ticket.HasAttribute("readby"))
+            {
+                string[] s = ticket.GetAttribute("readby").Split(new char[] { ',' });
+                foreach (string a in s)
+                    if (a.Trim().ToLower() == HttpContext.Current.User.Identity.Name.ToLower()) needed = false;
+                if (needed)
+                {
+                    List<string> s1 = new List<string>();
+                    s1.AddRange(s);
+                    s1.Add(HttpContext.Current.User.Identity.Name);
+                    ticket.SetAttribute("readby", string.Join(", ", s1.ToArray()));
+                }
+            }
+            else
+            {
+                ticket.SetAttribute("readby", HttpContext.Current.User.Identity.Name);
+            }
+            if (needed) doc.Save(HttpContext.Current.Server.MapPath("~/App_Data/Tickets" + Archive + ".xml"));
+            return ft;
         }
 
         [OperationContract]
@@ -475,11 +522,11 @@ namespace HAP.HelpDesk
                     else highusers.Add(tick.Username, 1);
                     s.NewTickets++;
                 }
-                if (DateTime.Parse(tick.Notes[tick.Notes.Count - 1].Date).Date >= DateTime.Now.AddDays(p).Date && DateTime.Parse(tick.Notes[tick.Notes.Count - 1].Date).Date <= DateTime.Now.Date && tick.Status == "Fixed")
+                if (DateTime.Parse(tick.Notes[tick.Notes.Count - 1].Date).Date >= DateTime.Now.AddDays(p).Date && DateTime.Parse(tick.Notes[tick.Notes.Count - 1].Date).Date <= DateTime.Now.Date && !isOpen(tick.Status))
                 {
                     s.ClosedTickets++;
                 }
-                if (tick.Status != "Fixed") s.OpenTickets++;
+                if (isOpen(tick.Status)) s.OpenTickets++;
             }
             if (highusers.Keys.Count > 0)
             {
