@@ -241,9 +241,9 @@
 		}
 	    function updateTicket() {
 	        $("#curtick-loading").show();
-	        var s = $("#ticket-StatusI").val();
+	        var s = $("#ticket-Status").text();
 	        if (s == "User Attention Needed" && !hap.hdadmin) s = "Investigating";
-	        var data = '{ "Note": "' + escape($("#ticket-note").val()) + '", "State": "' + s + '", "Priority": "' + $("#ticket-PriorityI").val() + '", "ShowTo": "' + $("#ticket-ShowToI").val() + '", "FAQ": "false", "AssignTo": "", "Subject": "' + $("#ticket-SubjectI").val() + '"' + (hap.hdadmin ? (', "HideNote": ' + $("#ticket-hidenote").is(":checked")) : '') + ' }';
+	        var data = '{ "Note": "' + escape($("#ticket-note").val()) + '", "State": "' + s + '", "Priority": "' + $("#ticket-Priority").text() + '", "ShowTo": "' + $("#ticket-ShowToI").text() + '", "FAQ": "false", "AssignTo": "'  + $("#<%=userlist2.ClientID%>").val() + '", "Subject": "' + $("#ticket-Subject").text() + '"' + (hap.hdadmin ? (', "HideNote": ' + $("#ticket-hidenote").is(":checked")) : '') + ' }';
 		    var url = (hap.hdadmin) ? hap.common.formatJSONUrl("~/api/HelpDesk/AdminTicket/" + curticket) : hap.common.formatJSONUrl("~/api/HelpDesk/Ticket/" + curticket);
 			$.ajax({
 				type: 'PUT',
@@ -262,8 +262,8 @@
 
 	    function setFAQ() {
 	        $("#curtick-loading").show();
-	        var s = $("#ticket-StatusI").val();
-	        var data = '{ "Note": "' + escape($("#ticket-note").val()) + '", "State": "' + + '", "Priority": "' + $("#ticket-PriorityI").val() + '", "ShowTo": "' + $("#ticket-ShowToI").val() + '", "FAQ": "true", "AssignTo": "", "Subject": "' + $("#ticket-SubjectI").val() + '" }';
+	        var s = $("#ticket-Status").text();
+	        var data = '{ "Note": "' + escape($("#ticket-note").val()) + '", "State": "' + + '", "Priority": "' + $("#ticket-Priority").text() + '", "ShowTo": "' + $("#ticket-ShowToI").val() + '", "FAQ": "true", "AssignTo": "", "Subject": "' + $("#ticket-Subject").text() + '" }';
 	        var url = (hap.hdadmin) ? hap.common.formatJSONUrl("~/api/HelpDesk/Ticket/" + curticket) : hap.common.formatJSONUrl("~/api/HelpDesk/AdminTicket/" + curticket);
 	        $.ajax({
 	            type: 'PUT',
