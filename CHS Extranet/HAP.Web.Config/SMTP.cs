@@ -17,6 +17,8 @@ namespace HAP.Web.Configuration
         {
             this.doc = doc;
             if (doc.SelectSingleNode("/hapConfig/SMTP") == null) Initialize();
+            if (doc.SelectSingleNode("/hapConfig").Attributes["salt"] != null) _salt = Encoding.ASCII.GetBytes(doc.SelectSingleNode("/hapConfig").Attributes["salt"].Value);
+            if (doc.SelectSingleNode("/hapConfig").Attributes["key"] != null) _key = doc.SelectSingleNode("/hapConfig").Attributes["key"].Value;
             this.el = (XmlElement)doc.SelectSingleNode("/hapConfig/SMTP");
         }
         public void Initialize()

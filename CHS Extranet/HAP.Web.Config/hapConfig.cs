@@ -62,6 +62,8 @@ namespace HAP.Web.Configuration
             get { return doc.SelectSingleNode("/hapConfig").Attributes["local"].Value; }
             set { doc.SelectSingleNode("/hapConfig").Attributes["local"].Value = value.ToString(); }
         }
+        public string Salt { get { return ((XmlElement)doc.SelectSingleNode("/hapConfig")).HasAttribute("salt") ? doc.SelectSingleNode("/hapConfig").Attributes["salt"].Value : ""; } }
+        public string Key { get { return ((XmlElement)doc.SelectSingleNode("/hapConfig")).HasAttribute("key") ? doc.SelectSingleNode("/hapConfig").Attributes["key"].Value : ""; } }
 
         public AD AD { get; private set; }
         public Homepage Homepage { get; private set; }
