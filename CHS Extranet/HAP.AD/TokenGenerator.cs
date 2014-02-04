@@ -5,6 +5,7 @@ using System.Text;
 using System.Security.Cryptography;
 using System.IO;
 using System.Web;
+using HAP.Web.Configuration;
 
 namespace HAP.AD
 {
@@ -15,6 +16,8 @@ namespace HAP.AD
 
         public static string ConvertToPlain(string token)
         {
+            if (!string.IsNullOrEmpty(hapConfig.Current.Key)) _key = hapConfig.Current.Key;
+            if (!string.IsNullOrEmpty(hapConfig.Current.Salt)) _salt = Encoding.ASCII.GetBytes(hapConfig.Current.Salt);
             RijndaelManaged aesAlg = null;
             string plaintext = null;
 
@@ -45,6 +48,8 @@ namespace HAP.AD
 
         public static string ConvertToToken(string value)
         {
+            if (!string.IsNullOrEmpty(hapConfig.Current.Key)) _key = hapConfig.Current.Key;
+            if (!string.IsNullOrEmpty(hapConfig.Current.Salt)) _salt = Encoding.ASCII.GetBytes(hapConfig.Current.Salt);
             string outStr = "";
             RijndaelManaged aesAlg = null;
             try

@@ -95,6 +95,9 @@ namespace HAP.HelpDesk
             XmlDocument doc = new XmlDocument();
             doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
             XmlNode ticket = doc.SelectSingleNode("/Tickets/Ticket[@id='" + Id + "']");
+
+            if (ticket.Attributes["assignedto"] != null && ticket.Attributes["assignedto"].Value.ToLower() == AssignTo.ToLower()) AssignTo = "";
+
             if (!string.IsNullOrEmpty(Subject)) ticket.Attributes["subject"].Value = Subject;
             XmlElement node = doc.CreateElement("Note");
             node.SetAttribute("datetime", DateTime.Now.ToString("u"));
@@ -148,11 +151,7 @@ namespace HAP.HelpDesk
                 FileInfo template = new FileInfo(HttpContext.Current.Server.MapPath("~/HelpDesk/newadminnote.htm"));
                 StreamReader fs = template.OpenText();
 
-                mes.Body = fs.ReadToEnd().Replace("{0}", Id).Replace("{1}",
-                    (!isOpen(State) ? Localizable.Localize("helpdesk/closed") : Localizable.Localize("helpdesk/updated"))).Replace("{2}",
-                    emailnote).Replace("{3}",
-                    (!isOpen(State) ? Localizable.Localize("helpdesk/reopen") : Localizable.Localize("helpdesk/update"))).Replace("{4}",
-                    HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath).Replace("{5}", HttpContext.Current.User.Identity.Name).Replace("{6}", user.DisplayName).Replace("{7}", currentuser.DisplayName).Replace("{8}", ft.Subject);
+                mes.Body = fs.ReadToEnd().Replace("{0}", Id).Replace("{1}", (!isOpen(State) ? Localizable.Localize("helpdesk/closed") : Localizable.Localize("helpdesk/updated"))).Replace("{2}", emailnote).Replace("{3}", (!isOpen(State) ? Localizable.Localize("helpdesk/reopen") : Localizable.Localize("helpdesk/update"))).Replace("{4}", HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath).Replace("{5}", currentuser.UserName).Replace("{6}", AssignTo == "" ? "" : ADUtils.FindUserInfos(AssignTo)[0].DisplayName).Replace("{7}", currentuser.DisplayName).Replace("{8}", ft.Subject);
                 ServicePointManager.ServerCertificateValidationCallback = delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
                 SmtpClient smtp = new SmtpClient(hapConfig.Current.SMTP.Server, hapConfig.Current.SMTP.Port);
                 if (!string.IsNullOrEmpty(hapConfig.Current.SMTP.User))
@@ -177,11 +176,7 @@ namespace HAP.HelpDesk
                     FileInfo template = new FileInfo(HttpContext.Current.Server.MapPath("~/HelpDesk/newadminnote.htm"));
                     StreamReader fs = template.OpenText();
 
-                    mes.Body = fs.ReadToEnd().Replace("{0}", Id).Replace("{1}",
-                        (!isOpen(State) ? Localizable.Localize("helpdesk/closed") : Localizable.Localize("helpdesk/updated"))).Replace("{2}",
-                        emailnote).Replace("{3}",
-                        (!isOpen(State) ? Localizable.Localize("helpdesk/reopen") : Localizable.Localize("helpdesk/update"))).Replace("{4}",
-                        HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath).Replace("{8}", ft.Subject);
+                    mes.Body = fs.ReadToEnd().Replace("{0}", Id).Replace("{1}", (!isOpen(State) ? Localizable.Localize("helpdesk/closed") : Localizable.Localize("helpdesk/updated"))).Replace("{2}", emailnote).Replace("{3}", (!isOpen(State) ? Localizable.Localize("helpdesk/reopen") : Localizable.Localize("helpdesk/update"))).Replace("{4}", HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath).Replace("{5}", currentuser.UserName).Replace("{6}", AssignTo == "" ? "" : ADUtils.FindUserInfos(AssignTo)[0].DisplayName).Replace("{7}", currentuser.DisplayName).Replace("{8}", ft.Subject);
                     ServicePointManager.ServerCertificateValidationCallback = delegate(object s1, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
                     SmtpClient smtp = new SmtpClient(hapConfig.Current.SMTP.Server, hapConfig.Current.SMTP.Port);
                     if (!string.IsNullOrEmpty(hapConfig.Current.SMTP.User))
@@ -204,9 +199,7 @@ namespace HAP.HelpDesk
                 FileInfo template = new FileInfo(HttpContext.Current.Server.MapPath("~/HelpDesk/newassignticket.htm"));
                 StreamReader fs = template.OpenText();
 
-                mes.Body = fs.ReadToEnd().Replace("{0}", Id).Replace("{3}",
-                    (!isOpen(State) ? Localizable.Localize("helpdesk/reopen") : Localizable.Localize("helpdesk/update"))).Replace("{4}",
-                    HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath).Replace("{8}", ft.Subject);
+                mes.Body = fs.ReadToEnd().Replace("{0}", Id).Replace("{1}", (!isOpen(State) ? Localizable.Localize("helpdesk/closed") : Localizable.Localize("helpdesk/updated"))).Replace("{2}", emailnote).Replace("{3}", (!isOpen(State) ? Localizable.Localize("helpdesk/reopen") : Localizable.Localize("helpdesk/update"))).Replace("{4}", HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath).Replace("{5}", currentuser.UserName).Replace("{6}", AssignTo == "" ? "" : ADUtils.FindUserInfos(AssignTo)[0].DisplayName).Replace("{7}", currentuser.DisplayName).Replace("{8}", ft.Subject);
                 ServicePointManager.ServerCertificateValidationCallback = delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
                 SmtpClient smtp = new SmtpClient(hapConfig.Current.SMTP.Server, hapConfig.Current.SMTP.Port);
                 if (!string.IsNullOrEmpty(hapConfig.Current.SMTP.User))
