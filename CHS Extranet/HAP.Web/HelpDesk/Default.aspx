@@ -204,7 +204,7 @@
 		function renderTicket(data) {
 		    if (data.FAQ) { $("#HDcontrols, #HDlowercontrols").hide(); $("#currentticket").addClass("nocontrol"); }
 		    $("#ticket-note, #ticket-AwareI").val("");
-		    $("#ticket-hidenote").prop("checked", false);
+		    $("#ticket-hidenote").prop("checked", false).prev().removeClass("on");
 		    $(".ui-tabs-selected a span").html("Ticket: " + data.Subject);
 		    $("#ticket-Subject").html(data.Subject).prev().html("Ticket " + (curticket.match(/\//gi) ? curticket.split(/\//g)[1] : curticket) + ": ");
 		    $("#ticket-Username").html(data.Username);
@@ -322,7 +322,7 @@
 		    }).next("input[type=text],select").hide().focusout(function () {
 		        $(this).prev().show().text($(this).hide().val());
 		    });
-		    if (!hap.hdadmin) $("#HDtop .hdadmin").hide();
+		    if (!hap.hdadmin) { $("#HDtop .hdadmin, #ticket-hidenote").hide(); if ($("#ticket-hidenote").prev().is(".hapswitch")) $("#ticket-hidenote").prev().hide(); }
 		    $("#updateticket, #assignticket").dialog({ autoOpen: false });
 		    $("#tabs > div, #HDmain > div").hide();
 		    $("#toolbar a").click(function () {
