@@ -159,7 +159,7 @@ namespace HAP.HelpDesk
                 smtp.EnableSsl = hapConfig.Current.SMTP.SSL;
                 smtp.Send(mes);
             }
-            if (hapConfig.Current.SMTP.Enabled && !string.IsNullOrWhiteSpace(ShowTo))
+            if (hapConfig.Current.SMTP.Enabled && !string.IsNullOrWhiteSpace(ShowTo) && !HideNote)
                 foreach (string s in ShowTo.Split(new char[] { ',' }))
                 {
 
@@ -184,7 +184,7 @@ namespace HAP.HelpDesk
                     smtp.EnableSsl = hapConfig.Current.SMTP.SSL;
                     smtp.Send(mes);
                 }
-            if (hapConfig.Current.SMTP.Enabled && !string.IsNullOrEmpty(AssignTo))
+            if (hapConfig.Current.SMTP.Enabled && !string.IsNullOrEmpty(AssignTo) && AssignTo.ToLower() != HttpContext.Current.User.Identity.Name.ToLower())
             {
                 MailMessage mes = new MailMessage();
 

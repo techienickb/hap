@@ -76,6 +76,15 @@ namespace HAP.Web.HelpDesk {
         protected global::System.Web.UI.WebControls.DropDownList userlist2;
         
         /// <summary>
+        /// newticket_pc control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField newticket_pc;
+        
+        /// <summary>
         /// adminbookingpanel control.
         /// </summary>
         /// <remarks>

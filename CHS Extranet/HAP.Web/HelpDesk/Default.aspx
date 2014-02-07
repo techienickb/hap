@@ -138,8 +138,9 @@
 			    <input type="text" id="newticket-subject" style="width: 400px;" />
 		    </div>
 		    <div>
-			    <label for="newticket-room"><hap:LocalResource StringPath="helpdesk/room" runat="server" />: </label>
+			    <label for="newticket-room">PC/<hap:LocalResource StringPath="helpdesk/room" runat="server" />: </label>
 			    <input type="text" id="newticket-room" />
+                <asp:HiddenField runat="server" ID="newticket_pc" />
 		    </div>
 		    <div>
 			    <label for="newticket-note"><hap:LocalResource StringPath="helpdesk/note" runat="server" />: </label>
@@ -214,12 +215,21 @@
 		    $("#ticket-AssignedTo").html(data.AssignedTo);
 		    $("#curtick-loading").hide();
 		    $("#curtick-loading .ticket").remove();
+		    origshowto = data.ShowTo;
 		    $("ticket-ShowToI").val(data.ShowTo);
 		    var h = "";
-		    for (var i = 0; i < data.Notes.length; i++)
-		        h += data.Notes[i].DisplayName + ' ' + data.Notes[i].Date + '<br /><pre>' + unescape(data.Notes[i].NoteText).replace(/\+/g, ' ') + '</pre>';
+		    for (var i = 0; i < data.Notes.length; i++) {
+		        var d = replaceURLWithHTMLLinks(unescape(data.Notes[i].NoteText).replace(/\+/g, ' '));
+		        d = d.replace(/#(\d+)/gi, '<a href="#ticket-$1">#$1</a>');
+		        h += data.Notes[i].DisplayName + ' ' + data.Notes[i].Date + '<br /><pre>' + d + '</pre>';
+		    }
 		    $("#notes").html(h);
 		    $("button").button();
+		}
+
+		function replaceURLWithHTMLLinks(text) {
+		    var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+		    return text.replace(exp,"<a href='$1'>$1</a>"); 
 		}
 
 		function assignTicket() {
@@ -297,7 +307,7 @@
 				contentType: 'application/json',
 				success: function (data) {
 					$("#newticket-subject").val("");
-					$("#newticket-room").val("");
+					$("#newticket-room").val($("#<%=newticket_pc.ClientID%>").val());
 					$("#newticket-note").val("");
 					if (hap.hdadmin) {
 						$("#priorityradioes input:checked").removeAttr("checked");
@@ -308,13 +318,14 @@
 	            },  error: hap.common.jsonError
 			});
 			return false;
-		}
+	    }
 		$(window).hashchange(function () {
 			if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curticket = window.location.href.split('#')[1].substr(7);
 			else curticket = null;
 			loadTicket();
 		});
 		$(function () {
+		    $("#newticket-room").val($("#<%=newticket_pc.ClientID%>").val());
 		    $("#HDtop div span").click(function () {
 		        var next = $(this).next();
 		        if (!hap.hdadmin && $(this).parent().hasClass("hdadmin") || $("#currentticket").hasClass("nocontrol")) return;
@@ -336,9 +347,21 @@
 			if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curticket = window.location.href.split('#')[1].substr(7);
 			else curticket = null;
 			$("#toolbar a").first().click();
+			$("#ticket-note").keyup(function () {
+			    if ($("#ticket-note").val().match(/@\S+/gi)) {
+			        var showto = origshowto;
+			        for (var i = 0; i < $("#ticket-note").val().match(/@\S+/gi).length; i++) {
+			            if (origshowto.match($("#ticket-note").val().match(/@\S+/gi)[i].substr(1)) || $("#ticket-note").val().match(/@\S+/gi)[i].substr(1).toLowerCase() == $("#ticket-Username").val().toLowerCase() || $("#ticket-note").val().match(/@\S+/gi)[i].substr(1).toLowerCase() == $("#ticket-AssignedTo").val().toLowerCase()) continue;
+			            if (showto != "") showto += ", ";
+			            showto += $("#ticket-note").val().match(/@\S+/gi)[i].substr(1);
+			        }
+			        $("#ticket-ShowToI").val(showto);
+			    }
+			});
 			loadTicket();
 			Update();
 		});
+	    var origshowto;
 		function isRead(o) {
 		    for (var i = 0; i < o.split(/,/g).length; i++)
 		        if ($.trim(o.split(/,/g)[i].toLowerCase()) == hap.user.toLowerCase()) return true;
