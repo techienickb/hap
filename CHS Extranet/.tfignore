@@ -1,0 +1,68 @@
+﻿################################################################################
+# This .tfignore file was automatically created by Microsoft(R) Visual Studio.
+#
+# Local items matching filespecs in this file will not be added to version
+# control. This file can be checked in to share exclusions with others.
+#
+# Wildcard characters are * and ?. Patterns are matched recursively unless the
+# pattern is prefixed by the \ character.
+#
+# You can prepend a path to a pattern to make it more specific. If you do,
+# wildcard characters are not permitted in the path portion.
+#
+# The # character at the beginning of a line indicates a comment.
+#
+# The ! prefix negates a pattern. This can be used to re-include an item after
+# it was excluded by a .tfignore file higher in the tree, or by the Team
+# Project Collection's global exclusions list.
+#
+# The / character is interpreted as a \ character on Windows platforms.
+#
+# Examples:
+#
+#  # Excludes all files ending in .txt in Alpha\Beta and all its subfolders.
+#  Alpha\Beta\*.txt
+#
+#  # Excludes all files ending in .cpp in this folder only.
+#  \*.cpp
+#
+#  # Excludes all files ending in .cpp in this folder and all subfolders.
+#  *.cpp
+#
+#  # If "Contoso" is a folder, then Contoso and all its children are excluded.
+#  # If it is a file, then only the "Contoso" in this folder is excluded.
+#  \Contoso
+#
+#  # If Help.exe is excluded by a higher .tfignore file or by the Team Project
+#  # Collection global exclusions list, then this pattern re-includes it in
+#  # this folder only.
+#  !\Help.exe    
+#
+################################################################################
+
+\screenshot_04092013_113333.png
+\screenshot_04092013_113351.png
+\screenshot_04092013_113418.png
+\screenshot_04092013_113422.png
+\screenshot_04092013_113435.png
+\Thumbs.db
+\winphone-app-1.png
+\winphone-app-2.png
+\winphone-app-3.png
+\winphone-app-4.png
+\Test Web\Global.asax
+\Test Web\Global.asax.cs
+\Test Web\Test Web.csproj
+\Test Web\Web.config
+\Test Web\Web.Debug.config
+\Test Web\Web.Release.config
+\Test Web\Properties\AssemblyInfo.cs
+\HAP.Win.MyFiles\BundleArtifacts\neutral.txt
+\HAP.Web.SendTo.Google\LiveClient.cs
+\HAP.Web.Config\adDomain.cs
+\HAP.Web.Config\adDomains.cs
+\HAP.Web.Config\ADs.cs
+\HAP.Web.Config\Domain.cs
+\HAP.Web.Config\IJS.cs
+\HAP.Web\MyFiles\Web.config
+\HAP.Web\App_Data\hapconfig.xml
