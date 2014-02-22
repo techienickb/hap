@@ -1,4 +1,4 @@
-﻿/*HAP.Web.JS.js - Copyright © 2014 nb development - Version 4 */
+﻿/*HAP.Web.JS.js - Copyright © 2014 nb development - Version 5 */
 if (hap == null) {
     var hap = {
         root: "/hap/",
@@ -218,9 +218,9 @@ if (hap == null) {
                     });
                 });
                 hap.livetiles.RegisterTileHandler("bookings", function (type, initdata, t) {
-                    t.html = '<a id="' + t.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + ' class="width' + initdata.Width + ' height' + initdata.Height + '"' + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
+                    t.html = '<a id="' + t.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + ' class="width' + initdata.Width + ' height' + initdata.Height + '"' + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label class="text"></label></span>' + initdata.Name + '</a>';
                     t.Render();
-                    $("#" + t.id).addClass("appointment");
+                    setInterval("$('#" + t.id + " > span > i').animate({ height: 'toggle' });", 8000);
                     setTimeout("hap.livetiles.UpdateBookings('" + t.id + "');", 100);
                 });
                 hap.livetiles.RegisterTileHandler("helpdesk", function (type, initdata, t) {
@@ -329,8 +329,7 @@ if (hap == null) {
                             var item = data[i];
                             d += (item.Date.match(/[0|1][0-9]\w\w\w/g) ? item.Date.substr(2, item.Date.length - 2) : item.Date) + ": " + item.Name + " in " + item.Room + "<br />";
                         }
-                        if (data.length > 0) $("#" + this + " span i").attr("style", "background-image: url();");
-                        $('#' + this + " span i").html(d);
+                        $('#' + this + " span label").html(d);
                         setTimeout("hap.livetiles.UpdateBookings('" + this + "');", 110000);
                     },
                     error: hap.common.jsonError
@@ -346,6 +345,7 @@ if (hap == null) {
                     success: function (data) {
                         var x = "";
                         var y = 0;
+                        data.reverse();
                         for (var i = 0; i < data.length; i++) {
                             x += '<b>' + (i + 1) + '</b>:' + data[i].Subject + '<br />';
                             var read = false;
