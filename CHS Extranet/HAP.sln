@@ -101,6 +101,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Timetable", "HAP.Timeta
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Win.DirectEdit", "HAP.Windows.DirectEdit\HAP.Win.DirectEdit.csproj", "{9970A04C-B866-460E-9FF2-527BCE0A701A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Other Files", "Other Files", "{4FCD20C4-7460-4A18-B764-1F99D8C5BFC8}"
+	ProjectSection(SolutionItems) = preProject
+		Documentation.docx = Documentation.docx
+		hap-logo.jpg = hap-logo.jpg
+		hap-logo.png = hap-logo.png
+		haplogo.psd = haplogo.psd
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 28
