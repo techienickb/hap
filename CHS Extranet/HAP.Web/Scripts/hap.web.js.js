@@ -225,10 +225,9 @@ if (hap == null) {
                 });
                 hap.livetiles.RegisterTileHandler("helpdesk", function (type, initdata, t) {
                     size = "large";
-                    t.html = '<a id="' + t.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + ' class="width' + initdata.Width + ' height' + initdata.Height + '"' + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label></label></span>' + initdata.Name + '</a>';
+                    t.html = '<a id="' + t.id + '" href="' + hap.common.resolveUrl(initdata.Url) + '" target="' + initdata.Target + '" title="' + initdata.Description + '"' + ' class="helpdesk width' + initdata.Width + ' height' + initdata.Height + '"' + (initdata.Color == '' ? '' : ' style="background-color: ' + initdata.Color.Base + ';" onmouseover="this.style.backgroundColor = \'' + initdata.Color.Light + '\';" onmouseout="this.style.backgroundColor = \'' + initdata.Color.Base + '\';" onmousedown="this.style.backgroundColor = \'' + initdata.Color.Dark + '\';"') + '><span><i style="background-image: url(' + hap.common.resolveUrl(initdata.Icon) + ');"></i><label class="count"></label><label class="text"></label></span>' + initdata.Name + '</a>';
                     t.Render();
-                    $("#" + t.id).addClass("me");
-                    setInterval("$('#" + t.id + " > span > i').animate({ height: 'toggle' });", 10000);
+                    setInterval("$('#" + t.id + " > span > i, #" + t.id + " > span > .count').animate({ height: 'toggle' });", 10000);
                     setTimeout("hap.livetiles.UpdateTickets('" + t.id + "');", 100);
                 });
                 hap.livetiles.RegisterTileHandler(/^uptime\:/gi, function (type, initdata, t) {
@@ -346,9 +345,21 @@ if (hap == null) {
                     contentType: 'application/json',
                     success: function (data) {
                         var x = "";
-                        for (var i = 0; i < data.length; i++) x += '<b>' + (i + 1) + '</b>:' + data[i].Subject + '<br />';
+                        var y = 0;
+                        for (var i = 0; i < data.length; i++) {
+                            x += '<b>' + (i + 1) + '</b>:' + data[i].Subject + '<br />';
+                            var read = false;
+                            for (var a = 0; a < data[i].ReadBy.split(",").length; a++)
+                                if ($.trim(data[i].ReadBy.split(",")[a].toLowerCase()) == hap.user.toLowerCase()) read = true;
+                            if (!read) y++;
+                        }
                         if (data.length == 0) x = "No Open Tickets";
                         $("#" + this + " span label").html(x);
+                        if (y > 0) $("#" + this + " span i").animate({ width: 180 }, 500, function () { $(this).parent().children("label.count").html(y); });
+                        else {
+                            $("#" + this + " span .count").html("");
+                            $("#" + this + " span i").animate({ width: 227 });
+                        }
                         setTimeout("hap.livetiles.UpdateTickets('" + this + "');", 500000);
                     },
                     error: hap.common.jsonError
