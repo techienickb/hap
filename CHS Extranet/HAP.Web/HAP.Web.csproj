@@ -103,6 +103,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="App_LocalResources\en-gb\Strings.xml" />
+    <None Include="App_Offline.htm.off" />
     <Content Include="BookingSystem\admin\Default.aspx" />
     <Content Include="BookingSystem\Cal.aspx" />
     <Content Include="BookingSystem\Display.aspx" />

@@ -57,6 +57,12 @@ namespace HAP.Web.Configuration
             get { return doc.SelectSingleNode("/hapConfig").Attributes["verbose"] == null ? false : bool.Parse(doc.SelectSingleNode("/hapConfig").Attributes["verbose"].Value); }
         }
 
+        public bool Maintenance
+        {
+            get { return doc.SelectSingleNode("/hapConfig").Attributes["maintenance"] == null ? false : bool.Parse(doc.SelectSingleNode("/hapConfig").Attributes["maintenance"].Value); }
+            set { ((XmlElement)doc.SelectSingleNode("/hapConfig")).SetAttribute("maintenance", value.ToString()); }
+        }
+
         public string Local
         {
             get { return doc.SelectSingleNode("/hapConfig").Attributes["local"].Value; }
@@ -313,13 +319,15 @@ namespace HAP.Web.Configuration
                 }
                 doc2.Save(HttpContext.Current.Server.MapPath("~/app_data/staticbookings.xml"));
             }
-            if (version.CompareTo(Version.Parse("10.0.0201.2100")) < 0) //Perform v10 upgrade
+            if (version.CompareTo(Version.Parse("10.0.0223.2100")) < 0) //Perform v10 upgrade
             {
+                XmlElement hap = doc.SelectSingleNode("/hapConfig") as XmlElement;
+                hap.SetAttribute("maintenance", "false");
                 XmlElement hd = doc.SelectSingleNode("/hapConfig/HelpDesk") as XmlElement;
                 hd.SetAttribute("provider", "xml");
                 hd.SetAttribute("priorities", "Low, Normal, High");
                 hd.SetAttribute("openstates", "New, With IT, Investigating, User Attention Needed, With 1st Line Support, With 2nd Line Support, With 3rd Line Support, Item Ordered, Waiting");
-                hd.SetAttribute("closedstates", "Resolved, Fixed, Timed Out, No Action Needed");
+                hd.SetAttribute("closedstates", "Completed, Fixed, No Action Needed, Resolved, Timed Out, User Fixed");
                 hd.SetAttribute("useropenstates", "New, Updated");
                 hd.SetAttribute("userclosedstates", "Fixed, No Action Needed, Self Fixed");
             }
