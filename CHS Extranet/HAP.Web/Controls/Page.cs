@@ -28,6 +28,19 @@ namespace HAP.Web.Controls
         {
             config = hapConfig.Current;
             this.Title = string.Format("{0} - {2} - {1}", config.School.Name, SectionTitle, Localize("homeaccessplus"));
+
+            if (hapConfig.Current.Maintenance)
+            {
+                if (Context.Request.Path.ToLower().Contains("login.aspx") || User.IsInRole("Domain Admins")) { }
+                else
+                {
+                    Context.Response.Clear();
+                    Context.Response.WriteFile(Server.MapPath("~/App_Offline.htm.off"));
+                    Context.Response.Flush();
+                    Context.Response.Close();
+                }
+            }
+
         }
 
         public string Localize(string StringPath)
