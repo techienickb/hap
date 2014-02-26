@@ -771,6 +771,7 @@
   <ItemGroup>
     <Compile Include="API\Announcement.cs" />
     <Compile Include="API\api.cs" />
+    <Compile Include="API\Home.Permalink.cs" />
     <Compile Include="API\TileIconHandler.cs" />
     <Compile Include="API\Homework.Upload.cs" />
     <Compile Include="API\MyPicHandler.cs" />
