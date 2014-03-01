@@ -680,7 +680,7 @@
 					    if (curitem.Actions == 3) { $("#con-download", menu).remove(); if (SelectedItems().length != 1 || SelectedItems()[0].Data.Type != 'Directory') $("#con-open", menu).remove(); $("#con-properties", menu).remove(); $("#con-zip", menu).remove(); $("#con-unzip", menu).remove(); $("#con-directedit", menu).remove(); }
 					    if (SelectedItems().length > 1) { $("#con-unzip", menu).remove(); $("#con-download", menu).remove(); $("#con-directedit", menu).remove(); $("#con-open", menu).remove(); $("#con-rename", menu).remove(); $("#con-properties", menu).remove(); $("#con-preview", menu).remove(); $("#con-google", menu).remove(); $("#con-skydrive", menu).remove(); }
 					    else {
-					        if (!$("#hapdirectedit").is(":checked") && !SelectedItems()[0].Data.Path.match(/\.ppt/gi) && !SelectedItems()[0].Data.Path.match(/\.doc/gi) && SelectedItems()[0].Data.Path.match(/\.xls/gi)) $("#con-directedit", menu).remove();
+					        if (!$("#hapdirectedit").is(":checked") || !SelectedItems()[0].Data.Extension.match(/(xls|doc|ppt)/gi)) $("#con-directedit", menu).remove();
 					        if (SelectedItems()[0].Data.Type == "Directory") { $("#con-download", menu).remove(); $("#con-directedit", menu).remove(); }
 					        else if (!SelectedItems()[0].Data.Path.match(/\.zip/gi)) { $("#con-open", menu).remove(); }
 					        var remgoogle = false;
@@ -1007,6 +1007,10 @@
 		        $("#MyFiles").css("min-height", parseInt($("#hapContent").css("min-height").replace(/px/g, "")) - 2); 
 		        $("#Views,#directedit").css("left", $('#view').position().left);
 		    });
+		    if (navigator.appVersion.indexOf("Win") == -1) {
+		        $("#de").remove();
+		        $("#con-directedit").remove();
+		    }
 		    $("#properties").dialog({ autoOpen: false });
 		    $("#loadingbox").dialog({ autoOpen: false });
 			$("#preview").dialog({ autoOpen: false });
