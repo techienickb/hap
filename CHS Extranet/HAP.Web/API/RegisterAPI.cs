@@ -28,6 +28,7 @@ namespace HAP.Web.API
             RouteTable.Routes.Add(new Route("api/mycomputer/thumb/{*path}", new ThumbsHandler()));
             RouteTable.Routes.Add(new Route("api/mycomputer/{ext}.ico", new IconHandler()));
             RouteTable.Routes.Add(new Route("api/myfiles-upload/{drive}/{*path}", new MyFiles_UploadHandler()));
+            RouteTable.Routes.Add(new Route("myfiles/directedit/{drive}/{*path}", new PageRouteHandler("~/myfiles/directedit.aspx")));
             RouteTable.Routes.Add(new Route("api/homework-upload/{teacher}/{name}/{start}/{end}/{drive}/{*path}", new Homework_UploadHandler()));
             RouteTable.Routes.Add(new Route("api/myfiles-permalink/{drive}/{*path}", new MyFiles_PermaLinkHandler()));
             RouteTable.Routes.Add(new Route("api/home-peramlink/{hash}", new Home_PermaLinkHandler()));

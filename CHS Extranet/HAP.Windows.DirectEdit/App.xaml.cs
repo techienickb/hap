@@ -37,8 +37,13 @@ namespace HAP.Win.DirectEdit
                         di.SetValue(string.Empty, System.Reflection.Assembly.GetExecutingAssembly().Location + ",1");
                         key = key.CreateSubKey(@"shell\open\command");
                         key.SetValue(string.Empty, System.Reflection.Assembly.GetExecutingAssembly().Location + " " + "%1");
+                        MessageBox.Show("HAP+ DirectEdit Registered");
                     }
-                    else Registry.ClassesRoot.DeleteSubKeyTree("hap");
+                    else
+                    {
+                        Registry.ClassesRoot.DeleteSubKeyTree("hap");
+                        MessageBox.Show("HAP+ DirectEdit Unregistered");
+                    }
                 }
                 Application.Current.Shutdown(0);
             }

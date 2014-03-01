@@ -74,6 +74,7 @@
     <logs>Logs</logs>
   </tracker>
   <myfiles>
+    <directedit>DirectEdit</directedit>
     <myfiles>My Files</myfiles>
     <open>Open</open>
     <download>Download</download>

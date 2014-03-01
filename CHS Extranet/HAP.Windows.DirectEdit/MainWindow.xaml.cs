@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -35,25 +36,37 @@ namespace HAP.Win.DirectEdit
             if (p.ToLower().StartsWith("hap://")) p = p.Remove(0, 6);
             else if (p.ToLower().StartsWith("hap:/")) p = p.Remove(0, 5);
             else if (p.ToLower().StartsWith("hap:")) p = p.Remove(0, 4);
-            parts = Decrypt.ConvertToPlain(p).Split(new char[] { '|' });
-            Uri uri = new Uri(parts[2]);
-            filename = System.IO.Path.Combine(System.IO.Path.GetTempPath(), System.IO.Path.GetFileName(uri.LocalPath));
-            if (allowed.Contains(System.IO.Path.GetExtension(filename).ToLower()))
+            if (p == "" || p == "/")
             {
-                info.Text = "Downloading " + System.IO.Path.GetFileName(uri.LocalPath);
-                WebClient wc = new WebClient();
-                wc.Headers.Add(HttpRequestHeader.UserAgent, "HAPDirectEdit/1.0 (Windows)");
-                wc.Headers.Add(HttpRequestHeader.Cookie, ".ASPXAUTH=" + parts[1] + "; token=" + parts[0]);
-                wc.DownloadProgressChanged += wc_DownloadProgressChanged;
-                wc.DownloadFileCompleted += wc_DownloadFileCompleted;
-                wc.DownloadFileAsync(uri, filename);
+                info.Text = "Initializing...";
+                Hide();
+                ShowInTaskbar = false;
+                Thread.Sleep(3000);
+                this.cancelclose = false;
+                Close();
             }
             else
             {
-                this.cancelclose = false;
-                Hide();
-                MessageBox.Show(this, "Invalid File Type for Secure Download", "Invalid File Type", MessageBoxButton.OK, MessageBoxImage.Error);
-                Close();
+                parts = Decrypt.ConvertToPlain(p).Split(new char[] { '|' });
+                Uri uri = new Uri(parts[2]);
+                filename = System.IO.Path.Combine(System.IO.Path.GetTempPath(), System.IO.Path.GetFileName(uri.LocalPath));
+                if (allowed.Contains(System.IO.Path.GetExtension(filename).ToLower()))
+                {
+                    info.Text = "Downloading " + System.IO.Path.GetFileName(uri.LocalPath);
+                    WebClient wc = new WebClient();
+                    wc.Headers.Add(HttpRequestHeader.UserAgent, "HAPDirectEdit/1.0 (Windows)");
+                    wc.Headers.Add(HttpRequestHeader.Cookie, ".ASPXAUTH=" + parts[1] + "; token=" + parts[0]);
+                    wc.DownloadProgressChanged += wc_DownloadProgressChanged;
+                    wc.DownloadFileCompleted += wc_DownloadFileCompleted;
+                    wc.DownloadFileAsync(uri, filename);
+                }
+                else
+                {
+                    this.cancelclose = false;
+                    Hide();
+                    MessageBox.Show(this, "Invalid File Type for Secure Download", "Invalid File Type", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Close();
+                }
             }
         }
 
@@ -110,13 +123,13 @@ namespace HAP.Win.DirectEdit
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (cancelclose) MessageBox.Show(this, "You still have the document open\nYou Cannot close the HAP+ DirectEdit Program", "Still Open", MessageBoxButton.OK, MessageBoxImage.Warning);
+            if (cancelclose && Environment.GetCommandLineArgs().Length > 1) MessageBox.Show(this, "You still have the document open\nYou Cannot close the HAP+ DirectEdit Program", "Still Open", MessageBoxButton.OK, MessageBoxImage.Warning);
             e.Cancel = cancelclose;
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            System.IO.File.Delete(filename);
+            if (filename != "") System.IO.File.Delete(filename);
         }
     }
 }

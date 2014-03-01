@@ -68,6 +68,7 @@ a.dynatree-title:active, .dynatree-node:active, .dynatree-node:active > a { bord
 
 #Views {  }
 #Views a { display: block; color: #000; text-decoration: none; padding: 5px 20px; }
+#directedit { margin-left: -104px; padding: 10px; }
 
 button.back span { top: 4px; }
 

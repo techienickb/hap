@@ -17,7 +17,7 @@ namespace HAP.Web.API
     {
         public IHttpHandler GetHttpHandler(RequestContext requestContext)
         {
-            Home_PermaLink myu = new Home_PermaLink { Hash =  requestContext.RouteData.GetRequiredString("Hash");}
+            Home_PermaLink myu = new Home_PermaLink { Hash = requestContext.RouteData.GetRequiredString("Hash") };
             return myu;
         }
     }
