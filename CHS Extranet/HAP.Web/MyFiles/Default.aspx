@@ -13,6 +13,7 @@
 	<a style="float: right;" id="help" href="#" onclick="return false;"><hap:LocalResource StringPath="help" runat="server" />?</a>
     <div id="toolbar" data-role="header">
 		<div style="float: right;">
+            <a class="dropdown" id="de" href="#"><hap:LocalResource runat="server" StringPath="myfiles/directedit" /></a>
 			<a class="dropdown" id="view" href="#"><hap:LocalResource runat="server" StringPath="myfiles/view" /></a>
 		</div>
 		<div style="float: left;">
@@ -66,6 +67,7 @@
         <ul>
             <li id="con-open"><hap:LocalResource StringPath="myfiles/open" runat="server" /></li>
             <li id="con-download"><hap:LocalResource StringPath="myfiles/download" runat="server" /></li>
+            <li id="con-directedit"><hap:LocalResource StringPath="myfiles/directedit" runat="server" /></li>
             <li id="con-delete"><hap:LocalResource StringPath="myfiles/delete/delete" runat="server" /></li>
             <li id="con-rename"><hap:LocalResource StringPath="myfiles/rename" runat="server" /></li>
             <li id="con-preview"><hap:LocalResource StringPath="myfiles/preview" runat="server" /></li>
@@ -97,6 +99,10 @@
 		<a href="#" id="largeicons"><hap:LocalResource runat="server" StringPath="myfiles/largeicons" /></a>
 		<a href="#" id="details"><hap:LocalResource runat="server" StringPath="myfiles/details" /></a>
 	</div>
+    <div id="directedit" class="hapmenu tile-border-color">
+        <label for="hapdirectedit">Enable <hap:LocalResource runat="server" StringPath="myfiles/directedit" />: </label>
+        <input type="checkbox" id="hapdirectedit" />
+    </div>
     <div id="search">
 		<input type="text" id="filter" />
 	</div>
@@ -112,6 +118,7 @@
 		var items = new Array();
 		var subdrop = false;
 		var showView = 0;
+		var showDE = 0;
 		var viewMode = 0;
 		var keys = { shift: false, ctrl: false };
 		var lazytimer = null;
@@ -463,10 +470,10 @@
 				}
 				else if ("<%=AcceptedExtensions %>".toLowerCase().indexOf(this.FileName.substr(this.FileName.lastIndexOf('.')).toLowerCase()) == -1 && "<%=DropZoneAccepted %>" != "") {
 					alert(this.File.name + " " + hap.common.getLocal("myfiles/upload/filetypewarning") + "\n\n <%=AcceptedExtensions %>");
-					uploads.pop(this);
+				    uploads.pop(this);
 					return false;
 				}
-				if(this.File.size > <%=maxRequestLength%>) {
+				if(this.File.size > praseInt('<%=maxRequestLength%>')) {
 					alert(this.File.name + " " + hap.common.getLocal("myfiles/upload/filesizewarning"));
 					uploads.pop(this);
 					return false;
@@ -575,7 +582,7 @@
 			if (unzip && $("#toolbar-unzip").css("display") == "none") $("#toolbar-unzip").css("display", "").animate({ width: 40 });
 			if (!unzip && $("#toolbar-unzip").css("display") != "none") $("#toolbar-unzip").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-unzip").css("display", "none") } });
 			if (zip && $("#toolbar-zip").css("display") == "none") $("#toolbar-zip").css("display", "").animate({ width: 22 });
-			if (!zip && $("#toolbar-zip").css("display") != "none") $("#toolbar-zip").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-zip").css("display", "none") } });
+			if (!zip && $("#toolbar-zip").css("display") != "none") $("#toolbar-zip").animate({ width: 0 }, { duration: 500, complete: function () { $("#toolbar-zip").css("display", "none") } });
 			$(window).trigger("resize");
 		}
 		function Item(data) {
@@ -670,11 +677,12 @@
 					onShowMenu: function (e, menu) {
 					    if (curitem.Permissions.DeleteSubDirsOrFiles == false) $("#con-delete", menu).remove();
 					    if (curitem.Permissions.CreateFiles == false) { $("#con-rename", menu).remove(); $("#con-zip", menu).remove(); $("#con-unzip", menu).remove(); }
-					    if (curitem.Actions == 3) { $("#con-download", menu).remove(); if (SelectedItems().length != 1 || SelectedItems()[0].Data.Type != 'Directory') $("#con-open", menu).remove(); $("#con-properties", menu).remove(); $("#con-zip", menu).remove(); $("#con-unzip", menu).remove(); }
-					    if (SelectedItems().length > 1) { $("#con-unzip", menu).remove(); $("#con-download", menu).remove(); $("#con-open", menu).remove(); $("#con-rename", menu).remove(); $("#con-properties", menu).remove(); $("#con-preview", menu).remove(); $("#con-google", menu).remove(); $("#con-skydrive", menu).remove(); }
+					    if (curitem.Actions == 3) { $("#con-download", menu).remove(); if (SelectedItems().length != 1 || SelectedItems()[0].Data.Type != 'Directory') $("#con-open", menu).remove(); $("#con-properties", menu).remove(); $("#con-zip", menu).remove(); $("#con-unzip", menu).remove(); $("#con-directedit", menu).remove(); }
+					    if (SelectedItems().length > 1) { $("#con-unzip", menu).remove(); $("#con-download", menu).remove(); $("#con-directedit", menu).remove(); $("#con-open", menu).remove(); $("#con-rename", menu).remove(); $("#con-properties", menu).remove(); $("#con-preview", menu).remove(); $("#con-google", menu).remove(); $("#con-skydrive", menu).remove(); }
 					    else {
-					        if (SelectedItems()[0].Data.Type == "Directory") $("#con-download", menu).remove();
-					        else if (!SelectedItems()[0].Data.Path.match(/\.zip/gi)) $("#con-open", menu).remove();
+					        if (!$("#hapdirectedit").is(":checked") && !SelectedItems()[0].Data.Path.match(/\.ppt/gi) && !SelectedItems()[0].Data.Path.match(/\.doc/gi) && SelectedItems()[0].Data.Path.match(/\.xls/gi)) $("#con-directedit", menu).remove();
+					        if (SelectedItems()[0].Data.Type == "Directory") { $("#con-download", menu).remove(); $("#con-directedit", menu).remove(); }
+					        else if (!SelectedItems()[0].Data.Path.match(/\.zip/gi)) { $("#con-open", menu).remove(); }
 					        var remgoogle = false;
 					        if (SelectedItems()[0].Data.Extension != ".txt" && SelectedItems()[0].Data.Extension != ".xlsx" && SelectedItems()[0].Data.Extension != ".docx" && SelectedItems()[0].Data.Extension != ".xls" && SelectedItems()[0].Data.Extension != ".csv" && SelectedItems()[0].Data.Extension != ".png" && SelectedItems()[0].Data.Extension != ".gif" && SelectedItems()[0].Data.Extension != ".jpg" && SelectedItems()[0].Data.Extension != ".jpeg" && SelectedItems()[0].Data.Extension != ".bmp") {
 					            $("#con-preview", menu).remove();
@@ -695,6 +703,11 @@
 							if (SelectedItems().length > 1) { alert(hap.common.getLocal("myfiles/only1")); return false; }
 							if (SelectedItems()[0].Data.Type == 'Directory') window.location.href = "#" + SelectedItems()[0].Data.Path;
 							else { alert(hap.common.getLocal("myfiles/downloadwarning")); window.open(SelectedItems()[0].Data.Path); }
+						},
+						'con-directedit': function (t) {
+						    if (SelectedItems().length > 1) { alert(hap.common.getLocal("myfiles/only1")); return false; }
+						    if (SelectedItems()[0].Data.Type == 'Directory') window.location.href = "#" + SelectedItems()[0].Data.Path;
+						    else location.href = SelectedItems()[0].Data.Path.replace(/\.\.\/Download\//gi, "../myfiles/directedit/");
 						},
 						'con-delete': function (t) {
 							$("#progressstatus").dialog({ autoOpen: true, modal: true, title: hap.common.getLocal("myfiles/delete/deletingitem1") + " 1 " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items") });
@@ -987,11 +1000,12 @@
 			var re = new RegExp("(" + $("#filter").val().replace(/\*/g, ")(.*)(").replace(/ /g, ")(.*)(").replace(/\(\)/g, "") + ")", "i");
 			return data.match(re);
 		}
+		var directedit = false;
 		$(function () {
 		    $(window).resize(function () {
 		        $("#Tree").css("top", $("#search").position().top + $("#search").height()).css("height", $("#hapContent").height() - $("#search").height()); 
 		        $("#MyFiles").css("min-height", parseInt($("#hapContent").css("min-height").replace(/px/g, "")) - 2); 
-		        $("#Views").css("left", $('#view').position().left);
+		        $("#Views,#directedit").css("left", $('#view').position().left);
 		    });
 		    $("#properties").dialog({ autoOpen: false });
 		    $("#loadingbox").dialog({ autoOpen: false });
@@ -1000,7 +1014,7 @@
 			$("#progressstate").dialog({ autoOpen: false });
 			$("#uploaders").dialog({ autoOpen: false });
 			$("#googlesignin").dialog({ autoOpen: false });
-			$("#Views").animate({ height: 'toggle' });
+			$("#Views,#directedit").animate({ height: 'toggle' });
 			$("#Tree").dynatree({ imagePath: "../images/setup/", debugLevel: 0, selectMode: 1, minExpandLevel: 1, noLink: false, children: [{ icon: "../myfiles-i.png", title: hap.common.getLocal("myfiles/mydrives"), href: "#", isFolder: true, isLazy: true}], fx: { height: "toggle", duration: 200 },
 				onLazyRead: function (node) {
 					if (node.data.href == "#") {
@@ -1278,12 +1292,22 @@
 				return false;
 			});
 			$("#view").click(function () {
+			    if (showDE == 1) { $("#directedit").animate({ height: 'toggle' }); showDE = 0; }
 				if (showView == 0) {
 					showView = 1;
 					$("#Views").animate({ height: 'toggle' });
 				}
 				return false;
 			});
+			$("#de").click(function () {
+			    if (showView == 1) { $("#Views").animate({ height: 'toggle' }); showDE = 0; }
+			    if (showDE == 0)
+			    {
+			        showDE = 1;
+			        $("#directedit").animate({ height: 'toggle' });
+			    }
+			    return false;
+			})
 			$("#filter").keyup(function () {
 				if ($("#filter").val().length == 0) for (var x = 0; x < items.length; x++) { items[x].Show = true; items[x].Refresh(); }
 				else {
@@ -1291,7 +1315,8 @@
 				}
             });
 			$(document).click(function () {
-				if (showView == 1) { $("#Views").animate({ height: 'toggle' }); showView = 0; }
+			    if (showView == 1) { $("#Views").animate({ height: 'toggle' }); showView = 0; }
+			    if (showDE == 1) { $("#directedit").animate({ height: 'toggle' }); showDE = 0; }
 			});
 			$("#Views a").click(function () {
 				if ($(this).attr("id") == "details") {

@@ -119,6 +119,7 @@
     <Content Include="ExampleCustomTile.js" />
     <Content Include="haplogo-icon.ico" />
     <Content Include="HelpDesk\Default.aspx" />
+    <Content Include="MyFiles\DirectEdit.aspx" />
     <Content Include="style\fullcalendar.css" />
     <Content Include="HelpDesk\newassignticket.htm" />
     <Content Include="images\120-arrow.png" />
@@ -890,6 +891,13 @@
     <Compile Include="MyFiles\Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
+    <Compile Include="MyFiles\DirectEdit.aspx.cs">
+      <DependentUpon>DirectEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MyFiles\DirectEdit.aspx.designer.cs">
+      <DependentUpon>DirectEdit.aspx</DependentUpon>
+    </Compile>
     <Compile Include="MyFiles\Homework.aspx.cs">
       <DependentUpon>Homework.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1116,6 +1124,16 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug Notify|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug DirectEdit|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
