@@ -15,18 +15,6 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_16AB5CCAA3C28F37AA35884948D6DF6A"
-        "OwnerKey" = "8:_A65F893BDC0C4D3CA18D6A2948DB34E8"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_16AB5CCAA3C28F37AA35884948D6DF6A"
-        "OwnerKey" = "8:_A97940507EC144FD845A505AEDC0B09B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_A65F893BDC0C4D3CA18D6A2948DB34E8"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -39,6 +27,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_B6FBB15029E82C92ABD0145D33A9AA39"
+        "OwnerKey" = "8:_A65F893BDC0C4D3CA18D6A2948DB34E8"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B6FBB15029E82C92ABD0145D33A9AA39"
+        "OwnerKey" = "8:_A97940507EC144FD845A505AEDC0B09B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_A97940507EC144FD845A505AEDC0B09B"
         "MsmSig" = "8:_UNDEFINED"
@@ -46,13 +46,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_16AB5CCAA3C28F37AA35884948D6DF6A"
+        "OwnerKey" = "8:_A65F893BDC0C4D3CA18D6A2948DB34E8"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_A65F893BDC0C4D3CA18D6A2948DB34E8"
+        "OwnerKey" = "8:_B6FBB15029E82C92ABD0145D33A9AA39"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -160,14 +160,14 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_16AB5CCAA3C28F37AA35884948D6DF6A"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B6FBB15029E82C92ABD0145D33A9AA39"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_16AB5CCAA3C28F37AA35884948D6DF6A"
+                    "_B6FBB15029E82C92ABD0145D33A9AA39"
                     {
                     "Name" = "8:Newtonsoft.Json.dll"
                     "Attributes" = "3:512"
@@ -236,15 +236,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HAP Logon Tracker"
-        "ProductCode" = "8:{B4D4A036-9694-49D0-A0A8-33A7E8426982}"
-        "PackageCode" = "8:{A2404FBB-DBDA-4E2B-881D-14324D8819CE}"
+        "ProductCode" = "8:{362A7062-DDC3-4755-A443-6FA2DE34024D}"
+        "PackageCode" = "8:{2FCBA3A0-A9C8-401D-9DC4-A763AB754874}"
         "UpgradeCode" = "8:{41BAC840-CB78-47EF-859E-15CC9CA146CD}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:5.0.0"
+        "ProductVersion" = "8:6.0.0"
         "Manufacturer" = "8:nb development"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://hap.codeplex.com"
