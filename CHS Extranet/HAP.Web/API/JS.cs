@@ -73,7 +73,7 @@ namespace HAP.Web.API
             else 
             {
                 if (JSType == API.JSType.CSS) context.Response.ContentType = "text/css";
-                string[] paths = GetPaths(context.Request.UrlReferrer.ToString());
+                string[] paths = GetPaths(context.Request.QueryString.Keys[0]);
                 int status = 200;
                 if (paths.Length > 0)
                 {
@@ -109,7 +109,7 @@ namespace HAP.Web.API
 
                     foreach (string s in paths)
                     {
-                        context.Response.Write("\n/* " + s + "* /\n");
+                        context.Response.Write("\n/* " + s + " */\n");
                         StreamReader sr = File.OpenText(context.Server.MapPath(s));
                         string f = "";
                         if (JSType != API.JSType.CSS)
