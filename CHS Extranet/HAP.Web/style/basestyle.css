@@ -11,7 +11,7 @@ html, body { padding: 0; margin: 0; }
 .tiles a:hover { background-color: #3286C1; border-color: #3286C1; }
 .tiles a:active { background-color: #004577; border-color: #004577; }
 
-#form1, #hapContent, .ui-widget { font-family: '☺Segoe', "Segoe UI", Segoe, Arial, sans-serif; font-size: 13px; }
+#form1, #hapContent, .ui-widget, .hapPopup { font-family: '☺Segoe', "Segoe UI", Segoe, Arial, sans-serif; font-size: 13px; }
 #hapContent input, #hapContent select, #hapContent input { font-size: 13px; }
 a img { border: 0; }
 
@@ -206,6 +206,15 @@ span.hapswitch.on::after { content: 'on' }
 #sidebaredit input[@type=text] { width: 70%; }
 #sidebaredit .buttons { text-align: center; margin-top: 10px; }
 #sidebaredit button { font-size: 20px; }
+
+.hapPopup { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(125, 125, 125, 0.40); z-index: 320; }
+.hapPopup-table { height: 100%; width: 100%; padding: 0; margin: 0; border: 0; }
+.hapPopup-table > tr, .hapPopup-table > tr > td { padding: 0; margin: 0; border: 0; }
+.hapPopup-wrapper { background: #fff; margin: 0; padding: 0; }
+.hapPopup-wrapperinner { max-width: 990px; margin: 0 auto; padding: 10px 10px 50px 10px; position: relative; }
+.hapPopup-title { font-family: ☺SegoeLight, 'Segoe UI Light'; }
+.hapPopup-content { padding: 0; position: relative; overflow: auto; clear: both; }
+.hapPopup-buttonset  { position: absolute; bottom: 10px; right: 10px; }
 
 @media only screen and (max-width: 1024px)  {
     #sidebaredit.show { width: 50%; }
