@@ -7,9 +7,9 @@ html, body { padding: 0; margin: 0; }
 .tile-color, #datepicker .ui-datepicker-header, .fc-content .ui-widget-header { background: #0060a6; border-color: #0060a6; }
 .tile-border-color, #datepicker .ui-datepicker { border-color: #0060a6; }
 .tile-color-font { color: #0060a6; }
-.tiles a { background-color: #0060a6; color: #fff; border-color: #0060a6; }
-.tiles a:hover { background-color: #3286C1; border-color: #3286C1; }
-.tiles a:active { background-color: #004577; border-color: #004577; }
+.tiles a.tile { background-color: #0060a6; color: #fff; border-color: #0060a6; }
+.tiles a.tile:hover { background-color: #3286C1; border-color: #3286C1; }
+.tiles a.tile:active { background-color: #004577; border-color: #004577; }
 
 #form1, #hapContent, .ui-widget, .hapPopup { font-family: '☺Segoe', "Segoe UI", Segoe, Arial, sans-serif; font-size: 13px; }
 #hapContent input, #hapContent select, #hapContent input { font-size: 13px; }
@@ -90,12 +90,11 @@ h1.Announcement b { font-size: 16px; }
 #EditAnn a.EditAnnLink { position: absolute; right: 0; top: 0; }
 #EditAnn a.EditAnnLink img { vertical-align: middle; text-decoration: none; height: 48px; }
 
-#HomeButtons a { float: left; margin: 3px 3px 0 0; padding: 8px; height: 108px; width: 108px; font-size: 11px; text-decoration: none; position: relative; }
-#HomeButtons a span { display: block; text-align: center; width: 108px; height: 90px; vertical-align: middle; overflow: hidden; }
-#HomeButtons a span i { float: left; width: 108px; font-style: normal; height: 90px; vertical-align: middle; background: transparent no-repeat center center; }
-#HomeButtons a span label { float: left; cursor: pointer; line-height: 80px; font-size: 32px; padding-left: 5px; }
-#HomeButtons a:hover { text-decoration: none; }
-#HomeButtons a.large, #HomeButtons a.large span, #HomeButtons a.large span i { width: 235px; }
+#HomeButtons a.tile { float: left; margin: 3px 3px 0 0; padding: 8px; height: 108px; width: 108px; font-size: 11px; text-decoration: none; position: relative; }
+#HomeButtons a.tile span { display: block; text-align: center; width: 108px; height: 90px; vertical-align: middle; overflow: hidden; }
+#HomeButtons a.tile span i { float: left; width: 108px; font-style: normal; height: 90px; vertical-align: middle; background: transparent no-repeat center center; }
+#HomeButtons a.tile span label { float: left; cursor: pointer; line-height: 80px; font-size: 32px; padding-left: 5px; }
+#HomeButtons a.tile:hover { text-decoration: none; }
 
 #HomeButtons a.height2 { height: 235px; }
 #HomeButtons a.height2 span, #HomeButtons a.height2 span i { height: 221px; }
