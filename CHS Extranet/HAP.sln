@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2010
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{7F80432C-70D9-4AAA-9FE3-6398471FC04D}"
 	ProjectSection(SolutionItems) = preProject
 		DiskQuotaTypeLibrary.dll = DiskQuotaTypeLibrary.dll
@@ -110,6 +112,85 @@ EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HAP DirectEdit", "HAP DirectEdit Installer\HAP DirectEdit Installer.vdproj", "{46457F1A-A86C-41C2-A5DA-7EEF2064FE95}"
 EndProject
 Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 23
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs08
+		SccProjectUniqueName0 = HAP.Web.Config\\HAP.Web.Configuration.csproj
+		SccProjectName0 = HAP.Web.Config
+		SccLocalPath0 = HAP.Web.Config
+		SccProjectUniqueName1 = HAP.AD\\HAP.AD.csproj
+		SccProjectName1 = HAP.AD
+		SccLocalPath1 = HAP.AD
+		SccProjectUniqueName2 = HAP.Data\\HAP.Data.csproj
+		SccProjectName2 = HAP.Data
+		SccLocalPath2 = HAP.Data
+		SccProjectUniqueName3 = HAP.Data.SQL\\HAP.Data.SQL.csproj
+		SccProjectName3 = HAP.Data.SQL
+		SccLocalPath3 = HAP.Data.SQL
+		SccProjectUniqueName4 = HAP.Web.Logging\\HAP.Web.Logging.csproj
+		SccProjectName4 = HAP.Web.Logging
+		SccLocalPath4 = HAP.Web.Logging
+		SccProjectUniqueName5 = HAP.BookingSystem\\HAP.BookingSystem.csproj
+		SccProjectName5 = HAP.BookingSystem
+		SccLocalPath5 = HAP.BookingSystem
+		SccProjectUniqueName6 = HAP.HelpDesk\\HAP.HelpDesk.csproj
+		SccProjectName6 = HAP.HelpDesk
+		SccLocalPath6 = HAP.HelpDesk
+		SccProjectUniqueName7 = HAP.Web.SendTo.Google\\HAP.Web.SendTo.csproj
+		SccProjectName7 = HAP.Web.SendTo.Google
+		SccLocalPath7 = HAP.Web.SendTo.Google
+		SccProjectUniqueName8 = HAP.MyFiles\\HAP.MyFiles.csproj
+		SccProjectName8 = HAP.MyFiles
+		SccLocalPath8 = HAP.MyFiles
+		SccProjectUniqueName9 = HAP.Web.LiveTiles\\HAP.Web.LiveTiles.csproj
+		SccProjectName9 = HAP.Web.LiveTiles
+		SccLocalPath9 = HAP.Web.LiveTiles
+		SccProjectUniqueName10 = HAP.Timetable\\HAP.Timetable.csproj
+		SccProjectName10 = HAP.Timetable
+		SccLocalPath10 = HAP.Timetable
+		SccProjectUniqueName11 = HAP.Tracker\\HAP.Tracker.csproj
+		SccProjectTopLevelParentUniqueName11 = HAP.sln
+		SccProjectName11 = HAP.Tracker
+		SccLocalPath11 = HAP.Tracker
+		SccProjectUniqueName12 = HAP.Web\\HAP.Web.csproj
+		SccProjectName12 = HAP.Web
+		SccLocalPath12 = HAP.Web
+		SccProjectUniqueName13 = HAP\u0020User\u0020Card\\HAP\u0020User\u0020Card.csproj
+		SccProjectName13 = HAP\u0020User\u0020Card
+		SccLocalPath13 = HAP\u0020User\u0020Card
+		SccProjectUniqueName14 = HAP.Data.Quota\\HAP.Data.Quota.csproj
+		SccProjectTopLevelParentUniqueName14 = HAP.sln
+		SccProjectName14 = HAP.Data.Quota
+		SccLocalPath14 = HAP.Data.Quota
+		SccProjectUniqueName15 = HAP.Data.Quota.Service\\HAP\u0020Quota\u0020Service.csproj
+		SccProjectTopLevelParentUniqueName15 = HAP.sln
+		SccProjectName15 = HAP.Data.Quota.Service
+		SccLocalPath15 = HAP.Data.Quota.Service
+		SccProjectUniqueName16 = HAP.Data.Quota\u0020x86\\HAP.Data.Quota\u0020x86.csproj
+		SccProjectTopLevelParentUniqueName16 = HAP.sln
+		SccProjectName16 = HAP.Data.Quota\u0020x86
+		SccLocalPath16 = HAP.Data.Quota\u0020x86
+		SccProjectUniqueName17 = HAP.Data.Quota.Service\u0020x86\\HAP\u0020Quota\u0020Service\u0020x86.csproj
+		SccProjectTopLevelParentUniqueName17 = HAP.sln
+		SccProjectName17 = HAP.Data.Quota.Service\u0020x86
+		SccLocalPath17 = HAP.Data.Quota.Service\u0020x86
+		SccProjectUniqueName18 = HAP.Win.MyFiles\\HAP.Win.MyFiles.csproj
+		SccProjectName18 = HAP.Win.MyFiles
+		SccLocalPath18 = HAP.Win.MyFiles
+		SccProjectUniqueName19 = HAP\u0020Logon\u0020Tracker\\HAP.Tracker.UI.csproj
+		SccProjectTopLevelParentUniqueName19 = HAP.sln
+		SccProjectName19 = HAP\u0020Logon\u0020Tracker
+		SccLocalPath19 = HAP\u0020Logon\u0020Tracker
+		SccProjectUniqueName20 = HAP.Tracker.UI.Notify\\HAP.Tracker.UI.Notify.csproj
+		SccProjectTopLevelParentUniqueName20 = HAP.sln
+		SccProjectName20 = HAP.Tracker.UI.Notify
+		SccLocalPath20 = HAP.Tracker.UI.Notify
+		SccProjectUniqueName21 = HAP.Windows.DirectEdit\\HAP.Win.DirectEdit.csproj
+		SccProjectName21 = HAP.Windows.DirectEdit
+		SccLocalPath21 = HAP.Windows.DirectEdit
+		SccLocalPath22 = .
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug DirectEdit|Any CPU = Debug DirectEdit|Any CPU
 		Debug DirectEdit|ARM = Debug DirectEdit|ARM
