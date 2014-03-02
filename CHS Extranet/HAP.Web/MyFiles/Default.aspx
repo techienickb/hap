@@ -1305,13 +1305,12 @@
 			});
 			$("#de").click(function () {
 			    if (showView == 1) { $("#Views").animate({ height: 'toggle' }); showDE = 0; }
-			    if (showDE == 0)
-			    {
+			    if (showDE == 0) {
 			        showDE = 1;
 			        $("#directedit").animate({ height: 'toggle' });
 			    }
 			    return false;
-			})
+			});
 			$("#filter").keyup(function () {
 				if ($("#filter").val().length == 0) for (var x = 0; x < items.length; x++) { items[x].Show = true; items[x].Refresh(); }
 				else {
