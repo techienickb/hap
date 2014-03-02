@@ -34,7 +34,7 @@ namespace HAP.Win.DirectEdit
                         key.SetValue(string.Empty, "URL:HAP Protocol");
                         key.SetValue("URL Protocol", string.Empty);
                         RegistryKey di = key.CreateSubKey("DefaultIcon");
-                        di.SetValue(string.Empty, System.Reflection.Assembly.GetExecutingAssembly().Location + ",1");
+                        di.SetValue(string.Empty, System.Reflection.Assembly.GetExecutingAssembly().Location + ",0");
                         key = key.CreateSubKey(@"shell\open\command");
                         key.SetValue(string.Empty, System.Reflection.Assembly.GetExecutingAssembly().Location + " " + "%1");
                         MessageBox.Show("HAP+ DirectEdit Registered");
