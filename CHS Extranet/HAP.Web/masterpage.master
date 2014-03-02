@@ -62,7 +62,7 @@
                     $("#hapContent").css("min-height", document.documentElement.clientHeight - $("#hapHeader").height() + "px");
                 });
             </script>
-            <script src="<%: ResolveClientUrl("~/api/js/end" + Request.Path + "=0") %>"></script>
+            <script src="<%: ResolveClientUrl("~/api/js/end?" + Request.Path + "=0") %>"></script>
         </form>
     </body>
 </html>
