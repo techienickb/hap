@@ -6,6 +6,7 @@ using System.Xml;
 using System.Web;
 using System.IO;
 using System.Reflection;
+using System.Collections;
 
 namespace HAP.Web.Configuration
 {
@@ -44,6 +45,44 @@ namespace HAP.Web.Configuration
             BookingSystem = new BookingSystem(ref doc);
             MyFiles = new MyFiles(ref doc);
             HelpDesk = new HelpDesk(ref doc);
+            ConfigSections = new Dictionary<string, IConfig>();
+            foreach (IConfig config in GetPlugins())
+            {
+                if (doc.SelectSingleNode("/hapConfig/" + config.Name.Replace(" ", "")) == null) {
+                    XmlElement e = doc.CreateElement(config.Name.Replace(" ", ""));
+                    config.Init(e, ref doc);
+                    doc.SelectSingleNode("/hapConfig").AppendChild(e);
+                }
+                config.Load(doc.SelectSingleNode("/hapConfig/" + config.Name.Replace(" ", "")) as XmlElement);
+                ConfigSections.Add(config.Name, config);
+            }
+        }
+
+        public T GetSection<T>(string Name) where T : IConfig
+        {
+            return (T)ConfigSections[Name];
+        }
+
+        IConfig[] GetPlugins()
+        {
+            List<IConfig> plugins = new List<IConfig>();
+            //load apis in the bin folder
+            foreach (FileInfo assembly in new DirectoryInfo(HttpContext.Current.Server.MapPath("~/bin/")).GetFiles("*.dll").Where(fi => fi.Name != "HAP.Web.dll" && fi.Name != "HAP.Web.Configuration.dll"))
+            {
+                Assembly a = Assembly.LoadFrom(assembly.FullName);
+                foreach (Type type in a.GetTypes())
+                {
+                    if (!type.IsClass || type.IsNotPublic) continue;
+                    Type[] interfaces = type.GetInterfaces();
+                    if (((IList)interfaces).Contains(typeof(IConfig)))
+                    {
+                        object obj = Activator.CreateInstance(type);
+                        IConfig t = (IConfig)obj;
+                        plugins.Add(t);
+                    }
+                }
+            }
+            return plugins.ToArray();
         }
 
         public bool FirstRun
@@ -80,6 +119,7 @@ namespace HAP.Web.Configuration
         public BookingSystem BookingSystem { get; private set; }
         public HelpDesk HelpDesk { get; private set; }
         public MyFiles MyFiles { get; private set; }
+        public Dictionary<string, IConfig> ConfigSections { get; private set; }
 
         private void doUpgrade(Version version) {
             if (version.CompareTo(Version.Parse("7.1")) == -1)
@@ -338,6 +378,12 @@ namespace HAP.Web.Configuration
         public void Save()
         {
             FirstRun = false;
+            foreach (IConfig config in ConfigSections.Values)
+                try
+                {
+                    config.Save(doc.SelectSingleNode("/hapConfig/" + config.Name.Replace(" ", "")) as XmlElement, ref doc);
+                }
+                catch { }
             doc.Save(ConfigPath);
         }
     }

@@ -9,6 +9,7 @@ using System.Xml;
 using System.Web.Security;
 using HAP.BookingSystem;
 using HAP.Web.Configuration;
+using HAP.Timetable;
 
 namespace HAP.Web
 {
@@ -24,6 +25,17 @@ namespace HAP.Web
             {
                 adminconverter.Visible = User.IsInRole("Domain Admins");
                 Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            }
+        }
+
+        protected string JSOptCals
+        {
+            get
+            {
+                List<string> s = new List<string>();
+                foreach (OptionalCalendar cal in hapConfig.Current.GetSection<Config>("Timetable").OptionalCalendars)
+                    s.Add("{" + string.Format("Roles: '{0}', Calendar: '{1}', Color: '{2}'", cal.Roles, cal.Calendar, cal.Color) + "}");
+                return string.Join(", ", s.ToArray());
             }
         }
 
