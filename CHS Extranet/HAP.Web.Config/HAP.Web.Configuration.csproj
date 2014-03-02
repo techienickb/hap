@@ -88,6 +88,7 @@
     <Compile Include="bookingsystem.cs" />
     <Compile Include="HelpDesk.cs" />
     <Compile Include="IAPI.cs" />
+    <Compile Include="IConfig.cs" />
     <Compile Include="IRegister.cs" />
     <Compile Include="Localizable.cs" />
     <Compile Include="QuotaServers.cs" />

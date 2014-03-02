@@ -23,8 +23,7 @@
         var terms = [ <%=JSTermDates %>];
         var lessontimes = [ <%=JSLessons%>];
         var timetable = [];
-        var optionalcalendars = [];
-        // var optionalcalendars = [{ Roles: '![Students]', Calendar: 'office@crickhowell-hs.powys.sch.uk', Color: '#ad3a3a' }];
+        var optionalcalendars = [ <%=JSOptCals%> ];
         //example: [ { Roles: '![Students]', Calendar: 'office@crickhowell-hs.powys.sch.uk', Color: '#dddddd' } ]
         // [Students] = HAP Students Group.
         //example2: [ { Roles: '![Students]', Calendar: 'office@crickhowell-hs.powys.sch.uk', Color: '#dddddd' }, { Roles: 'Domain Admins, Teachers', Calendar: 'netmain@crickhowell-hs.powys.sch.uk', Color: '#dddddd' } ]
