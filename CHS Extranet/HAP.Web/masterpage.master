@@ -6,7 +6,7 @@
     <head runat="server">
         <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
         <title>Home Access Plus</title>
-        <asp:ContentPlaceHolder runat="server" ID="viewport"><meta name="viewport" content="width=992px" /></asp:ContentPlaceHolder>
+        <asp:ContentPlaceHolder runat="server" ID="viewport"><meta name="viewport" content="width=992" /></asp:ContentPlaceHolder>
         <link rel="shortcut icon" href="~/favicon.ico" />
         <link href="~/style/jquery-ui.css" rel="stylesheet" type="text/css" />
         <link href="~/style/basestyle.css" rel="stylesheet" type="text/css" />
