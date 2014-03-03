@@ -31,7 +31,7 @@ namespace HAP.Web.Configuration
             Groups["Resources"].Add("My Emails", "Inherit", "Access Email", "/owa/", "~/images/icons/metro/office-15/outlook.png", "1", "1", "");
             Groups.Add("Management", "Domain Admins", "", false, false, false);
             Groups["Management"].Add("Help Desk", "Inherit", "Log/View a Support Ticket", "~/helpdesk/", "~/images/icons/metro/folders-os/help.png", "", "2", "1", "helpdesk");
-            Groups["Management"].Add("Booking System", "Inherit", "Book an IT Resource", "~/bookingsystem/", "~/images/icons/metro/applications/calendar.png", "", "2", "1", "bookings");
+            Groups["Management"].Add("Booking System", "Inherit", "Book an IT Resource", "~/bookingsystem/", "~/images/icons/metro/applications/RegEdit.png", "", "2", "1", "bookings");
             Groups["Management"].Add("Logon Tracker", "Domain Admins", "View the Logon History", "~/tracker/", "~/images/icons/metro/other/History.png", "1", "1", "");
             Groups["Management"].Add("HAP+ Config", "Domain Admins", "Home Access Plus+ Config", "~/setup.aspx", "~/images/icons/metro/folders-os/Configurealt1.png", "1", "1", "");
             Groups.Add("Me", "All", "#me", false, false, false);
