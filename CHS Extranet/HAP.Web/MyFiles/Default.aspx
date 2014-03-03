@@ -473,7 +473,7 @@
 				    uploads.pop(this);
 					return false;
 				}
-				if(this.File.size > praseInt('<%=maxRequestLength%>')) {
+				if(this.File.size > parseInt('<%=maxRequestLength%>')) {
 					alert(this.File.name + " " + hap.common.getLocal("myfiles/upload/filesizewarning"));
 					uploads.pop(this);
 					return false;
