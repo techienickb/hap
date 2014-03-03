@@ -343,7 +343,7 @@
 			else curdate = date;
 			$('#datepicker').datepicker("setDate", curdate);
 			$("#picker").val($.datepicker.formatDate('d MM', curdate));
-			$("#wv").attr("href", "cal.aspx#" + $.datepicker.formatDate('dd/mm/yy', curdate))
+			$("#wv").attr("href", "cal.aspx#" + $.datepicker.formatDate('dd/mm/yy', curdate));
 			breakloc = null;
 			for (var i = 0; i < lessontimes.length; i++) lessontimes[i].FromStart = lessontimes[i].FromEnd = null;
 			$("#time").removeAttr("style");
