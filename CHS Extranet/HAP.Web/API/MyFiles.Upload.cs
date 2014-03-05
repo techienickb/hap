@@ -119,6 +119,7 @@ namespace HAP.Web.API
                     }
                 }
                 finally { ADUser.EndContainedImpersonate(); }
+                context.Response.Write("Ok");
 
             }
             else throw new ArgumentNullException("No File Attached!");

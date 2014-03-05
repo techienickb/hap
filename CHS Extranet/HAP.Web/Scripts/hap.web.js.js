@@ -398,7 +398,7 @@ if (hap == null) {
     });
     $.fn.hapPopup = function (e) {
         if (!e) e = { buttons: [{ Text: "Close", Click: function () { $(this).parents(".hapPopup").hide(); } }] };
-        else if (e == "close") { console.log("I'm here"); return this; }
+        else if (e == "close") { $(this).hide(); return this; }
         this.show();
         if (!this.hasClass("hapPopup")) {
             this.addClass("hapPopup").contents().wrapAll('<table class="hapPopup-table" cellpadding=0 border=0 cellspacing=0><tr><td><div class="hapPopup-wrapper"><div class="hapPopup-wrapperinner"><div class="hapPopup-content"></div></div></div></td></tr></table>');

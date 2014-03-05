@@ -33,25 +33,6 @@ namespace HAP.MyFiles
     public class API
     {
         [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "DirectEdit/{Drive}/{*Path}")]
-        public void DirectEdit(string Drive, string Path)
-        {
-            hapConfig config = hapConfig.Current;
-            User user = new User();
-            if (config.AD.AuthenticationMode == Web.Configuration.AuthMode.Forms)
-            {
-                HttpCookie token = HttpContext.Current.Request.Cookies["token"];
-                if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
-                user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
-                HttpContext.Current.Response.Clear();
-                HttpContext.Current.Response.ContentType = "text/html";
-                HttpContext.Current.Response.Write("<html><head><title>HAP+ DirectEdit</title></head><body>Attempting to launch HAP+ DirectEdit...<script>location.href = '" + "hap://" + DirectEditToken.ConvertToToken(token.Value + "|" + HttpContext.Current.Request.Cookies[FormsAuthentication.FormsCookieName].Value + "|" + HttpContext.Current.Request.Url.ToString().ToLower().Replace("api/myfiles/directedit", "download")) + "';</script></body></html>");
-                HttpContext.Current.Response.Clear();
-            }
-            else HttpContext.Current.Response.Write("Windows Authentication is not supported");
-        }
-
-        [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "SendTo/Google/{Drive}/{*Path}", BodyStyle = WebMessageBodyStyle.WrappedRequest,  RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         public string GoogleUpload(string Drive, string Path, string username, string password)
         {
