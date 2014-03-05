@@ -30,6 +30,7 @@ namespace HAP.Win.DirectEdit
         string[] allowed = { ".docx", ".doc", ".xls", ".xlsx", ".ppt", ".pptx", ".txt" };
         string filename = "";
         string[] parts = null;
+        string url = "";
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             string p = Environment.GetCommandLineArgs()[1];
@@ -47,24 +48,26 @@ namespace HAP.Win.DirectEdit
             }
             else
             {
-                parts = Decrypt.ConvertToPlain(p).Split(new char[] { '|' });
-                Uri uri = new Uri(parts[2]);
-                filename = System.IO.Path.Combine(System.IO.Path.GetTempPath(), System.IO.Path.GetFileName(uri.LocalPath));
-                if (allowed.Contains(System.IO.Path.GetExtension(filename).ToLower()))
+                p = Decrypt.ConvertToPlain(p);
+                parts = p.Split(new char[] { '|' });
+                url = p.Substring(p.IndexOf(parts[1]) + parts[1].Length + 1);
+                string file = Uri.UnescapeDataString(url.Replace('|', '%')).Replace('^', '&');
+                filename = System.IO.Path.Combine(System.IO.Path.GetTempPath(), System.IO.Path.GetFileName(file));
+                if (allowed.Contains(System.IO.Path.GetExtension(file).ToLower()))
                 {
-                    info.Text = "Downloading " + System.IO.Path.GetFileName(uri.LocalPath);
+                    info.Text = "Downloading " + System.IO.Path.GetFileName(file);
                     WebClient wc = new WebClient();
                     wc.Headers.Add(HttpRequestHeader.UserAgent, "HAPDirectEdit/1.0 (Windows)");
                     wc.Headers.Add(HttpRequestHeader.Cookie, ".ASPXAUTH=" + parts[1] + "; token=" + parts[0]);
                     wc.DownloadProgressChanged += wc_DownloadProgressChanged;
                     wc.DownloadFileCompleted += wc_DownloadFileCompleted;
-                    wc.DownloadFileAsync(uri, filename);
+                    wc.DownloadFileAsync(new Uri(url), filename);
                 }
                 else
                 {
                     this.cancelclose = false;
                     Hide();
-                    MessageBox.Show(this, "Invalid File Type for Secure Download", "Invalid File Type", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(this, "Invalid File Type for Secure Download\n\n" + System.IO.Path.GetExtension(file).ToLower(), "Invalid File Type", MessageBoxButton.OK, MessageBoxImage.Error);
                     Close();
                 }
             }
@@ -92,8 +95,8 @@ namespace HAP.Win.DirectEdit
             wc.Headers.Add("X_FILENAME", System.IO.Path.GetFileName(filename));
             wc.UploadFileCompleted += wc_UploadFileCompleted;
             wc.UploadProgressChanged += wc_UploadProgressChanged;
-            string url = parts[2].Remove(parts[2].IndexOf(System.IO.Path.GetFileName(filename))).Replace("Download/", "api/myfiles-upload/");
-            wc.UploadFileAsync(new Uri(url), filename);
+            string url1 = url.Remove(url.LastIndexOf('/') + 1).Replace("Download/", "api/myfiles-upload/");
+            wc.UploadFileAsync(new Uri(url1), filename);
         }
 
         void wc_UploadProgressChanged(object sender, UploadProgressChangedEventArgs e)

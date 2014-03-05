@@ -16,7 +16,7 @@
                     [{
                         Text: "Save", Click: function () {
                             $.ajax({
-                                url: "api/announcement/save", type: 'POST', data: '{ "content": "' + escape($("textarea").wysiwyg("getContent")) + '", "show": "' + $("#htmlannouncement").is(":checked") + '" }', dataType: "json", contentType: 'application/JSON', success: function (data) {
+                                url: "api/announcement/save", type: 'POST', data: '{ "content": "' + escape($("textarea").wysiwyg("getContent")) + '", "show": "' + $("#<%=ShowAnnouncement.ClientID%>").is(":checked") + '" }', dataType: "json", contentType: 'application/JSON', success: function (data) {
                                     $("#editannouncement").hapPopup("close");
                                     document.location.reload();
                                 }, error: hap.common.jsonError
