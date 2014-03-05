@@ -24,8 +24,8 @@ namespace HAP.Web.Controls
             doc.Load(Server.MapPath("~/App_Data/Announcement.xml"));
             XmlNode node = doc.SelectSingleNode("/announcement");
             ShowAnnouncement.Checked = bool.Parse(node.Attributes[0].Value);
-            htmlannouncement.Text = node.InnerXml.Replace("<![CDATA[ ", "").Replace(" ]]>", "");
-            string anan = FilterAnan(htmlannouncement.Text);
+            htmlannounce.Text = node.InnerXml.Replace("<![CDATA[ ", "").Replace(" ]]>", "");
+            string anan = FilterAnan(htmlannounce.Text);
             if (ShowAnnouncement.Checked && !string.IsNullOrWhiteSpace(anan))
                 AnnouncementText.Text = string.Format("<h1 class=\"Announcement\"><b>Announcement</b><br />{0}</h1>", anan);
         }
