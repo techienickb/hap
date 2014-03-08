@@ -65,9 +65,21 @@ namespace HAP.BookingSystem
                 {
                     try
                     {
-                        if (a.ToLower().StartsWith("bookcharging("))
+                        if (a.ToLower().StartsWith("bookcharging(") || a.ToLower().StartsWith("bookunavailable("))
                         {
-                            string c = a.Remove(0, "bookcharging(".Length).TrimEnd(new char[] { ')' });
+                            string reason = "";
+                            string c = "";
+                            if (a.ToLower().StartsWith("bookcharging("))
+                            {
+                                c = a.Remove(0, "bookcharging(".Length).TrimEnd(new char[] { ')' });
+                                reason = "CHARGING";
+                            }
+                            else if (a.ToLower().StartsWith("bookunavailable("))
+                            {
+                                c = a.Remove(0, "bookunavailable(".Length).TrimEnd(new char[] { ')' });
+                                reason = "UNAVAILABLE";
+                            }
+                            
                             object o = BookingCondition.processCondition(c, b, r, bs);
                             if (o is Booking)
                             {
@@ -86,7 +98,7 @@ namespace HAP.BookingSystem
                                     }
                                     node.SetAttribute("username", "systemadmin");
                                     node.SetAttribute("uid", b.uid);
-                                    node.SetAttribute("name", "CHARGING");
+                                    node.SetAttribute("name", reason);
                                     doc.SelectSingleNode("/Bookings").AppendChild(node);
                                 }
                                 else
