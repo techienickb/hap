@@ -177,7 +177,7 @@ namespace HAP.BookingSystem
         {
             try
             {
-                object comp1 = processCondition(Condition1, b, r, bs), comp2 = processCondition(Condition1, b, r, bs);
+                object comp1 = processCondition(Condition1, b, r, bs), comp2 = processCondition(Condition2, b, r, bs);
 
                 switch (Operation)
                 {
