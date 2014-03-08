@@ -73,10 +73,10 @@ namespace HAP.BookingSystem
                             {
                                 Booking ob = o as Booking;
                                 XmlDocument doc = HAP.BookingSystem.BookingSystem.BookingsDoc;
-                                if (!IsRemoveEvent && bs.islessonFree(b.Room, b.Lesson))
+                                if (!IsRemoveEvent && bs.islessonFree(b.Room, ob.Lesson))
                                 {
                                     XmlElement node = doc.CreateElement("Booking");
-                                    node.SetAttribute("date", ob.Date.ToShortDateString());
+                                    node.SetAttribute("date", b.Date.ToShortDateString());
                                     node.SetAttribute("lesson", ob.Lesson);
                                     node.SetAttribute("room", b.Room);
                                     if (r.Type == ResourceType.Laptops)
@@ -107,7 +107,7 @@ namespace HAP.BookingSystem
                                 if (!IsRemoveEvent)
                                 {
                                     XmlElement node = doc.CreateElement("Booking");
-                                    node.SetAttribute("date", ob.Date.ToShortDateString());
+                                    node.SetAttribute("date", b.Date.ToShortDateString());
                                     node.SetAttribute("lesson", ob.Lesson);
                                     node.SetAttribute("room", b.Room);
                                     if (r.Type == ResourceType.Laptops)
