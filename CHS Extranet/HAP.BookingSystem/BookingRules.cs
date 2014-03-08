@@ -103,9 +103,10 @@ namespace HAP.BookingSystem
                                 }
                                 else
                                 {
-                                    if (doc.SelectSingleNode("/Bookings/Booking[@date='" + b.Date.ToShortDateString() + "' and @lesson='" + b.Lesson + "' and @room='" + b.Room + "' and @uid='" + b.uid + "']") != null)
-                                        doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + b.Date.ToShortDateString() + "' and @lesson='" + b.Lesson + "' and @room='" + b.Room + "' and @uid='" + b.uid + "']"));
+                                    if (doc.SelectSingleNode("/Bookings/Booking[@date='" + b.Date.ToShortDateString() + "' and @lesson='" + ob.Lesson + "' and @room='" + b.Room + "' and @uid='" + b.uid + "']") != null)
+                                        doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + b.Date.ToShortDateString() + "' and @lesson='" + ob.Lesson + "' and @room='" + b.Room + "' and @uid='" + b.uid + "']"));
                                 }
+                                HAP.BookingSystem.BookingSystem.BookingsDoc = doc;
                             }
                         }
                         else if (a.ToLower().StartsWith("book("))
@@ -137,9 +138,10 @@ namespace HAP.BookingSystem
                                 }
                                 else
                                 {
-                                    if (doc.SelectSingleNode("/Bookings/Booking[@date='" + b.Date.ToShortDateString() + "' and @lesson='" + b.Lesson + "' and @room='" + b.Room + "' and @uid='" + b.uid + "']") != null)
-                                        doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + b.Date.ToShortDateString() + "' and @lesson='" + b.Lesson + "' and @room='" + b.Room + "' and @uid='" + b.uid + "']"));
+                                    if (doc.SelectSingleNode("/Bookings/Booking[@date='" + b.Date.ToShortDateString() + "' and @lesson='" + ob.Lesson + "' and @room='" + b.Room + "' and @uid='" + b.uid + "']") != null)
+                                        doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + b.Date.ToShortDateString() + "' and @lesson='" + ob.Lesson + "' and @room='" + b.Room + "' and @uid='" + b.uid + "']"));
                                 }
+                                HAP.BookingSystem.BookingSystem.BookingsDoc = doc;
                             }
                         }
                     }
