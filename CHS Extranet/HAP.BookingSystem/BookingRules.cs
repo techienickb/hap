@@ -211,7 +211,7 @@ namespace HAP.BookingSystem
             int x = 0; bool bo = false;
             if (Condition.ToLower().StartsWith("resource."))
                 return processCondition(r, Condition.Remove(0, "resource.".Length));
-            else if (Condition.ToLower().StartsWith("booking.")) return processCondition(r, Condition.Remove(0, "booking.".Length));
+            else if (Condition.ToLower().StartsWith("booking.")) return processCondition(b, Condition.Remove(0, "booking.".Length));
             else if (Condition.ToLower().StartsWith("bookingsystem.")) return processCondition(r, Condition.Remove(0, "bookingsystem.".Length));
             else if (Condition.ToLower().StartsWith("user.")) return processCondition(HttpContext.Current.User, Condition.Remove(0, "user.".Length));
             else if (int.TryParse(Condition, out x)) return x;
@@ -229,14 +229,21 @@ namespace HAP.BookingSystem
                 string[] conditions = cons1.Remove(0, cons1.IndexOf('(')).TrimStart(new char[] { '(' }).TrimEnd(new char[] { ')' }).Split(new char[] { ',' });
                 cons1 = cons1.Substring(0, cons1.IndexOf('(')).TrimEnd(new char[] { '(' });
 
-                List<object> objects = new List<object>();
-                foreach (string s in conditions)
+                if (conditions.Length == 1 && conditions[0] == "")
                 {
-                    int x = 0;
-                    if (int.TryParse(s, out x)) objects.Add(x);
-                    else objects.Add(s);
+                    return processCondition(o.GetType().GetMethod(cons1).Invoke(o, null), cons2);
                 }
-                return processCondition(o.GetType().GetMethod(cons1).Invoke(o, objects.ToArray()), cons2);
+                else
+                {
+                    List<object> objects = new List<object>();
+                    foreach (string s in conditions)
+                    {
+                        int x = 0;
+                        if (int.TryParse(s, out x)) objects.Add(x);
+                        else objects.Add(s);
+                    }
+                    return processCondition(o.GetType().GetMethod(cons1).Invoke(o, objects.ToArray()), cons2);
+                }
             }
             else return processCondition(o.GetType().GetProperty(cons1).GetValue(o, null), cons2);
         }
