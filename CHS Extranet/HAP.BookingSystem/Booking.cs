@@ -84,18 +84,18 @@ namespace HAP.BookingSystem
             this.Username = username;
             this.Static = false;
         }
-        public Booking[] PreviousLesson()
+        public Booking PreviousLesson()
         {
             int index = hapConfig.Current.BookingSystem.Lessons.FindIndex(l => l.Name == this.Lesson);
             if (index > 0)
-                return new BookingSystem(this.Date).getBooking(Room, hapConfig.Current.BookingSystem.Lessons[index - 1].Name);
+                return new BookingSystem(this.Date).getBooking(Room, hapConfig.Current.BookingSystem.Lessons[index - 1].Name)[0];
             else return null;
         }
-        public Booking[] NextLesson()
+        public Booking NextLesson()
         {
             int index = hapConfig.Current.BookingSystem.Lessons.FindIndex(l => l.Name == this.Lesson);
             if (index < hapConfig.Current.BookingSystem.Lessons.Count - 1)
-                return new BookingSystem(this.Date).getBooking(Room, hapConfig.Current.BookingSystem.Lessons[index + 1].Name);
+                return new BookingSystem(this.Date).getBooking(Room, hapConfig.Current.BookingSystem.Lessons[index + 1].Name)[0];
             else return null;
         }
         public string Room { get; set; }
