@@ -133,7 +133,7 @@ namespace HAP.Web.API
                             HAP.BookingSystem.BookingSystem bs = new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date));
                             int index = config.BookingSystem.Lessons.FindIndex(l => l.Name == firstlesson);
                             int index2 = config.BookingSystem.Lessons.FindIndex(l => l.Name == lastlesson);
-                            if (index > 0 && bs.islessonFree(booking.Room, config.BookingSystem.Lessons[index - x].Name))
+                            if ((index - x) >= 0 && bs.islessonFree(booking.Room, config.BookingSystem.Lessons[index - x].Name))
                             {
                                 node = doc.CreateElement("Booking");
                                 node.SetAttribute("date", DateTime.Parse(Date).ToShortDateString());
