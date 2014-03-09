@@ -165,7 +165,21 @@ namespace HAP.Web.API
                 List<JSONBooking> js = new List<JSONBooking>();
                 foreach (Booking b in bs.getBooking(Resource, lesson.Name))
                 {
-                    JSONBooking j = new JSONBooking(b);
+                    object result = null;
+                    JSONBooking j;
+                    if (b.Name == "FREE")
+                    {
+                        result = BookingRules.Execute(b, hapConfig.Current.BookingSystem.Resources[Resource], bs, BookingRuleType.PreProcess, false);
+                        if (result != null)
+                        {
+                            j = new JSONBooking((Booking)result);
+                        }
+                    }
+                    else
+                    {
+                        j = new JSONBooking(b);
+                    }
+                    
                     if (b.Resource.Type == ResourceType.Loan) j.Lesson = lesson.Name;
                     js.Add(j);
                 }
