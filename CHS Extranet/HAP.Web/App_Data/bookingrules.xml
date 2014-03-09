@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<bookingrules>
+   <rule>
+	 <And condition1="Resource.EnableCharging" condition2="True" operation="Equals" />
+     <action>bookcharging(booking.NextLesson(),Resource.ChargingPeriods)</action>
+     <action>bookunavailable(booking.PreviousLesson(),-1))</action>
+   </rule>
+</bookingrules>
