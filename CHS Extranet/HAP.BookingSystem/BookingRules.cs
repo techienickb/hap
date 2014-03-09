@@ -26,20 +26,22 @@ namespace HAP.BookingSystem
             foreach (XmlNode node in doc.SelectNodes("/bookingrules/rule")) this.Add(new BookingRule(node));
         }
 
-        public static void Execute(Booking b, Resource r, BookingSystem bs, BookingRuleType brt, bool isRemoveEvent)
+        public static object Execute(Booking b, Resource r, BookingSystem bs, BookingRuleType brt, bool isRemoveEvent)
         {
             BookingRules br = new BookingRules();
+            object o = null;
             foreach (BookingRule rule in br)
             {
                 if (brt != rule.Type)
                     continue;
-
-                bool matched = rule.ExecuteRule(b, r, bs, brt, isRemoveEvent);
+                
+                bool matched = rule.ExecuteRule(b, r, bs, brt, isRemoveEvent, out o);
                 if (matched && rule.StopProcessing)
                 {
                     break;
                 }
             }
+            return o;
         }
     }
 
@@ -76,9 +78,10 @@ namespace HAP.BookingSystem
             get { return this.type; }
         }
 
-        public bool ExecuteRule(Booking b, Resource r, BookingSystem bs, BookingRuleType brt, bool IsRemoveEvent)
+        public bool ExecuteRule(Booking b, Resource r, BookingSystem bs, BookingRuleType brt, bool IsRemoveEvent, out object objo)
         {
             bool good = true;
+            objo = null;
             foreach (BookingCondition con in Conditions)
                 switch (con.MasterOperation)
                 {
@@ -202,6 +205,13 @@ namespace HAP.BookingSystem
                                 HAP.BookingSystem.BookingSystem.BookingsDoc = doc;
                             }
                         }
+                        else if (a.ToLower().StartsWith("busy("))
+                        {
+                            string reason = a.Remove(0, "busy(".Length).TrimEnd(new char[] { ')' });
+                            b.Name = reason;
+                            b.Static = true;
+                            objo = b;
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -241,7 +251,7 @@ namespace HAP.BookingSystem
             try
             {
                 object comp1 = processCondition(Condition1, b, r, bs), comp2 = processCondition(Condition2, b, r, bs);
-
+                
                 switch (Operation)
                 {
                     case BookingConditionOperation.Equals:
