@@ -149,7 +149,14 @@ namespace HAP.BookingSystem
             this.Username = b.Username;
             try
             {
-                this.DisplayName = b.User.Notes;
+                if (b.Username == "Not Booked" || b.Username == "systemadmin")
+                {
+                    this.DisplayName = b.Username;
+                }
+                else
+                {
+                    this.DisplayName = b.User.Notes;
+                }
             }
             catch { this.DisplayName = b.Username; }
             this.Static = b.Static;
