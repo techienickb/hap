@@ -87,7 +87,7 @@ namespace HAP.BookingSystem
         }
         public Booking PreviousLesson()
         {
-            string lesson = (this.Lesson.Contains(',') ? this.Lesson.Split(new char[] { ',' })[0] : this.Lesson);
+            string lesson = (this.Lesson.Contains(',') ? this.Lesson.Split(new char[] { ',' })[0] : this.Lesson).Trim();
             int index = hapConfig.Current.BookingSystem.Lessons.FindIndex(l => l.Name == lesson);
             if (index > 0)
                 return new BookingSystem(this.Date).getBooking(Room, hapConfig.Current.BookingSystem.Lessons[index - 1].Name)[0];
@@ -95,7 +95,7 @@ namespace HAP.BookingSystem
         }
         public Booking NextLesson()
         {
-            string lesson = (this.Lesson.Contains(',') ? this.Lesson.Split(new char[] { ',' }).Last() : this.Lesson);
+            string lesson = (this.Lesson.Contains(',') ? this.Lesson.Split(new char[] { ',' }).Last() : this.Lesson).Trim();
             int index = hapConfig.Current.BookingSystem.Lessons.FindIndex(l => l.Name == lesson);
             if (index < hapConfig.Current.BookingSystem.Lessons.Count - 1)
                 return new BookingSystem(this.Date).getBooking(Room, hapConfig.Current.BookingSystem.Lessons[index + 1].Name)[0];
@@ -149,7 +149,7 @@ namespace HAP.BookingSystem
             this.Username = b.Username;
             try
             {
-                if (b.Username == "Not Booked" || b.Username == "systemadmin")
+                if (b.Username == "Not Booked" || b.Username == "systemadmin" || b.Username == "undefined")
                 {
                     this.DisplayName = b.Username;
                 }

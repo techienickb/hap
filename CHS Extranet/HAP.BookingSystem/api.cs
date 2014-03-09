@@ -50,7 +50,7 @@ namespace HAP.Web.API
             Booking b = bs.getBooking(booking.Room, booking.Lesson)[int.Parse(i)];
             try
             {
-                BookingRules.Execute(b, hapConfig.Current.BookingSystem.Resources[b.Room], bs, true);
+                BookingRules.Execute(b, hapConfig.Current.BookingSystem.Resources[b.Room], bs, BookingRuleType.Booking, true);
             }
             catch (Exception ex) { HAP.Web.Logging.EventViewer.Log("Booking System JSON API", ex.ToString() + "\nMessage:\n" + ex.Message + "\nStack Trace:\n" + ex.StackTrace, System.Diagnostics.EventLogEntryType.Error); }
             try
@@ -110,7 +110,7 @@ namespace HAP.Web.API
                         iCalGenerator.Generate(b, DateTime.Parse(Date));
                         if (config.BookingSystem.Resources[b.Room].EmailAdmins) iCalGenerator.Generate(b, DateTime.Parse(Date), true);
                     }
-                    BookingRules.Execute(b, config.BookingSystem.Resources[b.Room], new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date)), false);
+                    BookingRules.Execute(b, config.BookingSystem.Resources[b.Room], new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date)), BookingRuleType.Booking, false);
                 }
             }
             catch (Exception e)
@@ -125,7 +125,9 @@ namespace HAP.Web.API
         public JSONBooking[][] Return(string Date, string Resource, string lesson)
         {
             hapConfig config = hapConfig.Current;
+            HAP.BookingSystem.BookingSystem bs = new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date)); 
             Booking b = new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date)).getBooking(Resource, lesson)[0];
+
             XmlDocument doc = HAP.BookingSystem.BookingSystem.BookingsDoc;
             List<string> newlesson = new List<string>(); bool go = false;
             foreach (Lesson l in config.BookingSystem.Lessons) {
@@ -134,28 +136,15 @@ namespace HAP.Web.API
                 if (l.Name == lesson) go = false;
             }
             doc.SelectSingleNode("/Bookings/Booking[@date='" + DateTime.Parse(Date).ToShortDateString() + "' and @lesson[contains(., '" + lesson + "')] and @room='" + Resource + "']").Attributes["lesson"].Value = string.Join(", ", newlesson.ToArray());
+            b.Lesson = string.Join(", ", newlesson.ToArray()); // update b.Lesson to reflect what just went into the XML above (ready for booking rules)
+
             HAP.BookingSystem.BookingSystem.BookingsDoc = doc;
-            #region Charging
-            if (config.BookingSystem.Resources[Resource].EnableCharging)
+            try
             {
-                HAP.BookingSystem.BookingSystem bs = new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date));
-                int index = config.BookingSystem.Lessons.FindIndex(l => l.Name == lesson);
-                if (index < config.BookingSystem.Lessons.Count - 1)
-                {
-                    if (bs.islessonFree(Resource, config.BookingSystem.Lessons[index + 1].Name))
-                    {
-                        XmlElement node = doc.CreateElement("Booking");
-                        node.SetAttribute("date", DateTime.Parse(Date).ToShortDateString());
-                        node.SetAttribute("lesson", config.BookingSystem.Lessons[index + 1].Name);
-                        node.SetAttribute("room", Resource);
-                        node.SetAttribute("username", "systemadmin");
-                        node.SetAttribute("name", "CHARGING");
-                        doc.SelectSingleNode("/Bookings").AppendChild(node);
-                    }
-                }
-                HAP.BookingSystem.BookingSystem.BookingsDoc = doc;
+                BookingRules.Execute(b, hapConfig.Current.BookingSystem.Resources[b.Room], bs, BookingRuleType.Return, false);
             }
-            #endregion
+            catch (Exception ex) { HAP.Web.Logging.EventViewer.Log("Booking System JSON API", ex.ToString() + "\nMessage:\n" + ex.Message + "\nStack Trace:\n" + ex.StackTrace, System.Diagnostics.EventLogEntryType.Error); }
+
             if (config.SMTP.Enabled)
             {
                 iCalGenerator.GenerateCancel(b, DateTime.Parse(Date));

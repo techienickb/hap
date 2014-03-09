@@ -26,12 +26,15 @@ namespace HAP.BookingSystem
             foreach (XmlNode node in doc.SelectNodes("/bookingrules/rule")) this.Add(new BookingRule(node));
         }
 
-        public static void Execute(Booking b, Resource r, BookingSystem bs, bool IsRemoveEvent)
+        public static void Execute(Booking b, Resource r, BookingSystem bs, BookingRuleType brt, bool isRemoveEvent)
         {
             BookingRules br = new BookingRules();
             foreach (BookingRule rule in br)
             {
-                bool matched = rule.ExecuteRule(b, r, bs, IsRemoveEvent);
+                if (brt != rule.Type)
+                    continue;
+
+                bool matched = rule.ExecuteRule(b, r, bs, brt, isRemoveEvent);
                 if (matched && rule.StopProcessing)
                 {
                     break;
@@ -50,6 +53,10 @@ namespace HAP.BookingSystem
             {
                 this.stop = bool.Parse(node.Attributes["stop"].Value);
             }
+            if (node.Attributes["type"] != null)
+            {
+                this.type = (BookingRuleType)Enum.Parse(typeof(BookingRuleType), node.Attributes["type"].Value);
+            }
             foreach (XmlNode n in node.ChildNodes)
                 if (n.Name == "action") this.Actions.Add(n.InnerText);
                 else this.Conditions.Add(new BookingCondition(n));
@@ -57,13 +64,19 @@ namespace HAP.BookingSystem
         private List<BookingCondition> Conditions;
         private List<string> Actions;      
         private bool stop = false;
+        private BookingRuleType type = BookingRuleType.Booking;
 
         public bool StopProcessing
         {
             get { return this.stop; }
-        } 
+        }
 
-        public bool ExecuteRule(Booking b, Resource r, BookingSystem bs, bool IsRemoveEvent)
+        public BookingRuleType Type
+        {
+            get { return this.type; }
+        }
+
+        public bool ExecuteRule(Booking b, Resource r, BookingSystem bs, BookingRuleType brt, bool IsRemoveEvent)
         {
             bool good = true;
             foreach (BookingCondition con in Conditions)
@@ -205,6 +218,8 @@ namespace HAP.BookingSystem
         
     }
     public enum BookingConditionOperation { And, Or, Not, Equals, Null, GT, LT, GTE, LTE, NotNull }
+
+    public enum BookingRuleType { Booking, Return, PreProcess }
 
     public class BookingCondition
     {
