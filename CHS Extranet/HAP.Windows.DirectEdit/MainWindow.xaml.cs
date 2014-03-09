@@ -95,7 +95,7 @@ namespace HAP.Win.DirectEdit
             wc.Headers.Add("X_FILENAME", System.IO.Path.GetFileName(filename));
             wc.UploadFileCompleted += wc_UploadFileCompleted;
             wc.UploadProgressChanged += wc_UploadProgressChanged;
-            string url1 = url.Remove(url.LastIndexOf('/') + 1).Replace("Download/", "api/myfiles-upload/");
+            string url1 = url.Remove(url.LastIndexOf('/') + 1).ToLower().Replace("download/", "api/myfiles-upload/");
             wc.UploadFileAsync(new Uri(url1), filename);
         }
 
