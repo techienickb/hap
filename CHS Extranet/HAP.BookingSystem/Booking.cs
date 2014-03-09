@@ -6,6 +6,7 @@ using HAP.Web.Configuration;
 using System.Configuration;
 using System.Xml;
 using System.Collections.Generic;
+using System.Linq;
 using HAP.AD;
 
 namespace HAP.BookingSystem
@@ -86,14 +87,16 @@ namespace HAP.BookingSystem
         }
         public Booking PreviousLesson()
         {
-            int index = hapConfig.Current.BookingSystem.Lessons.FindIndex(l => l.Name == this.Lesson);
+            string lesson = (this.Lesson.Contains(',') ? this.Lesson.Split(new char[] { ',' })[0] : this.Lesson);
+            int index = hapConfig.Current.BookingSystem.Lessons.FindIndex(l => l.Name == lesson);
             if (index > 0)
                 return new BookingSystem(this.Date).getBooking(Room, hapConfig.Current.BookingSystem.Lessons[index - 1].Name)[0];
             else return null;
         }
         public Booking NextLesson()
         {
-            int index = hapConfig.Current.BookingSystem.Lessons.FindIndex(l => l.Name == this.Lesson);
+            string lesson = (this.Lesson.Contains(',') ? this.Lesson.Split(new char[] { ',' }).Last() : this.Lesson);
+            int index = hapConfig.Current.BookingSystem.Lessons.FindIndex(l => l.Name == lesson);
             if (index < hapConfig.Current.BookingSystem.Lessons.Count - 1)
                 return new BookingSystem(this.Date).getBooking(Room, hapConfig.Current.BookingSystem.Lessons[index + 1].Name)[0];
             else return null;
