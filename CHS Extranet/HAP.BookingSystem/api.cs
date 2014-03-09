@@ -65,27 +65,6 @@ namespace HAP.Web.API
             XmlDocument doc = HAP.BookingSystem.BookingSystem.BookingsDoc;
             XmlNodeList nodes = doc.SelectNodes("/Bookings/Booking[@date='" + DateTime.Parse(Date).ToShortDateString() + "' and @lesson[contains(., '" + booking.Lesson + "')] and @room='" + booking.Room + "']");
             doc.SelectSingleNode("/Bookings").RemoveChild(nodes[int.Parse(i)]);
-            if (hapConfig.Current.BookingSystem.Resources[booking.Room].EnableCharging)
-            {
-                string lastlesson = (booking.Lesson.Contains(',') ? booking.Lesson.Split(new char[] { ',' }).Last() : booking.Lesson);
-                string firstlesson = (booking.Lesson.Contains(',') ? booking.Lesson.Split(new char[] { ',' })[0] : booking.Lesson);
-                for (int x = 1; x <= hapConfig.Current.BookingSystem.Resources[booking.Room].ChargingPeriods; x++)
-                {
-                    int index = hapConfig.Current.BookingSystem.Lessons.FindIndex(l1 => l1.Name == lastlesson) + x;
-                    if (index >= hapConfig.Current.BookingSystem.Lessons.Count) index--;
-                    Lesson nextlesson = hapConfig.Current.BookingSystem.Lessons[index];
-
-                    if (nextlesson.Type != LessonType.Lesson) nextlesson = hapConfig.Current.BookingSystem.Lessons[hapConfig.Current.BookingSystem.Lessons.IndexOf(nextlesson) + x];
-                    if (doc.SelectSingleNode("/Bookings/Booking[@date='" + DateTime.Parse(Date).ToShortDateString() + "' and @lesson='" + nextlesson.Name + "' and @room='" + booking.Room + "']") != null)
-                        doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + DateTime.Parse(Date).ToShortDateString() + "' and @lesson='" + nextlesson.Name + "' and @room='" + booking.Room + "']"));
-
-                    index = hapConfig.Current.BookingSystem.Lessons.FindIndex(l1 => l1.Name == firstlesson) - x;
-                    if (index < 0) index++;
-                    Lesson previouslesson = hapConfig.Current.BookingSystem.Lessons[index];
-                    if (doc.SelectSingleNode("/Bookings/Booking[@date='" + DateTime.Parse(Date).ToShortDateString() + "' and @lesson='" + previouslesson.Name + "' and @room='" + booking.Room + "' and @name='UNAVAILABLE']") != null)
-                        doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + DateTime.Parse(Date).ToShortDateString() + "' and @lesson='" + previouslesson.Name + "' and @room='" + booking.Room + "' and @name='UNAVAILABLE']"));
-                }
-            }
             HAP.BookingSystem.BookingSystem.BookingsDoc = doc;
             return LoadRoom(Date, booking.Room);
         }
@@ -123,48 +102,6 @@ namespace HAP.Web.API
                     if (booking.Count >= 0) node.SetAttribute("count", booking.Count.ToString());
                     if (!string.IsNullOrWhiteSpace(booking.Notes)) node.SetAttribute("notes", booking.Notes);
                     doc.SelectSingleNode("/Bookings").AppendChild(node);
-                    #region Charging
-                    if (config.BookingSystem.Resources[booking.Room].EnableCharging)
-                    {
-                        string lastlesson = (booking.Lesson.Contains(',') ? booking.Lesson.Split(new char[] { ',' }).Last() : booking.Lesson);
-                        string firstlesson = (booking.Lesson.Contains(',') ? booking.Lesson.Split(new char[] { ',' })[0] : booking.Lesson);
-                        for (int x = 1; x <= hapConfig.Current.BookingSystem.Resources[booking.Room].ChargingPeriods; x++)
-                        {
-                            HAP.BookingSystem.BookingSystem bs = new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date));
-                            int index = config.BookingSystem.Lessons.FindIndex(l => l.Name == firstlesson);
-                            int index2 = config.BookingSystem.Lessons.FindIndex(l => l.Name == lastlesson);
-                            if ((index - x) >= 0 && bs.islessonFree(booking.Room, config.BookingSystem.Lessons[index - x].Name))
-                            {
-                                node = doc.CreateElement("Booking");
-                                node.SetAttribute("date", DateTime.Parse(Date).ToShortDateString());
-                                node.SetAttribute("lesson", config.BookingSystem.Lessons[index - x].Name);
-                                node.SetAttribute("room", booking.Room);
-                                node.SetAttribute("ltroom", "--");
-                                node.SetAttribute("count", booking.Count.ToString());
-                                node.SetAttribute("ltheadphones", booking.LTHeadPhones.ToString());
-                                node.SetAttribute("username", "systemadmin");
-                                node.SetAttribute("name", "UNAVAILABLE");
-                                doc.SelectSingleNode("/Bookings").AppendChild(node);
-                            }
-                            if (index2 < config.BookingSystem.Lessons.Count - x)
-                            {
-                                if (bs.islessonFree(booking.Room, config.BookingSystem.Lessons[index2 + x].Name))
-                                {
-                                    node = doc.CreateElement("Booking");
-                                    node.SetAttribute("date", DateTime.Parse(Date).ToShortDateString());
-                                    node.SetAttribute("lesson", config.BookingSystem.Lessons[index2 + x].Name);
-                                    node.SetAttribute("room", booking.Room);
-                                    node.SetAttribute("ltroom", "--");
-                                    node.SetAttribute("count", booking.Count.ToString());
-                                    node.SetAttribute("ltheadphones", booking.LTHeadPhones.ToString());
-                                    node.SetAttribute("username", "systemadmin");
-                                    node.SetAttribute("name", "CHARGING");
-                                    doc.SelectSingleNode("/Bookings").AppendChild(node);
-                                }
-                            }
-                        }
-                    }
-                    #endregion
                     HAP.BookingSystem.BookingSystem.BookingsDoc = doc;
                     Booking[] b1 = new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date)).getBooking(booking.Room, booking.Lesson);
                     Booking b = b1[b1.Length - 1];
