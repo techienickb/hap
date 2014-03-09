@@ -69,42 +69,69 @@ namespace HAP.BookingSystem
                         {
                             string reason = "";
                             string c = "";
+                            int repeat = 1;
+                            string[] conditions = null;
                             if (a.ToLower().StartsWith("bookcharging("))
                             {
+                                conditions = a.Remove(0, "bookcharging(".Length).TrimStart(new char[] { '(' }).TrimEnd(new char[] { ')' }).Split(new char[] { ',' });
                                 c = a.Remove(0, "bookcharging(".Length).TrimEnd(new char[] { ')' });
                                 reason = "CHARGING";
                             }
                             else if (a.ToLower().StartsWith("bookunavailable("))
                             {
+                                conditions = a.Remove(0, "bookunavailable(".Length).TrimStart(new char[] { '(' }).TrimEnd(new char[] { ')' }).Split(new char[] { ',' });
                                 c = a.Remove(0, "bookunavailable(".Length).TrimEnd(new char[] { ')' });
                                 reason = "UNAVAILABLE";
                             }
-                            
+
+                            if (conditions.Length == 2) {
+                                c = conditions[0];
+                                repeat = Convert.ToInt32(BookingCondition.processCondition(conditions[1], b, r, bs));
+                            }
+
                             object o = BookingCondition.processCondition(c, b, r, bs);
                             if (o is Booking)
                             {
                                 Booking ob = o as Booking;
                                 XmlDocument doc = HAP.BookingSystem.BookingSystem.BookingsDoc;
-                                if (!IsRemoveEvent && bs.islessonFree(b.Room, ob.Lesson))
+                                hapConfig config = hapConfig.Current;
+                                if (!IsRemoveEvent)
                                 {
-                                    XmlElement node = doc.CreateElement("Booking");
-                                    node.SetAttribute("date", b.Date.ToShortDateString());
-                                    node.SetAttribute("lesson", ob.Lesson);
-                                    node.SetAttribute("room", b.Room);
-                                    if (r.Type == ResourceType.Laptops)
+                                    string lastlesson = (ob.Lesson.Contains(',') ? ob.Lesson.Split(new char[] { ',' }).Last() : ob.Lesson);
+                                    int index2 = config.BookingSystem.Lessons.FindIndex(l => l.Name == lastlesson);
+
+                                    for (int x = 0; x < Math.Abs(repeat); x++)
                                     {
-                                        node.SetAttribute("ltroom", "--");
-                                        node.SetAttribute("ltheadphones", b.LTHeadPhones.ToString());
+                                        int period = (repeat > 0) ? index2 + x : index2 - x;
+                                        if (index2 < config.BookingSystem.Lessons.Count - x && bs.islessonFree(b.Room, config.BookingSystem.Lessons[period].Name))
+                                        {
+                                            XmlElement node = doc.CreateElement("Booking");
+                                            node.SetAttribute("date", b.Date.ToShortDateString());
+                                            node.SetAttribute("lesson", config.BookingSystem.Lessons[period].Name);
+                                            node.SetAttribute("room", b.Room);
+                                            if (r.Type == ResourceType.Laptops)
+                                            {
+                                                node.SetAttribute("ltroom", "--");
+                                                node.SetAttribute("ltheadphones", b.LTHeadPhones.ToString());
+                                            }
+                                            node.SetAttribute("username", "systemadmin");
+                                            node.SetAttribute("uid", b.uid);
+                                            node.SetAttribute("name", reason);
+                                            doc.SelectSingleNode("/Bookings").AppendChild(node);
+                                        }
                                     }
-                                    node.SetAttribute("username", "systemadmin");
-                                    node.SetAttribute("uid", b.uid);
-                                    node.SetAttribute("name", reason);
-                                    doc.SelectSingleNode("/Bookings").AppendChild(node);
                                 }
                                 else
                                 {
-                                    if (doc.SelectSingleNode("/Bookings/Booking[@date='" + b.Date.ToShortDateString() + "' and @lesson='" + ob.Lesson + "' and @room='" + b.Room + "' and @uid='" + b.uid + "']") != null)
-                                        doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + b.Date.ToShortDateString() + "' and @lesson='" + ob.Lesson + "' and @room='" + b.Room + "' and @uid='" + b.uid + "']"));
+                                    string lastlesson = (ob.Lesson.Contains(',') ? ob.Lesson.Split(new char[] { ',' }).Last() : ob.Lesson);
+                                    int index2 = config.BookingSystem.Lessons.FindIndex(l => l.Name == lastlesson);
+                                    for (int x = 0; x < Math.Abs(repeat); x++)
+                                    {
+                                        int period = (repeat > 0) ? index2 + x : index2 - x;
+                                        if (index2 < config.BookingSystem.Lessons.Count - x)
+                                            if (doc.SelectSingleNode("/Bookings/Booking[@date='" + b.Date.ToShortDateString() + "' and @lesson='" + config.BookingSystem.Lessons[period].Name + "' and @room='" + b.Room + "' and @uid='" + b.uid + "']") != null)
+                                                doc.SelectSingleNode("/Bookings").RemoveChild(doc.SelectSingleNode("/Bookings/Booking[@date='" + b.Date.ToShortDateString() + "' and @lesson='" + config.BookingSystem.Lessons[period].Name + "' and @room='" + b.Room + "' and @uid='" + b.uid + "']"));
+                                    }
                                 }
                                 HAP.BookingSystem.BookingSystem.BookingsDoc = doc;
                             }
@@ -222,13 +249,31 @@ namespace HAP.BookingSystem
 
         public static object processCondition(string Condition, Booking b, Resource r, BookingSystem bs)
         {
-            int x = 0; bool bo = false;
-            if (Condition.ToLower().StartsWith("resource."))
-                return processCondition(r, Condition.Remove(0, "resource.".Length));
-            else if (Condition.ToLower().StartsWith("booking.")) return processCondition(b, Condition.Remove(0, "booking.".Length));
-            else if (Condition.ToLower().StartsWith("bookingsystem.")) return processCondition(r, Condition.Remove(0, "bookingsystem.".Length));
-            else if (Condition.ToLower().StartsWith("user.")) return processCondition(HttpContext.Current.User, Condition.Remove(0, "user.".Length));
-            else if (int.TryParse(Condition, out x)) return x;
+            int x = 0; bool bo = false; bool negative = false;
+            string condition2 = Condition;
+            if (Condition.StartsWith("-"))
+            {
+                negative = true;
+                condition2 = Condition.Remove(0, 1);
+            }
+
+            object ret = null;
+            if (condition2.ToLower().StartsWith("resource."))
+                ret = processCondition(r, condition2.Remove(0, "resource.".Length));
+            else if (Condition.ToLower().StartsWith("booking.")) ret = processCondition(b, condition2.Remove(0, "booking.".Length));
+            else if (Condition.ToLower().StartsWith("bookingsystem.")) ret = processCondition(r, condition2.Remove(0, "bookingsystem.".Length));
+            else if (Condition.ToLower().StartsWith("user.")) ret = processCondition(HttpContext.Current.User, condition2.Remove(0, "user.".Length));
+
+            if (ret != null)
+            {
+                if (negative == true)
+                {
+                    return 0 - Convert.ToInt32(ret);
+                }
+                return ret;
+            }
+
+            if (int.TryParse(Condition, out x)) return x;
             else if (bool.TryParse(Condition, out bo)) return bo;
             else return Condition;
         }
