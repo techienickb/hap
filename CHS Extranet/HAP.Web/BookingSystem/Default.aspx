@@ -242,8 +242,9 @@
 			            if (this.Data[x][y].Name == "FREE" || this.Data[x][y].Name == "UNAVAILABLE" || this.Data[x][y].Name == "CHARGING") { }
 			            else {
 			                if (this.Type == "Laptops") h += ' in ' + this.Data[x][y].LTRoom + ' [' + this.Data[x][y].Count + '|' + (this.Data[x][y].LTHeadPhones ? 'HP' : 'N-HP') + ']';
-			                else if (this.Data[x][y].Count != 0 && this.Quantities.length > 0 && this.CanShare && !this.Data[x][0].Static) { xy += this.Data[x][y].Count; h += ' [' + this.Data[x][y].Count + '/' + this.Quantities[this.Quantities.length - 1] +']'; }
 			                else if (this.Type == "Equipment" || this.Type == "Loan") h += ' in ' + this.Data[x][y].EquipRoom;
+
+			                if (this.Data[x][y].Count != 0 && this.Quantities.length > 0 && this.CanShare && !this.Data[x][0].Static) { xy += this.Data[x][y].Count; h += ' [' + this.Data[x][y].Count + '/' + this.Quantities[this.Quantities.length - 1] +']'; }
 			            }
 			            h += '</span></a>';
 			        }
