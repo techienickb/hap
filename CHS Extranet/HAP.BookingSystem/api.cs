@@ -166,7 +166,7 @@ namespace HAP.Web.API
                 foreach (Booking b in bs.getBooking(Resource, lesson.Name))
                 {
                     object result = null;
-                    JSONBooking j;
+                    JSONBooking j = null;
                     if (b.Name == "FREE")
                     {
                         result = BookingRules.Execute(b, hapConfig.Current.BookingSystem.Resources[Resource], bs, BookingRuleType.PreProcess, false);
@@ -175,10 +175,9 @@ namespace HAP.Web.API
                             j = new JSONBooking((Booking)result);
                         }
                     }
-                    else
-                    {
+                    
+                    if (j == null)
                         j = new JSONBooking(b);
-                    }
                     
                     if (b.Resource.Type == ResourceType.Loan) j.Lesson = lesson.Name;
                     js.Add(j);
