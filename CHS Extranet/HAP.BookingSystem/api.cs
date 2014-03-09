@@ -78,7 +78,11 @@ namespace HAP.Web.API
             {
                 if (booking.Static) {
                     HAP.BookingSystem.BookingSystem bs = new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date));
-                    bs.addStaticBooking(new Booking { Name = booking.Name, Lesson = booking.Lesson, Username = booking.Username, Room = booking.Room, Day = bs.DayNumber });
+                    if (!bs.isStatic(booking.Room, booking.Lesson)) {
+                        bs.addStaticBooking(new Booking { Name = booking.Name, Lesson = booking.Lesson, Username = booking.Username, Room = booking.Room, Day = bs.DayNumber });
+                    } else {
+                        throw new Exception("Static Booking Already Exists for period " + booking.Lesson + " with resource " + booking.Room);
+                    }
                 }
                 else
                 {
