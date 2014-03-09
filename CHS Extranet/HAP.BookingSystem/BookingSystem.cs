@@ -324,6 +324,8 @@ namespace HAP.BookingSystem
             bookings.AppendChild(node);
 
             doc.Save(HttpContext.Current.Server.MapPath("~/App_Data/StaticBookings.xml"));
+
+            HttpContext.Current.Cache["staticbookings"] = null;
         }
         #endregion
     }
