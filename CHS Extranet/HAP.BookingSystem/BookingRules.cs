@@ -29,7 +29,14 @@ namespace HAP.BookingSystem
         public static void Execute(Booking b, Resource r, BookingSystem bs, bool IsRemoveEvent)
         {
             BookingRules br = new BookingRules();
-            foreach (BookingRule rule in br) rule.ExecuteRule(b, r, bs, IsRemoveEvent);
+            foreach (BookingRule rule in br)
+            {
+                bool matched = rule.ExecuteRule(b, r, bs, IsRemoveEvent);
+                if (matched && rule.StopProcessing)
+                {
+                    break;
+                }
+            }
         }
     }
 
@@ -39,14 +46,24 @@ namespace HAP.BookingSystem
         {
             this.Conditions = new List<BookingCondition>();
             this.Actions = new List<string>();
+            if (node.Attributes["stop"] != null)
+            {
+                this.stop = bool.Parse(node.Attributes["stop"].Value);
+            }
             foreach (XmlNode n in node.ChildNodes)
                 if (n.Name == "action") this.Actions.Add(n.InnerText);
                 else this.Conditions.Add(new BookingCondition(n));
         }
         private List<BookingCondition> Conditions;
-        private List<string> Actions;
+        private List<string> Actions;      
+        private bool stop = false;
 
-        public void ExecuteRule(Booking b, Resource r, BookingSystem bs, bool IsRemoveEvent)
+        public bool StopProcessing
+        {
+            get { return this.stop; }
+        } 
+
+        public bool ExecuteRule(Booking b, Resource r, BookingSystem bs, bool IsRemoveEvent)
         {
             bool good = true;
             foreach (BookingCondition con in Conditions)
@@ -61,6 +78,7 @@ namespace HAP.BookingSystem
                 }
             if (good)
             {
+                #region ProcessRule
                 foreach (string a in this.Actions)
                 {
                     try
@@ -177,7 +195,10 @@ namespace HAP.BookingSystem
                         HAP.Web.Logging.EventViewer.Log("BookingSystem.BookingRule", "Failed Action: " + Actions[0] + "\n\n" + ex.ToString(), System.Diagnostics.EventLogEntryType.Error);
                     }
                 }
+                #endregion
+                return true;
             }
+            return false;
         }
 
 
