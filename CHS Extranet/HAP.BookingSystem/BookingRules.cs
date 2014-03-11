@@ -307,8 +307,9 @@ namespace HAP.BookingSystem
             if (condition2.ToLower().StartsWith("resource."))
                 ret = processCondition(r, condition2.Remove(0, "resource.".Length));
             else if (Condition.ToLower().StartsWith("booking.")) ret = processCondition(b, condition2.Remove(0, "booking.".Length));
-            else if (Condition.ToLower().StartsWith("bookingsystem.")) ret = processCondition(r, condition2.Remove(0, "bookingsystem.".Length));
+            else if (Condition.ToLower().StartsWith("bookingsystem.")) ret = processCondition(bs, condition2.Remove(0, "bookingsystem.".Length));
             else if (Condition.ToLower().StartsWith("user.")) ret = processCondition(HttpContext.Current.User, condition2.Remove(0, "user.".Length));
+            else if (Condition.ToLower().StartsWith("datetime.now")) ret = processCondition(DateTime.Now, condition2.Remove(0, "datetime.now.".Length));
 
             if (ret != null)
             {
