@@ -76,8 +76,8 @@ namespace HAP.Web.API
             HAP.Data.SQL.WebEvents.Log(DateTime.Now, "BookingSystem.Book", HttpContext.Current.User.Identity.Name, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Booking " + booking.Name);
             try
             {
+                HAP.BookingSystem.BookingSystem bs = new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date));
                 if (booking.Static) {
-                    HAP.BookingSystem.BookingSystem bs = new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date));
                     if (!bs.isStatic(booking.Room, booking.Lesson)) {
                         bs.addStaticBooking(new Booking { Name = booking.Name, Lesson = booking.Lesson, Username = booking.Username, Room = booking.Room, Day = bs.DayNumber });
                     } else {
@@ -86,11 +86,21 @@ namespace HAP.Web.API
                 }
                 else
                 {
+                    hapConfig config = hapConfig.Current;
+
+                    if (!config.BookingSystem.Resources[booking.Room].CanShare)
+                    {
+                        // if bookings can't be shared, need to check here that booking doesn't already exist
+                        Booking[] existing = bs.getBooking(booking.Room, booking.Lesson);
+                        if( existing[0] != null && !existing[0].Static && existing[0].Name != "FREE" ) {
+                            throw new Exception("Booking Already Exists for period " + booking.Lesson + " with resource " + booking.Room);
+                        }
+                    }
+
                     XmlDocument doc = HAP.BookingSystem.BookingSystem.BookingsDoc;
                     XmlElement node = doc.CreateElement("Booking");
                     node.SetAttribute("date", DateTime.Parse(Date).ToShortDateString());
                     node.SetAttribute("lesson", booking.Lesson);
-                    hapConfig config = hapConfig.Current;
                     if (config.BookingSystem.Resources[booking.Room].Type == ResourceType.Laptops)
                     {
                         node.SetAttribute("ltroom", booking.LTRoom);
