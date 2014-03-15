@@ -216,28 +216,16 @@ span.hapswitch.on::after { content: 'on' }
 .hapPopup-buttonset  { position: absolute; bottom: 10px; right: 10px; }
 
 
-#hapLoader.go { width: 100%; margin: 0; padding: 0; text-align: center; position: fixed; top: 40px; z-index: 100 }
+#hapLoader.go { width: 100%; margin: 0; padding: 0; text-align: center; position: fixed; top: 40px; z-index: 311; }
 #hapLoader.go span { background: #fff; border-radius: 5px; display: inline-block; position: relative; width: 10px; height: 10px; position: absolute; }
-#hapLoader.go .dot_1 { margin-right: 10px; animation: loading 5s ease-in-out infinite; }
-#hapLoader.go .dot_2 { animation: loading 5s ease-in-out .3s infinite; }
-#hapLoader.go .dot_3 { animation: loading 5s ease-in-out .6s infinite; }
-#hapLoader.go .dot_4 { animation: loading 5s ease-in-out .9s infinite; }
-#hapLoader.go .dot_5 { animation: loading 5s ease-in-out .12s infinite; }
+#hapLoader.go .dot_1 { opacity: 0; margin-right: 10px; animation: loading 5s ease-in-out infinite; -ms-animation: loadingie 5s ease-in-out infinite; }
+#hapLoader.go .dot_2 { opacity: 0; animation: loading 5s ease-in-out .3s infinite; -ms-animation: loadingie 5s ease-in-out .3s infinite; }
+#hapLoader.go .dot_3 { opacity: 0; animation: loading 5s ease-in-out .6s infinite; -ms-animation: loadingie 5s ease-in-out .6s infinite; }
+#hapLoader.go .dot_4 { opacity: 0; animation: loading 5s ease-in-out .9s infinite; -ms-animation: loadingie 5s ease-in-out .9s infinite; }
+#hapLoader.go .dot_5 { opacity: 0; animation: loading 5s ease-in-out .12s infinite; -ms-animation: loadingie 5s ease-in-out .12s infinite; }
 
-@keyframes loading {
-  from {
-    margin-left: -50%;
-  	opacity: 0;
-  }
-  50% {
-    margin-left: 0;
-  	opacity: 1;
-  }
-  to {
-    margin-left: 50%;
-  	opacity: 0;
-  }
-}
+@keyframes loading { from { margin-left: -50%; opacity: 0; } 50% { margin-left: 0; opacity: 1; } to { margin-left: 50%; opacity: 0; } }
+@keyframes loadingie { from { margin-left: 0%; opacity: 0; } 50% { margin-left: 50%; opacity: 1; } to { margin-left: 100%; opacity: 0; } }
 
 @media only screen and (max-width: 1024px)  {
     #sidebaredit.show { width: 50%; }
