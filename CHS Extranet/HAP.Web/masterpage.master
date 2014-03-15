@@ -50,6 +50,7 @@
                         </div>
                     </LoggedInTemplate>
                 </asp:LoginView>
+                <div id="hapLoader"><span class="dot_1"></span><span class="dot_2"></span><span class="dot_3"></span><span class="dot_4"></span><span class="dot_5"></span></div>
                 <div id="baseContent">
                     <asp:ContentPlaceHolder id="body" runat="server" />
                 </div>

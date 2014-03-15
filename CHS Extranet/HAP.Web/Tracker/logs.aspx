@@ -33,16 +33,13 @@
         <div id="monthpicker" style="display: inline-block; vertical-align: middle;"></div>
         <button id="load">Load Month</button>
     </div>
-    <img src="../images/metroloading.gif" id="loading" />
     <div id="datagrid"></div>
     <script type="text/javascript">
         var line1 = [<%=Data%>];
     </script>
     <script type="text/javascript">
         var plot1;
-        $("#loading").hide();
         $("#load").click(function () {
-            $("#loading").show();
             $.getJSON("../api/tracker/" + $("#monthpicker .ui-datepicker-year :selected").val() + "/" + (parseInt($("#monthpicker .ui-datepicker-month :selected").val()) + 1), function (data) {
                 plot1.destroy();
                 plot1 = $.jqplot('chartdiv', [data.LineData], {
@@ -68,7 +65,6 @@
                     "bPaginate": false,
                     "aaSorting": [[6, "asc"]]
                 });
-                $("#loading").hide();
             });
             return false;
         });

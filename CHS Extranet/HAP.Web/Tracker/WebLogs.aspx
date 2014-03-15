@@ -29,16 +29,13 @@
         <input type="date" id="datepicker" />
         <button id="loadmonth">Load Month</button><button id="loadday">Load Day</button>
     </div>
-    <img src="../images/metroloading.gif" id="loading" />
     <div id="datagrid"></div>
     <script type="text/javascript">
         var line1 = [<%=Data%>];
     </script>
     <script type="text/javascript">
         var plot1;
-        $("#loading").hide();
         $("#loadmonth").click(function () {
-            $("#loading").show();
             $.getJSON("../api/tracker/web/" + $('#datepicker').datepicker("getDate").getFullYear() + "/" + ($('#datepicker').datepicker("getDate").getMonth() + 1), function (data) {
                 plot1.destroy();
                 plot1 = $.jqplot('chartdiv', [data], {
@@ -49,12 +46,10 @@
                     cursor: { show: true, zoom: true }
                 });
                 $('#datagrid').html('');
-                $("#loading").hide();
             });
             return false;
         });
         $("#loadday").click(function () {
-            $("#loading").show();
             $.getJSON("../api/tracker/web/" + $('#datepicker').datepicker("getDate").getFullYear() + "/" + ($('#datepicker').datepicker("getDate").getMonth() + 1) + "/" + $('#datepicker').datepicker("getDate").getDate(), function (data) {
                 plot1.destroy();
                 plot1 = $.jqplot('chartdiv', [data.LineData], {
@@ -80,7 +75,6 @@
                     "bAutoWidth": false,
                     "aaSorting": [[0, "asc"]]
                 });
-                $("#loading").hide();
             });
             return false;
         });
