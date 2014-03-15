@@ -15,7 +15,6 @@
 			<a href="<%:ResolveClientUrl("~/tracker") %>"><hap:LocalResource StringPath="tracker/livelogons" runat="server" /></a>
 		</div>
 	</header>
-    <img src="../images/metroloading.gif" id="loading" />
     <div id="tools" style="position: absolute; right: 200px; z-index: 140;"><input class="noswitch" type="checkbox" id="checkall" /><label for="checkall">Check All</label> | <a href="#" id="logoff">Logoff Selected</a> | <a href="#" id="markasloggedoff">Mark Selected as Logged Off</a>&nbsp;|&nbsp;</div>
     <div id="datagrid"></div>
     <script type="text/javascript">
@@ -35,7 +34,6 @@
             return false;
         });
         function logoff(e, clear) {
-            $("#loading").show();
             var row = $(e);
             if (row.is("a")) row = row.parent().parent();
             $.ajax({
@@ -80,7 +78,6 @@
                     });
                 }
                 $("#tools").show();
-                $("#loading").hide();
             });
             return false;
         };
