@@ -80,7 +80,7 @@
         });
         $(document).ready(function () {
             $("button").button();
-            $('#datepicker').datepicker({
+            $('#datepicker').val(new Date().getDate() + "/" + (new Date().getMonth() + 1) + "/" + new Date().getFullYear()).datepicker({
                 changeMonth: true,
                 minDate: new Date(line1[0][0].split(/\-/gi)[0], line1[0][0].split(/\-/gi)[1] - 1),
                 maxDate: 0,
