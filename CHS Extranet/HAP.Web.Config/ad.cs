@@ -35,6 +35,8 @@ namespace HAP.Web.Configuration
             e.SetAttribute("allow1usecodes", "False");
             XmlElement ous = doc.CreateElement("OUs");
             e.AppendChild(ous);
+            XmlElement ips = doc.CreateElement("InternalIPs");
+            e.AppendChild(ips);
             doc.SelectSingleNode("/hapConfig").AppendChild(e);
         }
 
