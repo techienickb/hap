@@ -17,11 +17,6 @@
     <asp:HyperLink ID="HyperLink4" runat="server" NavigateUrl="~/tracker/weblogs.aspx"><hap:LocalResource runat="server" StringPath="tracker/weblogs" /></asp:HyperLink>
 </asp:Content>
 <asp:Content ContentPlaceHolderID="body" runat="server">
-    <header class="commonheader">
-		<div>
-			<a href="<%:ResolveClientUrl("~/tracker") %>"><hap:LocalResource StringPath="tracker/historiclogs" runat="server" /></a>
-		</div>
-	</header>
     <div id="chartdiv" style="height:300px;width:99%; "></div>
     <div>
         <button onclick="plot1.resetZoom(); return false;">Reset Zoom</button>

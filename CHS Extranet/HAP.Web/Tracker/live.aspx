@@ -10,11 +10,6 @@
     <asp:HyperLink runat="server" NavigateUrl="~/tracker/weblogs.aspx"><hap:LocalResource runat="server" StringPath="tracker/weblogs" /></asp:HyperLink>
 </asp:Content>
 <asp:Content ContentPlaceHolderID="body" runat="server">
-    <header class="commonheader">
-		<div>
-			<a href="<%:ResolveClientUrl("~/tracker") %>"><hap:LocalResource StringPath="tracker/livelogons" runat="server" /></a>
-		</div>
-	</header>
     <div id="tools" style="position: absolute; right: 200px; z-index: 140;"><input class="noswitch" type="checkbox" id="checkall" /><label for="checkall">Check All</label> | <a href="#" id="logoff">Logoff Selected</a> | <a href="#" id="markasloggedoff">Mark Selected as Logged Off</a>&nbsp;|&nbsp;</div>
     <div id="datagrid"></div>
     <script type="text/javascript">
