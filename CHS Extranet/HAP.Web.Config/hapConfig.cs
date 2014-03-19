@@ -371,7 +371,7 @@ namespace HAP.Web.Configuration
                 hd.SetAttribute("useropenstates", "New, Updated");
                 hd.SetAttribute("userclosedstates", "Fixed, No Action Needed, Self Fixed");
             }
-            if (version.CompareTo(Version.Parse("10.0.0302.1801")) < 0) // Perform v10 upgrade - allow multiple internal IP ranges
+            if (version.CompareTo(Version.Parse("10.0.0319.2020")) < 0) // Perform v10 upgrade - allow multiple internal IP ranges
             {
                 XmlElement hap = doc.SelectSingleNode("/hapConfig/AD") as XmlElement;
 
