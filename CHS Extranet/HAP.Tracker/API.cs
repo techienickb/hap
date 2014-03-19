@@ -82,6 +82,25 @@ namespace HAP.Tracker
         }
 
         [OperationContract]
+        [WebInvoke(UriTemplate = "/{Year}/{Month}/{Day}", Method = "GET", ResponseFormat = WebMessageFormat.Json)]
+        public DataResult DayData(string Year, string Month, string Day)
+        {
+            DataResult res = new DataResult();
+            Dictionary<DateTime, int> data = new Dictionary<DateTime, int>();
+            trackerlog tlog = new trackerlog(int.Parse(Year), int.Parse(Month));
+            for (int y = 0; y < 24; y++)
+                data.Add(new DateTime(int.Parse(Year), int.Parse(Month), int.Parse(Day), y, 0, 0), tlog.Count(t => (t.LogOnDateTime.Day == int.Parse(Day)) && t.LogOnDateTime.Hour == y));
+            List<object> s = new List<object>();
+            foreach (DateTime dt2 in data.Keys)
+                s.Add(new object[] { dt2.ToString("yyyy-MM-dd h:mmtt"), data[dt2] });
+            res.LineData = s.ToArray();
+            List<string[]> l = new List<string[]>();
+            foreach (HAP.Data.Tracker.trackerlogentry e in tlog.Where(t => t.LogOnDateTime.Day == int.Parse(Day))) l.Add(new string[] { e.ComputerName, e.IP, e.UserName, e.DomainName, e.LogonServer, e.OS, e.LogOnDateTime.ToString(), e.LogOffDateTime.HasValue ? e.LogOffDateTime.Value.ToString() : "" });
+            res.Data = l.ToArray();
+            return res;
+        }
+
+        [OperationContract]
         [WebInvoke(UriTemplate = "/{Year}/{Month}", Method = "GET", ResponseFormat = WebMessageFormat.Json)]
         public DataResult MonthData(string Year, string Month)
         {
