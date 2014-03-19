@@ -68,10 +68,13 @@ namespace HAP.Web.HelpDesk
                 }
                 userlist.SelectedValue = userlist2.SelectedValue = ADUser.UserName.ToLower();
             }
-
-            if (!string.IsNullOrEmpty(config.AD.InternalIP) && !Request.Browser.Browser.Contains("Chrome"))
+            if (!Request.Browser.Browser.Contains("Chrome"))
             {
-                if (new IPSubnet(config.AD.InternalIP).Contains(Request.UserHostAddress) && Dns.GetHostEntry(Request.UserHostAddress).HostName.ToLower().EndsWith(config.AD.UPN.ToLower())) newticket_pc.Value = Dns.GetHostEntry(Request.UserHostAddress).HostName.ToLower().Remove(Dns.GetHostEntry(Request.UserHostAddress).HostName.IndexOf('.'));
+                foreach (string ip in config.AD.InternalIP)
+                {
+                    if (new IPSubnet(ip).Contains(Request.UserHostAddress) && Dns.GetHostEntry(Request.UserHostAddress).HostName.ToLower().EndsWith(config.AD.UPN.ToLower())) 
+                        newticket_pc.Value = Dns.GetHostEntry(Request.UserHostAddress).HostName.ToLower().Remove(Dns.GetHostEntry(Request.UserHostAddress).HostName.IndexOf('.'));
+                }
             }
         }
 

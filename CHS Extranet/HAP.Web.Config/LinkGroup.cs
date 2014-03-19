@@ -34,15 +34,29 @@ namespace HAP.Web.Configuration
         {
             get
             {
+                bool internaluser = false;
+                foreach (string ip in hapConfig.Current.AD.InternalIP)
+                {
+                    if (new IPSubnet(ip).Contains(HttpContext.Current.Request.UserHostAddress))
+                    {
+                        internaluser = true; 
+                        break;
+                    }
+                }
+
                 List<Link> Links = new List<Link>();
                 foreach (Link l in this)
-                    if (l.ShowTo == "All"|| l.ShowTo == "Inherit") Links.Add(l);
-                    else if (l.ShowTo != "None")
+                    if (l.Access == "both" || (l.Access == "internal" && internaluser == true))
                     {
-                        bool vis = false;
-                        foreach (string s in l.ShowTo.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
-                            if (!vis) vis = HttpContext.Current.User.IsInRole(s.Trim());
-                        if (vis) Links.Add(l);
+                        if (l.ShowTo == "All" || l.ShowTo == "Inherit") Links.Add(l);
+                        else if (l.ShowTo != "None")
+                        {
+                            bool vis = false;
+
+                            foreach (string s in l.ShowTo.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
+                                if (!vis) vis = HttpContext.Current.User.IsInRole(s.Trim());
+                            if (vis) Links.Add(l);
+                        }
                     }
                 return Links.ToArray();
             }
@@ -58,6 +72,7 @@ namespace HAP.Web.Configuration
             e.SetAttribute("target", Target);
             e.SetAttribute("width", width);
             e.SetAttribute("height", height);
+            e.SetAttribute("access", "both");
             doc.SelectSingleNode("/hapConfig/Homepage/Links/Group[@name='" + this.Name + "']").AppendChild(e);
             base.Add(new Link(e));
         }
@@ -73,6 +88,7 @@ namespace HAP.Web.Configuration
             e.SetAttribute("type", Type);
             e.SetAttribute("width", width);
             e.SetAttribute("height", height);
+            e.SetAttribute("access", "both");
             doc.SelectSingleNode("/hapConfig/Homepage/Links/Group[@name='" + this.Name + "']").AppendChild(e);
             base.Add(new Link(e));
         }
@@ -99,6 +115,8 @@ namespace HAP.Web.Configuration
             e.Attributes["target"].Value = link.Target;
             e.Attributes["width"].Value = link.Width;
             e.Attributes["height"].Value = link.Height;
+            e.Attributes["access"].Value = link.Access;
+
             base.Insert(x, new Link(e));
         }
 
