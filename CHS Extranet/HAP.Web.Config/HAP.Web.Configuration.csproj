@@ -89,6 +89,7 @@
     <Compile Include="HelpDesk.cs" />
     <Compile Include="IAPI.cs" />
     <Compile Include="IConfig.cs" />
+    <Compile Include="IPSubnet.cs" />
     <Compile Include="IRegister.cs" />
     <Compile Include="Localizable.cs" />
     <Compile Include="QuotaServers.cs" />

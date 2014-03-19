@@ -371,6 +371,26 @@ namespace HAP.Web.Configuration
                 hd.SetAttribute("useropenstates", "New, Updated");
                 hd.SetAttribute("userclosedstates", "Fixed, No Action Needed, Self Fixed");
             }
+            if (version.CompareTo(Version.Parse("10.0.0302.1801")) < 0) // Perform v10 upgrade - allow multiple internal IP ranges
+            {
+                XmlElement hap = doc.SelectSingleNode("/hapConfig/AD") as XmlElement;
+
+                XmlElement e = doc.CreateElement("InternalIPs");
+                if (hap.HasAttribute("internalip"))
+                {
+                    XmlElement e1 = doc.CreateElement("InternalIP");
+                    e1.SetAttribute("ip", hap.GetAttribute("internalip"));
+                    e.AppendChild(e1);
+                }
+                doc.SelectSingleNode("/hapConfig/AD").AppendChild(e);
+                hap.RemoveAttribute("internalip");
+
+                foreach (XmlNode n in doc.SelectNodes("/hapConfig/Homepage/Links/Group/Link"))
+                {
+                    XmlElement en = n as XmlElement;
+                    en.SetAttribute("access", "both");
+                }
+            }
             doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             doc.Save(ConfigPath);
         }

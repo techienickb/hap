@@ -161,12 +161,21 @@ namespace HAP.Web.Configuration
                 return AuthMode.Forms;
             }
         }
-        public string InternalIP
+        public string[] InternalIP
         {
             get
             {
-                if (el.HasAttribute("internalip")) return el.GetAttribute("internalip");
-                return "";
+                List<string> s = new List<string>();
+                XmlNode node = doc.SelectSingleNode("/hapConfig/AD/InternalIPs");
+
+                foreach (XmlNode n in node.ChildNodes)
+                {
+                    if (n.Attributes["ip"] != null)
+                    {
+                        s.Add(n.Attributes["ip"].Value.ToString());
+                    }
+                }
+                return s.ToArray();
             }
         }
     }
