@@ -336,7 +336,7 @@ namespace HAP.BookingSystem
 
                 if (conditions.Length == 1 && conditions[0] == "")
                 {
-                    return processCondition(o.GetType().GetMethod(cons1).Invoke(o, null), cons2);
+                    return processCondition(o.GetType().GetMethod(cons1, new Type[0]).Invoke(o, new object[0]), cons2);
                 }
                 else
                 {
