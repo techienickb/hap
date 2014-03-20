@@ -46,7 +46,7 @@ namespace HAP.Web.Configuration
 
                 List<Link> Links = new List<Link>();
                 foreach (Link l in this)
-                    if (l.Access == "both" || (l.Access == "internal" && internaluser == true))
+                    if (l.Access == "both" || (l.Access == "internal" && internaluser == true) || (l.Access == "external" && internaluser == false))
                     {
                         if (l.ShowTo == "All" || l.ShowTo == "Inherit") Links.Add(l);
                         else if (l.ShowTo != "None")
