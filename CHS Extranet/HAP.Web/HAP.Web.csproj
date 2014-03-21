@@ -113,16 +113,13 @@
     <Content Include="BookingSystem\OverviewCalendar.ascx" />
     <Content Include="BookingSystem\OverviewCalendar.aspx" />
     <Content Include="BookingSystem\WeekView.aspx" />
-    <Content Include="Controls\Announcement.ascx" />
+    <Content Include="Announcement.ascx" />
     <Content Include="App_Data\Announcement.xml" />
-    <Content Include="App_Data\Tickets.xml" />
-    <Content Include="Controls\UpdateChecker.ascx" />
+    <Content Include="UpdateChecker.ascx" />
     <Content Include="ExampleCustomTile.js" />
     <Content Include="haplogo-icon.ico" />
-    <Content Include="HelpDesk\Default.aspx" />
     <Content Include="MyFiles\DirectEdit.aspx" />
     <Content Include="style\fullcalendar.css" />
-    <Content Include="HelpDesk\newassignticket.htm" />
     <Content Include="images\120-arrow.png" />
     <Content Include="images\ajax-loader.png" />
     <Content Include="images\arrow-collapse.png" />
@@ -677,10 +674,6 @@
     <Content Include="style\basestyle.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="HelpDesk\newusernote.htm" />
-    <Content Include="HelpDesk\newadminnote.htm" />
-    <Content Include="HelpDesk\newadminticket.htm" />
-    <Content Include="HelpDesk\newuserticket.htm" />
     <Content Include="images\arrow-right.gif" />
     <Content Include="images\dashed.gif" />
     <Content Include="images\haplogo.png" />
@@ -708,7 +701,6 @@
     <Content Include="Scripts\jquery.dynatree.js" />
     <Content Include="Setup.aspx" />
     <Content Include="style\bookingsystem.css" />
-    <Content Include="style\helpdesk.css" />
     <Content Include="style\jquery-ui.css" />
     <Content Include="style\jquery.wysiwyg.css" />
     <Content Include="style\mobile-base.css" />
@@ -840,36 +832,22 @@
       <DependentUpon>WeekView.aspx</DependentUpon>
     </Compile>
     <Compile Include="BookingSystem\WeekViewRow.cs" />
-    <Compile Include="Controls\Announcement.ascx.cs">
+    <Compile Include="Announcement.ascx.cs">
       <DependentUpon>Announcement.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Controls\Announcement.ascx.designer.cs">
+    <Compile Include="Announcement.ascx.designer.cs">
       <DependentUpon>Announcement.ascx</DependentUpon>
     </Compile>
-    <Compile Include="Controls\CompressJS.cs" />
-    <Compile Include="Controls\HAPTag.cs" />
-    <Compile Include="Controls\LocalResource.cs" />
-    <Compile Include="Controls\Page.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\UpdateChecker.ascx.cs">
+    <Compile Include="UpdateChecker.ascx.cs">
       <DependentUpon>UpdateChecker.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Controls\UpdateChecker.ascx.designer.cs">
+    <Compile Include="UpdateChecker.ascx.designer.cs">
       <DependentUpon>UpdateChecker.ascx</DependentUpon>
     </Compile>
-    <Compile Include="Controls\WrappedLocalResource.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="HelpDesk\Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="HelpDesk\Default.aspx.designer.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
     <Compile Include="kerberos.aspx.cs">
       <DependentUpon>kerberos.aspx</DependentUpon>
@@ -1013,9 +991,21 @@
     <Content Include="masterpage.master" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HAP.AD\HAP.AD.csproj">
-      <Project>{36468E14-F8AF-4794-AB76-25571A54682F}</Project>
+    <ProjectReference Include="..\Core\HAP.AD\HAP.AD.csproj">
+      <Project>{36468e14-f8af-4794-ab76-25571a54682f}</Project>
       <Name>HAP.AD</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\HAP.Web.Config\HAP.Web.Configuration.csproj">
+      <Project>{1f2cfbbf-1c06-4cac-bb4b-5551bf6a398c}</Project>
+      <Name>HAP.Web.Configuration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\HAP.Web.Controls\HAP.Web.Controls.csproj">
+      <Project>{94a9d6f5-014d-4c3e-a734-614beb05ed04}</Project>
+      <Name>HAP.Web.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\HAP.Web.Logging\HAP.Web.Logging.csproj">
+      <Project>{3733b9ac-7559-4abf-ac72-fb383030326a}</Project>
+      <Name>HAP.Web.Logging</Name>
     </ProjectReference>
     <ProjectReference Include="..\HAP.BookingSystem\HAP.BookingSystem.csproj">
       <Project>{ae604fd8-9641-4203-9014-19a1a07e5bf2}</Project>
@@ -1029,10 +1019,6 @@
       <Project>{66768D2F-2190-4B13-BB6C-7195A342DB9A}</Project>
       <Name>HAP.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\HAP.HelpDesk\HAP.HelpDesk.csproj">
-      <Project>{89ff514f-a7c3-410a-9250-8e79b6cfd993}</Project>
-      <Name>HAP.HelpDesk</Name>
-    </ProjectReference>
     <ProjectReference Include="..\HAP.MyFiles\HAP.MyFiles.csproj">
       <Project>{ed1514ff-9e76-4fc3-9238-68653b50f9c4}</Project>
       <Name>HAP.MyFiles</Name>
@@ -1045,17 +1031,9 @@
       <Project>{8a57d4c2-d59d-4d1e-9b83-62946a4e778d}</Project>
       <Name>HAP.Tracker</Name>
     </ProjectReference>
-    <ProjectReference Include="..\HAP.Web.Config\HAP.Web.Configuration.csproj">
-      <Project>{1F2CFBBF-1C06-4CAC-BB4B-5551BF6A398C}</Project>
-      <Name>HAP.Web.Configuration</Name>
-    </ProjectReference>
     <ProjectReference Include="..\HAP.Web.LiveTiles\HAP.Web.LiveTiles.csproj">
       <Project>{02914446-48ef-4af0-b4e7-016d668e5350}</Project>
       <Name>HAP.Web.LiveTiles</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HAP.Web.Logging\HAP.Web.Logging.csproj">
-      <Project>{3733B9AC-7559-4ABF-AC72-FB383030326A}</Project>
-      <Name>HAP.Web.Logging</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -1063,9 +1041,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="HelpDesk\Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="BookingSystem\Web.config">
@@ -1101,6 +1076,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\homework\" />
+    <Folder Include="Controls\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

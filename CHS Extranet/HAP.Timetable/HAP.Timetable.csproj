@@ -78,17 +78,17 @@
     <Compile Include="Timetables.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HAP.AD\HAP.AD.csproj">
+    <ProjectReference Include="..\Core\HAP.AD\HAP.AD.csproj">
       <Project>{36468e14-f8af-4794-ab76-25571a54682f}</Project>
       <Name>HAP.AD</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\HAP.Web.Config\HAP.Web.Configuration.csproj">
+      <Project>{1f2cfbbf-1c06-4cac-bb4b-5551bf6a398c}</Project>
+      <Name>HAP.Web.Configuration</Name>
     </ProjectReference>
     <ProjectReference Include="..\HAP.BookingSystem\HAP.BookingSystem.csproj">
       <Project>{ae604fd8-9641-4203-9014-19a1a07e5bf2}</Project>
       <Name>HAP.BookingSystem</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HAP.Web.Config\HAP.Web.Configuration.csproj">
-      <Project>{1f2cfbbf-1c06-4cac-bb4b-5551bf6a398c}</Project>
-      <Name>HAP.Web.Configuration</Name>
     </ProjectReference>
     <ProjectReference Include="..\HAP.Web.LiveTiles\HAP.Web.LiveTiles.csproj">
       <Project>{02914446-48ef-4af0-b4e7-016d668e5350}</Project>

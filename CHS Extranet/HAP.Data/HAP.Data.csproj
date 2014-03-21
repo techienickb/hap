@@ -123,16 +123,6 @@
     <Compile Include="Tracker\xml.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HAP.AD\HAP.AD.csproj">
-      <Project>{36468E14-F8AF-4794-AB76-25571A54682F}</Project>
-      <Name>HAP.AD</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HAP.Web.Config\HAP.Web.Configuration.csproj">
-      <Project>{1F2CFBBF-1C06-4CAC-BB4B-5551BF6A398C}</Project>
-      <Name>HAP.Web.Configuration</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
@@ -167,6 +157,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="haplogo-icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\HAP.AD\HAP.AD.csproj">
+      <Project>{36468e14-f8af-4794-ab76-25571a54682f}</Project>
+      <Name>HAP.AD</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\HAP.Web.Config\HAP.Web.Configuration.csproj">
+      <Project>{1f2cfbbf-1c06-4cac-bb4b-5551bf6a398c}</Project>
+      <Name>HAP.Web.Configuration</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

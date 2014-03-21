@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="Crickhowell High School - IT - Home Access Plus+" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="HAP.Web.Default" %>
-<%@ Register TagName="announcement" TagPrefix="hap" Src="~/Controls/Announcement.ascx" %>
-<%@ Register TagName="version" TagPrefix="hap" Src="~/Controls/UpdateChecker.ascx" %>
+<%@ Register TagName="announcement" TagPrefix="hap" Src="~/Announcement.ascx" %>
+<%@ Register TagName="version" TagPrefix="hap" Src="~/UpdateChecker.ascx" %>
 <asp:Content runat="server" ContentPlaceHolderID="head">
     <link rel="stylesheet" type="text/css" href="style/jquery.wysiwyg.css" />
     <script src="Scripts/jquery.ba-hashchange.min.js"></script>

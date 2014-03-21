@@ -6,7 +6,6 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using HAP.Web.Configuration;
 using System.Configuration;
-using HAP.Web.HelpDesk;
 using HAP.AD;
 using HAP.BookingSystem;
 using System.IO;
