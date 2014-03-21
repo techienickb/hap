@@ -82,7 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\Tickets.xml" />
-    <Content Include="haplogo-icon.ico" />
+    <None Include="haplogo-icon.ico" />
     <Content Include="HelpDesk\Default.aspx" />
     <Content Include="HelpDesk\newadminnote.htm" />
     <Content Include="HelpDesk\newadminticket.htm" />
@@ -90,6 +90,7 @@
     <Content Include="HelpDesk\newusernote.htm" />
     <Content Include="HelpDesk\newuserticket.htm" />
     <Content Include="scripts\hap.helpdesk.js" />
+    <None Include="Properties\PublishProfiles\Pack.pubxml" />
     <None Include="scripts\hap.web.js.js" />
     <None Include="scripts\jquery-ui.min.js" />
     <None Include="scripts\jquery-vsdoc.js" />
