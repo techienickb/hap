@@ -129,9 +129,17 @@
     <Compile Include="WordVisualizer\GlobalSuppressions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HAP.AD\HAP.AD.csproj">
+    <ProjectReference Include="..\Core\HAP.AD\HAP.AD.csproj">
       <Project>{36468e14-f8af-4794-ab76-25571a54682f}</Project>
       <Name>HAP.AD</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\HAP.Web.Config\HAP.Web.Configuration.csproj">
+      <Project>{1f2cfbbf-1c06-4cac-bb4b-5551bf6a398c}</Project>
+      <Name>HAP.Web.Configuration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\HAP.Web.Logging\HAP.Web.Logging.csproj">
+      <Project>{3733b9ac-7559-4abf-ac72-fb383030326a}</Project>
+      <Name>HAP.Web.Logging</Name>
     </ProjectReference>
     <ProjectReference Include="..\HAP.Data.SQL\HAP.Data.SQL.csproj">
       <Project>{d7498641-1837-480e-8aa0-4466cdb5fb12}</Project>
@@ -140,14 +148,6 @@
     <ProjectReference Include="..\HAP.Data\HAP.Data.csproj">
       <Project>{66768d2f-2190-4b13-bb6c-7195a342db9a}</Project>
       <Name>HAP.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HAP.Web.Config\HAP.Web.Configuration.csproj">
-      <Project>{1f2cfbbf-1c06-4cac-bb4b-5551bf6a398c}</Project>
-      <Name>HAP.Web.Configuration</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HAP.Web.Logging\HAP.Web.Logging.csproj">
-      <Project>{3733b9ac-7559-4abf-ac72-fb383030326a}</Project>
-      <Name>HAP.Web.Logging</Name>
     </ProjectReference>
     <ProjectReference Include="..\HAP.Web.SendTo.Google\HAP.Web.SendTo.csproj">
       <Project>{3e5b1ff1-bd5c-4dca-8165-813c6b5bf6b2}</Project>

@@ -112,15 +112,19 @@ namespace HAP.Web.API
                         context.Response.Write("\n/* " + s + " */\n");
                         StreamReader sr = File.OpenText(context.Server.MapPath(s));
                         string f = "";
+#if DEBUG
+                        f = sr.ReadToEnd();
+#else
                         if (JSType != API.JSType.CSS)
                             while (!sr.EndOfStream)
                             {
                                 f += sr.ReadLine();
                             }
                         else f = sr.ReadToEnd();
-                        sr.Close();
                         if (JSType != API.JSType.CSS)
                             f = f.Replace("\t", "").Replace("  ", " ").Replace("  ", " ");
+#endif
+                        sr.Close();
                         context.Response.Write(f);
                     }
 
