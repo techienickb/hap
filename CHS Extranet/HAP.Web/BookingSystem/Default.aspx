@@ -144,53 +144,55 @@
 		<div>
 			<asp:Label runat="server" AssociatedControlID="userlist" Text="User To Book For: " /><asp:DropDownList runat="server" ID="userlist" />
 		</div>
-        <div>
-            <label for="bflstatic">Make static?: </label><input type="checkbox" id="bflstatic" />
-        </div>
-        <div>
-            <label for="bfrecur">Recurance: </label><input type="checkbox" id="bfrecur" />
-            <div id="recurbox" style="display: none;">
-                <label for="recurweeks">Number of Weeks: </label><input type="number" id="recurweeks" value="0" />
-                <script>
-                    $(function () {
-                        setTimeout(function () {
-                            $("#bfrecur").prev().click(function () {
-                                if ($("#bfrecur").is(":checked")) $("#recurbox").show();
-                                else $("#recurbox").hide();
-                            });
-                        }, 100);
+        </asp:PlaceHolder>
+        <div id="bfadminonly">
+            <div>
+                <label for="bflstatic">Make static?: </label><input type="checkbox" id="bflstatic" />
+            </div>
+            <div>
+                <label for="bfrecur">Recurrence: </label><input type="checkbox" id="bfrecur" />
+                <div id="recurbox" style="display: none;">
+                    <label for="recurweeks">Number of Weeks: </label><input type="number" id="recurweeks" value="0" />
+                    <script>
+                        $(function () {
+                            setTimeout(function () {
+                                $("#bfrecur").prev().click(function () {
+                                    if ($("#bfrecur").is(":checked")) $("#recurbox").show();
+                                    else $("#recurbox").hide();
+                                });
+                            }, 100);
 
-                    });
-                    $("#recurweeks").val("0").spinner({ min: 1, spin: spins, change: spins });
-                    function spins(e, u) {
-                        $("#recurcheck").html('<span id="crecurcheck">Checking...</span>');
-                        recurs = [];
-                        for (var i = 1; i <= (u.value || $("#recurweeks").val()) ; i++) {
-                            var ndate = new Date(curdate.getTime() + i * 7 * 24 * 60 * 60 * 1000);
-                            recurs.push(ndate);
-                            $.ajax({
-                                type: 'GET',
-                                url: hap.common.formatJSONUrl('~/api/BookingSystem/LoadRoom/' + ndate.getDate() + '-' + (ndate.getMonth() + 1) + '-' + ndate.getFullYear() + '/' + curres.Name),
-                                dataType: 'json',
-                                context: ndate,
-                                success: function (data) {
-                                    $("#crecurcheck").remove();
-                                    var h = "";
-                                    for (var cr1 = 0; cr1 < data.length; cr1++)
-                                        if (data[cr1][0].Lesson == curles) {
-                                            $("#recurcheck").append("<div><span>" + this.getDate() + '-' + (this.getMonth() + 1) + '-' + this.getFullYear() + "</span>" + (data[cr1][0].Name == "FREE" ? "Available" : "Not Available") + "</div>");
-                                            recurs[recurs.indexOf(this)] = data[cr1][0].Name;
-                                        }
-                                },
-                                error: hap.common.jsonError
-                            });
+                        });
+                        $("#recurweeks").val("0").spinner({ min: 1, spin: spins, change: spins });
+                        function spins(e, u) {
+                            $("#recurcheck").html('<span id="crecurcheck">Checking...</span>');
+                            recurs = [];
+                            for (var i = 1; i <= (u.value || $("#recurweeks").val()) ; i++) {
+                                var ndate = new Date(curdate.getTime() + i * 7 * 24 * 60 * 60 * 1000);
+                                recurs.push(ndate);
+                                $.ajax({
+                                    type: 'GET',
+                                    url: hap.common.formatJSONUrl('~/api/BookingSystem/LoadRoom/' + ndate.getDate() + '-' + (ndate.getMonth() + 1) + '-' + ndate.getFullYear() + '/' + curres.Name),
+                                    dataType: 'json',
+                                    context: ndate,
+                                    success: function (data) {
+                                        $("#crecurcheck").remove();
+                                        var h = "";
+                                        for (var cr1 = 0; cr1 < data.length; cr1++)
+                                            if (data[cr1][0].Lesson == curles) {
+                                                $("#recurcheck").append("<div><span>" + this.getDate() + '-' + (this.getMonth() + 1) + '-' + this.getFullYear() + "</span>" + (data[cr1][0].Name == "FREE" ? "Available" : "Not Available") + "</div>");
+                                                recurs[recurs.indexOf(this)] = data[cr1][0].Name;
+                                            }
+                                    },
+                                    error: hap.common.jsonError
+                                });
+                            }
                         }
-                    }
-                </script>
-                <div id="recurcheck" style="padding-left: 10px;"></div>
+                    </script>
+                    <div id="recurcheck" style="padding-left: 10px;"></div>
+                </div>
             </div>
         </div>
-		</asp:PlaceHolder>
         <div id="bfdisclaimer">
             <label for="bfdisclaim"></label><input type="checkbox" class="noswitch" id="bfdisclaim" />
         </div>
@@ -387,7 +389,7 @@
 		    n1 += $("#bfsubject").val();
 		    if (abort) return false;
 		    var d = '{ "booking": { "Room": "' + curres.Name + '", "Lesson": "' + (canmulti && $("#bfmultiroom").val() != null ? $("#bfmultiroom").val() : curles) + '", "Username": "' + (user.isBSAdmin ? $("#<%=userlist.ClientID %> option:selected").val() : user.username) + '", "Name": "' + n1 + '"';
-		    if ($("#bflstatic").length > 0 && $("#bflstatic").is(":checked")) d +=  ', "Static": true';
+		    if (isAdminOf(curres.Name) && $("#bflstatic").is(":checked")) d +=  ', "Static": true';
 		    if (curres.Type == "Laptops") {
 		        d += ', "LTRoom": "' + $("#bflroom").val() + '", "LTHeadPhones": ' + (($('#bflheadphones:checked').val() !== undefined) ? 'true' : 'false');
 		    }
@@ -405,7 +407,7 @@
 		    }
 
 		    d += " } }";
-		    var recurcount = (($("#bfrecur").length > 0 && $("#bfrecur").is(":checked")) ? parseInt($("#recurweeks").val()) : 0) + 1;
+		    var recurcount = ((isAdminOf(curres.Name) && $("#bfrecur").is(":checked")) ? parseInt($("#recurweeks").val()) : 0) + 1;
 		    for (var recuri = 0; recuri < recurcount; recuri++) {
 		        var ndate = new Date(curdate.getTime() + recuri * 7 * 24 * 60 * 60 * 1000);
                 if (recuri == 0 || recurs[recuri-1] == "FREE")
@@ -491,9 +493,10 @@
 		        for (var i = 0; i < curres.Years.length; i++)
 		            $("#bfyear").append('<option value="' + curres.Years[i] + '">' + curres.Years[i] + '</option>');
 		    } catch (e) { }
-		    if ($("#bfrecur").length > 0) {
+		    if (isAdminOf(res)) {
+		        $("#bfadminonly").show();
 		        if ($("#bfrecur").is(":checked")) $("#bfrecur").prev().trigger("click");
-		    }
+		    } else $("#bfadminonly").hide();
 		    try {
 		        $("#bfquant, #bfquants, #bfquantspin").hide();
 		        $("#bfquantmax").html("");
