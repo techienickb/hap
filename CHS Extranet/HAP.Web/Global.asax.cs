@@ -9,6 +9,7 @@ using HAP.Web.routing;
 using System.Diagnostics;
 using HAP.Web.Configuration;
 using Microsoft.Win32;
+using HAP.BookingSystem;
 
 namespace HAP.Web
 {

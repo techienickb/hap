@@ -11,8 +11,8 @@ using System.Globalization;
 using System.Net.Mime;
 using System.Net;
 using System.DirectoryServices.AccountManagement;
-using HAP.Data.BookingSystem;
 using HAP.AD;
+using HAP.BookingSystem;
 
 namespace HAP.Web.BookingSystem
 {
@@ -40,7 +40,7 @@ namespace HAP.Web.BookingSystem
             if (t.ContainsKey(resource.Name)) template = t[resource.Name];
             string ltcount = "";
             if (resource.Type == ResourceType.Room) location = booking.Room;
-            else if (resource.Type == ResourceType.Laptops) { location = booking.LTRoom; ltcount = booking.LTCount.ToString(); }
+            else if (resource.Type == ResourceType.Laptops) { location = booking.LTRoom; ltcount = booking.Count.ToString(); }
             else if (resource.Type == ResourceType.Equipment) location = booking.EquipRoom;
             
             string summary = string.Format(template.Subject, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, ltcount);
@@ -114,7 +114,7 @@ namespace HAP.Web.BookingSystem
             if (t.ContainsKey(resource.Name)) template = t[resource.Name + "admin"];
             string ltcount = "";
             if (resource.Type == ResourceType.Room) location = booking.Room;
-            else if (resource.Type == ResourceType.Laptops) { location = booking.LTRoom; ltcount = booking.LTCount.ToString(); }
+            else if (resource.Type == ResourceType.Laptops) { location = booking.LTRoom; ltcount = booking.Count.ToString(); }
             else if (resource.Type == ResourceType.Equipment) location = booking.EquipRoom;
             
             string summary = string.Format(template.Subject, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, ltcount);
@@ -201,8 +201,8 @@ namespace HAP.Web.BookingSystem
             string description = "Cancellation of " + booking.Name + " in " + location + " during " + booking.Lesson + " on " + booking.Date.ToShortDateString();
             if (resource.Type == ResourceType.Laptops)
             {
-                summary += " with the " + booking.Room + " [" + booking.LTCount.ToString() + "]";
-                description += " with the " + booking.Room + " [" + booking.LTCount.ToString() + "]";
+                summary += " with the " + booking.Room + " [" + booking.Count.ToString() + "]";
+                description += " with the " + booking.Room + " [" + booking.Count.ToString() + "]";
             }
 
             sb.AppendLine("BEGIN:VCALENDAR");
@@ -270,8 +270,8 @@ namespace HAP.Web.BookingSystem
             string description = "Cancellation of " + booking.Name + " in " + location + " during " + booking.Lesson + " on " + booking.Date.ToShortDateString();
             if (resource.Type == ResourceType.Laptops)
             {
-                summary += " with the " + booking.Room + " [" + booking.LTCount.ToString() + "]";
-                description += " with the " + booking.Room + " [" + booking.LTCount.ToString() + "]";
+                summary += " with the " + booking.Room + " [" + booking.Count.ToString() + "]";
+                description += " with the " + booking.Room + " [" + booking.Count.ToString() + "]";
             }
 
             sb.AppendLine("BEGIN:VCALENDAR");

@@ -86,13 +86,13 @@
       <Project>{1f2cfbbf-1c06-4cac-bb4b-5551bf6a398c}</Project>
       <Name>HAP.Web.Configuration</Name>
     </ProjectReference>
-    <ProjectReference Include="..\HAP.BookingSystem\HAP.BookingSystem.csproj">
-      <Project>{ae604fd8-9641-4203-9014-19a1a07e5bf2}</Project>
-      <Name>HAP.BookingSystem</Name>
-    </ProjectReference>
     <ProjectReference Include="..\HAP.Web.LiveTiles\HAP.Web.LiveTiles.csproj">
       <Project>{02914446-48ef-4af0-b4e7-016d668e5350}</Project>
       <Name>HAP.Web.LiveTiles</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Plugins\HAP.BookingSystem\HAP.BookingSystem.csproj">
+      <Project>{6102c2b3-cfdc-4800-b9f7-0ad498039f14}</Project>
+      <Name>HAP.BookingSystem</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

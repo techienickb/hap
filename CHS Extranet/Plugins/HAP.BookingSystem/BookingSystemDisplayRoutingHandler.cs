@@ -8,7 +8,7 @@ using System.Web.UI;
 using System.Web.Security;
 using System.Net;
 
-namespace HAP.Web.routing
+namespace HAP.BookingSystem
 {
     public class BookingSystemDislayRoutingHandler : IRouteHandler
     {

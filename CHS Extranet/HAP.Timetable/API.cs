@@ -49,7 +49,7 @@ namespace HAP.Timetable
             int ret = -1;
             for (int i = 0; i < 5; i++)
             {
-                ret = new BookingSystem.BookingSystem(DateTime.Parse(date).AddDays(i).Date).WeekNumber;
+                ret = new HAP.BookingSystem.BookingSystem(DateTime.Parse(date).AddDays(i).Date).WeekNumber;
                 if (ret > -1) break;
             }
             return ret;
