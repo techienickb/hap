@@ -84,19 +84,12 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\abr.xml" />
-    <Content Include="App_Data\bookingrules.xml" />
-    <Content Include="App_Data\Bookings.xml" />
-    <Content Include="App_Data\BookingTemplates.xml" />
     <Content Include="App_Data\hap.sql" />
     <Content Include="App_Data\Homework.xml">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="App_Data\myfiles-users.txt" />
-    <Content Include="App_Data\StaticBookings.xml" />
     <Content Include="App_Data\temp\placeholder.txt" />
-    <Content Include="App_Data\TermDates.xml" />
-    <Content Include="App_Data\timetables.xml" />
     <Content Include="App_Data\tracker.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -641,7 +634,6 @@
     <Content Include="Scripts\jqplot.cursor.min.js" />
     <Content Include="Scripts\jqplot.dateAxisRenderer.min.js" />
     <Content Include="Scripts\jqplot.highlighter.min.js" />
-    <Content Include="App_Data\Timetables.RptDef" />
     <None Include="Scripts\jquery-vsdoc.js" />
     <Content Include="Scripts\jquery.dataTables.js" />
     <Content Include="Scripts\jquery.event.move.js" />
@@ -698,7 +690,6 @@
     <Content Include="style\setup.css" />
     <Content Include="style\timetable.css" />
     <Content Include="style\ui.dynatree.css" />
-    <Content Include="Timetable.aspx" />
     <Content Include="Tracker\api.asmx" />
     <Content Include="Tracker\logontracker-small.png" />
     <Content Include="images\statusicons\priority_high.png" />
@@ -855,13 +846,6 @@
     <Compile Include="Setup.aspx.designer.cs">
       <DependentUpon>Setup.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Timetable.aspx.cs">
-      <DependentUpon>Timetable.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Timetable.aspx.designer.cs">
-      <DependentUpon>Timetable.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Tracker\api.asmx.cs">
       <DependentUpon>api.asmx</DependentUpon>
       <SubType>Component</SubType>
@@ -952,10 +936,6 @@
     <ProjectReference Include="..\HAP.MyFiles\HAP.MyFiles.csproj">
       <Project>{ed1514ff-9e76-4fc3-9238-68653b50f9c4}</Project>
       <Name>HAP.MyFiles</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HAP.Timetable\HAP.Timetable.csproj">
-      <Project>{1a0e71ea-2860-4e47-acd6-0fde50e7f659}</Project>
-      <Name>HAP.Timetable</Name>
     </ProjectReference>
     <ProjectReference Include="..\HAP.Tracker\HAP.Tracker.csproj">
       <Project>{8a57d4c2-d59d-4d1e-9b83-62946a4e778d}</Project>
