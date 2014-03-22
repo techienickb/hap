@@ -7,12 +7,12 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{6102C2B3-CFDC-4800-B9F7-0AD498039F14}</ProjectGuid>
+    <ProjectGuid>{96A9C102-7CE8-4538-854B-1442D8E8E962}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HAP.BookingSystem</RootNamespace>
-    <AssemblyName>HAP.BookingSystem</AssemblyName>
+    <RootNamespace>HAP.Timetable</RootNamespace>
+    <AssemblyName>HAP.Timetable</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
@@ -43,8 +43,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.DirectoryServices" />
-    <Reference Include="System.DirectoryServices.AccountManagement" />
+    <Reference Include="Microsoft.Exchange.WebServices">
+      <HintPath>..\..\Binaries\Microsoft.Exchange.WebServices.dll</HintPath>
+    </Reference>
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Activation" />
     <Reference Include="System.ServiceModel.Web" />
@@ -66,92 +67,27 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AdvancedBookingRight.cs" />
-    <Compile Include="api.cs" />
-    <Compile Include="Booking.cs" />
-    <Compile Include="BookingKey.cs" />
-    <Compile Include="BookingRules.cs" />
-    <Compile Include="BookingSystem.cs" />
-    <Compile Include="BookingSystemDisplayRoutingHandler.cs" />
-    <Compile Include="BookingSystem\admin\Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="BookingSystem\admin\Default.aspx.designer.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="BookingSystem\api.ashx.cs">
-      <DependentUpon>api.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="BookingSystem\BigBookingCalendar.cs" />
-    <Compile Include="BookingSystem\Cal.aspx.cs">
-      <DependentUpon>Cal.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="BookingSystem\Cal.aspx.designer.cs">
-      <DependentUpon>Cal.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="BookingSystem\Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="BookingSystem\Default.aspx.designer.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="BookingSystem\Display.aspx.cs">
-      <DependentUpon>Display.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="BookingSystem\Display.aspx.designer.cs">
-      <DependentUpon>Display.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="BookingSystem\iCalGenerator.cs" />
-    <Compile Include="BookingSystem\OverviewCalendar.ascx.cs">
-      <DependentUpon>OverviewCalendar.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="BookingSystem\OverviewCalendar.ascx.designer.cs">
-      <DependentUpon>OverviewCalendar.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="BookingSystem\OverviewCalendar.aspx.cs">
-      <DependentUpon>OverviewCalendar.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="BookingSystem\OverviewCalendar.aspx.designer.cs">
-      <DependentUpon>OverviewCalendar.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="BookingSystem\WeekView.aspx.cs">
-      <DependentUpon>WeekView.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="BookingSystem\WeekView.aspx.designer.cs">
-      <DependentUpon>WeekView.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="BookingSystem\WeekViewRow.cs" />
-    <Compile Include="IBookingSystemDisplay.cs" />
-    <Compile Include="iCalGenerator.cs" />
+    <Compile Include="API.cs" />
+    <Compile Include="Config.cs" />
+    <Compile Include="hapAppointment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Register.cs" />
-    <Compile Include="Template.cs" />
-    <Compile Include="Templates.cs" />
-    <Compile Include="Term.cs" />
+    <Compile Include="Timetable.aspx.cs">
+      <DependentUpon>Timetable.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Timetable.aspx.designer.cs">
+      <DependentUpon>Timetable.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="TimetableDay.cs" />
+    <Compile Include="TimetableRecord.cs" />
+    <Compile Include="Timetables.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\abr.xml" />
-    <Content Include="App_Data\bookingrules.xml" />
-    <Content Include="App_Data\Bookings.xml" />
-    <Content Include="App_Data\BookingTemplates.xml" />
-    <Content Include="App_Data\StaticBookings.xml" />
-    <Content Include="App_Data\TermDates.xml" />
-    <Content Include="BookingSystem\admin\Web.config" />
-    <Content Include="BookingSystem\api.ashx" />
-    <Content Include="BookingSystem\Web.config" />
-    <Content Include="style\bookingpopup.css" />
-    <Content Include="style\bookingsystem.css" />
-    <None Include="Properties\PublishProfiles\Pack.pubxml" />
-    <None Include="style\fullcalendar.css" />
-    <None Include="style\fullcalendar.print.css" />
+    <Content Include="App_Data\Timetables.RptDef" />
+    <Content Include="Timetable.aspx" />
     <None Include="masterpage.master" />
+    <None Include="Properties\PublishProfiles\Pack.pubxml" />
     <None Include="Web.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -165,7 +101,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="scripts\modernizr.js" />
+    <None Include="scripts\jquery.mousewheel.js" />
     <None Include="scripts\jquery.min.js" />
+    <None Include="scripts\jquery.contextMenu.js" />
     <None Include="scripts\jquery.ba-hashchange.min.js" />
     <None Include="scripts\jquery-vsdoc.js" />
     <None Include="scripts\jquery-ui.min.js" />
@@ -187,25 +125,19 @@
       <Name>HAP.Web.Controls</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\HAP.Web.Logging\HAP.Web.Logging.csproj">
-      <Project>{3733b9ac-7559-4abf-ac72-fb383030326a}</Project>
-      <Name>HAP.Web.Logging</Name>
+    <ProjectReference Include="..\..\HAP.Web.LiveTiles\HAP.Web.LiveTiles.csproj">
+      <Project>{02914446-48ef-4af0-b4e7-016d668e5350}</Project>
+      <Name>HAP.Web.LiveTiles</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\HAP.Data.SQL\HAP.Data.SQL.csproj">
-      <Project>{d7498641-1837-480e-8aa0-4466cdb5fb12}</Project>
-      <Name>HAP.Data.SQL</Name>
+    <ProjectReference Include="..\HAP.BookingSystem\HAP.BookingSystem.csproj">
+      <Project>{6102c2b3-cfdc-4800-b9f7-0ad498039f14}</Project>
+      <Name>HAP.BookingSystem</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="BookingSystem\admin\Default.aspx" />
-    <Content Include="BookingSystem\Cal.aspx" />
-    <Content Include="BookingSystem\Default.aspx" />
-    <Content Include="BookingSystem\Display.aspx" />
-    <Content Include="BookingSystem\OverviewCalendar.ascx" />
-    <Content Include="BookingSystem\OverviewCalendar.aspx" />
-    <Content Include="BookingSystem\WeekView.aspx" />
+    <Content Include="App_Data\timetables.xml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -220,9 +152,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>51894</DevelopmentServerPort>
+          <DevelopmentServerPort>53870</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:51894/</IISUrl>
+          <IISUrl>http://localhost:53870/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
