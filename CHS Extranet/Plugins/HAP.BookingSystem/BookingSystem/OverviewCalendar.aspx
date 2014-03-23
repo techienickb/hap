@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="OverviewCalendar.aspx.cs" Inherits="HAP.Web.BookingSystem.OverviewCalendar1" %>
-<%@ Register Assembly="HAP.Web" Namespace="HAP.Web.BookingSystem" TagPrefix="hap" %>
+<%@ Register Assembly="HAP.BookingSystem" Namespace="HAP.Web.BookingSystem" TagPrefix="hap" %>
 <!DOCTYPE html>
 <html>
     <head runat="server">
