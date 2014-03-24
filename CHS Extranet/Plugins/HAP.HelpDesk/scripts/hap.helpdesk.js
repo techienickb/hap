@@ -123,7 +123,7 @@ function fileTicket() {
     var url = hap.common.formatJSONUrl("~/api/HelpDesk/Ticket");
     if (hap.hdadmin) {
         data += ', "Priority": "' + $("#priorityradioes input:checked").val() + '", "User": "' + userlist.val() + '", "ShowTo": "' + $("#newticket-showto").val() + '"';
-        url = hap.common.resolveUrl("~/api/HelpDesk/AdminTicket/");
+        url = hap.common.resolveUrl("~/api/HelpDesk/AdminTicket");
     }
     data += ' }';
     $.ajax({
