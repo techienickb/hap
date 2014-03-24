@@ -84,7 +84,7 @@
                     var x = '';
                     var i = 0;
                     for (var i = 0; i < response.length; i++)
-                        x += '<tr id="' + $.trim(response[i][0].Lesson.toLowerCase().replace(/ /g, "")) + '" class="' + $.trim(response[i][0].Lesson.toLowerCase().replace(/ /g, "")) + '"><td class="lesson">' + $.trim(response[i][0].Lesson.replace(/Lesson /g, "")) + '</td><td><span>' + response[i][0].Name + '</span>' + response[i].DisplayName + '</td></tr>';
+                        x += '<tr id="' + $.trim(response[i][0].Lesson.toLowerCase().replace(/ /g, "")) + '" class="' + $.trim(response[i][0].Lesson.toLowerCase().replace(/ /g, "")) + '"><td class="lesson">' + $.trim(response[i][0].Lesson.replace(/Lesson /g, "")) + '</td><td><span>' + response[i][0].Name + '</span>' + response[i][0].DisplayName + '</td></tr>';
                     $("#ict1").html(x);
                 }
             }
