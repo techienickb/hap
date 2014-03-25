@@ -531,7 +531,7 @@
 		                if (!l1) l1 = (curres.Data[i][0].Lesson == lesson);
 		                if (l1) {
 		                    l3++;
-		                    if ((parseInt(curres.MaxLessons) > 0 && l3 <= parseInt(curres.MaxLessons) && ((availbookings[0] == -1 || l3 <= availbookings[0] && availbookings[0] > 0))) && curres.Data[i][0].Name == "FREE") {
+		                    if ((isAdminOf(curres.Name) || (parseInt(curres.MaxLessons) > 0 && l3 <= parseInt(curres.MaxLessons) && ((availbookings[0] == -1 || l3 <= availbookings[0] && availbookings[0] > 0))) && curres.Data[i][0].Name == "FREE") {
 		                        $("#bfmultiroom").append('<option value="' + l2 + curres.Data[i][0].Lesson + '">' + l3 + ' Lesson' + (l3 == 1 ? '' : 's') + '</option>');
 		                        l2 += curres.Data[i][0].Lesson + ',';
 		                    } else break;
