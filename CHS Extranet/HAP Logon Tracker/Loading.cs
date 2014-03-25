@@ -11,6 +11,7 @@ using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Diagnostics;
 using Newtonsoft.Json;
+using System.Threading;
 
 namespace HAP.Tracker.UI
 {
@@ -18,6 +19,7 @@ namespace HAP.Tracker.UI
     {
         private Action action;
         private bool silent;
+        private bool closing;
         private string baseurl;
 
         private static bool ValidateRemoteCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors policyErrors)
@@ -35,6 +37,12 @@ namespace HAP.Tracker.UI
             if (action == Action.Clear) label1.Text = "Refreshing the Tracker...";
             else label1.Text = "Registering your Logon...";
             this.Text = "Logon Tracker - " + label1.Text;
+            closing = false;
+            new Thread(new ThreadStart(() => {
+                DateTime dt = new DateTime();
+                while (!closing && dt < dt.AddSeconds(10)) { }
+                if (!closing) Close();
+            })).Start();
         }
 
         private void Loading_Load(object sender, EventArgs e)
@@ -77,6 +85,7 @@ namespace HAP.Tracker.UI
 
         void c_UploadStringCompleted(object sender, UploadStringCompletedEventArgs e)
         {
+            closing = true;
             if (e.Error == null)
             {
                 LogonsList list = JsonConvert.DeserializeObject<LogonsList>(e.Result);
@@ -96,6 +105,11 @@ namespace HAP.Tracker.UI
                 proc.Start();
             }
             Close();
+        }
+
+        private void Loading_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            closing = true;
         }
     }
 
