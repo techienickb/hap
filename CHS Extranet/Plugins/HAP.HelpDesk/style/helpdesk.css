@@ -1,4 +1,4 @@
-﻿#tabs { background: #fff; position: fixed; top: 80px; bottom:45px; left: 0; width: 400px; padding: 10px 0; overflow: auto; }
+﻿#tabs { background: #fff; position: fixed; top: 40px; bottom:45px; left: 0; width: 400px; padding: 10px 0; overflow: auto; }
 
 #toolbar a.active { background: #fff; color: #0060a6; }
 #notes { margin-top: 5px; padding: 10px }
@@ -21,7 +21,7 @@
 #HDmain { padding-left: 400px; background: #fff; }
 #HDmain > div { padding: 140px 10px 50px 10px; }
 #HDmain > #stats, #HDmain > #newticket { padding-top: 20px; }
-#HDtop { position: fixed; top: 80px; left: 400px; right: 0; border-bottom: solid 1px #ddd; background: #fff; padding: 10px; z-index: 80; }
+#HDtop { position: fixed; top: 40px; left: 400px; right: 0; border-bottom: solid 1px #ddd; background: #fff; padding: 10px; z-index: 80; }
 #HDsubject { font-size: 14px; }
 
 .nocontrol #newnote { display: none; }

@@ -97,7 +97,7 @@
             <div id="HDtop">
                 <div style="float: right;" id="HDcontrols">
                     <div style="text-align: right;">
-                        <button onclick="return assignTicket();" class="hdadmin">Assign</button>
+                        <!--<button onclick="return assignTicket();" class="hdadmin">Assign</button>-->
                         <button onclick="return setFAQ();" class="hdadmin">FAQ</button>
                         <button onclick="return updateTicket();">Update</button>
                     </div>

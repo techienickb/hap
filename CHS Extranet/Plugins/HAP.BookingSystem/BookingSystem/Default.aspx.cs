@@ -49,17 +49,14 @@ namespace HAP.Web.BookingSystem
             lessons.DataBind();
             subjects.DataSource = config.BookingSystem.Subjects.ToArray();
             subjects.DataBind();
-            adminbookingpanel.Visible = adminlink.Visible = isBSAdmin || User.IsInRole("Domain Admins");
-            if (isBSAdmin || User.IsInRole("Domain Admins"))
-            {
-                userlist.Items.Clear();
-                foreach (UserInfo user in ADUtils.FindUsers(OUVisibility.BookingSystem))
-                    if (user.DisplayName == user.UserName)
-                        userlist.Items.Add(new ListItem(user.UserName, user.UserName.ToLower()));
-                    else
-                        userlist.Items.Add(new ListItem(string.Format("{0} - ({1})", user.UserName, user.Notes), user.UserName.ToLower()));
-                userlist.SelectedValue = ADUser.UserName.ToLower();
-            }
+            adminlink.Visible = isBSAdmin || User.IsInRole("Domain Admins");
+            userlist.Items.Clear();
+            foreach (UserInfo user in ADUtils.FindUsers(OUVisibility.BookingSystem))
+                if (user.DisplayName == user.UserName)
+                    userlist.Items.Add(new ListItem(user.UserName, user.UserName.ToLower()));
+                else
+                    userlist.Items.Add(new ListItem(string.Format("{0} - ({1})", user.UserName, user.Notes), user.UserName.ToLower()));
+            userlist.SelectedValue = ADUser.UserName.ToLower();
             try
             {
                 DateTime d = CurrentDate;
