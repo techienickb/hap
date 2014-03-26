@@ -58,15 +58,6 @@ namespace HAP.Web.BookingSystem {
         protected global::System.Web.UI.WebControls.Repeater subjects;
         
         /// <summary>
-        /// adminbookingpanel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder adminbookingpanel;
-        
-        /// <summary>
         /// userlist control.
         /// </summary>
         /// <remarks>

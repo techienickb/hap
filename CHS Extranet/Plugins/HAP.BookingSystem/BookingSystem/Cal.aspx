@@ -61,6 +61,8 @@
                 weekends: false,
                 defaultView: 'agendaWeek',
                 theme: true,
+                minTime: lessontimes[0].Start,
+                maxTime: lessontimes[lessontimes.length - 1].End,
                 events: termdates,
                 titleFormat: {
                     month: 'MMMM yyyy',                             // September 2009

@@ -62,7 +62,11 @@ namespace HAP.HelpDesk
                 MailMessage mes = new MailMessage();
 
                 mes.Subject = Localizable.Localize("helpdesk/ticketupdated").Replace("#", "#" + Id);
-                mes.From = mes.Sender = new MailAddress(ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].Email, ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].DisplayName);
+                try
+                {
+                    mes.From = mes.Sender = new MailAddress(ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].Email, ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].DisplayName);
+                }
+                catch { mes.From = new MailAddress(hapConfig.Current.SMTP.FromEmail, hapConfig.Current.SMTP.FromUser); }
                 mes.ReplyToList.Add(mes.From);
                 foreach (string s in hapConfig.Current.HelpDesk.FirstLineEmails.Split(new char[] { ',' }))
                     mes.To.Add(new MailAddress(s.Trim()));
@@ -251,7 +255,11 @@ namespace HAP.HelpDesk
                 MailMessage mes = new MailMessage();
 
                 mes.Subject = Localizable.Localize("helpdesk/ticketcreated").Replace("#", "#" + x);
-                mes.From = new MailAddress(ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].Email, ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].DisplayName);
+                try
+                {
+                    mes.From = new MailAddress(ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].Email, ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].DisplayName);
+                }
+                catch { mes.From = new MailAddress(hapConfig.Current.SMTP.FromEmail, hapConfig.Current.SMTP.FromUser); }
                 mes.Sender = mes.From;
                 mes.ReplyToList.Add(mes.From);
 
@@ -319,7 +327,11 @@ namespace HAP.HelpDesk
 
                 mes.Subject = Localizable.Localize("helpdesk/ticketlogged").Replace("#", "#" + x);
 
-                mes.From = mes.Sender = new MailAddress(ADUtils.FindUserInfos(User)[0].Email, ADUtils.FindUserInfos(User)[0].DisplayName);
+                try
+                {
+                    mes.From = mes.Sender = new MailAddress(ADUtils.FindUserInfos(User)[0].Email, ADUtils.FindUserInfos(User)[0].DisplayName);
+                }
+                catch { mes.From = new MailAddress(hapConfig.Current.SMTP.FromEmail, hapConfig.Current.SMTP.FromUser); }
                 mes.ReplyToList.Add(mes.From);
 
                 mes.To.Add(new MailAddress(ADUtils.FindUserInfos(User)[0].Email, ADUtils.FindUserInfos(User)[0].DisplayName));
@@ -343,31 +355,34 @@ namespace HAP.HelpDesk
             if (hapConfig.Current.SMTP.Enabled && !string.IsNullOrWhiteSpace(ShowTo))
                 foreach (string s in ShowTo.Split( new char[] {','}))
                 {
-                
-                    MailMessage mes = new MailMessage();
+                    try
+                    {
 
-                    mes.Subject = Localizable.Localize("helpdesk/ticketcreated").Replace("#", "#" + x);
-                    mes.From = new MailAddress(hapConfig.Current.SMTP.FromEmail, hapConfig.Current.SMTP.FromUser);
-                    mes.Sender = mes.From;
-                    mes.ReplyToList.Add(mes.From);
+                        MailMessage mes = new MailMessage();
 
-                    mes.To.Add(new MailAddress(ADUtils.FindUserInfos(s)[0].Email, ADUtils.FindUserInfos(s)[0].DisplayName));
+                        mes.Subject = Localizable.Localize("helpdesk/ticketcreated").Replace("#", "#" + x);
+                        mes.From = new MailAddress(hapConfig.Current.SMTP.FromEmail, hapConfig.Current.SMTP.FromUser);
+                        mes.Sender = mes.From;
+                        mes.ReplyToList.Add(mes.From);
+                        mes.To.Add(new MailAddress(ADUtils.FindUserInfos(s)[0].Email, ADUtils.FindUserInfos(s)[0].DisplayName));
 
-                    mes.IsBodyHtml = true;
-                    FileInfo template = new FileInfo(HttpContext.Current.Server.MapPath("~/HelpDesk/newuserticket.htm"));
-                    StreamReader fs = template.OpenText();
-                    mes.Body = fs.ReadToEnd().Replace("{0}", x.ToString()).Replace("{1}",
-                        HttpUtility.UrlDecode(Subject, System.Text.Encoding.Default)).Replace("{2}",
-                        HttpUtility.UrlDecode(Note, System.Text.Encoding.Default)).Replace("{3}",
-                        Room).Replace("{4}",
-                        ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].DisplayName).Replace("{5}",
-                        HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath);
-                    ServicePointManager.ServerCertificateValidationCallback = delegate(object s1, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
-                    SmtpClient smtp = new SmtpClient(hapConfig.Current.SMTP.Server, hapConfig.Current.SMTP.Port);
-                    if (!string.IsNullOrEmpty(hapConfig.Current.SMTP.User))
-                        smtp.Credentials = new NetworkCredential(hapConfig.Current.SMTP.User, hapConfig.Current.SMTP.Password);
-                    smtp.EnableSsl = hapConfig.Current.SMTP.SSL;
-                    smtp.Send(mes);
+                        mes.IsBodyHtml = true;
+                        FileInfo template = new FileInfo(HttpContext.Current.Server.MapPath("~/HelpDesk/newuserticket.htm"));
+                        StreamReader fs = template.OpenText();
+                        mes.Body = fs.ReadToEnd().Replace("{0}", x.ToString()).Replace("{1}",
+                            HttpUtility.UrlDecode(Subject, System.Text.Encoding.Default)).Replace("{2}",
+                            HttpUtility.UrlDecode(Note, System.Text.Encoding.Default)).Replace("{3}",
+                            Room).Replace("{4}",
+                            ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].DisplayName).Replace("{5}",
+                            HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath);
+                        ServicePointManager.ServerCertificateValidationCallback = delegate(object s1, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
+                        SmtpClient smtp = new SmtpClient(hapConfig.Current.SMTP.Server, hapConfig.Current.SMTP.Port);
+                        if (!string.IsNullOrEmpty(hapConfig.Current.SMTP.User))
+                            smtp.Credentials = new NetworkCredential(hapConfig.Current.SMTP.User, hapConfig.Current.SMTP.Password);
+                        smtp.EnableSsl = hapConfig.Current.SMTP.SSL;
+                        smtp.Send(mes);
+                    }
+                    catch { }
                 }
             return new FullTicket(doc.SelectSingleNode("/Tickets/Ticket[@id='" + x + "']"));
         }

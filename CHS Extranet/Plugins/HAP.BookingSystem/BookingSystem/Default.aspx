@@ -139,12 +139,10 @@
         <div id="bfmultilesson">
             <label for="bfmultiroom">Length: </label><select id="bfmultiroom"></select>
         </div>
-		<asp:PlaceHolder runat="server" ID="adminbookingpanel">
-		<div>
-			<asp:Label runat="server" AssociatedControlID="userlist" Text="User To Book For: " /><asp:DropDownList runat="server" ID="userlist" />
-		</div>
-        </asp:PlaceHolder>
         <div id="bfadminonly">
+            <div>
+			    <asp:Label runat="server" AssociatedControlID="userlist" Text="User To Book For: " /><asp:DropDownList runat="server" ID="userlist" />
+		    </div>
             <div>
                 <label for="bflstatic">Make static?: </label><input type="checkbox" id="bflstatic" />
             </div>
@@ -387,7 +385,7 @@
 		    if (n1 != "") n1 += " ";
 		    n1 += $("#bfsubject").val();
 		    if (abort) return false;
-		    var d = '{ "booking": { "Room": "' + curres.Name + '", "Lesson": "' + (canmulti && $("#bfmultiroom").val() != null ? $("#bfmultiroom").val() : curles) + '", "Username": "' + (user.isBSAdmin ? $("#<%=userlist.ClientID %> option:selected").val() : user.username) + '", "Name": "' + n1 + '"';
+		    var d = '{ "booking": { "Room": "' + curres.Name + '", "Lesson": "' + (canmulti && $("#bfmultiroom").val() != null ? $("#bfmultiroom").val() : curles) + '", "Username": "' + (isAdminOf(curres.Name) ? $("#<%=userlist.ClientID %> option:selected").val() : user.username) + '", "Name": "' + n1 + '"';
 		    if (isAdminOf(curres.Name) && $("#bflstatic").is(":checked")) d +=  ', "Static": true';
 		    if (curres.Type == "Laptops") {
 		        d += ', "LTRoom": "' + $("#bflroom").val() + '", "LTHeadPhones": ' + (($('#bflheadphones:checked').val() !== undefined) ? 'true' : 'false');
@@ -453,6 +451,7 @@
 			}
 			recurs = [];
 			curles = lesson;
+			$("#bflstatic").prop("checked", false);
 			$("#bfdate").html($.datepicker.formatDate('d MM yy', curdate));
 			for (var i = 0; i < resources.length; i++)
 			    if (resources[i].Name == res) curres = resources[i];
