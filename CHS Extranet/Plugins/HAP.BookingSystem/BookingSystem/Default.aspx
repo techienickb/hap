@@ -199,7 +199,7 @@
     <hap:CompressJS runat="server" tag="div">
 	<script>
 		var curdate, curres, curles, user, resources, date, lessontimes;
-		var availbookings = [ 0, 0 ];
+		var availbookings = 0;
 		var recurs = [];
         var canmulti = false;
 		function resource(name, type, years, quantities, readonly, multiroom, maxlessons, rooms, disclaimer, canshare, notes, allowance) {
@@ -324,11 +324,13 @@
 					if (user.isBSAdmin) $("#val").html("This Week is a Week " + data[1]);
 					else {
 					    if (data[0] >= 0 ) {
-						    $("#val").html("You have " + data[0] + " bookings available to use this week. This Week is a Week " + data[1]);
+					        $("#val").html("You have " + data[0] + " bookings available to use this week. This Week is a Week " + data[1]);
+					        availbookings = data[0];
 					    } else {
 					        $("#val").html("This Week is a Week " + data[1]);
+					        availbookings = -1;
 					    }
-						availbookings = data;
+						
 					}
 				},
 				error: hap.common.jsonError
@@ -428,10 +430,11 @@
 		                                else {
 		                                    if (data[0] >= 0) {
 		                                        $("#val").html("You have " + data[0] + " bookings available to use this week. This Week is a Week " + data[1]);
+		                                        availbookings = data[0];
 		                                    } else {
 		                                        $("#val").html("This Week is a Week " + data[1]);
+		                                        availbookings = -1;
 		                                    }
-		                                    availbookings = data;
 		                                }
 		                            },
 		                            error: hap.common.jsonError
@@ -445,7 +448,7 @@
 		    return false;
 		});
 		function doBooking(res, lesson) {
-			if (availbookings[0] == 0 && !user.isBSAdmin) { 
+			if (availbookings == 0 && !user.isBSAdmin) { 
 				alert("You have exceeded your allowed bookings, please contact an Admin if this is wrong");
 				return false; 
 			}
@@ -530,7 +533,7 @@
 		                if (!l1) l1 = (curres.Data[i][0].Lesson == lesson);
 		                if (l1) {
 		                    l3++;
-		                    if (isAdminOf(curres.Name) || (parseInt(curres.MaxLessons) > 0 && l3 <= parseInt(curres.MaxLessons) && ((availbookings[0] == -1 || l3 <= availbookings[0] && availbookings[0] > 0))) && curres.Data[i][0].Name == "FREE") {
+		                    if ((isAdminOf(curres.Name) || (parseInt(curres.MaxLessons) > 0 && l3 <= parseInt(curres.MaxLessons) && (availbookings == -1 || l3 <= availbookings && availbookings > 0))) && curres.Data[i][0].Name == "FREE") {
 		                        $("#bfmultiroom").append('<option value="' + l2 + curres.Data[i][0].Lesson + '">' + l3 + ' Lesson' + (l3 == 1 ? '' : 's') + '</option>');
 		                        l2 += curres.Data[i][0].Lesson + ',';
 		                    } else break;
@@ -550,7 +553,7 @@
 		                if (!l1) l1 = (curres.Data[i][0].Lesson == lesson);
 		                if (l1) {
 		                    l3++;
-		                    if ((isAdminOf(curres.Name) || (parseInt(curres.MaxLessons) > 0 && l3 <= parseInt(curres.MaxLessons) && (l3 <= availbookings[0] && availbookings[0] > 0))) && curres.Data[i][0].Name == "FREE") {
+		                    if ((isAdminOf(curres.Name) || (parseInt(curres.MaxLessons) > 0 && l3 <= parseInt(curres.MaxLessons) && (availbookings == -1 || l3 <= availbookings && availbookings > 0))) && curres.Data[i][0].Name == "FREE") {
 		                        $("#bfmultiroom").append('<option value="' + l2 + curres.Data[i][0].Lesson + '">' + l3 + ' Lesson' + (l3 == 1 ? '' : 's') + '</option>');
 		                        l2 += curres.Data[i][0].Lesson + ',';
 		                    } else break;
