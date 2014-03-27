@@ -64,9 +64,9 @@
             // label1
             // 
             this.label1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.label1.Location = new System.Drawing.Point(0, 116);
+            this.label1.Location = new System.Drawing.Point(0, 117);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(661, 45);
+            this.label1.Size = new System.Drawing.Size(661, 69);
             this.label1.TabIndex = 2;
             this.label1.Text = "Registering your logon...";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -89,9 +89,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.AutoSize = true;
-            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(661, 161);
+            this.ClientSize = new System.Drawing.Size(661, 186);
             this.ControlBox = false;
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.pictureBox1);
