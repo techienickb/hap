@@ -410,7 +410,7 @@ namespace HAP.HelpDesk
             XmlDocument doc = new XmlDocument();
             doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets" + Archive + ".xml"));
             List<Ticket> tickets = new List<Ticket>();
-            string xpath = string.Format("/Tickets/Ticket[@status{0}]", State == "Open" ? "!='Fixed'" : "='Fixed'");
+            string xpath = string.Format("/Tickets/Ticket");
             foreach (XmlNode node in doc.SelectNodes(xpath)) {
                 Ticket t = new Ticket(node);
                 bool add = false;
