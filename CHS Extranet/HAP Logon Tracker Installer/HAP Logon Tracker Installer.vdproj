@@ -46,13 +46,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_A65F893BDC0C4D3CA18D6A2948DB34E8"
+        "OwnerKey" = "8:_B6FBB15029E82C92ABD0145D33A9AA39"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_B6FBB15029E82C92ABD0145D33A9AA39"
+        "OwnerKey" = "8:_A65F893BDC0C4D3CA18D6A2948DB34E8"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -167,11 +167,6 @@
             "AssemblyAsmDisplayName" = "8:Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_B6FBB15029E82C92ABD0145D33A9AA39"
-                    {
-                    "Name" = "8:Newtonsoft.Json.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:Newtonsoft.Json.dll"
             "TargetName" = "8:"
@@ -236,15 +231,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HAP Logon Tracker"
-        "ProductCode" = "8:{362A7062-DDC3-4755-A443-6FA2DE34024D}"
-        "PackageCode" = "8:{2FCBA3A0-A9C8-401D-9DC4-A763AB754874}"
+        "ProductCode" = "8:{0C51F7EF-D759-4B6F-9889-96172D7F10D8}"
+        "PackageCode" = "8:{52073253-DEA8-4F95-BE74-3A11224096D2}"
         "UpgradeCode" = "8:{41BAC840-CB78-47EF-859E-15CC9CA146CD}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:6.0.0"
+        "ProductVersion" = "8:6.1.0"
         "Manufacturer" = "8:nb development"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://hap.codeplex.com"
