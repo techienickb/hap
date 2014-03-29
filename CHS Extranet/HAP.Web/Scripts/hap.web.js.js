@@ -402,7 +402,7 @@ if (hap == null) {
         });
     });
     $.fn.hapPopup = function (e) {
-        if (!e) e = { buttons: [{ Text: "Close", Click: function () { $(this).parents(".hapPopup").hide(); } }] };
+        if (!e) e = { buttons: [{ Text: "Close", Click: function () { $(this).parents(".hapPopup").hide(); return false; } }] };
         else if (e == "close") { $(this).hide(); return this; }
         this.show();
         if (!this.hasClass("hapPopup")) {

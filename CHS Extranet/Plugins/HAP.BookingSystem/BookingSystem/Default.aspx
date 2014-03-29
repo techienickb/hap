@@ -686,10 +686,7 @@
 				}
 			});
 			$("#overview").click(function () {
-				$("#overviewcalendar").dialog({ 
-					autoOpen: true,
-					minWidth: 450
-				});
+			    $("#overviewcalendar").hapPopup();
 				return false;
 			});
 			$("#bflsroom").change(function () {
@@ -699,7 +696,7 @@
 			    $("#bferoom").val(this.options[this.selectedIndex].value);
 			});
 			$("#questionbox").dialog({ autoOpen: false });
-			$("#overviewcalendar").dialog({ autoOpen: false });
+			$("#overviewcalendar").hide();
 			$("#bookingform").dialog({ autoOpen: false });
 			$("#picker").val($.datepicker.formatDate('d MM', curdate));
 			$("input[type=button]").button();
