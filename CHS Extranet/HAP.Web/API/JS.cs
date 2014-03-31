@@ -64,8 +64,8 @@ namespace HAP.Web.API
                 {
                     s = s.Replace("user: \"\",", "user: \"" + ((HAP.AD.User)Membership.GetUser()).UserName + "\",");
                     s = s.Replace("admin: false,", "admin: " + HttpContext.Current.User.IsInRole("Domain Admins").ToString().ToLower() + ",");
-                    s = s.Replace("bsadmin: false,", "admin: " + isBSAdmin.ToString().ToLower() + ",");
-                    s = s.Replace("hdadmin: false,", "admin: " + isHDAdmin.ToString().ToLower() + ",");
+                    s = s.Replace("bsadmin: false,", "bsadmin: " + isBSAdmin.ToString().ToLower() + ",");
+                    s = s.Replace("hdadmin: false,", "hdadmin: " + isHDAdmin.ToString().ToLower() + ",");
                 }
                 s = s.Replace("localization: []", "localization: [" + string.Join(", ", BuildLocalization(_locals.SelectSingleNode("/hapStrings"), "")) + "]");
 #if !DEBUG
