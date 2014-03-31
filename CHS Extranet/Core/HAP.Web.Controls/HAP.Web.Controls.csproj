@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="CompressJS.cs" />
     <Compile Include="HAPTag.cs" />
+    <Compile Include="JSMini.cs" />
     <Compile Include="LocalResource.cs" />
     <Compile Include="Page.cs">
       <SubType>ASPXCodeBehind</SubType>

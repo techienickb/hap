@@ -49,6 +49,7 @@ namespace HAP.Web.API
         {
             context.Response.Clear();
             context.Response.ContentType = "text/plain";
+            Controls.JavaScriptMinifier js = new Controls.JavaScriptMinifier();
             if (JSType == API.JSType.HAP)
             {
                 string s = "";
@@ -66,8 +67,10 @@ namespace HAP.Web.API
                     s = s.Replace("bsadmin: false,", "admin: " + isBSAdmin.ToString().ToLower() + ",");
                     s = s.Replace("hdadmin: false,", "admin: " + isHDAdmin.ToString().ToLower() + ",");
                 }
-                s = s.Replace("\t", "").Replace("  ", " ").Replace("  ", " ");
                 s = s.Replace("localization: []", "localization: [" + string.Join(", ", BuildLocalization(_locals.SelectSingleNode("/hapStrings"), "")) + "]");
+#if !DEBUG
+                s = js.Minify(s);
+#endif
                 context.Response.Write(s);
             }
             else 
@@ -111,18 +114,11 @@ namespace HAP.Web.API
                     {
                         context.Response.Write("\n/* " + s + " */\n");
                         StreamReader sr = File.OpenText(context.Server.MapPath(s));
-                        string f = "";
-#if DEBUG
-                        f = sr.ReadToEnd();
-#else
+                        string f = sr.ReadToEnd();
+#if !DEBUG
                         if (JSType != API.JSType.CSS)
-                            while (!sr.EndOfStream)
-                            {
-                                f += sr.ReadLine();
-                            }
-                        else f = sr.ReadToEnd();
-                        if (JSType != API.JSType.CSS)
-                            f = f.Replace("\t", "").Replace("  ", " ").Replace("  ", " ");
+                            f = js.Minify(f);
+                        else f = RemoveWhiteSpaceFromStylesheets(f);
 #endif
                         sr.Close();
                         context.Response.Write(f);
@@ -132,6 +128,22 @@ namespace HAP.Web.API
 
             }
         }
+
+
+
+        public static string RemoveWhiteSpaceFromStylesheets(string body)
+        {
+            body = Regex.Replace(body, @"[a-zA-Z]+#", "#");
+            body = Regex.Replace(body, @"[\n\r]+\s*", string.Empty);
+            body = Regex.Replace(body, @"\s+", " ");
+            body = Regex.Replace(body, @"\s?([:,;{}])\s?", "$1");
+            body = body.Replace(";}", "}");
+            body = Regex.Replace(body, @"([\s:]0)(px|pt|%|em)", "$1");
+            // Remove comments from CSS
+            body = Regex.Replace(body, @"/\*[\d\D]*?\*/", string.Empty);
+            return body;
+        }
+
 
         public string[] GetPaths(string Referrer)
         {

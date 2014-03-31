@@ -32,7 +32,7 @@ namespace HAP.Web.Controls
             HtmlTextWriter w = new HtmlTextWriter(stringWriter);
             base.Render(w);
             w.Close();
-            writer.Write(stringWriter.ToString().Replace(Environment.NewLine, "").Replace("\t", " ")); 
+            writer.Write(new JavaScriptMinifier().Minify(StringWriter.ToString())); 
 #endif
         }
 
