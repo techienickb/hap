@@ -17,6 +17,7 @@ namespace HAP.Web.Controls
         public override string UniqueID { get { return ""; } }
 
         [DefaultValue("div")]
+        [Obsolete()]
         public string Tag
         {
             get;
@@ -30,15 +31,12 @@ namespace HAP.Web.Controls
 #else
             StringWriter stringWriter = new StringWriter();
             HtmlTextWriter w = new HtmlTextWriter(stringWriter);
-            base.Render(w);
+            base.RenderChildren(w);
             w.Close();
-            writer.Write(new Microsoft.Ajax.Utilities.Minifier().MinifyJavaScript(stringWriter.ToString())); 
+            writer.WriteFullBeginTag("script");
+            writer.Write(new Microsoft.Ajax.Utilities.Minifier().MinifyJavaScript(stringWriter.ToString().Replace("<script type=\"text/javascript\">", "").Replace("</script>","")));
+            writer.WriteEndTag("script");
 #endif
-        }
-
-        public override string TagName
-        {
-            get { return Tag; }
         }
     }
 }

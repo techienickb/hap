@@ -196,12 +196,13 @@
         <div id="bfnote"><label for="bfnotes">Notes:</label><br /><textarea id="bfnotes" style="width: 99%;"></textarea></div>
         <div class="buttons"><button id="bookbutton">Book</button><button onclick="$('#sidebaredit').removeClass('show'); return false;">Cancel</button></div>
 	</div>
-    <hap:CompressJS runat="server" tag="div">
-	<script>
-		var curdate, curres, curles, user, resources, date, lessontimes;
-		var availbookings = 0;
-		var recurs = [];
+    <script>
+        var curdate, curres, curles, user, resources, date, lessontimes;
+        var availbookings = 0;
+        var recurs = [];
         var canmulti = false;
+    </script>
+	<script>
 		function resource(name, type, years, quantities, readonly, multiroom, maxlessons, rooms, disclaimer, canshare, notes, allowance) {
 			this.Name = name;
 			this.Type = type;
@@ -754,7 +755,6 @@
 		    }
 		}
 	</script>
-	</hap:CompressJS>
     <script>		
         user = { <%=JSUser %> };
         resources = <%=JSResources %>;
