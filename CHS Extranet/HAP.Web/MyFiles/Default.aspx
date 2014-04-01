@@ -113,7 +113,7 @@
 	<div id="MyFiles" class="tiles" data-role="content">
 	</div>
 	</div>
-	<hap:CompressJS runat="server" tag="div">
+	<hap:CompressJS runat="server" tag="script">
 	<script type="text/javascript">
 		var items = new Array();
 		var subdrop = false;
