@@ -37,6 +37,9 @@
     <ApplicationIcon>haplogo-icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AjaxMin">
+      <HintPath>..\..\Binaries\AjaxMin.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
@@ -50,7 +53,6 @@
   <ItemGroup>
     <Compile Include="CompressJS.cs" />
     <Compile Include="HAPTag.cs" />
-    <Compile Include="JSMini.cs" />
     <Compile Include="LocalResource.cs" />
     <Compile Include="Page.cs">
       <SubType>ASPXCodeBehind</SubType>
