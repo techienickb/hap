@@ -16,6 +16,7 @@ using System.Collections;
 using System.Text.RegularExpressions;
 using System.Text;
 using System.Globalization;
+using Microsoft.Ajax.Utilities;
 
 namespace HAP.Web.API
 {
@@ -49,7 +50,7 @@ namespace HAP.Web.API
         {
             context.Response.Clear();
             context.Response.ContentType = "text/plain";
-            Controls.JavaScriptMinifier js = new Controls.JavaScriptMinifier();
+            Minifier minifier = new Minifier();
             if (JSType == API.JSType.HAP)
             {
                 string s = "";
@@ -69,7 +70,7 @@ namespace HAP.Web.API
                 }
                 s = s.Replace("localization: []", "localization: [" + string.Join(", ", BuildLocalization(_locals.SelectSingleNode("/hapStrings"), "")) + "]");
 #if !DEBUG
-                s = js.Minify(s);
+                s = minifier.MinifyJavaScript(s);
 #endif
                 context.Response.Write(s);
             }
@@ -117,8 +118,8 @@ namespace HAP.Web.API
                         string f = sr.ReadToEnd();
 #if !DEBUG
                         if (JSType != API.JSType.CSS)
-                            f = js.Minify(f);
-                        else f = RemoveWhiteSpaceFromStylesheets(f);
+                            f = minifier.MinifyJavaScript(f);
+                        else f = minifier.MinifyStyleSheet(f);
 #endif
                         sr.Close();
                         context.Response.Write(f);
