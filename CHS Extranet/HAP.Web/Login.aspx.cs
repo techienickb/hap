@@ -95,6 +95,28 @@ namespace HAP.Web
             }
             string code;
             ban.Attempts++;
+            UserAccountControl uac = HAP.AD.User.UserAccountControl(username.Text);
+            if ((uac & UserAccountControl.AccountDisabled) == UserAccountControl.AccountDisabled)
+            {
+                HAP.Web.Logging.EventViewer.Log("HAP+ Logon", "Home Access Plus+ Logon\n\nUsername: " + username.Text + "\nState: Disabled", System.Diagnostics.EventLogEntryType.Information, true);
+                HAP.Data.SQL.WebEvents.Log(DateTime.Now, "Disabled Logon", username.Text, Request.UserHostAddress, Request.Browser.Platform, Request.Browser.Browser + " " + Request.Browser.Version, Request.UserHostName, Request.UserAgent);
+                message.Text = "<div class=\"ui-state-error ui-corner-all\" style=\" padding: 5px 10px\"><span class=\"ui-icon ui-icon-alert\" style=\"float: left; margin-right: 5px;\"></span>" + Localizable.Localize("ad/disabled") + "</div>";
+                return;
+            } 
+            else if ((uac & UserAccountControl.PasswordExpired) == UserAccountControl.PasswordExpired)
+            {
+                HAP.Web.Logging.EventViewer.Log("HAP+ Logon", "Home Access Plus+ Logon\n\nUsername: " + username.Text + "\nState: Password Expired", System.Diagnostics.EventLogEntryType.Information, true);
+                HAP.Data.SQL.WebEvents.Log(DateTime.Now, "Expired Logon", username.Text, Request.UserHostAddress, Request.Browser.Platform, Request.Browser.Browser + " " + Request.Browser.Version, Request.UserHostName, Request.UserAgent);
+                message.Text = "<div class=\"ui-state-error ui-corner-all\" style=\" padding: 5px 10px\"><span class=\"ui-icon ui-icon-alert\" style=\"float: left; margin-right: 5px;\"></span>" + Localizable.Localize("ad/passexpired") + "</div>";
+                return;
+            }
+            else if ((uac & UserAccountControl.Lockout) == UserAccountControl.Lockout)
+            {
+                HAP.Web.Logging.EventViewer.Log("HAP+ Logon", "Home Access Plus+ Logon\n\nUsername: " + username.Text + "\nState: Locked Out", System.Diagnostics.EventLogEntryType.Information, true);
+                HAP.Data.SQL.WebEvents.Log(DateTime.Now, "Lockedout Logon", username.Text, Request.UserHostAddress, Request.Browser.Platform, Request.Browser.Browser + " " + Request.Browser.Version, Request.UserHostName, Request.UserAgent);
+                message.Text = "<div class=\"ui-state-error ui-corner-all\" style=\" padding: 5px 10px\"><span class=\"ui-icon ui-icon-alert\" style=\"float: left; margin-right: 5px;\"></span>" + Localizable.Localize("ad/lockedout") + "</div>";
+                return;
+            }
             if (oneusecode.Text.Length == 4 && IsValidCode(out code) && !ban.IsBanned && Membership.ValidateUser(username.Text.Trim(), HAP.AD.TokenGenerator.ConvertToPlain(code)))
             {
                 HAP.Web.Logging.EventViewer.Log("HAP+ Logon", "Home Access Plus+ Logon\n\nUsername: " + username.Text, System.Diagnostics.EventLogEntryType.Information, true);

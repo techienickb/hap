@@ -1,5 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <hapStrings>
+  <ad>
+    <disabled>Your account has been disabled. Please contact your IT Department for Help</disabled>
+    <passexpired>Your password has expired.  Please logon to a school computer or the email system to change your password</passexpired>
+    <expired>Your account has been expired. Please contact your IT Department for Help</expired>
+    <lockedout>Your account has been locked out. Please contact your IT Department for Help</lockedout>
+  </ad>
   <homeaccessplus>Home Access Plus+</homeaccessplus>
   <home>Home</home>
   <editprofile>Edit Profile</editprofile>

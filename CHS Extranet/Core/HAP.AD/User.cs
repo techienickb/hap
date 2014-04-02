@@ -46,6 +46,15 @@ namespace HAP.AD
             this.LoadUserFromAD(userp);
         }
 
+        public static UserAccountControl UserAccountControl(string username)
+        {
+            DirectorySearcher ds = new DirectorySearcher(ADUtils.DirectoryRoot);
+            ds.Filter = "(&(objectClass=user)(sAMAccountName=" + username + "))";
+            ds.PropertiesToLoad.Add("userAccountControl");
+            SearchResultCollection sr = ds.FindAll();
+            return (UserAccountControl)sr[0].Properties["userAccountControl"][0];
+        }
+
         private void LoadUserFromAD(UserPrincipal userp)
         {
             this.UserName = userp.SamAccountName;
@@ -173,7 +182,7 @@ namespace HAP.AD
             get
             {
                 DirectorySearcher ds = new DirectorySearcher(ADUtils.DirectoryRoot);
-                ds.Filter = "(&(objectClass=user)(sAMAccountName=*" + this.UserName + "*))";
+                ds.Filter = "(&(objectClass=user)(sAMAccountName=" + this.UserName + "))";
                 ds.PropertiesToLoad.Add("info");
                 try
                 {

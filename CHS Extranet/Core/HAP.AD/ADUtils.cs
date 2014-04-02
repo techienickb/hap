@@ -456,4 +456,31 @@ namespace HAP.AD
 
         #endregion
     }
+
+    [Flags]
+    public enum UserAccountControl
+    {
+        // values from http://support.microsoft.com/kb/305144
+        Script = 0x0001,
+        AccountDisabled = 0x0002,
+        HomeDirRequired = 0x0008,
+        Lockout = 0x0010,
+        PasswordNotRequired = 0x0020,
+        PasswordCantChange = 0x0040,
+        EncryptedTextPasswordAllowed = 0x0080,
+        TempDuplicateAccount = 0x0100,
+        NormalAccount = 0x0200,
+        InterDomainTrustAccount = 0x0800,
+        WorkstationTrustAccount = 0x1000,
+        ServerTrustAccount = 0x2000,
+        DontExpirePassword = 0x10000,
+        MnsLogonAccount = 0x20000,
+        SmartcardRequired = 0x40000,
+        TrustedForDelegation = 0x80000,
+        Delegated = 0x100000,
+        UseDesKeyOnly = 0x200000,
+        DontReqPreauth = 0x400000,
+        PasswordExpired = 0x800000,
+        TrustedToAuthForDelegation = 0x1000000
+    }
 }
