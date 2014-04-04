@@ -54,6 +54,7 @@ namespace HAP.HelpDesk.HelpDesk
                 archiveddates.Items.Add(new ListItem(f.Name.Remove(f.Name.LastIndexOf('.')).Remove(0, 8).Replace("_", " to "), f.Name.Remove(f.Name.LastIndexOf('.')).Remove(0, 7)));
             hasArch = archiveddates.Items.Count > 0;
             if (hasArch) archiveddates.Items.Insert(0, new ListItem("--- Select ---", ""));
+            adminbookingpanel.Visible = archiveadmin.Visible = isHDAdmin;
             if (isHDAdmin)
             {
                 userlist.Items.Clear();
