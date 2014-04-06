@@ -153,18 +153,21 @@ namespace HAP.BookingSystem
             sb.AppendLine("ATTENDEE;ROLE=REQ-PARTICIPANT;CN=" + booking.User.DisplayName + ":MAILTO:" + booking.User.Email);
             foreach (string s in hapConfig.Current.BookingSystem.Resources[booking.Room].Admins.Split(new char[] { ',' }))
             {
-                UserInfo ui = ADUtils.FindUserInfos(s.Trim())[0];
-                uis.Add(ui);
-                try
+                if (s != "Inherit")
                 {
-                    if (string.IsNullOrEmpty(ui.Email)) continue;
+                    UserInfo ui = ADUtils.FindUserInfos(s.Trim())[0];
+                    uis.Add(ui);
+                    try
+                    {
+                        if (string.IsNullOrEmpty(ui.Email)) continue;
+                    }
+                    catch
+                    {
+                        continue;
+                    }
+                    if (!string.IsNullOrEmpty(ui.Email))
+                        sb.AppendLine("ATTENDEE;ROLE=REQ-PARTICIPANT;CN=" + ui.DisplayName + ":MAILTO:" + ui.Email);
                 }
-                catch
-                {
-                    continue;
-                }
-                if (!string.IsNullOrEmpty(ui.Email))
-                    sb.AppendLine("ATTENDEE;ROLE=REQ-PARTICIPANT;CN=" + ui.DisplayName + ":MAILTO:" + ui.Email);
             }
             sb.AppendLine("LOCATION:" + location);
             sb.AppendLine("UID:" + booking.uid);
@@ -353,16 +356,19 @@ namespace HAP.BookingSystem
 
             foreach (string s in hapConfig.Current.BookingSystem.Resources[booking.Room].Admins.Split(new char[] { ',' }))
             {
-                UserInfo ui = ADUtils.FindUserInfos(s.Trim())[0];
-                try
+                if (s != "Inherit")
                 {
-                    if (string.IsNullOrEmpty(ui.Email)) continue;
+                    UserInfo ui = ADUtils.FindUserInfos(s.Trim())[0];
+                    try
+                    {
+                        if (string.IsNullOrEmpty(ui.Email)) continue;
+                    }
+                    catch (Exception e)
+                    {
+                        continue;
+                    }
+                    if (!string.IsNullOrEmpty(ui.Email)) mes.To.Add(new MailAddress(ui.Email, ui.DisplayName));
                 }
-                catch (Exception e)
-                {
-                    continue;
-                }
-                if (!string.IsNullOrEmpty(ui.Email)) mes.To.Add(new MailAddress(ui.Email, ui.DisplayName));
             }
 
             mes.Body = description;
