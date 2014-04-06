@@ -146,6 +146,7 @@
     <Content Include="BookingSystem\admin\Web.config" />
     <Content Include="BookingSystem\api.ashx" />
     <Content Include="BookingSystem\Web.config" />
+    <Content Include="haplogo-icon.ico" />
     <Content Include="style\bookingpopup.css" />
     <Content Include="style\bookingsystem.css" />
     <None Include="Properties\PublishProfiles\Pack.pubxml" />
@@ -210,6 +211,9 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>haplogo-icon.ico</ApplicationIcon>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
