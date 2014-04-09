@@ -42,14 +42,11 @@ namespace HAP.HelpDesk.HelpDesk
         {
             List<string> users = new List<string>();
             foreach (string s in config.HelpDesk.Admins.Split(new char[] { ',' }))
-                try
-                {
-                    foreach (string s2 in System.Web.Security.Roles.GetUsersInRole(s.Trim())) if (!users.Contains(s2.ToLower())) users.Add(s2.ToLower());
-                }
-                catch
-                {
-                    users.Add(s.Trim().ToLower());
-                }
+                if (s.StartsWith("!")) continue;
+                else if (!System.Web.Security.Roles.RoleExists(s.Trim())) users.Add(s.Trim().ToLower());
+                else foreach (string s2 in System.Web.Security.Roles.GetUsersInRole(s.Trim())) if (!users.Contains(s2.ToLower())) users.Add(s2.ToLower());
+            foreach (string s in config.HelpDesk.Admins.Split(new char[] { ',' }))
+                if (s.StartsWith("!") && users.Contains(s.Trim().Substring(1).ToLower())) users.Remove(s.Trim().Substring(1).ToLower());
             foreach (FileInfo f in new DirectoryInfo(Server.MapPath("~/app_data/")).GetFiles("Tickets_*.xml", SearchOption.TopDirectoryOnly))
                 archiveddates.Items.Add(new ListItem(f.Name.Remove(f.Name.LastIndexOf('.')).Remove(0, 8).Replace("_", " to "), f.Name.Remove(f.Name.LastIndexOf('.')).Remove(0, 7)));
             hasArch = archiveddates.Items.Count > 0;
