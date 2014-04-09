@@ -80,7 +80,13 @@ namespace HAP.AD
 
         public override bool RoleExists(string roleName)
         {
-            return wtrp.RoleExists(roleName);
+            PrincipalContext pcontext;
+            if (HAP.Web.Configuration.hapConfig.Current.AD.SecureLDAP) pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, null, ContextOptions.Negotiate, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
+            else pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
+            GroupPrincipal p = GroupPrincipal.FindByIdentity(pcontext, roleName);
+            try { var s = p.StructuralObjectClass; }
+            catch { return false; }
+            return true;
         }
 
         public override void AddUsersToRoles(string[] usernames, string[] roleNames)
