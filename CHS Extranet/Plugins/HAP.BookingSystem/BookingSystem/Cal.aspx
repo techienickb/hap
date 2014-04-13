@@ -1,10 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true" CodeBehind="Cal.aspx.cs" Inherits="HAP.Web.BookingSystem.Cal" %>
 <asp:Content ContentPlaceHolderID="head" runat="server">
-    <link href="../style/fullcalendar.css" rel="stylesheet" type="text/css" />
-    <link href="../style/fullcalendar.print.css" rel="stylesheet" type="text/css" media="print" />
-	<link href="../style/bookingsystem.css" rel="stylesheet" type="text/css" />
-	<script src="../Scripts/jquery.ba-hashchange.min.js" type="text/javascript"></script>
-    <script src="../Scripts/fullcalendar.min.js"></script>
     <style>body { overflow: hidden; }</style>
 </asp:Content>
 <asp:Content ContentPlaceHolderID="title" runat="server"><asp:HyperLink runat="server" NavigateUrl="~/BookingSystem/"><hap:LocalResource runat="server" StringPath="bookingsystem/bookingsystem" /></asp:HyperLink></asp:Content>

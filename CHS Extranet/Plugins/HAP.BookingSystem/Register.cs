@@ -10,7 +10,11 @@ namespace HAP.BookingSystem
     {
         public RegistrationPath[] RegisterCSS()
         {
-            throw new NotImplementedException();
+            return new RegistrationPath[] { 
+                new RegistrationPath { LoadOn = new string[] { "bookingsystem/cal.aspx" }, Path = "~/style/fullcalendar.css" },
+                new RegistrationPath { LoadOn = new string[] { "bookingsystem/cal.aspx" }, Path = "~/style/fullcalendar.print.css" },
+                new RegistrationPath { LoadOn = new string[] { "bookingsystem" }, Path = "~/style/bookingsystem.css" }
+            };
         }
 
         public RegistrationPath[] RegisterJSStart()
@@ -20,7 +24,10 @@ namespace HAP.BookingSystem
 
         public RegistrationPath[] RegisterJSBeforeHAP()
         {
-            return new RegistrationPath[] { new RegistrationPath { LoadOn = new string[] { "bookingsystem" }, Path = "~/scripts/jquery.ba-hashchange.min.js" } };
+            return new RegistrationPath[] { 
+                new RegistrationPath { LoadOn = new string[] { "bookingsystem" }, Path = "~/scripts/jquery.ba-hashchange.min.js" },
+                new RegistrationPath { LoadOn = new string[] { "bookingsystem/cal.aspx" }, Path = "~/scripts/fullcalendar.js" }
+            };
         }
 
         public RegistrationPath[] RegisterJSAfterHAP()

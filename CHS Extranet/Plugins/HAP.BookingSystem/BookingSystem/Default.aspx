@@ -1,6 +1,5 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/masterpage.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="HAP.Web.BookingSystem._new" %>
 <asp:Content ContentPlaceHolderID="head" runat="server">
-	<link href="../style/bookingsystem.css" rel="stylesheet" type="text/css" />
     <style>
         #bookingday #resources, .col a, .col .share, #bookingday .head h1 { width: <%=Math.Round(100.00 / (config.BookingSystem.Lessons.Count + 1), 1)%>%; }
         #bookingday #resources { min-height: <%=(60 * (rez.Count + 1)) - 2 %>px; }
