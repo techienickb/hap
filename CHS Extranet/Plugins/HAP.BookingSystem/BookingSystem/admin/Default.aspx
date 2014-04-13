@@ -2,7 +2,6 @@
 	CodeBehind="Default.aspx.cs" Inherits="HAP.Web.BookingSystem.admin.Default" %>
 <%@ Import Namespace="HAP.Web.BookingSystem" %>
 <asp:Content ContentPlaceHolderID="head" runat="server">
-	<link href="../../style/bookingsystem.css" rel="stylesheet" type="text/css" />
     <style>
         #bookingday { position: static; bottom: auto; top: auto; left: auto; right: auto; clear: both; overflow: hidden; }
         #bookingday .body { height: auto; }

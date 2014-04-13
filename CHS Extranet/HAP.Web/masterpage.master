@@ -1,34 +1,29 @@
 ﻿<%@ Master Language="C#" %>
 <%@ Register Assembly="HAP.Web.Controls" Namespace="HAP.Web.Controls" TagPrefix="hap" %>
 <!DOCTYPE html>
-<script runat="server">
-    string GetApplicationVersion()
-    {
-        return typeof(HAP.Web.Global).Assembly.GetName().Version.ToString();
-    }
-</script>
+
 <html>
     <head runat="server">
         <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
         <title>Home Access Plus</title>
         <asp:ContentPlaceHolder runat="server" ID="viewport"><meta name="viewport" content="width=992" /></asp:ContentPlaceHolder>
         <link rel="shortcut icon" href="~/favicon.ico" />
-        <link href="<%: ResolveClientUrl("~/style/" + GetApplicationVersion() + "/jquery-ui.css") %>" rel="stylesheet" type="text/css" />
-        <link href="<%: ResolveClientUrl("~/style/" + GetApplicationVersion() + "/basestyle.css") %>" rel="stylesheet" type="text/css" />
-        <link href="<%: ResolveClientUrl("~/style/" + GetApplicationVersion() + "/mobile-base.css") %>" rel="stylesheet" type="text/css" media="handheld" />
-        <link href="<%: ResolveClientUrl("~/style/" + GetApplicationVersion() + "/mobile-base.css") %>" rel="stylesheet" type="text/css" media="screen and (max-device-width: 780px)" />
-        <link href="<%: ResolveClientUrl("~/api/css?" + Request.Path + "=" + GetApplicationVersion() )%>" rel="stylesheet" type="text/css" />
+        <link href="<%: ResolveClientUrl("~/style/" + HAP.Web.Controls.HAPTag.HAPVersion.ToString() + "/jquery-ui.css") %>" rel="stylesheet" type="text/css" />
+        <link href="<%: ResolveClientUrl("~/style/" + HAP.Web.Controls.HAPTag.HAPVersion.ToString() + "/basestyle.css.css") %>" rel="stylesheet" type="text/css" />
+        <link href="<%: ResolveClientUrl("~/style/" + HAP.Web.Controls.HAPTag.HAPVersion.ToString() + "/mobile-base.css") %>" rel="stylesheet" type="text/css" media="handheld" />
+        <link href="<%: ResolveClientUrl("~/style/" + HAP.Web.Controls.HAPTag.HAPVersion.ToString() + "/mobile-base.css") %>" rel="stylesheet" type="text/css" media="screen and (max-device-width: 780px)" />
+        <link href="<%: ResolveClientUrl("~/api/css?" + Request.Path + "=" + HAP.Web.Controls.HAPTag.HAPVersion.ToString())%>" rel="stylesheet" type="text/css" />
         <link rel="icon" type="image/vnd.microsoft.icon" href="~/favicon.ico" />
-        <script src="<%: ResolveClientUrl("~/api/js/start?" + Request.Path + "=" + GetApplicationVersion() ) %>"></script>
-        <script src="<%: ResolveClientUrl("~/scripts/" + GetApplicationVersion() + "/modernizr.js") %>"></script>
-        <script src="<%: ResolveClientUrl("~/scripts/" + GetApplicationVersion() + "/jquery.min.js") %>"></script>
-        <script src="<%: ResolveClientUrl("~/scripts/" + GetApplicationVersion() + "/jquery-ui.min.js") %>"></script>
-        <script src="<%: ResolveClientUrl("~/api/js/beforehap?" + Request.Path + "=" + GetApplicationVersion() ) %>"></script>
-        <script src="<%: ResolveClientUrl("~/api/js/hap?" + GetApplicationVersion()) %>"></script>
+        <script src="<%: ResolveClientUrl("~/api/js/start?" + Request.Path + "=" + HAP.Web.Controls.HAPTag.HAPVersion.ToString()) %>"></script>
+        <script src="<%: ResolveClientUrl("~/scripts/" + HAP.Web.Controls.HAPTag.HAPVersion.ToString() + "/modernizr.js") %>"></script>
+        <script src="<%: ResolveClientUrl("~/scripts/" + HAP.Web.Controls.HAPTag.HAPVersion.ToString() + "/jquery.min.js") %>"></script>
+        <script src="<%: ResolveClientUrl("~/scripts/" + HAP.Web.Controls.HAPTag.HAPVersion.ToString() + "/jquery-ui.min.js") %>"></script>
+        <script src="<%: ResolveClientUrl("~/api/js/beforehap?" + Request.Path + "=" + HAP.Web.Controls.HAPTag.HAPVersion.ToString()) %>"></script>
+        <script src="<%: ResolveClientUrl("~/api/js/hap?" + Request.Path + "=" + HAP.Web.Controls.HAPTag.HAPVersion.ToString()) %>"></script>
         <%if (false) { %>
-        <script src="<%: ResolveClientUrl("~/Scripts/" + GetApplicationVersion() + "/hap.web.js.js") %>"></script>
+        <script src="<%: ResolveClientUrl("~/Scripts/hap.web.js.js") %>"></script>
         <%} %>
-        <script src="<%: ResolveClientUrl("~/api/js/afterhap?" + Request.Path + "=" + GetApplicationVersion() ) %>"></script>
+        <script src="<%: ResolveClientUrl("~/api/js/afterhap?" + Request.Path + "=" + HAP.Web.Controls.HAPTag.HAPVersion.ToString()) %>"></script>
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
         <hap:HAPTag runat="server" />
         <asp:ContentPlaceHolder id="head" runat="server" />
@@ -68,7 +63,7 @@
                     $("#hapContent").css("min-height", document.documentElement.clientHeight - $("#hapHeader").height() + "px");
                 });
             </script>
-            <script src="<%: ResolveClientUrl("~/api/js/end?" + Request.Path + "=0") %>"></script>
+            <script src="<%: ResolveClientUrl("~/api/js/end?" + Request.Path + "=" + HAP.Web.Controls.HAPTag.HAPVersion.ToString()) %>"></script>
         </form>
     </body>
 </html>
