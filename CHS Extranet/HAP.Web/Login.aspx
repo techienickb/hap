@@ -55,6 +55,28 @@
             });
             $("#<%=username.ClientID%>").focusout(function () {
                 $("#<%=username.ClientID%>").val($.trim($("#<%=username.ClientID%>").val()));
+                <%--$.ajax({
+                    type: 'GET',
+                    url: hap.common.formatJSONUrl("~/api/ad/uac/" + $("#<%=username.ClientID%>").val()),
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    success: function (data) {
+                    },
+                    error: function () {
+
+                    }
+                });
+                $.ajax({
+                    type: 'GET',
+                    url: hap.common.formatJSONUrl("~/api/ad/passexpired/" + $("#<%=username.ClientID%>").val()),
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    success: function (data) {
+                    },
+                    error: function () {
+
+                    }
+                });--%>
             });
             $('input[type=text],input[type=password]').keyup(function (e) {
                 if (e.keyCode == 13) {

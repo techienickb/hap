@@ -10,6 +10,7 @@ using HAP.AD;
 using HAP.Web.Configuration;
 using System.Web.Security;
 using System.Diagnostics;
+using System.DirectoryServices.AccountManagement;
 
 namespace HAP.AD
 {
@@ -39,6 +40,35 @@ namespace HAP.AD
             }
             catch (Exception e) { user.Token2 = e.ToString(); user.isValid = false; }
             return user;
+        }
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "passexpired/{username}")]
+        public bool PassExpired(string username)
+        {
+            return ((AD.User.UserAccountControl(username) & UserAccountControl.PasswordExpired) == UserAccountControl.PasswordExpired);
+        }
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "uac/{username}")]
+        public string UAC(string username)
+        {
+            return AD.User.UserAccountControl(username).ToString();
+        }
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "resetpassword/{username}")]
+        public int ResetPassword(string username, string password, string newpassword)
+        {
+            try
+            {
+                PrincipalContext pcontext = ADUtils.GetPContext();
+                UserPrincipal userp = UserPrincipal.FindByIdentity(pcontext, username);
+                userp.ChangePassword(password, newpassword);
+                return 1;
+            }
+            catch (Exception e) { throw new UnauthorizedAccessException("Invalid Administrator Credentials, you may need to get your administrator to reset the HAP+ Settings for Active Directory", e); }
+            return 0;
         }
 
         [OperationContract]
