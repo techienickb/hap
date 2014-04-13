@@ -26,7 +26,7 @@ namespace HAP.BookingSystem
         {
             return new RegistrationPath[] { 
                 new RegistrationPath { LoadOn = new string[] { "bookingsystem" }, Path = "~/scripts/jquery.ba-hashchange.min.js" },
-                new RegistrationPath { LoadOn = new string[] { "bookingsystem/cal.aspx" }, Path = "~/scripts/fullcalendar.js" }
+                new RegistrationPath { LoadOn = new string[] { "bookingsystem/cal.aspx" }, Path = "~/scripts/fullcalendar.min.js" }
             };
         }
 
