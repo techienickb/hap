@@ -20,13 +20,13 @@ namespace HAP.Web.Controls
         protected override void RenderContents(HtmlTextWriter output)
         {
             output.WriteLine("<meta name=\"author\" content=\"Nick Brown - nb development\" />");
-            output.Write("<meta name=\"generator\" content=\"" + Assembly.GetExecutingAssembly().GetName().Name + " - Version: " + HAPVersion.ToString() + "\" />");
+            output.Write("<meta name=\"generator\" content=\"" + typeof(HAP.Web.Configuration.hapConfig).Assembly.GetName().Name + " - Version: " + HAPVersion.ToString() + "\" />");
             
         }
 
         public static Version HAPVersion
         {
-            get { return Assembly.GetExecutingAssembly().GetName().Version; }
+            get { return typeof(HAP.Web.Configuration.hapConfig).Assembly.GetName().Version; }
         }
 
         public override void RenderEndTag(HtmlTextWriter writer)
