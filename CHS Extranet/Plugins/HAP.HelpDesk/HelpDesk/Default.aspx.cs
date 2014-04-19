@@ -113,7 +113,31 @@ namespace HAP.HelpDesk.HelpDesk
 
         protected void migrate_Click(object sender, EventArgs e)
         {
+            Data.SQL.sql2linqDataContext sql = new Data.SQL.sql2linqDataContext(WebConfigurationManager.ConnectionStrings[config.HelpDesk.Provider].ConnectionString);
+            foreach (FileInfo f in new DirectoryInfo(Server.MapPath("~/app_data/")).GetFiles("Tickets_*.xml", SearchOption.TopDirectoryOnly))
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.Load(f.OpenRead());
+                Migrate(f.Name.Remove(f.Name.LastIndexOf('.')).Remove(0, 7), doc, sql);
+            }
+            XmlDocument doc2 = new XmlDocument();
+            doc2.Load(Server.MapPath("~/App_Data/tickets.xml"));
+            Migrate("", doc2, sql);
+        }
 
+        protected void Migrate(string archive, XmlDocument doc, Data.SQL.sql2linqDataContext sql)
+        {
+            foreach (XmlNode node in doc.SelectNodes("/Tickets"))
+            {
+                FullTicket ticket = new FullTicket(node);
+                Data.SQL.Ticket tick = new Data.SQL.Ticket { Archive = archive, Faq = ticket.FAQ, Status = ticket.Status, AssignedTo = ticket.AssignedTo, ShowTo = ticket.ShowTo, ReadBy = ticket.ReadBy, Title = ticket.Subject, Priority = ticket.Priority };
+                foreach (Note n in ticket.Notes)
+                {
+                    tick.Notes.Add(new Data.SQL.Note { DateTime = DateTime.Parse(n.Date), Hide = n.Hide, Username = n.Username, Content = n.NoteText });
+                }
+                sql.Tickets.InsertOnSubmit(tick);
+            }
+            sql.SubmitChanges();
         }
     }
 }
