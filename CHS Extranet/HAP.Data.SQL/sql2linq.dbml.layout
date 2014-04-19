@@ -14,5 +14,37 @@
         <elementListCompartment Id="4b0cdea4-4afa-4354-8c40-0363ad114870" absoluteBounds="4.015, 1.71, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
+    <classShape Id="8c1c0a7d-01ca-4d57-b3ed-5bfc2bd29894" absoluteBounds="0.75, 5, 2, 2.7324039713541666">
+      <DataClassMoniker Name="/sql2linqDataContext/Ticket" />
+      <nestedChildShapes>
+        <elementListCompartment Id="6ecb9f22-94a6-4944-a1e9-443c25f3550b" absoluteBounds="0.765, 5.46, 1.9700000000000002, 2.1724039713541665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="1b87a21f-6573-4b09-96c0-5274d6dfa19c" absoluteBounds="3.5, 5.375, 2, 1.9631982421875005">
+      <DataClassMoniker Name="/sql2linqDataContext/Note" />
+      <nestedChildShapes>
+        <elementListCompartment Id="a120f133-4771-477c-983a-bc22e7113622" absoluteBounds="3.515, 5.835, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="f2cff79b-4df4-4b27-a245-4ddc23669509" absoluteBounds="6.25, 5.5, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/sql2linqDataContext/NoteFile" />
+      <nestedChildShapes>
+        <elementListCompartment Id="07c205df-b9fe-4438-bcd7-dc5ef2828e5a" absoluteBounds="6.265, 5.96, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(2.75 : 6.35659912109375); (3.5 : 6.35659912109375)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/sql2linqDataContext/Ticket/Ticket_Note" />
+      <nodes>
+        <classShapeMoniker Id="8c1c0a7d-01ca-4d57-b3ed-5bfc2bd29894" />
+        <classShapeMoniker Id="1b87a21f-6573-4b09-96c0-5274d6dfa19c" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.5 : 6.28929768880208); (6.25 : 6.28929768880208)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/sql2linqDataContext/Note/Note_NoteFile" />
+      <nodes>
+        <classShapeMoniker Id="1b87a21f-6573-4b09-96c0-5274d6dfa19c" />
+        <classShapeMoniker Id="f2cff79b-4df4-4b27-a245-4ddc23669509" />
+      </nodes>
+    </associationConnector>
   </nestedChildShapes>
 </ordesignerObjectsDiagram>
