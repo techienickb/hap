@@ -48,6 +48,30 @@ namespace HAP.HelpDesk
             if (node.Attributes["faq"] != null) FAQ = bool.Parse(node.Attributes["faq"].Value);
             ReadBy = node.Attributes["readby"] != null ? node.Attributes["readby"].Value : "";
         }
+
+        public Ticket(Data.SQL.Ticket tick)
+        {
+            Id = tick.Id;
+            Subject = tick.Title;
+            Priority = tick.Priority;
+            Status = tick.Status;
+            AssignedTo = (tick.AssignedTo == null) ? "" : tick.AssignedTo;
+            Date = tick.Notes[0].DateTime.ToString("dd/MM/yy HH:mm");
+            try
+            {
+                Username = ADUtils.FindUserInfos(tick.Notes[0].Username)[0].UserName;
+            }
+            catch { Username = "UNKNOWN"; }
+            ShowTo = tick.ShowTo == null ? "" : tick.ShowTo;
+            try
+            {
+                DisplayName = ADUtils.FindUserInfos(tick.Notes[0].Username)[0].DisplayName;
+            }
+            catch { DisplayName = "UNKNOWN"; }
+            FAQ = false;
+            FAQ = tick.Faq;
+            ReadBy = tick.ReadBy;
+        }
     }
 
     public class FullTicket : Ticket
@@ -58,6 +82,12 @@ namespace HAP.HelpDesk
         {
             Notes = new List<Note>();
             foreach (XmlNode n in node.SelectNodes("Note"))
+                Notes.Add(new Note(n));
+        }
+        public FullTicket(Data.SQL.Ticket tick) : base(tick)
+        {
+            Notes = new List<Note>();
+            foreach (Data.SQL.Note n in tick.Notes)
                 Notes.Add(new Note(n));
         }
     }

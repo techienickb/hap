@@ -15,6 +15,7 @@ using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
 using System.Threading;
+using System.Configuration;
 
 namespace HAP.HelpDesk
 {
@@ -35,28 +36,42 @@ namespace HAP.HelpDesk
         public FullTicket UpdateTicket(string Id, string Note, string State, string Priority, string ShowTo, string FAQ, string Subject, string AssignTo)
         {
             HAP.Data.SQL.WebEvents.Log(DateTime.Now, "HelpDesk.Update", HttpContext.Current.User.Identity.Name, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Updating Ticket " + Id);
-            XmlDocument doc = new XmlDocument();
-            doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
-            XmlElement ticket = doc.SelectSingleNode("/Tickets/Ticket[@id='" + Id + "']") as XmlElement;
-            ticket.SetAttribute("status", "New");
-            if (!string.IsNullOrEmpty(State)) ticket.Attributes["status"].Value = State;
-            ticket.SetAttribute("readby", HttpContext.Current.User.Identity.Name);
-            XmlElement node = doc.CreateElement("Note");
-            node.SetAttribute("datetime", DateTime.Now.ToString("u"));
-            node.SetAttribute("username", HttpContext.Current.User.Identity.Name);
-            if (string.IsNullOrEmpty(Note)) node.InnerXml = "<![CDATA[No Note Information Added]]>";
-            else node.InnerXml = "<![CDATA[" + HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />") + "]]>";
-            ticket.AppendChild(node);
 
-            XmlWriterSettings set = new XmlWriterSettings();
-            set.Indent = true;
-            set.IndentChars = "   ";
-            set.Encoding = System.Text.Encoding.UTF8;
-            XmlWriter writer = XmlWriter.Create(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"), set);
-            doc.Save(writer);
-            writer.Flush();
-            writer.Close();
+            if (hapConfig.Current.HelpDesk.Provider.ToLower() == "xml")
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
+                XmlElement ticket = doc.SelectSingleNode("/Tickets/Ticket[@id='" + Id + "']") as XmlElement;
+                ticket.SetAttribute("status", "New");
+                if (!string.IsNullOrEmpty(State)) ticket.Attributes["status"].Value = State;
+                ticket.SetAttribute("readby", HttpContext.Current.User.Identity.Name);
+                XmlElement node = doc.CreateElement("Note");
+                node.SetAttribute("datetime", DateTime.Now.ToString("u"));
+                node.SetAttribute("username", HttpContext.Current.User.Identity.Name);
+                if (string.IsNullOrEmpty(Note)) node.InnerXml = "<![CDATA[No Note Information Added]]>";
+                else node.InnerXml = "<![CDATA[" + HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />") + "]]>";
+                ticket.AppendChild(node);
 
+                XmlWriterSettings set = new XmlWriterSettings();
+                set.Indent = true;
+                set.IndentChars = "   ";
+                set.Encoding = System.Text.Encoding.UTF8;
+                XmlWriter writer = XmlWriter.Create(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"), set);
+                doc.Save(writer);
+                writer.Flush();
+                writer.Close();
+            }
+            else
+            {
+                HAP.Data.SQL.sql2linqDataContext sql = new Data.SQL.sql2linqDataContext(ConfigurationManager.ConnectionStrings[hapConfig.Current.HelpDesk.Provider].ConnectionString);
+                Data.SQL.Ticket tick = sql.Tickets.Single(t => t.Id == int.Parse(Id));
+                tick.Status = string.IsNullOrEmpty(State) ? "New" : State;
+                tick.ReadBy = HttpContext.Current.User.Identity.Name;
+                if (string.IsNullOrEmpty(Note)) Note = string.IsNullOrEmpty(AssignTo) ? "No Note Information Added" : "Assigned to: " + AssignTo;
+                else Note = HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />");
+                tick.Notes.Add(new Data.SQL.Note { DateTime = DateTime.Now, Hide = false, Username = HttpContext.Current.User.Identity.Name, Content = Note });
+                sql.SubmitChanges();
+            }
             if (hapConfig.Current.SMTP.Enabled)
             {
                 MailMessage mes = new MailMessage();
@@ -87,7 +102,7 @@ namespace HAP.HelpDesk
                 smtp.EnableSsl = hapConfig.Current.SMTP.SSL;
                 smtp.Send(mes);
             }
-            return new FullTicket(doc.SelectSingleNode("/Tickets/Ticket[@id='" + Id + "']"));
+            return Ticket("", Id);
         }
 
         [OperationContract]
@@ -96,50 +111,69 @@ namespace HAP.HelpDesk
         {
             HAP.Data.SQL.WebEvents.Log(DateTime.Now, "HelpDesk.UpdateAdmin", HttpContext.Current.User.Identity.Name, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Updating Admin Ticket " + Id);
 
-            XmlDocument doc = new XmlDocument();
-            doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
-            XmlNode ticket = doc.SelectSingleNode("/Tickets/Ticket[@id='" + Id + "']");
 
-            if (ticket.Attributes["assignedto"] != null && ticket.Attributes["assignedto"].Value.ToLower() == AssignTo.ToLower()) AssignTo = "";
+            if (hapConfig.Current.HelpDesk.Provider.ToLower() == "xml")
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
+                XmlNode ticket = doc.SelectSingleNode("/Tickets/Ticket[@id='" + Id + "']");
 
-            if (!string.IsNullOrEmpty(Subject)) ticket.Attributes["subject"].Value = Subject;
-            XmlElement node = doc.CreateElement("Note");
-            node.SetAttribute("datetime", DateTime.Now.ToString("u"));
-            node.SetAttribute("username", HttpContext.Current.User.Identity.Name);
-            node.SetAttribute("hide", HideNote.ToString());
-            if (string.IsNullOrEmpty(Note)) node.InnerXml = string.IsNullOrEmpty(AssignTo) ? "<![CDATA[No Note Information Added]]>" : "<![CDATA[Assigned to: " + AssignTo + "]]>";
-            else node.InnerXml = "<![CDATA[" + HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />") + "]]>";
-            ticket.AppendChild(node);
+                if (ticket.Attributes["assignedto"] != null && ticket.Attributes["assignedto"].Value.ToLower() == AssignTo.ToLower()) AssignTo = "";
 
-            if (!string.IsNullOrEmpty(State)) ticket.Attributes["status"].Value = State;
-            if (node.Attributes["assignedto"] == null) ticket.Attributes.Append(doc.CreateAttribute("assignedto"));
-            ticket.Attributes["assignedto"].Value = string.IsNullOrEmpty(AssignTo) ? HttpContext.Current.User.Identity.Name : AssignTo;
-            ticket.Attributes["priority"].Value = string.IsNullOrEmpty(Priority) ? ticket.Attributes["priority"].Value : Priority;
-            if (ticket.Attributes["showto"] == null) ticket.Attributes.Append(doc.CreateAttribute("showto"));
-            if (!string.IsNullOrEmpty(ShowTo)) ticket.Attributes["showto"].Value = ShowTo;
-            if (ticket.Attributes["faq"] == null) ticket.Attributes.Append(doc.CreateAttribute("faq"));
-            ticket.Attributes["faq"].Value = string.IsNullOrWhiteSpace(FAQ) ? "false" : FAQ;
+                if (!string.IsNullOrEmpty(Subject)) ticket.Attributes["subject"].Value = Subject;
+                XmlElement node = doc.CreateElement("Note");
+                node.SetAttribute("datetime", DateTime.Now.ToString("u"));
+                node.SetAttribute("username", HttpContext.Current.User.Identity.Name);
+                node.SetAttribute("hide", HideNote.ToString());
+                if (string.IsNullOrEmpty(Note)) node.InnerXml = string.IsNullOrEmpty(AssignTo) ? "<![CDATA[No Note Information Added]]>" : "<![CDATA[Assigned to: " + AssignTo + "]]>";
+                else node.InnerXml = "<![CDATA[" + HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />") + "]]>";
+                ticket.AppendChild(node);
 
-            ((XmlElement)ticket).SetAttribute("readby", HttpContext.Current.User.Identity.Name);
+                if (!string.IsNullOrEmpty(State)) ticket.Attributes["status"].Value = State;
+                if (node.Attributes["assignedto"] == null) ticket.Attributes.Append(doc.CreateAttribute("assignedto"));
+                ticket.Attributes["assignedto"].Value = string.IsNullOrEmpty(AssignTo) ? HttpContext.Current.User.Identity.Name : AssignTo;
+                ticket.Attributes["priority"].Value = string.IsNullOrEmpty(Priority) ? ticket.Attributes["priority"].Value : Priority;
+                if (ticket.Attributes["showto"] == null) ticket.Attributes.Append(doc.CreateAttribute("showto"));
+                if (!string.IsNullOrEmpty(ShowTo)) ticket.Attributes["showto"].Value = ShowTo;
+                if (ticket.Attributes["faq"] == null) ticket.Attributes.Append(doc.CreateAttribute("faq"));
+                ticket.Attributes["faq"].Value = string.IsNullOrWhiteSpace(FAQ) ? "false" : FAQ;
 
-            XmlWriterSettings set = new XmlWriterSettings();
-            set.Indent = true;
-            set.IndentChars = "   ";
-            set.Encoding = System.Text.Encoding.UTF8;
-            XmlWriter writer = XmlWriter.Create(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"), set);
-            doc.Save(writer);
-            writer.Flush();
-            writer.Close();
+                ((XmlElement)ticket).SetAttribute("readby", HttpContext.Current.User.Identity.Name);
+
+                XmlWriterSettings set = new XmlWriterSettings();
+                set.Indent = true;
+                set.IndentChars = "   ";
+                set.Encoding = System.Text.Encoding.UTF8;
+                XmlWriter writer = XmlWriter.Create(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"), set);
+                doc.Save(writer);
+                writer.Flush();
+                writer.Close();
+            }
+            else
+            {
+                HAP.Data.SQL.sql2linqDataContext sql = new Data.SQL.sql2linqDataContext(ConfigurationManager.ConnectionStrings[hapConfig.Current.HelpDesk.Provider].ConnectionString);
+                Data.SQL.Ticket tick = sql.Tickets.Single(t => t.Id == int.Parse(Id));
+                if (tick.AssignedTo.ToLower() == AssignTo.ToLower()) AssignTo = "";
+                if (!string.IsNullOrEmpty(Subject)) tick.Title = Subject;
+                if (!string.IsNullOrEmpty(State)) tick.Status = State;
+                tick.AssignedTo = string.IsNullOrEmpty(AssignTo) ? HttpContext.Current.User.Identity.Name : AssignTo;
+                tick.Priority = string.IsNullOrEmpty(Priority) ? tick.Priority : Priority;
+                if (!string.IsNullOrEmpty(ShowTo)) tick.ShowTo = ShowTo;
+                tick.Faq = string.IsNullOrWhiteSpace(FAQ) ? false : bool.Parse(FAQ);
+
+                if (string.IsNullOrEmpty(Note)) Note = string.IsNullOrEmpty(AssignTo) ? "No Note Information Added" : "Assigned to: " + AssignTo;
+                else Note = HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />");
+                tick.Notes.Add(new Data.SQL.Note { DateTime = DateTime.Now, Hide = HideNote, Username = HttpContext.Current.User.Identity.Name, Content = Note });
+                sql.SubmitChanges();
+            }
 
             string emailnote = "";
-            doc = new XmlDocument();
-            doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
-            FullTicket ft = new FullTicket(doc.SelectSingleNode("/Tickets/Ticket[@id='" + Id + "']"));
+            FullTicket ft = Ticket("", Id);
             foreach (Note not in ft.Notes.Where(n => !n.Hide))
                 emailnote += not.DisplayName + " on " + not.Date.ToString() + "<br />" + HttpUtility.UrlDecode(not.NoteText, System.Text.Encoding.Default).Replace("\n", "<br />") + "<hr />";
             
 
-            UserInfo user = ADUtils.FindUserInfos(ticket.SelectNodes("Note")[0].Attributes["username"].Value)[0];
+            UserInfo user = ADUtils.FindUserInfos(ft.Notes[0].Username)[0];
             UserInfo currentuser = ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0];
             if (hapConfig.Current.SMTP.Enabled && user.Email != null && !string.IsNullOrEmpty(user.Email) && !HideNote)
             {
@@ -211,44 +245,56 @@ namespace HAP.HelpDesk
                 smtp.EnableSsl = hapConfig.Current.SMTP.SSL;
                 smtp.Send(mes);
             }
-            return new FullTicket(doc.SelectSingleNode("/Tickets/Ticket[@id='" + Id + "']"));
+            return Ticket("", Id);
         }
 
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "/Ticket", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         public FullTicket FileTicket(string Subject, string Room, string Note)
         {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
             int x;
-            if (doc.SelectSingleNode("/Tickets").ChildNodes.Count > 0)
+            if (hapConfig.Current.HelpDesk.Provider.ToLower() == "xml")
             {
-                XmlNodeList tickets = doc.SelectNodes("/Tickets/Ticket");
-                x = int.Parse(tickets[tickets.Count - 1].Attributes["id"].Value) + 1;
-            }
-            else x = 1;
-            HAP.Data.SQL.WebEvents.Log(DateTime.Now, "HelpDesk.New", HttpContext.Current.User.Identity.Name, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Creating Ticket " + x + " (" + Subject + ")");
-            XmlElement ticket = doc.CreateElement("Ticket");
-            ticket.SetAttribute("id", x.ToString());
-            ticket.SetAttribute("subject", HttpUtility.UrlDecode(Subject, System.Text.Encoding.Default));
-            ticket.SetAttribute("priority", "Normal");
-            ticket.SetAttribute("status", "New");
-            ticket.SetAttribute("readby", HttpContext.Current.User.Identity.Name);
-            XmlElement node = doc.CreateElement("Note");
-            node.SetAttribute("datetime", DateTime.Now.ToUniversalTime().ToString("u"));
-            node.SetAttribute("username", HttpContext.Current.User.Identity.Name);
-            node.InnerXml = "<![CDATA[Room: " + Room + "<br />\n" + HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />") + "]]>";
-            ticket.AppendChild(node);
-            doc.SelectSingleNode("/Tickets").AppendChild(ticket);
+                XmlDocument doc = new XmlDocument();
+                doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
+                if (doc.SelectSingleNode("/Tickets").ChildNodes.Count > 0)
+                {
+                    XmlNodeList tickets = doc.SelectNodes("/Tickets/Ticket");
+                    x = int.Parse(tickets[tickets.Count - 1].Attributes["id"].Value) + 1;
+                }
+                else x = 1;
+                HAP.Data.SQL.WebEvents.Log(DateTime.Now, "HelpDesk.New", HttpContext.Current.User.Identity.Name, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Creating Ticket " + x + " (" + Subject + ")");
+                XmlElement ticket = doc.CreateElement("Ticket");
+                ticket.SetAttribute("id", x.ToString());
+                ticket.SetAttribute("subject", HttpUtility.UrlDecode(Subject, System.Text.Encoding.Default));
+                ticket.SetAttribute("priority", "Normal");
+                ticket.SetAttribute("status", "New");
+                ticket.SetAttribute("readby", HttpContext.Current.User.Identity.Name);
+                XmlElement node = doc.CreateElement("Note");
+                node.SetAttribute("datetime", DateTime.Now.ToUniversalTime().ToString("u"));
+                node.SetAttribute("username", HttpContext.Current.User.Identity.Name);
+                node.InnerXml = "<![CDATA[Room: " + Room + "<br />\n" + HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />") + "]]>";
+                ticket.AppendChild(node);
+                doc.SelectSingleNode("/Tickets").AppendChild(ticket);
 
-            XmlWriterSettings set = new XmlWriterSettings();
-            set.Indent = true;
-            set.IndentChars = "   ";
-            set.Encoding = System.Text.Encoding.UTF8;
-            XmlWriter writer = XmlWriter.Create(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"), set);
-            doc.Save(writer);
-            writer.Flush();
-            writer.Close();
+                XmlWriterSettings set = new XmlWriterSettings();
+                set.Indent = true;
+                set.IndentChars = "   ";
+                set.Encoding = System.Text.Encoding.UTF8;
+                XmlWriter writer = XmlWriter.Create(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"), set);
+                doc.Save(writer);
+                writer.Flush();
+                writer.Close();
+            }
+            else
+            {
+                HAP.Data.SQL.sql2linqDataContext sql = new Data.SQL.sql2linqDataContext(ConfigurationManager.ConnectionStrings[hapConfig.Current.HelpDesk.Provider].ConnectionString);
+                Data.SQL.Ticket tick = new Data.SQL.Ticket { Archive = "", Faq = false, Status = "New", Priority = "Normal", AssignedTo = "", HideAssignedTo = false, ShowTo = "", ReadBy = HttpContext.Current.User.Identity.Name, Title = HttpUtility.UrlDecode(Subject, System.Text.Encoding.Default) };
+                tick.Notes.Add(new Data.SQL.Note { DateTime = DateTime.Now, Hide = false, Username = HttpContext.Current.User.Identity.Name, Content = "Room: " + Room + "\n\n" + HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />") });
+                sql.Tickets.InsertOnSubmit(tick);
+                sql.SubmitChanges();
+                x = tick.Id;
+            }
 
             if (hapConfig.Current.SMTP.Enabled)
             {
@@ -282,44 +328,57 @@ namespace HAP.HelpDesk
                 smtp.EnableSsl = hapConfig.Current.SMTP.SSL;
                 smtp.Send(mes);
             }
-            return new FullTicket(doc.SelectSingleNode("/Tickets/Ticket[@id='" + x + "']"));
+            return Ticket("", x.ToString());
         }
 
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "/AdminTicket", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         public FullTicket FileAdminTicket(string Subject, string Room, string Note, string ShowTo, string Priority, string User)
         {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
-            int x;
-            if (doc.SelectSingleNode("/Tickets").ChildNodes.Count > 0)
+            int x = 0;
+            if (hapConfig.Current.HelpDesk.Provider.ToLower() == "xml")
             {
-                XmlNodeList tickets = doc.SelectNodes("/Tickets/Ticket");
-                x = int.Parse(tickets[tickets.Count - 1].Attributes["id"].Value) + 1;
-            }
-            else x = 1;
-            HAP.Data.SQL.WebEvents.Log(DateTime.Now, "HelpDesk.NewAdmin", HttpContext.Current.User.Identity.Name, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Creating Ticket " + x + " (" + Subject + ")");
-            XmlElement ticket = doc.CreateElement("Ticket");
-            ticket.SetAttribute("id", x.ToString());
-            ticket.SetAttribute("subject", HttpUtility.UrlDecode(Subject, System.Text.Encoding.Default));
-            ticket.SetAttribute("priority", Priority == "" ? "Normal": Priority);
-            ticket.SetAttribute("status", "New");
-            ticket.SetAttribute("readby", HttpContext.Current.User.Identity.Name);
-            XmlElement node = doc.CreateElement("Note");
-            node.SetAttribute("datetime", DateTime.Now.ToUniversalTime().ToString("u"));
-            node.SetAttribute("username", User);
-            node.InnerXml = "<![CDATA[Room: " + Room + "\n\n" + HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />") + "]]>";
-            ticket.AppendChild(node);
-            doc.SelectSingleNode("/Tickets").AppendChild(ticket);
+                XmlDocument doc = new XmlDocument();
+                doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
+                if (doc.SelectSingleNode("/Tickets").ChildNodes.Count > 0)
+                {
+                    XmlNodeList tickets = doc.SelectNodes("/Tickets/Ticket");
+                    x = int.Parse(tickets[tickets.Count - 1].Attributes["id"].Value) + 1;
+                }
+                else x = 1;
+                HAP.Data.SQL.WebEvents.Log(DateTime.Now, "HelpDesk.NewAdmin", HttpContext.Current.User.Identity.Name, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Creating Ticket " + x + " (" + Subject + ")");
+                XmlElement ticket = doc.CreateElement("Ticket");
+                ticket.SetAttribute("id", x.ToString());
+                ticket.SetAttribute("subject", HttpUtility.UrlDecode(Subject, System.Text.Encoding.Default));
+                ticket.SetAttribute("priority", Priority == "" ? "Normal" : Priority);
+                ticket.SetAttribute("status", "New");
+                ticket.SetAttribute("readby", HttpContext.Current.User.Identity.Name);
+                XmlElement node = doc.CreateElement("Note");
+                node.SetAttribute("datetime", DateTime.Now.ToUniversalTime().ToString("u"));
+                node.SetAttribute("username", User);
+                node.InnerXml = "<![CDATA[Room: " + Room + "\n\n" + HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />") + "]]>";
+                ticket.AppendChild(node);
+                doc.SelectSingleNode("/Tickets").AppendChild(ticket);
 
-            XmlWriterSettings set = new XmlWriterSettings();
-            set.Indent = true;
-            set.IndentChars = "   ";
-            set.Encoding = System.Text.Encoding.UTF8;
-            XmlWriter writer = XmlWriter.Create(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"), set);
-            doc.Save(writer);
-            writer.Flush();
-            writer.Close();
+                XmlWriterSettings set = new XmlWriterSettings();
+                set.Indent = true;
+                set.IndentChars = "   ";
+                set.Encoding = System.Text.Encoding.UTF8;
+                XmlWriter writer = XmlWriter.Create(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"), set);
+                doc.Save(writer);
+                writer.Flush();
+                writer.Close();
+            }
+            else
+            {
+                HAP.Data.SQL.sql2linqDataContext sql = new Data.SQL.sql2linqDataContext(ConfigurationManager.ConnectionStrings[hapConfig.Current.HelpDesk.Provider].ConnectionString);
+                Data.SQL.Ticket tick = new Data.SQL.Ticket { Archive = "", Faq = false, Status = "New", AssignedTo = "", HideAssignedTo = false, ShowTo = ShowTo, ReadBy = HttpContext.Current.User.Identity.Name, Title = HttpUtility.UrlDecode(Subject, System.Text.Encoding.Default) };
+                tick.Priority = Priority == "" ? "Normal" : Priority;
+                tick.Notes.Add(new Data.SQL.Note { DateTime = DateTime.Now, Hide = false, Username = HttpContext.Current.User.Identity.Name, Content = "Room: " + Room + "\n\n" + HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />") });
+                sql.Tickets.InsertOnSubmit(tick);
+                sql.SubmitChanges();
+                x = tick.Id;
+            }
 
             if (hapConfig.Current.SMTP.Enabled && ADUtils.FindUserInfos(User)[0].Email != null && !string.IsNullOrEmpty(ADUtils.FindUserInfos(User)[0].Email))
             {
@@ -384,7 +443,7 @@ namespace HAP.HelpDesk
                     }
                     catch { }
                 }
-            return new FullTicket(doc.SelectSingleNode("/Tickets/Ticket[@id='" + x + "']"));
+            return Ticket("", x.ToString());
         }
 
         [OperationContract]
@@ -407,27 +466,56 @@ namespace HAP.HelpDesk
         [WebGet(UriTemplate = "ATickets/{Archive}/{State}", ResponseFormat = WebMessageFormat.Json)]
         public Ticket[] AllTickets(string Archive, string State)
         {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets" + Archive + ".xml"));
             List<Ticket> tickets = new List<Ticket>();
-            string xpath = string.Format("/Tickets/Ticket");
-            foreach (XmlNode node in doc.SelectNodes(xpath)) {
-                Ticket t = new Ticket(node);
-                bool add = false;
-                if (State == "Open") {
-                    foreach (string s in hapConfig.Current.HelpDesk.UserOpenStates.Split(new char[] { ',' }))
-                        if (t.Status == s.Trim()) { add = true; break; }
-                    if (!add) foreach (string s in hapConfig.Current.HelpDesk.OpenStates.Split(new char[] {','}))
-                        if (t.Status == s.Trim()) { add = true; break; }
-                }
-                else
+            if (hapConfig.Current.HelpDesk.Provider.ToLower() == "xml")
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets" + Archive + ".xml"));
+                string xpath = string.Format("/Tickets/Ticket");
+                foreach (XmlNode node in doc.SelectNodes(xpath))
                 {
-                    foreach (string s in hapConfig.Current.HelpDesk.UserClosedStates.Split(new char[] { ',' }))
-                        if (t.Status == s.Trim()) { add = true; break; }
-                    if (!add) foreach (string s in hapConfig.Current.HelpDesk.ClosedStates.Split(new char[] { ',' }))
+                    Ticket t = new Ticket(node);
+                    bool add = false;
+                    if (State == "Open")
+                    {
+                        foreach (string s in hapConfig.Current.HelpDesk.UserOpenStates.Split(new char[] { ',' }))
                             if (t.Status == s.Trim()) { add = true; break; }
+                        if (!add) foreach (string s in hapConfig.Current.HelpDesk.OpenStates.Split(new char[] { ',' }))
+                                if (t.Status == s.Trim()) { add = true; break; }
+                    }
+                    else
+                    {
+                        foreach (string s in hapConfig.Current.HelpDesk.UserClosedStates.Split(new char[] { ',' }))
+                            if (t.Status == s.Trim()) { add = true; break; }
+                        if (!add) foreach (string s in hapConfig.Current.HelpDesk.ClosedStates.Split(new char[] { ',' }))
+                                if (t.Status == s.Trim()) { add = true; break; }
+                    }
+                    if (add) tickets.Add(t);
                 }
-                if (add) tickets.Add(t);
+            }
+            else
+            {
+                HAP.Data.SQL.sql2linqDataContext sql = new Data.SQL.sql2linqDataContext(ConfigurationManager.ConnectionStrings[hapConfig.Current.HelpDesk.Provider].ConnectionString);
+                foreach (HAP.Data.SQL.Ticket tick in sql.Tickets.Where(t => t.Archive == Archive))
+                {
+                    Ticket t = new Ticket(tick);
+                    bool add = false;
+                    if (State == "Open")
+                    {
+                        foreach (string s in hapConfig.Current.HelpDesk.UserOpenStates.Split(new char[] { ',' }))
+                            if (t.Status == s.Trim()) { add = true; break; }
+                        if (!add) foreach (string s in hapConfig.Current.HelpDesk.OpenStates.Split(new char[] { ',' }))
+                                if (t.Status == s.Trim()) { add = true; break; }
+                    }
+                    else
+                    {
+                        foreach (string s in hapConfig.Current.HelpDesk.UserClosedStates.Split(new char[] { ',' }))
+                            if (t.Status == s.Trim()) { add = true; break; }
+                        if (!add) foreach (string s in hapConfig.Current.HelpDesk.ClosedStates.Split(new char[] { ',' }))
+                                if (t.Status == s.Trim()) { add = true; break; }
+                    }
+                    if (add) tickets.Add(t);
+                }
             }
             return tickets.ToArray();
         }
@@ -460,14 +548,40 @@ namespace HAP.HelpDesk
         [WebGet(UriTemplate = "ATicket/{Archive}/{TicketId}", ResponseFormat = WebMessageFormat.Json)]
         public FullTicket Ticket(string Archive, string TicketId)
         {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets" + Archive + ".xml"));
-            XmlElement ticket = doc.SelectSingleNode("/Tickets/Ticket[@id='" + TicketId + "']") as XmlElement;
-            FullTicket ft = new FullTicket(ticket);
-            bool needed = true;
-            if (ticket.HasAttribute("readby"))
+            if (hapConfig.Current.HelpDesk.Provider.ToLower() == "xml")
             {
-                string[] s = ticket.GetAttribute("readby").Split(new char[] { ',' });
+                XmlDocument doc = new XmlDocument();
+                doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets" + Archive + ".xml"));
+                XmlElement ticket = doc.SelectSingleNode("/Tickets/Ticket[@id='" + TicketId + "']") as XmlElement;
+                FullTicket ft = new FullTicket(ticket);
+                bool needed = true;
+                if (ticket.HasAttribute("readby"))
+                {
+                    string[] s = ticket.GetAttribute("readby").Split(new char[] { ',' });
+                    foreach (string a in s)
+                        if (a.Trim().ToLower() == HttpContext.Current.User.Identity.Name.ToLower()) needed = false;
+                    if (needed)
+                    {
+                        List<string> s1 = new List<string>();
+                        s1.AddRange(s);
+                        s1.Add(HttpContext.Current.User.Identity.Name);
+                        ticket.SetAttribute("readby", string.Join(", ", s1.ToArray()));
+                    }
+                }
+                else
+                {
+                    ticket.SetAttribute("readby", HttpContext.Current.User.Identity.Name);
+                }
+                if (needed) doc.Save(HttpContext.Current.Server.MapPath("~/App_Data/Tickets" + Archive + ".xml"));
+                return ft;
+            }
+            else
+            {
+                HAP.Data.SQL.sql2linqDataContext sql = new Data.SQL.sql2linqDataContext(ConfigurationManager.ConnectionStrings[hapConfig.Current.HelpDesk.Provider].ConnectionString);
+                Data.SQL.Ticket tick = sql.Tickets.Single(t => t.Archive == Archive && t.Id == int.Parse(TicketId));
+                FullTicket ft = new FullTicket(tick);
+                string[] s = tick.ReadBy.Split(new char[] { ',' });
+                bool needed = true;
                 foreach (string a in s)
                     if (a.Trim().ToLower() == HttpContext.Current.User.Identity.Name.ToLower()) needed = false;
                 if (needed)
@@ -475,15 +589,11 @@ namespace HAP.HelpDesk
                     List<string> s1 = new List<string>();
                     s1.AddRange(s);
                     s1.Add(HttpContext.Current.User.Identity.Name);
-                    ticket.SetAttribute("readby", string.Join(", ", s1.ToArray()));
+                    tick.ReadBy = string.Join(", ", s1.ToArray());
+                    sql.SubmitChanges();
                 }
+                return ft;
             }
-            else
-            {
-                ticket.SetAttribute("readby", HttpContext.Current.User.Identity.Name);
-            }
-            if (needed) doc.Save(HttpContext.Current.Server.MapPath("~/App_Data/Tickets" + Archive + ".xml"));
-            return ft;
         }
 
         [OperationContract]
@@ -497,11 +607,20 @@ namespace HAP.HelpDesk
         [WebGet(UriTemplate = "FAQs", ResponseFormat = WebMessageFormat.Json)]
         public Ticket[] FAQs()
         {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
             List<Ticket> tickets = new List<Ticket>();
-            foreach (XmlNode node in doc.SelectNodes("/Tickets/Ticket[@faq='true']"))
-                tickets.Add(new Ticket(node));
+            if (hapConfig.Current.HelpDesk.Provider.ToLower() == "xml")
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
+                foreach (XmlNode node in doc.SelectNodes("/Tickets/Ticket[@faq='true']"))
+                    tickets.Add(new Ticket(node));
+            }
+            else
+            {
+                HAP.Data.SQL.sql2linqDataContext sql = new Data.SQL.sql2linqDataContext(ConfigurationManager.ConnectionStrings[hapConfig.Current.HelpDesk.Provider].ConnectionString);
+                foreach (Data.SQL.Ticket tick in sql.Tickets.Where(t => t.Faq == true))
+                    tickets.Add(new Ticket(tick));
+            }
             return tickets.ToArray();
         }
 
@@ -519,12 +638,25 @@ namespace HAP.HelpDesk
             int p = int.Parse("-" + Period);
             Stats s = new Stats();
             Dictionary<string, int> highusers = new Dictionary<string, int>();
+            List<FullTicket> fulltickets = new List<FullTicket>();
             XmlDocument doc = new XmlDocument();
-            doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
             s.NewTickets = s.ClosedTickets = s.OpenTickets = 0;
-            foreach (XmlNode node in doc.SelectNodes("/Tickets/Ticket"))
+            if (hapConfig.Current.HelpDesk.Provider.ToLower() == "xml")
             {
-                FullTicket tick = new FullTicket(node);
+                doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
+                foreach (XmlNode node in doc.SelectNodes("/Tickets/Ticket"))
+                {
+                    fulltickets.Add(new FullTicket(node));
+                }
+            }
+            else
+            {
+                HAP.Data.SQL.sql2linqDataContext sql = new Data.SQL.sql2linqDataContext(ConfigurationManager.ConnectionStrings[hapConfig.Current.HelpDesk.Provider].ConnectionString);
+                foreach (Data.SQL.Ticket tick in sql.Tickets.Where(t => t.Archive != ""))
+                    fulltickets.Add(new FullTicket(tick));
+            }
+            foreach (FullTicket tick in fulltickets)
+            {
                 if (DateTime.Parse(tick.Date).Date >= DateTime.Now.AddDays(p).Date && DateTime.Parse(tick.Date).Date <= DateTime.Now.Date)
                 {
                     if (highusers.ContainsKey(tick.Username)) highusers[tick.Username]++;
