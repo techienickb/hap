@@ -16,10 +16,13 @@ namespace HAP.HelpDesk
         public string DisplayName { get; set; }
         public string NoteText { get; set; }
         public bool Hide { get; set; }
+        public int Id { get; set; }
+        public Attachment[] Attachments { get; set; }
 
         public Note(XmlNode node)
         {
-            NoteText = HttpUtility.UrlEncode(node.InnerXml.Replace("<![CDATA[", "").Replace("]]>", "").Replace("\n", "<br />"), System.Text.Encoding.Default);
+            Attachments = new Attachment[] {};
+            NoteText = HttpUtility.UrlDecode(node.InnerXml.Replace("<![CDATA[", "").Replace("]]>", "").Replace("\n", "<br />"), System.Text.Encoding.Default);
             if (node.Attributes["date"] != null && node.Attributes["time"] != null)
                 Date = DateTime.Parse(node.Attributes["date"].Value + " " + node.Attributes["time"].Value).ToString("dd/MM/yy HH:mm");
             else Date = DateTime.Parse(node.Attributes["datetime"].Value).ToString("dd/MM/yy HH:mm");
@@ -34,7 +37,7 @@ namespace HAP.HelpDesk
 
         public Note(Data.SQL.Note n)
         {
-            NoteText = HttpUtility.UrlEncode(n.Content.Replace("<![CDATA[", "").Replace("]]>", "").Replace("\n", "<br />"), System.Text.Encoding.Default);
+            NoteText = HttpUtility.UrlDecode(n.Content.Replace("<![CDATA[", "").Replace("]]>", "").Replace("\n", "<br />"), System.Text.Encoding.Default);
             Date = n.DateTime.ToString("dd/MM/yy HH:mm");
             Username = n.Username;
             try
@@ -43,6 +46,11 @@ namespace HAP.HelpDesk
             }
             catch { DisplayName = "UNKNOWN"; }
             Hide = n.Hide;
+            Id = n.Id;
+            List<Attachment> attachments = new List<Attachment>();
+            foreach (Data.SQL.NoteFile nf in n.NoteFiles)
+                attachments.Add(new Attachment { Name = nf.FileName, CType = nf.ContentType });
+            Attachments = attachments.ToArray();
         }
     }
 }

@@ -32,7 +32,7 @@ namespace HAP.HelpDesk.HelpDesk
         {
             get
             {
-                return (Directory.GetFiles(HttpContext.Current.Server.MapPath("~/app_data/"), "Tickets.xml").Length > 0) && isHDAdmin;
+                return (Directory.GetFiles(HttpContext.Current.Server.MapPath("~/app_data/"), "Tickets.xml").Length > 0) && isHDAdmin && config.HelpDesk.Provider != "xml";
             }
         }
 
@@ -47,8 +47,15 @@ namespace HAP.HelpDesk.HelpDesk
                 else foreach (string s2 in System.Web.Security.Roles.GetUsersInRole(s.Trim())) if (!users.Contains(s2.ToLower())) users.Add(s2.ToLower());
             foreach (string s in config.HelpDesk.Admins.Split(new char[] { ',' }))
                 if (s.StartsWith("!") && users.Contains(s.Trim().Substring(1).ToLower())) users.Remove(s.Trim().Substring(1).ToLower());
-            foreach (FileInfo f in new DirectoryInfo(Server.MapPath("~/app_data/")).GetFiles("Tickets_*.xml", SearchOption.TopDirectoryOnly))
-                archiveddates.Items.Add(new ListItem(f.Name.Remove(f.Name.LastIndexOf('.')).Remove(0, 8).Replace("_", " to "), f.Name.Remove(f.Name.LastIndexOf('.')).Remove(0, 7)));
+            if (config.HelpDesk.Provider == "xml") 
+                foreach (FileInfo f in new DirectoryInfo(Server.MapPath("~/app_data/")).GetFiles("Tickets_*.xml", SearchOption.TopDirectoryOnly))
+                    archiveddates.Items.Add(new ListItem(f.Name.Remove(f.Name.LastIndexOf('.')).Remove(0, 8).Replace("_", " to "), f.Name.Remove(f.Name.LastIndexOf('.')).Remove(0, 7)));
+            else
+            {
+                Data.SQL.sql2linqDataContext sql = new Data.SQL.sql2linqDataContext(WebConfigurationManager.ConnectionStrings[config.HelpDesk.Provider].ConnectionString);
+                foreach (var tick in sql.Tickets.Where(t => t.Archive != "").GroupBy(t => t.Archive))
+                    archiveddates.Items.Add(new ListItem(tick.Key.Replace("_", " to "), tick.Key));
+            }
             hasArch = archiveddates.Items.Count > 0;
             if (hasArch) archiveddates.Items.Insert(0, new ListItem("--- Select ---", ""));
             adminbookingpanel.Visible = archiveadmin.Visible = isHDAdmin;
@@ -70,12 +77,17 @@ namespace HAP.HelpDesk.HelpDesk
             }
             if (!Request.Browser.Browser.Contains("Chrome"))
             {
-                foreach (string ip in config.AD.InternalIP)
+                try
                 {
-                    if (new IPSubnet(ip).Contains(Request.UserHostAddress) && Dns.GetHostEntry(Request.UserHostAddress).HostName.ToLower().EndsWith(config.AD.UPN.ToLower()))
-                        newticket_pc.Value = Dns.GetHostEntry(Request.UserHostAddress).HostName.ToLower().Remove(Dns.GetHostEntry(Request.UserHostAddress).HostName.IndexOf('.'));
+                    foreach (string ip in config.AD.InternalIP)
+                    {
+                        if (new IPSubnet(ip).Contains(Request.UserHostAddress) && Dns.GetHostEntry(Request.UserHostAddress).HostName.ToLower().EndsWith(config.AD.UPN.ToLower()))
+                            newticket_pc.Value = Dns.GetHostEntry(Request.UserHostAddress).HostName.ToLower().Remove(Dns.GetHostEntry(Request.UserHostAddress).HostName.IndexOf('.'));
+                    }
                 }
+                catch { }
             }
+            migrate.Visible = isUpgrade;
         }
 
 
@@ -87,28 +99,40 @@ namespace HAP.HelpDesk.HelpDesk
         {
             DateTime datefrom = DateTime.Parse(archivefrom.Text);
             DateTime dateto = DateTime.Parse(archiveto.Text);
-            StreamWriter sw = File.CreateText(HttpContext.Current.Server.MapPath("~/app_data/Tickets_" + datefrom.ToString("dd-MM-yy") + "_" + dateto.ToString("dd-MM-yy") + ".xml"));
-            sw.WriteLine("<?xml version=\"1.0\"?>");
-            sw.WriteLine("<Tickets/>");
-            sw.Close();
-            sw.Dispose();
-            XmlDocument doc2 = new XmlDocument();
-            doc2.Load(HttpContext.Current.Server.MapPath("~/app_data/Tickets_" + datefrom.ToString("dd-MM-yy") + "_" + dateto.ToString("dd-MM-yy") + ".xml"));
-            XmlDocument doc = new XmlDocument();
-            doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
-            foreach (XmlNode node in doc.SelectNodes("/Tickets/Ticket[@status='Fixed']"))
+            if (config.HelpDesk.Provider == "xml")
             {
-                DateTime d = DateTime.Parse(node.SelectNodes("Note")[node.SelectNodes("Note").Count - 1].Attributes["datetime"].Value);
-                bool faq = node.Attributes["faq"] != null;
-                if (faq) faq = bool.Parse(node.Attributes["faq"].Value);
-                if (datefrom.Date <= d.Date && dateto.Date > d.Date && !faq)
+                StreamWriter sw = File.CreateText(HttpContext.Current.Server.MapPath("~/app_data/Tickets_" + datefrom.ToString("dd-MM-yy") + "_" + dateto.ToString("dd-MM-yy") + ".xml"));
+                sw.WriteLine("<?xml version=\"1.0\"?>");
+                sw.WriteLine("<Tickets/>");
+                sw.Close();
+                sw.Dispose();
+                XmlDocument doc2 = new XmlDocument();
+                doc2.Load(HttpContext.Current.Server.MapPath("~/app_data/Tickets_" + datefrom.ToString("dd-MM-yy") + "_" + dateto.ToString("dd-MM-yy") + ".xml"));
+                XmlDocument doc = new XmlDocument();
+                doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
+                foreach (XmlNode node in doc.SelectNodes("/Tickets/Ticket[@status='Fixed']"))
                 {
-                    doc2.SelectSingleNode("/Tickets").AppendChild(doc2.ImportNode(node.Clone(), true));
-                    doc.SelectSingleNode("/Tickets").RemoveChild(node);
+                    DateTime d = DateTime.Parse(node.SelectNodes("Note")[node.SelectNodes("Note").Count - 1].Attributes["datetime"].Value);
+                    bool faq = node.Attributes["faq"] != null;
+                    if (faq) faq = bool.Parse(node.Attributes["faq"].Value);
+                    if (datefrom.Date <= d.Date && dateto.Date > d.Date && !faq)
+                    {
+                        doc2.SelectSingleNode("/Tickets").AppendChild(doc2.ImportNode(node.Clone(), true));
+                        doc.SelectSingleNode("/Tickets").RemoveChild(node);
+                    }
                 }
+                doc.Save(HttpContext.Current.Server.MapPath("~/app_data/Tickets.xml"));
+                doc2.Save(HttpContext.Current.Server.MapPath("~/app_data/Tickets_" + datefrom.ToString("dd-MM-yy") + "_" + dateto.ToString("dd-MM-yy") + ".xml"));
             }
-            doc.Save(HttpContext.Current.Server.MapPath("~/app_data/Tickets.xml"));
-            doc2.Save(HttpContext.Current.Server.MapPath("~/app_data/Tickets_" + datefrom.ToString("dd-MM-yy") + "_" + dateto.ToString("dd-MM-yy") + ".xml"));
+            else
+            {
+                Data.SQL.sql2linqDataContext sql = new Data.SQL.sql2linqDataContext(WebConfigurationManager.ConnectionStrings[config.HelpDesk.Provider].ConnectionString);
+                foreach (Data.SQL.Ticket tick in sql.Tickets.Where(t => t.Archive == "" && !API.isOpen(t.Status)))
+                {
+                    tick.Archive = datefrom.ToString("dd-MM-yy") + "_" + dateto.ToString("dd-MM-yy");
+                }
+                sql.SubmitChanges();
+            }
         }
 
         protected void migrate_Click(object sender, EventArgs e)
@@ -118,7 +142,7 @@ namespace HAP.HelpDesk.HelpDesk
             {
                 XmlDocument doc = new XmlDocument();
                 doc.Load(f.OpenRead());
-                Migrate(f.Name.Remove(f.Name.LastIndexOf('.')).Remove(0, 7), doc, sql);
+                Migrate(f.Name.Remove(f.Name.LastIndexOf('.')).Remove(0, 8), doc, sql);
             }
             XmlDocument doc2 = new XmlDocument();
             doc2.Load(Server.MapPath("~/App_Data/tickets.xml"));
@@ -127,7 +151,7 @@ namespace HAP.HelpDesk.HelpDesk
 
         protected void Migrate(string archive, XmlDocument doc, Data.SQL.sql2linqDataContext sql)
         {
-            foreach (XmlNode node in doc.SelectNodes("/Tickets"))
+            foreach (XmlNode node in doc.SelectNodes("/Tickets/Ticket"))
             {
                 FullTicket ticket = new FullTicket(node);
                 Data.SQL.Ticket tick = new Data.SQL.Ticket { Archive = archive, Faq = ticket.FAQ, Status = ticket.Status, AssignedTo = ticket.AssignedTo, ShowTo = ticket.ShowTo, ReadBy = ticket.ReadBy, Title = ticket.Subject, Priority = ticket.Priority };

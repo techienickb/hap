@@ -6,7 +6,7 @@
 <asp:Content runat="server" ContentPlaceHolderID="viewport"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" /></asp:Content>
 <asp:Content ContentPlaceHolderID="title" runat="server"><asp:HyperLink runat="server" NavigateUrl="~/HelpDesk/"><hap:LocalResource runat="server" StringPath="helpdesk/helpdesk" /></asp:HyperLink></asp:Content>
 <asp:Content ContentPlaceHolderID="header" runat="server">
-    <div id="toolbar"><a id="opentickets-link" href="#opentickets" onclick="return false;"><hap:LocalResource StringPath="helpdesk/opentickets" runat="server" /></a><a id="closedtickets-link" href="#closedtickets" onclick="return false;"><hap:LocalResource StringPath="helpdesk/closedtickets" runat="server" /></a><%if (isHDAdmin || hasArch) { %><a id="archivedtickets-link" href="#archivedtickets" onclick="return false;"><hap:LocalResource StringPath="helpdesk/archivedtickets" runat="server" /></a><%} %><a href="#faqs" id="faq-link" onclick="return false;"><hap:LocalResource StringPath="helpdesk/faqs" runat="server" /></a><a href="#newticket" id="newticket-link"><hap:LocalResource StringPath="helpdesk/newtickets" runat="server" /></a><%if (isHDAdmin) { %><a href="#stats" id="stats-link"><hap:LocalResource runat="server" StringPath="helpdesk/stats" /></a><%} %><%if (isUpgrade) { %><asp:LinkButton runat="server" ID="migrate" Text="Migrate to SQL" OnClick="migrate_Click" Visible="false" /><%} %></div>
+    <div id="toolbar"><a id="opentickets-link" href="#opentickets" onclick="return false;"><hap:LocalResource StringPath="helpdesk/opentickets" runat="server" /></a><a id="closedtickets-link" href="#closedtickets" onclick="return false;"><hap:LocalResource StringPath="helpdesk/closedtickets" runat="server" /></a><%if (isHDAdmin || hasArch) { %><a id="archivedtickets-link" href="#archivedtickets" onclick="return false;"><hap:LocalResource StringPath="helpdesk/archivedtickets" runat="server" /></a><%} %><a href="#faqs" id="faq-link" onclick="return false;"><hap:LocalResource StringPath="helpdesk/faqs" runat="server" /></a><a href="#newticket" id="newticket-link"><hap:LocalResource StringPath="helpdesk/newtickets" runat="server" /></a><%if (isHDAdmin) { %><a href="#stats" id="stats-link"><hap:LocalResource runat="server" StringPath="helpdesk/stats" /></a><%} %><asp:LinkButton runat="server" ID="migrate" Text="Migrate to SQL" OnClick="migrate_Click" /></div>
 </asp:Content>
 <asp:Content ContentPlaceHolderID="body" runat="server">
     <div id="hap-HD">
@@ -125,7 +125,7 @@
             <div id="notes">
             </div>
             <div id="newnote">
-                <label for="ticket-note">New Notes: </label><label class="hdadmin" for="ticket-hidenote">Hide Note </label><input class="hdadmin" type="checkbox" id="ticket-hidenote" /><br />
+                <label for="ticket-note">New Notes: </label><label class="hdadmin" for="ticket-hidenote">Hide Note </label><input class="hdadmin" type="checkbox" id="ticket-hidenote" /><% if (HAP.Web.Configuration.hapConfig.Current.HelpDesk.Provider != "xml") { %> - <a href="#" id="ticket-file">Attach File</a><%} %><br />
                 <textarea id="ticket-note" style="width: 100%; height: 200px;" rows="8" cols="10"></textarea>
             </div>
             <div style="text-align: right;" id="HDlowercontrols"><button onclick="return updateTicket();">Update</button></div>
@@ -141,7 +141,7 @@
                 <asp:HiddenField runat="server" ID="newticket_pc" />
 		    </div>
 		    <div>
-			    <label for="newticket-note"><hap:LocalResource StringPath="helpdesk/note" runat="server" />: </label>
+			    <label for="newticket-note"><hap:LocalResource StringPath="helpdesk/note" runat="server" />: </label><% if (HAP.Web.Configuration.hapConfig.Current.HelpDesk.Provider != "xml") { %><a href="#" id="newticket-file">Attach File</a><%} %>
 		    </div>
 		    <textarea id="newticket-note" style="width: 100%; height: 200px;" rows="8" cols="10"></textarea>
 		    <asp:PlaceHolder runat="server" ID="adminbookingpanel">
