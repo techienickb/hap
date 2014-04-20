@@ -680,7 +680,7 @@ namespace HAP.HelpDesk
             else
             {
                 HAP.Data.SQL.sql2linqDataContext sql = new Data.SQL.sql2linqDataContext(ConfigurationManager.ConnectionStrings[hapConfig.Current.HelpDesk.Provider].ConnectionString);
-                foreach (Data.SQL.Ticket tick in sql.Tickets.Where(t => t.Archive != ""))
+                foreach (Data.SQL.Ticket tick in sql.Tickets.Where(t => t.Archive == ""))
                     fulltickets.Add(new FullTicket(tick));
             }
             foreach (FullTicket tick in fulltickets)
