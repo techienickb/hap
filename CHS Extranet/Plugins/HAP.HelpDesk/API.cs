@@ -25,15 +25,26 @@ namespace HAP.HelpDesk
     public class API
     {
         [OperationContract]
-        [WebGet(UriTemplate="/Permalink/{Id}")]
+        [WebGet(UriTemplate="Permalink/{Id}")]
         public void Permalink(string Id)
         {
             HttpContext.Current.Response.Redirect("~/HelpDesk/#ticket-" + Id);
         }
 
         [OperationContract]
-        [WebInvoke(Method = "PUT", UriTemplate = "/Ticket/{Id}", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public FullTicket UpdateTicket(string Id, string Note, string State, string Priority, string ShowTo, string FAQ, string Subject, string AssignTo)
+        [WebGet(UriTemplate = "Get/{Id}/{Name}")]
+        public void GetA(string Id, string Name)
+        {
+            HAP.Data.SQL.sql2linqDataContext sql = new Data.SQL.sql2linqDataContext(ConfigurationManager.ConnectionStrings[hapConfig.Current.HelpDesk.Provider].ConnectionString);
+            Data.SQL.NoteFile nf = sql.NoteFiles.Single(n => n.FileName == HttpUtility.UrlDecode(Name, System.Text.Encoding.Default) && n.NoteId == int.Parse(Id));
+            HttpContext.Current.Response.Clear();
+            HttpContext.Current.Response.ContentType = nf.ContentType;
+            HttpContext.Current.Response.BinaryWrite(nf.Data.ToArray());
+        }
+
+        [OperationContract]
+        [WebInvoke(Method = "PUT", UriTemplate = "Ticket/{Id}", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        public FullTicket UpdateTicket(string Id, string Note, string State, string Priority, string ShowTo, string FAQ, string Subject, string AssignTo, Attachment[] Attachments)
         {
             HAP.Data.SQL.WebEvents.Log(DateTime.Now, "HelpDesk.Update", HttpContext.Current.User.Identity.Name, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Updating Ticket " + Id);
 
@@ -69,8 +80,12 @@ namespace HAP.HelpDesk
                 tick.ReadBy = HttpContext.Current.User.Identity.Name;
                 if (string.IsNullOrEmpty(Note)) Note = string.IsNullOrEmpty(AssignTo) ? "No Note Information Added" : "Assigned to: " + AssignTo;
                 else Note = HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />");
-                tick.Notes.Add(new Data.SQL.Note { DateTime = DateTime.Now, Hide = false, Username = HttpContext.Current.User.Identity.Name, Content = Note });
+                Data.SQL.Note n = new Data.SQL.Note { DateTime = DateTime.Now, Hide = false, Username = HttpContext.Current.User.Identity.Name, Content = Note };
+                foreach (Attachment a in Attachments)
+                    n.NoteFiles.Add(new Data.SQL.NoteFile { ContentType = HttpUtility.UrlDecode(a.CType, System.Text.Encoding.Default), FileName = HttpUtility.UrlDecode(a.Name, System.Text.Encoding.Default), Data = new System.Data.Linq.Binary((byte[])HttpContext.Current.Cache.Get("hap-HD-" + HttpUtility.UrlDecode(a.Name, System.Text.Encoding.Default))) });
+                tick.Notes.Add(n);
                 sql.SubmitChanges();
+                foreach (Attachment a in Attachments) HttpContext.Current.Cache.Remove("hap-HD-" + HttpUtility.UrlDecode(a.Name, System.Text.Encoding.Default));
             }
             if (hapConfig.Current.SMTP.Enabled)
             {
@@ -106,8 +121,8 @@ namespace HAP.HelpDesk
         }
 
         [OperationContract]
-        [WebInvoke(Method = "PUT", UriTemplate = "/AdminTicket/{Id}", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public FullTicket UpdateAdminTicket(string Id, string Note, string State, string Priority, string ShowTo, string FAQ, string Subject, string AssignTo, bool HideNote)
+        [WebInvoke(Method = "PUT", UriTemplate = "AdminTicket/{Id}", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        public FullTicket UpdateAdminTicket(string Id, string Note, string State, string Priority, string ShowTo, string FAQ, string Subject, string AssignTo, bool HideNote, Attachment[] Attachments)
         {
             HAP.Data.SQL.WebEvents.Log(DateTime.Now, "HelpDesk.UpdateAdmin", HttpContext.Current.User.Identity.Name, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Updating Admin Ticket " + Id);
 
@@ -163,8 +178,12 @@ namespace HAP.HelpDesk
 
                 if (string.IsNullOrEmpty(Note)) Note = string.IsNullOrEmpty(AssignTo) ? "No Note Information Added" : "Assigned to: " + AssignTo;
                 else Note = HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />");
-                tick.Notes.Add(new Data.SQL.Note { DateTime = DateTime.Now, Hide = HideNote, Username = HttpContext.Current.User.Identity.Name, Content = Note });
+                Data.SQL.Note n = new Data.SQL.Note { DateTime = DateTime.Now, Hide = HideNote, Username = HttpContext.Current.User.Identity.Name, Content = Note };
+                foreach (Attachment a in Attachments)
+                    n.NoteFiles.Add(new Data.SQL.NoteFile { ContentType = HttpUtility.UrlDecode(a.CType, System.Text.Encoding.Default), FileName = HttpUtility.UrlDecode(a.Name, System.Text.Encoding.Default), Data = new System.Data.Linq.Binary((byte[])HttpContext.Current.Cache.Get("hap-HD-" + HttpUtility.UrlDecode(a.Name, System.Text.Encoding.Default))) });
+                tick.Notes.Add(n);
                 sql.SubmitChanges();
+                foreach (Attachment a in Attachments) HttpContext.Current.Cache.Remove("hap-HD-" + HttpUtility.UrlDecode(a.Name, System.Text.Encoding.Default));
             }
 
             string emailnote = "";
@@ -249,8 +268,8 @@ namespace HAP.HelpDesk
         }
 
         [OperationContract]
-        [WebInvoke(Method = "POST", UriTemplate = "/Ticket", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public FullTicket FileTicket(string Subject, string Room, string Note)
+        [WebInvoke(Method = "POST", UriTemplate = "Ticket", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        public FullTicket FileTicket(string Subject, string Room, string Note, Attachment[] Attachments)
         {
             int x;
             if (hapConfig.Current.HelpDesk.Provider.ToLower() == "xml")
@@ -290,10 +309,15 @@ namespace HAP.HelpDesk
             {
                 HAP.Data.SQL.sql2linqDataContext sql = new Data.SQL.sql2linqDataContext(ConfigurationManager.ConnectionStrings[hapConfig.Current.HelpDesk.Provider].ConnectionString);
                 Data.SQL.Ticket tick = new Data.SQL.Ticket { Archive = "", Faq = false, Status = "New", Priority = "Normal", AssignedTo = "", HideAssignedTo = false, ShowTo = "", ReadBy = HttpContext.Current.User.Identity.Name, Title = HttpUtility.UrlDecode(Subject, System.Text.Encoding.Default) };
-                tick.Notes.Add(new Data.SQL.Note { DateTime = DateTime.Now, Hide = false, Username = HttpContext.Current.User.Identity.Name, Content = "Room: " + Room + "\n\n" + HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />") });
+                Data.SQL.Note n = new Data.SQL.Note { DateTime = DateTime.Now, Hide = false, Username = HttpContext.Current.User.Identity.Name, Content = "Room: " + Room + "\n\n" + HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />") };
+                foreach (Attachment a in Attachments)
+                    n.NoteFiles.Add(new Data.SQL.NoteFile { ContentType = HttpUtility.UrlDecode(a.CType, System.Text.Encoding.Default), FileName = HttpUtility.UrlDecode(a.Name, System.Text.Encoding.Default), Data = new System.Data.Linq.Binary((byte[])HttpContext.Current.Cache.Get("hap-HD-" + HttpUtility.UrlDecode(a.Name, System.Text.Encoding.Default))) });
+                tick.Notes.Add(n);
+                sql.SubmitChanges();
                 sql.Tickets.InsertOnSubmit(tick);
                 sql.SubmitChanges();
                 x = tick.Id;
+                foreach (Attachment a in Attachments) HttpContext.Current.Cache.Remove("hap-HD-" + HttpUtility.UrlDecode(a.Name, System.Text.Encoding.Default));
             }
 
             if (hapConfig.Current.SMTP.Enabled)
@@ -332,8 +356,8 @@ namespace HAP.HelpDesk
         }
 
         [OperationContract]
-        [WebInvoke(Method = "POST", UriTemplate = "/AdminTicket", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        public FullTicket FileAdminTicket(string Subject, string Room, string Note, string ShowTo, string Priority, string User)
+        [WebInvoke(Method = "POST", UriTemplate = "AdminTicket", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        public FullTicket FileAdminTicket(string Subject, string Room, string Note, string ShowTo, string Priority, string User, Attachment[] Attachments)
         {
             int x = 0;
             if (hapConfig.Current.HelpDesk.Provider.ToLower() == "xml")
@@ -374,10 +398,14 @@ namespace HAP.HelpDesk
                 HAP.Data.SQL.sql2linqDataContext sql = new Data.SQL.sql2linqDataContext(ConfigurationManager.ConnectionStrings[hapConfig.Current.HelpDesk.Provider].ConnectionString);
                 Data.SQL.Ticket tick = new Data.SQL.Ticket { Archive = "", Faq = false, Status = "New", AssignedTo = "", HideAssignedTo = false, ShowTo = ShowTo, ReadBy = HttpContext.Current.User.Identity.Name, Title = HttpUtility.UrlDecode(Subject, System.Text.Encoding.Default) };
                 tick.Priority = Priority == "" ? "Normal" : Priority;
-                tick.Notes.Add(new Data.SQL.Note { DateTime = DateTime.Now, Hide = false, Username = HttpContext.Current.User.Identity.Name, Content = "Room: " + Room + "\n\n" + HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />") });
+                Data.SQL.Note n = new Data.SQL.Note { DateTime = DateTime.Now, Hide = false, Username = HttpContext.Current.User.Identity.Name, Content = "Room: " + Room + "\n\n" + HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />") };
+                foreach (Attachment a in Attachments)
+                    n.NoteFiles.Add(new Data.SQL.NoteFile { ContentType = HttpUtility.UrlDecode(a.CType, System.Text.Encoding.Default), FileName = HttpUtility.UrlDecode(a.Name, System.Text.Encoding.Default), Data = new System.Data.Linq.Binary((byte[])HttpContext.Current.Cache.Get("hap-HD-" + HttpUtility.UrlDecode(a.Name, System.Text.Encoding.Default))) });
+                tick.Notes.Add(n);
                 sql.Tickets.InsertOnSubmit(tick);
                 sql.SubmitChanges();
                 x = tick.Id;
+                foreach (Attachment a in Attachments) HttpContext.Current.Cache.Remove("hap-HD-" + HttpUtility.UrlDecode(a.Name, System.Text.Encoding.Default));
             }
 
             if (hapConfig.Current.SMTP.Enabled && ADUtils.FindUserInfos(User)[0].Email != null && !string.IsNullOrEmpty(ADUtils.FindUserInfos(User)[0].Email))
@@ -453,7 +481,7 @@ namespace HAP.HelpDesk
             return AllTickets("", State);
         }
 
-        public bool isOpen(string state)
+        public static bool isOpen(string state)
         {
             foreach (string s in hapConfig.Current.HelpDesk.UserOpenStates.Split(new char[] { ',' }))
                 if (state == s.Trim()) return true;

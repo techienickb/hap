@@ -3,7 +3,18 @@ var st = "";
 var userlist2 = null;
 var userlist = null;
 var newticket_pc = null;
+var uploads = [];
+
+function genAttachments() {
+    var a = [];
+    for (var i = 0; i < uploads.length; i++)
+        a.push('{ "Name": "' + escape(uploads[i].d.name) + '", "CType": "' + escape(uploads[i].d.type) + '" }');
+    return '[' + a.join(', ') + ']';
+}
+
 function loadTicket() {
+    uploads = [];
+    $("#ticket-uploads").remove();
     $("#tabs a.selected").removeClass("selected");
     $("#newticket-link").removeClass("active");
     $("#tabs").removeClass("ticketactive");
@@ -30,6 +41,7 @@ function loadTicket() {
 }
 
 function renderTicket(data) {
+    $("#ticket-uploads").remove();
     if (data.FAQ) { $("#HDcontrols, #HDlowercontrols").hide(); $("#currentticket").addClass("nocontrol"); }
     $("#ticket-note, #ticket-AwareI").val("");
     $("#ticket-hidenote").prop("checked", false).prev().removeClass("on");
@@ -49,6 +61,14 @@ function renderTicket(data) {
         var d = replaceURLWithHTMLLinks(unescape(data.Notes[i].NoteText).replace(/\+/g, ' '));
         d = d.replace(/#(\d+)/gi, '<a href="#ticket-$1">#$1</a>');
         h += data.Notes[i].DisplayName + ' ' + data.Notes[i].Date + '<br /><pre>' + d + '</pre>';
+        if (data.Notes[i].Attachments.length > 0) {
+            h += 'Attachments: ';
+            var a = [];
+            for (var x = 0; x < data.Notes[i].Attachments.length; x++)
+                a.push('<a href="' + hap.common.formatJSONUrl("~/api/helpdesk/Get/" + data.Notes[i].Id + "/" + escape(data.Notes[i].Attachments[x].Name)) + '" target="_blank">' + data.Notes[i].Attachments[x].Name + '</a>');
+            h += a.join(", ");
+            h += "<br />";
+        }
     }
     $("#notes").html(h);
     $("button").button();
@@ -80,7 +100,7 @@ function updateTicket() {
     $("#curtick-loading").show();
     var s = $("#ticket-Status").text();
     if (s == "User Attention Needed" && !hap.hdadmin) s = "Investigating";
-    var data = '{ "Note": "' + escape($("#ticket-note").val()) + '", "State": "' + s + '", "Priority": "' + $("#ticket-Priority").text() + '", "ShowTo": "' + $("#ticket-ShowToI").text() + '", "FAQ": "false", "AssignTo": "' + userlist2.val() + '", "Subject": "' + $("#ticket-Subject").text() + '"' + (hap.hdadmin ? (', "HideNote": ' + $("#ticket-hidenote").is(":checked")) : '') + ' }';
+    var data = '{ "Note": "' + escape($("#ticket-note").val()) + '", "State": "' + s + '", "Priority": "' + $("#ticket-Priority").text() + '", "ShowTo": "' + $("#ticket-ShowToI").text() + '", "FAQ": "false", "AssignTo": "' + userlist2.val() + '", "Subject": "' + $("#ticket-Subject").text() + '"' + (hap.hdadmin ? (', "HideNote": ' + $("#ticket-hidenote").is(":checked")) : '') + ', "Attachments": ' + genAttachments() + ' }';
     var url = (hap.hdadmin) ? hap.common.formatJSONUrl("~/api/HelpDesk/AdminTicket/" + curticket) : hap.common.formatJSONUrl("~/api/HelpDesk/Ticket/" + curticket);
     $.ajax({
         type: 'PUT',
@@ -125,7 +145,7 @@ function fileTicket() {
         data += ', "Priority": "' + $("#priorityradioes input:checked").val() + '", "User": "' + userlist.val() + '", "ShowTo": "' + $("#newticket-showto").val() + '"';
         url = hap.common.resolveUrl("~/api/HelpDesk/AdminTicket");
     }
-    data += ' }';
+    data += ', "Attachments": ' + genAttachments() + ' }';
     $.ajax({
         type: 'POST',
         url: url,
@@ -146,6 +166,43 @@ function fileTicket() {
     });
     return false;
 }
+
+function upload(d) {
+    this.onProgress = function (e) {
+        for (var i = 0; i < uploads.length; i++) if (uploads[i].d.size == e.total) uploads[i].updateProgress(parseInt((e.loaded / e.total) * 100));
+    };
+    this.updateProgress = function (e) {
+        $("#upload-" + this.xhr.id + " progress").val(e);
+    }
+    this.xhr = new XMLHttpRequest();
+    this.xhr.id = this.id = d.name.replace(/[^\w]/gi, "");
+    this.d = d;
+    this.xhr.upload.addEventListener("progress", this.onProgress, false);
+    this.xhr.addEventListener("progress", this.onProgress, false);
+    this.xhr.onprogress = this.onProgress;
+    this.xhr.open('POST', hap.common.resolveUrl('~/api/helpdesk-upload'), true);
+    this.xhr.onreadystatechange = function () {
+        if (this.readyState == 4) {
+            if ($("#ticket-uploads").length == 0) (curticket == null ?  $("#newticket-file") : $("#ticket-file")).before('<span id="ticket-uploads">Pending attachments: </span>');
+            $("#ticket-uploads").append(unescape(this.responseText) + ", ");
+            for (var i = 0; i < uploads.length; i++) if (uploads[i].d.name == unescape(this.responseText)) {
+                var u = uploads[i];
+                if (u.d.type.match(/^image\//gi)) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $("#upload-" + u.id).append('<img src="' + e.target.result + '" width="150px" />');
+                    }
+                    reader.readAsDataURL(u.d);
+                }
+                $("#upload-" + u.id).append("Uploaded");
+                $("#upload-" + u.id + " progress").remove();
+            }
+        }
+    };
+    this.xhr.setRequestHeader('X_FILENAME', d.name);
+    this.xhr.send(d);
+}
+
 $(window).hashchange(function () {
     if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) {
         curticket = window.location.href.split('#')[1].substr(7);
@@ -165,7 +222,7 @@ $(function () {
     if (!hap.hdadmin) { $("#HDtop .hdadmin, #ticket-hidenote").hide(); if ($("#ticket-hidenote").prev().is(".hapswitch")) $("#ticket-hidenote").prev().hide(); }
     $("#updateticket, #assignticket").dialog({ autoOpen: false });
     $("#tabs > div, #HDmain > div").hide();
-    $("#toolbar a").click(function () {
+    $("#toolbar a:not(#header_migrate)").click(function () {
         if ($(this).index() < 5) $("#updateticket, #assignticket").dialog("close");
         if ($(this).index() > 3) { $("#HDmain > div").hide(); window.location.href = "#"; $("#newticket-link, #stats-link").removeClass("active"); $("#tabs").addClass("ticketactive"); }
         else { $("#tabs > div, #newticket, #stats").hide(); $("#toolbar a").removeClass("active"); }
@@ -186,6 +243,40 @@ $(function () {
             }
             $("#ticket-ShowToI").val(showto);
         }
+    });
+    $("#ticket-file, #newticket-file").click(function () {
+        if ($("#uploadbox").length == 0) {
+            $("#hapContent").append('<div title="Add File" id="uploadbox"><p>Drag a file into this box</p></div>');
+            $("#uploadbox").hapPopup();
+            $("#uploadbox .hapPopup-content").css("height", parseInt($("#uploadbox .hapPopup-content").css("max-height").replace(/px/gi, "")) - 4 + "px").css("text-align", "center").css("border", "padding 1px #ccc").css("margin", "2px").on("dragover", function () {
+                $("#uploadbox .hapPopup-content").css("border", "dashed 3px #0060a6").css("padding", "0");
+                return false;
+            }).on("dragleave", function () {
+                $("#uploadbox .hapPopup-content").css("border", "dashed 1px #ccc").css("padding", "2px");
+                return false;
+            }).on("dragend", function () {
+                $("#uploadbox .hapPopup-content").css("border", "dashed 1px #ccc").css("padding", "2px");
+                return false;
+            }).attr("dropzone", "copy f:image/png f:image/gif f:image/jpeg f:image/jpg")[0].ondrop = function (event) {
+                event.stopPropagation();
+                event.preventDefault();
+                $("#uploadbox .hapPopup-content").css("border", "dashed 1px #ccc").css("padding", "2px");
+                var files = (event.target.files || event.dataTransfer.files);
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    if (file.type.match(/application\/x-zip/gi) || file.type.match(/^image\//gi)) {
+                        $("#uploadbox .hapPopup-content").append('<div style="display: inline-block; width: 150px; height: 150px;" id="upload-' + file.name.replace(/[^\w]/gi, "") + '">' + file.name + '<br /><progress value="0" max="100"></progress></div>');
+                        uploads.push(new upload(file));
+
+                    } else alert("This file type cannot be uploaded");
+                }
+                return false;
+            };
+        } else {
+            $("#uploadbox .hapPopup-content").html("<p>Drag a file into this box</p>");
+            $("#uploadbox").hapPopup();
+        }
+        return false;
     });
     loadTicket();
     Update();

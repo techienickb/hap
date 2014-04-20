@@ -1198,6 +1198,8 @@ namespace HAP.Data.SQL
 		
 		private string _ContentType;
 		
+		private string _FileName;
+		
 		private EntityRef<Note> _Note;
 		
     #region Extensibility Method Definitions
@@ -1212,6 +1214,8 @@ namespace HAP.Data.SQL
     partial void OnDataChanged();
     partial void OnContentTypeChanging(string value);
     partial void OnContentTypeChanged();
+    partial void OnFileNameChanging(string value);
+    partial void OnFileNameChanged();
     #endregion
 		
 		public NoteFile()
@@ -1300,6 +1304,26 @@ namespace HAP.Data.SQL
 					this._ContentType = value;
 					this.SendPropertyChanged("ContentType");
 					this.OnContentTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FileName", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string FileName
+		{
+			get
+			{
+				return this._FileName;
+			}
+			set
+			{
+				if ((this._FileName != value))
+				{
+					this.OnFileNameChanging(value);
+					this.SendPropertyChanging();
+					this._FileName = value;
+					this.SendPropertyChanged("FileName");
+					this.OnFileNameChanged();
 				}
 			}
 		}
