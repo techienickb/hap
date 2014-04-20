@@ -14,4 +14,14 @@ namespace HAP.Web.Configuration
             this.Name = name;
         }
     }
+
+    public class HandlerAPI : Attribute
+    {
+        public string Name { get; set; }
+
+        public HandlerAPI(string name)
+        {
+            this.Name = name;
+        }
+    }
 }

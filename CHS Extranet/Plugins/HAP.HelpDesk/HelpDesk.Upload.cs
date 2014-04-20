@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using HAP.Web.routing;
 using System.Web.Routing;
 using System.Web.Compilation;
 using System.Web.Security;
@@ -12,8 +11,9 @@ using HAP.Web.Configuration;
 using System.Xml;
 using HAP.AD;
 
-namespace HAP.Web.API
+namespace HAP.HelpDesk
 {
+    [HAP.Web.Configuration.HandlerAPI("api/helpdesk-upload")]
     public class HelpDesk_UploadHandler : IRouteHandler
     {
         public IHttpHandler GetHttpHandler(RequestContext requestContext)
