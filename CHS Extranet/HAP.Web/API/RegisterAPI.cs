@@ -28,7 +28,6 @@ namespace HAP.Web.API
             RouteTable.Routes.Add(new Route("api/mycomputer/thumb/{*path}", new ThumbsHandler()));
             RouteTable.Routes.Add(new Route("api/mycomputer/{ext}.ico", new IconHandler()));
             RouteTable.Routes.Add(new Route("api/myfiles-upload/{drive}/{*path}", new MyFiles_UploadHandler()));
-            RouteTable.Routes.Add(new Route("api/helpdesk-upload", new HelpDesk_UploadHandler()));
             RouteTable.Routes.Add(new Route("myfiles/directedit/{drive}/{*path}", new PageRouteHandler("~/myfiles/directedit.aspx")));
             RouteTable.Routes.Add(new Route("api/homework-upload/{teacher}/{name}/{start}/{end}/{drive}/{*path}", new Homework_UploadHandler()));
             RouteTable.Routes.Add(new Route("api/myfiles-permalink/{drive}/{*path}", new MyFiles_PermaLinkHandler()));
@@ -48,6 +47,10 @@ namespace HAP.Web.API
                 {
                     if (type.GetCustomAttributes(typeof(HAP.Web.Configuration.ServiceAPI), false).Length > 0)
                         RouteTable.Routes.Add(new ServiceRoute(((HAP.Web.Configuration.ServiceAPI)type.GetCustomAttributes(typeof(HAP.Web.Configuration.ServiceAPI), false)[0]).Name, factory, type));
+                    if (type.GetCustomAttributes(typeof(HAP.Web.Configuration.HandlerAPI), false).Length > 0) {
+                        var instance = (IRouteHandler)Activator.CreateInstance(type);
+                        RouteTable.Routes.Add(new Route(((HAP.Web.Configuration.HandlerAPI)type.GetCustomAttributes(typeof(HAP.Web.Configuration.HandlerAPI), false)[0]).Name, instance));
+                    }
                 }
             }
 
