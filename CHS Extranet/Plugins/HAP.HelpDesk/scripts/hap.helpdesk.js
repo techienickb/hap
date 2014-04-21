@@ -246,7 +246,7 @@ $(function () {
     });
     $("#ticket-file, #newticket-file").click(function () {
         if ($("#uploadbox").length == 0) {
-            $("#hapContent").append('<div title="Add File" id="uploadbox"><p>Drag a file into this box</p></div>');
+            $("#hapContent").append('<div title="Add File" id="uploadbox"><div><p>Drag a file into this box or click below</p><input type="file" multiple="multiple" id="uploadfiles" /></div></div>');
             $("#uploadbox").hapPopup();
             $("#uploadbox .hapPopup-content").css("height", parseInt($("#uploadbox .hapPopup-content").css("max-height").replace(/px/gi, "")) - 4 + "px").css("text-align", "center").css("border", "padding 1px #ccc").css("margin", "2px").on("dragover", function () {
                 $("#uploadbox .hapPopup-content").css("border", "dashed 3px #0060a6").css("padding", "0");
@@ -273,9 +273,20 @@ $(function () {
                 return false;
             };
         } else {
-            $("#uploadbox .hapPopup-content").html("<p>Drag a file into this box</p>");
+            $("#uploadbox .hapPopup-content").html('<div><p>Drag a file into this box or click below</p><input type="file" multiple="multiple" id="uploadfiles" /></div>');
             $("#uploadbox").hapPopup();
         }
+        $("#uploadfiles").change(function () {
+            for (var i = 0; i < this.files.length; i++) {
+                var file = this.files[i];
+                if (file.type.match(/application\/x-zip/gi) || file.type.match(/^image\//gi)) {
+                    $("#uploadbox .hapPopup-content").append('<div style="display: inline-block; width: 150px; height: 150px;" id="upload-' + file.name.replace(/[^\w]/gi, "") + '">' + file.name + '<br /><progress value="0" max="100"></progress></div>');
+                    uploads.push(new upload(file));
+
+                } else alert("This file type cannot be uploaded");
+            }
+            $(this).val("");
+        });
         return false;
     });
     loadTicket();
