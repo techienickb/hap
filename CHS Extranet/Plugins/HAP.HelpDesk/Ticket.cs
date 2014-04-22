@@ -68,7 +68,6 @@ namespace HAP.HelpDesk
                 DisplayName = ADUtils.FindUserInfos(tick.Notes[0].Username)[0].DisplayName;
             }
             catch { DisplayName = "UNKNOWN"; }
-            FAQ = false;
             FAQ = tick.Faq;
             ReadBy = tick.ReadBy;
         }
