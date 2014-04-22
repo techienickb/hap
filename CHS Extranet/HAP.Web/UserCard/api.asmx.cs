@@ -108,32 +108,50 @@ namespace HAP.Web.UserCard
         [WebMethod]
         public Ticket[] getMyTickets(string username)
         {
+            List<Ticket> tickets = new List<Ticket>();
             hapConfig config = hapConfig.Current;
-            XmlDocument doc = new XmlDocument();
-            doc.Load(Server.MapPath("~/App_Data/Tickets.xml"));
-            string xpath = string.Format("/Tickets/Ticket[@status!='Fixed']");
-            GroupPrincipal gp = GroupPrincipal.FindByIdentity(HAP.AD.ADUtils.GetPContext(), "Domain Admins");
-            bool ia = false;
-            try
+            if (config.HelpDesk.Provider == "xml")
             {
-                ia = new User(username).IsMemberOf(gp);
-            }
-            catch { }
-            if (ia)
-            {
-                List<Ticket> tickets = new List<Ticket>();
-                foreach (XmlNode node in doc.SelectNodes(xpath))
-                    tickets.Add(Ticket.Parse(node));
-                return tickets.ToArray();
+                XmlDocument doc = new XmlDocument();
+                doc.Load(Server.MapPath("~/App_Data/Tickets.xml"));
+                string xpath = string.Format("/Tickets/Ticket[@status!='Fixed']");
+                GroupPrincipal gp = GroupPrincipal.FindByIdentity(HAP.AD.ADUtils.GetPContext(), "Domain Admins");
+                bool ia = false;
+                try
+                {
+                    ia = new User(username).IsMemberOf(gp);
+                }
+                catch { }
+                if (ia)
+                {
+                    foreach (XmlNode node in doc.SelectNodes(xpath))
+                        tickets.Add(Ticket.Parse(node));
+                    return tickets.ToArray();
+                }
+                else
+                {
+                    tickets = new List<Ticket>();
+                    foreach (XmlNode node in doc.SelectNodes(xpath))
+                        if (node.SelectNodes("Note")[0].Attributes["username"].Value.ToLower() == username.ToLower())
+                            tickets.Add(Ticket.Parse(node));
+                    return tickets.ToArray();
+                }
             }
             else
             {
-                List<Ticket> tickets = new List<Ticket>();
-                foreach (XmlNode node in doc.SelectNodes(xpath))
-                    if (node.SelectNodes("Note")[0].Attributes["username"].Value.ToLower() == username.ToLower())
-                        tickets.Add(Ticket.Parse(node));
-                return tickets.ToArray();
+                HAP.Data.SQL.sql2linqDataContext sql = new Data.SQL.sql2linqDataContext(ConfigurationManager.ConnectionStrings[hapConfig.Current.HelpDesk.Provider].ConnectionString);
+                foreach (HAP.Data.SQL.Ticket tick in sql.Tickets.Where(t => t.Archive == ""))
+                {
+                    Ticket t = new Ticket(tick);
+                    bool add = false;
+                    foreach (string s in hapConfig.Current.HelpDesk.UserOpenStates.Split(new char[] { ',' }))
+                        if (t.Status == s.Trim()) { add = true; break; }
+                    if (!add) foreach (string s in hapConfig.Current.HelpDesk.OpenStates.Split(new char[] { ',' }))
+                            if (t.Status == s.Trim()) { add = true; break; }
+                    if (add) tickets.Add(t);
+                }
             }
+            return tickets.ToArray();
         }
 
         [WebMethod]
@@ -215,8 +233,18 @@ namespace HAP.Web.UserCard
             if (node.Attributes["date"] != null && node.Attributes["time"] != null)
                 Date = DateTime.Parse(node.Attributes["date"].Value + " " + node.Attributes["time"].Value);
             else Date = DateTime.Parse(node.Attributes["datetime"].Value);
-            hapConfig config = hapConfig.Current;
             User = new User(node.Attributes["username"].Value).DisplayName;
+        }
+
+        public Note(Data.SQL.Note n)
+        {
+            NoteText = HttpUtility.UrlDecode(n.Content.Replace("<![CDATA[", "").Replace("]]>", "").Replace("\n", "<br />"), System.Text.Encoding.Default);
+            Date = n.DateTime;
+            try
+            {
+                User = ADUtils.FindUserInfos(n.Username)[0].DisplayName;
+            }
+            catch { User = "UNKNOWN"; }
         }
 
         public static Note Parse(XmlNode node) { return new Note(node); }
@@ -243,12 +271,25 @@ namespace HAP.Web.UserCard
             if (node.SelectNodes("Note")[0].Attributes["date"] != null)
                 Date = DateTime.Parse(node.SelectNodes("Note")[0].Attributes["date"].Value + " " + node.SelectNodes("Note")[0].Attributes["time"].Value);
             Date = DateTime.Parse(node.SelectNodes("Note")[0].Attributes["datetime"].Value);
-            hapConfig config = hapConfig.Current;
             User = new User(node.SelectNodes("Note")[0].Attributes["username"].Value).DisplayName;
             List<Note> notes = new List<Note>();
             foreach (XmlNode n in node.SelectNodes("Note"))
                 notes.Add(new Note(n));
             Notes = notes.ToArray();
+        }
+
+        public Ticket(Data.SQL.Ticket tick)
+        {
+            Id = tick.Id;
+            Subject = tick.Title;
+            Priority = tick.Priority;
+            Status = tick.Status;
+            Date = tick.Notes[0].DateTime;
+            try
+            {
+                User = ADUtils.FindUserInfos(tick.Notes[0].Username)[0].DisplayName;
+            }
+            catch { User = "UNKNOWN"; }
         }
     }
 }
