@@ -336,7 +336,7 @@
 				type: 'POST',
 				url: hap.common.formatJSONUrl('~/api/MyFiles/Move'),
 				dataType: 'json', 
-				data: '{ "OldPath" : "' + SelectedItems()[index].Data.Path.replace(/\.\.\/download\//gi, "").replace(/\\/gi, "/") + '", "NewPath": "' + (target.replace(/\\/gi, '/') + '/' + SelectedItems()[index].Data.Path.replace(/\\/gi, "/").substr(SelectedItems()[index].Data.Path.replace(/\\/gi, "/").lastIndexOf('/')).replace(/\//gi, '')) + '", "Overwrite": "' + overwrite + '" }',
+				data: ('{ "OldPath" : "' + SelectedItems()[index].Data.Path.replace(/\.\.\/download\//gi, "") + '", "NewPath": "' + (target + '/' + SelectedItems()[index].Data.Path.substr(SelectedItems()[index].Data.Path.lastIndexOf('\\'))) + '", "Overwrite": "' + overwrite + '" }').replace(/\\/gi, "/"),
 				contentType: 'application/json',
 				success: function (data) {
 					temp.index++;
@@ -388,7 +388,7 @@
 				type: 'POST',
 				url: hap.common.formatJSONUrl('~/api/MyFiles/Move'),
 				dataType: 'json',
-				data: '{ "OldPath" : "' + clipboard.items[index].Data.Path.replace(/\.\.\/download\//gi, "").replace(/\\/gi, "/") + '", "NewPath": "' + (target.replace(/\//gi, '/') + '/' + clipboard.items[index].Data.Path.replace(/\\/gi, "/").substr(clipboard.items[index].Data.Path.replace(/\\/gi, "/").lastIndexOf('/')).replace(/\//gi, '')) + '", "Overwrite": "' + overwrite + '" }',
+				data: ('{ "OldPath" : "' + clipboard.items[index].Data.Path.replace(/\.\.\/download\//gi, "") + '", "NewPath": "' + (target + '\\' + clipboard.items[index].Data.Path.substr(clipboard.items[index].Data.Path.lastIndexOf('/'))) + '", "Overwrite": "' + overwrite + '" }').replace(/\\/gi, "/"),
 				contentType: 'application/json',
 				success: function (data) {
 					temp.index++;
