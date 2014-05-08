@@ -45,7 +45,7 @@ namespace HAP.AD
                     UserPrincipal userp = UserPrincipal.FindByIdentity(pcontext, username);
                     foreach (Principal p in userp.GetGroups())
                     {
-                        roles.Add(p.SamAccountName);
+                        if (!roles.Contains(p.Name)) roles.Add(p.Name);
                         foreach (Principal p1 in (((GroupPrincipal)p).GetGroups()))
                             Recurse(p1, ref roles, 0);
                     }
@@ -58,7 +58,7 @@ namespace HAP.AD
 
         public void Recurse(Principal p, ref List<string> roles, int loop)
         {
-            roles.Add(p.Name);
+            if (!roles.Contains(p.Name)) roles.Add(p.Name);
             if (loop < HAP.Web.Configuration.hapConfig.Current.AD.MaxRecursions)
                 try
                 {
