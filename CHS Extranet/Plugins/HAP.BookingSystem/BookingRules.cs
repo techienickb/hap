@@ -137,7 +137,7 @@ namespace HAP.BookingSystem
                                     for (int x = 0; x < Math.Abs(repeat); x++)
                                     {
                                         int period = (repeat > 0) ? index2 + x : index2 - x;
-                                        if (index2 < config.BookingSystem.Lessons.Count - x && bs.islessonFree(b.Room, config.BookingSystem.Lessons[period].Name))
+                                        if (index2 < config.BookingSystem.Lessons.Count - x)
                                         {
                                             XmlElement node = doc.CreateElement("Booking");
                                             node.SetAttribute("date", b.Date.ToShortDateString());
