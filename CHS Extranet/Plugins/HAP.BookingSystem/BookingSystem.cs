@@ -80,14 +80,17 @@ namespace HAP.BookingSystem
             {
                 StreamWriter sw = File.CreateText(o.Path);
                 sw.WriteLine("<?xml version=\"1.0\"?>");
-                sw.WriteLine("</Bookings>");
+                sw.WriteLine("<Bookings />");
                 sw.Close();
                 sw.Dispose();
             }
             XmlDocument doc = new XmlDocument();
             doc.Load(o.Path);
             foreach (XmlNode node in o.Nodes)
-                doc.SelectSingleNode("/Bookings").AppendChild(node);
+            {
+                XmlNode ArchiveNode = doc.ImportNode(node, true);
+                doc.SelectSingleNode("/Bookings").AppendChild(ArchiveNode);
+            }
             doc.Save(o.Path);
         }
 
