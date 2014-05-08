@@ -91,6 +91,13 @@ namespace HAP.AD
             catch { }
         }
 
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, UriTemplate = "roles/{username}")]
+        public string[] UserRoles(string username)
+        {
+            return Roles.GetRolesForUser(username);
+        }
+
     }
 
     public class JSONUser
