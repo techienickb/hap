@@ -194,6 +194,12 @@ namespace HAP.BookingSystem
                         j = new JSONBooking(b);
                     
                     if (b.Resource.Type == ResourceType.Loan) j.Lesson = lesson.Name;
+
+                    if (b.Name == "CHARGING" || b.Name == "UNAVAILABLE")
+                    {
+                        js.Add(j);
+                        break;
+                    }                    
                     js.Add(j);
                 }
                 bookings.Add(js.ToArray());
@@ -232,6 +238,11 @@ namespace HAP.BookingSystem
                                 j.Date = d.AddSeconds(a).ToString("yyyy-MM-ddTHH:mm:ssZ");
                                 j.Date2 = d2.ToString("yyyy-MM-ddTHH:mm:ssZ");
                                 if (b.Resource.Type == ResourceType.Loan) j.Lesson = lesson.Name;
+                                if (b.Name == "CHARGING" || b.Name == "UNAVAILABLE")
+                                {
+                                    js.Add(j);
+                                    break;
+                                } 
                                 js.Add(j);
                             }
                         a++;
