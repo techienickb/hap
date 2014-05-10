@@ -140,6 +140,7 @@ namespace HAP.BookingSystem
 
     public class JSONBooking : IComparable
     {
+        private Booking Booking;
         public JSONBooking() {}
         public JSONBooking(Booking b)
         {
@@ -161,6 +162,7 @@ namespace HAP.BookingSystem
             catch { this.DisplayName = b.Username; }
             this.Static = b.Static;
             this.Date = b.Static ? b.Day.ToString() : b.Date.ToShortDateString();
+            this.Booking = b;
             this.Count = b.Count;
             this.Notes = b.Notes;
             try
@@ -203,10 +205,22 @@ namespace HAP.BookingSystem
         public string Date2 { get; set; }
         public string Date { get; set; }
         public string Notes { get; set; }
+        public Booking GetBooking()
+        {
+            return this.Booking;
+        }
         public int CompareTo(object obj)
         {
-            if (Date.CompareTo(((JSONBooking)obj).Date) == 0) return Lesson.CompareTo(((JSONBooking)obj).Lesson);
-            return Date.CompareTo(((JSONBooking)obj).Date);
+            if (this.Static)
+            {
+                if (Date.CompareTo(((JSONBooking)obj).Date) == 0) return Lesson.CompareTo(((JSONBooking)obj).Lesson);
+                return Date.CompareTo(((JSONBooking)obj).Date);
+            }
+            else
+            {
+                if (this.Booking.Date.CompareTo(((JSONBooking)obj).GetBooking().Date) == 0) return Lesson.CompareTo(((JSONBooking)obj).Lesson);
+                return this.Booking.Date.CompareTo(((JSONBooking)obj).GetBooking().Date);
+            }
         }
     }
 }
