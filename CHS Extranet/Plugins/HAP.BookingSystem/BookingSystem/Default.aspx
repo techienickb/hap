@@ -38,13 +38,17 @@
 			                    data: '{ "Query": "' + $('#overviewsearch').val() + '" }',
 			                    contentType: 'application/json',
 			                    success: function (data) {
-			                        $('#searchresults').html("");
+			                        $('#searchresults').html('<div id="bookingresults" style="float:left; margin-right:20px" /><div id="staticresults" style="float:left;" />');
 			                        var d = "";
 			                        for (var i = 0; i < data.length; i++) {
 			                            var item = data[i];
 			                            var h = "<div" + (d != (item.Date.match(/[0|1][0-9]\w\w\w/g) ? item.Date.substr(2, item.Date.length - 2) : item.Date) ? ' class="newline"><span class="date">' + (item.Date.match(/[0|1][0-9]\w\w\w/g) ? item.Date.substr(2, item.Date.length - 2) : item.Date) : '><span class="date">') + "</span><span>" + item.Lesson + "</span><span>" + item.Room + "</span><span>" + item.Username + "</span><span>" + item.Name + "</span></div>";
 			                            d = item.Date.match(/[0|1][0-9]\w\w\w/g) ? item.Date.substr(2, item.Date.length - 2) : item.Date;
-			                            $('#searchresults').append(h);
+			                            if( item.Static ) {
+			                                $('#staticresults').append(h);
+			                            } else {
+			                                $('#bookingresults').append(h);
+			                            }
 			                        }
 			                    },
 			                    error: hap.common.jsonError
