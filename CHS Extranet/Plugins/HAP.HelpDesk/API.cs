@@ -125,7 +125,7 @@ namespace HAP.HelpDesk
         public FullTicket UpdateAdminTicket(string Id, string Note, string State, string Priority, string ShowTo, string FAQ, string Subject, string AssignTo, bool HideNote, Attachment[] Attachments)
         {
             HAP.Data.SQL.WebEvents.Log(DateTime.Now, "HelpDesk.UpdateAdmin", HttpContext.Current.User.Identity.Name, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Updating Admin Ticket " + Id);
-
+            bool same = false;
 
             if (hapConfig.Current.HelpDesk.Provider.ToLower() == "xml")
             {
@@ -133,14 +133,20 @@ namespace HAP.HelpDesk
                 doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/Tickets.xml"));
                 XmlNode ticket = doc.SelectSingleNode("/Tickets/Ticket[@id='" + Id + "']");
 
-                if (ticket.Attributes["assignedto"] != null && ticket.Attributes["assignedto"].Value.ToLower() == AssignTo.ToLower()) AssignTo = "";
+                if (ticket.Attributes["assignedto"] != null && ticket.Attributes["assignedto"].Value.ToLower() == AssignTo.ToLower()) same = true;
 
                 if (!string.IsNullOrEmpty(Subject)) ticket.Attributes["subject"].Value = Subject;
                 XmlElement node = doc.CreateElement("Note");
                 node.SetAttribute("datetime", DateTime.Now.ToString("u"));
                 node.SetAttribute("username", HttpContext.Current.User.Identity.Name);
                 node.SetAttribute("hide", HideNote.ToString());
-                if (string.IsNullOrEmpty(Note)) node.InnerXml = string.IsNullOrEmpty(AssignTo) ? "<![CDATA[No Note Information Added]]>" : "<![CDATA[Assigned to: " + AssignTo + "]]>";
+
+
+                if (string.IsNullOrEmpty(Note))
+                {
+                    if (same) node.InnerXml = "<![CDATA[Assigned to: " + AssignTo + "]]>";
+                    else Note = string.IsNullOrEmpty(AssignTo) ? "<![CDATA[No Note Information Added]]>" : "<![CDATA[Assigned to: " + AssignTo + "]]>";
+                }
                 else node.InnerXml = "<![CDATA[" + HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />") + "]]>";
                 ticket.AppendChild(node);
 
@@ -168,7 +174,9 @@ namespace HAP.HelpDesk
             {
                 HAP.Data.SQL.sql2linqDataContext sql = new Data.SQL.sql2linqDataContext(ConfigurationManager.ConnectionStrings[hapConfig.Current.HelpDesk.Provider].ConnectionString);
                 Data.SQL.Ticket tick = sql.Tickets.Single(t => t.Id == int.Parse(Id));
-                if (tick.AssignedTo.ToLower() == AssignTo.ToLower()) AssignTo = "";
+
+                same = tick.AssignedTo.ToLower() == AssignTo.ToLower();
+
                 if (!string.IsNullOrEmpty(Subject)) tick.Title = Subject;
                 if (!string.IsNullOrEmpty(State)) tick.Status = State;
                 tick.AssignedTo = string.IsNullOrEmpty(AssignTo) ? HttpContext.Current.User.Identity.Name : AssignTo;
@@ -176,7 +184,11 @@ namespace HAP.HelpDesk
                 if (!string.IsNullOrEmpty(ShowTo)) tick.ShowTo = ShowTo;
                 tick.Faq = string.IsNullOrWhiteSpace(FAQ) ? false : bool.Parse(FAQ);
 
-                if (string.IsNullOrEmpty(Note)) Note = string.IsNullOrEmpty(AssignTo) ? "No Note Information Added" : "Assigned to: " + AssignTo;
+                if (string.IsNullOrEmpty(Note))
+                {
+                    if (same) Note = "No Note Information Added";
+                    else Note = string.IsNullOrEmpty(AssignTo) ? "No Note Information Added" : "Assigned to: " + AssignTo;
+                }
                 else Note = HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />");
                 Data.SQL.Note n = new Data.SQL.Note { DateTime = DateTime.Now, Hide = HideNote, Username = HttpContext.Current.User.Identity.Name, Content = Note };
                 foreach (Attachment a in Attachments)
@@ -241,7 +253,7 @@ namespace HAP.HelpDesk
                     smtp.EnableSsl = hapConfig.Current.SMTP.SSL;
                     smtp.Send(mes);
                 }
-            if (hapConfig.Current.SMTP.Enabled && !string.IsNullOrEmpty(AssignTo) && AssignTo.ToLower() != HttpContext.Current.User.Identity.Name.ToLower())
+            if (hapConfig.Current.SMTP.Enabled && !same && AssignTo.ToLower() != HttpContext.Current.User.Identity.Name.ToLower())
             {
                 MailMessage mes = new MailMessage();
 
@@ -398,7 +410,7 @@ namespace HAP.HelpDesk
                 HAP.Data.SQL.sql2linqDataContext sql = new Data.SQL.sql2linqDataContext(ConfigurationManager.ConnectionStrings[hapConfig.Current.HelpDesk.Provider].ConnectionString);
                 Data.SQL.Ticket tick = new Data.SQL.Ticket { Archive = "", Faq = false, Status = "New", AssignedTo = "", HideAssignedTo = false, ShowTo = ShowTo, ReadBy = HttpContext.Current.User.Identity.Name, Title = HttpUtility.UrlDecode(Subject, System.Text.Encoding.Default) };
                 tick.Priority = Priority == "" ? "Normal" : Priority;
-                Data.SQL.Note n = new Data.SQL.Note { DateTime = DateTime.Now, Hide = false, Username = HttpContext.Current.User.Identity.Name, Content = "Room: " + Room + "\n\n" + HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />") };
+                Data.SQL.Note n = new Data.SQL.Note { DateTime = DateTime.Now, Hide = false, Username = User, Content = "Room: " + Room + "\n\n" + HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />") };
                 foreach (Attachment a in Attachments)
                     n.NoteFiles.Add(new Data.SQL.NoteFile { ContentType = HttpUtility.UrlDecode(a.CType, System.Text.Encoding.Default), FileName = HttpUtility.UrlDecode(a.Name, System.Text.Encoding.Default), Data = new System.Data.Linq.Binary((byte[])HttpContext.Current.Cache.Get("hap-HD-" + HttpUtility.UrlDecode(a.Name, System.Text.Encoding.Default))) });
                 tick.Notes.Add(n);
