@@ -609,10 +609,12 @@
 	                                else {
 	                                    if (data[0] >= 0 ) {
 	                                        $("#val").html("You have " + data[0] + " bookings available to use this week. This Week is a Week " + data[1]);
+	                                        availbookings = data[0];
 	                                    } else {
 	                                        $("#val").html("This Week is a Week " + data[1]);
+	                                        availbookings = -1;
 	                                    }
-	                                    availbookings = data;
+	                                    
 	                                }
 	                            },
 	                            error: hap.common.jsonError
@@ -652,11 +654,13 @@
 									if (user.isBSAdmin) $("#val").html("This Week is a Week " + data[1]);
 									else {
 									    if (data[0] >= 0 ) {
-										    $("#val").html("You have " + data[0] + " bookings available to use this week. This Week is a Week " + data[1]);
+									        $("#val").html("You have " + data[0] + " bookings available to use this week. This Week is a Week " + data[1]);
+									        availbookings = data[0];
 									    } else {
 									        $("#val").html("This Week is a Week " + data[1]);
+									        availbookings = -1;
 									    }
-										availbookings = data;
+										
 									}
 								},
 								error: hap.common.jsonError
