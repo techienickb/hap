@@ -168,7 +168,7 @@
                             $("#recurcheck").html('<span id="crecurcheck">Checking...</span>');
                             recurs = [];
                             for (var i = 1; i <= (u.value || $("#recurweeks").val()) ; i++) {
-                                var ndate = new Date(curdate.getTime() + i * 7 * 24 * 60 * 60 * 1000);
+                                var ndate = new Date(curdate.getFullYear(), curdate.getMonth(), curdate.getDate() + 7 * i);
                                 recurs.push(ndate);
                                 $.ajax({
                                     type: 'GET',
