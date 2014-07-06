@@ -280,24 +280,12 @@ namespace HAP.BookingSystem
             doc.Save(HttpContext.Current.Server.MapPath("~/App_Data/StaticBookings.xml"));
         }
 
-        public void deleteStaticBooking(Booking booking)
-        {
-            //XmlDocument doc = new XmlDocument();
-            //doc.Load(HttpContext.Current.Server.MapPath("~/StaticBookings.xml"));
-
-            //XmlNode node = doc.SelectSingleNode("/Bookings/Booking[@lesson='" + booking.Lesson + "' and @room='" + booking.Room + "' and @day='" + booking.Day + "']");
-            //doc.SelectSingleNode("/Bookings").RemoveChild(node);
-
-            //doc.Save(HttpContext.Current.Server.MapPath("~/StaticBookings.xml"));
-        }
-
         public void deleteStaticBooking1(string lesson, string room, int day)
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(HttpContext.Current.Server.MapPath("~/App_Data/StaticBookings.xml"));
 
             XmlNode node = doc.SelectSingleNode("/Bookings/Booking[@lesson='" + lesson + "' and @room='" + room + "' and @day='" + day + "']");
-            //HttpContext.Current.Response.Write("/Bookings/Booking[@lesson='" + lesson + "' and @room='" + room + "' and @day='" + day + "']  " + (node != null));
             doc.SelectSingleNode("/Bookings").RemoveChild(node);
 
             doc.Save(HttpContext.Current.Server.MapPath("~/App_Data/StaticBookings.xml"));
