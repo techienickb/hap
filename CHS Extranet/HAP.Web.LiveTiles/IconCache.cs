@@ -69,14 +69,11 @@ namespace HAP.Web.LiveTiles
             }
             XmlDocument doc = new XmlDocument();
             doc.Load(HttpContext.Current.Server.MapPath("~/app_data/iconcache/colors.xml"));
-            foreach (XmlNode n in doc.SelectNodes("/colorcache/color"))
+            if (doc.SelectNodes("/colorcache/color[@icon='" + key + "']").Count > 0)
             {
-                if (n.Attributes["icon"].Value == key)
-                {
-                    // icon cache file name already exists in xml file. 
-                    // This may be caused by concurrent requests, so we skip replacing the existing entry.
-                    return;
-                }
+                // icon cache file name already exists in xml file. 
+                // This may be caused by concurrent requests, so we skip replacing the existing entry.
+                return;
             }
             XmlElement e = doc.CreateElement("color");
             e.SetAttribute("icon", key);
