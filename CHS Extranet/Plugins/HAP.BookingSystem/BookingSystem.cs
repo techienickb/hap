@@ -279,6 +279,11 @@ namespace HAP.BookingSystem
 
             doc.Save(HttpContext.Current.Server.MapPath("~/App_Data/StaticBookings.xml"));
         }
+        /// <summary>
+        /// Hides the asp.net grid functionality from doing anything
+        /// </summary>
+        /// <param name="booking"></param>
+        public void deleteStaticBooking(Booking booking) { }
 
         public void deleteStaticBooking1(string lesson, string room, int day)
         {
