@@ -35,6 +35,38 @@
 	</div>
 </asp:Content>
 <asp:Content ContentPlaceHolderID="body" runat="server">
+    <iframe src="about:blank" width="0" height="0" style="border: 0; visibility: hidden; position: absolute; top: 0; left: 0;" id="decheck"></iframe>
+    <script>
+        var ad = "<%=HAP.MyFiles.DirectEditToken.ConvertToToken(HttpContext.Current.Request.Cookies["token"].Value + "|" + HttpContext.Current.Request.Cookies[FormsAuthentication.FormsCookieName].Value + "|" + HttpContext.Current.Request.Url.ToString().ToLower().Replace("myfiles/default.aspx", "api/myfiles/destatus/confirm")) %>";
+        var dechecktimer, detimeout, run1 = true;
+        $(function () {
+            dechecktimer = setInterval(function () {
+                $.ajax({
+                    type: 'GET',
+                    url: hap.common.formatJSONUrl('~/api/MyFiles/DEStatus/Query'),
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    success: function (data) {
+                        if (data == true)
+                        {
+                            clearInterval(dechecktimer);
+                            clearTimeout(detimeout);
+                            detimeout = dechecktimer = null;
+                            $("#hapdirectedit").prop("checked", true);
+                        }
+                        else if (run1) {
+                            $("#decheck")[0].contentDocument.location.href = "hap://" + ad;
+                            run1 = false;
+                        }
+                    },
+                    error: hap.common.jsonError
+                });
+            }, 1000);
+            detimeout = setTimeout(function () {
+                clearInterval(dechecktimer);
+            }, 10005);
+        });
+    </script>
 	<input type="text" id="renamebox" />
 	<hap:WrappedLocalResource runat="server" title="#myfiles/properties" id="properties" Tag="div">
 		<div id="propcont"><hap:LocalResource StringPath="loading" runat="server" />...</div>
@@ -863,11 +895,44 @@
 				var item = null;
 				for (var x = 0; x < items.length; x++) if (items[x].Id == $(this).attr("id")) item = items[x];
 				if (item.Data.Type != 'Directory' && item.Data.Actions == 3) return;
-				if (item.Data.Type != 'Directory') alert(hap.common.getLocal("myfiles/downloadwarning"));
+
 				var item = null;
 				for (var x = 0; x < items.length; x++)
 				    if (items[x].Id == $(this).attr("id")) { item = items[x]; break; }
-				if (item.Data.Type != 'Directory') window.open((item.Data.Path.match(/\.\./i) ? item.Data.Path.replace(/\\/g, "/") : '#' + item.Data.Path));
+
+				if (item.Data.Type != 'Directory') {
+				    if ($("#hapdirectedit").is(":checked") && item.Data.Extension.match(/(xls|doc|ppt)/gi)) {
+				        $('#hapContent').append('<div title="Question" id="hapWarning">' + hap.common.getLocal("myfiles/directeditquestion") + '</div>');
+				        $("#hapWarning").hapPopup({
+				            buttons: [
+                                {
+                                    Text: "Download", Click: function () {
+                                        $(this).parents(".hapPopup").remove();
+                                        $('#hapContent').append('<div title="Warning" id="hapWarning">' + hap.common.getLocal("myfiles/downloadwarning") + '</div>');
+                                        $("#hapWarning").hapPopup({
+                                            buttons: [
+                                                { Text: "Ok", Click: function () { $(this).parents(".hapPopup").remove(); window.open("" + (item.Data.Path.match(/\.\./i) ? item.Data.Path.replace(/\\/g, "/") : '#' + item.Data.Path)); return false; } },
+                                                { Text: "Cancel", Click: function () { $(this).parents(".hapPopup").remove(); return false; } }
+                                            ], item: item
+                                        });
+                                        return false;
+                                    }
+                                },
+				                { Text: "DirectEdit", Click: function () { $(this).parents(".hapPopup").remove(); location.href = "" + item.Data.Path.replace(/\.\.\/Download\//gi, "../myfiles/directedit/"); return false; } },
+                                { Text: "Cancel", Click: function () { $(this).parents(".hapPopup").remove(); return false; } }
+				            ], item: item
+				        });
+				    }
+				    else {
+				        $('#hapContent').append('<div title="Warning" id="hapWarning">' + hap.common.getLocal("myfiles/downloadwarning") + '</div>');
+				        $("#hapWarning").hapPopup({
+				            buttons: [
+                                { Text: "Ok", Click: function () { $(this).parents(".hapPopup").remove(); window.open("" + (item.Data.Path.match(/\.\./i) ? item.Data.Path.replace(/\\/g, "/") : '#' + item.Data.Path)); return false; } },
+                                { Text: "Cancel", Click: function () { $(this).parents(".hapPopup").remove(); return false; } }
+				            ], item: item
+				        });
+				    }
+				}
 				else window.location.href = (item.Data.Path.match(/\.\./i) ? item.Data.Path.replace(/\\/g, "/") : '#' + item.Data.Path);
 			};
 			this.Click = function (e) {

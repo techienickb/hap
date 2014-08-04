@@ -114,6 +114,7 @@
     </move>
     <downloadwarning>You are about to download this file. If you wish to edit this file, remember to
 save it to your computer and upload it back once you have finished!</downloadwarning>
+    <directeditquestion>Do you want to download this file or DirectEdit it?</directeditquestion>
     <upload>
       <random>Random Name Suffix</random>
       <upload>Upload</upload>

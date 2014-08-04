@@ -32,6 +32,39 @@ namespace HAP.MyFiles
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
     public class API
     {
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", UriTemplate = "DEStatus/Confirm", BodyStyle = WebMessageBodyStyle.Bare, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        public string ConfirmDE()
+        {
+            hapConfig config = hapConfig.Current;
+            User user = new User();
+            if (config.AD.AuthenticationMode == Web.Configuration.AuthMode.Forms)
+            {
+                HttpCookie token = HttpContext.Current.Request.Cookies["token"];
+                if (token == null) throw new AccessViolationException("Token Cookie Missing, user not logged in correctly");
+                user.Authenticate(HttpContext.Current.User.Identity.Name, TokenGenerator.ConvertToPlain(token.Value));
+            }
+            else
+            {
+                user = new User(HttpContext.Current.User.Identity.Name);
+            }
+            HttpContext.Current.Cache.Insert("hap-DE-" + user.UserName.ToLower() + HttpContext.Current.Request.UserHostAddress, true, null, System.Web.Caching.Cache.NoAbsoluteExpiration, TimeSpan.FromMinutes(5));
+            return "Ok";
+        }
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", UriTemplate = "DEStatus/Query", BodyStyle = WebMessageBodyStyle.Bare, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        public bool DEStatus()
+        {
+            try
+            {
+                return (bool)HttpContext.Current.Cache.Get("hap-DE-" + HttpContext.Current.User.Identity.Name.ToLower() + HttpContext.Current.Request.UserHostAddress);
+            }
+            catch { }
+            return false;
+        }
+
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "SendTo/Google/{Drive}/{*Path}", BodyStyle = WebMessageBodyStyle.WrappedRequest,  RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         public string GoogleUpload(string Drive, string Path, string username, string password)
