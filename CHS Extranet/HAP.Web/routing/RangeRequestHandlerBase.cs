@@ -267,7 +267,7 @@ public abstract class RangeRequestHandlerBase : IHttpHandler
         HttpResponse Response = context.Response;
 
         byte[] buffer = new byte[this.BufferSize];
-        using (FileStream fs = this.InternalRequestedFileInfo.OpenRead())
+        using (FileStream fs = this.InternalRequestedFileInfo.Open(FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
         {
             for (int i = 0; i < this.StartRangeBytes.Length; i++)
             {

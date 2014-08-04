@@ -24,16 +24,20 @@ namespace HAP.Web
             {
                 if (!Request.Browser.Browser.Contains("Chrome"))
                 {
-                    foreach (string ip in hapConfig.Current.AD.InternalIP)
+                    try
                     {
-                        if (new IPSubnet(ip).Contains(Request.UserHostAddress))
+                        foreach (string ip in hapConfig.Current.AD.InternalIP)
                         {
-                            if (Dns.GetHostEntry(Request.UserHostAddress).HostName.ToLower().EndsWith(hapConfig.Current.AD.UPN.ToLower()) && Request.QueryString.Count < 2) 
-                                Response.Redirect("~/kerberos.aspx?ReturnUrl=" + Request.QueryString[0], true);
-                            else if(Dns.GetHostEntry(Request.UserHostAddress).HostName.ToLower().EndsWith(hapConfig.Current.AD.UPN.ToLower()) && Request.QueryString.Count == 2) 
-                                username.Text = User.Identity.Name.Contains('\\') ? User.Identity.Name.Substring(User.Identity.Name.IndexOf('\\') + 1) : User.Identity.Name;
+                            if (new IPSubnet(ip).Contains(Request.UserHostAddress))
+                            {
+                                if (Dns.GetHostEntry(Request.UserHostAddress).HostName.ToLower().EndsWith(hapConfig.Current.AD.UPN.ToLower()) && Request.QueryString.Count < 2)
+                                    Response.Redirect("~/kerberos.aspx?ReturnUrl=" + Request.QueryString[0], true);
+                                else if (Dns.GetHostEntry(Request.UserHostAddress).HostName.ToLower().EndsWith(hapConfig.Current.AD.UPN.ToLower()) && Request.QueryString.Count == 2)
+                                    username.Text = User.Identity.Name.Contains('\\') ? User.Identity.Name.Substring(User.Identity.Name.IndexOf('\\') + 1) : User.Identity.Name;
+                            }
                         }
                     }
+                    catch { }
                 }
                 if (Cache.Get("hapBannedIps") == null) HttpContext.Current.Cache.Insert("hapBannedIps", new List<Banned>());
                 List<Banned> bans = Cache.Get("hapBannedIps") as List<Banned>;
