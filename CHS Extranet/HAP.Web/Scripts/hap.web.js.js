@@ -132,13 +132,15 @@ if (hap == null) {
         localization: [],
         livetiles: {
             Init: function (data) {
-                if ($("#" + data[0].Data.Group).is(".me")) this.ShowMe(data);
-                else for (var i = 0; i < data.length; i++) {
-                    var tile = new this.LiveTile(data[i].Type, data[i].Data);
-                    for (var x = 0; x < this.TileHandlers.length; x++)
-                        if (data[i].Type.match(this.TileHandlers[x].type)) { this.TileHandlers[x].func(data[i].Type, data[i].Data, tile); break; }
-                    tile.Render();
-                    this.Tiles.push(tile);
+                if (data.length > 0) {
+                    if ($("#" + data[0].Data.Group).is(".me")) this.ShowMe(data);
+                    else for (var i = 0; i < data.length; i++) {
+                        var tile = new this.LiveTile(data[i].Type, data[i].Data);
+                        for (var x = 0; x < this.TileHandlers.length; x++)
+                            if (data[i].Type.match(this.TileHandlers[x].type)) { this.TileHandlers[x].func(data[i].Type, data[i].Data, tile); break; }
+                        tile.Render();
+                        this.Tiles.push(tile);
+                    }
                 }
             },
             TileHandlers: [],
