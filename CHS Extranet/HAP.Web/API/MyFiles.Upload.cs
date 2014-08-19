@@ -104,19 +104,20 @@ namespace HAP.Web.API
                 try
                 {
                     ADUser.ImpersonateContained();
+                    Stream inputStream;
                     if (context.Request.Cookies["HAPSecure"] != null)
                     {
                         HttpPostedFile file = context.Request.Files[0];
-                        file.SaveAs(path);
+                        inputStream = file.InputStream;
                     }
                     else
                     {
-                        Stream inputStream = context.Request.InputStream;
-                        FileStream fileStream = new FileStream(path, FileMode.OpenOrCreate);
-
-                        inputStream.CopyTo(fileStream);
-                        fileStream.Close();
+                        inputStream = context.Request.InputStream;
                     }
+                    FileStream fileStream = new FileStream(path, FileMode.OpenOrCreate);
+                    inputStream.CopyTo(fileStream);
+                    fileStream.Close();
+                    inputStream.Close();
                 }
                 finally { ADUser.EndContainedImpersonate(); }
                 context.Response.Write("Ok");
