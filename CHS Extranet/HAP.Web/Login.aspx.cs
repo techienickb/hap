@@ -24,7 +24,7 @@ namespace HAP.Web
             if (!User.Identity.IsAuthenticated && Request.Cookies["token"] != null)
             {
                 Response.Cookies.Remove("token");
-                HttpCookie t = new HttpCookie("token") { Expires = DateTime.UtcNow.AddHours(-10), Secure = true, HttpOnly = true, Domain = ((AuthenticationSection)WebConfigurationManager.GetWebApplicationSection("system.web/authentication")).Forms.Domain };
+                HttpCookie t = new HttpCookie("token") { Expires = DateTime.UtcNow.AddHours(-10), Secure = true, Domain = ((AuthenticationSection)WebConfigurationManager.GetWebApplicationSection("system.web/authentication")).Forms.Domain };
                 Response.AppendCookie(t);
             }
             if (!Page.IsPostBack)
@@ -143,7 +143,7 @@ namespace HAP.Web
                 FormsAuthentication.SetAuthCookie(username.Text, false);
                 HttpCookie tokenCookie = new HttpCookie("token", code);
                 tokenCookie.Domain = ((AuthenticationSection)WebConfigurationManager.GetWebApplicationSection("system.web/authentication")).Forms.Domain;
-                tokenCookie.Secure = tokenCookie.HttpOnly = true;
+                tokenCookie.Secure = true;
                 if (Request.Cookies["token"] == null) Response.AppendCookie(tokenCookie);
                 else Response.SetCookie(tokenCookie);
                 bans.Remove(ban);
@@ -156,7 +156,7 @@ namespace HAP.Web
                 HAP.Data.SQL.WebEvents.Log(DateTime.Now, "Logon", username.Text, Request.UserHostAddress, Request.Browser.Platform, Request.Browser.Browser + " " + Request.Browser.Version, Request.UserHostName, Request.UserAgent);
                 FormsAuthentication.SetAuthCookie(username.Text, false);
                 HttpCookie tokenCookie = new HttpCookie("token", TokenGenerator.ConvertToToken(password.Text));
-                tokenCookie.Secure = tokenCookie.HttpOnly = true;
+                tokenCookie.Secure = true;
                 tokenCookie.Domain = ((AuthenticationSection)WebConfigurationManager.GetWebApplicationSection("system.web/authentication")).Forms.Domain;
                 if (Request.Cookies["token"] == null) Response.AppendCookie(tokenCookie);
                 else Response.SetCookie(tokenCookie);
