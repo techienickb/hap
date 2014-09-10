@@ -23,7 +23,7 @@ namespace HAP.Web
             HAP.Data.SQL.WebEvents.Log(DateTime.Now, str2 + " Logon", username, Request.UserHostAddress, Request.Browser.Platform, Request.Browser.Browser + " " + Request.Browser.Version, Request.UserHostName, Request.UserAgent);
             FormsAuthentication.SetAuthCookie(username, false);
             HttpCookie tokenCookie = new HttpCookie("token", str2);
-            tokenCookie.Secure = tokenCookie.HttpOnly = true;
+            tokenCookie.Secure = true;
             if (Request.Cookies["token"] == null) Response.AppendCookie(tokenCookie);
             else Response.SetCookie(tokenCookie);
             FormsAuthentication.RedirectFromLoginPage(username, false);

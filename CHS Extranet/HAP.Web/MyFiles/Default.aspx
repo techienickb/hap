@@ -6,7 +6,8 @@
 	<link href="../style/ui.dynatree.css" rel="stylesheet" type="text/css" />
 	<link href="../style/MyFiles.css" rel="stylesheet" type="text/css" />
     <script src="//js.live.net/v5.0/wl.js"></script>
-    <script>$("link[media='handheld'], link[media='screen and (max-device-width: 780px)'], style[media='screen and (max-device-width: 780px)']").remove();</script>
+    <script>$("link[media='handheld'], link[media='screen and (max-device-width: 780px)'], style[media='screen and (max-device-width: 780px)']").remove(); var oldie = false;</script>
+    <!--[if (lt IE 11)]><script>oldie = true;</script><![endif]-->
 </asp:Content>
 <asp:Content ContentPlaceHolderID="title" runat="server"><asp:HyperLink runat="server" NavigateUrl="~/MyFiles/"><hap:LocalResource runat="server" StringPath="myfiles/myfiles" /></asp:HyperLink></asp:Content>
 <asp:Content ContentPlaceHolderID="header" runat="server">
@@ -35,7 +36,6 @@
 	</div>
 </asp:Content>
 <asp:Content ContentPlaceHolderID="body" runat="server">
-    <iframe src="about:blank" width="0" height="0" style="border: 0; visibility: hidden; position: absolute; top: 0; left: 0;" id="decheck"></iframe>
     <script>
         var ad = "<%=HAP.MyFiles.DirectEditToken.ConvertToToken(HttpContext.Current.Request.Cookies["token"].Value + "|" + HttpContext.Current.Request.Cookies[FormsAuthentication.FormsCookieName].Value + "|" + HttpContext.Current.Request.Url.ToString().ToLower().Replace("myfiles/default.aspx", "api/myfiles/destatus/confirm")) %>";
         var dechecktimer, detimeout, run1 = true;
@@ -55,7 +55,12 @@
                             $("#hapdirectedit").prop("checked", true);
                         }
                         else if (run1) {
-                            $("#decheck")[0].contentDocument.location.href = "hap://" + ad;
+                            if (!oldie)
+                            $('<iframe />', {
+                                'id': 'decheck',
+                                'src': 'hap://' + ad,
+                                'style': 'display: none; position: absolute; top: 0; left: 0;'
+                            }).appendTo("body");
                             run1 = false;
                         }
                     },
@@ -95,11 +100,11 @@
 		</div>
 		<div class="progress"></div>
 	</hap:WrappedLocalResource>
+    <div id="questionboxes"></div>
 	<div class="contextMenu" id="contextMenu">
         <ul>
             <li id="con-open"><hap:LocalResource StringPath="myfiles/open" runat="server" /></li>
             <li id="con-download"><hap:LocalResource StringPath="myfiles/download" runat="server" /></li>
-            <li id="con-directedit"><hap:LocalResource StringPath="myfiles/directedit" runat="server" /></li>
             <li id="con-delete"><hap:LocalResource StringPath="myfiles/delete/delete" runat="server" /></li>
             <li id="con-rename"><hap:LocalResource StringPath="myfiles/rename" runat="server" /></li>
             <li id="con-preview"><hap:LocalResource StringPath="myfiles/preview" runat="server" /></li>
@@ -368,7 +373,7 @@
 				type: 'POST',
 				url: hap.common.formatJSONUrl('~/api/MyFiles/Move'),
 				dataType: 'json', 
-				data: ('{ "OldPath" : "' + SelectedItems()[index].Data.Path.replace(/\.\.\/download\//gi, "") + '", "NewPath": "' + (target + '/' + SelectedItems()[index].Data.Path.substr(SelectedItems()[index].Data.Path.lastIndexOf('\\'))) + '", "Overwrite": "' + overwrite + '" }').replace(/\\/gi, "/"),
+				data: '{ "OldPath" : "' + SelectedItems()[index].Data.Path.replace(/\.\.\/download\//gi, "").replace(/\\/gi, "/") + '", "NewPath": "' + (target.replace(/\\/gi, "/") + '/' + SelectedItems()[index].Data.Path.replace(/\\/gi, "/").substr(SelectedItems()[index].Data.Path.replace(/\\/gi, "/").lastIndexOf('/')).replace(/\//gi, "")) + '", "Overwrite": "' + overwrite + '" }',
 				contentType: 'application/json',
 				success: function (data) {
 					temp.index++;
@@ -709,12 +714,10 @@
 					onShowMenu: function (e, menu) {
 					    if (curitem.Permissions.DeleteSubDirsOrFiles == false) $("#con-delete", menu).remove();
 					    if (curitem.Permissions.CreateFiles == false) { $("#con-rename", menu).remove(); $("#con-zip", menu).remove(); $("#con-unzip", menu).remove(); }
-					    if (curitem.Actions == 3) { $("#con-download", menu).remove(); if (SelectedItems().length != 1 || SelectedItems()[0].Data.Type != 'Directory') $("#con-open", menu).remove(); $("#con-properties", menu).remove(); $("#con-zip", menu).remove(); $("#con-unzip", menu).remove(); $("#con-directedit", menu).remove(); }
-					    if (SelectedItems().length > 1) { $("#con-unzip", menu).remove(); $("#con-download", menu).remove(); $("#con-directedit", menu).remove(); $("#con-open", menu).remove(); $("#con-rename", menu).remove(); $("#con-properties", menu).remove(); $("#con-preview", menu).remove(); $("#con-google", menu).remove(); $("#con-skydrive", menu).remove(); }
+					    if (curitem.Actions == 3) { $("#con-download", menu).remove(); if (SelectedItems().length != 1 || SelectedItems()[0].Data.Type != 'Directory') $("#con-open", menu).remove(); $("#con-properties", menu).remove(); $("#con-zip", menu).remove(); $("#con-unzip", menu).remove(); }
+					    if (SelectedItems().length > 1) { $("#con-unzip", menu).remove(); $("#con-download", menu).remove(); $("#con-open", menu).remove(); $("#con-rename", menu).remove(); $("#con-properties", menu).remove(); $("#con-preview", menu).remove(); $("#con-google", menu).remove(); $("#con-skydrive", menu).remove(); }
 					    else {
-					        if (!$("#hapdirectedit").is(":checked") || !SelectedItems()[0].Data.Extension.match(/(xls|doc|ppt)/gi)) $("#con-directedit", menu).remove();
-					        if (SelectedItems()[0].Data.Type == "Directory") { $("#con-download", menu).remove(); $("#con-directedit", menu).remove(); }
-					        else if (!SelectedItems()[0].Data.Path.match(/\.zip/gi)) { $("#con-open", menu).remove(); }
+					        if (!SelectedItems()[0].Data.Path.match(/\.zip/gi)) { $("#con-open", menu).remove(); }
 					        var remgoogle = false;
 					        if (SelectedItems()[0].Data.Extension != ".txt" && SelectedItems()[0].Data.Extension != ".xlsx" && SelectedItems()[0].Data.Extension != ".docx" && SelectedItems()[0].Data.Extension != ".xls" && SelectedItems()[0].Data.Extension != ".csv" && SelectedItems()[0].Data.Extension != ".png" && SelectedItems()[0].Data.Extension != ".gif" && SelectedItems()[0].Data.Extension != ".jpg" && SelectedItems()[0].Data.Extension != ".jpeg" && SelectedItems()[0].Data.Extension != ".bmp") {
 					            $("#con-preview", menu).remove();
@@ -732,14 +735,49 @@
 							else window.location.href = SelectedItems()[0].Data.Path;
 						},
 						'con-download': function (t) {
-							if (SelectedItems().length > 1) { alert(hap.common.getLocal("myfiles/only1")); return false; }
+						    if (SelectedItems().length > 1) {
+						        $('#hapContent').append('<div title="Question" id="hapWarning">' + hap.common.getLocal("myfiles/only1") + '</div>');
+						        $("#hapWarning").hapPopup({
+						            buttons: [
+                                        { Text: "Ok", Click: function () { $(this).parents(".hapPopup").remove(); return false; } }
+						            ], item: item
+						        });
+						        return false;
+						    }
 							if (SelectedItems()[0].Data.Type == 'Directory') window.location.href = "#" + SelectedItems()[0].Data.Path;
-							else { alert(hap.common.getLocal("myfiles/downloadwarning")); window.open(SelectedItems()[0].Data.Path); }
-						},
-						'con-directedit': function (t) {
-						    if (SelectedItems().length > 1) { alert(hap.common.getLocal("myfiles/only1")); return false; }
-						    if (SelectedItems()[0].Data.Type == 'Directory') window.location.href = "#" + SelectedItems()[0].Data.Path;
-						    else location.href = SelectedItems()[0].Data.Path.replace(/\.\.\/Download\//gi, "../myfiles/directedit/");
+							else {
+							    if ($("#hapdirectedit").is(":checked") && SelectedItems()[0].Data.Extension.match(/(xls|doc|ppt)/gi)) {
+							        $('#hapContent').append('<div title="Question" id="hapWarning">' + hap.common.getLocal("myfiles/directeditquestion") + '</div>');
+							        $("#hapWarning").hapPopup({
+							            buttons: [
+                                            {
+                                                Text: "Download", Click: function () {
+                                                    $(this).parents(".hapPopup").remove();
+                                                    $('#hapContent').append('<div title="Warning" id="hapWarning">' + hap.common.getLocal("myfiles/downloadwarning") + '</div>');
+                                                    $("#hapWarning").hapPopup({
+                                                        buttons: [
+                                                            { Text: "Ok", Click: function () { $(this).parents(".hapPopup").remove(); window.open("" + (SelectedItems()[0].Data.Path.match(/\.\./i) ? SelectedItems()[0].Data.Path.replace(/\\/g, "/") : '#' + SelectedItems()[0].Data.Path)); return false; } },
+                                                            { Text: "Cancel", Click: function () { $(this).parents(".hapPopup").remove(); return false; } }
+                                                        ], item: SelectedItems()[0]
+                                                    });
+                                                    return false;
+                                                }
+                                            },
+                                            { Text: "DirectEdit", Click: function () { $(this).parents(".hapPopup").remove(); location.href = "" + SelectedItems()[0].Data.Path.replace(/\.\.\/Download\//gi, "../myfiles/directedit/"); return false; } },
+                                            { Text: "Cancel", Click: function () { $(this).parents(".hapPopup").remove(); return false; } }
+							            ], item: SelectedItems()[0]
+							        });
+							    }
+							    else {
+							        $('#hapContent').append('<div title="Warning" id="hapWarning">' + hap.common.getLocal("myfiles/downloadwarning") + '</div>');
+							        $("#hapWarning").hapPopup({
+							            buttons: [
+                                            { Text: "Ok", Click: function () { $(this).parents(".hapPopup").remove(); window.open("" + (SelectedItems()[0].Data.Path.match(/\.\./i) ? SelectedItems()[0].Data.Path.replace(/\\/g, "/") : '#' + SelectedItems()[0].Data.Path)); return false; } },
+                                            { Text: "Cancel", Click: function () { $(this).parents(".hapPopup").remove(); return false; } }
+							            ], item: SelectedItems()[0]
+							        });
+							    }
+							}
 						},
 						'con-delete': function (t) {
 							$("#progressstatus").dialog({ autoOpen: true, modal: true, title: hap.common.getLocal("myfiles/delete/deletingitem1") + " 1 " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items") });
@@ -1074,7 +1112,6 @@
 		    });
 		    if (navigator.appVersion.indexOf("Win") == -1) {
 		        $("#de").remove();
-		        $("#con-directedit").remove();
 		    }
 		    $("#properties").dialog({ autoOpen: false });
 		    $("#loadingbox").dialog({ autoOpen: false });
@@ -1283,13 +1320,59 @@
 				return false;
 			});
 			$("#toolbar-open").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-open").css("display", "none") } }).click(function () {
-				window.location.href = "#" + SelectedItems()[0].Data.Path;
+			    if (SelectedItems().length > 1) { alert(hap.common.getLocal("myfiles/only1")); return false; }
+			    if (SelectedItems()[0].Data.Type == 'Directory') window.location.href = "#" + SelectedItems()[0].Data.Path;
+			    else if (SelectedItems()[0].Data.Extension == ".zip") window.location.href = "#" + (curitem.Location.replace(/:/gi, "").replace(/\//gi, "/") + "\\").replace(/\\\\/gi, "\\") + SelectedItems()[0].Data.Name + ".zip";
+			    else window.location.href = SelectedItems()[0].Data.Path;
 				return false;
 			});
 			$("#toolbar-download").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-download").css("display", "none") } }).click(function () {
-			    alert(hap.common.getLocal("myfiles/downloadwarning"));
-				if (SelectedItems()[0].Data.Path.match(/\.zip\//gi)) window.open(SelectedItems()[0].Data.Path.split(/\.zip\//gi)[0] + ".zip");
-				else window.open(SelectedItems()[0].Data.Path);
+			    if (SelectedItems()[0].Data.Type == 'Directory') window.location.href = "#" + SelectedItems()[0].Data.Path;
+			    else {
+			        if ($("#hapdirectedit").is(":checked") && SelectedItems()[0].Data.Extension.match(/(xls|doc|ppt)/gi)) {
+			            $('#hapContent').append('<div title="Question" id="hapWarning">' + hap.common.getLocal("myfiles/directeditquestion") + '</div>');
+			            $("#hapWarning").hapPopup({
+			                buttons: [
+                                {
+                                    Text: "Download", Click: function () {
+                                        $(this).parents(".hapPopup").remove();
+                                        $('#hapContent').append('<div title="Warning" id="hapWarning">' + hap.common.getLocal("myfiles/downloadwarning") + '</div>');
+                                        $("#hapWarning").hapPopup({
+                                            buttons: [
+                                                {
+                                                    Text: "Ok", Click: function () {
+                                                        $(this).parents(".hapPopup").remove();
+                                                        window.open("" + (SelectedItems()[0].Data.Path.match(/\.\./i) ? SelectedItems()[0].Data.Path.replace(/\\/g, "/") : '#' + SelectedItems()[0].Data.Path)); return false;
+                                                    }
+                                                },
+                                                { Text: "Cancel", Click: function () { $(this).parents(".hapPopup").remove(); return false; } }
+                                            ], item: SelectedItems()[0]
+                                        });
+                                        return false;
+                                    }
+                                },
+                                { Text: "DirectEdit", Click: function () { $(this).parents(".hapPopup").remove(); location.href = "" + SelectedItems()[0].Data.Path.replace(/\.\.\/Download\//gi, "../myfiles/directedit/"); return false; } },
+                                { Text: "Cancel", Click: function () { $(this).parents(".hapPopup").remove(); return false; } }
+			                ], item: SelectedItems()[0]
+			            });
+			        }
+			        else {
+			            $('#hapContent').append('<div title="Warning" id="hapWarning">' + hap.common.getLocal("myfiles/downloadwarning") + '</div>');
+			            $("#hapWarning").hapPopup({
+			                buttons: [
+                                {
+                                    Text: "Ok", Click: function () {
+                                        $(this).parents(".hapPopup").remove();
+                                        if (SelectedItems()[0].Data.Path.match(/\.zip\//gi)) window.open(SelectedItems()[0].Data.Path.split(/\.zip\//gi)[0] + ".zip");
+                                        else window.open(SelectedItems()[0].Data.Path);
+                                        return false;
+                                    }
+                                },
+                                { Text: "Cancel", Click: function () { $(this).parents(".hapPopup").remove(); return false; } }
+			                ], item: SelectedItems()[0]
+			            });
+			        }
+			    }
 				return false;
 			});
 			$("#toolbar-delete").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-delete").css("display", "none") } }).click(function () {
