@@ -127,9 +127,12 @@ namespace HAP.HelpDesk.HelpDesk
             else
             {
                 Data.SQL.sql2linqDataContext sql = new Data.SQL.sql2linqDataContext(WebConfigurationManager.ConnectionStrings[config.HelpDesk.Provider].ConnectionString);
-                foreach (Data.SQL.Ticket tick in sql.Tickets.Where(t => t.Archive == "" && !API.isOpen(t.Status)))
+                foreach (Data.SQL.Ticket tick in sql.Tickets.Where(t => t.Archive == "" && !t.Faq))
                 {
-                    tick.Archive = datefrom.ToString("dd-MM-yy") + "_" + dateto.ToString("dd-MM-yy");
+                    if (!API.isOpen(tick.Status))
+                    {
+                        tick.Archive = datefrom.ToString("dd-MM-yy") + "_" + dateto.ToString("dd-MM-yy");
+                    }
                 }
                 sql.SubmitChanges();
             }

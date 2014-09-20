@@ -94,13 +94,14 @@ namespace HAP.Web.API
 
         public void ProcessRequest(HttpContext context)
         {
-            if (!string.IsNullOrEmpty(context.Request.Headers["X_FILENAME"]))
+            if (!string.IsNullOrEmpty(context.Request.Headers["X_FILENAME"]) || !string.IsNullOrEmpty(context.Request.Headers["X-FILENAME"]))
             {
-
-                if (!isAuth(Path.GetExtension(context.Request.Headers["X_FILENAME"]))) throw new UnauthorizedAccessException(_doc.SelectSingleNode("/hapStrings/myfiles/upload/filetypeerror").InnerText);
+                string filename = (!string.IsNullOrEmpty(context.Request.Headers["X_FILENAME"]) ? context.Request.Headers["X_FILENAME"] : "");
+                filename = (!string.IsNullOrEmpty(context.Request.Headers["X-FILENAME"]) ? context.Request.Headers["X-FILENAME"] : "");
+                if (!isAuth(Path.GetExtension(filename))) throw new UnauthorizedAccessException(_doc.SelectSingleNode("/hapStrings/myfiles/upload/filetypeerror").InnerText);
                 DriveMapping m;
-                string path = Path.Combine(Converter.DriveToUNC('\\' + RoutingPath, RoutingDrive, out m, ADUser), context.Request.Headers["X_FILENAME"]);
-                HAP.Data.SQL.WebEvents.Log(DateTime.Now, context.Request.Cookies["HAPSecure"] == null ? "MyFiles.Upload" : "MyFiles.SecureUpload", ADUser.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Uploading of: " + context.Request.Headers["X_FILENAME"] + " to: " + path);
+                string path = Path.Combine(Converter.DriveToUNC('\\' + RoutingPath, RoutingDrive, out m, ADUser), filename);
+                HAP.Data.SQL.WebEvents.Log(DateTime.Now, context.Request.Cookies["HAPSecure"] == null ? "MyFiles.Upload" : "MyFiles.SecureUpload", ADUser.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Uploading of: " + filename + " to: " + path);
                 try
                 {
                     ADUser.ImpersonateContained();

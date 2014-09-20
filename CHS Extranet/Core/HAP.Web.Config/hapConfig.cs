@@ -391,6 +391,10 @@ namespace HAP.Web.Configuration
                     en.SetAttribute("access", "both");
                 }
             }
+            if (version.CompareTo(Version.Parse("10.3.0917.1730")) < 0) // Perform v10.3 upgrade
+            {
+                ((XmlElement)doc.SelectSingleNode("/hapConfig/SMTP")).SetAttribute("tls", "False");
+            }
             doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             doc.Save(ConfigPath);
         }

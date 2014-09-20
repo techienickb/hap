@@ -102,8 +102,16 @@ namespace HAP.BookingSystem
             //mes.Attachments.Add(new Attachment(file.FullName, "text/calendar; method=REQUEST; name=ITBooking.ics"));
             SmtpClient client = new SmtpClient(config.SMTP.Server);
             if (!string.IsNullOrEmpty(config.SMTP.User))
+            {
                 client.Credentials = new NetworkCredential(config.SMTP.User, config.SMTP.Password);
+                client.UseDefaultCredentials = false;
+            }
             client.EnableSsl = config.SMTP.SSL;
+            if (config.SMTP.TLS)
+            {
+                client.TargetName = "STARTTLS/" + config.SMTP.Server;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            }
             client.Port = config.SMTP.Port;
             client.Send(mes);
         }
@@ -207,8 +215,16 @@ namespace HAP.BookingSystem
             //mes.Attachments.Add(new Attachment(file.FullName, "text/calendar; method=REQUEST; name=ITBooking.ics"));
             SmtpClient client = new SmtpClient(config.SMTP.Server);
             if (!string.IsNullOrEmpty(config.SMTP.User))
+            {
                 client.Credentials = new NetworkCredential(config.SMTP.User, config.SMTP.Password);
+                client.UseDefaultCredentials = false;
+            }
             client.EnableSsl = config.SMTP.SSL;
+            if (config.SMTP.TLS)
+            {
+                client.TargetName = "STARTTLS/" + config.SMTP.Server;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            }
             client.Port = config.SMTP.Port;
             client.Send(mes);
         }
@@ -285,8 +301,16 @@ namespace HAP.BookingSystem
             //mes.Attachments.Add(new Attachment(file.FullName, "text/calendar; method=REQUEST; name=ITBooking.ics"));
             SmtpClient client = new SmtpClient(config.SMTP.Server);
             if (!string.IsNullOrEmpty(config.SMTP.User))
+            {
                 client.Credentials = new NetworkCredential(config.SMTP.User, config.SMTP.Password);
+                client.UseDefaultCredentials = false;
+            }
             client.EnableSsl = config.SMTP.SSL;
+            if (config.SMTP.TLS)
+            {
+                client.TargetName = "STARTTLS/" + config.SMTP.Server;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            }
             client.Port = config.SMTP.Port;
             client.Send(mes);
         }
@@ -380,8 +404,16 @@ namespace HAP.BookingSystem
             //mes.Attachments.Add(new Attachment(file.FullName, "text/calendar; method=REQUEST; name=ITBooking.ics"));
             SmtpClient client = new SmtpClient(config.SMTP.Server);
             if (!string.IsNullOrEmpty(config.SMTP.User))
+            {
                 client.Credentials = new NetworkCredential(config.SMTP.User, config.SMTP.Password);
+                client.UseDefaultCredentials = false;
+            }
             client.EnableSsl = config.SMTP.SSL;
+            if (config.SMTP.TLS)
+            {
+                client.TargetName = "STARTTLS/" + config.SMTP.Server;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            }
             client.Port = config.SMTP.Port;
             client.Send(mes);
         }
