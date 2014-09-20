@@ -30,6 +30,7 @@ namespace HAP.Web.Configuration
             e.SetAttribute("ssl", "False");
             e.SetAttribute("from", "admin");
             e.SetAttribute("fromaddress", "admin@localhost.com");
+            e.SetAttribute("tls", "False");
             doc.SelectSingleNode("/hapConfig").AppendChild(e);
         }
         public string Server
@@ -51,6 +52,11 @@ namespace HAP.Web.Configuration
         {
             get { return bool.Parse(el.GetAttribute("ssl")); }
             set { el.SetAttribute("ssl", value.ToString()); }
+        }
+        public bool TLS
+        {
+            get { return bool.Parse(el.GetAttribute("tls")); }
+            set { el.SetAttribute("tls", value.ToString()); }
         }
         public string User
         {
