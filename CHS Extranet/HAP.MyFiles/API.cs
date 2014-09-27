@@ -781,7 +781,7 @@ namespace HAP.MyFiles
                             if (!subdir.Name.ToLower().Contains("recycle") && !isSystem && !isHidden && !subdir.Name.ToLower().Contains("system volume info"))
                             {
                                 HAP.MyFiles.AccessControlActions actions = allowactions;
-                                if (config.MyFiles.WriteChecks)
+                                if (config.MyFiles.WriteChecks && actions == AccessControlActions.Change)
                                 {
                                     //try
                                     //{
