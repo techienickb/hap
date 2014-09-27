@@ -97,7 +97,7 @@ namespace HAP.Web.API
             if (!string.IsNullOrEmpty(context.Request.Headers["X_FILENAME"]) || !string.IsNullOrEmpty(context.Request.Headers["X-FILENAME"]))
             {
                 string filename = (!string.IsNullOrEmpty(context.Request.Headers["X_FILENAME"]) ? context.Request.Headers["X_FILENAME"] : "");
-                filename = (!string.IsNullOrEmpty(context.Request.Headers["X-FILENAME"]) ? context.Request.Headers["X-FILENAME"] : "");
+                filename = (!string.IsNullOrEmpty(context.Request.Headers["X-FILENAME"]) ? context.Request.Headers["X-FILENAME"] : filename);
                 if (!isAuth(Path.GetExtension(filename))) throw new UnauthorizedAccessException(_doc.SelectSingleNode("/hapStrings/myfiles/upload/filetypeerror").InnerText);
                 DriveMapping m;
                 string path = Path.Combine(Converter.DriveToUNC('\\' + RoutingPath, RoutingDrive, out m, ADUser), filename);
@@ -105,20 +105,19 @@ namespace HAP.Web.API
                 try
                 {
                     ADUser.ImpersonateContained();
-                    Stream inputStream;
                     if (context.Request.Cookies["HAPSecure"] != null)
                     {
                         HttpPostedFile file = context.Request.Files[0];
-                        inputStream = file.InputStream;
+                        file.SaveAs(path);
                     }
                     else
                     {
-                        inputStream = context.Request.InputStream;
+                        Stream inputStream = context.Request.InputStream;
+                        FileStream fileStream = new FileStream(path, FileMode.OpenOrCreate);
+
+                        inputStream.CopyTo(fileStream);
+                        fileStream.Close();
                     }
-                    FileStream fileStream = new FileStream(path, FileMode.OpenOrCreate);
-                    inputStream.CopyTo(fileStream);
-                    fileStream.Close();
-                    inputStream.Close();
                 }
                 finally { ADUser.EndContainedImpersonate(); }
                 context.Response.Write("Ok");
