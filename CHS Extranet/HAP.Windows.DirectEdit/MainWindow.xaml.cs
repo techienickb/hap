@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Security;
+using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
@@ -61,7 +62,7 @@ namespace HAP.Win.DirectEdit
                     wc.Headers.Add(HttpRequestHeader.UserAgent, "HAPDirectEdit/1.0 (Windows)");
                     wc.Headers.Add(HttpRequestHeader.Cookie, ".ASPXAUTH=" + parts[1] + "; token=" + parts[0]);
                     wc.Headers.Add("Content-Type", "application/json");
-                    wc.UploadString(new Uri(url), "POST", "");
+                    wc.UploadString(new Uri(url), "POST", Assembly.GetExecutingAssembly().GetName().Version.ToString());
                     Close();
                 }
                 else
@@ -96,15 +97,18 @@ namespace HAP.Win.DirectEdit
             {
                 progress.Value = (int)o;
                 info.Text = "Downloaded " + System.IO.Path.GetFileName(filename) + " Waiting to upload";
+                cancelclose = true;
             }), 100);
+            new Thread(new ThreadStart(waitforclose)).Start();
+        }
+        
+        void waitforclose()
+        {
             string ext = System.IO.Path.GetExtension(filename).ToLower();
             ProcessStartInfo psi = new ProcessStartInfo(filename);
             psi.UseShellExecute = true;
             Process p = Process.Start(psi);
             p.WaitForExit();
-
-            info.Text = "Uploading " + System.IO.Path.GetFileName(filename);
-            progress.Value = 0;
             ServicePointManager.ServerCertificateValidationCallback = delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
             WebClient wc = new WebClient();
             wc.Headers.Clear();
@@ -121,6 +125,7 @@ namespace HAP.Win.DirectEdit
         {
             Dispatcher.BeginInvoke(new UpdateProgress((o) =>
             {
+                info.Text = "Uploading " + System.IO.Path.GetFileName(filename);
                 progress.Value = (int)o;
             }), e.ProgressPercentage);
         }
@@ -128,8 +133,11 @@ namespace HAP.Win.DirectEdit
         void wc_UploadFileCompleted(object sender, UploadFileCompletedEventArgs e)
         {
             if (e.Error != null) MessageBox.Show(e.Error.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            cancelclose = false;
-            Close();
+            Dispatcher.BeginInvoke(new UpdateProgress((o) =>
+            {
+                cancelclose = false;
+                Close();
+            }), 100);
         }
 
         void wc_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)

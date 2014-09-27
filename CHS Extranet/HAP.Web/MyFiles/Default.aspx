@@ -479,7 +479,14 @@
 				data: '[' + a + ']',
 				contentType: 'application/json',
 				success: function (data) {
-					if (data[0].match(/i could not delete/gi)) alert(data[0]);
+				    if (data[0].match(/i could not delete/gi)) {
+				        $('#hapContent').append('<div title="Alert" id="hapWarning">' + data[0] + '</div>');
+				        $("#hapWarning").hapPopup({
+				            buttons: [
+                                { Text: "Ok", Click: function () { $(this).parents(".hapPopup").remove(); return false; } }
+				            ]
+				        });
+				    }
 					temp++;
 					if (temp < SelectedItems().length) {
 					    $("#progressstatus").dialog("option", "title", hap.common.getLocal("myfiles/delete/deletingitem1") + " " + (temp + 1) + " " + hap.common.getLocal("of") + " " + SelectedItems().length + " " + hap.common.getLocal("items"));
@@ -500,18 +507,33 @@
 			};
 			this.Start = function() {
 			    this.FileName = ($("#uploadfilesrandom").is(":checked") ? this.FormatFileName() : this.File.name) + "";
-				if (this.File.name.indexOf('.') == -1) {
-				    alert(hap.common.getLocal("myfiles/upload/folderwarning").replace(/\%/g, this.FileName));
+			    if (this.File.name.indexOf('.') == -1) {
+			        $('#hapContent').append('<div title="Warning" id="hapWarning">' + hap.common.getLocal("myfiles/upload/folderwarning").replace(/\%/g, this.FileName) + '</div>');
+			        $("#hapWarning").hapPopup({
+			            buttons: [
+                            { Text: "Ok", Click: function () { $(this).parents(".hapPopup").remove(); return false; } }
+			            ]
+			        });
 					uploads.pop(this);
 					return false;
 				}
 				else if ("<%=AcceptedExtensions %>".toLowerCase().indexOf(this.FileName.substr(this.FileName.lastIndexOf('.')).toLowerCase()) == -1 && "<%=DropZoneAccepted %>" != "") {
-					alert(this.File.name + " " + hap.common.getLocal("myfiles/upload/filetypewarning") + "\n\n <%=AcceptedExtensions %>");
+				    $('#hapContent').append('<div title="Warning" id="hapWarning">' + this.File.name + " " + hap.common.getLocal("myfiles/upload/filetypewarning") + '<br /><br /><%=AcceptedExtensions%></div>');
+				    $("#hapWarning").hapPopup({
+				        buttons: [
+                            { Text: "Ok", Click: function () { $(this).parents(".hapPopup").remove(); return false; } }
+				        ]
+				    });
 				    uploads.pop(this);
 					return false;
 				}
-				if(this.File.size > parseInt('<%=maxRequestLength%>')) {
-					alert(this.File.name + " " + hap.common.getLocal("myfiles/upload/filesizewarning"));
+			    if (this.File.size > parseInt('<%=maxRequestLength%>')) {
+			        $('#hapContent').append('<div title="Warning" id="hapWarning">' + this.File.name + " " + hap.common.getLocal("myfiles/upload/filesizewarning") + '</div>');
+			        $("#hapWarning").hapPopup({
+			            buttons: [
+                            { Text: "Ok", Click: function () { $(this).parents(".hapPopup").remove(); return false; } }
+			            ]
+			        });
 					uploads.pop(this);
 					return false;
 				}
@@ -548,7 +570,14 @@
 					if (this.readyState == 4) {
 					    var uitem = null;
 					    for (var i = 0; i < uploads.length; i ++) if (uploads[i].FileName.replace(/[\\'\. \[\]\(\)\-]/g, "_") == this.id) uitem = uploads[i];
-					    if (this.status != 200) alert(hap.common.getLocal("myfiles/upload/upload") + " " + hap.common.getLocal("of") + " " + uitem.FileName + " " + hap.common.getLocal("myfiles/upload/failed") + "\n\n" + this.responseText.substr(this.responseText.indexOf('<title>') + 7, this.responseText.indexOf('</title>') - (7 + this.responseText.indexOf('<title>'))));
+					    if (this.status != 200) {
+					        $('#hapContent').append('<div title="' + hap.common.getLocal("myfiles/upload/upload") + " " + hap.common.getLocal("of") + " " + uitem.FileName + " " + hap.common.getLocal("myfiles/upload/failed") + '" id="hapWarning">' + this.responseText.substr(this.responseText.indexOf('<title>') + 7, this.responseText.indexOf('</title>') - (7 + this.responseText.indexOf('<title>'))) + '</div>');
+					        $("#hapWarning").hapPopup({
+					            buttons: [
+                                    { Text: "Ok", Click: function () { $(this).parents(".hapPopup").remove(); return false; } }
+					            ]
+					        });
+					    }
 						$("#upload-" + id + " .progressbar").progressbar({ value: 100 });
 						$("#upload-" + id).delay(1000).slideUp('slow', function() { $("#upload-" + id).remove(); if (uploads.length == 0) $("#uploadprogress").slideUp('slow'); });
 						if (curpath.substr(0, curpath.length - 1).replace(/\//g, "\\") == uitem.Path || curpath.replace(/\//g, "\\") == uitem.Path) Load();
@@ -729,7 +758,15 @@
 					},
 					bindings: {
 						'con-open': function (t) {
-							if (SelectedItems().length > 1) { alert(hap.common.getLocal("myfiles/only1")); return false; }
+						    if (SelectedItems().length > 1) {
+						        $('#hapContent').append('<div title="' + hap.common.getLocal("myfiles/only1") + '" id="hapWarning">' + hap.common.getLocal("myfiles/only1") + '</div>');
+						        $("#hapWarning").hapPopup({
+						            buttons: [
+                                        { Text: "Ok", Click: function () { $(this).parents(".hapPopup").remove(); return false; } }
+						            ]
+						        });
+						        return false;
+						    }
 							if (SelectedItems()[0].Data.Type == 'Directory') window.location.href = "#" + SelectedItems()[0].Data.Path;
 							else if (SelectedItems()[0].Data.Extension == ".zip") window.location.href="#" + (curitem.Location.replace(/:/gi, "").replace(/\//gi, "/") + "\\").replace(/\\\\/gi, "\\") + SelectedItems()[0].Data.Name + ".zip";
 							else window.location.href = SelectedItems()[0].Data.Path;
@@ -788,12 +825,28 @@
 							else $("#progressstatus").dialog("close");
 						},
 						'con-rename': function (t) {
-							if (SelectedItems().length > 1) { alert(hap.common.getLocal("myfiles/only1")); return false; }
+						    if (SelectedItems().length > 1) {
+						        $('#hapContent').append('<div title="' + hap.common.getLocal("myfiles/only1") + '" id="hapWarning">' + hap.common.getLocal("myfiles/only1") + '</div>');
+						        $("#hapWarning").hapPopup({
+						            buttons: [
+                                        { Text: "Ok", Click: function () { $(this).parents(".hapPopup").remove(); return false; } }
+						            ]
+						        });
+						        return false;
+						    }
 							var item = SelectedItems()[0];
 							$("#renamebox").val(item.Data.Name).css("display", "block").css("top", $("#" +item.Id).position().top).css("left", $("#" + item.Id).position().left).focus().select();
 						},
 						'con-properties': function (t) {
-							if (SelectedItems().length > 1) { alert(hap.common.getLocal("myfiles/only1")); return false; }
+						    if (SelectedItems().length > 1) {
+						        $('#hapContent').append('<div title="' + hap.common.getLocal("myfiles/only1") + '" id="hapWarning">' + hap.common.getLocal("myfiles/only1") + '</div>');
+						        $("#hapWarning").hapPopup({
+						            buttons: [
+                                        { Text: "Ok", Click: function () { $(this).parents(".hapPopup").remove(); return false; } }
+						            ]
+						        });
+						        return false;
+						    }
 							$("#properties").dialog({ autoOpen: true, modal: true, buttons: {
 								"OK": function () {
 									$(this).dialog("close");
@@ -831,7 +884,15 @@
 							});
 						},
 						'con-preview': function (t) {
-							if (SelectedItems().length > 1) { alert(hap.common.getLocal("myfiles/only1")); return false; }
+						    if (SelectedItems().length > 1) {
+						        $('#hapContent').append('<div title="' + hap.common.getLocal("myfiles/only1") + '" id="hapWarning">' + hap.common.getLocal("myfiles/only1") + '</div>');
+						        $("#hapWarning").hapPopup({
+						            buttons: [
+                                        { Text: "Ok", Click: function () { $(this).parents(".hapPopup").remove(); return false; } }
+						            ]
+						        });
+						        return false;
+						    }
 							$("#preview").dialog({ autoOpen: true, height: 600, width: 900, modal: true, buttons: {
 								"OK": function () {
 									$("#previewcont").html(hap.common.getLocal("loading") + "...");
@@ -866,7 +927,15 @@
 							$("#zipfilename").val(SelectedItems()[0].Data.Name).focus();
 						},
 						'con-google' : function (t) {
-							if (SelectedItems().length > 1) { alert(hap.common.getLocal("myfiles/only1")); return false; }
+						    if (SelectedItems().length > 1) {
+						        $('#hapContent').append('<div title="' + hap.common.getLocal("myfiles/only1") + '" id="hapWarning">' + hap.common.getLocal("myfiles/only1") + '</div>');
+						        $("#hapWarning").hapPopup({
+						            buttons: [
+                                        { Text: "Ok", Click: function () { $(this).parents(".hapPopup").remove(); return false; } }
+						            ]
+						        });
+                                return false;
+						    }
 							$("#googlesignin").dialog({ autoOpen: true, modal: true, buttons: { 
 								"Signin": function() { 
 									$("#googleuser").addClass("loading");
@@ -891,7 +960,15 @@
 							});
 						},
 						'con-skydrive' : function (t) {
-						    if (SelectedItems().length > 1) { alert(hap.common.getLocal("myfiles/only1")); return false; }
+						    if (SelectedItems().length > 1) {
+						        $('#hapContent').append('<div title="' + hap.common.getLocal("myfiles/only1") + '" id="hapWarning">' + hap.common.getLocal("myfiles/only1") + '</div>');
+						        $("#hapWarning").hapPopup({
+						            buttons: [
+                                        { Text: "Ok", Click: function () { $(this).parents(".hapPopup").remove(); return false; } }
+						            ]
+						        });
+						        return false;
+						    }
 						    WL.init({ client_id: '<%=config.MyFiles.LiveAppId%>', redirect_uri: hap.common.resolveUrl("~/myfiles/oauth.aspx"), scope: 'wl.skydrive_update', response_type: 'token' });
 						    WL.login({scope: 'wl.skydrive_update' }, function () { 
 						        $("#loadingbox").dialog({ autoOpen: true, modal: true });
@@ -1320,7 +1397,15 @@
 				return false;
 			});
 			$("#toolbar-open").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-open").css("display", "none") } }).click(function () {
-			    if (SelectedItems().length > 1) { alert(hap.common.getLocal("myfiles/only1")); return false; }
+			    if (SelectedItems().length > 1) {
+			        $('#hapContent').append('<div title="' + hap.common.getLocal("myfiles/only1") + '" id="hapWarning">' + hap.common.getLocal("myfiles/only1") + '</div>');
+			        $("#hapWarning").hapPopup({
+			            buttons: [
+                            { Text: "Ok", Click: function () { $(this).parents(".hapPopup").remove(); return false; } }
+			            ]
+			        });
+			        return false;
+			    }
 			    if (SelectedItems()[0].Data.Type == 'Directory') window.location.href = "#" + SelectedItems()[0].Data.Path;
 			    else if (SelectedItems()[0].Data.Extension == ".zip") window.location.href = "#" + (curitem.Location.replace(/:/gi, "").replace(/\//gi, "/") + "\\").replace(/\\\\/gi, "\\") + SelectedItems()[0].Data.Name + ".zip";
 			    else window.location.href = SelectedItems()[0].Data.Path;

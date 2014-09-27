@@ -36,8 +36,8 @@ namespace HAP.Web.API
 
                 XmlNode latest = xmldoc.SelectNodes("/rss/channel/item")[0];
                 XmlNode title = latest.SelectSingleNode("title");
-                Regex reg = new Regex("Release: v([\\d\\.])+");
-                string versioninfo = reg.Match(title.InnerText).Value.Replace("Release: ", "").TrimStart(new char[] { 'v' });
+                Regex reg = new Regex("Released: HAP+ Web Core v([\\d\\.])+");
+                string versioninfo = reg.Match(title.InnerText).Value.Replace("Released: HAP+ Web Core ", "").TrimStart(new char[] { 'v' });
 
                 Version NeededUpdate = Version.Parse(versioninfo);
                 int comp = Assembly.GetExecutingAssembly().GetName().Version.CompareTo(NeededUpdate);
