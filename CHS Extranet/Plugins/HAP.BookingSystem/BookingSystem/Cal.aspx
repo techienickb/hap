@@ -40,11 +40,13 @@
                 termdates.push({
                     title: terms[i].name + " Term",
                     start: terms[i].start,
+                    allDay: true,
                     end: terms[i].halfterm.start
                 });
                 termdates.push({
                     title: terms[i].name + " Term",
                     start: terms[i].halfterm.end,
+                    allDay: true,
                     end: terms[i].end
                 });
             }
@@ -61,13 +63,13 @@
                 events: termdates,
                 titleFormat: {
                     month: 'MMMM yyyy',                             // September 2009
-                    week: "d [ MMM yyyy] { '&#8212;' d MMMM yyyy}", // Sep 7 - 13 2009
-                    day: 'dddd, d MMMM yyyy'                  // Tuesday, Sep 8, 2009
+                    week: "D MMMM YYYY", // Sep 7 - 13 2009
+                    day: 'dddd, D MMMM yyyy'                  // Tuesday, Sep 8, 2009
                 },
                 columnFormat: {
                     month: 'dddd',    // Mon
-                    week: 'dddd d/M', // Mon 9/7
-                    day: 'dddd d/M'  // Monday 9/7
+                    week: 'dddd D/M', // Mon 9/7
+                    day: 'dddd D/M'  // Monday 9/7
                 },
                 header: {
                     left: 'agendaWeek,agendaDay',
@@ -80,14 +82,14 @@
                 },
                 viewRender: function (view, element) {
                     if (view.end > user.maxDate)
-                        $("#calendar").fullCalendar('gotoDate', user.maxDate.getFullYear(), user.maxDate.getMonth(), user.maxDate.getDate());
+                        $("#calendar").fullCalendar('gotoDate', user.maxDate);
                     if (view.start < user.minDate)
-                        $("#calendar").fullCalendar('gotoDate', user.minDate.getFullYear(), user.minDate.getMonth(), user.minDate.getDate());
+                        $("#calendar").fullCalendar('gotoDate', user.minDate);
                 }
-            }).fullCalendar('addEventSource', function (start, end, callback) {
-                var s = start;
+            }).fullCalendar('addEventSource', function (start, end, timezone, callback) {
+                var s = start._d;
                 var dates = [];
-                while (s < end) {
+                while (s < end._d) {
                     if (isDateInTerm(s)) dates.push(s);
                     var newDate = new Date(s);
                     s = new Date(newDate.setDate(newDate.getDate() + 1));
@@ -102,7 +104,7 @@
                             for (var x = 0; x < data.length; x++) {
                                 for (var y = 0; y < data[x].length; y++) {
                                     if (check(data[x][y].Room)) {
-                                        var d = $.fullCalendar.parseDate(data[x][y].Date);
+                                        var d = $.fullCalendar.moment(data[x][y].Date)._d;
                                         events.push({
                                             title: data[x][y].Name,
                                             start: data[x][y].Date,
@@ -119,7 +121,8 @@
                         },
                         error: hap.common.jsonError
                     });
-            }).fullCalendar('gotoDate', curdate.getFullYear(), curdate.getMonth(), curdate.getDate());
+            });
+            $("#calendar").fullCalendar('gotoDate', curdate);
             setTimeout('setSize();', 100);
         })
         $(window).resize(function () {

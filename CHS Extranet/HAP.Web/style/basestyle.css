@@ -223,7 +223,7 @@ span.hapswitch.on::after { content: 'on' }
 #hapLoader.go .dot_3 { opacity: 0; animation: loading 5s ease-in-out .6s infinite; -ms-animation: loadingie 5s ease-in-out .6s infinite; }
 #hapLoader.go .dot_4 { opacity: 0; animation: loading 5s ease-in-out .9s infinite; -ms-animation: loadingie 5s ease-in-out .9s infinite; }
 #hapLoader.go .dot_5 { opacity: 0; animation: loading 5s ease-in-out .12s infinite; -ms-animation: loadingie 5s ease-in-out .12s infinite; }
-
+.fc .ui-widget-header { background: #0060a6; }
 @keyframes loading { from { margin-left: -50%; opacity: 0; } 50% { margin-left: 0; opacity: 1; } to { margin-left: 50%; opacity: 0; } }
 @keyframes loadingie { from { margin-left: 0%; opacity: 0; } 50% { margin-left: 50%; opacity: 1; } to { margin-left: 100%; opacity: 0; } }
 

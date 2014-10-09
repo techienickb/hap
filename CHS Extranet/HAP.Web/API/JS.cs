@@ -77,17 +77,17 @@ namespace HAP.Web.API
             else 
             {
                 if (JSType == API.JSType.CSS) context.Response.ContentType = "text/css";
-                string[] paths = GetPaths(context.Request.QueryString.Keys[0]);
+                RegistrationPath[] paths = GetPaths(context.Request.QueryString.Keys[0]);
                 int status = 200;
                 if (paths.Length > 0)
                 {
-                    DateTime lastModified = File.GetLastWriteTimeUtc(context.Server.MapPath(paths[0]));
+                    DateTime lastModified = File.GetLastWriteTimeUtc(context.Server.MapPath(paths[0].Path));
 
-                    foreach (string s in paths)
+                    foreach (RegistrationPath s in paths)
                     {
-                        DateTime l = File.GetLastWriteTimeUtc(context.Server.MapPath(s));
+                        DateTime l = File.GetLastWriteTimeUtc(context.Server.MapPath(s.Path));
                         if (lastModified == null || lastModified < l) lastModified = l;
-                        context.Response.AddFileDependency(context.Server.MapPath(s));
+                        context.Response.AddFileDependency(context.Server.MapPath(s.Path));
                     }
                     lastModified = new DateTime(lastModified.Year, lastModified.Month, lastModified.Day, lastModified.Hour, lastModified.Minute, lastModified.Second, 0, DateTimeKind.Utc);
 
@@ -111,15 +111,17 @@ namespace HAP.Web.API
                 if (status == 200)
                 {
 
-                    foreach (string s in paths)
+                    foreach (RegistrationPath s in paths)
                     {
-                        context.Response.Write("\n/* " + s + " */\n");
-                        StreamReader sr = File.OpenText(context.Server.MapPath(s));
+                        //context.Response.Write("\n/* " + s.Path + " */\n\n");
+                        StreamReader sr = File.OpenText(context.Server.MapPath(s.Path));
                         string f = sr.ReadToEnd();
 #if !DEBUG
-                        if (JSType != API.JSType.CSS)
-                            f = minifier.MinifyJavaScript(f);
-                        else f = minifier.MinifyStyleSheet(f);
+                        if (s.Minify) {
+                            if (JSType != API.JSType.CSS)
+                                f = minifier.MinifyJavaScript(f);
+                            else f = minifier.MinifyStyleSheet(f);
+                        }
 #endif
                         sr.Close();
                         context.Response.Write(f);
@@ -131,9 +133,9 @@ namespace HAP.Web.API
         }
 
 
-        public string[] GetPaths(string Referrer)
+        public RegistrationPath[] GetPaths(string Referrer)
         {
-            List<string> s = new List<string>();
+            List<RegistrationPath> s = new List<RegistrationPath>();
             foreach (RegistrationPath path in GetPaths())
             {
                 bool load = false;
@@ -143,7 +145,7 @@ namespace HAP.Web.API
                     Regex r = new Regex(s1, RegexOptions.IgnoreCase);
                     if (r.IsMatch(Referrer)) { load = true; break; }
                 }
-                if (load) s.Add(path.Path);
+                if (load) s.Add(path);
             }
             return s.ToArray();
         }
