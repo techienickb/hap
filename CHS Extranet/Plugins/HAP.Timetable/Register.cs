@@ -29,7 +29,8 @@ namespace HAP.Timetable
         public RegistrationPath[] RegisterJSAfterHAP()
         {
             return new RegistrationPath[] {
-                new RegistrationPath { Path = "~/Scripts/fullcalendar.min.js", LoadOn = new string[] { "/timetable.aspx" } }
+                new RegistrationPath { Path = "~/Scripts/moment.min.js", LoadOn = new string[] { "/timetable.aspx" }, Minify = false },
+                new RegistrationPath { Path = "~/Scripts/fullcalendar.min.js", LoadOn = new string[] { "/timetable.aspx" }, Minify = false }
             };
         }
 

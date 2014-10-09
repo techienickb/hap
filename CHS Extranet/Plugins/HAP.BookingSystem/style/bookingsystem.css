@@ -86,17 +86,18 @@ body.bookingdisplay, body.bookingdisplay form { padding: 0; margin: 0; width: 10
 }
 
 .fc-event {
-    background-color: #ccc;
-    color: #333;
-    border-color: #bbb;
+    /*background-color: #ccc;
+    color: #333;*/
+    border-color: #3a87ad;
     border-radius: 0;
 }
 
-a.fc-event {
+a.fc-event.free {
     background-color: #EEEEEE;
+    color: #000;
 }
 
-a.fc-event:hover {
+a.fc-event.free:hover {
     background-color: #dedede;
     color: #000;
 }

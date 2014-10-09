@@ -55,7 +55,7 @@
                             $("#hapdirectedit").prop("checked", true);
                         }
                         else if (run1) {
-                            if (!oldie)
+                            if (window.navigator.userAgent.match(/firefox/gi))
                             $('<iframe />', {
                                 'id': 'decheck',
                                 'src': 'hap://' + ad,

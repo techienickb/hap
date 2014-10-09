@@ -1,6 +1,5 @@
 ﻿<%@ Page Title="Crickhowell High School - Home Access Plus+ - Timetable" Language="C#" MasterPageFile="~/Masterpage.master" AutoEventWireup="true" CodeBehind="Timetable.aspx.cs" Inherits="HAP.Timetable.Timetable" %>
 <asp:Content runat="server" ContentPlaceHolderID="head">
-
 </asp:Content>
 <asp:Content ContentPlaceHolderID="title" runat="server"><asp:HyperLink runat="server" NavigateUrl="~/timetable.aspx"><hap:LocalResource runat="server" StringPath="timetable/my" /></asp:HyperLink></asp:Content>
 <asp:Content ContentPlaceHolderID="header" runat="server">
@@ -33,10 +32,10 @@
             dataType: 'json',
             success: function (data) {
                 timetable = data;
-                $("#calendar").fullCalendar('addEventSource', function (start, end, callback) {
-                    var s = start;
+                $("#calendar").fullCalendar('addEventSource', function (start, end, timezone, callback) {
+                    var s = start._d;
                     var dates = [];
-                    while (s < end) {
+                    while (s < end._d) {
                         if (timetable.length == 0 || isDateInTerm(s)) dates.push(s);
                         var newDate = new Date(s);
                         s = new Date(newDate.setDate(newDate.getDate() + 1));
@@ -131,12 +130,14 @@
                 termdates.push({
                     title: terms[i].name + " Term",
                     start: terms[i].start,
-                    end: terms[i].halfterm.start
+                    end: terms[i].halfterm.start,
+                    allDay: true
                 });
                 termdates.push({
                     title: terms[i].name + " Term",
                     start: terms[i].halfterm.end,
-                    end: terms[i].end
+                    end: terms[i].end,
+                    allDay: true
                 });
             }
             $("#calendar").fullCalendar({
@@ -146,13 +147,13 @@
                 events: termdates,
                 titleFormat: {
                     month: 'MMMM yyyy',                             // September 2009
-                    week: "d [ MMM yyyy] { '&#8212;' d MMMM yyyy}", // Sep 7 - 13 2009
-                    day: 'dddd, d MMMM yyyy'                  // Tuesday, Sep 8, 2009
+                    week: "D MMMM YYYY", // Sep 7 - 13 2009
+                    day: 'dddd, D MMMM yyyy'                  // Tuesday, Sep 8, 2009
                 },
                 columnFormat: {
                     month: 'dddd',    // Mon
-                    week: 'dddd d/M', // Mon 9/7
-                    day: 'dddd d/M'  // Monday 9/7
+                    week: 'dddd D/M', // Mon 9/7
+                    day: 'dddd D/M'  // Monday 9/7
                 },
                 header: {
                     left: 'agendaWeek,agendaDay',
@@ -164,10 +165,10 @@
                 }
             });
             if (optionalcalendars.length > 0) {
-                $("#calendar").fullCalendar('addEventSource', function (start, end, callback) {
-                    var s = start;
+                $("#calendar").fullCalendar('addEventSource', function (start, end, timezone, callback) {
+                    var s = start._d;
                     var dates = [];
-                    while (s < end) {
+                    while (s < end._d) {
                         dates.push(s);
                         var newDate = new Date(s);
                         s = new Date(newDate.setDate(newDate.getDate() + 1));

@@ -37,6 +37,10 @@ namespace HAP.Web.Configuration
 
     public class RegistrationPath
     {
+        public RegistrationPath()
+        {
+            Minify = true;
+        }
         /// <summary>
         /// App Relative Path to the Source File
         /// </summary>
@@ -45,5 +49,9 @@ namespace HAP.Web.Configuration
         /// Array of Regular Expressions on which to load this script (RefererUri)
         /// </summary>
         public string[] LoadOn { get; set; }
+        /// <summary>
+        /// Set to minify or not (default is true)
+        /// </summary>
+        public bool Minify { get; set; }
     }
 }
