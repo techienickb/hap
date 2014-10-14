@@ -206,156 +206,156 @@
         var canmulti = false;
     </script>
 	<script>
-		function resource(name, type, years, quantities, readonly, multiroom, maxlessons, rooms, disclaimer, canshare, notes, allowance) {
-			this.Name = name;
-			this.Type = type;
-			this.Years = years;
-			this.Quantities = quantities;
-			this.Data;
-			this.Disclaimer = disclaimer;
-			this.ReadOnly = readonly;
-			this.MultiRoom = multiroom;
-			this.MaxLessons = maxlessons;
-			this.Rooms = rooms;
-			this.Notes = notes;
-			this.CanShare = canshare;
-			this.Allowance = allowance;
-			this.Render = function() {
-			    var h1 = "";
-			    for (var x = 0; x < this.Data.length; x++) {
-			        var xy = 0;
-			        var h = "";
-			        for (var y = 0; y < this.Data[x].length; y++)
-			        {
-			            h += '<a onclick="return ';
-			            var ex1 = (this.Allowance != null && lessontimes[x].FromStart != null && lessontimes[x].FromStart <= this.Allowance && $.inArray(this.Name, user.isAdminOf) == -1);
-			            var ex2 = (lessontimes[x].FromEnd != null && lessontimes[x].FromEnd <= 0);
-			            var expired = ex1 || ex2;
-			            if (this.ReadOnly || expired) h += "false";
-			            else if (this.Data[x][y].Name == "FREE") h += "doBooking('" +  this.Name + "', '" + this.Data[x][y].Lesson + "');";
-			            else {
-			                if (this.Data[x][y].Static && $.inArray(this.Name, user.isAdminOf) != -1 && this.Type != "Loan") h += "doBooking('" + this.Name + "', '" + this.Data[x][y].Lesson + "');";
-			                else if (this.Data[x][y].Static == false && this.Type != "Loan" && (this.Data[x][y].Username.toLowerCase() == user.username.toLowerCase() || $.inArray(this.Name, user.isAdminOf) != -1)) h += "doRemove('" + this.Name + "', '" + this.Data[x][y].Lesson + "', '" + this.Data[x][y].Name + "', " + y + ");";
-			                else if (this.Data[x][y].Static == false && this.Type == "Loan" && (this.Data[x][y].Username.toLowerCase() == user.username.toLowerCase() || $.inArray(this.Name, user.isAdminOf) != -1)) h += "doReturn('" + this.Name + "', '" + this.Data[x][y].Lesson + "', '" + this.Data[x][y].Name + "');";
-			                else h += "false;";
-			            }
-			            h += '" href="#' + this.Name + '-' + this.Data[x][y].Lesson.toLowerCase().replace(/ /g, "") + '" class="' + (this.Data[x][y].Static ? 'static ' : '') + (this.Type == "Loan" ? 'loan ' : '') + ($.inArray(this.Name, user.isAdminOf) == -1 ? '' : 'admin') + ((this.Data[x][y].Username.toLowerCase() == user.username.toLowerCase() && $.inArray(this.Name, user.isAdminOf) == -1) ? ' bookie' : '') + ((this.Data[x][y].Name == "FREE" && !this.ReadOnly) ? ' free' : ' booked') + (expired ? " expired" : "") + '">';
-			            h += (this.Data[x][y].Static ? '<span class="state static" title="Timetabled Lesson"><i></i><span>Override</span></span>' : (this.Data[x][y].Name == "FREE" ? '<span class="state book" title="Book"><i></i><span>Book</span></span>' : (this.Type == "Loan" ? '<span class="state Return" title="Return"><i></i><span>Return</span></span>' : '<span class="state remove">' + (this.Data[x][y].Notes != null ? ('<i class="notes" title="Booking Notes:\n' + unescape(this.Data[x][y].Notes) + '"></i>') : '') + '<i title="Remove"></i><span title="Remove">Remove</span></span>')));
-			            h += this.Data[x][y].Name + '<span>' + this.Data[x][y].DisplayName;
-			            if (this.Data[x][y].Name == "FREE" || this.Data[x][y].Name == "UNAVAILABLE" || this.Data[x][y].Name == "CHARGING") { }
-			            else {
-			                if (this.Type == "Laptops") h += ' in ' + this.Data[x][y].LTRoom + ' [' + this.Data[x][y].Count + '|' + (this.Data[x][y].LTHeadPhones ? 'HP' : 'N-HP') + ']';
-			                else if (this.Type == "Equipment" || this.Type == "Loan") h += ' in ' + this.Data[x][y].EquipRoom;
+	    function resource(name, type, years, quantities, readonly, multiroom, maxlessons, rooms, disclaimer, canshare, notes, allowance) {
+	        this.Name = name;
+	        this.Type = type;
+	        this.Years = years;
+	        this.Quantities = quantities;
+	        this.Data;
+	        this.Disclaimer = disclaimer;
+	        this.ReadOnly = readonly;
+	        this.MultiRoom = multiroom;
+	        this.MaxLessons = maxlessons;
+	        this.Rooms = rooms;
+	        this.Notes = notes;
+	        this.CanShare = canshare;
+	        this.Allowance = allowance;
+	        this.Render = function() {
+	            var h1 = "";
+	            for (var x = 0; x < this.Data.length; x++) {
+	                var xy = 0;
+	                var h = "";
+	                for (var y = 0; y < this.Data[x].length; y++)
+	                {
+	                    h += '<a onclick="return ';
+	                    var ex1 = (this.Allowance != null && lessontimes[x].FromStart != null && lessontimes[x].FromStart <= this.Allowance && $.inArray(this.Name, user.isAdminOf) == -1);
+	                    var ex2 = (lessontimes[x].FromEnd != null && lessontimes[x].FromEnd <= 0);
+	                    var expired = ex1 || ex2;
+	                    if (this.ReadOnly || expired) h += "false";
+	                    else if (this.Data[x][y].Name == "FREE") h += "doBooking('" +  this.Name + "', '" + this.Data[x][y].Lesson + "');";
+	                    else {
+	                        if (this.Data[x][y].Static && $.inArray(this.Name, user.isAdminOf) != -1 && this.Type != "Loan") h += "doBooking('" + this.Name + "', '" + this.Data[x][y].Lesson + "');";
+	                        else if (this.Data[x][y].Static == false && this.Type != "Loan" && (this.Data[x][y].Username.toLowerCase() == user.username.toLowerCase() || $.inArray(this.Name, user.isAdminOf) != -1)) h += "doRemove('" + this.Name + "', '" + this.Data[x][y].Lesson + "', '" + this.Data[x][y].Name + "', " + y + ");";
+	                        else if (this.Data[x][y].Static == false && this.Type == "Loan" && (this.Data[x][y].Username.toLowerCase() == user.username.toLowerCase() || $.inArray(this.Name, user.isAdminOf) != -1)) h += "doReturn('" + this.Name + "', '" + this.Data[x][y].Lesson + "', '" + this.Data[x][y].Name + "');";
+	                        else h += "false;";
+	                    }
+	                    h += '" href="#' + this.Name + '-' + this.Data[x][y].Lesson.toLowerCase().replace(/ /g, "") + '" class="' + (this.Data[x][y].Static ? 'static ' : '') + (this.Type == "Loan" ? 'loan ' : '') + ($.inArray(this.Name, user.isAdminOf) == -1 ? '' : 'admin') + ((this.Data[x][y].Username.toLowerCase() == user.username.toLowerCase() && $.inArray(this.Name, user.isAdminOf) == -1) ? ' bookie' : '') + ((this.Data[x][y].Name == "FREE" && !this.ReadOnly) ? ' free' : ' booked') + (expired ? " expired" : "") + '">';
+	                    h += (this.Data[x][y].Static ? '<span class="state static" title="Timetabled Lesson"><i></i><span>Override</span></span>' : (this.Data[x][y].Name == "FREE" ? '<span class="state book" title="Book"><i></i><span>Book</span></span>' : (this.Type == "Loan" ? '<span class="state Return" title="Return"><i></i><span>Return</span></span>' : '<span class="state remove">' + (this.Data[x][y].Notes != null ? ('<i class="notes" title="Booking Notes:\n' + unescape(this.Data[x][y].Notes) + '"></i>') : '') + '<i title="Remove"></i><span title="Remove">Remove</span></span>')));
+	                    h += this.Data[x][y].Name + '<span>' + this.Data[x][y].DisplayName;
+	                    if (this.Data[x][y].Name == "FREE" || this.Data[x][y].Name == "UNAVAILABLE" || this.Data[x][y].Name == "CHARGING") { }
+	                    else {
+	                        if (this.Type == "Laptops") h += ' in ' + this.Data[x][y].LTRoom + ' [' + this.Data[x][y].Count + '|' + (this.Data[x][y].LTHeadPhones ? 'HP' : 'N-HP') + ']';
+	                        else if (this.Type == "Equipment" || this.Type == "Loan") h += ' in ' + this.Data[x][y].EquipRoom;
 
-			                if (this.Data[x][y].Count != 0 && this.Quantities.length > 0 && this.CanShare && !this.Data[x][0].Static) { xy += this.Data[x][y].Count; h += ' [' + this.Data[x][y].Count + '/' + this.Quantities[this.Quantities.length - 1] +']'; }
-			            }
-			            h += '</span></a>';
-			        }
-			        if (this.CanShare && this.Data[x][0].Count > 0 && !this.Data[x][0].Static) {
-			            h = '<span class="share' + (xy < this.Quantities[this.Quantities.length - 1] ? '' : ' full') + '">' + h;
-			            if (!this.ReadOnly && xy < this.Quantities[this.Quantities.length - 1])
-			                h += '<a onclick="return doBooking(\'' +  this.Name + "', '" + this.Data[x][0].Lesson + '\');" href="#' + this.Name + '-' + this.Data[x][0].Lesson.toLowerCase().replace(/ /g, "") + '" class="' + ($.inArray(this.Name, user.isAdminOf) == -1 ? '' : 'admin') + ' free"><span class="state book" title="Book"><i></i><span>Book</span></span>' + (this.Quantities[this.Quantities.length - 1] - xy) + ' FREE</a>';
-			            h += '</span>';
-			        }
-			        h1 += h;
-			    }
-				$("#" + this.Name.replace(/ /g, '_')).html(h1);
-			};
-			this.timer = null;
-			this.Refresh = function() {
-				$.ajax({
-					type: 'GET',
-					url: hap.common.formatJSONUrl('~/api/BookingSystem/LoadRoom/' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + this.Name),
-					dataType: 'json',
-					context: this,
-					success: function (data) {
-						this.Data = data;
-						this.Render();
-						if (this.timer) clearTimeout(this.timer);
-						this.timer = null;
-						var _z = 0;
-						for (var _i = 0; _i < resources.length; _i++) if (resources[_i] == this) _z = _i;
-						this.timer = setTimeout(function () { resources[_z].Refresh(); }, 30000);
-					},
-					error: hap.common.jsonError
-				});
-			};
-		}
-		function subjectchance(box) {
-			var chosenoption = box.options[box.selectedIndex];
-			if (chosenoption.value == "CUSTOM") {
-				$("#bfsubject").val("");
-				$("#bfsubject").removeAttr("style");
-				$("#bfsubject").select();
-			} else {
-				$("#bfsubject").val(chosenoption.value);
-				$("#bfsubject").css("display", "none");
-			}
-		}
-		function disableAllTheseDays(date) {
-			var noWeekend = $.datepicker.noWeekends(date);
+	                        if (this.Data[x][y].Count != 0 && this.Quantities.length > 0 && this.CanShare && !this.Data[x][0].Static) { xy += this.Data[x][y].Count; h += ' [' + this.Data[x][y].Count + '/' + this.Quantities[this.Quantities.length - 1] +']'; }
+	                    }
+	                    h += '</span></a>';
+	                }
+	                if (this.CanShare && this.Data[x][0].Count > 0 && !this.Data[x][0].Static) {
+	                    h = '<span class="share' + (xy < this.Quantities[this.Quantities.length - 1] ? '' : ' full') + '">' + h;
+	                    if (!this.ReadOnly && xy < this.Quantities[this.Quantities.length - 1])
+	                        h += '<a onclick="return doBooking(\'' +  this.Name + "', '" + this.Data[x][0].Lesson + '\');" href="#' + this.Name + '-' + this.Data[x][0].Lesson.toLowerCase().replace(/ /g, "") + '" class="' + ($.inArray(this.Name, user.isAdminOf) == -1 ? '' : 'admin') + ' free"><span class="state book" title="Book"><i></i><span>Book</span></span>' + (this.Quantities[this.Quantities.length - 1] - xy) + ' FREE</a>';
+	                    h += '</span>';
+	                }
+	                h1 += h;
+	            }
+	            $("#" + this.Name.replace(/ /g, '_')).html(h1);
+	        };
+	        this.timer = null;
+	        this.Refresh = function() {
+	            $.ajax({
+	                type: 'GET',
+	                url: hap.common.formatJSONUrl('~/api/BookingSystem/LoadRoom/' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + this.Name),
+	                dataType: 'json',
+	                context: this,
+	                success: function (data) {
+	                    this.Data = data;
+	                    this.Render();
+	                    if (this.timer) clearTimeout(this.timer);
+	                    this.timer = null;
+	                    var _z = 0;
+	                    for (var _i = 0; _i < resources.length; _i++) if (resources[_i] == this) _z = _i;
+	                    this.timer = setTimeout(function () { resources[_z].Refresh(); }, 30000);
+	                },
+	                error: hap.common.jsonError
+	            });
+	        };
+	    }
+	    function subjectchance(box) {
+	        var chosenoption = box.options[box.selectedIndex];
+	        if (chosenoption.value == "CUSTOM") {
+	            $("#bfsubject").val("");
+	            $("#bfsubject").removeAttr("style");
+	            $("#bfsubject").select();
+	        } else {
+	            $("#bfsubject").val(chosenoption.value);
+	            $("#bfsubject").css("display", "none");
+	        }
+	    }
+	    function disableAllTheseDays(date) {
+	        var noWeekend = $.datepicker.noWeekends(date);
 			
-			if (noWeekend[0]) {
-				if (date <= user.maxDate && isDateInTerm(date)) return [true];
-				return [false];
-			} else {
-				return noWeekend;
-			}
-		}
-		function isDateInTerm(date) {
-			var terms = [ <%=JSTermDates %> ];
-			for (var i = 0; i < terms.length; i++)
-			{
-				if (terms[i].start <= date && terms[i].end >= date) {
-					if (terms[i].halfterm.start <= date && terms[i].halfterm.end >= date) return false;
-					else return true;
-				}
-			}
-			return false;
+	        if (noWeekend[0]) {
+	            if (date <= user.maxDate && isDateInTerm(date)) return [true];
+	            return [false];
+	        } else {
+	            return noWeekend;
+	        }
+	    }
+	    function isDateInTerm(date) {
+	        var terms = [ <%=JSTermDates %> ];
+		    for (var i = 0; i < terms.length; i++)
+		    {
+		        if (terms[i].start <= date && terms[i].end >= date) {
+		            if (terms[i].halfterm.start <= date && terms[i].halfterm.end >= date) return false;
+		            else return true;
+		        }
+		    }
+		    return false;
 		}
 		var showCal = 0;
 		function showDatePicker() {
-			if (showCal == 0) { $("#datepicker").animate({ height: 'toggle' }); showCal = 1; }
-			return false;
+		    if (showCal == 0) { $("#datepicker").animate({ height: 'toggle' }); showCal = 1; }
+		    return false;
 		}
 		function loadDate(norefresh) {
-			$("#val").html("Loading...");
-			$.ajax({
-				type: 'GET',
-				url: hap.common.formatJSONUrl('~/api/BookingSystem/Initial/' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username.toLowerCase()),
-				dataType: 'json',
-				success: function (data) {
-					if (user.isBSAdmin) $("#val").html("This Week is a Week " + data[1]);
-					else {
-					    if (data[0] >= 0 ) {
-					        $("#val").html("You have " + data[0] + " bookings available to use this week. This Week is a Week " + data[1]);
-					        availbookings = data[0];
-					    } else {
-					        $("#val").html("This Week is a Week " + data[1]);
-					        availbookings = -1;
-					    }
+		    $("#val").html("Loading...");
+		    $.ajax({
+		        type: 'GET',
+		        url: hap.common.formatJSONUrl('~/api/BookingSystem/Initial/' + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username.toLowerCase()),
+		        dataType: 'json',
+		        success: function (data) {
+		            if (user.isBSAdmin) $("#val").html("This Week is a Week " + data[1]);
+		            else {
+		                if (data[0] >= 0 ) {
+		                    $("#val").html("You have " + data[0] + " bookings available to use this week. This Week is a Week " + data[1]);
+		                    availbookings = data[0];
+		                } else {
+		                    $("#val").html("This Week is a Week " + data[1]);
+		                    availbookings = -1;
+		                }
 						
-					}
-				},
-				error: hap.common.jsonError
-			});
-			if (!norefresh) for (var i = 0; i < resources.length; i++) {
-				$("#" + resources[i].Name).html(" ");
-				resources[i].Refresh();
-			}
+		            }
+		        },
+		        error: hap.common.jsonError
+		    });
+		    if (!norefresh) for (var i = 0; i < resources.length; i++) {
+		        $("#" + resources[i].Name).html(" ");
+		        resources[i].Refresh();
+		    }
 		}
 		$(window).hashchange(function () {
-			if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curdate = new Date(window.location.href.split('#')[1].split('/')[2], window.location.href.split('#')[1].split('/')[1] - 1, window.location.href.split('#')[1].split('/')[0]);
-			else curdate = date;
-			$('#datepicker').datepicker("setDate", curdate);
-			$("#picker").val($.datepicker.formatDate('d MM', curdate));
-			$("#wv").attr("href", "cal.aspx#" + $.datepicker.formatDate('dd/mm/yy', curdate));
-			breakloc = null;
-			for (var i = 0; i < lessontimes.length; i++) lessontimes[i].FromStart = lessontimes[i].FromEnd = null;
-			$("#time").removeAttr("style");
-			changeTime();
-			if (breakloc == null) loadDate();
-			else loadDate(true);
+		    if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curdate = new Date(window.location.href.split('#')[1].split('/')[2], window.location.href.split('#')[1].split('/')[1] - 1, window.location.href.split('#')[1].split('/')[0]);
+		    else curdate = date;
+		    $('#datepicker').datepicker("setDate", curdate);
+		    $("#picker").val($.datepicker.formatDate('d MM', curdate));
+		    $("#wv").attr("href", "cal.aspx#" + $.datepicker.formatDate('dd/mm/yy', curdate));
+		    breakloc = null;
+		    for (var i = 0; i < lessontimes.length; i++) lessontimes[i].FromStart = lessontimes[i].FromEnd = null;
+		    $("#time").removeAttr("style");
+		    changeTime();
+		    if (breakloc == null) loadDate();
+		    else loadDate(true);
 		});
 		function isAdminOf(res) {
 		    for (var i = 0; i < user.isAdminOf.length; i++)
@@ -413,7 +413,7 @@
 		    var recurcount = ((isAdminOf(curres.Name) && $("#bfrecur").is(":checked")) ? parseInt($("#recurweeks").val()) : 0) + 1;
 		    for (var recuri = 0; recuri < recurcount; recuri++) {
 		        var ndate = new Date(curdate.getTime() + recuri * 7 * 24 * 60 * 60 * 1000);
-                if (recuri == 0 || recurs[recuri-1] == "FREE")
+		        if (recuri == 0 || recurs[recuri-1] == "FREE")
 		            $.ajax({
 		                type: 'POST',
 		                url: hap.common.formatJSONUrl('~/api/BookingSystem/Booking/' + ndate.getDate() + '-' + (ndate.getMonth() + 1) + '-' + ndate.getFullYear()),
@@ -451,316 +451,342 @@
 		    $("#sidebaredit").removeClass("show");
 		    return false;
 		});
-		function doBooking(res, lesson) {
-			if (availbookings == 0 && !user.isBSAdmin) { 
-				alert("You have exceeded your allowed bookings, please contact an Admin if this is wrong");
-				return false; 
-			}
-			recurs = [];
-			curles = lesson;
-			$("#bflstatic").prop("checked", false);
-			$("#bfdate").html($.datepicker.formatDate('d MM yy', curdate));
-			for (var i = 0; i < resources.length; i++)
-			    if (resources[i].Name == res) curres = resources[i];
-			$("#bfsubject").css("display", "none");
-			$(".bfType").css("display", "none");
-			$(".bfType > input").val("");
-			if (curres.Type == "Room") $("#bfres").html("in " + curres.Name);
-			else {
-				$("#bfres").html("with " + curres.Name);
-				if ($("#bf" + curres.Type) != null) $("#bf" + curres.Type).css("display", "block");
-			}
-			$("#bflroomerror, #bferoomerror, #bfloroomerror").css("display", "none");
-			$("#bfsubject").val("");
-			$("#bfsubjects option:selected").removeAttr("selected");
-			$("#bfsubjects option:first").attr("selected", "selected");
-			$("#bflheadphones").removeAttr("checked");
-			$("#bflroom, #bferoom, #bfloroom").val("");
-			$("#bflsroom option, #bfesroom option, #bflosroom option").remove();
-			if (curres.Notes) {
-			    $("#bfnote").show();
-			    $("#bfnotes").val("");
-			} else $("#bfnote").hide();
-			if (curres.Rooms.length > 0) {
-			    $("#bflroom_span, #bferoom_span, #bfloroom_span").css("display", "none");
-			    $("#bflsroom_span, #bfesroom_span, #bflosroom_span").removeAttr("style");
-			    $("#bflsroom, #bfesroom, #bflosroom").append('<option value="">---</option>');
-			    for (var i = 0; i < curres.Rooms.length; i++)
-			        $("#bflsroom, #bfesroom, #bflosroom").append('<option value="' + curres.Rooms[i] + '">' + curres.Rooms[i] + '</option>');
-			}
-			else {
-			    $("#bflroom_span, #bferoom_span, #bfloroom_span").removeAttr("style");
-			    $("#bflsroom_span, #bfesroom_span, #bflosroom_span").css("display", "none");
-			}
-		    try {
-		        $("#bfyear option").remove();
+        function doBooking(res, lesson) {
+            if (availbookings == 0 && !user.isBSAdmin) { 
+                alert("You have exceeded your allowed bookings, please contact an Admin if this is wrong");
+                return false; 
+            }
+            recurs = [];
+            curles = lesson;
+            $("#bflstatic").prop("checked", false);
+            $("#bfdate").html($.datepicker.formatDate('d MM yy', curdate));
+            for (var i = 0; i < resources.length; i++)
+                if (resources[i].Name == res) curres = resources[i];
+            $("#bfsubject").css("display", "none");
+            $(".bfType").css("display", "none");
+            $(".bfType > input").val("");
+            if (curres.Type == "Room") $("#bfres").html("in " + curres.Name);
+            else {
+                $("#bfres").html("with " + curres.Name);
+                if ($("#bf" + curres.Type) != null) $("#bf" + curres.Type).css("display", "block");
+            }
+            $("#bflroomerror, #bferoomerror, #bfloroomerror").css("display", "none");
+            $("#bfsubject").val("");
+            $("#bfsubjects option:selected").removeAttr("selected");
+            $("#bfsubjects option:first").attr("selected", "selected");
+            $("#bflheadphones").removeAttr("checked");
+            $("#bflroom, #bferoom, #bfloroom").val("");
+            $("#bflsroom option, #bfesroom option, #bflosroom option").remove();
+            if (curres.Notes) {
+                $("#bfnote").show();
+                $("#bfnotes").val("");
+            } else $("#bfnote").hide();
+            if (curres.Rooms.length > 0) {
+                $("#bflroom_span, #bferoom_span, #bfloroom_span").css("display", "none");
+                $("#bflsroom_span, #bfesroom_span, #bflosroom_span").removeAttr("style");
+                $("#bflsroom, #bfesroom, #bflosroom").append('<option value="">---</option>');
+                for (var i = 0; i < curres.Rooms.length; i++)
+                    $("#bflsroom, #bfesroom, #bflosroom").append('<option value="' + curres.Rooms[i] + '">' + curres.Rooms[i] + '</option>');
+            }
+            else {
+                $("#bflroom_span, #bferoom_span, #bfloroom_span").removeAttr("style");
+                $("#bflsroom_span, #bfesroom_span, #bflosroom_span").css("display", "none");
+            }
+            try {
+                $("#bfyear option").remove();
                 if (curres.Years.length > 1) $("#bfyear").append('<option value="">---</option>');
-		        for (var i = 0; i < curres.Years.length; i++)
-		            $("#bfyear").append('<option value="' + curres.Years[i] + '">' + curres.Years[i] + '</option>');
-		    } catch (e) { }
-		    if (isAdminOf(res)) {
-		        $("#bfadminonly").show();
-		        if ($("#bfrecur").is(":checked")) $("#bfrecur").prev().trigger("click");
-		    } else $("#bfadminonly").hide();
-		    try {
-		        $("#bfquant, #bfquants, #bfquantspin").hide();
-		        $("#bfquantmax").html("");
-		        if (curres.CanShare || curres.Type == "Laptops") {
-		            $("#bfquant").show();
-		            if (curres.Quantities.length == 1) {
-		                $("#bfquantspin").show();
-		                var cr3 = curres.Quantities[0];
-		                for (var cr1 = 0; cr1 < curres.Data.length; cr1++)
-		                    if (curres.Data[cr1][0].Lesson == curles)
-		                        for (var cr2 = 0; cr2 < curres.Data[cr1].length; cr2++)
-		                            cr3 -= curres.Data[cr1][cr2].Count;
-		                $("#bfquantmax").html("&nbsp;/&nbsp;" + cr3);
-		                $("#bfquantspin").val(cr3).spinner( "option", "min", 1).spinner("option", "max", cr3);
-		            }
-		            else {
-		                $("#bfquants").html("").show();
-		                for (var i = 0; i < curres.Quantities.length; i++) 
-		                    $("#bfquants").append('<input type="radio" name="bfquants" id="bfquants-' + curres.Quantities[i] + '" value="' + curres.Quantities[i] + '" /><label for="bfquants-' + curres.Quantities[i] + '">' + curres.Quantities[i] + '</label>');
-		                $("#bfquants").buttonset();
-		            }
-		        }
-		    } catch (e) { }
-		    try {
-		        if (curres.MultiRoom && curres.Type != "Loan") {
-		            $("#bfmultilesson").show();
-		            $("#bfmultiroom option").remove();
-		            var l1 = false;
-		            var l2 = "";
-		            var l3 = 0;
-		            for (var i = 0; i < curres.Data.length; i++)
-		            {
-		                if (!l1) l1 = (curres.Data[i][0].Lesson == lesson);
-		                if (l1) {
-		                    l3++;
-		                    if ((isAdminOf(curres.Name) || (parseInt(curres.MaxLessons) > 0 && l3 <= parseInt(curres.MaxLessons) && (availbookings == -1 || l3 <= availbookings && availbookings > 0))) && curres.Data[i][0].Name == "FREE") {
-		                        $("#bfmultiroom").append('<option value="' + l2 + curres.Data[i][0].Lesson + '">' + l3 + ' Lesson' + (l3 == 1 ? '' : 's') + '</option>');
-		                        l2 += curres.Data[i][0].Lesson + ',';
-		                    } else break;
-		                }
-		            }
-		            if (l2 == "") { canmulti = false; $("#bfmultilesson").hide(); }
-		            canmulti = true;
-		        }
-		        else if (curres.Type == "Loan") {
-		            canmulti = true;
-		            $("#bfmultiroom option").remove();
-		            var l1 = false;
-		            var l2 = "";
-		            var l3 = 0;
-		            for (var i = 0; i < curres.Data.length; i++)
-		            {
-		                if (!l1) l1 = (curres.Data[i][0].Lesson == lesson);
-		                if (l1) {
-		                    l3++;
-		                    if ((isAdminOf(curres.Name) || (parseInt(curres.MaxLessons) > 0 && l3 <= parseInt(curres.MaxLessons) && (availbookings == -1 || l3 <= availbookings && availbookings > 0))) && curres.Data[i][0].Name == "FREE") {
-		                        $("#bfmultiroom").append('<option value="' + l2 + curres.Data[i][0].Lesson + '">' + l3 + ' Lesson' + (l3 == 1 ? '' : 's') + '</option>');
-		                        l2 += curres.Data[i][0].Lesson + ',';
-		                    } else break;
-		                }
-		            }
-		            $("#bfmultiroom").val($("#bfmultiroom option").last().val());
-		        }
-		        else {
-		            $("#bfmultilesson").hide();
-		            canmulti = false;
-		        }
-		    } catch (e) 
-		    {
-		        $("#bfmultilesson").hide();
-		        canmulti = false; 
-		    }
-			$("#bflesson").html(lesson);
-			if (curres.Disclaimer != "") {
-			    $("#bfdisclaimer").show();
-			    $("#bfdisclaimer label").html(curres.Disclaimer);
-			    $("#bfdisclaimer input").prop("checked", false);
-			} else { $("#bfdisclaimer").hide(); }
-			$("#sidebaredit").addClass("show");
-			return false;
-		}
-	    function doReturn(res, lesson, name) {
-	        $("#questionbox span").html("Are you sure you want to return<br/>" + res + " during " + lesson);
-	        $("#questionbox").dialog({ autoOpen: true, 
-	            buttons: { "Yes": function() {
-	                curles = lesson;
-	                $("#bfdate").html($.datepicker.formatDate('d MM yy', curdate));
-	                for (var i = 0; i < resources.length; i++)
-	                    if (resources[i].Name == res) curres = resources[i];
-	                $.ajax({
-	                    type: 'POST',
-	                    url: hap.common.formatJSONUrl("~/api/BookingSystem/Return/" + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear()),
-	                    dataType: 'json',
-	                    contentType: 'application/json',
-	                    data: '{ "Resource": "' + curres.Name + '", "lesson": "' + curles + '" }',
-	                    success: function (data) {
-	                        curres.Data = data;
-	                        curres.Render();
-	                        $.ajax({
-	                            type: 'GET',
-	                            url: hap.common.formatJSONUrl("~/api/BookingSystem/Initial/" + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username),
-	                            dataType: 'json',
-	                            success: function (data) {
-	                                if (user.isBSAdmin) $("#val").html("This Week is a Week " + data[1]);
-	                                else {
-	                                    if (data[0] >= 0 ) {
-	                                        $("#val").html("You have " + data[0] + " bookings available to use this week. This Week is a Week " + data[1]);
-	                                        availbookings = data[0];
-	                                    } else {
-	                                        $("#val").html("This Week is a Week " + data[1]);
-	                                        availbookings = -1;
-	                                    }
+                for (var i = 0; i < curres.Years.length; i++)
+                    $("#bfyear").append('<option value="' + curres.Years[i] + '">' + curres.Years[i] + '</option>');
+            } catch (e) { }
+            if (isAdminOf(res)) {
+                $("#bfadminonly").show();
+                if ($("#bfrecur").is(":checked")) $("#bfrecur").prev().trigger("click");
+            } else $("#bfadminonly").hide();
+            try {
+                $("#bfquant, #bfquants, #bfquantspin").hide();
+                $("#bfquantmax").html("");
+                if (curres.CanShare || curres.Type == "Laptops") {
+                    $("#bfquant").show();
+                    if (curres.Quantities.length == 1) {
+                        $("#bfquantspin").show();
+                        var cr3 = curres.Quantities[0];
+                        for (var cr1 = 0; cr1 < curres.Data.length; cr1++)
+                            if (curres.Data[cr1][0].Lesson == curles)
+                                for (var cr2 = 0; cr2 < curres.Data[cr1].length; cr2++)
+                                    cr3 -= curres.Data[cr1][cr2].Count;
+                        $("#bfquantmax").html("&nbsp;/&nbsp;" + cr3);
+                        $("#bfquantspin").val(cr3).spinner( "option", "min", 1).spinner("option", "max", cr3);
+                    }
+                    else {
+                        $("#bfquants").html("").show();
+                        for (var i = 0; i < curres.Quantities.length; i++) 
+                            $("#bfquants").append('<input type="radio" name="bfquants" id="bfquants-' + curres.Quantities[i] + '" value="' + curres.Quantities[i] + '" /><label for="bfquants-' + curres.Quantities[i] + '">' + curres.Quantities[i] + '</label>');
+                        $("#bfquants").buttonset();
+                    }
+                }
+            } catch (e) { }
+            try {
+                if (curres.MultiRoom && curres.Type != "Loan") {
+                    $("#bfmultilesson").show();
+                    $("#bfmultiroom option").remove();
+                    var l1 = false;
+                    var l2 = "";
+                    var l3 = 0;
+                    for (var i = 0; i < curres.Data.length; i++)
+                    {
+                        if (!l1) l1 = (curres.Data[i][0].Lesson == lesson);
+                        if (l1) {
+                            l3++;
+                            if ((isAdminOf(curres.Name) || (parseInt(curres.MaxLessons) > 0 && l3 <= parseInt(curres.MaxLessons) && (availbookings == -1 || l3 <= availbookings && availbookings > 0))) && curres.Data[i][0].Name == "FREE") {
+                                $("#bfmultiroom").append('<option value="' + l2 + curres.Data[i][0].Lesson + '">' + l3 + ' Lesson' + (l3 == 1 ? '' : 's') + '</option>');
+                                l2 += curres.Data[i][0].Lesson + ',';
+                            } else break;
+                        }
+                    }
+                    if (l2 == "") { canmulti = false; $("#bfmultilesson").hide(); }
+                    canmulti = true;
+                }
+                else if (curres.Type == "Loan") {
+                    canmulti = true;
+                    $("#bfmultiroom option").remove();
+                    var l1 = false;
+                    var l2 = "";
+                    var l3 = 0;
+                    for (var i = 0; i < curres.Data.length; i++)
+                    {
+                        if (!l1) l1 = (curres.Data[i][0].Lesson == lesson);
+                        if (l1) {
+                            l3++;
+                            if ((isAdminOf(curres.Name) || (parseInt(curres.MaxLessons) > 0 && l3 <= parseInt(curres.MaxLessons) && (availbookings == -1 || l3 <= availbookings && availbookings > 0))) && curres.Data[i][0].Name == "FREE") {
+                                $("#bfmultiroom").append('<option value="' + l2 + curres.Data[i][0].Lesson + '">' + l3 + ' Lesson' + (l3 == 1 ? '' : 's') + '</option>');
+                                l2 += curres.Data[i][0].Lesson + ',';
+                            } else break;
+                        }
+                    }
+                    $("#bfmultiroom").val($("#bfmultiroom option").last().val());
+                }
+                else {
+                    $("#bfmultilesson").hide();
+                    canmulti = false;
+                }
+            } catch (e) 
+            {
+                $("#bfmultilesson").hide();
+                canmulti = false; 
+            }
+            $("#bflesson").html(lesson);
+            if (curres.Disclaimer != "") {
+                $("#bfdisclaimer").show();
+                $("#bfdisclaimer label").html(curres.Disclaimer);
+                $("#bfdisclaimer input").prop("checked", false);
+            } else { $("#bfdisclaimer").hide(); }
+            $("#sidebaredit").addClass("show");
+            return false;
+        }
+        function doReturn(res, lesson, name) {
+            $("#questionbox span").html("Are you sure you want to return<br/>" + res + " during " + lesson);
+            $("#questionbox").dialog({ autoOpen: true, 
+                buttons: { "Yes": function() {
+                    curles = lesson;
+                    $("#bfdate").html($.datepicker.formatDate('d MM yy', curdate));
+                    for (var i = 0; i < resources.length; i++)
+                        if (resources[i].Name == res) curres = resources[i];
+                    $.ajax({
+                        type: 'POST',
+                        url: hap.common.formatJSONUrl("~/api/BookingSystem/Return/" + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear()),
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        data: '{ "Resource": "' + curres.Name + '", "lesson": "' + curles + '" }',
+                        success: function (data) {
+                            curres.Data = data;
+                            curres.Render();
+                            $.ajax({
+                                type: 'GET',
+                                url: hap.common.formatJSONUrl("~/api/BookingSystem/Initial/" + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username),
+                                dataType: 'json',
+                                success: function (data) {
+                                    if (user.isBSAdmin) $("#val").html("This Week is a Week " + data[1]);
+                                    else {
+                                        if (data[0] >= 0 ) {
+                                            $("#val").html("You have " + data[0] + " bookings available to use this week. This Week is a Week " + data[1]);
+                                            availbookings = data[0];
+                                        } else {
+                                            $("#val").html("This Week is a Week " + data[1]);
+                                            availbookings = -1;
+                                        }
 	                                    
-	                                }
-	                            },
-	                            error: hap.common.jsonError
-	                        });
-	                    },
-	                    error: hap.common.jsonError
-	                });
-	                $(this).dialog("close");
-	            }, "No": function() {
-	                $(this).dialog("close");
-	            } } 
-	        });
-	        return false;
-	    }
-		function doRemove(res, lesson, name, index) {
-			$("#questionbox span").html("Are you sure you want to remove<br/>" + name + " in/with " + res + " during " + lesson);
-			$("#questionbox").dialog({ autoOpen: true, 
-				buttons: { "Yes": function() {
-					curles = lesson;
-					$("#bfdate").html($.datepicker.formatDate('d MM yy', curdate));
-					for (var i = 0; i < resources.length; i++)
-						if (resources[i].Name == res) curres = resources[i];
-					$.ajax({
-						type: 'DELETE',
-						url: hap.common.formatJSONUrl("~/api/BookingSystem/Booking/" + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + "/" + index),
-						dataType: 'json',
-						contentType: 'application/json',
-						data: '{ "booking": { "Room": "' + curres.Name + '", "Lesson": "' + curles + '", "Name": "' + name + '" } }',
-						success: function (data) {
-							curres.Data = data;
-							curres.Render();
-							$.ajax({
-								type: 'GET',
-								url: hap.common.formatJSONUrl("~/api/BookingSystem/Initial/" + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username),
-								dataType: 'json',
-								success: function (data) {
-									if (user.isBSAdmin) $("#val").html("This Week is a Week " + data[1]);
-									else {
-									    if (data[0] >= 0 ) {
-									        $("#val").html("You have " + data[0] + " bookings available to use this week. This Week is a Week " + data[1]);
-									        availbookings = data[0];
-									    } else {
-									        $("#val").html("This Week is a Week " + data[1]);
-									        availbookings = -1;
-									    }
+                                    }
+                                },
+                                error: hap.common.jsonError
+                            });
+                        },
+                        error: hap.common.jsonError
+                    });
+                    $(this).dialog("close");
+                }, "No": function() {
+                    $(this).dialog("close");
+                } } 
+            });
+            return false;
+        }
+        function doRemove(res, lesson, name, index) {
+            $("#questionbox span").html("Are you sure you want to remove<br/>" + name + " in/with " + res + " during " + lesson);
+            $("#questionbox").dialog({ autoOpen: true, 
+                buttons: { "Yes": function() {
+                    curles = lesson;
+                    $("#bfdate").html($.datepicker.formatDate('d MM yy', curdate));
+                    for (var i = 0; i < resources.length; i++)
+                        if (resources[i].Name == res) curres = resources[i];
+                    $.ajax({
+                        type: 'DELETE',
+                        url: hap.common.formatJSONUrl("~/api/BookingSystem/Booking/" + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + "/" + index),
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        data: '{ "booking": { "Room": "' + curres.Name + '", "Lesson": "' + curles + '", "Name": "' + name + '" } }',
+                        success: function (data) {
+                            curres.Data = data;
+                            curres.Render();
+                            $.ajax({
+                                type: 'GET',
+                                url: hap.common.formatJSONUrl("~/api/BookingSystem/Initial/" + curdate.getDate() + '-' + (curdate.getMonth() + 1) + '-' + curdate.getFullYear() + '/' + user.username),
+                                dataType: 'json',
+                                success: function (data) {
+                                    if (user.isBSAdmin) $("#val").html("This Week is a Week " + data[1]);
+                                    else {
+                                        if (data[0] >= 0 ) {
+                                            $("#val").html("You have " + data[0] + " bookings available to use this week. This Week is a Week " + data[1]);
+                                            availbookings = data[0];
+                                        } else {
+                                            $("#val").html("This Week is a Week " + data[1]);
+                                            availbookings = -1;
+                                        }
 										
-									}
-								},
-								error: hap.common.jsonError
-							});
-						},
-						error: hap.common.jsonError
-					});
-					$(this).dialog("close");
-				}, "No": function() {
-					$(this).dialog("close");
-				} } 
-			});
-			return false;
-		}
-		$(function () {
-		    $("button").button();
-			try {
-				if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curdate = new Date(window.location.href.split('#')[1].split('/')[2], window.location.href.split('#')[1].split('/')[1] - 1, window.location.href.split('#')[1].split('/')[0]);
-				else curdate = date;
-			} catch (ex) { alert(ex); }
-			$("#datepicker").datepicker({ 
-				minDate: user.minDate,
-				maxDate: user.maxDate,
-				beforeShowDay: disableAllTheseDays,
-				showOtherMonths: true,
-				selectOtherMonths: true,
-				defaultDate: curdate,
-				onSelect: function(dateText, inst) {
-					curdate = new Date(dateText);
-					location.href = "#" + $.datepicker.formatDate('dd/mm/yy', curdate);
-				}
-			});
-			$("#overview").click(function () {
-			    $("#overviewcalendar").hapPopup();
-				return false;
-			});
-			$("#bflsroom").change(function () {
-			    $("#bflroom").val(this.options[this.selectedIndex].value);
-			});
-			$("#bfesroom").change(function () {
-			    $("#bferoom").val(this.options[this.selectedIndex].value);
-			});
-			$("#questionbox").dialog({ autoOpen: false });
-			$("#overviewcalendar").hide();
-			$("#bookingform").dialog({ autoOpen: false });
-			$("#picker").val($.datepicker.formatDate('d MM', curdate));
-			$("input[type=button]").button();
-			$(".button").button();
-			$("#datepicker").animate({ height: 'toggle' });
-			$("#bflquant").buttonset();
-			$("#hapContent").click(function() {
-				if (showCal == 2) { $("#datepicker").animate({ height: 'toggle' }); showCal = 0; }
-				else if (showCal == 1) showCal = 2;
-			});
-			$("#datepicker").click(function () { return false; });
-			changeTime();
-			if (breakloc == null) loadDate();
-			else loadDate(true);
-			setInterval("changeTime();", 6000);
-		});
-		var breakloc = null;
-		function changeTime() {
-		    $("#time").height($("#resources").height() - 30);
-		    for (var i = 0; i < lessontimes.length; i++)
-		    {
-		        var time1 = new Date(curdate.toDateString());
-		        time1.setHours(parseInt(lessontimes[i].Start.split(":")[0]));
-		        time1.setMinutes(parseInt(lessontimes[i].Start.split(":")[1]));
+                                    }
+                                },
+                                error: hap.common.jsonError
+                            });
+                        },
+                        error: hap.common.jsonError
+                    });
+                    $(this).dialog("close");
+                }, "No": function() {
+                    $(this).dialog("close");
+                } } 
+            });
+            return false;
+        }
+        $(function () {
+            $("button").button();
+            try {
+                if (window.location.href.split('#')[1] != "" && window.location.href.split('#')[1]) curdate = new Date(window.location.href.split('#')[1].split('/')[2], window.location.href.split('#')[1].split('/')[1] - 1, window.location.href.split('#')[1].split('/')[0]);
+                else curdate = date;
+            } catch (ex) { alert(ex); }
+            $("#datepicker").datepicker({ 
+                minDate: user.minDate,
+                maxDate: user.maxDate,
+                beforeShowDay: disableAllTheseDays,
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                defaultDate: curdate,
+                onSelect: function(dateText, inst) {
+                    curdate = new Date(dateText);
+                    location.href = "#" + $.datepicker.formatDate('dd/mm/yy', curdate);
+                }
+            });
+            $("#overview").click(function () {
+                $("#overviewcalendar").hapPopup();
+                return false;
+            });
+            $("#bflsroom").change(function () {
+                $("#bflroom").val(this.options[this.selectedIndex].value);
+            });
+            $("#bfesroom").change(function () {
+                $("#bferoom").val(this.options[this.selectedIndex].value);
+            });
+            $("#questionbox").dialog({ autoOpen: false });
+            $("#overviewcalendar").hide();
+            $("#bookingform").dialog({ autoOpen: false });
+            $("#picker").val($.datepicker.formatDate('d MM', curdate));
+            $("input[type=button]").button();
+            $(".button").button();
+            $("#datepicker").animate({ height: 'toggle' });
+            $("#bflquant").buttonset();
+            $("#hapContent").click(function() {
+                if (showCal == 2) { $("#datepicker").animate({ height: 'toggle' }); showCal = 0; }
+                else if (showCal == 1) showCal = 2;
+            });
+            $("#datepicker").click(function () { return false; });
+            changeTime();
+            if (breakloc == null) loadDate();
+            else loadDate(true);
+            setInterval("changeTime();", 6000);
+        });
+        var breakloc = null;
+        function changeTime() {
+            $("#time").height($("#resources").height() - 30);
 
-		        var time2 = new Date(curdate.toDateString());
-		        time2.setHours(parseInt(lessontimes[i].End.split(":")[0]));
-		        time2.setMinutes(parseInt(lessontimes[i].End.split(":")[1]));
-		        if (new Date() < time1) {
-		            $("#time").css("left", ($("#bookingday > .body > .head h1:eq(" + i + ")").position().left + 2) + "px");
-		            breakloc = null;
-		            break;
-		        }
-		        else if (new Date() >= time1 && new Date() <= time2) {
-		            var h = $("#bookingday > .body > .head h1:eq(" + i + ")");
-		            var tp = (new Date().getTime() - time1.getTime()) / 1000 / 60 / 60 * 100;
-		            $("#time").css("left", Math.round(h.position().left + 2 + (h.outerWidth() / 100 * tp)) + "px");
-		            for (var y = 0; y < lessontimes.length; y++) {
-		                var time3 = new Date(curdate.toDateString());
-		                time3.setHours(parseInt(lessontimes[y].Start.split(":")[0]));
-		                time3.setMinutes(parseInt(lessontimes[y].Start.split(":")[1]));
-		                lessontimes[y].FromStart = Math.round((time3.getTime() - new Date().getTime()) / 1000 / 60);
-		                time3 = new Date(curdate.toDateString());
-		                time3.setHours(parseInt(lessontimes[y].End.split(":")[0]));
-		                time3.setMinutes(parseInt(lessontimes[y].End.split(":")[1]));
-		                lessontimes[y].FromEnd = Math.round((time3.getTime() - new Date().getTime()) / 1000 / 60);
-		            }
-		            if (breakloc != i) for (var z = 0; z < resources.length; z++) {
-		                $("#" + resources[z].Name).html(" ");
-		                resources[z].Refresh();
-		            }
-		            breakloc = i;
-		            break;
-		        }
-		    }
-		}
+            var time4 = new Date(curdate);
+            time4.setHours(0);
+            time4.setMinutes(0);
+            var time5 = new Date(curdate);
+            time5.setHours(parseInt(lessontimes[0].Start.split(":")[0]));
+            time5.setMinutes(parseInt(lessontimes[0].Start.split(":")[1]));
+            if (new Date() < time5)
+            {
+                $("#time").css("left", ($("#bookingday > .body > .head h1:eq(0)").position().left + 2) + "px");
+                for (var y = 0; y < lessontimes.length; y++) {
+                    var time3 = new Date(curdate.toDateString());
+                    time3.setHours(parseInt(lessontimes[y].Start.split(":")[0]));
+                    time3.setMinutes(parseInt(lessontimes[y].Start.split(":")[1]));
+                    lessontimes[y].FromStart = Math.round((time3.getTime() - new Date().getTime()) / 1000 / 60);
+                    time3 = new Date(curdate.toDateString());
+                    time3.setHours(parseInt(lessontimes[y].End.split(":")[0]));
+                    time3.setMinutes(parseInt(lessontimes[y].End.split(":")[1]));
+                    lessontimes[y].FromEnd = Math.round((time3.getTime() - new Date().getTime()) / 1000 / 60);
+                }
+            }
+            else 
+                for (var i = 0; i < lessontimes.length; i++)
+                {
+                    var time1 = new Date(curdate.toDateString());
+                    time1.setHours(parseInt(lessontimes[i].Start.split(":")[0]));
+                    time1.setMinutes(parseInt(lessontimes[i].Start.split(":")[1]));
+
+                    var time2 = new Date(curdate.toDateString());
+                    time2.setHours(parseInt(lessontimes[i].End.split(":")[0]));
+                    time2.setMinutes(parseInt(lessontimes[i].End.split(":")[1]));
+                    if (new Date() < time1) {
+                        $("#time").css("left", ($("#bookingday > .body > .head h1:eq(" + i + ")").position().left + 2) + "px");
+                        breakloc = null;
+                        for (var z = 0; z < resources.length; z++) {
+                            $("#" + resources[z].Name).html(" ");
+                            resources[z].Refresh();
+                        }
+                        break;
+                    }
+                    else if (new Date() >= time1 && new Date() <= time2) {
+                        var h = $("#bookingday > .body > .head h1:eq(" + i + ")");
+                        var tp = (new Date().getTime() - time1.getTime()) / 1000 / 60 / 60 * 100;
+                        $("#time").css("left", Math.round(h.position().left + 2 + (h.outerWidth() / 100 * tp)) + "px");
+                        for (var y = 0; y < lessontimes.length; y++) {
+                            var time3 = new Date(curdate.toDateString());
+                            time3.setHours(parseInt(lessontimes[y].Start.split(":")[0]));
+                            time3.setMinutes(parseInt(lessontimes[y].Start.split(":")[1]));
+                            lessontimes[y].FromStart = Math.round((time3.getTime() - new Date().getTime()) / 1000 / 60);
+                            time3 = new Date(curdate.toDateString());
+                            time3.setHours(parseInt(lessontimes[y].End.split(":")[0]));
+                            time3.setMinutes(parseInt(lessontimes[y].End.split(":")[1]));
+                            lessontimes[y].FromEnd = Math.round((time3.getTime() - new Date().getTime()) / 1000 / 60);
+                        }
+                        if (breakloc != i) for (var z = 0; z < resources.length; z++) {
+                            $("#" + resources[z].Name).html(" ");
+                            resources[z].Refresh();
+                        }
+                        breakloc = i;
+                        break;
+                    }
+                }
+        }
 	</script>
     <script>		
         user = { <%=JSUser %> };
