@@ -52,8 +52,8 @@ namespace HAP.BookingSystem
             else if (resource.Type == ResourceType.Laptops) location = booking.LTRoom; 
             else if (resource.Type == ResourceType.Equipment || resource.Type == ResourceType.Loan) location = booking.EquipRoom;
 
-            string summary = string.Format(template.Subject, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, booking.Count, HttpUtility.UrlDecode(booking.Notes, System.Text.Encoding.Default));
-            string description = string.Format(template.Content, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, booking.Count, HttpUtility.UrlDecode(booking.Notes, System.Text.Encoding.Default));
+            string summary = string.Format(template.Subject, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, booking.Count, HttpUtility.UrlDecode(booking.Notes, System.Text.Encoding.Default), DateTime.Now.ToString());
+            string description = string.Format(template.Content, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, booking.Count, HttpUtility.UrlDecode(booking.Notes, System.Text.Encoding.Default), DateTime.Now.ToString());
 
             sb.AppendLine("BEGIN:VCALENDAR");
             sb.AppendLine("VERSION:2.0");
@@ -135,8 +135,8 @@ namespace HAP.BookingSystem
             else if (resource.Type == ResourceType.Laptops) { location = booking.LTRoom; }
             else if (resource.Type == ResourceType.Equipment || resource.Type == ResourceType.Loan) { location = booking.EquipRoom; }
 
-            string summary = string.Format(template.Subject, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, booking.Count, HttpUtility.UrlDecode(booking.Notes, System.Text.Encoding.Default));
-            string description = string.Format(template.Content, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, booking.Count, HttpUtility.UrlDecode(booking.Notes, System.Text.Encoding.Default));
+            string summary = string.Format(template.Subject, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, booking.Count, HttpUtility.UrlDecode(booking.Notes, System.Text.Encoding.Default), DateTime.Now.ToString());
+            string description = string.Format(template.Content, booking.Username, booking.User.DisplayName, booking.Room, booking.Name, booking.Date.ToShortDateString(), booking.Day, booking.Lesson, location, booking.Count, HttpUtility.UrlDecode(booking.Notes, System.Text.Encoding.Default), DateTime.Now.ToString());
 
             List<UserInfo> uis = new List<UserInfo>();
 
@@ -252,7 +252,7 @@ namespace HAP.BookingSystem
             else if (resource.Type == ResourceType.Laptops) location = booking.LTRoom;
             else if (resource.Type == ResourceType.Equipment || resource.Type == ResourceType.Loan) location = booking.EquipRoom;
             string summary = "Cancellation of " + booking.Name + " in " + location;
-            string description = "Cancellation of " + booking.Name + " in " + location + " during " + booking.Lesson + " on " + booking.Date.ToShortDateString();
+            string description = "Cancellation of " + booking.Name + " in " + location + " during " + booking.Lesson + " on " + booking.Date.ToShortDateString() + " (" + DateTime.Now.ToString() + ")";
             if (resource.Type == ResourceType.Laptops)
             {
                 summary += " with the " + booking.Room + " [" + booking.Count + "]";
@@ -339,7 +339,7 @@ namespace HAP.BookingSystem
             else if (resource.Type == ResourceType.Laptops) location = booking.LTRoom;
             else if (resource.Type == ResourceType.Equipment || resource.Type == ResourceType.Loan) location = booking.EquipRoom;
             string summary = "Cancellation of " + booking.Name + " in " + location;
-            string description = "Cancellation of " + booking.Name + " in " + location + " during " + booking.Lesson + " on " + booking.Date.ToShortDateString();
+            string description = "Cancellation of " + booking.Name + " in " + location + " during " + booking.Lesson + " on " + booking.Date.ToShortDateString() + " (" + DateTime.Now.ToString() + ")";
             if (resource.Type == ResourceType.Laptops)
             {
                 summary += " with the " + booking.Room + " [" + booking.Count + "]";
