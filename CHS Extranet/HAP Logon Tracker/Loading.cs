@@ -47,7 +47,10 @@ namespace HAP.Tracker.UI
 
         private void Loading_Load(object sender, EventArgs e)
         {
-            if (this.silent) this.Hide();
+            if (silent)
+            {
+                this.WindowState = FormWindowState.Minimized;
+            }
             WebClient c = new WebClient();
             c.Headers.Add(HttpRequestHeader.ContentType, "application/json");
             c.Headers.Add(HttpRequestHeader.Accept, "application/json");

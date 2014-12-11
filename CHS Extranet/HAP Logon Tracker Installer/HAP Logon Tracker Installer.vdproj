@@ -46,13 +46,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_B6FBB15029E82C92ABD0145D33A9AA39"
+        "OwnerKey" = "8:_A65F893BDC0C4D3CA18D6A2948DB34E8"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_A65F893BDC0C4D3CA18D6A2948DB34E8"
+        "OwnerKey" = "8:_B6FBB15029E82C92ABD0145D33A9AA39"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -231,15 +231,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HAP Logon Tracker"
-        "ProductCode" = "8:{0C51F7EF-D759-4B6F-9889-96172D7F10D8}"
-        "PackageCode" = "8:{52073253-DEA8-4F95-BE74-3A11224096D2}"
+        "ProductCode" = "8:{EBA8B334-BA89-4A8B-84D9-D08F97AE09FE}"
+        "PackageCode" = "8:{8680AC9B-D4BB-4067-B805-9BE42E351F50}"
         "UpgradeCode" = "8:{41BAC840-CB78-47EF-859E-15CC9CA146CD}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:6.1.0"
+        "ProductVersion" = "8:6.2.0"
         "Manufacturer" = "8:nb development"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://hap.codeplex.com"
@@ -697,7 +697,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_A65F893BDC0C4D3CA18D6A2948DB34E8"
             {
-            "SourcePath" = "8:..\\HAP.Tracker.UI.Notify\\obj\\Release\\HAP Logon Tracker Notifier.exe"
+            "SourcePath" = "8:..\\HAP.Tracker.UI.Notify\\obj\\Debug\\HAP Logon Tracker Notifier.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_58116FF90CDA4CF08D407CF0B83FF282"
@@ -725,7 +725,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_A97940507EC144FD845A505AEDC0B09B"
             {
-            "SourcePath" = "8:..\\HAP Logon Tracker\\obj\\x86\\Release\\HAP Logon Tracker.exe"
+            "SourcePath" = "8:..\\HAP Logon Tracker\\obj\\x86\\Debug\\HAP Logon Tracker.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_58116FF90CDA4CF08D407CF0B83FF282"
