@@ -151,7 +151,7 @@ th span { float: right; }
         #hapHeader #hapTitle:hover { background-color: #00508a; }
         #hapHeader #hapTitle a { background-image: url(../images/icons/metro/hap-logo-20.png); background-repeat: no-repeat; background-position: 10px center; padding-left: 34px; }
         #hapHeader #hapTitle #hapTitleMore { font-family: MSHPIconsRegular; background-image: none; padding: 0 5px; }
-#hapUserTitle { position: fixed; right: 0; height: 40px; line-height: 40px; top: 0; z-index: 310; background-color: #0060a6; border-right: solid 10px #0060a6; color: #fff; text-decoration: none; padding: 0 10px; font-size:16px; }
+#hapUserTitle { position: fixed; right: 0; height: 40px; line-height: 40px; top: 0; z-index: 99; background-color: #0060a6; border-right: solid 10px #0060a6; color: #fff; text-decoration: none; padding: 0 10px; font-size:16px; }
 #hapUserTitle:hover { background-color: #3286C1; text-decoration: none; }
 #hapUserTitle:active { background-color: #004577; }
 .hapmenu { position: fixed; top: 40px; background: #fff; border-style: solid; border-width: 2px; border-top-width: 0; z-index: 301; font-size: 16px; }
