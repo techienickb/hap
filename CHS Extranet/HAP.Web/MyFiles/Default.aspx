@@ -6,21 +6,21 @@
 	<link href="../style/ui.dynatree.css" rel="stylesheet" type="text/css" />
 	<link href="../style/MyFiles.css" rel="stylesheet" type="text/css" />
     <script src="//js.live.net/v5.0/wl.js"></script>
-    <script>$("link[media='handheld'], link[media='screen and (max-device-width: 780px)'], style[media='screen and (max-device-width: 780px)']").remove(); var oldie = false;</script>
+    <script>var oldie = false;</script>
     <!--[if (lt IE 11)]><script>oldie = true;</script><![endif]-->
 </asp:Content>
 <asp:Content ContentPlaceHolderID="title" runat="server"><asp:HyperLink runat="server" NavigateUrl="~/MyFiles/"><hap:LocalResource runat="server" StringPath="myfiles/myfiles" /></asp:HyperLink></asp:Content>
 <asp:Content ContentPlaceHolderID="header" runat="server">
 	<a style="float: right;" id="help" href="#" onclick="return false;"><hap:LocalResource StringPath="help" runat="server" />?</a>
     <div id="toolbar" data-role="header">
-		<div style="float: right;">
+		<div style="float: right;" id="toolbar-right">
             <a class="dropdown" id="de" href="#"><hap:LocalResource runat="server" StringPath="myfiles/directedit" /></a>
 			<a class="dropdown" id="view" href="#"><hap:LocalResource runat="server" StringPath="myfiles/view" /></a>
 		</div>
 		<div style="float: left;">
 			<a href="#" id="backup"><span></span></a>
 		</div>
-		<div style="float: left; margin-left: 3px;" id="maintools">
+		<div id="maintools">
 			<input type="text" id="newfoldertext" /><a id="newfolder" href="#"><hap:LocalResource runat="server" StringPath="myfiles/newfolder" /></a>
             <a href="#" id="toolbar-cut"><hap:LocalResource runat="server" StringPath="myfiles/cut" /></a>
             <a href="#" id="toolbar-copy"><hap:LocalResource runat="server" StringPath="myfiles/copy/copy" /></a>
@@ -1099,7 +1099,7 @@
 					contentType: 'application/json;',
 					success: function (data) {
 						items = new Array();
-						$("#MyFiles").html("");
+						$("#MyFiles").html("").addClass("drives");
 						$(window).trigger("resize");
 						for (var i = 0; i < data.length; i++)
 							items.push(new Drive(data[i]));
@@ -1115,7 +1115,7 @@
 				contentType: 'application/json',
 				success: function (data) {
 					items = new Array();
-					$("#MyFiles").html("");
+					$("#MyFiles").html("").removeClass("drives");
 					for (var i = 0; i < data.length; i++)
 						items.push(new Item(data[i]));
 					for (var i = 0; i < items.length; i++) items[i].Render();

@@ -91,8 +91,8 @@ button.back span { top: 4px; }
 #uploadprogress { position: fixed; bottom: 0; width: 300px; z-index: 2045; background: #fff; }
 #uploadprogress .ui-widget-header { height: 26px; line-height: 26px; padding-left: 10px; font-size: 14px }
 
-#uploadprogress #progresses { padding: 6px; }
-#uploadprogress #progresses div { white-space: nowrap; overflow: hidden; height: 20px; line-height: 20px; text-overflow: ellipsis; }
+#progresses { padding: 6px; }
+#progresses div { white-space: nowrap; overflow: hidden; height: 20px; line-height: 20px; text-overflow: ellipsis; }
 
 #newfoldertext { background: #fff; margin: 0; }
 .loading { background: #fff url(../images/loading.gif) no-repeat right center; }
@@ -105,9 +105,22 @@ button.back span { top: 4px; }
 
 button { overflow: hidden; text-overflow: hidden; }
 #maintools button, #maintools input { margin-right: 3px; }
+#maintools { float: left; margin-left: 3px; }
 
 #jqContextMenu { font-size: 13px; }
 
 #backup span { display: inline-block; background: url(../images/ui-icons_ffffff_256x240.png) -80px -192px no-repeat; height: 16px; width: 16px; vertical-align: top; margin-top: 14px; }
 
-#hapHeader #hapTitle a { background-image: url(../api/tiles/icons/24/24/images/icons/metro/folders-os/DocumentsFolder.png); background-position: 5px center; }
+#hapTitle a { background-image: url(../api/tiles/icons/24/24/images/icons/metro/folders-os/DocumentsFolder.png); background-position: 5px center; }
+
+@media only screen and (max-width: 750px)  {
+    #Tree, #search { display: none!important; width: 0; }
+    #hapTitle { float: left!important; }
+    #hapUserTitle { left: auto!important; }
+    #hapContent { padding-top: 82px; }
+    #hapHeader { min-width: 100%; }
+    #toolbar-right { display: none; }
+    #maintools { display: run-in; float: none; margin: 0; }
+    #MyFiles { padding-top: 40px; }
+    #MyFiles.drives { padding-top: 0; }
+}
