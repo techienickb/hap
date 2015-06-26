@@ -82,7 +82,10 @@
                 if (e.keyCode == 13) {
                     $("#<%=username.ClientID%>").val($.trim($("#<%=username.ClientID%>").val()));
                     location.href = $("#<%=login.ClientID %>").attr("href");
+                } else if (e.keyCode == 220 || e.keyCode == 222) /*back slash*/ {
+                    alert("Please enter just your username");
                 }
+                    
             });
         </script>
     </div>
