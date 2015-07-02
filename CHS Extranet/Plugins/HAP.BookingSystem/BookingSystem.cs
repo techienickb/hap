@@ -136,11 +136,11 @@ namespace HAP.BookingSystem
                 if (key.Lesson.Contains(lesson) && key.Day == DayNumber && key.Room == room)
                 {
                     if (StaticBookings[key].StartDate.HasValue && StaticBookings[key].EndDate.HasValue)
-                        return (StaticBookings[key].StartDate.Value.Date <= DateTime.Now.Date && StaticBookings[key].EndDate >= DateTime.Now.Date);
+                        return (StaticBookings[key].StartDate.Value.Date <= Date.Date && StaticBookings[key].EndDate >= Date.Date);
                     else if (StaticBookings[key].StartDate.HasValue && !StaticBookings[key].EndDate.HasValue)
-                        return (StaticBookings[key].StartDate.Value.Date <= DateTime.Now.Date);
+                        return (StaticBookings[key].StartDate.Value.Date <= Date.Date);
                     else if (!StaticBookings[key].StartDate.HasValue && StaticBookings[key].EndDate.HasValue)
-                        return (StaticBookings[key].EndDate.Value.Date >= DateTime.Now.Date);
+                        return (StaticBookings[key].EndDate.Value.Date >= Date.Date);
                     else return true;
                 }
             return false;
