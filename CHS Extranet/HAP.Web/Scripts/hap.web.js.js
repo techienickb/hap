@@ -390,6 +390,11 @@ if (hap == null) {
         }
     };
     hap.livetiles.RegisterDefaultTiles();
+    $(document).ajaxStart(function () {
+        $("#hapLoader").addClass("go");
+    }).ajaxStop(function () {
+        $("#hapLoader").removeClass("go");
+    });
     $(function () {
         hap.header.Init();
         if (hap.load > hap.loadtypes.none) {
@@ -397,11 +402,6 @@ if (hap == null) {
             hap.common.keepAlive();
         }
         hap.common.makeSwitchs();
-        $(document).ajaxStart(function () {
-            $("#hapLoader").addClass("go");
-        }).ajaxStop(function () {
-            $("#hapLoader").removeClass("go");
-        });
     });
     $.fn.hapPopup = function (e) {
         if (!e) e = { buttons: [{ Text: "Close", Click: function () { $(this).parents(".hapPopup").hide(); return false; } }] };

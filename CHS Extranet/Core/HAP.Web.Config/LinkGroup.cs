@@ -97,7 +97,7 @@ namespace HAP.Web.Configuration
         {
             return this.Single(l => l.Name == name);
         }
-        public new void Remove(string name)
+        public void Remove(string name)
         {
             base.Remove(get(name));
             doc.SelectSingleNode("/hapConfig/Homepage/Links/Group[@name='" + Name + "']").RemoveChild(node.SelectSingleNode("Link[@name='" + name + "']"));

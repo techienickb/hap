@@ -27,7 +27,7 @@ namespace HAP.Web.Configuration
             doc.SelectSingleNode("/hapConfig/bookingsystem/lessons").AppendChild(e);
             base.Add(new Lesson(e));
         }
-        public new void Remove(string name)
+        public void Remove(string name)
         {
             base.Remove(Get(name));
             doc.SelectSingleNode("/hapConfig/bookingsystem/lessons").RemoveChild(node.SelectSingleNode("lesson[@name='" + name + "']"));
