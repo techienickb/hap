@@ -14,7 +14,7 @@ namespace HAP.Web.Configuration
             this.node = root;
             foreach (XmlNode n in node.ChildNodes) base.Add(n.InnerText);
         }
-        public void Add(string Name)
+        public new void Add(string Name)
         {
             XmlElement e = node.OwnerDocument.CreateElement("room");
             e.InnerText = Name;

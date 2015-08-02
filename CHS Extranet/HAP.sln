@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{7F80432C-70D9-4AAA-9FE3-6398471FC04D}"
 	ProjectSection(SolutionItems) = preProject
@@ -23,6 +23,44 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installers", "Installers", "{9A28C64F-CA1C-4D4C-A26C-907F9B8269EB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Quota Service", "Quota Service", "{7B73919E-D6DA-4B3E-A9BC-CDBCACD84EEA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JSON.net", "JSON.net", "{21F06B4A-B827-4E6D-8781-43F1FBB4F7EC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WinRT", "WinRT", "{BE7EA4B2-6350-43C4-AC23-C6091AD64F8A}"
+	ProjectSection(SolutionItems) = preProject
+		Binaries\JSON.net\WinRT\Newtonsoft.Json.dll = Binaries\JSON.net\WinRT\Newtonsoft.Json.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Portable", "Portable", "{F21F2F95-E0F4-404B-9122-73E8C2037F9F}"
+	ProjectSection(SolutionItems) = preProject
+		Binaries\JSON.net\Portable\Newtonsoft.Json.dll = Binaries\JSON.net\Portable\Newtonsoft.Json.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".net 4", ".net 4", "{4B0AFCA9-EE47-4775-9B33-57479AAA49B7}"
+	ProjectSection(SolutionItems) = preProject
+		Binaries\JSON.net\Net40\Newtonsoft.Json.dll = Binaries\JSON.net\Net40\Newtonsoft.Json.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Portable40", "Portable40", "{2FA0DEB1-776F-47F1-9BA6-F1A31A8B72C9}"
+	ProjectSection(SolutionItems) = preProject
+		Binaries\JSON.net\Portable40\Newtonsoft.Json.dll = Binaries\JSON.net\Portable40\Newtonsoft.Json.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tracker", "Tracker", "{A3251197-8D0F-449B-AFE5-173CCC35F043}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Other Files", "Other Files", "{4FCD20C4-7460-4A18-B764-1F99D8C5BFC8}"
+	ProjectSection(SolutionItems) = preProject
+		Documentation.docx = Documentation.docx
+		hap-logo.jpg = hap-logo.jpg
+		hap-logo.png = hap-logo.png
+		haplogo.psd = haplogo.psd
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{6BE11685-FCFB-4FAC-9BB3-51CEB5582BBF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{E8E055C9-9A15-40AE-A0CF-C2E08037F0BF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Office Add-ins", "Office Add-ins", "{D379D6FD-3178-4B2D-9E91-D4BEEA641851}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Web", "HAP.Web\HAP.Web.csproj", "{C3649002-D5BA-41D8-A2AA-78AD9E86C7BF}"
 EndProject
@@ -58,53 +96,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP Quota Service x86", "HA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Win.MyFiles", "HAP.Win.MyFiles\HAP.Win.MyFiles.csproj", "{7A45CE1F-79C1-4A63-96F7-698F2E10A43B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JSON.net", "JSON.net", "{21F06B4A-B827-4E6D-8781-43F1FBB4F7EC}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WinRT", "WinRT", "{BE7EA4B2-6350-43C4-AC23-C6091AD64F8A}"
-	ProjectSection(SolutionItems) = preProject
-		Binaries\JSON.net\WinRT\Newtonsoft.Json.dll = Binaries\JSON.net\WinRT\Newtonsoft.Json.dll
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Portable", "Portable", "{F21F2F95-E0F4-404B-9122-73E8C2037F9F}"
-	ProjectSection(SolutionItems) = preProject
-		Binaries\JSON.net\Portable\Newtonsoft.Json.dll = Binaries\JSON.net\Portable\Newtonsoft.Json.dll
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".net 4", ".net 4", "{4B0AFCA9-EE47-4775-9B33-57479AAA49B7}"
-	ProjectSection(SolutionItems) = preProject
-		Binaries\JSON.net\Net40\Newtonsoft.Json.dll = Binaries\JSON.net\Net40\Newtonsoft.Json.dll
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.WP.MyFiles", "HAP.WP.MyFiles\HAP.WP.MyFiles.csproj", "{A0CFD393-814C-4837-BF8A-E85604D97A30}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Portable40", "Portable40", "{2FA0DEB1-776F-47F1-9BA6-F1A31A8B72C9}"
-	ProjectSection(SolutionItems) = preProject
-		Binaries\JSON.net\Portable40\Newtonsoft.Json.dll = Binaries\JSON.net\Portable40\Newtonsoft.Json.dll
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Tracker", "HAP.Tracker\HAP.Tracker.csproj", "{8A57D4C2-D59D-4D1E-9B83-62946A4E778D}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tracker", "Tracker", "{A3251197-8D0F-449B-AFE5-173CCC35F043}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Tracker.UI.Notify", "HAP.Tracker.UI.Notify\HAP.Tracker.UI.Notify.csproj", "{06615BDD-F660-4A8D-9634-B9703E1AE2D3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Win.DirectEdit", "HAP.Windows.DirectEdit\HAP.Win.DirectEdit.csproj", "{9970A04C-B866-460E-9FF2-527BCE0A701A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Other Files", "Other Files", "{4FCD20C4-7460-4A18-B764-1F99D8C5BFC8}"
-	ProjectSection(SolutionItems) = preProject
-		Documentation.docx = Documentation.docx
-		hap-logo.jpg = hap-logo.jpg
-		hap-logo.png = hap-logo.png
-		haplogo.psd = haplogo.psd
-	EndProjectSection
-EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HAP DirectEdit", "HAP DirectEdit Installer\HAP DirectEdit Installer.vdproj", "{46457F1A-A86C-41C2-A5DA-7EEF2064FE95}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{6BE11685-FCFB-4FAC-9BB3-51CEB5582BBF}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.HelpDesk", "Plugins\HAP.HelpDesk\HAP.HelpDesk.csproj", "{106A4812-B5A3-4D57-B018-719831278E8D}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{E8E055C9-9A15-40AE-A0CF-C2E08037F0BF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.AD", "Core\HAP.AD\HAP.AD.csproj", "{36468E14-F8AF-4794-AB76-25571A54682F}"
 EndProject
@@ -118,96 +120,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.BookingSystem", "Plugin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Timetable", "Plugins\HAP.Timetable\HAP.Timetable.csproj", "{96A9C102-7CE8-4538-854B-1442D8E8E962}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Office.Word", "Office Add-ins\HAP.Office.Word\HAP.Office.Word.csproj", "{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAP.Office.Excel", "HAP.Office.Excel\HAP.Office.Excel.csproj", "{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}"
+EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 24
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs08
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = HAP.Data\\HAP.Data.csproj
-		SccProjectName1 = HAP.Data
-		SccLocalPath1 = HAP.Data
-		SccProjectUniqueName2 = HAP.Data.SQL\\HAP.Data.SQL.csproj
-		SccProjectName2 = HAP.Data.SQL
-		SccLocalPath2 = HAP.Data.SQL
-		SccProjectUniqueName3 = HAP.Web.SendTo.Google\\HAP.Web.SendTo.csproj
-		SccProjectName3 = HAP.Web.SendTo.Google
-		SccLocalPath3 = HAP.Web.SendTo.Google
-		SccProjectUniqueName4 = HAP.MyFiles\\HAP.MyFiles.csproj
-		SccProjectName4 = HAP.MyFiles
-		SccLocalPath4 = HAP.MyFiles
-		SccProjectUniqueName5 = HAP.Web.LiveTiles\\HAP.Web.LiveTiles.csproj
-		SccProjectName5 = HAP.Web.LiveTiles
-		SccLocalPath5 = HAP.Web.LiveTiles
-		SccProjectUniqueName6 = HAP.Tracker\\HAP.Tracker.csproj
-		SccProjectTopLevelParentUniqueName6 = HAP.sln
-		SccProjectName6 = HAP.Tracker
-		SccLocalPath6 = HAP.Tracker
-		SccProjectUniqueName7 = HAP.Web\\HAP.Web.csproj
-		SccProjectName7 = HAP.Web
-		SccLocalPath7 = HAP.Web
-		SccProjectUniqueName8 = HAP\u0020User\u0020Card\\HAP\u0020User\u0020Card.csproj
-		SccProjectName8 = HAP\u0020User\u0020Card
-		SccLocalPath8 = HAP\u0020User\u0020Card
-		SccProjectUniqueName9 = HAP.Data.Quota\\HAP.Data.Quota.csproj
-		SccProjectTopLevelParentUniqueName9 = HAP.sln
-		SccProjectName9 = HAP.Data.Quota
-		SccLocalPath9 = HAP.Data.Quota
-		SccProjectUniqueName10 = HAP.Data.Quota.Service\\HAP\u0020Quota\u0020Service.csproj
-		SccProjectTopLevelParentUniqueName10 = HAP.sln
-		SccProjectName10 = HAP.Data.Quota.Service
-		SccLocalPath10 = HAP.Data.Quota.Service
-		SccProjectUniqueName11 = HAP.Data.Quota\u0020x86\\HAP.Data.Quota\u0020x86.csproj
-		SccProjectTopLevelParentUniqueName11 = HAP.sln
-		SccProjectName11 = HAP.Data.Quota\u0020x86
-		SccLocalPath11 = HAP.Data.Quota\u0020x86
-		SccProjectUniqueName12 = HAP.Data.Quota.Service\u0020x86\\HAP\u0020Quota\u0020Service\u0020x86.csproj
-		SccProjectTopLevelParentUniqueName12 = HAP.sln
-		SccProjectName12 = HAP.Data.Quota.Service\u0020x86
-		SccLocalPath12 = HAP.Data.Quota.Service\u0020x86
-		SccProjectUniqueName13 = HAP.Win.MyFiles\\HAP.Win.MyFiles.csproj
-		SccProjectName13 = HAP.Win.MyFiles
-		SccLocalPath13 = HAP.Win.MyFiles
-		SccProjectUniqueName14 = HAP\u0020Logon\u0020Tracker\\HAP.Tracker.UI.csproj
-		SccProjectTopLevelParentUniqueName14 = HAP.sln
-		SccProjectName14 = HAP\u0020Logon\u0020Tracker
-		SccLocalPath14 = HAP\u0020Logon\u0020Tracker
-		SccProjectUniqueName15 = HAP.Tracker.UI.Notify\\HAP.Tracker.UI.Notify.csproj
-		SccProjectTopLevelParentUniqueName15 = HAP.sln
-		SccProjectName15 = HAP.Tracker.UI.Notify
-		SccLocalPath15 = HAP.Tracker.UI.Notify
-		SccProjectUniqueName16 = HAP.Windows.DirectEdit\\HAP.Win.DirectEdit.csproj
-		SccProjectName16 = HAP.Windows.DirectEdit
-		SccLocalPath16 = HAP.Windows.DirectEdit
-		SccProjectUniqueName17 = Plugins\\HAP.HelpDesk\\HAP.HelpDesk.csproj
-		SccProjectTopLevelParentUniqueName17 = HAP.sln
-		SccProjectName17 = Plugins/HAP.HelpDesk
-		SccLocalPath17 = Plugins\\HAP.HelpDesk
-		SccProjectUniqueName18 = Core\\HAP.AD\\HAP.AD.csproj
-		SccProjectTopLevelParentUniqueName18 = HAP.sln
-		SccProjectName18 = Core/HAP.AD
-		SccLocalPath18 = Core\\HAP.AD
-		SccProjectUniqueName19 = Core\\HAP.Web.Config\\HAP.Web.Configuration.csproj
-		SccProjectTopLevelParentUniqueName19 = HAP.sln
-		SccProjectName19 = Core/HAP.Web.Config
-		SccLocalPath19 = Core\\HAP.Web.Config
-		SccProjectUniqueName20 = Core\\HAP.Web.Logging\\HAP.Web.Logging.csproj
-		SccProjectTopLevelParentUniqueName20 = HAP.sln
-		SccProjectName20 = Core/HAP.Web.Logging
-		SccLocalPath20 = Core\\HAP.Web.Logging
-		SccProjectUniqueName21 = Core\\HAP.Web.Controls\\HAP.Web.Controls.csproj
-		SccProjectTopLevelParentUniqueName21 = HAP.sln
-		SccProjectName21 = Core/HAP.Web.Controls
-		SccLocalPath21 = Core\\HAP.Web.Controls
-		SccProjectUniqueName22 = Plugins\\HAP.BookingSystem\\HAP.BookingSystem.csproj
-		SccProjectTopLevelParentUniqueName22 = HAP.sln
-		SccProjectName22 = Plugins/HAP.BookingSystem
-		SccLocalPath22 = Plugins\\HAP.BookingSystem
-		SccProjectUniqueName23 = Plugins\\HAP.Timetable\\HAP.Timetable.csproj
-		SccProjectTopLevelParentUniqueName23 = HAP.sln
-		SccProjectName23 = Plugins/HAP.Timetable
-		SccLocalPath23 = Plugins\\HAP.Timetable
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug DirectEdit|Any CPU = Debug DirectEdit|Any CPU
 		Debug DirectEdit|ARM = Debug DirectEdit|ARM
@@ -1481,35 +1398,239 @@ Global
 		{96A9C102-7CE8-4538-854B-1442D8E8E962}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{96A9C102-7CE8-4538-854B-1442D8E8E962}.Release|x64.ActiveCfg = Release|Any CPU
 		{96A9C102-7CE8-4538-854B-1442D8E8E962}.Release|x86.ActiveCfg = Release|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Debug DirectEdit|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Debug DirectEdit|Any CPU.Build.0 = Debug|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Debug DirectEdit|ARM.ActiveCfg = Debug|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Debug DirectEdit|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Debug DirectEdit|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Debug DirectEdit|x64.ActiveCfg = Debug|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Debug DirectEdit|x86.ActiveCfg = Debug|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Debug Notify|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Debug Notify|Any CPU.Build.0 = Debug|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Debug Notify|ARM.ActiveCfg = Debug|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Debug Notify|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Debug Notify|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Debug Notify|x64.ActiveCfg = Debug|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Debug Notify|x86.ActiveCfg = Debug|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Debug WinRT|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Debug WinRT|Any CPU.Build.0 = Debug|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Debug WinRT|ARM.ActiveCfg = Debug|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Debug WinRT|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Debug WinRT|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Debug WinRT|x64.ActiveCfg = Debug|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Debug WinRT|x86.ActiveCfg = Debug|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Release WinRT|Any CPU.ActiveCfg = Release|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Release WinRT|Any CPU.Build.0 = Release|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Release WinRT|ARM.ActiveCfg = Release|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Release WinRT|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Release WinRT|Mixed Platforms.Build.0 = Release|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Release WinRT|x64.ActiveCfg = Release|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Release WinRT|x86.ActiveCfg = Release|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Release|ARM.ActiveCfg = Release|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Release|x64.ActiveCfg = Release|Any CPU
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76}.Release|x86.ActiveCfg = Release|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug DirectEdit|Any CPU.ActiveCfg = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug DirectEdit|Any CPU.Build.0 = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug DirectEdit|ARM.ActiveCfg = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug DirectEdit|ARM.Build.0 = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug DirectEdit|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug DirectEdit|Mixed Platforms.Build.0 = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug DirectEdit|x64.ActiveCfg = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug DirectEdit|x64.Build.0 = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug DirectEdit|x86.ActiveCfg = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug DirectEdit|x86.Build.0 = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug Notify|Any CPU.ActiveCfg = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug Notify|Any CPU.Build.0 = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug Notify|ARM.ActiveCfg = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug Notify|ARM.Build.0 = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug Notify|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug Notify|Mixed Platforms.Build.0 = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug Notify|x64.ActiveCfg = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug Notify|x64.Build.0 = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug Notify|x86.ActiveCfg = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug Notify|x86.Build.0 = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug WinRT|Any CPU.ActiveCfg = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug WinRT|Any CPU.Build.0 = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug WinRT|ARM.ActiveCfg = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug WinRT|ARM.Build.0 = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug WinRT|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug WinRT|Mixed Platforms.Build.0 = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug WinRT|x64.ActiveCfg = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug WinRT|x64.Build.0 = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug WinRT|x86.ActiveCfg = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug WinRT|x86.Build.0 = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug|ARM.Build.0 = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug|x64.Build.0 = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Debug|x86.Build.0 = Debug|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Release WinRT|Any CPU.ActiveCfg = Release|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Release WinRT|Any CPU.Build.0 = Release|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Release WinRT|ARM.ActiveCfg = Release|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Release WinRT|ARM.Build.0 = Release|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Release WinRT|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Release WinRT|Mixed Platforms.Build.0 = Release|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Release WinRT|x64.ActiveCfg = Release|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Release WinRT|x64.Build.0 = Release|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Release WinRT|x86.ActiveCfg = Release|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Release WinRT|x86.Build.0 = Release|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Release|Any CPU.Build.0 = Release|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Release|ARM.ActiveCfg = Release|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Release|ARM.Build.0 = Release|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Release|x64.ActiveCfg = Release|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Release|x64.Build.0 = Release|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Release|x86.ActiveCfg = Release|Any CPU
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{21F06B4A-B827-4E6D-8781-43F1FBB4F7EC} = {7F80432C-70D9-4AAA-9FE3-6398471FC04D}
-		{E10211DD-09C4-4756-AC4D-36C73A73FCEB} = {9A28C64F-CA1C-4D4C-A26C-907F9B8269EB}
-		{51E919E3-C676-4439-B192-F1F936FB830B} = {9A28C64F-CA1C-4D4C-A26C-907F9B8269EB}
-		{4D363196-D7E0-45A3-951A-DF52E8FD84AC} = {9A28C64F-CA1C-4D4C-A26C-907F9B8269EB}
-		{2F65911E-3C0E-4CE0-86FD-C733F6444B49} = {9A28C64F-CA1C-4D4C-A26C-907F9B8269EB}
-		{46457F1A-A86C-41C2-A5DA-7EEF2064FE95} = {9A28C64F-CA1C-4D4C-A26C-907F9B8269EB}
-		{335B9841-60EA-49CD-A32B-5866902330F5} = {7B73919E-D6DA-4B3E-A9BC-CDBCACD84EEA}
-		{A06C244E-4136-4A30-97AD-F0717974A5D0} = {7B73919E-D6DA-4B3E-A9BC-CDBCACD84EEA}
-		{A991E5B1-BA49-4FF3-9155-4FC79412131C} = {7B73919E-D6DA-4B3E-A9BC-CDBCACD84EEA}
-		{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9} = {7B73919E-D6DA-4B3E-A9BC-CDBCACD84EEA}
-		{8A57D4C2-D59D-4D1E-9B83-62946A4E778D} = {A3251197-8D0F-449B-AFE5-173CCC35F043}
-		{5254C771-C9B6-4261-BC11-FED83C526CE0} = {A3251197-8D0F-449B-AFE5-173CCC35F043}
-		{06615BDD-F660-4A8D-9634-B9703E1AE2D3} = {A3251197-8D0F-449B-AFE5-173CCC35F043}
 		{BE7EA4B2-6350-43C4-AC23-C6091AD64F8A} = {21F06B4A-B827-4E6D-8781-43F1FBB4F7EC}
 		{F21F2F95-E0F4-404B-9122-73E8C2037F9F} = {21F06B4A-B827-4E6D-8781-43F1FBB4F7EC}
 		{4B0AFCA9-EE47-4775-9B33-57479AAA49B7} = {21F06B4A-B827-4E6D-8781-43F1FBB4F7EC}
 		{2FA0DEB1-776F-47F1-9BA6-F1A31A8B72C9} = {21F06B4A-B827-4E6D-8781-43F1FBB4F7EC}
+		{5254C771-C9B6-4261-BC11-FED83C526CE0} = {A3251197-8D0F-449B-AFE5-173CCC35F043}
+		{E10211DD-09C4-4756-AC4D-36C73A73FCEB} = {9A28C64F-CA1C-4D4C-A26C-907F9B8269EB}
+		{51E919E3-C676-4439-B192-F1F936FB830B} = {9A28C64F-CA1C-4D4C-A26C-907F9B8269EB}
+		{335B9841-60EA-49CD-A32B-5866902330F5} = {7B73919E-D6DA-4B3E-A9BC-CDBCACD84EEA}
+		{A06C244E-4136-4A30-97AD-F0717974A5D0} = {7B73919E-D6DA-4B3E-A9BC-CDBCACD84EEA}
+		{4D363196-D7E0-45A3-951A-DF52E8FD84AC} = {9A28C64F-CA1C-4D4C-A26C-907F9B8269EB}
+		{2F65911E-3C0E-4CE0-86FD-C733F6444B49} = {9A28C64F-CA1C-4D4C-A26C-907F9B8269EB}
+		{A991E5B1-BA49-4FF3-9155-4FC79412131C} = {7B73919E-D6DA-4B3E-A9BC-CDBCACD84EEA}
+		{B4545A1A-BC18-4020-B3F0-4CFE64AF49F9} = {7B73919E-D6DA-4B3E-A9BC-CDBCACD84EEA}
+		{8A57D4C2-D59D-4D1E-9B83-62946A4E778D} = {A3251197-8D0F-449B-AFE5-173CCC35F043}
+		{06615BDD-F660-4A8D-9634-B9703E1AE2D3} = {A3251197-8D0F-449B-AFE5-173CCC35F043}
+		{46457F1A-A86C-41C2-A5DA-7EEF2064FE95} = {9A28C64F-CA1C-4D4C-A26C-907F9B8269EB}
 		{106A4812-B5A3-4D57-B018-719831278E8D} = {6BE11685-FCFB-4FAC-9BB3-51CEB5582BBF}
-		{6102C2B3-CFDC-4800-B9F7-0AD498039F14} = {6BE11685-FCFB-4FAC-9BB3-51CEB5582BBF}
-		{96A9C102-7CE8-4538-854B-1442D8E8E962} = {6BE11685-FCFB-4FAC-9BB3-51CEB5582BBF}
 		{36468E14-F8AF-4794-AB76-25571A54682F} = {E8E055C9-9A15-40AE-A0CF-C2E08037F0BF}
 		{1F2CFBBF-1C06-4CAC-BB4B-5551BF6A398C} = {E8E055C9-9A15-40AE-A0CF-C2E08037F0BF}
 		{3733B9AC-7559-4ABF-AC72-FB383030326A} = {E8E055C9-9A15-40AE-A0CF-C2E08037F0BF}
 		{94A9D6F5-014D-4C3E-A734-614BEB05ED04} = {E8E055C9-9A15-40AE-A0CF-C2E08037F0BF}
+		{6102C2B3-CFDC-4800-B9F7-0AD498039F14} = {6BE11685-FCFB-4FAC-9BB3-51CEB5582BBF}
+		{96A9C102-7CE8-4538-854B-1442D8E8E962} = {6BE11685-FCFB-4FAC-9BB3-51CEB5582BBF}
+		{8F1C5E83-8B39-4374-95D8-86D0B1F94C76} = {D379D6FD-3178-4B2D-9E91-D4BEEA641851}
+		{514195D7-F0BD-41C1-BA06-CDD4EC6F7260} = {D379D6FD-3178-4B2D-9E91-D4BEEA641851}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 27
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs08
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = HAP.Data\\HAP.Data.csproj
+		SccProjectName1 = HAP.Data
+		SccLocalPath1 = HAP.Data
+		SccProjectUniqueName2 = HAP.Data.SQL\\HAP.Data.SQL.csproj
+		SccProjectName2 = HAP.Data.SQL
+		SccLocalPath2 = HAP.Data.SQL
+		SccProjectUniqueName3 = HAP.Web.SendTo.Google\\HAP.Web.SendTo.csproj
+		SccProjectName3 = HAP.Web.SendTo.Google
+		SccLocalPath3 = HAP.Web.SendTo.Google
+		SccProjectUniqueName4 = HAP.MyFiles\\HAP.MyFiles.csproj
+		SccProjectName4 = HAP.MyFiles
+		SccLocalPath4 = HAP.MyFiles
+		SccProjectUniqueName5 = HAP.Web.LiveTiles\\HAP.Web.LiveTiles.csproj
+		SccProjectName5 = HAP.Web.LiveTiles
+		SccLocalPath5 = HAP.Web.LiveTiles
+		SccProjectUniqueName6 = HAP.Tracker\\HAP.Tracker.csproj
+		SccProjectTopLevelParentUniqueName6 = HAP.sln
+		SccProjectName6 = HAP.Tracker
+		SccLocalPath6 = HAP.Tracker
+		SccProjectUniqueName7 = HAP.Web\\HAP.Web.csproj
+		SccProjectName7 = HAP.Web
+		SccLocalPath7 = HAP.Web
+		SccProjectUniqueName8 = HAP\u0020User\u0020Card\\HAP\u0020User\u0020Card.csproj
+		SccProjectName8 = HAP\u0020User\u0020Card
+		SccLocalPath8 = HAP\u0020User\u0020Card
+		SccProjectUniqueName9 = HAP.Data.Quota\\HAP.Data.Quota.csproj
+		SccProjectTopLevelParentUniqueName9 = HAP.sln
+		SccProjectName9 = HAP.Data.Quota
+		SccLocalPath9 = HAP.Data.Quota
+		SccProjectUniqueName10 = HAP.Data.Quota.Service\\HAP\u0020Quota\u0020Service.csproj
+		SccProjectTopLevelParentUniqueName10 = HAP.sln
+		SccProjectName10 = HAP.Data.Quota.Service
+		SccLocalPath10 = HAP.Data.Quota.Service
+		SccProjectUniqueName11 = HAP.Data.Quota\u0020x86\\HAP.Data.Quota\u0020x86.csproj
+		SccProjectTopLevelParentUniqueName11 = HAP.sln
+		SccProjectName11 = HAP.Data.Quota\u0020x86
+		SccLocalPath11 = HAP.Data.Quota\u0020x86
+		SccProjectUniqueName12 = HAP.Data.Quota.Service\u0020x86\\HAP\u0020Quota\u0020Service\u0020x86.csproj
+		SccProjectTopLevelParentUniqueName12 = HAP.sln
+		SccProjectName12 = HAP.Data.Quota.Service\u0020x86
+		SccLocalPath12 = HAP.Data.Quota.Service\u0020x86
+		SccProjectUniqueName13 = HAP.Win.MyFiles\\HAP.Win.MyFiles.csproj
+		SccProjectName13 = HAP.Win.MyFiles
+		SccLocalPath13 = HAP.Win.MyFiles
+		SccProjectUniqueName14 = HAP\u0020Logon\u0020Tracker\\HAP.Tracker.UI.csproj
+		SccProjectTopLevelParentUniqueName14 = HAP.sln
+		SccProjectName14 = HAP\u0020Logon\u0020Tracker
+		SccLocalPath14 = HAP\u0020Logon\u0020Tracker
+		SccProjectUniqueName15 = HAP.Tracker.UI.Notify\\HAP.Tracker.UI.Notify.csproj
+		SccProjectTopLevelParentUniqueName15 = HAP.sln
+		SccProjectName15 = HAP.Tracker.UI.Notify
+		SccLocalPath15 = HAP.Tracker.UI.Notify
+		SccProjectUniqueName16 = HAP.Windows.DirectEdit\\HAP.Win.DirectEdit.csproj
+		SccProjectName16 = HAP.Windows.DirectEdit
+		SccLocalPath16 = HAP.Windows.DirectEdit
+		SccProjectUniqueName17 = Plugins\\HAP.HelpDesk\\HAP.HelpDesk.csproj
+		SccProjectTopLevelParentUniqueName17 = HAP.sln
+		SccProjectName17 = Plugins/HAP.HelpDesk
+		SccLocalPath17 = Plugins\\HAP.HelpDesk
+		SccProjectUniqueName18 = Core\\HAP.AD\\HAP.AD.csproj
+		SccProjectTopLevelParentUniqueName18 = HAP.sln
+		SccProjectName18 = Core/HAP.AD
+		SccLocalPath18 = Core\\HAP.AD
+		SccProjectUniqueName19 = Core\\HAP.Web.Config\\HAP.Web.Configuration.csproj
+		SccProjectTopLevelParentUniqueName19 = HAP.sln
+		SccProjectName19 = Core/HAP.Web.Config
+		SccLocalPath19 = Core\\HAP.Web.Config
+		SccProjectUniqueName20 = Core\\HAP.Web.Logging\\HAP.Web.Logging.csproj
+		SccProjectTopLevelParentUniqueName20 = HAP.sln
+		SccProjectName20 = Core/HAP.Web.Logging
+		SccLocalPath20 = Core\\HAP.Web.Logging
+		SccProjectUniqueName21 = Core\\HAP.Web.Controls\\HAP.Web.Controls.csproj
+		SccProjectTopLevelParentUniqueName21 = HAP.sln
+		SccProjectName21 = Core/HAP.Web.Controls
+		SccLocalPath21 = Core\\HAP.Web.Controls
+		SccProjectUniqueName22 = Plugins\\HAP.BookingSystem\\HAP.BookingSystem.csproj
+		SccProjectTopLevelParentUniqueName22 = HAP.sln
+		SccProjectName22 = Plugins/HAP.BookingSystem
+		SccLocalPath22 = Plugins\\HAP.BookingSystem
+		SccProjectUniqueName23 = Plugins\\HAP.Timetable\\HAP.Timetable.csproj
+		SccProjectTopLevelParentUniqueName23 = HAP.sln
+		SccProjectName23 = Plugins/HAP.Timetable
+		SccLocalPath23 = Plugins\\HAP.Timetable
+		SccProjectUniqueName24 = Office\u0020Add-ins\\HAP.Office.Word\\HAP.Office.Word.csproj
+		SccProjectTopLevelParentUniqueName24 = HAP.sln
+		SccProjectName24 = Office\u0020Add-ins/HAP.Office.Word
+		SccLocalPath24 = Office\u0020Add-ins\\HAP.Office.Word
+		SccProjectUniqueName25 = HAP.WP.MyFiles\\HAP.WP.MyFiles.csproj
+		SccProjectName25 = HAP.WP.MyFiles
+		SccLocalPath25 = HAP.WP.MyFiles
+		SccProjectUniqueName26 = HAP.Office.Excel\\HAP.Office.Excel.csproj
+		SccProjectTopLevelParentUniqueName26 = HAP.sln
+		SccProjectName26 = HAP.Office.Excel
+		SccLocalPath26 = HAP.Office.Excel
 	EndGlobalSection
 	GlobalSection(SharpSetup) = preSolution
 		Version = 1.2

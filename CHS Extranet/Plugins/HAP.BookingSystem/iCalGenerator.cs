@@ -144,7 +144,7 @@ namespace HAP.BookingSystem
             {
                 if (string.IsNullOrEmpty(booking.User.Email)) return;
             }
-            catch (Exception e)
+            catch
             {
                 return;
             }
@@ -321,7 +321,7 @@ namespace HAP.BookingSystem
             {
                 if (string.IsNullOrEmpty(booking.User.Email)) return;
             }
-            catch (Exception e)
+            catch
             {
                 return;
             }
@@ -387,7 +387,7 @@ namespace HAP.BookingSystem
                     {
                         if (string.IsNullOrEmpty(ui.Email)) continue;
                     }
-                    catch (Exception e)
+                    catch
                     {
                         continue;
                     }

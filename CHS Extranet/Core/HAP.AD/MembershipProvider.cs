@@ -76,7 +76,6 @@ namespace HAP.AD
 
         public override System.Web.Security.MembershipUser GetUser(string username, bool userIsOnline)
         {
-            StreamWriter sw = null;
             if (HttpContext.Current.Cache["usercache-" + username] == null) HttpContext.Current.Cache.Insert("usercache-" + username, new User(username), null, DateTime.Now.AddMinutes(1), System.Web.Caching.Cache.NoSlidingExpiration);
             return HttpContext.Current.Cache["usercache-" + username] as User;
         }

@@ -151,7 +151,7 @@ namespace HAP.Win.MyFiles
             return set;
         }
 
-        public string[] ToString()
+        public new string[] ToString()
         {
             if (Name != "site0")
             {

@@ -15,7 +15,7 @@ namespace HAP.Win.MyFiles.JSON
         public string Token2 { get; set; }
         public string Token2Name { get; set; }
         public string SiteName { get; set; }
-        public string[] ToString()
+        public new string[] ToString()
         {
             return new string[] { Token1, Token2, Token2Name };
         }
