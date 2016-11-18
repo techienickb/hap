@@ -113,13 +113,13 @@ button { overflow: hidden; text-overflow: hidden; }
 
 #hapTitle a { background-image: url(../api/tiles/icons/24/24/images/icons/metro/folders-os/DocumentsFolder.png); background-position: 5px center; }
 
-@media only screen and (max-width: 700px)  {
+@media only screen and (max-width: 800px)  {
     #Tree, #search { display: none!important; width: 0; }
     #hapTitle { float: left!important; }
     #hapUserTitle { left: auto!important; }
     #hapHeader { min-width: 100%; }
     #toolbar-right { display: none; }
     #maintools { display: run-in; float: none; margin: 0; }
-    #MyFiles { padding-top: 40px; }
+    #MyFiles { padding-top: 40px; margin-left: 0!important }
     #MyFiles.drives { padding-top: 0; }
 }
