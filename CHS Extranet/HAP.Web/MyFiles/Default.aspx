@@ -21,16 +21,16 @@
 			<a href="#" id="backup"><span></span></a>
 		</div>
 		<div id="maintools">
-			<input type="text" id="newfoldertext" /><a id="newfolder" href="#"><hap:LocalResource runat="server" StringPath="myfiles/newfolder" /></a>
-            <a href="#" id="toolbar-cut"><hap:LocalResource runat="server" StringPath="myfiles/cut" /></a>
-            <a href="#" id="toolbar-copy"><hap:LocalResource runat="server" StringPath="myfiles/copy/copy" /></a>
-            <div id="toolbar-paste-container" class="menucontainer"><a href="#" id="toolbar-paste"><hap:LocalResource runat="server" StringPath="myfiles/paste" /></a>|<a style="padding: 0 5px;" href="#" id="toolbar-clear">X</a></div>
-            <a href="#" id="toolbar-delete"><hap:LocalResource runat="server" StringPath="myfiles/delete/delete" /></a>
-            <a href="#" id="toolbar-zip"><hap:LocalResource runat="server" StringPath="myfiles/zip/zip" /></a>
-            <a href="#" id="toolbar-unzip"><hap:LocalResource runat="server" StringPath="myfiles/unzip/unzip" /></a>
-            <a href="#" id="toolbar-open"><hap:LocalResource runat="server" StringPath="myfiles/open" /></a>
-            <a href="#" id="toolbar-download"><hap:LocalResource runat="server" StringPath="myfiles/download" /></a>
-            <a href="#" id="upload"><hap:LocalResource runat="server" StringPath="myfiles/upload/upload" /></a>
+			<input type="text" id="newfoldertext" /><a id="newfolder" href="#"  title="<%=Localize("myfiles/newfolder") %>"><hap:LocalResource runat="server" StringPath="myfiles/newfolder" /></a>
+            <a href="#" id="toolbar-cut" title="<%=Localize("myfiles/cut") %>"><hap:LocalResource runat="server" StringPath="myfiles/cut" /></a>
+            <a href="#" id="toolbar-copy" title="<%=Localize("myfiles/copy") %>"><hap:LocalResource runat="server" StringPath="myfiles/copy/copy" /></a>
+            <div id="toolbar-paste-container" class="menucontainer"><a href="#" id="toolbar-paste" title="<%=Localize("myfiles/paste") %>"><hap:LocalResource runat="server" StringPath="myfiles/paste" /></a>|<a style="padding: 0 5px;" href="#" id="toolbar-clear">X</a></div>
+            <a href="#" id="toolbar-delete" title="<%=Localize("myfiles/delete") %>"><hap:LocalResource runat="server" StringPath="myfiles/delete/delete" /></a>
+            <a href="#" id="toolbar-zip" title="<%=Localize("myfiles/zip/zip") %>"><hap:LocalResource runat="server" StringPath="myfiles/zip/zip" /></a>
+            <a href="#" id="toolbar-unzip" title="<%=Localize("myfiles/unzip/unzip") %>"><hap:LocalResource runat="server" StringPath="myfiles/unzip/unzip" /></a>
+            <a href="#" id="toolbar-open" title="<%=Localize("myfiles/open") %>"><hap:LocalResource runat="server" StringPath="myfiles/open" /></a>
+            <a href="#" id="toolbar-download" title="<%=Localize("myfiles/download") %>"<hap:LocalResource runat="server" StringPath="myfiles/download" /></a>
+            <a href="#" id="upload" title="<%=Localize("myfiles/upload/upload") %>"><hap:LocalResource runat="server" StringPath="myfiles/upload/upload" /></a>
             <label id="uploadto"></label>
 		</div>
 	</div>
@@ -637,13 +637,13 @@
 				else del = false;
 			}
 			if (curpath.match(/\.zip/gi)) { cut = copy = pase = del = download = zip = unzip = false; }
-			if (cut && $("#toolbar-cut").css("display") == "none") { $("#toolbar-cut").css("display", "").animate({ width: 22 }); $("#toolbar-delete").css("display", "").animate({ width: 43 }); }
+			if (cut && $("#toolbar-cut").css("display") == "none") { $("#toolbar-cut").css("display", "").animate({ width: 22 }); $("#toolbar-delete").css("display", "").animate({ width: 66 }); }
 			if (!cut && $("#toolbar-cut").css("display") != "none") { $("#toolbar-cut").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-cut").css("display", "none") } }); $("#toolbar-delete").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-delete").css("display", "none") } }); }
 			if (copy && $("#toolbar-copy").css("display") == "none") $("#toolbar-copy").css("display", "").animate({ width: 35 });
 			if (!copy && $("#toolbar-copy").css("display") != "none") $("#toolbar-copy").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-copy").css("display", "none") } });
 			if (paste && $("#toolbar-paste").css("display") == "none") { $("#toolbar-paste-container").show(); $("#toolbar-paste").css("display", "").animate({ width: 38 }); $("#toolbar-clear").css("display", "").animate({ width: 10 }); }
 			if (!paste && $("#toolbar-paste").css("display") != "none") { $("#toolbar-paste").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-paste").css("display", "none"); $("#toolbar-paste-container").hide(); } }); $("#toolbar-clear").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-clear").css("display", "none") } }); }
-			if (download && $("#toolbar-download").css("display") == "none") $("#toolbar-download").css("display", "").animate({ width: 64 });
+			if (download && $("#toolbar-download").css("display") == "none") $("#toolbar-download").css("display", "").animate({ width: 84 });
 			if (!download && $("#toolbar-download").css("display") != "none") $("#toolbar-download").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-download").css("display", "none") } });
 			if (open && $("#toolbar-open").css("display") == "none") $("#toolbar-open").css("display", "").animate({ width: 36 });
 			if (!open && $("#toolbar-open").css("display") != "none") $("#toolbar-open").animate({ width: 0 }, { duration: 500, complete: function() { $("#toolbar-open").css("display", "none") } });

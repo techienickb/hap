@@ -1,6 +1,7 @@
 ﻿@font-face { font-family: '☺Segoe'; src: url("segoe_ui.eot"); src: local("Segoe UI"),local("Segoe"),local("Segoe WP"),url("segoe_ui.eot?#iefix") format("embedded-opentype"),url("segoe_ui.woff") format("woff"),url("segoe_ui.ttf") format("truetype"); font-weight: normal; font-style: normal; }
 @font-face { font-family: '☺SegoeLight'; src: url("segoe_ui_light.eot"); src: local("Segoe UI Light"),local("Segoe WP Light"),url("segoe_ui_light.eot?#iefix") format("embedded-opentype"),url("segoe_ui_light.woff") format("woff"),url("segoe_ui_light.ttf") format("truetype"); font-weight: normal; font-style: normal; }
 @font-face { font-family: 'MSHPIconsRegular'; src: url("icons.eot"); src: url("icons.eot?#iefix") format("embedded-opentype"),url("icons.woff") format("woff"),url("icons.ttf") format("truetype"); font-weight: normal; font-style: normal; }
+@font-face { font-family: 'glyphicons'; src: url("glyphicons-halflings-regular.eot"); src: url("glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"),url("glyphicons-halflings-regular.woff") format("woff"),url("glyphicons-halflings-regular.ttf") format("truetype"); font-weight: normal; font-style: normal; }
 
 html, body { padding: 0; margin: 0; }
 
@@ -150,7 +151,7 @@ th span { float: right; }
     #hapHeader #hapTitle { float: left; font-size: 20px; height: 40px; line-height: 40px; }
         #hapHeader #hapTitle:hover { background-color: #00508a; }
         #hapHeader #hapTitle a { background-image: url(../images/icons/metro/hap-logo-20.png); background-repeat: no-repeat; background-position: 10px center; padding-left: 34px; }
-        #hapHeader #hapTitle #hapTitleMore { font-family: MSHPIconsRegular; background-image: none; padding: 0 5px; }
+        #hapHeader #hapTitle #hapTitleMore { font-family: glyphicons; font-size: 12px; background-image: none; padding: 0 5px; }
 #hapUserTitle { position: fixed; right: 0; height: 40px; line-height: 40px; top: 0; z-index: 99; background-color: #0060a6; border-right: solid 10px #0060a6; color: #fff; text-decoration: none; padding: 0 10px; font-size:16px; }
 #hapUserTitle:hover { background-color: #3286C1; text-decoration: none; }
 #hapUserTitle:active { background-color: #004577; }
