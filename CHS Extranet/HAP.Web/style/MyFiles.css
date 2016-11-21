@@ -83,9 +83,9 @@ button.back span { top: 4px; }
 
 .disabled { display: none; }
 
-#dragobject { z-index: 1111; }
-#dragobject img { border: solid 1px #666; background: #fff; opacity: 0.8; vertical-align: middle; }
-#dragobject span { display: inline-block; margin-left: 5px; background: #666; border: solid 1px #666; color: #fff; padding: 0 2px; }
+#dragobject { z-index: 1111; display: block; border: solid 1px #666; background: rgba(255, 255, 255, 0.60); width: 200px; margin-top: 30px; margin-left: 60px; padding: 5px; overflow: hidden; -ms-text-overflow: ellipsis;-o-text-overflow: ellipsis;text-overflow: ellipsis;white-space: nowrap; }
+#dragobject img { vertical-align: middle; width: 48px; height: 48px; }
+    #dragobject span { color: #666;}
 #Document { line-height: normal; height: auto; }
 
 #uploadprogress { position: fixed; bottom: 0; width: 300px; z-index: 2045; background: #fff; }
@@ -109,9 +109,13 @@ button { overflow: hidden; text-overflow: hidden; }
 
 #jqContextMenu { font-size: 13px; }
 
-#backup span { display: inline-block; background: url(../images/ui-icons_ffffff_256x240.png) -80px -192px no-repeat; height: 16px; width: 16px; vertical-align: top; margin-top: 14px; }
+#backup:after { display: inline-block; font-family: glyphicons; content: '' }
 
 #hapTitle a { background-image: url(../api/tiles/icons/24/24/images/icons/metro/folders-os/DocumentsFolder.png); background-position: 5px center; }
+#newfolder:before { content: '+'; font-family: glyphicons; font-weight:100; padding-right: 5px; font-size: 12px; }
+#upload:before { content: ''; font-family: glyphicons; padding-right: 5px; font-size: 12px; }
+#toolbar-delete:before { content: ''; font-family: glyphicons; padding-right: 5px; font-size: 12px; }
+#toolbar-download:before { content: ''; font-family: glyphicons; padding-right: 5px; font-size: 12px; }
 
 @media only screen and (max-width: 800px)  {
     #Tree, #search { display: none!important; width: 0; }
@@ -122,4 +126,8 @@ button { overflow: hidden; text-overflow: hidden; }
     #maintools { display: run-in; float: none; margin: 0; }
     #MyFiles { padding-top: 40px; margin-left: 0!important }
     #MyFiles.drives { padding-top: 0; }
+}
+
+@media only screen and (max-width: 550px)  {
+    #MyFiles { padding-top: 80px; margin-left: 0!important }
 }
