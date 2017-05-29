@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="HAP.UserCard.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ControlledOU" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">chs01.crickhowell.internal/OU=Controlled,OU=Students,OU=CHS,OU=Establishments,DC=Crickhowell,DC=internal</Value>
+    </Setting>
+    <Setting Name="ShowHelpDesk" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

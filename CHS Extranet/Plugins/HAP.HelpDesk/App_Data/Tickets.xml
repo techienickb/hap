@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Tickets>
-   <Ticket id="1" subject="Test Ticket" priority="Normal" status="Fixed">
-      <Note datetime="2010-03-07 17:44:29Z" username="administrator"><![CDATA[Room: Test<br />
-Hello, this i<span style="text-decoration: line-through;">s</span> a <span style="text-decoration: underline;">test</span> <span style="font-weight: bold;">ticket</span><br />]]></Note>
-      <Note datetime="2010-03-07 17:51:25Z" username="administrator"><![CDATA[No Note Information Added]]></Note>
-   </Ticket>
-</Tickets>

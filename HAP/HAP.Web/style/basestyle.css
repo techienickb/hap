@@ -1,0 +1,253 @@
+﻿@font-face { font-family: '☺Segoe'; src: url("segoe_ui.eot"); src: local("Segoe UI"),local("Segoe"),local("Segoe WP"),url("segoe_ui.eot?#iefix") format("embedded-opentype"),url("segoe_ui.woff") format("woff"),url("segoe_ui.ttf") format("truetype"); font-weight: normal; font-style: normal; }
+@font-face { font-family: '☺SegoeLight'; src: url("segoe_ui_light.eot"); src: local("Segoe UI Light"),local("Segoe WP Light"),url("segoe_ui_light.eot?#iefix") format("embedded-opentype"),url("segoe_ui_light.woff") format("woff"),url("segoe_ui_light.ttf") format("truetype"); font-weight: normal; font-style: normal; }
+@font-face { font-family: 'MSHPIconsRegular'; src: url("icons.eot"); src: url("icons.eot?#iefix") format("embedded-opentype"),url("icons.woff") format("woff"),url("icons.ttf") format("truetype"); font-weight: normal; font-style: normal; }
+@font-face { font-family: 'glyphicons'; src: url("glyphicons-halflings-regular.eot"); src: url("glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"),url("glyphicons-halflings-regular.woff") format("woff"),url("glyphicons-halflings-regular.ttf") format("truetype"); font-weight: normal; font-style: normal; }
+
+html, body { padding: 0; margin: 0; }
+
+.tile-color, #datepicker .ui-datepicker-header, .fc-content .ui-widget-header { background: #0060a6; border-color: #0060a6; }
+.tile-border-color, #datepicker .ui-datepicker { border-color: #0060a6; }
+.tile-color-font { color: #0060a6; }
+.tiles > a, .tiles a.tile, #hapHeaderMore a { background-color: #0060a6; color: #fff; border-color: #0060a6; }
+.tiles > a:hover, .tiles a.tile:hover, #hapHeaderMore a:hover { background-color: #3286C1; border-color: #3286C1; }
+.tiles > a:active, .tiles a.tile:active, #hapHeaderMore a:active { background-color: #004577; border-color: #004577; }
+
+#form1, #hapContent, .ui-widget, .hapPopup { font-family: '☺Segoe', "Segoe UI", Segoe, Arial, sans-serif; font-size: 13px; }
+#hapContent input, #hapContent select, #hapContent input { font-size: 13px; }
+a img { border: 0; }
+
+/*input[type=button], input[type=submit], button { border: 0; cursor: pointer; padding: 4px 6px; background-color: #bbb; }
+input[type=button]:hover, input[type=submit]:hover, button:hover { background-color: #999; color: #fff; }*/
+input[type=password], input[type=text], input[type=time], input[type=date], input[type=email], textarea { border: solid 2px #bbb; font-family: Calibri, Arial, Sans-Serif; font-size: 14px; }
+input[type=password]:hover, input[type=password]:active, input[type=time]:active, input[type=date]:active, input[type=time]:hover, input[type=date]:hover, input[type=text]:hover, input[type=email]:hover, textarea:hover, input[type=text]:focus, input[type=email]:focus, textarea:focus { border: #edce00 solid 2px; }
+input[type=button]:focus, input[type=submit]:focus, button:focus { outline: #edce00 solid 2px; outline-offset: 2px; }
+
+
+#hapContent { background: #f3f3f3; position: relative; padding-top: 40px; }
+#hapContent .commonheader { overflow: hidden; clear: both; position: relative; height: 80px; }
+#hapContent .commonheader nav { position: absolute; }
+#hapContent .commonheader .left { left: 0; text-align: left; }
+#hapContent .commonheader .right { right: 0; text-align: right; }
+#hapContent .commonheader div { text-align: center; font-size: 3em; font-family: '☺SegoeLight'; line-height: 80px; font-weight: 300; }
+#hapContent .commonheader div a { color: #000; text-decoration: none; }
+
+#useroutter { overflow: hidden; }
+
+#usertop { position: absolute; z-index: 1909; top: 10px; left: 10px; padding: 2px 10px; border: solid 1px gray; background: #fff; }
+
+#tab_me_progress { width: 100%; height: 18px; border: solid 1px gray; border-radius: 3px; background: transparent url(../images/progressbar.png) repeat-x top left; position: relative; overflow: hidden; margin: 5px 0 0 0; }
+#tab_me_progress div { height: 18px; background: transparent url(../images/progressbar-active.png) repeat-x top left; }
+#tab_me_progress label { position: absolute; top: 0; left: 0; right: 0; bottom: 0; text-align: center; font-size: 14px; }
+#Me_tab { padding-left: 12px; padding-right: 12px; }
+#Me_tab img { margin: 0 10px 0 0; max-height: 122px; padding: 0; }
+
+.bookingtable { border: solid 1px #a0a0a0; border-collapse: collapse; padding: 0; margin: 0; background: #fff; width: 100%; position: relative; }
+.bookingtable th { border-bottom: solid 1px #a0a0a0; border-top: 0; line-height: 20px; height: 20px; background: #f3f4f6 url(../images/table-head-bg.gif) repeat-x top left; font-weight: normal; padding: 0; margin: 0; font-size: 15px; }
+.bookingtable td { font-size: 100%; padding: 0 2px; }
+.bookingtable.tickets td { font-size: 94%; text-align: center; }
+
+#baseContent { height: 100%; }
+
+#logincontainer, #hapHomeContainer { background: #f3f3f3; }
+#loginformside, #hapHomeSide { position: absolute; left: 0; width: 30%; top: 0; bottom: 0; background-image: url(../images/icons/metro/hap-logo-128.png); background-repeat: no-repeat; background-position: center 30%; overflow: hidden; }
+#loginform, #hapHome { margin-left: 40%; }
+#loginform img { margin-bottom: 60px; }
+#loginform div { padding: 5px 0; }
+#loginform input { font-size: 150%; }
+#loginform label { font-size: .9em; display: block; }
+#loginform .submit { padding-top: 30px; }
+#loginform .submit a { width: 200px; display: inline-block; }
+#loginform .submit a span:before { font-family: MSHPIconsRegular; font-size: 1em; content: ''; margin-right: 20px; }
+#loginform .submit a:hover { color: #fff; }
+#loginform .base { padding-top: 60px; padding-left: 60px; padding-bottom: 0; }
+#loginform .copyright { position: absolute; right: 40px; bottom: 40px; }
+
+#loginform h1, #title h1 { color: #0060a6; font-size: 5em; margin: 0; font-weight: normal; padding-top: 10%; }
+#loginform h1 a, #title h1 a { color: #0060a6; text-decoration: none; }
+#loginform h2, #title h2 { margin: 0; padding: 0 0 40px 60px; font-size: 2.5em; font-weight: normal; }
+
+#title h1, #title h2 { margin-left: 10%; }
+#title h1 { padding-top: 0; }
+
+#hapHomeSide { background-position: center 10%; }
+#hapHome { margin-left: 30%; }
+#HomeButtonsContainer { position: relative; clear: both; }
+#HomeButtonsOutter { overflow: hidden; padding: 0 20px; }
+#HomeButtons { margin-top: 6px; overflow: hidden; }
+#HomeButtons .panel { float: left; }
+#HomeButtonsHeader h1 { font-family: '☺SegoeLight', 'Segoe UI', Segoe, Arial, sans-serif; font-weight: normal; display: inline-block; margin: 0; margin-right: 10px; font-size: 2em; line-height: 30px; }
+#HomeButtonsHeader h1.active { font-weight: bold; }
+#HomeButtonsHeader h1 a { text-decoration: none; color: #666; }
+#HomeButtonsHeader h1 a:hover { color: #222; }
+#HomeButtonsHeader h1.active a { color: #0060a6; }
+#HomeButtonsHeader { clear: both; padding-left: 20px; }
+#leftscroll, #rightscoll { position: absolute; top: 0; bottom: 0; font-size: 20px; width: 20px; font-family: #0060a6; background: #f3f3f3; font-family: MSHPIconsRegular; text-decoration: none; }
+#rightscoll { right: 0; }
+#leftscroll { left: 0; }
+
+h1.Announcement { background: #fceb80; font-size: 12px; color: Red; border: solid 1px #fff; padding: 4px 10px; }
+h1.Announcement b { font-size: 16px; }
+#EditAnn { position: relative; }
+#EditAnn a.EditAnnLink { position: absolute; right: 0; top: 0; }
+#EditAnn a.EditAnnLink img { vertical-align: middle; text-decoration: none; height: 48px; }
+
+#HomeButtons .tile { float: left; margin: 3px 3px 0 0; padding: 8px; height: 108px; width: 108px; font-size: 11px; text-decoration: none; position: relative; }
+#HomeButtons .tile span { display: block; text-align: center; width: 108px; height: 90px; vertical-align: middle; overflow: hidden; }
+#HomeButtons .tile span i { float: left; width: 108px; font-style: normal; height: 90px; vertical-align: middle; background: transparent no-repeat center center; }
+#HomeButtons .tile span label { float: left; cursor: pointer; line-height: 80px; font-size: 32px; padding-left: 5px; }
+#HomeButtons .tile:hover { text-decoration: none; }
+
+#HomeButtons .height2 { height: 235px; }
+#HomeButtons .height2 span, #HomeButtons .height2 span i { height: 221px; }
+#HomeButtons .height3 { height: 361px; }
+#HomeButtons .height3 span, #HomeButtons .height3 span i { height: 344px; }
+#HomeButtons .width2 { width: 235px; }
+#HomeButtons .width2 span, #HomeButtons .width2 span i { width: 227px; }
+#HomeButtons .width3 { width: 361px; }
+#HomeButtons .width3 span, #HomeButtons .width3 span i { width: 354px; }
+
+
+
+
+#HomeButtons .appointment span { text-align: left; overflow: visible; }
+#HomeButtons .appointment span i { text-transform: none; font-style: normal; overflow: hidden; }
+#HomeButtons .appointment span label { float: right; line-height: normal; font-size: 11px; height: 24px; position: relative; margin-top: -14px; padding: 0; }
+#HomeButtons .appointment span label b { font-size: 24px; font-weight: normal; }
+
+#HomeButtons .me span label, #HomeButtons a span label.text { line-height: normal; font-size: 11px; padding: 0; text-align: left; }
+#HomeButtons .me span, #HomeButtons .helpdesk span { text-align: left; }
+#HomeButtons .me .progress { display: block; background: #fff; height: 14px; overflow: hidden; white-space: nowrap; position: relative; }
+#HomeButtons .me .progress u { background: green; display: block; height: 12px; margin: 1px 1px 0 1px; }
+#HomeButtons .me .progress label { cursor: pointer; position: absolute; display: block; height: 12px; line-height: 12px; font-size: 11px; color: #ccc; top: 0; left: 0; right: 0; text-align: center; }
+
+#me-password h1 { font-weight: normal; font-size: 15px; }
+#me-password label { display: inline-block; width: 120px; text-align: right; padding-right: 5px; }
+
+#hometabs { height: 200px; border-radius: 0; }
+#homepageiwt { float: right; margin-left: 6px; padding: 0; height: 202px; width: 264px; overflow: hidden; }
+#homepageiwt h1, #homepageiwt h2 { line-height: normal; padding: 0; margin: 0; }
+#homepageiwt h1 { font-weight: lighter; color: #fff; padding: 0 6px; font-size: 22px; line-height: 26px; }
+#homepageiwt h2 { font-size: 13px; font-weight: bold; }
+#homepageiwt a.togglelink { color: #fff; text-decoration: none; display: block; height: 24px; line-height: 24px; padding: 0 6px 0 30px; background: transparent url(../images/appbar.add.rest.png) no-repeat -10px center; }
+#homepageiwt a.active { background-image: url(../images/appbar.minus.rest.png); }
+#homepageiwt div { padding: 1px; }
+#homepageiwt div div { padding: 4px; height: 116px; background: #fff; font-size: 11px; overflow: hidden; }
+#homepageiwt div div a { float: left; height: 19px; line-height: 19px; padding: 0 26px 0 5px; border: 1px solid #ccc; text-decoration: none; }
+#homepageiwt div div a:hover { background: #dbe4f4; }
+#homepageiwt img { float: left; margin: 4px 12px 12px 4px; }
+
+.l1 { float: right; margin-top: 1px; height: 16px; width: 16px; background-position: -32px 0; background-image: url(../images/ui-icons_228ef1_256x240.png); }
+
+th span { float: right; }
+
+#errorlist { position: absolute; position: fixed; top: 100px; left: 10px; }
+#errorlist div { margin-bottom: 3px; }
+#errorlist div .cont { display: none; }
+
+#hapHeader { position: fixed; top: 0; left: 0; right: 0; height: 40px; padding: 0 10px; line-height: 40px; z-index: 99; font-family: '☺SegoeLight', 'Segoe UI Light', 'Segoe UI', Tahoma; font-size: 16px; color: #fff; white-space: nowrap; overflow: hidden;  }
+    #hapHeader a { padding: 0 10px; vertical-align: top; text-decoration: none; display: inline-block; height: 40px; line-height: 40px; color: #fff; }
+    #hapHeader a:hover { background-color: #3286C1; }
+    #hapHeader a:active { background-color: #004577; }
+    #hapHeader #hapTitle { float: left; font-size: 20px; height: 40px; line-height: 40px; }
+        #hapHeader #hapTitle:hover { background-color: #00508a; }
+        #hapHeader #hapTitle a { background-image: url(../images/icons/metro/hap-logo-20.png); background-repeat: no-repeat; background-position: 10px center; padding-left: 34px; }
+        #hapHeader #hapTitle #hapTitleMore { font-family: glyphicons; font-size: 12px; background-image: none; padding: 0 5px; }
+#hapUserTitle { position: fixed; right: 0; height: 40px; line-height: 40px; top: 0; z-index: 99; background-color: #0060a6; border-right: solid 10px #0060a6; color: #fff; text-decoration: none; padding: 0 10px; font-size:16px; }
+#hapUserTitle:hover { background-color: #3286C1; text-decoration: none; }
+#hapUserTitle:active { background-color: #004577; }
+.hapmenu { position: fixed; top: 40px; background: #fff; border-style: solid; border-width: 2px; border-top-width: 0; z-index: 301; font-size: 16px; }
+.hapmenu a { display: block; background: #fff; color: #000; height: 30px; line-height: 30px; text-decoration: none; padding: 5px 20px; }
+    .hapmenu a:hover { background-color: #f3f3f3; }
+#hapUserMenu { right: 10px; width: 300px; border-top-width: 2px; margin-top: -2px; }
+    #hapUserMenu .mypic { background-color: #0E5D30; float: left; width: 128px; height: 128px; background-position: center center; background-repeat: no-repeat; margin-right: 10px; }
+
+#hapHeaderMore { position: fixed; top: 0; left: 0; right: 0; background-color: #111; padding: 20px; overflow: hidden; z-index: 400; }
+#hapHeaderMore .tiles { margin-top: 10px; overflow: hidden; }
+#hapHeaderMore .tiles div { display: block; color: #f3f3f3; padding: 0 0 6px 2px; font-family: ☺SegoeLight, 'Segoe UI Light', 'Segoe UI', Tahoma; }
+#hapHeaderMore .tiles div div { vertical-align: text-top; padding-top: 2px; }
+#hapHeaderMore .tiles div div a { text-align: center; display: inline-block; white-space: normal; background-position: center top; background-repeat: no-repeat; padding-top: 70px; width: 100px; height: 30px; margin-right: 4px; margin-top: 4px; line-height: 13px; font-size: 13px; vertical-align: text-top; color: #fff; text-decoration: none; }
+
+.dropdown:after { margin-left: .35em; font-family: 'MSHPIconsRegular'; content: ''; font-size: .688em; }
+.menucontainer { display: inline-block; height: 40px; line-height: 40px; }
+.menucontainer:hover { background-color: #00508a; }
+
+#bflquant .ui-button-text { padding: 1px 4px; }
+
+input.hapswitch { display: none; }
+span.hapswitch { display: inline-block; width: 50px; height: 16px; background: #d4d4d4; position: relative; padding: 2px; margin-top: 2px; cursor: pointer; margin-right: 20px; vertical-align: text-bottom; }
+span.hapswitch::after { content: 'off'; position: absolute; left: 56px; top: 0; }
+span.hapswitch.on::after { content: 'on' }
+.hapswitch span { display: block; border: solid 1px #fff; background: #d4d4d4; width: 48px; height: 14px; }
+.hapswitch i { display: block; position: absolute; left: 0; top: 0; height: 20px; width: 12px; background: #000; -moz-transition: left linear .1s; -o-transition: left linear .1s; -webkit-transition: left linear .1s; transition: left linear .1s; }
+.hapswitch.on span { background: #66B3FF; }
+.hapswitch.on i { left: 42px; }
+
+#HomeButtons .selected { border: solid 2px #0060a6; background-image: url(../images/triangle.png); background-repeat: no-repeat; background-position: right top; margin: 1px 1px -2px -2px }
+#contextbar { background: #000; height: 0; position: fixed; bottom: 0; left: 0; right: 0; color: #fff; overflow: hidden; -moz-transition: height ease-in-out 0.2s; -o-transition: height ease-in-out 0.2s; -webkit-transition: inherit; transition: height ease-in-out 0.2s; }
+#contextbar.show { height: 80px; padding: 20px; }
+#contextbar a { color: #555; display: none; padding-top: 60px; text-decoration: none; cursor: default; background: transparent url(../images/contextbar.png) no-repeat; width: 64px; text-align: center; }
+#contextbar a:first-of-type { color: #fff; cursor: pointer; float: right; }
+#contextbar a:first-of-type:hover { background-position: -68px 0; }
+#contextbar a:first-of-type, #contextbar.editmode a { display: inline-block; }
+#contextbar.editmode.selectactive a, #contextbar.editmode a:nth-of-type(2) { color: #fff; cursor: pointer; }
+#contextbar.editmode a:nth-of-type(4) { background-position: -272px 0; }
+#contextbar.editmode.selectactive a:nth-of-type(4):hover { background-position: -340px 0; }
+#contextbar.editmode a:nth-of-type(3) { background-position: -136px 0; }
+#contextbar.editmode.selectactive a:nth-of-type(3):hover { background-position: -204px 0; }
+#contextbar.editmode a:nth-of-type(2), #contextbar.editmode.selectactive a:nth-of-type(2):hover { background-position: -409px 0; color: #fff; cursor: pointer; }
+#contextbar.editmode.selectactive a:nth-of-type(2), #contextbar.editmode.selectactive a:nth-of-type(2):hover { color: #555; }
+#contextbar.editmode a:nth-of-type(2):hover { background-position: -477px 0; }
+
+#sidebaredit { background: #fff; width: 0; overflow: hidden; line-height: 30px; position: fixed; left: 0; top: 40px; bottom: 0; -moz-transition: width ease-in-out 0.2s; -o-transition: width ease-in-out 0.2s; -webkit-transition: inherit; transition: width ease-in-out 0.2s; }
+#sidebaredit.show { width: 30%; border-right: solid 3px #004577; }
+#sidebaredit h1 { background: #00508a; color: #fff; font-weight: 100; padding: 5px 10px; margin: 0 0 10px; }
+#sidebaredit label { display: inline-block; width: 25%; text-align: right; padding-right: 10px; }
+#sidebaredit #bfdisclaimer label  { width: auto; }
+#sidebaredit input[@type=text] { width: 70%; }
+#sidebaredit .buttons { text-align: center; margin-top: 10px; }
+#sidebaredit button { font-size: 20px; }
+
+.hapPopup { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(125, 125, 125, 0.40); z-index: 320; }
+.hapPopup-table { height: 100%; width: 100%; padding: 0; margin: 0; border: 0; }
+.hapPopup-table > tr, .hapPopup-table > tr > td { padding: 0; margin: 0; border: 0; }
+.hapPopup-wrapper { background: #fff; margin: 0; padding: 0; }
+.hapPopup-wrapperinner { max-width: 990px; margin: 0 auto; padding: 10px 10px 50px 10px; position: relative; }
+.hapPopup-title { font-family: ☺SegoeLight, 'Segoe UI Light'; }
+.hapPopup-content { padding: 0; position: relative; overflow: auto; clear: both; }
+.hapPopup-buttonset  { position: absolute; bottom: 10px; right: 10px; }
+
+
+#hapLoader.go { width: 100%; margin: 0; padding: 0; text-align: center; position: fixed; top: 0; z-index: 311; }
+#hapLoader.go span { background: #fff; border-radius: 5px; display: inline-block; position: relative; width: 10px; height: 10px; position: absolute; }
+#hapLoader.go .dot_1 { opacity: 0; margin-right: 10px; animation: loading 5s ease-in-out infinite; -ms-animation: loadingie 5s ease-in-out infinite; }
+#hapLoader.go .dot_2 { opacity: 0; animation: loading 5s ease-in-out .3s infinite; -ms-animation: loadingie 5s ease-in-out .3s infinite; }
+#hapLoader.go .dot_3 { opacity: 0; animation: loading 5s ease-in-out .6s infinite; -ms-animation: loadingie 5s ease-in-out .6s infinite; }
+#hapLoader.go .dot_4 { opacity: 0; animation: loading 5s ease-in-out .9s infinite; -ms-animation: loadingie 5s ease-in-out .9s infinite; }
+#hapLoader.go .dot_5 { opacity: 0; animation: loading 5s ease-in-out .12s infinite; -ms-animation: loadingie 5s ease-in-out .12s infinite; }
+.fc .ui-widget-header { background: #0060a6; }
+@keyframes loading { from { margin-left: -50%; opacity: 0; } 50% { margin-left: 0; opacity: 1; } to { margin-left: 50%; opacity: 0; } }
+@keyframes loadingie { from { margin-left: 0%; opacity: 0; } 50% { margin-left: 50%; opacity: 1; } to { margin-left: 100%; opacity: 0; } }
+
+@media only screen and (max-width: 1024px)  {
+    #sidebaredit.show { width: 50%; }
+}
+@media only screen and (max-width: 800px)  {
+    #sidebaredit.show { width: 75%; }
+#loginformside, #hapHomeSide { display: none; }
+#loginform, #hapHome { padding-top: 20px; margin: 0; padding-left: 5px; padding-right: 5px; }
+#loginform { padding-top: 0; }
+#loginform h1, #title h1 { padding-top: 0; font-size: xx-large; text-align: center; }
+#loginform h2, #title h2 { padding: 0; font-size: large; text-align: center; }
+#loginform label { font-size: large; }
+#HomeButtonsHeader { padding-left: 0; line-height: 0; }
+#usertop { top: 0; left: 0; right: 0; }
+#loginform .copyright { position: static; text-align: right; right: auto; top: auto; bottom: auto; left: auto; }
+#hapHeader { height: auto; padding: 0; white-space: normal; left: 0; right: 0!important; clear: both; margin: 0; }
+#hapHeader #hapTitle { float: none; }
+#hapHeader a { clear: both; float: none!important; }
+#hapUserTitle { clear: both; left: 0; right: 0; text-align: right; }
+#bookingday, #bookingsystemcontent p.ui-state-highlight { margin-top: 80px!important; }
+}
+@media only screen and (max-width: 480px)  {
+    #sidebaredit.show { width: 100%; border: 0; }
+}

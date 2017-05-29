@@ -1,0 +1,133 @@
+﻿body.bookingdisplay, body.bookingdisplay form { padding: 0; margin: 0; width: 100%; height: 100%; }
+
+#hapHeader { min-width: 820px; }
+
+#search { position: fixed; width: 168px; font-size: 16px; top: 40px; height: 30px; text-align: center; line-height: 30px; background: #eee; padding: 0 10px; }
+    #search input { font-size: 16px; width: 168px; }
+#Tree { position: fixed; width: 188px; font-size: 11px; overflow: auto; bottom: 0; top: 80px; left: 0; background: #eee; }
+.dynatree-container { margin: 0; }
+.dynatree-node { display: block; }
+a.dynatree-title { display: inline-block; text-decoration: none; color: #000; padding: 1px 4px; border: 0; }
+a.dynatree-title:hover, .dynatree-node:hover { border-color: #dedede; background: #dedede; }
+a.dynatree-title:active, .dynatree-node:active, .dynatree-node:active > a { border-color: #333; background: #333; color: #fff; }
+#MyFiles { min-height: 410px; overflow: hidden; padding-top: 2px; }
+#MyFiles a { float: left; margin: 0 3px 3px 0; padding: 0; border-width: 8px; border-style: solid; height: 40px; width: 230px; font-size: 11px; text-decoration: none; overflow: hidden; text-overflow: ellipsis; }
+#MyFiles a.Selectable { background-color: #eee; color: #666; border-color: #eee; }
+#MyFiles a.Selectable:hover, .droppable-hover { background-color: #dedede; border-color: #dedede; }
+#MyFiles a.Selectable:active { background-color: #333; border-color: #333; color: #fff; }
+#MyFiles a.Drive { height: 70px; }
+#MyFiles a .icon { float: left; text-align: center; margin-right: 10px; width: 40px; height: 40px; background: transparent no-repeat center center; font-size: 36px; line-height: 40px; }
+#MyFiles a.Drive .icon { height: 64px; width: 64px; font-size: 60px; line-height: 64px; }
+#MyFiles a .label { padding: 0; display: block; line-height: 13px; text-overflow: ellipsis; white-space: nowrap; }
+#MyFiles a.Selectable:active .label, #MyFiles a.Selected { color: #fff; }
+#MyFiles a.Folder .label { padding-top: 4px; }
+#MyFiles a.Drive .label { padding-top: 10px; }
+#MyFiles a .type { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 13px; }
+#MyFiles a .size { display: block; line-height: 13px; }
+#MyFiles a .extension { display: none; line-height: 13px; }
+#MyFiles a .modified { display: none; line-height: 13px; }
+#MyFiles a.Selectable:active .type { color: #bbb; }
+#MyFiles a.Selected:active { color: #666; }
+#MyFiles a.Selectable .label { color: #000; }
+#MyFiles a .progress { display: block; background: #fff; height: 16px; margin-left: 74px; margin-top: 10px; overflow: hidden; white-space: nowrap; position: relative; }
+#MyFiles a .progress i { background: green; display: block; height: 12px; margin: 2px 2px 0 2px; }
+#MyFiles a .progress label { cursor: pointer; position: absolute; display: block; height: 15px; line-height: 15px; font-size: 11px; color: #ccc; top: 0; left: 0; right: 0; text-align: center; }
+#MyFiles a:hover { text-decoration: none; }
+
+#MyFiles.details .extension, #MyFiles.details .modified { display: block; }
+#MyFiles.details a span { display: table-cell; border-right: solid 2px #fff; line-height: 20px; padding: 0; padding-right: 2px; height: 20px; border-bottom: solid 2px #fff; }
+#MyFiles.details a .label { border-left: solid 2px #fff; margin-left: 2px; }
+#MyFiles.details a img { height: 17px; display: table-cell; width: 17px; padding: 0; margin: 0; float: none; line-height: 17px; font-size: 17px; vertical-align: middle; border-bottom: solid 2px #fff; }
+#MyFiles.details a { display: table-row; float: none; width: auto; line-height: 20px; height: 20px; }
+#MyFiles.details { vertical-align: middle; padding-top: 28px; }
+
+#MyFiles.small a span { display: none; }
+#MyFiles.small a .label { display: block; height: 16px; line-height: 16px; margin: 0; padding: 0; }
+#MyFiles.small a img { height: 17px; width: 17px; line-height: 17px; font-size: 17px; margin-right: 4px; vertical-align: middle; }
+#MyFiles.small a { line-height: 17px; height: 17px; }
+
+#MyFiles.medium a span { display: none; }
+#MyFiles.medium a .label { display: block; height: 32px; line-height: 16px; margin: 0; padding: 0; white-space: normal; text-overflow: none; overflow: visible; text-align: center; }
+#MyFiles.medium a img { height: 32px; width: 32px; margin: 0 auto; line-height: 17px; float: none; display: block; }
+#MyFiles.medium a { line-height: 17px; height: auto; width: 60px; white-space: normal; text-overflow: none; overflow: hidden; }
+
+#MyFiles.large a span { display: none; }
+#MyFiles.large a .label { display: block; height: 32px; line-height: 16px; margin: 0; padding: 0; white-space: normal; text-overflow: none; overflow: visible; text-align: center; }
+#MyFiles.large a img { margin: 0 auto; height: 64px; width: 64px; line-height: 17px; float: none; display: block; }
+#MyFiles.large a { line-height: 17px; height: auto; width: 84px; white-space: normal; text-overflow: none; overflow: hidden; }
+
+#MyFilesHeaddings { position: fixed; display: none; border-top: solid 2px #fff; border-bottom: solid 2px #fff; }
+#MyFilesHeaddings a, #MyFilesHeaddings span { display: inline-block; height: 22px; line-height: 22px; background: #333; color: #fff; border-right: solid 2px #fff; }
+
+#MyFiles a.Selected { background-color: #333; border-color: #333; color: #bbb; }
+#MyFiles a.Selected:hover { background-color: #666; border-color: #666; }
+#MyFiles a.Selected .label { color: #fff; }
+#MyFiles a.Selected:active { background-color: #aaa; border-color: #aaa; color: #eee; }
+#MyFiles a.Selected:active .label { color: #000; }
+#MyFiles a.Selected:active .type { color: #666; }
+
+#Views {  }
+#Views a { display: block; color: #000; text-decoration: none; padding: 5px 20px; }
+#directedit { margin-left: -104px; padding: 10px; }
+
+button.back span { top: 4px; }
+
+/* all context menus have this class */
+#jqContextMenu ul { background-color: #fff; border: 2px solid #0060a6!important; list-style-type: none; margin: 0; padding: 0; width: auto!important; }
+#jqContextMenu li { display: block; padding: 5px 10px!important; text-decoration: none; color: #333!important; cursor: pointer!important; font-size: 16px!important; }
+#jqContextMenu li:hover { background-color: #f3f3f3!important;  }
+#jqContextMenuShadow { display: none!important; }
+
+#propcont div { clear: both; overflow: hidden; }
+#propcont label { float: left; width: 100px; }
+
+.disabled { display: none; }
+
+#dragobject { z-index: 1111; display: block; border: solid 1px #666; background: rgba(255, 255, 255, 0.60); width: 200px; margin-top: 30px; margin-left: 60px; padding: 5px; overflow: hidden; -ms-text-overflow: ellipsis;-o-text-overflow: ellipsis;text-overflow: ellipsis;white-space: nowrap; }
+#dragobject img { vertical-align: middle; width: 48px; height: 48px; }
+    #dragobject span { color: #666;}
+#Document { line-height: normal; height: auto; }
+
+#uploadprogress { position: fixed; bottom: 0; width: 300px; z-index: 2045; background: #fff; }
+#uploadprogress .ui-widget-header { height: 26px; line-height: 26px; padding-left: 10px; font-size: 14px }
+
+#progresses { padding: 6px; }
+#progresses div { white-space: nowrap; overflow: hidden; height: 20px; line-height: 20px; text-overflow: ellipsis; }
+
+#newfoldertext { background: #fff; margin: 0; }
+.loading { background: #fff url(../images/loading.gif) no-repeat right center; }
+
+#renamebox { position: absolute; font-size: 12px; margin-left: 56px; margin-top: 4px; display: none; }
+#renamebox.details { margin-left: 20px; margin-top: 2px; }
+#renamebox.small { margin-left: 28px; margin-top: 4px; }
+#renamebox.medium { margin-left: 0; margin-top: 44px; width: 72px; }
+#renamebox.large { margin-left: 0; margin-top: 76px; width: 96px; }
+
+button { overflow: hidden; text-overflow: hidden; }
+#maintools button, #maintools input { margin-right: 3px; }
+#maintools { float: left; margin-left: 3px; }
+
+#jqContextMenu { font-size: 13px; }
+
+#backup:after { display: inline-block; font-family: glyphicons; content: '' }
+
+#hapTitle a { background-image: url(../api/tiles/icons/24/24/images/icons/metro/folders-os/DocumentsFolder.png); background-position: 5px center; }
+#newfolder:before { content: '+'; font-family: glyphicons; font-weight:100; padding-right: 5px; font-size: 12px; }
+#upload:before { content: ''; font-family: glyphicons; padding-right: 5px; font-size: 12px; }
+#toolbar-delete:before { content: ''; font-family: glyphicons; padding-right: 5px; font-size: 12px; }
+#toolbar-download:before { content: ''; font-family: glyphicons; padding-right: 5px; font-size: 12px; }
+
+@media only screen and (max-width: 800px)  {
+    #Tree, #search { display: none!important; width: 0; }
+    #hapTitle { float: left!important; }
+    #hapUserTitle { left: auto!important; }
+    #hapHeader { min-width: 100%; }
+    #toolbar-right { display: none; }
+    #maintools { display: run-in; float: none; margin: 0; }
+    #MyFiles { padding-top: 40px; margin-left: 0!important }
+    #MyFiles.drives { padding-top: 0; }
+}
+
+@media only screen and (max-width: 550px)  {
+    #MyFiles { padding-top: 80px; margin-left: 0!important }
+}

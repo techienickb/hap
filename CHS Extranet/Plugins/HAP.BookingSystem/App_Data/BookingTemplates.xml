@@ -1,5 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<templates>
-  <template id="general" subject="{3} in {2}">You have booked {2} on {4} during {6} for {3}</template>
-  <template id="generaladmin" subject="{3} in {2} with {1} ({0})">{1} ({0}) has booked {2} on {4} during {6} for {3}</template>
-</templates>

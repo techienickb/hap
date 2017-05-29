@@ -1,0 +1,17 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Site Maintenance</title>
+    <style>
+        html { font-family: 'Segoe UI', Arial, Verdana; }
+    </style>
+</head>
+<body>
+    <div id="hapContent">
+        <h1>Site Maintenance</h1>
+        <p>
+            This site is down for maintenance, please check back later
+        </p>
+    </div>
+</body>
+</html>

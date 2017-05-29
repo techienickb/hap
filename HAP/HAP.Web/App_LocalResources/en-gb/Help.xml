@@ -1,0 +1,369 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--
+British English Help Localised Resources
+-->
+<resources>
+  <contents>
+    <![CDATA[
+    <h2>Contents</h2>
+      <ul>
+      <li><b><a href="javascript:void(hap.help.Load('homepage/contents'));">Home Page</a></b></li>
+      <li><b><a href="javascript:void(hap.help.Load('myfiles/contents'));">My Files</a></b></li>
+      <li><b><a href="javascript:void(hap.help.Load('myfiles/homework/contents'));">Homework</a></b></li>
+      <li><b><a href="javascript:void(hap.help.Load('bookingsystem/contents'));">Booking System</a></b></li>
+      <li><b><a href="javascript:void(hap.help.Load('helpdesk/contents'));">Help Desk</a></b></li>
+      </ul>
+    ]]>
+  </contents>
+  <impmsg>
+    <![CDATA[<h1>You've been auto logged in using %am authentication</h1>
+    <p>These features will be unavailable: 
+    <ul>
+      <li>My Files via Home Access Plus+</li>
+      <li>Live Email Tile Information</li>
+      <li>Live Calendar Tile Information</li>
+      <li>My Homework (part of My Files)</li>
+    </ul></p>
+    <p>To get the full feature set</p>
+    <h1><a href="%l" class="button">Click Here</a></h1>
+    <p>and log in with your username and password</p>
+    <h2>To Logout, Close your browser</h2>
+    <p>To generate some One Use Codes to use to Logon to Untrusted Devices:</p>
+    <h1><a href="~/OneUseCodes.aspx" class="button">Click here</a></h1>]]>
+  </impmsg>
+  <myfiles>
+    <w8app>
+      <![CDATA[
+      <h2>The HAP+ My Files App is Available in the Windows Store</h2>
+      <p>You can now access your My Files via the Windows Store My Files App</p>
+      <button onclick="window.open('http://apps.microsoft.com/windows/en-US/app/home-access-plus-my-files/83c7c64d-6f8d-4532-8c39-76b4fb83e9d3'); return false;">Visit the Windows Store</button>
+      ]]>
+    </w8app>
+    <bug>
+      <![CDATA[
+      <h2>Got an Issue with the My Files Beta?</h2>
+      <p>Here's how to log it so it gets fixed:<br />&nbsp;</p>
+      <ol>
+        <li>Take a Screenshot of the Problem if you can</li>
+        <li>Log the Issue on the <a href="http://hap.codeplex.com/WorkItem/Create" target="_hap">Home Access Plus+ <b>Codeplex Site</b></a></li>
+      </ol>
+      <p>Alternatively, you can email your IT Support Department</p>
+      ]]>
+    </bug>
+    <contents>
+    <![CDATA[
+      <h2>Contents</h2>
+      <ul>
+      <li><b><a href="javascript:void(hap.help.Load('myfiles/index'));">Welcome</a></b>
+        <ul><li><a href="javascript:void(hap.help.Load('myfiles/whats-new'));">What's New</a></li></ul>
+      </li>
+      <li><b>The Interface</b>
+        <ul>
+          <li><a href="javascript:void(hap.help.Load('myfiles/toolbar'));">The Toolbar</a></li>
+          <li><a href="javascript:void(hap.help.Load('myfiles/tree'));">The Tree</a></li>
+          <li><a href="javascript:void(hap.help.Load('myfiles/list'));">The Main List</a></li>
+          <li><a href="javascript:void(hap.help.Load('myfiles/contextmenu'));">The Right Click Menu</a></li>
+        </ul>
+      </li>
+      <li><b>Operations</b>
+        <ul>
+          <li><a href="javascript:void(hap.help.Load('myfiles/delete'));">Delete</a></li>
+          <li><a href="javascript:void(hap.help.Load('myfiles/draganddrop'));">Copy/Move</a></li>
+          <li><a href="javascript:void(hap.help.Load('myfiles/properties'));">Properties</a></li>
+          <li><a href="javascript:void(hap.help.Load('myfiles/preview'));">Preview</a></li>
+          <li><a href="javascript:void(hap.help.Load('myfiles/open'));">Open</a></li>
+          <li><a href="javascript:void(hap.help.Load('myfiles/zip'));">Send to ZIP</a></li>
+          <li><a href="javascript:void(hap.help.Load('myfiles/zip'));">Extract from ZIP</a></li>
+          <li><a href="javascript:void(hap.help.Load('myfiles/googledocs'));">Send to Google Docs</a></li>
+          <li><a href="javascript:void(hap.help.Load('myfiles/upload'));">Upload</a></li>
+          <li><a href="javascript:void(hap.help.Load('myfiles/newfolder'));">New Folder</a></li>
+          <li><a href="javascript:void(hap.help.Load('myfiles/views'));">View</a></li>
+          <li><a href="javascript:void(hap.help.Load('myfiles/search'));">Searching</a></li>
+        </ul>
+      </li>
+      <li><b>Guides to:</b>
+        <ul>
+          <li><a href="javascript:void(hap.help.Load('myfiles/upload'));">Uploading Files</a></li>
+          <li><a href="javascript:void(hap.help.Load('myfiles/draganddrop'));">Dragging and Dropping</a></li>
+        </ul>
+      </ul>
+      
+    ]]></contents>
+    <index>
+      <![CDATA[<h2>Welcome to My Files Version 4.0</h2>
+      <p>This Help Document will provide some helpful details on operating My Files interface<br />
+      If you have used the old version of My Files, please <a href="javascript:void(hap.help.Load('myfiles/whats-new'));">click here</a> to find out what's different<br />
+      Home Access Plus+'s My Files allows you to transfer documents to and from your Educational Establishment by just using a web browser.</p>
+      <h3>Interface Basics</h3>
+      <img src="~/images/help/myfiles-interface.png" alt="" />
+      <p>The My Files interface contains 3 distinct areas:
+        <ol>
+          <li><b><a href="javascript:void(hap.help.Load('myfiles/toolbar'));">Toolbar</a></b><br />Shows up when you move past the drive selection page, allows you to Create a New Folder, Upload a file from your local machine, filter the current view for something, or change the View Style<br />For more information on the Toolbar <a href="javascript:void(hap.help.Load('myfiles/toolbar'));">click here</a></li>
+          <li><b><a href="javascript:void(hap.help.Load('myfiles/tree'));">Drive Tree</a></b><br />Allows you to quickly navigate to a folder in a tree layout, simular to Window Explorer's Tree.  You can drag files/folders from the list to the tree to move them (holding CTRL will copy them instead), or by Dragging a file from Windows Explorer, Upload a file to that specific Folder.<br />For more information on the Tree <a href="javascript:void(hap.help.Load('myfiles/tree'));">click here</a></li>
+          <li><b><a href="javascript:void(hap.help.Load('myfiles/list'));">Item List</a></b><br />The list (tiled/iconed/detailed) displays a list of drives/files/folders in a Windows Explorer styled interface.  You can drag files/folders around to move them (holding CTRL will copy them), <a href="javascript:void(hap.help.Load('myfiles/contextmenu'));">right click</a> to <a href="javascript:void(hap.help.Load('myfiles/rename'));">rename</a>, <a href="javascript:void(hap.help.Load('myfiles/delete'));">delete</a>, and <a href="javascript:void(hap.help.Load('myfiles/contents'));">more</a>. The List also allows you to <a href="javascript:void(hap.help.Load('myfiles/drag-and-drop'));">drag</a> files from Windows Explorer to Upload them.<br />For more information on the list <a href="javascript:void(hap.help.Load('myfiles/list'));">click here</a></li>
+        </ol>
+      <br />&nbsp;</p>
+      <p>To get started, close this Help Box, and give it a try.  Once you have chosen a drive (single click), opening a file/folder in the <a href="javascript:void(hap.help.Load('myfiles/list'));">List</a> is done by double clicking on them.  Single Clicking on them Selects them to allow for multiple deleting.  SHIFT and CTRL replicate standard Windows Explorer Actions<br />&nbsp;</p>
+      <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>]]>
+    </index>
+    <whats-new>
+     <![CDATA[
+      <h2>What's New to My Files in Version 4.0?</h2>
+      <ul>
+        <li>Completely Rewritten Interface</li>
+        <li>Works by just using HTML and Javascript, no more silverlight</li>
+        <li>Drag and Dropping files/folders around the interace**, like the old Extended Edition</li>
+        <li>Drag and Dropping of files from Windows Explorer to upload**</li>
+        <li>Ability to Select Muliple Files to Upload when you click the Upload Button*</li>
+        <li>Improved Preview Mode</li>
+        <li>Folder/File Properties, displaying File/Folder Size, Creation Date & Time, and More</li>
+        <li>Improved Speed compared to both previous versions</li>
+        <li>Improved Searching/Filtering of the main list compared to both previous versions</li>
+        <li>Consumes less bandwidth (for those with limited data caps)</li>
+        <li>Ability to Copy as well as Move Files</li>
+        <li>Ability to Open a ZIP file as if it were a folder, without having to download it</li>
+        <li>Use of HTML5 and CSS3 Technologies to improve your experience</li>
+      </ul>
+      * - Except Internet Explorer 7 and below
+      ** - Except Internet Explorer 7 and Mobile Browsers
+      <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
+    ]]></whats-new>
+    <toolbar>
+      <![CDATA[
+        <h2>The Toolbar</h2>
+        <img src="~/images/help/myfiles-toolbar.png" alt="" />
+        <p>
+          The toolbar appears when you move past the Drive Selection interface, and allows access to some key features, including:
+          <ul>
+            <li>Going Back</li>
+            <li>Creating a <b><a href="javascript:void(hap.help.Load('myfiles/newfolder'));">New Folder</a></b></li>
+            <li><b><a href="javascript:void(hap.help.Load('myfiles/upload'));">Uploading</a></b> a Document to the Current Folder via a Select Box</li>
+            <li><b><a href="javascript:void(hap.help.Load('myfiles/search'));">Searching/Filtering</a></b> the current view for a specific item</li>
+            <li>Changing the current <b><a href="javascript:void(hap.help.Load('myfiles/views'));">View</a></b> mode to view the items in a different order</li>
+          </ul>
+          When the View Mode is Changed to Details, another part of the toolbar is made visible, the coloumn headers.
+        <br />&nbsp;</p>
+        <p>
+          When you scroll down the page, the toolbar sticks to the top of the page so you can always get at the toolbar without having to scroll back to the top.<br />
+          Note: The toolbar is not sticky on Mobile devices
+        <br />&nbsp;</p>
+        <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
+        ]]>
+    
+      </toolbar>
+      <tree>
+        <![CDATA[
+        <img src="~/images/help/myfiles-tree.png" alt="" style="float: left;" />
+        <h2>The Tree</h2>
+        <p>The tree allows you to quickly delve into a any folder you have access to, and then quickly navigate to it.<br />&nbsp;</p>
+        <p>It works in the same way as the Tree you have in Windows Explorer to navigate through various folders on your PC<br />&nbsp;</p>
+        <p>It also supports <b><a href="javascript:void(hap.help.Load('myfiles/draganddrop'));">Drag and Drop</a></b> interfaces allowing you to copy/move/upload files/folders directly to that folder without leaving the current location<br />&nbsp;</p>
+        <p>Note: Please see <b><a href="javascript:void(hap.help.Load('myfiles/draganddrop'));">Drag and Drop</a></b> for Supported Browsers<br />&nbsp;</p>
+        <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
+      ]]>
+      </tree>
+      <draganddrop>
+        <![CDATA[
+      <h2>Drag and Drop</h2>
+      <p>My Files supports Dragging and Dropping Files and Folders around the interface, even from outside the browser to upload files**<br />&nbsp;</p>
+      <h3>Dragging and Dropping Items to Copy/Move them</h3>
+      <img src="~/images/help/myfiles-drag.png" alt="" />
+      <p>To Move, or Copy a File or Folder, simply drag that file(s)/folder(s) (can move more than 1) to the folder you want to move/copy that item into.<br />&nbsp;</p>
+      <p>If you want to Copy a File instead of Moving it, hold down the CTRL key on your keyboard to switch the mode to Copy instead of Move<br />&nbsp;</p>
+      <p>If a file already exists in that folder, you will be asked if you want to overwrite it<br />&nbsp;</p>
+      <img src="~/images/help/myfiles-fileexists.png" alt="" />
+      <h3>Dragging and Dropping Files to Upload Them</h3>
+      <img src="~/images/help/myfiles-draganddrop.png" alt="" />
+      <p>
+        To upload a file into a folder, simply drag it from your explorer window onto the folder you want.  Keep an eye next to the Upload button to give you an indication of where it will be uploaded to.<br />
+        Once you are happy, just let go and the upload will be started.
+      <br />&nbsp;</p>
+      <p>If a file already exists in that folder, you will be asked if you want to overwrite it<br />&nbsp;</p>
+      <img src="~/images/help/myfiles-fileexists.png" alt="" />
+      <p>A progress indicator will become visible down the bottom of the page<br />&nbsp;</p>
+      <img src="~/images/help/myfiles-uploadprogress.png" alt="" />
+      <p>Drag and Drop Uploading is supported in:
+        <ul>
+          <li>Internet Explorer 10+</li>
+          <li>Firefox 3.6+</li>
+          <li>Chrome 6+</li>
+          <li>Opera 11.1+</li>
+          <li>Opera Mobile 11.1+</li>
+          <li>Android Browser 3+</li>
+        </ul>
+      <br />&nbsp;</p>
+      <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
+      ]]>
+    </draganddrop>
+    <newfolder>
+      <![CDATA[
+      <h2>Creating a New Folder</h2>
+      <p>To create a New Folder in the current folder, simpily click the New Folder button, a text box will appear for you to type your new folder name into<br />&nbsp;</p>
+      <img src="~/images/help/myfiles-newfolder.png" />
+      <p>Once you are happy with the name, either hit enter on your keyboard or click Create<br />&nbsp;</p>
+      <p>The current view will refresh once the folder has been created<br />&nbsp;</p>
+      <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
+      ]]>
+    </newfolder>
+    <delete>
+      <![CDATA[
+      <h2>Deleting Items</h2>
+      <p>To delete items, select the items, right click on them to get the <a href="javascript:void(hap.help.Load('myfiles/contextmenu'));">right click context menu</a> up, then click on Delete<br />&nbsp;</p>
+      <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
+      ]]>
+    </delete>
+    <contextmenu>
+      <![CDATA[
+      <h2>The Right Click Context Menu</h2>
+      <p>This menu allows you to conduct selected actions on the currently selected items<br />&nbsp;</p>
+      <p>It is found by Right Clicking on any item, or in mobile browsers, hold down on an item until the in-browser menu is displayed, cancel the in browser menu and the right click context menu will be visible<br />&nbsp;</p>
+      <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
+      ]]>
+    </contextmenu>
+    <search>
+      <![CDATA[
+      <h2>Searching/Filtering the Current Folder</h2>
+      <img src="~/images/help/myfiles-search.png" alt="" />
+      <p>You can Search/Filter the current Folder to find a specific item, this is done in realtime as you type into the Search Box<br />&nbsp;</p>
+      <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
+      ]]>
+    </search>
+    <renaming>
+      <![CDATA[
+        <h2>Renaming</h2>
+        <p>You can rename an item by choosing Rename from the <b><a href="javascript:void(hap.help.Load('myfiles/contextmenu'));">right click context menu</a></b><br />&nbsp;</p>
+        <img src="~/images/help/myfiles-rename.png" alt="" />
+        <p>All you need to do is change the the text in the textbox that is shown on the current item.  This only works on 1 item at a time<br />&nbsp;</p>
+        <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
+      ]]>
+    </renaming>
+    <properties>
+      <![CDATA[
+      <h2>Properties</h2>
+      <img src="~/images/help/myfiles-properties.png" alt="" />
+      <p>You can get additional information on items by choosing Properties from the <b><a href="javascript:void(hap.help.Load('myfiles/contextmenu'));">right click context menu</a></b><br />&nbsp;</p>
+      <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
+      ]]>
+    </properties>
+    <preview>
+      <![CDATA[
+      <h2>File Preview</h2>
+      <img src="~/images/help/myfiles-preview.png" alt="" />
+      <p>You can get a Preview of Selected Files by choosing Preview from the <b><a href="javascript:void(hap.help.Load('myfiles/contextmenu'));">right click context menu</a></b><br />&nbsp;</p>
+      <p>Note: A preview is a "best possible" quick view of the chosen document. It will not always look identical to the actual document<br />&nbsp;</p>
+      <p>Supported Files are:
+        <ul>
+          <li>Open XML Office Word Documents - .docx</li>
+          <li>Excel Worksheets - .xls, .xlsx</li>
+          <li>Plain Text Documents - .txt</li>
+          <li>Images - .bmp, .png, .jpg, .gif</li>
+        </ul>
+      <br />&nbsp;</p>
+      <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
+      ]]>
+
+    </preview>
+    <googledocs>
+      <![CDATA[
+      <h2>Google Docs</h2>
+      <p>New in My Files is the Option to Send specific files to Google's Documents Storage System so you can edit them<br />&nbsp;</p>
+      <p>You can Send a Specific file to Google Docs by choosing Send to Google Docs from the <b><a href="javascript:void(hap.help.Load('myfiles/contextmenu'));">right click context menu</a></b><br />&nbsp;</p>
+      <p>You will be asked for your Google Username and Password so the file can be uploaded<br />&nbsp;</p>
+      <img src="~/images/myfiles-googledocs1.png" alt="" />
+      <p>Once the document has been uploaded a new window will open directing you to your Google Docs Storage<br />&nbsp;</p>
+      <p>Supported Files are:
+        <ul>
+          <li>Word Documents - .doc, .docx</li>
+          <li>Excel Worksheets - .xls, .xlsx</li>
+          <li>Power Point Files - .ppt, .pptx, .pps, .ppsx</li>
+          <li>Text Documents - .rtf, .txt</li>
+          <li>Adobe Portable Document Formatted Files - .pdf</li>
+        </ul>
+      <br />&nbsp;</p>
+      <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
+      ]]>
+    </googledocs>
+    <upload>
+      <![CDATA[
+      <h2>Uploading Files</h2>
+      <p>If your browser supports it, you can <b><a href="javascript:void(hap.help.Load('myfiles/draganddrop'));">Drag and Drop</a></b> files from outside of the Browser to Upload them, see <b><a href="javascript:void(hap.help.Load('myfiles/draganddrop'));">Drag and Drop</a></b> for more information<br />&nbsp;</p>
+      <p>The other way of Uploading Files is via the Upload button on the <b><a href="javascript:void(hap.help.Load('myfiles/toolbar'));">Toolbar</a></b><br />&nbsp;</p>
+      <p>
+        When you click on the Upload button a dialog will be shown asking you to select a file (or on supported browsers you can select multiple files, see <b><a href="javascript:void(hap.help.Load('myfiles/draganddrop'));">Drag and Drop</a></b> for a list of supported browsers)
+        <br />
+        Once you have chosen your files click Upload to Start the Upload Process.
+      <br />&nbsp;</p>
+      <p>
+        If you have a supported browser Home Access Plus+ will check to see if the file already exists and prompt you to overwrite it if it does<br />
+        <img src="~/images/help/myfiles-fileexists.png" alt="" /><br />
+        A progress indicator will then appear at the bottom of the page<br />
+        <img src="~/images/help/myfiles-uploadprogress.png" alt="" />
+      <br />&nbsp;</p>
+      <p>Once the file has been uploaded the page will reload to show the file<br />&nbsp;</p>
+      <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
+      ]]>
+    </upload>
+    <views>
+      <![CDATA[
+      <h2>Views</h2>
+      <p>My Files has the ability, much like your Folder Explorer (Windows Explorer, Safari Spotlight) to change the current view to get more/less information<br />&nbsp;</p>
+      <p>My Files does this via the View button on the <b><a href="javascript:void(hap.help.Load('myfiles/toolbar'));">Toolbar</a></b>, clicking on this will show a list of possible views you can choose from<br />&nbsp;</p>
+      <img src="~/images/help/myfiles-views.png" alt="" />
+      <p>Selecting one will change the view<br />&nbsp;</p>
+      <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
+      ]]>
+    </views>
+    <list>
+      <![CDATA[
+        <h2>The Main List</h2>
+        <img src="~/images/help/myfiles-interface.PNG" alt="" />
+        <p>The Main List displays the list of files/folders in your currently selected file
+          <br /><br />
+          Once you have opened a Drive (i.e. not at the drive selection level), selecting an item is done via Single Clicking, and navigating to that folder is done via Double Clicking it
+        <br />&nbsp;</p>
+        <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('myfiles/contents'));">click here</a><br />&nbsp;</p>
+      ]]>
+    </list>
+  </myfiles>
+  <bookingsystem>
+    <contents>
+      <![CDATA[
+      <h2>Contents</h2>
+      <ul>
+      <li><b><a href="javascript:void(hap.help.Load('bookingsystem/index'));">Welcome</a></b>
+      </li>
+      <li><b><a href="javascript:void(hap.help.Load('bookingsystem/interface'));">The Interface</a></b>
+      </li>
+      </ul>
+      
+    ]]>
+    </contents>
+    <index>
+      <![CDATA[<h2>Welcome to the Booking System</h2>
+      <p>This Help Document will provide some helpful details on operating the Booking System interface<br />
+      Home Access Plus+'s Booking System allows you to book IT resources in your Educational Establishment by just using a web browser.</p>
+      <h3>Interface Basics</h3>
+      <p>The Booking System interface contains 3 distinct areas:
+        <ol>
+          <li><b>The Calendar</b> - This is a calendar which is shown when you clock on the Date in the top left of the Booking Grid.  It allows you to change the date that is shown in The Bookings Grid.  It is limited to what the administrator has decided is the most advanced date you can book (usually 2 weeks from the beginning of the week).</li>
+          <li><b>The Bookings Grid</b> - This is a grid containing all of your Establishment's Resources which you can book.  You can also remove your booking from this interface if you have made a mistake.</li>
+          <li><b>The Booking Form</b> - This form allows you to book a resource for a specific time and date</li>
+        </ol>
+      <br /><a href="javascript:void(hap.help.Load('bookingsystem/interface'));">More interface help</a></p>
+      <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('bookingsystem/contents'));">click here</a><br />&nbsp;</p>]]>
+    </index>
+    <interface>
+      <![CDATA[<h2>The Booking System Interface</h2>
+      <p>This picture shows what the current booking system looks like</p>
+      <img src="../images/help/bookingsystem-interface.png" />
+      <p>At the top is the Common Header, allowing you to navigate to another part of HAP+ as well as accessing this help document, get the overview/search dialog and, if you have permissions, the Booking System Control Panel.<br />
+      Under that is the Week and Bookings available information bar, this will show what Week it is (if your school uses a 2 week timetable) as well as how many bookings you have left for that week, if it doesn't show that information you have unlimited bookings.<br />
+      Under that is the Date that is currently being shown, clicking on this will show the Calendar of days that you can move to.</p>
+      <p>In the main section of the page is a grid of Resources down the left and lessons along the top.  Free resources are clickable (unless you have permissions to overwrite, or remove your own booking).<br />
+      Resources marked with a circle arrow are timetabled lessons and, unless you have permissions, cannot be booked over<br />
+      Lessons marked with a crossing line are lessons that have been overriden.</p>
+      <p>The booking form pops up to confirm a booking as well as a few other details, it will ask for the Year group to book for, which subject it is as well as additional, resource specific information (number of laptops, headphones needed, etc)</p>
+      <p><br />For a full list of My Files Help Sections, <a href="javascript:void(hap.help.Load('bookingsystem/contents'));">click here</a><br />&nbsp;</p>]]>
+    </interface>
+  </bookingsystem>
+</resources>

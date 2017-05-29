@@ -1,0 +1,29 @@
+﻿html {font-family: Segoe UI; background: #dedede; font-size: 12px; }
+body { width: 775px; margin: 10px auto; background: white; padding: 11px; }
+a img { height: 14px; vertical-align: text-bottom; margin-left: 5px; }
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a { padding-bottom: 4px; }
+h3 { line-height: normal; padding: 0; margin: 0; }
+img { vertical-align: middle; }
+h3 img { height: 22px; vertical-align: middle; margin-left: 5px; }
+div { overflow: hidden; }
+div.group { padding: 0 30px; }
+label { display: inline-block; vertical-align: middle; width: 180px; text-align: right; padding: 2px 10px; }
+#adgroups-mode label { float: none; width: 30%; text-align: center; padding: 0; }
+#adgroups-mode { margin-bottom: 10px; }
+.homepagelink { float: left; width: 316px; height: 36px; margin-right: 4px; margin-bottom: 5px; background: #fff; overflow: hidden; border: solid 1px #dedede; border-radius: 4px; padding: 5px; }
+.homepagelink a { float: left; width: 290px; height: 36px; text-decoration: none; color: #000; }
+.homepagelink b, .homepagelink i { display: block; font-weight: normal; font-style: normal; overflow: hidden; white-space: nowrap; }
+.homepagelink i { color: gray }
+.homepagelink span, u, dd { display: none; }
+.homepagelink img { float: left; margin-right: 6px; height: 100%; }
+.homepagelink button { float: right; height: 36px; }
+.homepagelink button span { padding-left: 5px!important; padding-right: 5px!important; }
+.homepagelink .ui-state-active, .addbutton.ui-state-active { border-width: 2px!important; }
+.homepagegroup { background: #dedede; height: 180px; }
+.sortablegroup h4 { cursor: move; }
+#lessons div { overflow: hidden; }
+.lesson { float: left; }
+.lesson b { font-weight: normal; }
+#subjects span { float: left; width: 300px; }
+#subjects button span { float: none; width: auto; }
+#hapContent { background: #fff; }

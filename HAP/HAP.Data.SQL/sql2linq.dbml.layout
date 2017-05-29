@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="sql2linq">
+  <DataContextMoniker Name="/sql2linqDataContext" />
+  <nestedChildShapes>
+    <classShape Id="1b3e0668-d992-496b-be6d-5af860127bef" absoluteBounds="0.875, 0.75, 2, 2.5401025390625">
+      <DataClassMoniker Name="/sql2linqDataContext/TrackerEvent" />
+      <nestedChildShapes>
+        <elementListCompartment Id="a12d3dec-3c86-40fb-a4af-1c3354263e0b" absoluteBounds="0.88999999999999968, 1.21, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="c97d8748-da22-4833-9f2d-afc48d52b891" absoluteBounds="4, 1.25, 2, 2.5401025390625">
+      <DataClassMoniker Name="/sql2linqDataContext/WebTrackerEvent" />
+      <nestedChildShapes>
+        <elementListCompartment Id="4b0cdea4-4afa-4354-8c40-0363ad114870" absoluteBounds="4.015, 1.71, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="8c1c0a7d-01ca-4d57-b3ed-5bfc2bd29894" absoluteBounds="0.75, 5, 2, 2.7324039713541666">
+      <DataClassMoniker Name="/sql2linqDataContext/Ticket" />
+      <nestedChildShapes>
+        <elementListCompartment Id="6ecb9f22-94a6-4944-a1e9-443c25f3550b" absoluteBounds="0.765, 5.46, 1.9700000000000002, 2.1724039713541665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="1b87a21f-6573-4b09-96c0-5274d6dfa19c" absoluteBounds="3.5, 5.375, 2, 1.9631982421875005">
+      <DataClassMoniker Name="/sql2linqDataContext/Note" />
+      <nestedChildShapes>
+        <elementListCompartment Id="a120f133-4771-477c-983a-bc22e7113622" absoluteBounds="3.515, 5.835, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(2.75 : 6.35659912109375); (3.5 : 6.35659912109375)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/sql2linqDataContext/Ticket/Ticket_Note" />
+      <nodes>
+        <classShapeMoniker Id="8c1c0a7d-01ca-4d57-b3ed-5bfc2bd29894" />
+        <classShapeMoniker Id="1b87a21f-6573-4b09-96c0-5274d6dfa19c" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="363cfd85-78e2-40a3-bde2-740b32a11e5d" absoluteBounds="6.5, 6.125, 2, 1.7708968098958331">
+      <DataClassMoniker Name="/sql2linqDataContext/NoteFile" />
+      <nestedChildShapes>
+        <elementListCompartment Id="97152a78-e016-44bf-ae7a-19b3c9d747e2" absoluteBounds="6.515, 6.585, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(5.5 : 6.73159912109375); (6.5 : 6.73159912109375)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/sql2linqDataContext/Note/Note_NoteFile" />
+      <nodes>
+        <classShapeMoniker Id="1b87a21f-6573-4b09-96c0-5274d6dfa19c" />
+        <classShapeMoniker Id="363cfd85-78e2-40a3-bde2-740b32a11e5d" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>
