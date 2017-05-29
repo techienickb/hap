@@ -1,0 +1,7 @@
+<div class="wikidoc">
+<ol>
+<li>Go into IIS, and go to the HAP Application </li><li>Go into the Machine Key page </li><li>Untick all the Checkboxes </li><li>Click Generate Keys on the left site, copy these keys to your other server(s) and apply<br>
+<img src="http://download-codeplex.sec.s-msft.com/Download?ProjectName=hap&DownloadId=848144" alt="" width="424" height="301">
+</li><li>Open the hapConfig.xml file from the ~/app_data folder on on server </li><li>After maintenance=&quot;false&quot; add key=&quot;&quot; </li><li>Go to http://www.randomstring.net/ and copy the Alphanumeric &#43; special characters strings (all 6)
+</li><li>Paste those strings into the key=&quot;{pastehere}&quot; </li><li>Remove the line breaks </li><li>Add salt=&quot;&quot; </li><li>Refresh http://www.randomstring.net/ </li><li>Copy one of the Alphanumeric &#43; special characters strings (just 1) </li><li>Paste that string into the salt=&quot;{pastehere}&quot; </li><li>Set firstrun=&quot;true&quot; </li><li>Save hapConfig.xml </li><li>Run HAP from that server </li><li>Re-Enter any password and save the config page </li><li>Copy hapConfig.xml to your other server(s) </li></ol>
+</div><div class="ClearBoth"></div>

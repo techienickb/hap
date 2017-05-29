@@ -1,0 +1,1 @@
+{video:url=http://www.youtube.com/watch?v=di_QnHjcWYg,type=youtube,width=640,height=380}
