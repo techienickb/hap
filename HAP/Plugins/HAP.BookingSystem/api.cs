@@ -12,6 +12,7 @@ using System.DirectoryServices.AccountManagement;
 using System.DirectoryServices;
 using HAP.BookingSystem;
 using System.Xml;
+using System.Web.Security;
 
 namespace HAP.BookingSystem
 {
@@ -45,7 +46,7 @@ namespace HAP.BookingSystem
         [WebInvoke(Method = "DELETE", UriTemplate = "/Booking/{Date}/{i}", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         public JSONBooking[][] RemoveBooking(string Date, JSONBooking booking, string i)
         {
-            HAP.Data.SQL.WebEvents.Log(DateTime.Now, "BookingSystem.Remove", HttpContext.Current.User.Identity.Name, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Removing " + booking.Name);
+            HAP.Data.SQL.WebEvents.Log(DateTime.Now, "BookingSystem.Remove", ((HAP.AD.User)Membership.GetUser()).UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Removing " + booking.Name);
             HAP.BookingSystem.BookingSystem bs = new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date));
             Booking b = bs.getBooking(booking.Room, booking.Lesson)[int.Parse(i)];
             try
@@ -73,7 +74,7 @@ namespace HAP.BookingSystem
         [WebInvoke(Method = "POST", UriTemplate = "/Booking/{Date}", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         public JSONBooking[][] Book(string Date, JSONBooking booking)
         {
-            HAP.Data.SQL.WebEvents.Log(DateTime.Now, "BookingSystem.Book", HttpContext.Current.User.Identity.Name, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Booking " + booking.Name);
+            HAP.Data.SQL.WebEvents.Log(DateTime.Now, "BookingSystem.Book", ((HAP.AD.User)Membership.GetUser()).UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Booking " + booking.Name);
             try
             {
                 HAP.BookingSystem.BookingSystem bs = new HAP.BookingSystem.BookingSystem(DateTime.Parse(Date));
@@ -348,12 +349,12 @@ namespace HAP.BookingSystem
 
         private bool isVisible(string showto, string hidefrom)
         {
-            if (showto == "All" || isBSAdmin(HttpContext.Current.User.Identity.Name) || HttpContext.Current.User.IsInRole("Domain Admins")) return true;
+            if (showto == "All" || isBSAdmin(((HAP.AD.User)Membership.GetUser()).UserName) || HttpContext.Current.User.IsInRole("Domain Admins")) return true;
             foreach (string s in hidefrom.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-                if (HttpContext.Current.User.Identity.Name.ToLower().Equals(s.ToLower().Trim())) return false;
+                if (((HAP.AD.User)Membership.GetUser()).UserName.ToLower().Equals(s.ToLower().Trim())) return false;
                 else if (HttpContext.Current.User.IsInRole(s.Trim())) return false;
             foreach (string s in showto.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-                if (HttpContext.Current.User.Identity.Name.ToLower().Equals(s.ToLower().Trim())) return true;
+                if (((HAP.AD.User)Membership.GetUser()).UserName.ToLower().Equals(s.ToLower().Trim())) return true;
                 else if (HttpContext.Current.User.IsInRole(s.Trim())) return true;
             return false;
         }

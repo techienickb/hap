@@ -16,6 +16,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
 using System.Threading;
 using System.Configuration;
+using System.Web.Security;
 
 namespace HAP.HelpDesk
 {
@@ -46,7 +47,7 @@ namespace HAP.HelpDesk
         [WebInvoke(Method = "PUT", UriTemplate = "Ticket/{Id}", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         public FullTicket UpdateTicket(string Id, string Note, string State, string Priority, string ShowTo, string FAQ, string Subject, string AssignTo, Attachment[] Attachments)
         {
-            HAP.Data.SQL.WebEvents.Log(DateTime.Now, "HelpDesk.Update", HttpContext.Current.User.Identity.Name, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Updating Ticket " + Id);
+            HAP.Data.SQL.WebEvents.Log(DateTime.Now, "HelpDesk.Update", ((HAP.AD.User)Membership.GetUser()).UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Updating Ticket " + Id);
 
             if (hapConfig.Current.HelpDesk.Provider.ToLower() == "xml")
             {
@@ -55,10 +56,10 @@ namespace HAP.HelpDesk
                 XmlElement ticket = doc.SelectSingleNode("/Tickets/Ticket[@id='" + Id + "']") as XmlElement;
                 ticket.SetAttribute("status", "New");
                 if (!string.IsNullOrEmpty(State)) ticket.Attributes["status"].Value = State;
-                ticket.SetAttribute("readby", HttpContext.Current.User.Identity.Name);
+                ticket.SetAttribute("readby", ((HAP.AD.User)Membership.GetUser()).UserName);
                 XmlElement node = doc.CreateElement("Note");
                 node.SetAttribute("datetime", DateTime.Now.ToString("u"));
-                node.SetAttribute("username", HttpContext.Current.User.Identity.Name);
+                node.SetAttribute("username", ((HAP.AD.User)Membership.GetUser()).UserName);
                 if (string.IsNullOrEmpty(Note)) node.InnerXml = "<![CDATA[No Note Information Added]]>";
                 else node.InnerXml = "<![CDATA[" + HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />") + "]]>";
                 ticket.AppendChild(node);
@@ -77,10 +78,10 @@ namespace HAP.HelpDesk
                 HAP.Data.SQL.sql2linqDataContext sql = new Data.SQL.sql2linqDataContext(ConfigurationManager.ConnectionStrings[hapConfig.Current.HelpDesk.Provider].ConnectionString);
                 Data.SQL.Ticket tick = sql.Tickets.Single(t => t.Id == int.Parse(Id));
                 tick.Status = string.IsNullOrEmpty(State) ? "New" : State;
-                tick.ReadBy = HttpContext.Current.User.Identity.Name;
+                tick.ReadBy = ((HAP.AD.User)Membership.GetUser()).UserName;
                 if (string.IsNullOrEmpty(Note)) Note = string.IsNullOrEmpty(AssignTo) ? "No Note Information Added" : "Assigned to: " + AssignTo;
                 else Note = HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />");
-                Data.SQL.Note n = new Data.SQL.Note { DateTime = DateTime.Now, Hide = false, Username = HttpContext.Current.User.Identity.Name, Content = Note };
+                Data.SQL.Note n = new Data.SQL.Note { DateTime = DateTime.Now, Hide = false, Username = ((HAP.AD.User)Membership.GetUser()).UserName, Content = Note };
                 foreach (Attachment a in Attachments)
                     n.NoteFiles.Add(new Data.SQL.NoteFile { ContentType = HttpUtility.UrlDecode(a.CType, System.Text.Encoding.Default), FileName = HttpUtility.UrlDecode(a.Name, System.Text.Encoding.Default), Data = new System.Data.Linq.Binary((byte[])HttpContext.Current.Cache.Get("hap-HD-" + HttpUtility.UrlDecode(a.Name, System.Text.Encoding.Default))) });
                 tick.Notes.Add(n);
@@ -94,7 +95,7 @@ namespace HAP.HelpDesk
                 mes.Subject = Localizable.Localize("helpdesk/ticketupdated").Replace("#", "#" + Id);
                 try
                 {
-                    mes.From = mes.Sender = new MailAddress(ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].Email, ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].DisplayName);
+                    mes.From = mes.Sender = new MailAddress(ADUtils.FindUserInfos(((HAP.AD.User)Membership.GetUser()).UserName)[0].Email, ADUtils.FindUserInfos(((HAP.AD.User)Membership.GetUser()).UserName)[0].DisplayName);
                 }
                 catch { mes.From = new MailAddress(hapConfig.Current.SMTP.FromEmail, hapConfig.Current.SMTP.FromUser); }
                 mes.ReplyToList.Add(mes.From);
@@ -108,7 +109,7 @@ namespace HAP.HelpDesk
 
                 mes.Body = fs.ReadToEnd().Replace("{0}", Id).Replace("{1}",
                     HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />")).Replace("{2}",
-                    ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].DisplayName).Replace("{3}",
+                    ADUtils.FindUserInfos(((HAP.AD.User)Membership.GetUser()).UserName)[0].DisplayName).Replace("{3}",
                     HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath);
                 ServicePointManager.ServerCertificateValidationCallback = delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
                 SmtpClient smtp = new SmtpClient(hapConfig.Current.SMTP.Server, hapConfig.Current.SMTP.Port);
@@ -124,7 +125,7 @@ namespace HAP.HelpDesk
         [WebInvoke(Method = "PUT", UriTemplate = "AdminTicket/{Id}", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         public FullTicket UpdateAdminTicket(string Id, string Note, string State, string Priority, string ShowTo, string FAQ, string Subject, string AssignTo, bool HideNote, Attachment[] Attachments)
         {
-            HAP.Data.SQL.WebEvents.Log(DateTime.Now, "HelpDesk.UpdateAdmin", HttpContext.Current.User.Identity.Name, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Updating Admin Ticket " + Id);
+            HAP.Data.SQL.WebEvents.Log(DateTime.Now, "HelpDesk.UpdateAdmin", ((HAP.AD.User)Membership.GetUser()).UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Updating Admin Ticket " + Id);
             bool same = false;
 
             if (hapConfig.Current.HelpDesk.Provider.ToLower() == "xml")
@@ -138,7 +139,7 @@ namespace HAP.HelpDesk
                 if (!string.IsNullOrEmpty(Subject)) ticket.Attributes["subject"].Value = Subject;
                 XmlElement node = doc.CreateElement("Note");
                 node.SetAttribute("datetime", DateTime.Now.ToString("u"));
-                node.SetAttribute("username", HttpContext.Current.User.Identity.Name);
+                node.SetAttribute("username", ((HAP.AD.User)Membership.GetUser()).UserName);
                 node.SetAttribute("hide", HideNote.ToString());
 
 
@@ -152,14 +153,14 @@ namespace HAP.HelpDesk
 
                 if (!string.IsNullOrEmpty(State)) ticket.Attributes["status"].Value = State;
                 if (node.Attributes["assignedto"] == null) ticket.Attributes.Append(doc.CreateAttribute("assignedto"));
-                ticket.Attributes["assignedto"].Value = string.IsNullOrEmpty(AssignTo) ? HttpContext.Current.User.Identity.Name : AssignTo;
+                ticket.Attributes["assignedto"].Value = string.IsNullOrEmpty(AssignTo) ? ((HAP.AD.User)Membership.GetUser()).UserName : AssignTo;
                 ticket.Attributes["priority"].Value = string.IsNullOrEmpty(Priority) ? ticket.Attributes["priority"].Value : Priority;
                 if (ticket.Attributes["showto"] == null) ticket.Attributes.Append(doc.CreateAttribute("showto"));
                 if (!string.IsNullOrEmpty(ShowTo)) ticket.Attributes["showto"].Value = ShowTo;
                 if (ticket.Attributes["faq"] == null) ticket.Attributes.Append(doc.CreateAttribute("faq"));
                 ticket.Attributes["faq"].Value = string.IsNullOrWhiteSpace(FAQ) ? "false" : FAQ;
 
-                ((XmlElement)ticket).SetAttribute("readby", HttpContext.Current.User.Identity.Name);
+                ((XmlElement)ticket).SetAttribute("readby", ((HAP.AD.User)Membership.GetUser()).UserName);
 
                 XmlWriterSettings set = new XmlWriterSettings();
                 set.Indent = true;
@@ -179,7 +180,7 @@ namespace HAP.HelpDesk
 
                 if (!string.IsNullOrEmpty(Subject)) tick.Title = Subject;
                 if (!string.IsNullOrEmpty(State)) tick.Status = State;
-                tick.AssignedTo = string.IsNullOrEmpty(AssignTo) ? HttpContext.Current.User.Identity.Name : AssignTo;
+                tick.AssignedTo = string.IsNullOrEmpty(AssignTo) ? ((HAP.AD.User)Membership.GetUser()).UserName : AssignTo;
                 tick.Priority = string.IsNullOrEmpty(Priority) ? tick.Priority : Priority;
                 if (!string.IsNullOrEmpty(ShowTo)) tick.ShowTo = ShowTo;
                 tick.Faq = string.IsNullOrWhiteSpace(FAQ) ? false : bool.Parse(FAQ);
@@ -190,7 +191,7 @@ namespace HAP.HelpDesk
                     else Note = string.IsNullOrEmpty(AssignTo) ? "No Note Information Added" : "Assigned to: " + AssignTo;
                 }
                 else Note = HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />");
-                Data.SQL.Note n = new Data.SQL.Note { DateTime = DateTime.Now, Hide = HideNote, Username = HttpContext.Current.User.Identity.Name, Content = Note };
+                Data.SQL.Note n = new Data.SQL.Note { DateTime = DateTime.Now, Hide = HideNote, Username = ((HAP.AD.User)Membership.GetUser()).UserName, Content = Note };
                 foreach (Attachment a in Attachments)
                     n.NoteFiles.Add(new Data.SQL.NoteFile { ContentType = HttpUtility.UrlDecode(a.CType, System.Text.Encoding.Default), FileName = HttpUtility.UrlDecode(a.Name, System.Text.Encoding.Default), Data = new System.Data.Linq.Binary((byte[])HttpContext.Current.Cache.Get("hap-HD-" + HttpUtility.UrlDecode(a.Name, System.Text.Encoding.Default))) });
                 tick.Notes.Add(n);
@@ -205,7 +206,7 @@ namespace HAP.HelpDesk
             
 
             UserInfo user = ADUtils.FindUserInfos(ft.Notes[0].Username)[0];
-            UserInfo currentuser = ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0];
+            UserInfo currentuser = ADUtils.FindUserInfos(((HAP.AD.User)Membership.GetUser()).UserName)[0];
             if (hapConfig.Current.SMTP.Enabled && user.Email != null && !string.IsNullOrEmpty(user.Email) && !HideNote)
             {
                 MailMessage mes = new MailMessage();
@@ -253,7 +254,7 @@ namespace HAP.HelpDesk
                     smtp.EnableSsl = hapConfig.Current.SMTP.SSL;
                     smtp.Send(mes);
                 }
-            if (hapConfig.Current.SMTP.Enabled && !same && AssignTo.ToLower() != HttpContext.Current.User.Identity.Name.ToLower())
+            if (hapConfig.Current.SMTP.Enabled && !same && AssignTo.ToLower() != ((HAP.AD.User)Membership.GetUser()).UserName.ToLower())
             {
                 MailMessage mes = new MailMessage();
 
@@ -294,16 +295,16 @@ namespace HAP.HelpDesk
                     x = int.Parse(tickets[tickets.Count - 1].Attributes["id"].Value) + 1;
                 }
                 else x = 1;
-                HAP.Data.SQL.WebEvents.Log(DateTime.Now, "HelpDesk.New", HttpContext.Current.User.Identity.Name, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Creating Ticket " + x + " (" + Subject + ")");
+                HAP.Data.SQL.WebEvents.Log(DateTime.Now, "HelpDesk.New", ((HAP.AD.User)Membership.GetUser()).UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Creating Ticket " + x + " (" + Subject + ")");
                 XmlElement ticket = doc.CreateElement("Ticket");
                 ticket.SetAttribute("id", x.ToString());
                 ticket.SetAttribute("subject", HttpUtility.UrlDecode(Subject, System.Text.Encoding.Default));
                 ticket.SetAttribute("priority", "Normal");
                 ticket.SetAttribute("status", "New");
-                ticket.SetAttribute("readby", HttpContext.Current.User.Identity.Name);
+                ticket.SetAttribute("readby", ((HAP.AD.User)Membership.GetUser()).UserName);
                 XmlElement node = doc.CreateElement("Note");
                 node.SetAttribute("datetime", DateTime.Now.ToUniversalTime().ToString("u"));
-                node.SetAttribute("username", HttpContext.Current.User.Identity.Name);
+                node.SetAttribute("username", ((HAP.AD.User)Membership.GetUser()).UserName);
                 node.InnerXml = "<![CDATA[Room: " + Room + "<br />\n" + HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />") + "]]>";
                 ticket.AppendChild(node);
                 doc.SelectSingleNode("/Tickets").AppendChild(ticket);
@@ -320,8 +321,8 @@ namespace HAP.HelpDesk
             else
             {
                 HAP.Data.SQL.sql2linqDataContext sql = new Data.SQL.sql2linqDataContext(ConfigurationManager.ConnectionStrings[hapConfig.Current.HelpDesk.Provider].ConnectionString);
-                Data.SQL.Ticket tick = new Data.SQL.Ticket { Archive = "", Faq = false, Status = "New", Priority = "Normal", AssignedTo = "", HideAssignedTo = false, ShowTo = "", ReadBy = HttpContext.Current.User.Identity.Name, Title = HttpUtility.UrlDecode(Subject, System.Text.Encoding.Default) };
-                Data.SQL.Note n = new Data.SQL.Note { DateTime = DateTime.Now, Hide = false, Username = HttpContext.Current.User.Identity.Name, Content = "Room: " + Room + "\n\n" + HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />") };
+                Data.SQL.Ticket tick = new Data.SQL.Ticket { Archive = "", Faq = false, Status = "New", Priority = "Normal", AssignedTo = "", HideAssignedTo = false, ShowTo = "", ReadBy = ((HAP.AD.User)Membership.GetUser()).UserName, Title = HttpUtility.UrlDecode(Subject, System.Text.Encoding.Default) };
+                Data.SQL.Note n = new Data.SQL.Note { DateTime = DateTime.Now, Hide = false, Username = ((HAP.AD.User)Membership.GetUser()).UserName, Content = "Room: " + Room + "\n\n" + HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />") };
                 foreach (Attachment a in Attachments)
                     n.NoteFiles.Add(new Data.SQL.NoteFile { ContentType = HttpUtility.UrlDecode(a.CType, System.Text.Encoding.Default), FileName = HttpUtility.UrlDecode(a.Name, System.Text.Encoding.Default), Data = new System.Data.Linq.Binary((byte[])HttpContext.Current.Cache.Get("hap-HD-" + HttpUtility.UrlDecode(a.Name, System.Text.Encoding.Default))) });
                 tick.Notes.Add(n);
@@ -339,7 +340,7 @@ namespace HAP.HelpDesk
                 mes.Subject = Localizable.Localize("helpdesk/ticketcreated").Replace("#", "#" + x);
                 try
                 {
-                    mes.From = new MailAddress(ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].Email, ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].DisplayName);
+                    mes.From = new MailAddress(ADUtils.FindUserInfos(((HAP.AD.User)Membership.GetUser()).UserName)[0].Email, ADUtils.FindUserInfos(((HAP.AD.User)Membership.GetUser()).UserName)[0].DisplayName);
                 }
                 catch { mes.From = new MailAddress(hapConfig.Current.SMTP.FromEmail, hapConfig.Current.SMTP.FromUser); }
                 mes.Sender = mes.From;
@@ -355,7 +356,7 @@ namespace HAP.HelpDesk
                     HttpUtility.UrlDecode(Subject, System.Text.Encoding.Default)).Replace("{2}",
                     HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />")).Replace("{3}",
                     Room).Replace("{4}",
-                    ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].DisplayName).Replace("{5}",
+                    ADUtils.FindUserInfos(((HAP.AD.User)Membership.GetUser()).UserName)[0].DisplayName).Replace("{5}",
                     HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath);
                 ServicePointManager.ServerCertificateValidationCallback = delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
                 SmtpClient smtp = new SmtpClient(hapConfig.Current.SMTP.Server, hapConfig.Current.SMTP.Port);
@@ -382,13 +383,13 @@ namespace HAP.HelpDesk
                     x = int.Parse(tickets[tickets.Count - 1].Attributes["id"].Value) + 1;
                 }
                 else x = 1;
-                HAP.Data.SQL.WebEvents.Log(DateTime.Now, "HelpDesk.NewAdmin", HttpContext.Current.User.Identity.Name, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Creating Ticket " + x + " (" + Subject + ")");
+                HAP.Data.SQL.WebEvents.Log(DateTime.Now, "HelpDesk.NewAdmin", ((HAP.AD.User)Membership.GetUser()).UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Creating Ticket " + x + " (" + Subject + ")");
                 XmlElement ticket = doc.CreateElement("Ticket");
                 ticket.SetAttribute("id", x.ToString());
                 ticket.SetAttribute("subject", HttpUtility.UrlDecode(Subject, System.Text.Encoding.Default));
                 ticket.SetAttribute("priority", Priority == "" ? "Normal" : Priority);
                 ticket.SetAttribute("status", "New");
-                ticket.SetAttribute("readby", HttpContext.Current.User.Identity.Name);
+                ticket.SetAttribute("readby", ((HAP.AD.User)Membership.GetUser()).UserName);
                 XmlElement node = doc.CreateElement("Note");
                 node.SetAttribute("datetime", DateTime.Now.ToUniversalTime().ToString("u"));
                 node.SetAttribute("username", User);
@@ -408,7 +409,7 @@ namespace HAP.HelpDesk
             else
             {
                 HAP.Data.SQL.sql2linqDataContext sql = new Data.SQL.sql2linqDataContext(ConfigurationManager.ConnectionStrings[hapConfig.Current.HelpDesk.Provider].ConnectionString);
-                Data.SQL.Ticket tick = new Data.SQL.Ticket { Archive = "", Faq = false, Status = "New", AssignedTo = "", HideAssignedTo = false, ShowTo = ShowTo, ReadBy = HttpContext.Current.User.Identity.Name, Title = HttpUtility.UrlDecode(Subject, System.Text.Encoding.Default) };
+                Data.SQL.Ticket tick = new Data.SQL.Ticket { Archive = "", Faq = false, Status = "New", AssignedTo = "", HideAssignedTo = false, ShowTo = ShowTo, ReadBy = ((HAP.AD.User)Membership.GetUser()).UserName, Title = HttpUtility.UrlDecode(Subject, System.Text.Encoding.Default) };
                 tick.Priority = Priority == "" ? "Normal" : Priority;
                 Data.SQL.Note n = new Data.SQL.Note { DateTime = DateTime.Now, Hide = false, Username = User, Content = "Room: " + Room + "\n\n" + HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />") };
                 foreach (Attachment a in Attachments)
@@ -442,7 +443,7 @@ namespace HAP.HelpDesk
                 mes.Body = fs.ReadToEnd().Replace("{0}", x.ToString()).Replace("{1}",
                     HttpUtility.UrlDecode(Subject, System.Text.Encoding.Default)).Replace("{2}",
                     HttpUtility.UrlDecode(Note, System.Text.Encoding.Default).Replace("\n", "<br />")).Replace("{3}",
-                    ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].DisplayName).Replace("{4}",
+                    ADUtils.FindUserInfos(((HAP.AD.User)Membership.GetUser()).UserName)[0].DisplayName).Replace("{4}",
                     HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath);
                 ServicePointManager.ServerCertificateValidationCallback = delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
                 SmtpClient smtp = new SmtpClient(hapConfig.Current.SMTP.Server, hapConfig.Current.SMTP.Port);
@@ -472,7 +473,7 @@ namespace HAP.HelpDesk
                             HttpUtility.UrlDecode(Subject, System.Text.Encoding.Default)).Replace("{2}",
                             HttpUtility.UrlDecode(Note, System.Text.Encoding.Default)).Replace("{3}",
                             Room).Replace("{4}",
-                            ADUtils.FindUserInfos(HttpContext.Current.User.Identity.Name)[0].DisplayName).Replace("{5}",
+                            ADUtils.FindUserInfos(((HAP.AD.User)Membership.GetUser()).UserName)[0].DisplayName).Replace("{5}",
                             HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath);
                         ServicePointManager.ServerCertificateValidationCallback = delegate(object s1, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
                         SmtpClient smtp = new SmtpClient(hapConfig.Current.SMTP.Server, hapConfig.Current.SMTP.Port);
@@ -599,18 +600,18 @@ namespace HAP.HelpDesk
                 {
                     string[] s = ticket.GetAttribute("readby").Split(new char[] { ',' });
                     foreach (string a in s)
-                        if (a.Trim().ToLower() == HttpContext.Current.User.Identity.Name.ToLower()) needed = false;
+                        if (a.Trim().ToLower() == ((HAP.AD.User)Membership.GetUser()).UserName.ToLower()) needed = false;
                     if (needed)
                     {
                         List<string> s1 = new List<string>();
                         s1.AddRange(s);
-                        s1.Add(HttpContext.Current.User.Identity.Name);
+                        s1.Add(((HAP.AD.User)Membership.GetUser()).UserName);
                         ticket.SetAttribute("readby", string.Join(", ", s1.ToArray()));
                     }
                 }
                 else
                 {
-                    ticket.SetAttribute("readby", HttpContext.Current.User.Identity.Name);
+                    ticket.SetAttribute("readby", ((HAP.AD.User)Membership.GetUser()).UserName);
                 }
                 if (needed) doc.Save(HttpContext.Current.Server.MapPath("~/App_Data/Tickets" + Archive + ".xml"));
                 return ft;
@@ -623,12 +624,12 @@ namespace HAP.HelpDesk
                 string[] s = tick.ReadBy.Split(new char[] { ',' });
                 bool needed = true;
                 foreach (string a in s)
-                    if (a.Trim().ToLower() == HttpContext.Current.User.Identity.Name.ToLower()) needed = false;
+                    if (a.Trim().ToLower() == ((HAP.AD.User)Membership.GetUser()).UserName.ToLower()) needed = false;
                 if (needed)
                 {
                     List<string> s1 = new List<string>();
                     s1.AddRange(s);
-                    s1.Add(HttpContext.Current.User.Identity.Name);
+                    s1.Add(((HAP.AD.User)Membership.GetUser()).UserName);
                     tick.ReadBy = string.Join(", ", s1.ToArray());
                     sql.SubmitChanges();
                 }
