@@ -25,9 +25,11 @@ namespace HAP.Web.LiveTiles
                 // Replace this line with code to validate server certificate.
                 return true;
             };
- 
-            ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
-            service.Url = new Uri("https://" + HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange + "/ews/exchange.asmx");
+
+            ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2013_SP1);
+            if (string.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange))
+                service.AutodiscoverUrl(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser, (string redirectionUrl) => { return true; });
+            else service.Url = new Uri("https://" + HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange + "/ews/exchange.asmx");
             HAP.AD.User u = ((HAP.AD.User)Membership.GetUser());
             if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Configuration.AuthMode.Forms && string.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser))
             {
@@ -45,7 +47,11 @@ namespace HAP.Web.LiveTiles
                 }
                 else
                 {
-                    service.Credentials = new NetworkCredential(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser, HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationPassword, HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationDomain);
+                    if (string.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationDomain))
+                        service.Credentials = new WebCredentials(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser, HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationPassword);
+                    else
+                        service.Credentials = new WebCredentials(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser, HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationPassword, HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationDomain);
+
                     service.ImpersonatedUserId = new ImpersonatedUserId(ConnectingIdType.SmtpAddress, u.Email);
                 }
             }
@@ -68,8 +74,10 @@ namespace HAP.Web.LiveTiles
                 return true;
             };
 
-            ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
-            service.Url = new Uri("https://" + HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange + "/ews/exchange.asmx");
+            ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2013_SP1);
+            if (string.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange))
+                service.AutodiscoverUrl(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser, (string redirectionUrl) => { return true; });
+            else service.Url = new Uri("https://" + HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange + "/ews/exchange.asmx");
             HAP.AD.User u = ((HAP.AD.User)Membership.GetUser());
             if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Configuration.AuthMode.Forms &&  string.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser))
             {
@@ -87,7 +95,11 @@ namespace HAP.Web.LiveTiles
                 }
                 else
                 {
-                    service.Credentials = new NetworkCredential(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser, HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationPassword, HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationDomain);
+                    if (string.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationDomain))
+                        service.Credentials = new WebCredentials(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser, HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationPassword);
+                    else
+                        service.Credentials = new WebCredentials(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser, HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationPassword, HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationDomain);
+
                     service.ImpersonatedUserId = new ImpersonatedUserId(ConnectingIdType.SmtpAddress, u.Email);
                 }
             }
@@ -108,8 +120,10 @@ namespace HAP.Web.LiveTiles
                 return true;
             };
 
-            ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
-            service.Url = new Uri("https://" + HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange + "/ews/exchange.asmx");
+            ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2013_SP1);
+            if (string.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange))
+                service.AutodiscoverUrl(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser, (string redirectionUrl) => { return true; });
+            else service.Url = new Uri("https://" + HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange + "/ews/exchange.asmx");
             HAP.AD.User u = ((HAP.AD.User)Membership.GetUser());
             if (HAP.Web.Configuration.hapConfig.Current.AD.AuthenticationMode == Configuration.AuthMode.Forms && string.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser))
             {
@@ -127,7 +141,11 @@ namespace HAP.Web.LiveTiles
                 }
                 else
                 {
-                    service.Credentials = new NetworkCredential(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser, HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationPassword, HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationDomain);
+                    if (string.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationDomain))
+                        service.Credentials = new WebCredentials(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser, HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationPassword);
+                    else
+                        service.Credentials = new WebCredentials(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser, HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationPassword, HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationDomain);
+
                     service.ImpersonatedUserId = new ImpersonatedUserId(ConnectingIdType.SmtpAddress, u.Email);
                 }
             }
@@ -146,8 +164,11 @@ namespace HAP.Web.LiveTiles
                 return true;
             };
 
-            ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
-            service.Url = new Uri("https://" + HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange + "/ews/exchange.asmx");
+            ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2013_SP1);
+            if (string.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange))
+                service.AutodiscoverUrl(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser, (string redirectionUrl) => { return true; });
+            else service.Url = new Uri("https://" + HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange + "/ews/exchange.asmx");
+
             service.Credentials = new NetworkCredential(HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password, HAP.Web.Configuration.hapConfig.Current.AD.UPN);
             FolderId fid = new FolderId(WellKnownFolderName.Calendar, new Mailbox(mailbox));
             return service.FindAppointments(fid, new CalendarView(From, To.AddDays(1))).ToArray();
@@ -162,9 +183,16 @@ namespace HAP.Web.LiveTiles
                 return true;
             };
 
-            ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
-            service.Url = new Uri("https://" + HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange + "/ews/exchange.asmx");
-            service.Credentials = new NetworkCredential(HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password, HAP.Web.Configuration.hapConfig.Current.AD.UPN);
+            ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2013_SP1);
+            if (string.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange))
+                service.AutodiscoverUrl(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser, (string redirectionUrl) => { return true; });
+            else service.Url = new Uri("https://" + HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange + "/ews/exchange.asmx");
+
+            if (string.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationDomain))
+                service.Credentials = new WebCredentials(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser, HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationPassword);
+            else
+                service.Credentials = new WebCredentials(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser, HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationPassword, HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationDomain);
+
             FolderId fid = new FolderId(WellKnownFolderName.Calendar, new Mailbox(mailbox));
             List<string> s = new List<string>();
             foreach (Appointment a in service.FindAppointments(fid, new CalendarView(DateTime.Now, DateTime.Now.AddDays(1))))
@@ -181,9 +209,16 @@ namespace HAP.Web.LiveTiles
                 return true;
             };
 
-            ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
-            service.Url = new Uri("https://" + HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange + "/ews/exchange.asmx");
-            service.Credentials = new NetworkCredential(HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password, HAP.Web.Configuration.hapConfig.Current.AD.UPN);
+            ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2013_SP1);
+            if (string.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange))
+                service.AutodiscoverUrl(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser, (string redirectionUrl) => { return true; });
+            else service.Url = new Uri("https://" + HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange + "/ews/exchange.asmx");
+
+            if (string.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationDomain))
+                service.Credentials = new WebCredentials(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser, HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationPassword);
+            else
+                service.Credentials = new WebCredentials(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser, HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationPassword, HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationDomain);
+
             FolderId fid = new FolderId(WellKnownFolderName.Calendar, new Mailbox(mailbox));
             List<EWSAppointmentInfo> s = new List<EWSAppointmentInfo>();
             foreach (Appointment a in service.FindAppointments(fid, new CalendarView(DateTime.Now, DateTime.Now.AddDays(14))))

@@ -67,7 +67,7 @@ namespace HAP.Web.Configuration
         {
             List<IConfig> plugins = new List<IConfig>();
             //load apis in the bin folder
-            foreach (FileInfo assembly in new DirectoryInfo(HttpContext.Current.Server.MapPath("~/bin/")).GetFiles("*.dll").Where(fi => fi.Name != "HAP.Web.dll" && fi.Name != "HAP.Web.Configuration.dll"))
+            foreach (FileInfo assembly in new DirectoryInfo(HttpContext.Current.Server.MapPath("~/bin/")).GetFiles("*.dll").Where(fi => fi.Name != "HAP.Web.dll" && fi.Name != "HAP.Web.Configuration.dll" && !fi.Name.StartsWith("Microsoft")))
             {
                 Assembly a = Assembly.LoadFrom(assembly.FullName);
                 foreach (Type type in a.GetTypes())
@@ -394,6 +394,11 @@ namespace HAP.Web.Configuration
             if (version.CompareTo(Version.Parse("10.3.0917.1730")) < 0) // Perform v10.3 upgrade
             {
                 ((XmlElement)doc.SelectSingleNode("/hapConfig/SMTP")).SetAttribute("tls", "False");
+            }
+            if (version.CompareTo(Version.Parse("10.6.1801.0500")) < 0) // Perform v10.3 upgrade
+            {
+                if (!((XmlElement)doc.SelectSingleNode("/hapConfig/AD")).HasAttribute("AuthMode"))
+                    ((XmlElement)doc.SelectSingleNode("/hapConfig/AD")).SetAttribute("AuthMode", "Forms");
             }
             doc.SelectSingleNode("hapConfig").Attributes["version"].Value = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             doc.Save(ConfigPath);
