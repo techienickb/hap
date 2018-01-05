@@ -95,8 +95,8 @@ namespace HAP.Web.API
 
                 if (!isAuth(Path.GetExtension(context.Request.Headers["X_FILENAME"]))) throw new UnauthorizedAccessException(_doc.SelectSingleNode("/hapStrings/myfiles/upload/filetypeerror").InnerText);
                 DriveMapping m;
-                string path = Path.Combine(Converter.DriveToUNC('\\' + RoutingPath, RoutingDrive, out m, ADUser), Homework.Name, context.User.Identity.Name + " - " + context.Request.Headers["X_FILENAME"]);
-                HAP.Data.SQL.WebEvents.Log(DateTime.Now, "Homework.Upload", HttpContext.Current.User.Identity.Name, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Uploading of: " + context.Request.Headers["X_FILENAME"] + " to: " + path + " (impersonating: " + ADUser.UserName + ")");
+                string path = Path.Combine(Converter.DriveToUNC('\\' + RoutingPath, RoutingDrive, out m, ADUser), Homework.Name, ((HAP.AD.User)Membership.GetUser()).UserName + " - " + context.Request.Headers["X_FILENAME"]);
+                HAP.Data.SQL.WebEvents.Log(DateTime.Now, "Homework.Upload", ((HAP.AD.User)Membership.GetUser()).UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Uploading of: " + context.Request.Headers["X_FILENAME"] + " to: " + path + " (impersonating: " + ADUser.UserName + ")");
                 try
                 {
                     ADUser.ImpersonateContained();

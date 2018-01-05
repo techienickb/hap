@@ -9,6 +9,7 @@ using System.Web.Configuration;
 using System.Configuration;
 using System.IO;
 using System.Xml;
+using System.Web.Security;
 
 namespace HAP.Web.MyFiles
 {
@@ -26,24 +27,24 @@ namespace HAP.Web.MyFiles
             if (!File.Exists(Server.MapPath("~/app_data/myfiles-appusers.txt"))) File.Create(Server.MapPath("~/app_data/myfiles-appusers.txt")).Close();
             StreamReader sr = File.OpenText(Server.MapPath("~/app_data/myfiles-users.txt"));
             string s;
-            while ((s = sr.ReadLine()) != null) if (s.ToLower() == HttpContext.Current.User.Identity.Name.ToLower()) FirstTime = false;
+            while ((s = sr.ReadLine()) != null) if (s.ToLower() == ((HAP.AD.User)Membership.GetUser()).UserName.ToLower()) FirstTime = false;
             sr.Close();
             sr.Dispose();
             if (FirstTime)
             {
                 StreamWriter sw = File.AppendText(Server.MapPath("~/app_data/myfiles-users.txt"));
-                sw.WriteLine(HttpContext.Current.User.Identity.Name);
+                sw.WriteLine(((HAP.AD.User)Membership.GetUser()).UserName);
                 sw.Close();
                 sw.Dispose();
             }
             sr = File.OpenText(Server.MapPath("~/app_data/myfiles-appusers.txt"));
-            while ((s = sr.ReadLine()) != null) if (s.ToLower() == HttpContext.Current.User.Identity.Name.ToLower()) W8AppCap = false;
+            while ((s = sr.ReadLine()) != null) if (s.ToLower() == ((HAP.AD.User)Membership.GetUser()).UserName.ToLower()) W8AppCap = false;
             sr.Close();
             sr.Dispose();
             if (W8AppCap)
             {
                 StreamWriter sw = File.AppendText(Server.MapPath("~/app_data/myfiles-appusers.txt"));
-                sw.WriteLine(HttpContext.Current.User.Identity.Name);
+                sw.WriteLine(((HAP.AD.User)Membership.GetUser()).UserName);
                 sw.Close();
                 sw.Dispose();
             }

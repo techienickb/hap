@@ -33,6 +33,7 @@ namespace HAP.Web.Configuration
             e.SetAttribute("maxlogonattempts", "4");
             e.SetAttribute("maxrecursions", "10");
             e.SetAttribute("allow1usecodes", "False");
+            e.SetAttribute("AuthMode", "Forms");
             XmlElement ous = doc.CreateElement("OUs");
             e.AppendChild(ous);
             XmlElement ips = doc.CreateElement("InternalIPs");

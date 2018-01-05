@@ -198,7 +198,7 @@ namespace HAP.Web.API
             get
             {
                 foreach (string s in hapConfig.Current.BookingSystem.Admins.Split(new char[] { ',' }))
-                    if (s.Trim().ToLower().Equals(HttpContext.Current.User.Identity.Name.ToLower())) return true;
+                    if (s.Trim().ToLower().Equals(((HAP.AD.User)Membership.GetUser()).UserName.ToLower())) return true;
                     else if (HttpContext.Current.User.IsInRole(s.Trim())) return true;
                 return false;
             }
@@ -209,7 +209,7 @@ namespace HAP.Web.API
             get
             {
                 foreach (string s in hapConfig.Current.HelpDesk.Admins.Split(new char[] { ',' }))
-                    if (s.Trim().ToLower().Equals(HttpContext.Current.User.Identity.Name.ToLower())) return true;
+                    if (s.Trim().ToLower().Equals(((HAP.AD.User)Membership.GetUser()).UserName.ToLower())) return true;
                     else if (HttpContext.Current.User.IsInRole(s.Trim())) return true;
                 return false;
             }

@@ -32,12 +32,12 @@ namespace HAP.Web.API
             XmlDocument xmldoc = new XmlDocument();
             try
             {
-                xmldoc.LoadXml(client.DownloadString("http://hap.codeplex.com/Project/ProjectRss.aspx?ProjectRSSFeed=codeplex://release/hap"));
+                xmldoc.LoadXml(client.DownloadString("https://github.com/techienickb/hap/releases.atom"));
 
-                XmlNode latest = xmldoc.SelectNodes("/rss/channel/item")[0];
+                XmlNode latest = xmldoc.SelectNodes("/feed/entry")[0];
                 XmlNode title = latest.SelectSingleNode("title");
-                Regex reg = new Regex("Released: HAP+ Web Core v([\\d\\.])+");
-                string versioninfo = reg.Match(title.InnerText).Value.Replace("Released: HAP+ Web Core ", "").TrimStart(new char[] { 'v' });
+                Regex reg = new Regex("HAP\\+ Web Core v([\\d+\\.]*)");
+                string versioninfo = reg.Match(title.InnerText).Value.Replace("HAP+ Web Core ", "").TrimStart(new char[] { 'v' });
 
                 Version NeededUpdate = Version.Parse(versioninfo);
                 int comp = Assembly.GetExecutingAssembly().GetName().Version.CompareTo(NeededUpdate);
