@@ -175,7 +175,7 @@ namespace HAP.Web.API
         {
             List<IRegister> plugins = new List<IRegister>();
             //load apis in the bin folder
-            foreach (FileInfo assembly in new DirectoryInfo(HttpContext.Current.Server.MapPath("~/bin/")).GetFiles("*.dll").Where(fi => fi.Name != "HAP.Web.dll" && fi.Name != "HAP.Web.Configuration.dll"))
+            foreach (FileInfo assembly in new DirectoryInfo(HttpContext.Current.Server.MapPath("~/bin/")).GetFiles("*.dll").Where(fi => fi.Name != "HAP.Web.dll" && fi.Name != "HAP.Web.Configuration.dll" && !fi.Name.StartsWith("Microsoft")))
             {
                 Assembly a = Assembly.LoadFrom(assembly.FullName);
                 foreach (Type type in a.GetTypes())

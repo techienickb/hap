@@ -37,20 +37,24 @@ namespace HAP.AD
             else if (HttpContext.Current.Cache["userrolecache-" + username.ToLower()] == null)
             {
                 List<string> roles = new List<string> { "Authenticated Users" };
-                try
+                //try
+                //{
+                PrincipalContext pcontext;
+                if (HAP.Web.Configuration.hapConfig.Current.AD.SecureLDAP) pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, null, ContextOptions.Negotiate, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
+                else pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
+                UserPrincipal userp = UserPrincipal.FindByIdentity(pcontext, username);
+                foreach (Principal p in userp.GetAuthorizationGroups())
                 {
-                    PrincipalContext pcontext;
-                    if (HAP.Web.Configuration.hapConfig.Current.AD.SecureLDAP) pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, null, ContextOptions.Negotiate, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
-                    else pcontext = new PrincipalContext(ContextType.Domain, HAP.Web.Configuration.hapConfig.Current.AD.UPN, HAP.Web.Configuration.hapConfig.Current.AD.User, HAP.Web.Configuration.hapConfig.Current.AD.Password);
-                    UserPrincipal userp = UserPrincipal.FindByIdentity(pcontext, username);
-                    foreach (Principal p in userp.GetGroups())
+                    try
                     {
                         if (!roles.Contains(p.Name)) roles.Add(p.Name);
                         foreach (Principal p1 in (((GroupPrincipal)p).GetGroups()))
                             Recurse(p1, ref roles, 0);
                     }
+                    catch { }
                 }
-                catch { }
+                //}
+                //catch { }
                 HttpContext.Current.Cache.Insert("userrolecache-" + username.ToLower(), roles.ToArray(), null, System.Web.Caching.Cache.NoAbsoluteExpiration, TimeSpan.FromMinutes(5));
             }
             return HttpContext.Current.Cache["userrolecache-" + username.ToLower()] as string[];
@@ -60,12 +64,8 @@ namespace HAP.AD
         {
             if (!roles.Contains(p.Name)) roles.Add(p.Name);
             if (loop < HAP.Web.Configuration.hapConfig.Current.AD.MaxRecursions)
-                try
-                {
-                    foreach (Principal p1 in (((GroupPrincipal)p).GetGroups()))
-                        Recurse(p1, ref roles, loop + 1);
-                }
-                catch { }
+                foreach (Principal p1 in (((GroupPrincipal)p).GetGroups()))
+                Recurse(p1, ref roles, loop + 1);
         }
 
         public override void CreateRole(string roleName)
