@@ -283,7 +283,7 @@ namespace HAP.MyFiles
             }
             else
             {
-                user = new User(HttpContext.Current.User.Identity.Name);
+                user = ((HAP.AD.User)Membership.GetUser());
             }
             DriveMapping mapping;
             string p = Converter.DriveToUNC(ZipFile.Remove(0, 1), ZipFile.Substring(0, 1), out mapping, user);
@@ -760,12 +760,12 @@ namespace HAP.MyFiles
             }
             else
             {
-                user = new User(HttpContext.Current.User.Identity.Name);
+                user = ((HAP.AD.User)Membership.GetUser());
             }
             DriveMapping mapping;
             string path = Converter.DriveToUNC(Path, Drive, out mapping, user);
             HAP.Data.SQL.WebEvents.Log(DateTime.Now, "MyFiles.List", user.UserName, HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.Browser.Platform, HttpContext.Current.Request.Browser.Browser + " " + HttpContext.Current.Request.Browser.Version, HttpContext.Current.Request.UserHostName, "Requesting list of: " + path);
-            user.ImpersonateContained();
+            if (!user.ImpersonateContained()) throw new Exception("Impersonation Error");
             try
             {
                 if (path.ToLower().IndexOf(".zip") != -1) Items = ZIPList(Drive, Path, user);

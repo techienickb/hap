@@ -47,9 +47,12 @@ namespace HAP.AD
                 {
                     try
                     {
-                        if (!roles.Contains(p.Name)) roles.Add(p.Name);
-                        foreach (Principal p1 in (((GroupPrincipal)p).GetGroups()))
-                            Recurse(p1, ref roles, 0);
+                        if (!roles.Contains(p.Name))
+                        {
+                            roles.Add(p.Name);
+                            foreach (Principal p1 in (((GroupPrincipal)p).GetGroups()))
+                                Recurse(p1, ref roles, 0);
+                        }
                     }
                     catch { }
                 }
@@ -62,10 +65,13 @@ namespace HAP.AD
 
         public void Recurse(Principal p, ref List<string> roles, int loop)
         {
-            if (!roles.Contains(p.Name)) roles.Add(p.Name);
-            if (loop < HAP.Web.Configuration.hapConfig.Current.AD.MaxRecursions)
-                foreach (Principal p1 in (((GroupPrincipal)p).GetGroups()))
-                Recurse(p1, ref roles, loop + 1);
+            if (!roles.Contains(p.Name))
+            {
+                roles.Add(p.Name);
+                if (loop < HAP.Web.Configuration.hapConfig.Current.AD.MaxRecursions)
+                    foreach (Principal p1 in (((GroupPrincipal)p).GetGroups()))
+                        Recurse(p1, ref roles, loop + 1);
+            }
         }
 
         public override void CreateRole(string roleName)
