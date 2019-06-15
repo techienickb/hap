@@ -25,7 +25,7 @@ namespace HAP.Web.LiveTiles
                 // Replace this line with code to validate server certificate.
                 return true;
             };
-
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
             ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2013_SP1);
             if (string.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange))
                 service.AutodiscoverUrl(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser, (string redirectionUrl) => { return true; });
@@ -73,7 +73,7 @@ namespace HAP.Web.LiveTiles
                 // Replace this line with code to validate server certificate.
                 return true;
             };
-
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
             ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2013_SP1);
             if (string.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange))
                 service.AutodiscoverUrl(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser, (string redirectionUrl) => { return true; });
@@ -119,7 +119,7 @@ namespace HAP.Web.LiveTiles
                 // Replace this line with code to validate server certificate.
                 return true;
             };
-
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
             ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2013_SP1);
             if (string.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange))
                 service.AutodiscoverUrl(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser, (string redirectionUrl) => { return true; });
@@ -163,7 +163,7 @@ namespace HAP.Web.LiveTiles
                 // Replace this line with code to validate server certificate.
                 return true;
             };
-
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
             ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2013_SP1);
             if (string.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange))
                 service.AutodiscoverUrl(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser, (string redirectionUrl) => { return true; });
@@ -182,7 +182,7 @@ namespace HAP.Web.LiveTiles
                 // Replace this line with code to validate server certificate.
                 return true;
             };
-
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
             ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2013_SP1);
             if (string.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange))
                 service.AutodiscoverUrl(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser, (string redirectionUrl) => { return true; });
@@ -208,7 +208,7 @@ namespace HAP.Web.LiveTiles
                 // Replace this line with code to validate server certificate.
                 return true;
             };
-
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
             ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2013_SP1);
             if (string.IsNullOrEmpty(HAP.Web.Configuration.hapConfig.Current.SMTP.Exchange))
                 service.AutodiscoverUrl(HAP.Web.Configuration.hapConfig.Current.SMTP.ImpersonationUser, (string redirectionUrl) => { return true; });
