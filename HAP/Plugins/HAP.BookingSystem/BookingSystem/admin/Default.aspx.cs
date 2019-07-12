@@ -221,8 +221,21 @@ namespace HAP.Web.BookingSystem.admin
         {
             int x = 0;
             string[] s;
-            if (int.TryParse(day.Substring(0, 1), out x)) s = new string[] { "1Mon", "1Tue", "1Wed", "1Thu", "1Fri", "2Mon", "2Tue", "2Wed", "2Thu", "2Fri" };
-            else s = new string[] { "MonA", "TueA", "WedA", "ThuA", "FriA", "MonB", "TueB", "WedB", "ThuB", "FriB" };
+            if (day.Length == 3)
+            {
+                // must be a non-week number prefixed day
+                s = new string[] { "Mon", "Tue", "Wed", "Thu", "Fri" };
+            }
+            else if (int.TryParse(day.Substring(0, 1), out x))
+            {
+                // prefixed with week number
+                s = new string[] { "1Mon", "1Tue", "1Wed", "1Thu", "1Fri", "2Mon", "2Tue", "2Wed", "2Thu", "2Fri" };
+            }
+            else
+            {
+                // suffixed with A and B
+                s = new string[] { "MonA", "TueA", "WedA", "ThuA", "FriA", "MonB", "TueB", "WedB", "ThuB", "FriB" };
+            }
             for (int i = 0; i < s.Length; i++)
                 if (s[i].ToLower() == day.ToLower()) return i + 1;
             return -1;
